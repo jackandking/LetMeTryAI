@@ -1,0 +1,45 @@
+{
+  "name": "letmetryai",
+  "version": "1.0.0",
+  "description": "LetMeTryAI website with centralized configuration system",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "npm test -- --watch",
+    "test:coverage": "npm test -- --coverage",
+    "test:unit": "npm test -- util/",
+    "test:integration": "npm test -- integration.test.js",
+    "test:regression": "npm test -- regression.test.js",
+    "test:config": "npm test -- config.test.js",
+    "lint": "echo 'No linter configured yet'",
+    "serve": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "@jest/globals": "^29.0.0"
+  },
+  "jest": {
+    "preset": "default",
+    "testEnvironment": "jsdom",
+    "transform": {},
+    "extensionsToTreatAsEsm": [".js"],
+    "moduleNameMapping": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.js"],
+    "collectCoverageFrom": [
+      "util/*.js",
+      "config.js",
+      "!util/*.test.js",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": ["text", "lcov", "html"],
+    "testMatch": [
+      "**/*.test.js"
+    ]
+  },
+  "keywords": ["web", "configuration", "api", "images"],
+  "author": "LetMeTryAI Team",
+  "license": "MIT"
+}

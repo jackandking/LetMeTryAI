@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Details</title>
+    <script src="/config.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -129,7 +130,7 @@
                     <div class="task-content">
                         <div class="homework-section">
                             <h2>Original Homework</h2>
-                            <img src="https://letmetryai.cn${task.input_path}" alt="Homework" class="homework-image">
+                            <img src="${BASE_URL}${task.input_path}" alt="Homework" class="homework-image">
                         </div>
                         <div class="game-section">
                             <h2>Generated Game</h2>

@@ -1,6 +1,8 @@
 // AI utility functions for chat integration
 
-export const API_ENDPOINT = 'https://letmetryai.cn/lws/ai/chat';
+import { API_ENDPOINTS } from './config.js';
+
+export const API_ENDPOINT = API_ENDPOINTS.AI_CHAT;
 
 // Error messages
 export const ERROR_MESSAGES = {
