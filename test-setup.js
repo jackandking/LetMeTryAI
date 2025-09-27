@@ -1,4 +1,5 @@
 // test-setup.js - Jest setup file for global test configuration
+import { jest, beforeEach, afterAll } from '@jest/globals';
 
 // Mock fetch globally for all tests
 global.fetch = jest.fn();
