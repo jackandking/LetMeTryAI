@@ -1,6 +1,6 @@
 // AI utility functions for chat integration
 
-export const API_ENDPOINT = 'https://letmetryai.cn/lws/ai/chat';
+export const API_ENDPOINT = 'https://43.143.241.181/lws/ai/chat';
 
 // Error messages
 export const ERROR_MESSAGES = {

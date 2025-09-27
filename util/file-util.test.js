@@ -19,7 +19,7 @@ describe('uploadFile', () => {
     const result = await uploadFile(fileObject, targetPath);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://letmetryai.cn/lws/file/upload', {
+    expect(fetch).toHaveBeenCalledWith('https://43.143.241.181/lws/file/upload', {
       method: 'POST',
       body: expect.any(FormData),
       headers: { 'Content-Type': 'multipart/form-data' }
@@ -51,7 +51,7 @@ describe('uploadFile', () => {
     const result = await uploadFile(fileObject);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://letmetryai.cn/lws/file/upload', {
+    expect(fetch).toHaveBeenCalledWith('https://43.143.241.181/lws/file/upload', {
       method: 'POST',
       body: expect.any(FormData),
       headers: { 'Content-Type': 'multipart/form-data' }
