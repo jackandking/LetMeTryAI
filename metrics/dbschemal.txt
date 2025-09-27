@@ -1,0 +1,793 @@
+ mysql> desc ad_metrics;
++------------+--------------+------+-----+-------------------+-------------------+
+| Field      | Type         | Null | Key | Default           | Extra             |
++------------+--------------+------+-----+-------------------+-------------------+
+| id         | int          | NO   | PRI | NULL              | auto_increment    |
+| user_id    | varchar(36)  | NO   |     | NULL              |                   |
+| ad_type    | varchar(50)  | NO   |     | NULL              |                   |
+| ad_id      | varchar(50)  | NO   |     | NULL              |                   |
+| page_path  | varchar(255) | NO   |     | NULL              |                   |
+| event_type | varchar(50)  | NO   |     | NULL              |                   |
+| created_at | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+--------------+------+-----+-------------------+-------------------+
+7 rows in set (0.45 sec)
+
+mysql> desc event_metrics;
++------------+--------------+------+-----+-------------------+-------------------+
+| Field      | Type         | Null | Key | Default           | Extra             |
++------------+--------------+------+-----+-------------------+-------------------+
+| id         | int          | NO   | PRI | NULL              | auto_increment    |
+| user_id    | varchar(36)  | NO   |     | NULL              |                   |
+| event_type | varchar(50)  | NO   |     | NULL              |                   |
+| event_data | varchar(255) | NO   |     | NULL              |                   |
+| created_at | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+--------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from ad_metrics;
++-----+--------------------------------------+-----------------+-----------+-------------------------------------------------------+------------+---------------------+
+| id  | user_id                              | ad_type         | ad_id     | page_path                                             | event_type | created_at          |
++-----+--------------------------------------+-----------------+-----------+-------------------------------------------------------+------------+---------------------+
+|   1 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-20 21:56:49 |
+|   2 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-20 21:56:49 |
+|   3 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-20 21:56:49 |
+|   4 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:07 |
+|   5 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:07 |
+|   6 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:07 |
+|   7 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask                                      | load       | 2025-04-20 21:57:13 |
+|   8 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:26 |
+|   9 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:26 |
+|  10 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:26 |
+|  11 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/strip/strip                                    | load       | 2025-04-20 21:57:27 |
+|  12 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:31 |
+|  13 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:31 |
+|  14 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:31 |
+|  15 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:33 |
+|  16 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:33 |
+|  17 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:33 |
+|  18 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:36 |
+|  19 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:36 |
+|  20 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:36 |
+|  21 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:43 |
+|  22 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:43 |
+|  23 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:43 |
+|  24 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:46 |
+|  25 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:46 |
+|  26 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:46 |
+|  27 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | load       | 2025-04-20 21:57:48 |
+|  28 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | load       | 2025-04-20 21:57:48 |
+|  29 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | load       | 2025-04-20 21:57:48 |
+|  30 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | close      | 2025-04-20 21:57:51 |
+|  31 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:56 |
+|  32 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:57:56 |
+|  33 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:57:56 |
+|  34 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-20 21:57:58 |
+|  35 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5                               | error      | 2025-04-20 21:58:01 |
+|  36 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-20 21:58:02 |
+|  37 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-20 21:58:02 |
+|  38 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-20 21:58:04 |
+|  39 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:58:05 |
+|  40 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:58:05 |
+|  41 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:58:05 |
+|  42 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-20 21:59:15 |
+|  43 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-20 21:59:15 |
+|  44 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-20 21:59:15 |
+|  45 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask                                      | load       | 2025-04-20 21:59:20 |
+|  46 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:59:22 |
+|  47 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 21:59:22 |
+|  48 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 21:59:22 |
+|  49 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 22:00:03 |
+|  50 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-20 22:00:03 |
+|  51 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-20 22:00:03 |
+|  52 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 03:05:19 |
+|  53 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 03:05:19 |
+|  54 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 03:05:20 |
+|  55 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 06:47:44 |
+|  56 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-21 06:47:44 |
+|  57 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 06:47:44 |
+|  58 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 07:39:55 |
+|  59 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-21 07:39:55 |
+|  60 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 07:39:55 |
+|  61 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:02:39 |
+|  62 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:02:39 |
+|  63 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-21 12:02:39 |
+|  64 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 12:13:36 |
+|  65 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:13:36 |
+|  66 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 12:13:37 |
+|  67 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 12:13:43 |
+|  68 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 12:13:43 |
+|  69 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:13:43 |
+|  70 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-21 12:13:45 |
+|  71 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/mask/mask                                      | load       | 2025-04-21 12:13:46 |
+|  72 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/mask/mask                                      | finish     | 2025-04-21 12:14:09 |
+|  73 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:14 |
+|  74 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:14 |
+|  75 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:14 |
+|  76 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-21 12:14:14 |
+|  77 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:16 |
+|  78 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:17 |
+|  79 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:17 |
+|  80 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:23 |
+|  81 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:23 |
+|  82 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:23 |
+|  83 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:28 |
+|  84 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:28 |
+|  85 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:28 |
+|  86 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:31 |
+|  87 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:31 |
+|  88 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:31 |
+|  89 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-21 12:14:32 |
+|  90 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-21 12:14:32 |
+|  91 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-21 12:14:32 |
+|  92 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:37 |
+|  93 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:14:37 |
+|  94 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:14:37 |
+|  95 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-21 12:14:39 |
+|  96 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-21 12:14:39 |
+|  97 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-21 12:14:41 |
+|  98 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:15:01 |
+|  99 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:15:02 |
+| 100 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:15:02 |
+| 101 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-21 12:18:48 |
+| 102 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-21 12:18:48 |
+| 103 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-21 12:18:50 |
+| 104 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:18:56 |
+| 105 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 12:18:56 |
+| 106 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 12:18:56 |
+| 107 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 13:11:59 |
+| 108 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 13:11:59 |
+| 109 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-21 13:11:59 |
+| 110 | 23f8f9d7-911c-4f52-a177-67f8f62c2bc6 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 15:05:25 |
+| 111 | 23f8f9d7-911c-4f52-a177-67f8f62c2bc6 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 15:05:25 |
+| 112 | 23f8f9d7-911c-4f52-a177-67f8f62c2bc6 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 15:05:25 |
+| 113 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 17:33:17 |
+| 114 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-21 17:33:17 |
+| 115 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 17:33:17 |
+| 116 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:33:35 |
+| 117 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:33:35 |
+| 118 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 17:33:35 |
+| 119 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | interstitialAd  | 100044179 | pages/webview2/webview2                               | show       | 2025-04-21 17:33:44 |
+| 120 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | interstitialAd  | 100044179 | pages/webview2/webview2                               | load       | 2025-04-21 17:33:45 |
+| 121 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | interstitialAd  | 100044179 | pages/webview2/webview2                               | close      | 2025-04-21 17:33:47 |
+| 122 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:34:03 |
+| 123 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:34:03 |
+| 124 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 17:34:03 |
+| 125 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:35:16 |
+| 126 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:35:16 |
+| 127 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 17:35:16 |
+| 128 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:35:21 |
+| 129 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-21 17:35:21 |
+| 130 | 18ba7599-d44c-4679-93ce-ae5a5532ea87 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-21 17:35:21 |
+| 131 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 06:54:42 |
+| 132 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 06:54:42 |
+| 133 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-25 06:54:42 |
+| 134 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 06:55:22 |
+| 135 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 06:55:22 |
+| 136 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 06:55:22 |
+| 137 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 06:55:43 |
+| 138 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 06:55:43 |
+| 139 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 06:55:43 |
+| 140 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:10:55 |
+| 141 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:10:55 |
+| 142 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:10:55 |
+| 143 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:07 |
+| 144 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:07 |
+| 145 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:11:07 |
+| 146 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-25 10:11:08 |
+| 147 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:12 |
+| 148 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:12 |
+| 149 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-25 10:11:13 |
+| 150 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-25 10:11:14 |
+| 151 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | finish     | 2025-04-25 10:11:31 |
+| 152 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:38 |
+| 153 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:39 |
+| 154 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:11:39 |
+| 155 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:47 |
+| 156 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:47 |
+| 157 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:11:47 |
+| 158 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:51 |
+| 159 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:11:51 |
+| 160 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:11:52 |
+| 161 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:01 |
+| 162 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:01 |
+| 163 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:01 |
+| 164 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 10:12:03 |
+| 165 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 10:12:03 |
+| 166 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 10:12:03 |
+| 167 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:06 |
+| 168 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:06 |
+| 169 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:06 |
+| 170 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-25 10:12:07 |
+| 171 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-25 10:12:07 |
+| 172 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-25 10:12:09 |
+| 173 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:14 |
+| 174 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:14 |
+| 175 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:15 |
+| 176 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 10:12:34 |
+| 177 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 10:12:35 |
+| 178 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:35 |
+| 179 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-25 10:12:37 |
+| 180 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-25 10:12:37 |
+| 181 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-25 10:12:40 |
+| 182 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:47 |
+| 183 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:47 |
+| 184 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:47 |
+| 185 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:53 |
+| 186 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 10:12:53 |
+| 187 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:12:54 |
+| 188 | b35e6def-b47d-491e-8133-65fb7fce3c4d | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 10:34:17 |
+| 189 | b35e6def-b47d-491e-8133-65fb7fce3c4d | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 10:34:17 |
+| 190 | b35e6def-b47d-491e-8133-65fb7fce3c4d | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 10:34:17 |
+| 191 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:47:14 |
+| 192 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:47:14 |
+| 193 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-25 15:47:14 |
+| 194 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:49:31 |
+| 195 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:49:31 |
+| 196 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-25 15:49:31 |
+| 197 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:49:49 |
+| 198 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 15:49:49 |
+| 199 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:49:49 |
+| 200 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 15:52:35 |
+| 201 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:52:35 |
+| 202 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:52:35 |
+| 203 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:53:20 |
+| 204 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 15:53:20 |
+| 205 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 15:53:20 |
+| 206 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:57:48 |
+| 207 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 15:57:48 |
+| 208 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-25 15:57:48 |
+| 209 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:41 |
+| 210 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 17:04:41 |
+| 211 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:04:41 |
+| 212 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:41 |
+| 213 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:04:41 |
+| 214 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-25 17:04:41 |
+| 215 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:41 |
+| 216 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:43 |
+| 217 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:43 |
+| 218 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-25 17:04:44 |
+| 219 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:49 |
+| 220 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:49 |
+| 221 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:52 |
+| 222 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:04:52 |
+| 223 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:04:52 |
+| 224 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:05 |
+| 225 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:05 |
+| 226 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:05:05 |
+| 227 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 17:05:07 |
+| 228 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 17:05:07 |
+| 229 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-25 17:05:07 |
+| 230 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:14 |
+| 231 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:15 |
+| 232 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:05:15 |
+| 233 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | show       | 2025-04-25 17:05:18 |
+| 234 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | load       | 2025-04-25 17:05:18 |
+| 235 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | show       | 2025-04-25 17:05:18 |
+| 236 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | load       | 2025-04-25 17:05:18 |
+| 237 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | finish     | 2025-04-25 17:05:37 |
+| 238 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100035648 | pages/index/index                                     | close      | 2025-04-25 17:05:39 |
+| 239 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:50 |
+| 240 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:50 |
+| 241 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:05:51 |
+| 242 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:57 |
+| 243 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:57 |
+| 244 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:59 |
+| 245 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:05:59 |
+| 246 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:05:59 |
+| 247 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-25 17:06:01 |
+| 248 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-25 17:06:03 |
+| 249 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:06:06 |
+| 250 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:06:06 |
+| 251 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:06:06 |
+| 252 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:06:09 |
+| 253 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 17:06:09 |
+| 254 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 17:06:09 |
+| 255 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 20:26:47 |
+| 256 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 20:26:47 |
+| 257 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 20:26:47 |
+| 258 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-25 20:27:00 |
+| 259 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-25 20:27:00 |
+| 260 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | show       | 2025-04-25 20:27:19 |
+| 261 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | load       | 2025-04-25 20:27:19 |
+| 262 | 96ef7187-fc4b-4107-a820-f510f7f418c1 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 21:51:26 |
+| 263 | 96ef7187-fc4b-4107-a820-f510f7f418c1 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-25 21:51:26 |
+| 264 | 96ef7187-fc4b-4107-a820-f510f7f418c1 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 21:51:26 |
+| 265 | 932e6f43-5a89-4de4-9076-585c0624c909 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 23:32:56 |
+| 266 | 932e6f43-5a89-4de4-9076-585c0624c909 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-25 23:32:56 |
+| 267 | 932e6f43-5a89-4de4-9076-585c0624c909 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-25 23:32:56 |
+| 268 | 7b79f794-be5a-464b-943d-89025bf03186 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 00:51:29 |
+| 269 | 7b79f794-be5a-464b-943d-89025bf03186 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 00:51:30 |
+| 270 | 7b79f794-be5a-464b-943d-89025bf03186 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 00:51:30 |
+| 271 | da9fc358-1231-4771-a771-fe5a9dbf9bb5 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 01:22:09 |
+| 272 | da9fc358-1231-4771-a771-fe5a9dbf9bb5 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:22:09 |
+| 273 | da9fc358-1231-4771-a771-fe5a9dbf9bb5 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 01:22:09 |
+| 274 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 01:25:21 |
+| 275 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:25:21 |
+| 276 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 01:25:21 |
+| 277 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/mask/mask                                      | load       | 2025-04-26 01:25:34 |
+| 278 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:25:41 |
+| 279 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:25:41 |
+| 280 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 01:25:41 |
+| 281 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 01:25:58 |
+| 282 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 01:26:12 |
+| 283 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 01:26:13 |
+| 284 | ee87a342-8c88-46e9-9314-bb7de2caaa1e | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 01:26:13 |
+| 285 | c3bbe207-37d9-4daf-a431-fb5df5662404 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:59:13 |
+| 286 | c3bbe207-37d9-4daf-a431-fb5df5662404 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 01:59:13 |
+| 287 | c3bbe207-37d9-4daf-a431-fb5df5662404 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 01:59:13 |
+| 288 | c9926f59-4062-45ac-b3d6-758e0b59c68f | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 03:18:54 |
+| 289 | c9926f59-4062-45ac-b3d6-758e0b59c68f | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:18:54 |
+| 290 | c9926f59-4062-45ac-b3d6-758e0b59c68f | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:18:54 |
+| 291 | e75f2ab5-db8d-481d-83c6-c31f078707db | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:43:29 |
+| 292 | e75f2ab5-db8d-481d-83c6-c31f078707db | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:43:29 |
+| 293 | e75f2ab5-db8d-481d-83c6-c31f078707db | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 03:43:29 |
+| 294 | e75f2ab5-db8d-481d-83c6-c31f078707db | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:43:36 |
+| 295 | e75f2ab5-db8d-481d-83c6-c31f078707db | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 03:43:36 |
+| 296 | e75f2ab5-db8d-481d-83c6-c31f078707db | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 03:43:37 |
+| 297 | e75f2ab5-db8d-481d-83c6-c31f078707db | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 03:43:38 |
+| 298 | e75f2ab5-db8d-481d-83c6-c31f078707db | rewardedVideoAd | 100031568 | /pages/mask/mask                                      | load       | 2025-04-26 03:43:42 |
+| 299 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:14:57 |
+| 300 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:14:57 |
+| 301 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 07:14:57 |
+| 302 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:15:08 |
+| 303 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:15:08 |
+| 304 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:15:08 |
+| 305 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:03 |
+| 306 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:16:03 |
+| 307 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:03 |
+| 308 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:31 |
+| 309 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:16:31 |
+| 310 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:31 |
+| 311 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask                                      | load       | 2025-04-26 07:16:33 |
+| 312 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:16:34 |
+| 313 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:34 |
+| 314 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:34 |
+| 315 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/strip/strip                                    | load       | 2025-04-26 07:16:35 |
+| 316 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:37 |
+| 317 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:37 |
+| 318 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:16:37 |
+| 319 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:16:45 |
+| 320 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:45 |
+| 321 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:16:45 |
+| 322 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:17:14 |
+| 323 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:17:14 |
+| 324 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 07:17:14 |
+| 325 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:54:27 |
+| 326 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 07:54:27 |
+| 327 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 07:54:27 |
+| 328 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:55:26 |
+| 329 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:55:26 |
+| 330 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:55:26 |
+| 331 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:55:36 |
+| 332 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 07:55:36 |
+| 333 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 07:55:36 |
+| 334 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 08:58:42 |
+| 335 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 08:58:42 |
+| 336 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 08:58:42 |
+| 337 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:09:06 |
+| 338 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:09:06 |
+| 339 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 09:09:06 |
+| 340 | 5829ef54-3c9e-4bad-a188-70c7d40e6097 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:24:04 |
+| 341 | 5829ef54-3c9e-4bad-a188-70c7d40e6097 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:24:04 |
+| 342 | 5829ef54-3c9e-4bad-a188-70c7d40e6097 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 09:24:04 |
+| 343 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:34:06 |
+| 344 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 09:34:06 |
+| 345 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:34:06 |
+| 346 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:37:21 |
+| 347 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:37:21 |
+| 348 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 09:37:21 |
+| 349 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:47:34 |
+| 350 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:47:34 |
+| 351 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 09:47:34 |
+| 352 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:53:53 |
+| 353 | 7d00b630-8089-45cc-93cc-c75947ef9444 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 09:53:53 |
+| 354 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:53:53 |
+| 355 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:05 |
+| 356 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:05 |
+| 357 | 7d00b630-8089-45cc-93cc-c75947ef9444 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 09:54:05 |
+| 358 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 09:54:08 |
+| 359 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:13 |
+| 360 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:13 |
+| 361 | 7d00b630-8089-45cc-93cc-c75947ef9444 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 09:54:13 |
+| 362 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:36 |
+| 363 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 09:54:36 |
+| 364 | 7d00b630-8089-45cc-93cc-c75947ef9444 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 09:54:37 |
+| 365 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-26 09:54:41 |
+| 366 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-26 09:54:41 |
+| 367 | 7d00b630-8089-45cc-93cc-c75947ef9444 | 信息流          | 100034312 | /pages/jinling12/jinling12                            | error      | 2025-04-26 09:54:41 |
+| 368 | 28f18ef0-1ade-4ab0-8863-544d8deaf606 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:16:08 |
+| 369 | 28f18ef0-1ade-4ab0-8863-544d8deaf606 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:16:08 |
+| 370 | 28f18ef0-1ade-4ab0-8863-544d8deaf606 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:16:08 |
+| 371 | 32b6f1ff-e4a0-4001-9918-4ce752aae388 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:26:55 |
+| 372 | 32b6f1ff-e4a0-4001-9918-4ce752aae388 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:26:55 |
+| 373 | 32b6f1ff-e4a0-4001-9918-4ce752aae388 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:26:55 |
+| 374 | 32b6f1ff-e4a0-4001-9918-4ce752aae388 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 10:27:08 |
+| 375 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:40:25 |
+| 376 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 10:40:25 |
+| 377 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:40:25 |
+| 378 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/strip/strip                                    | load       | 2025-04-26 10:41:03 |
+| 379 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 10:41:14 |
+| 380 | b57c1b90-9164-45ff-8836-97fb642ed3fa | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:41:14 |
+| 381 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 10:41:14 |
+| 382 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/strip/strip                                    | load       | 2025-04-26 10:41:46 |
+| 383 | b57c1b90-9164-45ff-8836-97fb642ed3fa | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 10:41:49 |
+| 384 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:41:59 |
+| 385 | b57c1b90-9164-45ff-8836-97fb642ed3fa | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:41:59 |
+| 386 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:41:59 |
+| 387 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/mask/mask                                      | load       | 2025-04-26 10:42:08 |
+| 388 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 10:43:51 |
+| 389 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:44:23 |
+| 390 | b57c1b90-9164-45ff-8836-97fb642ed3fa | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:44:23 |
+| 391 | b57c1b90-9164-45ff-8836-97fb642ed3fa | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:44:23 |
+| 392 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 10:54:54 |
+| 393 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 10:54:54 |
+| 394 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:54:55 |
+| 395 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:11 |
+| 396 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:11 |
+| 397 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:55:11 |
+| 398 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 10:55:12 |
+| 399 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:26 |
+| 400 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:26 |
+| 401 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:55:26 |
+| 402 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 10:55:31 |
+| 403 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:35 |
+| 404 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 10:55:35 |
+| 405 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 10:55:35 |
+| 406 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:03:34 |
+| 407 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:03:34 |
+| 408 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 11:03:34 |
+| 409 | 4078b042-f87c-445b-b314-315d21b24325 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:10:41 |
+| 410 | 4078b042-f87c-445b-b314-315d21b24325 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:10:41 |
+| 411 | 4078b042-f87c-445b-b314-315d21b24325 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 11:10:41 |
+| 412 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | show       | 2025-04-26 11:30:30 |
+| 413 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | load       | 2025-04-26 11:30:31 |
+| 414 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:30:40 |
+| 415 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:30:40 |
+| 416 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 11:30:40 |
+| 417 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | show       | 2025-04-26 11:57:40 |
+| 418 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | load       | 2025-04-26 11:57:41 |
+| 419 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | close      | 2025-04-26 11:57:42 |
+| 420 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:57:43 |
+| 421 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 11:57:43 |
+| 422 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 11:57:44 |
+| 423 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 12:37:47 |
+| 424 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 12:37:47 |
+| 425 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 12:37:47 |
+| 426 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:11:11 |
+| 427 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:11:11 |
+| 428 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 14:11:11 |
+| 429 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:11:34 |
+| 430 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:11:34 |
+| 431 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:11:34 |
+| 432 | 9f91449d-30ba-4e8d-8440-466345d4382a | 信息流          | 100034312 | /pages/strip/strip                                    | load       | 2025-04-26 14:13:27 |
+| 433 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:13:36 |
+| 434 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:13:36 |
+| 435 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 14:13:36 |
+| 436 | 9f91449d-30ba-4e8d-8440-466345d4382a | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 14:14:49 |
+| 437 | 9f91449d-30ba-4e8d-8440-466345d4382a | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | finish     | 2025-04-26 14:15:14 |
+| 438 | 9f91449d-30ba-4e8d-8440-466345d4382a | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:17:18 |
+| 439 | 9f91449d-30ba-4e8d-8440-466345d4382a | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:17:18 |
+| 440 | 9f91449d-30ba-4e8d-8440-466345d4382a | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:17:18 |
+| 441 | 9f91449d-30ba-4e8d-8440-466345d4382a | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:18:34 |
+| 442 | 9f91449d-30ba-4e8d-8440-466345d4382a | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:18:34 |
+| 443 | 9f91449d-30ba-4e8d-8440-466345d4382a | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:18:34 |
+| 444 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 14:22:14 |
+| 445 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:22:49 |
+| 446 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:22:49 |
+| 447 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-26 14:22:52 |
+| 448 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:00 |
+| 449 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:00 |
+| 450 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:23:01 |
+| 451 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:07 |
+| 452 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:23:07 |
+| 453 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:07 |
+| 454 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:38 |
+| 455 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:23:38 |
+| 456 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 14:23:38 |
+| 457 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | show       | 2025-04-26 14:26:29 |
+| 458 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | load       | 2025-04-26 14:26:29 |
+| 459 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | close      | 2025-04-26 14:26:30 |
+| 460 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:26:31 |
+| 461 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:26:31 |
+| 462 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:26:32 |
+| 463 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguessPartnerCount | show       | 2025-04-26 14:26:50 |
+| 464 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguessPartnerCount | load       | 2025-04-26 14:26:50 |
+| 465 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguessPartnerCount | close      | 2025-04-26 14:26:53 |
+| 466 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | rewardedVideoAd | 100031568 | pages/showRewardedVideoAd/showRewardedVideoAd         | show       | 2025-04-26 14:26:56 |
+| 467 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | rewardedVideoAd | 100031568 | pages/showRewardedVideoAd/showRewardedVideoAd         | load       | 2025-04-26 14:26:56 |
+| 468 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | rewardedVideoAd | 100031568 | pages/showRewardedVideoAd/showRewardedVideoAd         | finish     | 2025-04-26 14:27:14 |
+| 469 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | show       | 2025-04-26 14:27:32 |
+| 470 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | load       | 2025-04-26 14:27:32 |
+| 471 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | interstitialAd  | 100044179 | /pages/genericWebview/genericWebviewguesscupsize      | close      | 2025-04-26 14:27:39 |
+| 472 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:28:08 |
+| 473 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:28:08 |
+| 474 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:28:08 |
+| 475 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:29:26 |
+| 476 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:29:26 |
+| 477 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:29:27 |
+| 478 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/mask/mask                                      | error      | 2025-04-26 14:30:27 |
+| 479 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:30:43 |
+| 480 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:30:43 |
+| 481 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:30:43 |
+| 482 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 14:30:44 |
+| 483 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 14:30:52 |
+| 484 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | finish     | 2025-04-26 14:31:13 |
+| 485 | 2e9c5630-4941-425b-a060-42393cea6975 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:59:42 |
+| 486 | 2e9c5630-4941-425b-a060-42393cea6975 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 14:59:42 |
+| 487 | 2e9c5630-4941-425b-a060-42393cea6975 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 14:59:42 |
+| 488 | 4a230cdd-4efd-4d2c-9342-ebe5fba10eb2 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 15:08:05 |
+| 489 | 4a230cdd-4efd-4d2c-9342-ebe5fba10eb2 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 15:08:06 |
+| 490 | 4a230cdd-4efd-4d2c-9342-ebe5fba10eb2 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | finish     | 2025-04-26 15:08:24 |
+| 491 | efbbde6f-6eab-446b-a10e-8b3593060c36 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 16:57:55 |
+| 492 | efbbde6f-6eab-446b-a10e-8b3593060c36 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 16:57:55 |
+| 493 | efbbde6f-6eab-446b-a10e-8b3593060c36 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 16:57:55 |
+| 494 | 8b824e53-05b6-4823-a170-424fb5fb267d | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 17:51:34 |
+| 495 | 8b824e53-05b6-4823-a170-424fb5fb267d | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 17:51:34 |
+| 496 | 8b824e53-05b6-4823-a170-424fb5fb267d | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 17:51:34 |
+| 497 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 18:00:31 |
+| 498 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 18:00:31 |
+| 499 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-26 18:00:31 |
+| 500 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 18:00:35 |
+| 501 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 18:00:36 |
+| 502 | 19079646-b3c0-4c5b-b2e9-01af369394d7 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 18:21:45 |
+| 503 | 19079646-b3c0-4c5b-b2e9-01af369394d7 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 18:21:45 |
+| 504 | 19079646-b3c0-4c5b-b2e9-01af369394d7 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 18:21:45 |
+| 505 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:21 |
+| 506 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:21 |
+| 507 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 19:53:21 |
+| 508 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:40 |
+| 509 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:40 |
+| 510 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 19:53:40 |
+| 511 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | interstitialAd  | 100044179 | pages/webview1/webview1                               | show       | 2025-04-26 19:53:44 |
+| 512 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | interstitialAd  | 100044179 | pages/webview1/webview1                               | load       | 2025-04-26 19:53:44 |
+| 513 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | interstitialAd  | 100044179 | pages/webview1/webview1                               | close      | 2025-04-26 19:53:50 |
+| 514 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:58 |
+| 515 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:53:58 |
+| 516 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 19:53:58 |
+| 517 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/strip/strip                                    | error      | 2025-04-26 19:54:01 |
+| 518 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | load       | 2025-04-26 19:54:04 |
+| 519 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | rewardedVideoAd | 100031568 | /pages/strip/strip                                    | finish     | 2025-04-26 19:54:25 |
+| 520 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:54:47 |
+| 521 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 19:54:47 |
+| 522 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 19:54:48 |
+| 523 | 3a8c865d-6a0a-43ab-a259-90c01df9d384 | interstitialAd  | 100044179 | pages/webview5/webview5                               | show       | 2025-04-26 22:18:59 |
+| 524 | 3a8c865d-6a0a-43ab-a259-90c01df9d384 | interstitialAd  | 100044179 | pages/webview5/webview5                               | load       | 2025-04-26 22:18:59 |
+| 525 | 3a8c865d-6a0a-43ab-a259-90c01df9d384 | interstitialAd  | 100044179 | pages/webview5/webview5                               | close      | 2025-04-26 22:19:01 |
+| 526 | bcc1925d-0f01-4099-8558-40db234a34ff | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 22:21:24 |
+| 527 | bcc1925d-0f01-4099-8558-40db234a34ff | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-26 22:21:24 |
+| 528 | bcc1925d-0f01-4099-8558-40db234a34ff | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-26 22:21:24 |
+| 529 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-27 06:44:29 |
+| 530 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-27 06:44:29 |
+| 531 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-27 06:44:29 |
+| 532 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-27 06:47:26 |
+| 533 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-27 06:47:26 |
+| 534 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-27 06:47:26 |
+| 535 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-27 06:48:10 |
+| 536 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | load       | 2025-04-27 06:48:10 |
+| 537 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | load       | 2025-04-27 06:48:10 |
+| 538 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-27 07:01:06 |
+| 539 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 信息流          | 100034312 | /pages/index/index                                    | error      | 2025-04-27 07:01:06 |
+| 540 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | banner          | 100044396 | /pages/index/index                                    | error      | 2025-04-27 07:01:07 |
++-----+--------------------------------------+-----------------+-----------+-------------------------------------------------------+------------+---------------------+
+540 rows in set (0.00 sec)
+
+mysql> select * from ad_metrics limit 100;
++-----+--------------------------------------+-----------------+-----------+----------------------------+------------+---------------------+
+| id  | user_id                              | ad_type         | ad_id     | page_path                  | event_type | created_at          |
++-----+--------------------------------------+-----------------+-----------+----------------------------+------------+---------------------+
+|   1 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-20 21:56:49 |
+|   2 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-20 21:56:49 |
+|   3 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | error      | 2025-04-20 21:56:49 |
+|   4 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:07 |
+|   5 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:07 |
+|   6 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:07 |
+|   7 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask           | load       | 2025-04-20 21:57:13 |
+|   8 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:26 |
+|   9 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:26 |
+|  10 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:26 |
+|  11 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/strip/strip         | load       | 2025-04-20 21:57:27 |
+|  12 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:31 |
+|  13 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:31 |
+|  14 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:31 |
+|  15 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:33 |
+|  16 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:33 |
+|  17 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:33 |
+|  18 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:36 |
+|  19 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:36 |
+|  20 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:36 |
+|  21 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:43 |
+|  22 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:43 |
+|  23 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:43 |
+|  24 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:46 |
+|  25 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:46 |
+|  26 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:46 |
+|  27 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12 | load       | 2025-04-20 21:57:48 |
+|  28 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12 | load       | 2025-04-20 21:57:48 |
+|  29 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12 | load       | 2025-04-20 21:57:48 |
+|  30 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/jinling12/jinling12 | close      | 2025-04-20 21:57:51 |
+|  31 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:56 |
+|  32 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:57:56 |
+|  33 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:57:56 |
+|  34 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5    | show       | 2025-04-20 21:57:58 |
+|  35 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5    | error      | 2025-04-20 21:58:01 |
+|  36 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5    | load       | 2025-04-20 21:58:02 |
+|  37 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5    | show       | 2025-04-20 21:58:02 |
+|  38 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | interstitialAd  | 100044179 | pages/webview5/webview5    | close      | 2025-04-20 21:58:04 |
+|  39 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:58:05 |
+|  40 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:58:05 |
+|  41 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:58:05 |
+|  42 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-20 21:59:15 |
+|  43 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-20 21:59:15 |
+|  44 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | error      | 2025-04-20 21:59:15 |
+|  45 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/mask/mask           | load       | 2025-04-20 21:59:20 |
+|  46 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:59:22 |
+|  47 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 21:59:22 |
+|  48 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 21:59:22 |
+|  49 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 22:00:03 |
+|  50 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-20 22:00:03 |
+|  51 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-20 22:00:03 |
+|  52 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 03:05:19 |
+|  53 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 03:05:19 |
+|  54 | fb64b2fc-2408-45d7-b91d-c350e63f9d86 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 03:05:20 |
+|  55 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 06:47:44 |
+|  56 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | error      | 2025-04-21 06:47:44 |
+|  57 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 06:47:44 |
+|  58 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 07:39:55 |
+|  59 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | error      | 2025-04-21 07:39:55 |
+|  60 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 07:39:55 |
+|  61 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:02:39 |
+|  62 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:02:39 |
+|  63 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | banner          | 100044396 | /pages/index/index         | error      | 2025-04-21 12:02:39 |
+|  64 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-21 12:13:36 |
+|  65 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:13:36 |
+|  66 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-21 12:13:37 |
+|  67 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-21 12:13:43 |
+|  68 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | load       | 2025-04-21 12:13:43 |
+|  69 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:13:43 |
+|  70 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/mask/mask           | error      | 2025-04-21 12:13:45 |
+|  71 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/mask/mask           | load       | 2025-04-21 12:13:46 |
+|  72 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | rewardedVideoAd | 100031568 | /pages/mask/mask           | finish     | 2025-04-21 12:14:09 |
+|  73 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:14 |
+|  74 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:14 |
+|  75 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:14 |
+|  76 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/strip/strip         | error      | 2025-04-21 12:14:14 |
+|  77 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:16 |
+|  78 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:17 |
+|  79 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:17 |
+|  80 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:23 |
+|  81 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:23 |
+|  82 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:23 |
+|  83 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:28 |
+|  84 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:28 |
+|  85 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:28 |
+|  86 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:31 |
+|  87 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:31 |
+|  88 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:31 |
+|  89 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12 | error      | 2025-04-21 12:14:32 |
+|  90 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12 | error      | 2025-04-21 12:14:32 |
+|  91 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/jinling12/jinling12 | error      | 2025-04-21 12:14:32 |
+|  92 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:37 |
+|  93 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:14:37 |
+|  94 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:14:37 |
+|  95 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5    | show       | 2025-04-21 12:14:39 |
+|  96 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5    | load       | 2025-04-21 12:14:39 |
+|  97 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | interstitialAd  | 100044179 | pages/webview5/webview5    | close      | 2025-04-21 12:14:41 |
+|  98 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:15:01 |
+|  99 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | 信息流          | 100034312 | /pages/index/index         | error      | 2025-04-21 12:15:02 |
+| 100 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | banner          | 100044396 | /pages/index/index         | load       | 2025-04-21 12:15:02 |
++-----+--------------------------------------+-----------------+-----------+----------------------------+------------+---------------------+
+100 rows in set (0.00 sec)
+
+mysql> show tables;
++------------------------------+
+| Tables_in_letmetryai         |
++------------------------------+
+| ab_experiments               |
+| ab_testers                   |
+| ab_user_assignments          |
+| ab_variants                  |
+| ab_visit_metrics             |
+| ad_metrics                   |
+| event_metrics                |
+| game_tasks                   |
+| ks_woman_ab_experiments      |
+| ks_woman_ab_testers          |
+| ks_woman_ab_user_assignments |
+| ks_woman_ab_variants         |
+| ks_woman_ab_visit_metrics    |
+| ks_woman_ad_metrics          |
+| ks_woman_event_metrics       |
+| location_reasons             |
++------------------------------+
+16 rows in set (0.02 sec)
+
+mysql> select * from event_metrics limit 100;
++----+--------------------------------------+--------------------+------------------------------------------------------------------------------------------+---------------------+
+| id | user_id                              | event_type         | event_data                                                                               | created_at          |
++----+--------------------------------------+--------------------+------------------------------------------------------------------------------------------+---------------------+
+|  1 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-20 21:57:12 |
+|  2 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-20 21:57:16 |
+|  3 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-20 21:57:19 |
+|  4 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManOpenAd       | ../sample/sample1.jpg                                                                    | 2025-04-20 21:57:21 |
+|  5 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-20 21:57:24 |
+|  6 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | stripURLs_0.0.1                                                                          | 2025-04-20 21:57:26 |
+|  7 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManOpenAd       | ../sample/sample1.jpg                                                                    | 2025-04-20 21:57:28 |
+|  8 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | stripURLs_0.0.1                                                                          | 2025-04-20 21:57:29 |
+|  9 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-20 21:59:19 |
+| 10 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png? | 2025-04-21 12:13:46 |
+| 11 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManFinishAd     | http://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png? | 2025-04-21 12:14:09 |
+| 12 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png? | 2025-04-21 12:14:11 |
+| 13 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png? | 2025-04-25 10:11:11 |
+| 14 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-25 10:11:14 |
+| 15 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManFinishAd     | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-25 10:11:31 |
+| 16 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-25 10:11:32 |
+| 17 | 135a9038-2ea1-4cc9-99c0-52a33145ef62 | TryManOpenAd       | http://43.143.241.181/images/0911/2581726056378_.pic.jpg                                 | 2025-04-25 10:11:37 |
+| 18 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | TryManOpenAd       | http://43.143.241.181/images/0911/2591726056379_.pic.jpg                                 | 2025-04-25 20:27:00 |
+| 19 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | TryManVoteStripUrl | http://43.143.241.181/images/1891725676317_.pic.jpg                                      | 2025-04-25 20:27:00 |
+| 20 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | TryManVoteStripUrl | http://43.143.241.181/images/2491725962226_.pic.jpg                                      | 2025-04-25 20:27:00 |
+| 21 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | TryManNoMoreUrl    | stripURLs_0.0.1                                                                          | 2025-04-25 20:27:09 |
+| 22 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | TryManNoMoreUrl    | stripURLs_0.0.1                                                                          | 2025-04-25 20:27:10 |
+| 23 | e75f2ab5-db8d-481d-83c6-c31f078707db | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png? | 2025-04-26 03:43:42 |
+| 24 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 07:16:33 |
+| 25 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | stripURLs_0.0.1                                                                          | 2025-04-26 07:16:35 |
+| 26 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 10:41:48 |
+| 27 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 10:43:57 |
+| 28 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManOpenAd       | http://43.143.241.181/images/0911/2581726056378_.pic.jpg                                 | 2025-04-26 10:44:03 |
+| 29 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManOpenAd       | http://43.143.241.181/images/0911/2591726056379_.pic.jpg                                 | 2025-04-26 10:44:07 |
+| 30 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManOpenAd       | http://43.143.241.181/images/0911/2601726056380_.pic.jpg                                 | 2025-04-26 10:44:13 |
+| 31 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManVoteStripUrl | http://43.143.241.181/images/0911/2591726056379_.pic.jpg                                 | 2025-04-26 10:44:21 |
+| 32 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManVoteStripUrl | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 10:44:21 |
+| 33 | b57c1b90-9164-45ff-8836-97fb642ed3fa | TryManVoteStripUrl | http://43.143.241.181/images/0911/2581726056378_.pic.jpg                                 | 2025-04-26 10:44:21 |
+| 34 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:22 |
+| 35 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:22 |
+| 36 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:22 |
+| 37 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:23 |
+| 38 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:24 |
+| 39 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:31 |
+| 40 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:32 |
+| 41 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:33 |
+| 42 | 32f9d517-fe2c-45b9-ab7c-1d80c95299ef | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 10:55:33 |
+| 43 | 9f91449d-30ba-4e8d-8440-466345d4382a | TryManOpenAd       | http://43.143.241.181/images/0911/2601726056380_.pic.jpg                                 | 2025-04-26 14:14:49 |
+| 44 | 9f91449d-30ba-4e8d-8440-466345d4382a | TryManFinishAd     | http://43.143.241.181/images/0911/2601726056380_.pic.jpg                                 | 2025-04-26 14:15:14 |
+| 45 | 9f91449d-30ba-4e8d-8440-466345d4382a | TryManOpenAd       | http://43.143.241.181/images/0911/2601726056380_.pic.jpg                                 | 2025-04-26 14:15:22 |
+| 46 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | TryManNoMoreUrl    | indexURLs_0.0.1                                                                          | 2025-04-26 14:22:11 |
+| 47 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/4320a01e8a9d480e8ea582f9f6bbfaf7_1070878037.png? | 2025-04-26 14:30:51 |
+| 48 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManVoteStripUrl | http://43.143.241.181/images/2221725798290_.pic.jpg                                      | 2025-04-26 14:30:52 |
+| 49 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManVoteStripUrl | http://43.143.241.181/images/3211727614953_.pic.jpg                                      | 2025-04-26 14:30:52 |
+| 50 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManVoteStripUrl | http://43.143.241.181/images/2101725797837_.pic.jpg                                      | 2025-04-26 14:30:52 |
+| 51 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManFinishAd     | http://eb118-file.cdn.bcebos.com/upload/4320a01e8a9d480e8ea582f9f6bbfaf7_1070878037.png? | 2025-04-26 14:31:13 |
+| 52 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/4320a01e8a9d480e8ea582f9f6bbfaf7_1070878037.png? | 2025-04-26 14:31:14 |
+| 53 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManOpenAd       | http://eb118-file.cdn.bcebos.com/upload/2e7be3834a4d401c849cb15d28c93a41_1070879948.png? | 2025-04-26 14:31:19 |
+| 54 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | TryManOpenAd       | http://43.143.241.181/images/2131725797839_.pic.jpg                                      | 2025-04-26 14:31:21 |
+| 55 | 4a230cdd-4efd-4d2c-9342-ebe5fba10eb2 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 15:08:06 |
+| 56 | 4a230cdd-4efd-4d2c-9342-ebe5fba10eb2 | TryManFinishAd     | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 15:08:24 |
+| 57 | 59052a1b-adc0-4550-99b8-49ccd1a4b474 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 18:00:36 |
+| 58 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 19:54:04 |
+| 59 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManFinishAd     | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 19:54:25 |
+| 60 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/0911/2571726056378_.pic.jpg                                 | 2025-04-26 19:54:28 |
+| 61 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/2081725797836_.pic.jpg                                      | 2025-04-26 19:54:36 |
+| 62 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/1621725673908_.pic.jpg                                      | 2025-04-26 19:54:40 |
+| 63 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/1891725676317_.pic.jpg                                      | 2025-04-26 19:54:42 |
+| 64 | fc7c1312-f97b-4a17-ac15-4897a3495a35 | TryManOpenAd       | http://43.143.241.181/images/2221725798290_.pic.jpg                                      | 2025-04-26 19:54:45 |
++----+--------------------------------------+--------------------+------------------------------------------------------------------------------------------+---------------------+
+64 rows in set (0.00 sec)
+
+mysql> Read from remote host 43.143.241.181: Operation timed out
+Connection to 43.143.241.181 closed.
+client_loop: send disconnect: Broken pipe
+[yliu5@MTX0JGWYY0 ~]$ 
+mysql> select * from ab_testers;
++-----+--------------------------------------+---------------------+
+| id  | user_id                              | created_at          |
++-----+--------------------------------------+---------------------+
+|   1 | 881887ec-efca-458a-9d1b-bd7f3fab812f | 2025-04-19 10:36:04 |
+| 199 | 8cf841ca-8bf4-4e5b-b74c-80d0868691e0 | 2025-04-19 23:24:04 |
+| 202 | e9558259-cadc-4a24-a019-f657fa568e1d | 2025-04-20 11:08:58 |
+| 203 | c290e7c0-b6bb-449e-9e94-2008b20b77d0 | 2025-04-20 12:56:51 |
+| 204 | abeb0c16-1811-4f5d-9404-83c708507288 | 2025-04-20 13:05:45 |
+| 206 | 8a0414db-2caa-4229-87fd-8f29eaba56e9 | 2025-04-20 14:48:59 |
+| 229 | 9565e3c0-e4b0-4c91-8b24-7dac820b1d50 | 2025-04-21 13:14:26 |
+| 230 | 76786d11-7169-483f-862d-c6a0131ab12c | 2025-04-21 20:13:11 |
+| 231 | 4380ef26-e3e6-4692-9dd4-f317b4bcb919 | 2025-04-27 06:44:29 |
++-----+--------------------------------------+---------------------+
+9 rows in set (0.01 sec)

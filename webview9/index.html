@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>测你喜欢的"理想女友"类型</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .more {
+            display: block; /* 确保元素是可见的 */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+            tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+            text-decoration: underline; /* 添加下划线效果 */
+            text-decoration-color: #007bff; /* 设置下划线颜色 */
+        }
+
+        .more:active {
+            background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+            transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+            text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+        }
+        .show-result-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .show-result-btn:hover {
+            background-color: #0056b3;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log(urlParams);
+
+
+            if (urlParams.get('finishedAd') === 'false') {
+                ks.navigateBack();
+            }
+    </script>
+</head>
+<body>
+
+    <h1>测你喜欢的"理想女友"类型</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="question1">
+            <p>1/5. 她更倾向于哪种活动？</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion(1)">安静地看书或看电影</button>
+                <button type="button" onclick="nextQuestion(0)">户外运动或探险</button>
+                <button type="button" onclick="nextQuestion(1)">两者都喜欢，平衡生活</button>
+            </div>
+        </div>
+
+        <div class="question" id="question2" style="display:none;">
+            <p>2/5. 她面对困难时的态度是？</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion(1)">冷静分析，寻找解决方案</button>
+                <button type="button" onclick="nextQuestion(0)">情绪化，需要安慰</button>
+                <button type="button" onclick="nextQuestion(1)">既冷静又寻求支持</button>
+            </div>
+        </div>
+
+        <div class="question" id="question3" style="display:none;">
+            <p>3/5. 她对于社交活动的态度是？</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion(1)">喜欢小范围、深入的交流</button>
+                <button type="button" onclick="nextQuestion(0)">热爱大型聚会，喜欢热闹</button>
+                <button type="button" onclick="nextQuestion(1)">两者皆可，看心情</button>
+            </div>
+        </div>
+
+        <div class="question" id="question4" style="display:none;">
+            <p>4/5. 她对于生活细节的态度是？</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion(1)">注重细节，追求完美</button>
+                <button type="button" onclick="nextQuestion(0)">大而化之，不拘小节</button>
+                <button type="button" onclick="nextQuestion(1)">适中，既不过分也不忽视</button>
+            </div>
+        </div>
+
+        <div class="question" id="question5" style="display:none;">
+            <p>5/5. 她对于未来规划的态度是？</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion(1)">有明确目标，步步为营</button>
+                <button type="button" onclick="nextQuestion(0)">随遇而安，享受当下</button>
+                <button type="button" onclick="nextQuestion(1)">既有规划也享受过程</button>
+            </div>
+        </div>
+    </form>
+
+    <style>
+        .button-group button {
+            height: 4em;
+            font-size: 1.2em;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-group button:hover {
+            background-color: #ff8800;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .button-group button:active {
+            background-color: #e67e22;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
+        }
+    </style>
+
+    <script>
+        let currentQuestion = 1;
+        let score = 0;
+
+        function nextQuestion(value) {
+            score += value;
+            document.getElementById(`question${currentQuestion}`).style.display = 'none';
+            currentQuestion++;
+            if (currentQuestion <= 5) {
+                document.getElementById(`question${currentQuestion}`).style.display = 'block';
+            } else {
+                document.getElementById('showResultBtn').style.display = 'block';
+            }
+        }
+        
+    </script>
+
+    <div class="result" id="result">
+        <p>你的"理想女友"类型是：<span id="result-type"></span></p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">看完广告显示结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    <script>
+        
+
+        function showAd() {
+            
+            ks.navigateTo({
+                url: "/pages/webview9/webview9?showAd=true&score=" + score,
+            });
+        }
+
+        function jumpToWebview6() {
+
+            ks.navigateTo({
+                url: "/pages/webview6/webview6",
+            });
+        }
+
+        function jumpToIndex() {
+
+            ks.navigateTo({
+                url: "/pages/index/index",
+            });
+        }
+
+        const cupPhotoLinks = {//+
+            '5': 'https://eb118-file.cdn.bcebos.com/upload/ece02d6b3c26460faca9f07cc727a734_1111319079.png',//+
+            '4': 'https://eb118-file.cdn.bcebos.com/upload/89c316980f84404e9b81c67f9eeb5982_1111344623.png',//+
+            '3': 'https://eb118-file.cdn.bcebos.com/upload/5be17b1a21e74800966978e67a136f87_2025516952.png',//+
+            '2': 'https://eb118-file.cdn.bcebos.com/upload/8425c60a3dc54d1ea945c5d6f52edcb8_1046805855.png',//+
+            '1': 'https://eb118-file.cdn.bcebos.com/upload/3cc06cc37ccc43e09f06e0810f8d1f84_2025517163.png',//+
+            
+        };//
+        function showResult(score) {
+            let resultType;
+            let cupSize;
+            if (score >= 5) {
+                resultType = "独特魅力型, 一般是A罩杯。这类女性个性鲜明，充满自信，喜欢追求独特的生活方式。与她们相处时，要尊重她们的个性和选择，给予足够的空间和自由，同时欣赏她们的独特魅力，多赞美她们的独到之处，共同探索新鲜有趣的事物。";
+                cupSize = '5';
+            } else if (score === 4) {
+                resultType = "知性优雅型, 一般是B罩杯。这类女性聪明睿智，举止优雅，善于处理各种关系。与她们相处时，要多进行深入的交流，分享彼此的想法和见解，尊重她们的意见，同时给予适当的关心和支持，一起享受文化的熏陶和艺术的魅力。";
+                cupSize = '4';
+            } else if (score === 3) {
+                resultType = "平衡兼顾型, 一般是C罩杯。这类女性性格温和，善于平衡各方面的需求，是家庭和事业的中坚力量。与她们相处时，要理解她们的辛苦和付出，给予足够的理解和支持，同时多参与她们的生活和工作，共同分担压力，享受平凡生活的温馨和快乐。";
+                cupSize = '3';
+            } else if (score === 2) {
+                resultType = "多元融合型, 一般是D罩杯。这类女性心胸开阔，善于接纳不同的人和事，具有很强的包容性。与她们相处时，要尊重她们的多元文化和价值观，多倾听她们的故事和经历，同时积极参与她们的兴趣爱好，共同拓展视野，享受多元文化的交融和碰撞。";
+                cupSize = '2';
+            } else if (score === 1) {
+                resultType = "随性自在型, 一般是E罩杯。这类女性性格随和，追求自由自在的生活，不喜欢受到束缚。与她们相处时，要给予足够的自由和空间，不要过多干涉她们的生活和选择，同时多陪伴她们一起享受生活的乐趣，共同追求轻松自在的生活方式。";
+                cupSize = '1';
+            } else {
+                resultType = "独特魅力型, 一般是A罩杯。这类女性的相处之道如前所述，要尊重、欣赏并给予她们足够的空间，共同探索生活的无限可能。";
+                cupSize = '5';
+            }
+            document.getElementById('questionnaire').style.display = 'none';
+            document.getElementById('result-type').innerHTML = resultType + `<img src="${cupPhotoLinks[cupSize]}" alt="Cup Photo" style="width: 100%; height: auto;">`;
+            document.getElementById('result').style.display = 'block';
+            //document.getElementById('more').style.display = 'block';
+        }
+
+        if (urlParams.get('finishedAd') !== null) {
+            const finishedAd = urlParams.get('finishedAd') === 'true';
+
+            if (finishedAd) {                
+                showResult(parseInt(urlParams.get('score')));
+            }
+        }
+    </script>
+
+
+
+</body>
+</html>

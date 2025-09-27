@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #ffcc00;
+    color: #333;
+    text-align: center;
+    padding: 1em 0;
+}
+
+header h1 {
+    font-size: 2em;
+}
+
+main {
+    padding: 1em;
+}
+
+.intro, .magic-trick, .interactive {
+    margin-bottom: 2em;
+}
+
+h2 {
+    color: #ff6600;
+    font-size: 1.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #ff8800;
+}
+
+#magic-reveal {
+    margin-top: 1em;
+    font-size: 1.2em;
+    color: #ff6600;
+}
+
+footer {
+    background-color: #ffcc00;
+    color: #333;
+    text-align: center;
+    padding: 1em 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

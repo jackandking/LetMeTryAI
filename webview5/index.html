@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- Previous head content remains the same -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全网性感美女排行榜</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+    <script src="../util.js"></script>
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        window.platformFilter = getUrlParameter('platform');
+        window.voteBudget = parseInt(getUrlParameter('budget')) || 0;
+        window.canDelete = parseInt(getUrlParameter('delete')) || 0;
+        window.onload = function() {
+            var deleteButton = document.querySelector('.show-delete-form-btn');
+            if (!window.canDelete) {
+                deleteButton.style.display = 'none';  // 如果没有 canDelete 参数，隐藏按钮
+            }
+        };
+    </script>
+    <style>
+        /* Previous styles remain the same */
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { cursor: pointer; background-color: #f9f9f9; }
+        th:hover { background-color: #f1f1f1; }
+        .vote-btn { margin: 0 2px; cursor: pointer; }
+        .vote-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .upload-form, .delete-form { margin: 20px 0; padding: 20px; border: 1px solid #ddd; display: none; }
+        .upload-form input, .upload-form button, .delete-form input, .delete-form button { margin: 5px 0; padding: 5px; }
+        .show-form-btn { margin: 20px 0; padding: 10px; cursor: pointer; }
+        @media (max-width: 600px) {
+            .table-container { display: none; }
+        }
+        @media (min-width: 601px) {
+            .list-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Previous HTML content remains the same until the form submission handler -->
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    <div class="container">
+        <h1>全网性感美女排行榜</h1>
+        <div id="budget-display">剩余投票数: <span id="remaining-budget"></span></div>
+
+        <!-- 列表视图，适用于移动设备 -->
+        <div class="list-container" id="technician-list"></div>
+
+        <!-- 表格视图，适用于桌面设备 -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-sort="rank">排名</th>
+                        <th data-sort="photo">照片</th>
+                        <th data-sort="name">名称</th>
+                        <th data-sort="platform">平台</th>
+                        <th data-sort="city">城市</th>
+                        <th data-sort="beautyScore">颜值分数</th>
+                        <th data-sort="bodyScore">身材分数</th>
+                        <th data-sort="skillScore">技能分数</th>
+                        <th data-sort="totalScore">总分</th>
+                        <th>视频链接</th>
+                    </tr>
+                </thead>
+                <tbody id="technician-table-body">
+                    <!-- 技师数据将由JavaScript动态生成 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!--button class="show-form-btn" onclick="toggleForm('uploadForm')">添加新美女</button-->
+        <button class="show-delete-form-btn" onclick="toggleForm('deleteForm')">删除美女</button>
+
+        <!-- 添加新技师表单 -->
+        <div class="upload-form" id="uploadForm">
+            <h3>添加新美女</h3>
+            <form id="newTechnicianForm">
+                <input type="text" id="newName" placeholder="名称" value="新美女" required><br>
+                <input type="text" id="newPlatform" placeholder="平台" value="快手" required><br>
+                <input type="text" id="newCity" placeholder="城市" value="未知" required><br>
+                <input type="number" id="newBeautyScore" placeholder="颜值分数" value="80" min="0" max="100" required><br>
+                <input type="number" id="newBodyScore" placeholder="身材分数" value="80" min="0" max="100" required><br>
+                <input type="number" id="newSkillScore" placeholder="技能分数" value="80" min="0" max="100" required><br>
+                <input type="url" id="newPhotoLink" placeholder="照片链接" value="https://eb118-file.cdn.bcebos.com/upload/8425c60a3dc54d1ea945c5d6f52edcb8_1046805855.png" pattern="https?://.+" title="请输入有效的URL地址（以http://或https://开头）" required size="50"><br>
+                <input type="url" id="newVideoLink" placeholder="视频链接" value="https://v.douyin.com/default" pattern="https?://.+" title="请输入有效的URL地址（以http://或https://开头）" required size="50"><br>
+                <small>示例链接格式：<br>
+                    抖音: https://v.douyin.com/iDnLafHJ/<br>
+                    快手: https://v.kuaishou.com/6Dxqi4<br>
+                </small>
+                <button type="submit">添加</button>
+                <button type="button" onclick="toggleForm('uploadForm')">取消</button>
+            </form>
+        </div>
+
+        <!-- 删除技师表单 -->
+        <div class="delete-form" id="deleteForm">
+            <h3>删除美女</h3>
+            <form id="deleteTechnicianForm">
+                <input type="url" id="deleteVideoLink" placeholder="输入要删除的视频链接" pattern="https?://.+" title="请输入有效的URL地址（以http://或https://开头）" required size="50"><br>
+                <button type="submit">删除</button>
+                <button type="button" onclick="toggleForm('deleteForm')">取消</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let technicians = [
+        {
+                rank: 1,
+                name: "芷柔",
+                platform: "抖音",
+                city: "嘉兴",
+                totalScore: 95,
+                beautyScore: 90,
+                bodyScore: 92,
+                skillScore: 92,
+                photoLink: "https://letmetryai.cn/images/zhirou.jpg",
+                videoLink: "https://v.douyin.com/iDnLafHJ/"
+            },
+            {
+                rank: 2,
+                name: "雅唸",
+                platform: "抖音",
+                city: "菏泽",
+                totalScore: 90,
+                beautyScore: 95,
+                bodyScore: 88,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG366.jpg",
+                videoLink: "https://v.kuaishou.com/6Dxqi4"
+            },
+            {
+                rank: 3,
+                name: "韩蓁蓁",
+                platform: " 快手",
+                city: "长沙",
+                totalScore: 89,
+                beautyScore: 90,
+                bodyScore: 88,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG365.jpg",
+                videoLink: "https://v.kuaishou.com/4PZquL"
+            },
+		{
+                rank: 4,
+                name: "玉缘",
+                platform: "抖音",
+                city: "上海",
+                totalScore: 90,
+                beautyScore: 91,
+                bodyScore: 85,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG371.jpg",
+                videoLink: "https://v.kuaishou.com/6AdR2i"
+            },
+            {
+                rank: 5,
+                name: "杨诗桃",
+                platform: "抖音",
+                city: "上海",
+                totalScore: 90,
+                beautyScore: 91,
+                bodyScore: 92,
+                skillScore: 92,
+                photoLink: "https://letmetryai.cn/images/WechatIMG374.jpg",
+                videoLink: "https://v.kuaishou.com/6AdR2i"
+            },
+        ];
+
+        let remainingBudget = window.voteBudget;
+        let filteredTechnicians = [];
+        
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Add form submission handler
+        document.getElementById('newTechnicianForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const photoLink = document.getElementById('newPhotoLink').value;
+            const videoLink = document.getElementById('newVideoLink').value;
+
+            if (!isValidUrl(photoLink)) {
+                alert('请输入有效的照片链接URL');
+                return;
+            }
+
+            if (!isValidUrl(videoLink)) {
+                alert('请输入有效的视频链接URL');
+                return;
+            }
+
+            const isDuplicateVideo = technicians.some(tech => tech.videoLink === videoLink);
+            if (isDuplicateVideo) {
+                alert('该视频链接已存在，请使用其他视频链接');
+                return;
+            }
+
+            const newTechnician = {
+                name: document.getElementById('newName').value,
+                platform: document.getElementById('newPlatform').value,
+                city: document.getElementById('newCity').value,
+                beautyScore: parseInt(document.getElementById('newBeautyScore').value),
+                bodyScore: parseInt(document.getElementById('newBodyScore').value),
+                skillScore: parseInt(document.getElementById('newSkillScore').value),
+                photoLink: photoLink,
+                videoLink: videoLink,
+                totalScore: 0
+            };
+
+            technicians.push(newTechnician);
+            updateKeyValueStore("webview5.data", JSON.stringify(technicians));
+            setTimeout(() => {
+                initData();
+            }, 1000);
+            this.reset();
+            toggleForm('uploadForm');
+        });
+
+        // Delete form submission handler
+        document.getElementById('deleteTechnicianForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const videoLink = document.getElementById('deleteVideoLink').value;
+
+            if (!isValidUrl(videoLink)) {
+                alert('请输入有效的视频链接URL');
+                return;
+            }
+
+            const technicianIndex = technicians.findIndex(tech => tech.videoLink === videoLink);
+            if (technicianIndex === -1) {
+                alert('未找到该视频链接对应的美女');
+                return;
+            }
+
+            technicians.splice(technicianIndex, 1);
+            updateKeyValueStore("webview5.data", JSON.stringify(technicians));
+            setTimeout(() => {
+                initData();
+            }, 1000);
+            this.reset();
+            toggleForm('deleteForm');
+        });
+
+        async function initData() {
+            setTimeout(() => {
+       
+                readKeyValueStore("webview5.data", (storedData) => {
+                    if (storedData) {
+                        technicians = JSON.parse(storedData);
+                    }
+                    
+                    filteredTechnicians = window.platformFilter 
+                        ? technicians.filter(t => t.platform.trim().toLowerCase() === window.platformFilter.toLowerCase())
+                        : technicians;
+
+                    filteredTechnicians.forEach(technician => {
+                        technician.totalScore = technician.beautyScore + technician.bodyScore + technician.skillScore;
+                    });
+
+                    filteredTechnicians.sort((a, b) => b.totalScore - a.totalScore);
+            
+                    filteredTechnicians.forEach((technician, index) => {
+                        technician.rank = index + 1;
+                    });
+
+                    updateBudgetDisplay();
+                    if (window.innerWidth <= 600) {
+                        renderList(filteredTechnicians);
+                    } else {
+                        renderTable(filteredTechnicians);
+                    }
+                });
+           
+            }, 1000);
+        }
+        
+        function updateBudgetDisplay() {
+            document.getElementById('remaining-budget').textContent = remainingBudget;
+        }
+
+        function updateScore(technicianIndex, scoreType, increment) {
+            if (remainingBudget <= 0) return;
+            
+            remainingBudget--;
+            if (increment) {
+                filteredTechnicians[technicianIndex][scoreType]++;
+            } else {
+                filteredTechnicians[technicianIndex][scoreType]--;
+            }
+            
+            filteredTechnicians[technicianIndex].totalScore = 
+                filteredTechnicians[technicianIndex].beautyScore + 
+                filteredTechnicians[technicianIndex].bodyScore + 
+                filteredTechnicians[technicianIndex].skillScore;
+            
+            filteredTechnicians.sort((a, b) => b.totalScore - a.totalScore);
+            filteredTechnicians.forEach((tech, index) => {
+                tech.rank = index + 1;
+            });
+            
+            updateKeyValueStore("webview5.data", JSON.stringify(technicians));
+            initData();
+        }
+
+        const technicianList = document.getElementById('technician-list');
+        const tableBody = document.getElementById('technician-table-body');
+
+        const renderList = (data) => {
+            technicianList.innerHTML = '';
+            data.forEach((technician, index) => {
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.borderBottom = '1px solid #ddd';
+                div.innerHTML = `
+                    <img src="${technician.photoLink}" alt="${technician.name}的照片" style="max-width: 100%; height: auto; display: block; margin-bottom: 10px;">
+                    <h2>${technician.rank}. ${technician.name}</h2>
+                    <p>平台：${technician.platform} | 城市：${technician.city}</p>
+                    <p>
+                        颜值分数：${technician.beautyScore}
+                        <button onclick="updateScore(${index}, 'beautyScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button onclick="updateScore(${index}, 'beautyScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        身材分数：${technician.bodyScore}
+                        <button onclick="updateScore(${index}, 'bodyScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button onclick="updateScore(${index}, 'bodyScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        技能分数：${technician.skillScore}
+                        <button onclick="updateScore(${index}, 'skillScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button onclick="updateScore(${index}, 'skillScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>总分：${technician.totalScore}</p>
+                    <a href="${technician.videoLink}" target="_blank">查看视频</a>
+                `;
+                technicianList.appendChild(div);
+            });
+        };
+
+        // 渲染表格视图
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            data.forEach((technician, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${technician.rank}</td>
+                    <td><img src="${technician.photoLink}" alt="${technician.name}的照片" style="width: 50px; height: auto;"></td>
+                    <td>${technician.name}</td>
+                    <td>${technician.platform}</td>
+                    <td>${technician.city}</td>
+                    <td>
+                        ${technician.beautyScore}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'beautyScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'beautyScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.bodyScore}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'bodyScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'bodyScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.skillScore}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'skillScore', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'skillScore', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>${technician.totalScore}</td>
+                    <td><a href="${technician.videoLink}" target="_blank">查看视频</a></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        };
+
+        // 表格排序功能
+        document.querySelectorAll('th').forEach(header => {
+            header.addEventListener('click', () => {
+                const sortKey = header.getAttribute('data-sort');
+                const isAscending = header.classList.contains('ascending');
+                filteredTechnicians.sort((a, b) => {
+                    if (a[sortKey] < b[sortKey]) return isAscending ? -1 : 1;
+                    if (a[sortKey] > b[sortKey]) return isAscending ? 1 : -1;
+                    return 0;
+                });
+                header.classList.toggle('ascending');
+                header.classList.toggle('descending');
+                renderTable(filteredTechnicians);
+            });
+        });
+
+        // 监听窗口大小变化，动态切换视图
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 600) {
+                technicianList.style.display = 'block';
+                tableBody.style.display = 'none';
+                renderList(filteredTechnicians);
+            } else {
+                technicianList.style.display = 'none';
+                tableBody.style.display = 'block';
+                renderTable(filteredTechnicians);
+            }
+        });
+
+        // Initialize data when page loads
+        initData();
+    </script>
+    <style>
+    
+        .more {
+            display: block; /* 确保元素是可见的 */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+            tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+            text-decoration: underline; /* 添加下划线效果 */
+            text-decoration-color: #007bff; /* 设置下划线颜色 */
+        }
+
+        .more:active {
+            background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+            transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+            text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+        }
+    
+    </style>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+
+    <script>
+        function jumpToIndex() {
+
+            ks.navigateTo({
+                url: "/pages/index/index",
+            });
+        }
+    </script>    
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <title>十大美女</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+   
+   <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff5722;
+        margin-bottom: 20px;
+    }
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .grid-item {
+        flex: 1 1 30%;
+        margin: 10px;
+        box-sizing: border-box;
+    }
+    .grid-item img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 768px) {
+        .grid-item {
+            flex: 1 1 45%;
+        }
+    }
+    @media (max-width: 480px) {
+        .grid-item {
+            flex: 1 1 90%;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>抖音旅游宝小程序 - 十大美女</h1>
+        <h1>快手男人宝小程序 - 十大美女</h1>
+        <div class="grid" id="imageGrid"></div>
+    </div>
+
+    <script>
+        // JavaScript数组存储图片URL
+        const imageUrls = [
+        "https://eb118-file.cdn.bcebos.com/upload/ca8429b6fe534204a04ca51ce36f1dd7_1561634347.png?",
+        "https://eb118-file.cdn.bcebos.com/upload/fdff11005e954e1186a6796dc1f5af9e_1561634362.png?",
+        "https://eb118-file.cdn.bcebos.com/upload/67e7ae7c49e54ba5b1a7a35c8b3b89bd_1561634411.png?",
+        "https://eb118-file.cdn.bcebos.com/upload/429727365cac4361b6d5ea6b341dcea0_1561634421.png?",
+        "https://eb118-file.cdn.bcebos.com/upload/59a6d0fed38647e5be178b5d12468ec0_1561634431.png?",
+        "http://letmetryai.cn/images/0911/2611726056381_.pic.jpg",
+        "http://letmetryai.cn/images/0911/2571726056378_.pic.jpg",
+        "https://letmetryai.cn/images/0911/2581726056378_.pic.jpg",
+        "https://letmetryai.cn/images/0911/2591726056379_.pic.jpg",
+        "https://letmetryai.cn/images/0911/2601726056380_.pic.jpg",
+        ];
+
+        // 获取网格容器
+        const gridContainer = document.getElementById('imageGrid');
+
+        // 动态生成图片元素并添加到网格容器中
+        imageUrls.forEach((url, index) => {
+            const div = document.createElement('div');
+            div.classList.add('grid-item');
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `美女${index + 1}`;
+            div.appendChild(img);
+            gridContainer.appendChild(div);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script src="../util.js"></script>
+    <title>Admin</title>
+</head>
+<script>
+    let searchHistory = [];
+    function fetchValue() {
+        const key = document.getElementById('keyInput').value;
+        readKeyValueStore(key, function(value) {
+            if (value) {
+                try {
+                    const jsonValue = JSON.parse(value);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const updateAllowed = urlParams.has('update');
+                    const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
+                    document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + JSON.stringify(jsonValue, null, 2) + '</textarea><br>' + uploadButton;
+                } catch (e) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    
+                    const updateRawAllowed = urlParams.has('raw');
+                    if(updateRawAllowed){
+                        const updateAllowed = urlParams.has('update');
+                        const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
+                        document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + value + '</textarea><br>' + uploadButton;
+                    }else{
+                        document.getElementById('result').textContent = 'Error: Invalid JSON. Raw data: ' + value;
+                
+                    }
+                }
+                addToHistory(key);
+                updateKeyValueStore('webview7.data', JSON.stringify(searchHistory));
+            } else {
+                document.getElementById('result').textContent = 'No value found for the given key';
+            }
+        });
+    }
+
+    function uploadValue() {
+        const key = document.getElementById('keyInput').value;
+        const newValue = document.getElementById('jsonEditor').value;
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const updateRawAllowed = urlParams.has('raw');
+            updateRawAllowed || JSON.parse(newValue); // Validate JSON
+            updateKeyValueStore(key, newValue);
+            alert('Value updated successfully');
+        } catch (e) {
+            alert('Invalid JSON format');
+        }
+    }
+    function addToHistory(key) {
+        if (!searchHistory.includes(key)) {
+            searchHistory.unshift(key);
+            if (searchHistory.length > 10) {
+                searchHistory.pop();
+            }
+            updateHistoryDisplay();
+        }
+    }
+
+    function updateHistoryDisplay() {
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '';
+        searchHistory.forEach(key => {
+            const li = document.createElement('li');
+            li.textContent = key;
+            li.onclick = function() {
+                document.getElementById('keyInput').value = key;
+                fetchValue();
+            };
+            historyList.appendChild(li);
+        });
+    }
+
+    // Load search history on page load
+    readKeyValueStore('webview7.data', function(value) {
+        if (value) {
+            searchHistory = JSON.parse(value);
+            updateHistoryDisplay();
+        }
+    });
+
+    // Check if 'h' parameter is present in the URL
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.has('h')) {
+            document.getElementById('historySection').style.display = 'none';
+        }
+    };
+</script>
+<body>
+    <div>
+        <input type="text" id="keyInput" placeholder="Enter key" value="LetMeTryManKS.1.7.0"/>
+        <button onclick="fetchValue()">Fetch Value</button>
+    </div>
+    <div id="result"></div>
+    <div id="historySection">
+        <h3>Search History</h3>
+        <ul id="historyList"></ul>
+    </div>
+</body>
+</html>

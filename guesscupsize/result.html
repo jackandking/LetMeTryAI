@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>世界上最多的女性罩杯是哪个？</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #ff6f61;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .option {
+      padding: 10px 20px;
+      background-color: #fff;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .option:hover {
+      background-color: #ff6f61;
+      border-color: #ff6f61;
+      color: #fff;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .bar-chart {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      height: 200px;
+      margin-top: 20px;
+    }
+    .bar {
+      width: 40px;
+      background-color: #ff6f61;
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>世界上最多的女性罩杯是哪个？</h1>
+  <div class="options">
+    <div class="option" data-cup="A">A</div>
+    <div class="option" data-cup="B">B</div>
+    <div class="option" data-cup="C">C</div>
+    <div class="option" data-cup="D">D</div>
+    <div class="option" data-cup="E+">E+</div>
+  </div>
+  <div class="result" id="result"></div>
+
+  <script>
+    // 初始化投票数据
+    let cupvote = {
+      A: 0,
+      B: 0,
+      C: 0,
+      D: 0,
+      "E+": 0
+    };
+
+    // 读取当前投票结果
+    function readKeyValueStore(key, callback) {
+      // 模拟从服务器获取数据
+      const data = localStorage.getItem(key);
+      if (data) {
+        callback(JSON.parse(data));
+      } else {
+        callback(cupvote); // 默认值
+      }
+    }
+
+    // 更新投票结果
+    function updateKeyValueStore(key, data) {
+      // 模拟上传数据到服务器
+      localStorage.setItem(key, data);
+    }
+
+    // 显示广告
+    function showAd(callback) {
+      // 模拟广告展示
+      setTimeout(() => {
+        callback({ finishedAd: true });
+      }, 2000); // 假设广告持续 2 秒
+    }
+
+    // 显示投票结果直方图
+    function showResult() {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<h2>投票结果</h2>";
+      const barChart = document.createElement("div");
+      barChart.className = "bar-chart";
+
+      for (const [cup, count] of Object.entries(cupvote)) {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.height = `${count * 10}px`; // 根据得票数设置高度
+        bar.innerText = count;
+        barChart.appendChild(bar);
+      }
+
+      resultDiv.appendChild(barChart);
+    }
+
+    // 绑定选项点击事件
+    document.querySelectorAll(".option").forEach(option => {
+      option.addEventListener("click", () => {
+        const selectedCup = option.getAttribute("data-cup");
+
+        // 读取当前投票结果
+        readKeyValueStore("guesscupsize.data", (data) => {
+          cupvote = data;
+          cupvote[selectedCup] += 1; // 更新投票结果
+
+          // 上传更新后的投票结果
+          updateKeyValueStore("guesscupsize.data", JSON.stringify(cupvote));
+
+          // 显示广告
+          showAd((response) => {
+            if (response.finishedAd) {
+              showResult(); // 广告结束后显示结果
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

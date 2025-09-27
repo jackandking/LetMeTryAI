@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+    <style>
+        /* 省略其他非关键样式 */
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { cursor: pointer; background-color: #f9f9f9; }
+        th:hover { background-color: #f1f1f1; }
+        @media (max-width: 600px) {
+            .table-container { display: none; }
+        }
+        @media (min-width: 601px) {
+            .list-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px;" id="pagesTable">
+    <!-- Table headers -->
+    <tr>
+        <th style="border: 1px solid #ddd; padding: 8px;">Page Name</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">Page Description</th>
+    </tr>
+    <!-- Table body will be dynamically generated here -->
+</table>
+
+<script>
+    // Define an array of objects, each representing a page
+    const pages = [
+        { name: 'webview1', description: '十大诱人美女', href: '../webview1.html' },
+        { name: 'webview2', description: '按摩技师排行榜', href: '../webview2' },
+        { name: 'webview3', description: '儿童魔术乐园', href: '../webview3' },
+        { name: 'webview4', description: '十大留人美女', href: '../webview4' },
+        { name: 'webview5', description: '全网性感美女排行榜', href: '../webview5' },
+        { name: 'webview6', description: '美女罩杯鉴定榜', href: '../webview6' },
+        { name: 'webview7', description: 'Admin', href: '../webview7' },
+        { name: 'webview9', description: '测你喜欢的"理想女友"类型', href: '../webview9' },
+        { name: 'webview10', description: '十大美女', href: '../webview10' },
+        { name: 'webview11', description: 'AI大模型排行榜', href: '../webview11' },
+        { name: 'webview12', description: '新年烟花', href: '../webview12' },
+        { name: 'webview13', description: '入门宝', href: '../webview13' },
+        { name: 'webview14', description: 'HTML编程入门教程', href: '../webview14' },
+        { name: 'webview15', description: '摆地摊入门指南', href: '../webview15' },
+        { name: 'webview16', description: '理发入门', href: '../webview16' },
+        //{ name: 'webview17', description: 'JavaScript 入门指南', href: '../webview17' },
+        //{ name: 'webview18', description: 'Python 入门指南', href: '../webview18' },
+        // Add more pages here as needed
+    ];
+
+    // Function to generate table rows based on the array of pages
+    function generateTableRows(pages) {
+        const tableBody = document.getElementById('pagesTable');
+        pages.forEach(page => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="border: 1px solid #ddd; padding: 8px;"><a href="${page.href}">${page.name}</a></td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${page.description}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    // Call the function to generate the table rows
+    generateTableRows(pages);
+</script>
+</body>
+</html>

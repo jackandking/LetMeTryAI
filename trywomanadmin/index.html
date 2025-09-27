@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TryWoman Admin</title>
+    <style>
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .prompts-section {
+            margin-bottom: 20px;
+        }
+        .prompt-box {
+            margin-bottom: 15px;
+        }
+        .prompt-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .prompt-display {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 20px;
+            cursor: pointer;
+        }
+        .url-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .preview-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .preview-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .preview-image {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="prompts-section">
+                <div class="prompt-box">
+                    <span class="prompt-label">Original Prompt:</span>
+                    <div class="prompt-display" id="originalPrompt">No prompt available</div>
+                </div>
+                
+                <div class="prompt-box">
+                    <span class="prompt-label">AI Generated Prompt:</span>
+                    <textarea 
+                        id="aiPrompt" 
+                        class="prompt-display"
+                        style="min-height: 100px; width: 100%;"
+                    >No prompt available</textarea>
+                    <button 
+                        type="button" 
+                        class="submit-btn" 
+                        style="margin-top: 10px;"
+                        onclick="copyPrompt()"
+                    >Copy Prompt</button>
+                </div>
+            </div>
+            
+            <textarea 
+                placeholder="Enter photo URL" 
+                id="photoUrl"
+                class="url-input"
+            ></textarea>
+            
+            <div class="preview-container" id="previewContainer" style="display: none;">
+                <span class="preview-title">Preview:</span>
+                <div class="preview-prompt" id="previewPrompt">No prompt available</div>
+                <img 
+                    src="" 
+                    id="previewImage"
+                    class="preview-image"
+                />
+            </div>
+
+            <button type="button" id="submitBtn" class="submit-btn">
+                Submit Photo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAiPrompts();
+            
+            document.getElementById('photoUrl').addEventListener('input', function(e) {
+                const url = e.target.value;
+                if (url) {
+                    document.getElementById('previewContainer').style.display = 'block';
+                    document.getElementById('previewImage').src = url;
+                } else {
+                    document.getElementById('previewContainer').style.display = 'none';
+                }
+            });
+            
+            document.getElementById('submitBtn').addEventListener('click', onSubmit);
+            
+            document.querySelectorAll('.prompt-display').forEach(el => {
+                //el.addEventListener('click', onPromptClick);
+            });
+        });
+        
+        async function loadAiPrompts() {
+            try {
+                const MySQLUtil = await import('../util/mysql-util.js');
+                const AIUtils = await import('../util/ai_utils.js');
+                
+                // Get top voted prompt from database
+                const results = await new Promise((resolve, reject) => {
+                    MySQLUtil.queryDatabase('SELECT prompt FROM ks_woman_photos ORDER BY vote_count DESC LIMIT 1', [], 
+                        (err, results) => err ? reject(err) : resolve(results));
+                });
+                
+                if (results && results.length > 0) {
+                    const basePrompt = results[0].prompt;
+                    document.getElementById('originalPrompt').textContent = basePrompt;
+                    
+                    // Generate enhanced prompt with AI
+                    const enhancedPrompt = await new Promise((resolve, reject) => {
+                        AIUtils.generateInnovativePrompt(basePrompt, 0.1, 
+                            (err, newPrompt) => err ? reject(err) : resolve(newPrompt));
+                    });
+                    
+                    document.getElementById('aiPrompt').textContent = enhancedPrompt;
+                    document.getElementById('previewPrompt').textContent = enhancedPrompt;
+                } else {
+                    document.getElementById('originalPrompt').textContent = 'No prompts found';
+                    document.getElementById('aiPrompt').textContent = 'No prompts found';
+                }
+            } catch (error) {
+                console.error('Error loading prompts:', error);
+                document.getElementById('originalPrompt').textContent = 'Error loading prompt';
+                document.getElementById('aiPrompt').textContent = 'Error loading prompt';
+            }
+        }
+        
+        function onPromptClick() {
+            const prompt = this.textContent;
+            if (prompt !== 'No prompt available') {
+                navigator.clipboard.writeText(prompt)
+                    .then(() => alert('Prompt copied to clipboard'))
+                    .catch(() => alert('Failed to copy prompt'));
+            }
+        }
+        
+        async function copyPrompt() {
+            const prompt = document.getElementById('aiPrompt').value;
+            if (prompt && prompt !== 'No prompt available') {
+                try {
+                    await navigator.clipboard.writeText(prompt);
+                    alert('Prompt copied to clipboard');
+                } catch (err) {
+                    alert('Failed to copy prompt');
+                }
+            }
+        }
+        
+        async function onSubmit() {
+            const prompt = document.getElementById('aiPrompt').textContent;
+            const url = document.getElementById('photoUrl').value;
+            
+            if (!prompt || prompt === 'No prompt available' || !url) {
+                alert('Please wait for prompt to load and enter URL');
+                return;
+            }
+            
+            try {
+                const MySQLUtil = await import('../util/mysql-util.js');
+                const data = {
+                    prompt: prompt,
+                    url: url,
+                    vote_count: 0,
+                    devote_count: 0
+                };
+                
+                await new Promise((resolve, reject) => {
+                    MySQLUtil.insertRecord('ks_woman_photos', data, 
+                        (err, result) => err ? reject(err) : resolve(result));
+                });
+                
+                alert('Photo submitted successfully!');
+                document.getElementById('photoUrl').value = '';
+                document.getElementById('previewContainer').style.display = 'none';
+            } catch (error) {
+                console.error('Error submitting photo:', error);
+                alert('Failed to submit photo');
+            }
+        }
+    </script>
+</body>
+</html>

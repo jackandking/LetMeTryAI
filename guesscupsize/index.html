@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>猜猜看她是什么罩杯</title>
+    <script src="../util.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .more {
+            display: block; /* 确保元素是可见的 */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+            tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+            text-decoration: underline; /* 添加下划线效果 */
+            text-decoration-color: #007bff; /* 设置下划线颜色 */
+        }
+
+        .more:active {
+            background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+            transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+            text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+        }
+        .show-result-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .show-result-btn:hover {
+            background-color: #0056b3;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log(urlParams);
+
+
+            if (urlParams.get('finishedAd') === 'false') {
+                ks.navigateBack();
+            }
+    </script>
+</head>
+<body>
+
+    <h1>猜猜看她是什么罩杯</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="question1">
+            <p>猜一猜视频中的美女是什么罩杯</p>
+            <div class="button-group">
+                <button type="button" onclick="nextQuestion('A')">A罩杯</button>
+                <button type="button" onclick="nextQuestion('B')">B罩杯</button>
+                <button type="button" onclick="nextQuestion('C')">C罩杯</button>
+                <button type="button" onclick="nextQuestion('D')">D罩杯</button>
+                <button type="button" onclick="nextQuestion('E+')">E+罩杯</button>
+            </div>
+        </div>
+    </form>
+
+    <style>
+        .button-group button {
+            height: 4em;
+            font-size: 1.2em;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-group button:hover {
+            background-color: #ff8800;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .button-group button:active {
+            background-color: #e67e22;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
+        }
+    </style>
+
+    <script>
+        let currentQuestion = 1;
+        let score = 0;
+        // 初始化投票数据
+    let cupvote = {
+      A: 0,
+      B: 0,
+      C: 0,
+      D: 0,
+      "E+": 0
+    };
+
+        function nextQuestion(selectedCup) {
+            // 读取当前投票结果
+        getConfig("guesscupsize.data", (data) => {
+            // 若没有数据，则初始化为 0
+          if (data !== null) {
+            cupvote = data;
+          }
+          cupvote[selectedCup] += 1; // 更新投票结果
+
+          // 上传更新后的投票结果
+          updateConfig("guesscupsize.data", cupvote);
+        });
+
+            
+            document.getElementById(`question${currentQuestion}`).style.display = 'none';
+            currentQuestion++;
+            if (currentQuestion <= 1) {
+                document.getElementById(`question${currentQuestion}`).style.display = 'block';
+            } else {
+                document.getElementById('showResultBtn').style.display = 'block';
+            }
+        }
+        
+    </script>
+
+    <div class="result" id="result">
+        <p>正在获取最新统计结果...</p>
+    </div>
+    <style>
+        .bar-chart {
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          gap: 20px;
+          height: 300px;
+          margin-top: 20px;
+        }
+      
+        .bar-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      
+        .bar {
+          width: 40px;
+          background-color: #ff6f61;
+          border-radius: 5px 5px 0 0;
+          transition: height 0.3s;
+        }
+      
+        .bar-label {
+          margin-top: 5px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #333;
+        }
+      
+        .cup-label {
+          margin-top: 5px;
+          font-size: 14px;
+          color: #666;
+        }
+      </style>
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">看完广告显示结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    <script>
+        
+
+        function showAd() {
+            
+            ks.navigateTo({
+                url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=guesscupsize",
+            });
+        }
+
+        function jumpToWebview6() {
+
+            ks.navigateTo({
+                url: "/pages/webview6/webview6",
+            });
+        }
+
+        function jumpToIndex() {
+
+            ks.navigateTo({
+                url: "/pages/index/index",
+            });
+        }
+
+      
+        // 显示投票结果直方图
+        function showResult(cupvote) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "<h2>投票结果</h2>";
+
+  // 创建直方图容器
+  const barChart = document.createElement("div");
+  barChart.className = "bar-chart";
+
+  // 遍历投票结果
+  for (const [cup, count] of Object.entries(cupvote)) {
+    // 创建柱子容器
+    const barContainer = document.createElement("div");
+    barContainer.className = "bar-container";
+
+    // 创建柱子
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.height = `${count * 10}px`; // 根据得票数设置高度
+
+    // 创建柱子标签（显示 count 值）
+    const barLabel = document.createElement("div");
+    barLabel.className = "bar-label";
+    barLabel.innerText = count;
+
+    // 创建柱子名称（显示 cup 名称）
+    const cupLabel = document.createElement("div");
+    cupLabel.className = "cup-label";
+    cupLabel.innerText = cup;
+
+    // 将柱子和标签添加到柱子容器中
+    barContainer.appendChild(bar);
+    barContainer.appendChild(barLabel);
+    barContainer.appendChild(cupLabel);
+
+    // 将柱子容器添加到直方图中
+    barChart.appendChild(barContainer);
+  }
+
+  // 将直方图添加到结果区域
+  resultDiv.appendChild(barChart);
+}
+
+        if (urlParams.get('finishedAd') !== null) {
+            const finishedAd = urlParams.get('finishedAd') === 'true';
+
+            if (finishedAd) {       
+                document.getElementById('questionnaire').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                getConfig("guesscupsize.data", (data) => {         
+                    showResult(data);
+                });
+            }
+        }
+    </script>
+
+
+
+</body>
+</html>

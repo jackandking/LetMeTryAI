@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Game Tasks</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .task-list {
+            margin-top: 20px;
+        }
+        .task-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        .task-item:hover {
+            background-color: #f8f9fa;
+        }
+        .task-info {
+            flex-grow: 1;
+        }
+        .task-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-complete {
+            background: #d4edda;
+            color: #155724;
+        }
+        .task-timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tasks.html">View All Tasks</a>
+    </nav>
+    <div class="container">
+        <h1>All Tasks</h1>
+        <div id="taskList" class="task-list"></div>
+    </div>
+
+    <script type="module">
+        import { getAllTasks } from './db.js';
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleString();
+        }
+
+        function displayTasks() {
+            console.log('Fetching all tasks...');
+            getAllTasks((err, tasks) => {
+                if (err) {
+                    console.error('Error fetching tasks:', err);
+                    return;
+                }
+
+                console.log(`Retrieved ${tasks ? tasks.length : 0} tasks`);
+                const taskList = document.getElementById('taskList');
+                taskList.innerHTML = '';
+
+                if (!tasks || tasks.length === 0) {
+                    console.log('No tasks found');
+                    taskList.innerHTML = '<p>No tasks found.</p>';
+                    return;
+                }
+
+                console.log('Rendering task list...');
+                tasks.forEach(task => {
+                    console.log(`Processing task: ${task.id} - ${task.filename} (${task.status})`);
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task-item';
+                    taskElement.innerHTML = `
+                        <div class="task-info">
+                            <h3>${task.filename}</h3>
+                            <div class="task-timestamp">Created: ${formatDate(task.created_at)}</div>
+                            <div class="task-timestamp">Updated: ${formatDate(task.updated_at)}</div>
+                        </div>
+                        <div class="task-status status-${task.status.toLowerCase()}">${task.status}</div>
+                    `;
+                    taskElement.onclick = () => {
+                        console.log(`Navigating to task details: ${task.id}`);
+                        window.location.href = `task.html?id=${task.id}`;
+                    };
+                    taskList.appendChild(taskElement);
+                });
+                console.log('Task list rendering complete');
+            });
+        }
+
+        // Initial load
+        displayTasks();
+
+        // Refresh every 30 seconds
+        setInterval(displayTasks, 30000);
+    </script>
+</body>
+</html>

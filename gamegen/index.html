@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Game Generator</title>
+    <style>
+        nav {
+            background: #333;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #007bff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .upload-section {
+            text-align: center;
+            padding: 40px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .upload-section:hover {
+            border-color: #007bff;
+        }
+        #preview {
+            max-width: 100%;
+            margin: 20px 0;
+            display: none;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn:disabled {
+            background: #ccc;
+        }
+        #status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-complete {
+            background: #d4edda;
+            color: #155724;
+        }
+        #gameContainer {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="tasks.html">View All Tasks</a>
+    </nav>
+    <div class="container">
+        <h1>Homework Game Generator</h1>
+        <p>Upload your homework screenshot and we'll generate a game to help you understand it better!</p>
+        
+        <div class="upload-section" id="dropZone">
+            <input type="file" id="fileInput" accept="image/*" style="display: none">
+            <button class="btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+            <p>or drag and drop your image here</p>
+            <img id="preview">
+        </div>
+
+        <button id="submitBtn" class="btn" disabled>Generate Game</button>
+
+        <div id="status"></div>
+        <div id="taskDetails" style="display: none; margin-top: 20px;">
+            <h3>Task Details</h3>
+            <p><strong>Task ID:</strong> <span id="taskId"></span></p>
+            <p><strong>Status:</strong> <span id="taskStatus"></span></p>
+            <p><strong>Created:</strong> <span id="taskCreated"></span></p>
+            <p><strong>Last Updated:</strong> <span id="taskUpdated"></span></p>
+        </div>
+        <div id="gameContainer"></div>
+    </div>
+
+    <script type="module">
+        import { createTask, getTask, updateTaskStatus } from './db.js';
+        import { uploadFile } from '../util/file-util.js';
+        let taskId = null;
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const submitBtn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
+        const gameContainer = document.getElementById('gameContainer');
+
+        // Handle drag and drop
+        dropZone.ondragover = (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#007bff';
+        };
+
+        dropZone.ondragleave = () => {
+            dropZone.style.borderColor = '#ccc';
+        };
+
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#ccc';
+            const file = e.dataTransfer.files[0];
+            console.log('File dropped:', file ? `${file.name} (${file.type})` : 'No file');
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            } else if (file) {
+                console.warn('Invalid file type dropped:', file.type);
+            }
+        };
+
+        fileInput.onchange = () => {
+            const file = fileInput.files[0];
+            console.log('File selected:', file ? `${file.name} (${file.type})` : 'No file');
+            if (file) {
+                handleFile(file);
+            }
+        };
+
+        function handleFile(file) {
+            console.log('Processing file:', file.name);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                console.log('File read successfully');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                submitBtn.disabled = false;
+            };
+            reader.onerror = (error) => {
+                console.error('Error reading file:', error);
+                status.className = 'status-error';
+                status.style.display = 'block';
+                status.textContent = 'Error reading file. Please try again.';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        submitBtn.onclick = async () => {
+            if (!preview.src) {
+                console.warn('Submit attempted without image');
+                return;
+            }
+
+            console.log('Starting game generation process');
+            submitBtn.disabled = true;
+            status.className = 'status-processing';
+            status.style.display = 'block';
+            status.textContent = 'Processing your homework...';
+            
+            // Update status styles
+            const statusStyles = document.createElement('style');
+            statusStyles.textContent = `
+                .status-processing {
+                    background: #e2f3ff;
+                    color: #0066cc;
+                }
+                .status-failed {
+                    background: #ffe6e6;
+                    color: #cc0000;
+                }
+            `;
+            document.head.appendChild(statusStyles);
+
+            // Generate UUID first to ensure consistency
+            const uuid = crypto.randomUUID();
+            const fileExtension = fileInput.files[0].name.split('.').pop();
+            const inputPath = '/gamegen/input/' + uuid + '.' + fileExtension;
+            
+            try {
+                await uploadFile(fileInput.files[0], 'gamegen/input', uuid);
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                status.className = 'status-error';
+                status.textContent = 'Error uploading file. Please try again.';
+                submitBtn.disabled = false;
+                return;
+            }
+
+            createTask(fileInput.files[0].name, inputPath, (err, newTaskId) => {
+                if (err) {
+                    console.error('Error creating task:', err);
+                    status.className = 'status-error';
+                    status.textContent = 'Error creating task. Please try again.';
+                    return;
+                }
+                
+                taskId = newTaskId;
+                console.log('Task created with ID:', taskId);
+                checkTaskStatus();
+            });
+        };
+
+        function checkTaskStatus() {
+            if (!taskId) {
+                console.warn('Check status called without task ID');
+                return;
+            }
+
+            console.log('Checking status for task:', taskId);
+            getTask(taskId, (err, taskData) => {
+                if (err || !taskData) {
+                    console.warn('Error getting task:', err);
+                    return;
+                }
+                
+                console.log('Task status:', taskData.status);
+                
+                // Update task details display
+                document.getElementById('taskDetails').style.display = 'block';
+                document.getElementById('taskId').textContent = taskId;
+                document.getElementById('taskStatus').textContent = taskData.status;
+                document.getElementById('taskCreated').textContent = new Date(taskData.created_at).toLocaleString();
+                document.getElementById('taskUpdated').textContent = new Date(taskData.updated_at).toLocaleString();
+
+                if (taskData.status === 'complete' && taskData.output_path) {
+                    console.log('Game generation complete');
+                    status.className = 'status-complete';
+                    status.textContent = 'Your game is ready!';
+                    gameContainer.style.display = 'block';
+                    // Display game and add developer upload form
+                    gameContainer.innerHTML = `
+                        <div class="game-content">
+                            <iframe src="${taskData.output_path}" width="100%" height="600px" frameborder="0"></iframe>
+                        </div>
+                        <div class="developer-section">
+                            <h3>Developer Upload</h3>
+                            <form id="devUploadForm">
+                                <input type="file" accept=".html" required>
+                                <button type="submit" class="btn">Upload Game HTML</button>
+                            </form>
+                        </div>
+                    `;
+
+                    // Handle developer uploads
+                    const devUploadForm = document.getElementById('devUploadForm');
+                    devUploadForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        const file = devUploadForm.querySelector('input[type="file"]').files[0];
+                        const outputPath = '/gamegen/output/' + taskId;
+                        await uploadFile(file, outputPath);
+
+                        // Update task status and output path
+                        updateTaskStatus(taskId, 'completed', outputPath, null, (err) => {
+                            if (err) {
+                                console.error('Error updating task status:', err);
+                                return;
+                            }
+                            console.log('Task updated successfully');
+                        });
+                    };
+                } else if (taskData.status === 'pending') {
+                    console.log('Task still pending, scheduling next check');
+                    setTimeout(checkTaskStatus, 5000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
