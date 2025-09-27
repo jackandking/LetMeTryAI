@@ -6,7 +6,7 @@ const log = (message) => {
 
 // Function to query MySQL database
 const queryDatabase = (query, params, callback) => {
-  fetch('https://letmetryai.cn/lws/mysql/query', {
+  fetch('https://43.143.241.181/lws/mysql/query', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ const queryDatabase = (query, params, callback) => {
 
 // Function to get record by ID
 const getById = (table, id, callback) => {
-  fetch('https://letmetryai.cn/lws/mysql/getById', {
+  fetch('https://43.143.241.181/lws/mysql/getById', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const getById = (table, id, callback) => {
 
 // Function to insert record
 const insertRecord = (table, data, callback) => {
-  fetch('https://letmetryai.cn/lws/mysql/insert', {
+  fetch('https://43.143.241.181/lws/mysql/insert', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ const insertRecord = (table, data, callback) => {
 
 // Function to update record
 const updateRecord = (table, id, data, callback) => {
-  fetch('https://letmetryai.cn/lws/mysql/update', {
+  fetch('https://43.143.241.181/lws/mysql/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ const updateRecord = (table, id, data, callback) => {
 
 // Function to delete record
 const deleteRecord = (table, id, callback) => {
-  fetch('https://letmetryai.cn/lws/mysql/delete', {
+  fetch('https://43.143.241.181/lws/mysql/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
