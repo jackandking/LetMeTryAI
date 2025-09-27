@@ -1,5 +1,6 @@
 // file-util.test.js
 import { uploadFile } from './file-util';
+import { API_ENDPOINTS } from './config';
 
 // 启用 fetch 模拟
 //global.fetch = require('jest-fetch-mock').enableMocks();
@@ -19,7 +20,7 @@ describe('uploadFile', () => {
     const result = await uploadFile(fileObject, targetPath);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://43.143.241.181/lws/file/upload', {
+    expect(fetch).toHaveBeenCalledWith(API_ENDPOINTS.FILE_UPLOAD, {
       method: 'POST',
       body: expect.any(FormData),
       headers: { 'Content-Type': 'multipart/form-data' }
@@ -51,7 +52,7 @@ describe('uploadFile', () => {
     const result = await uploadFile(fileObject);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://43.143.241.181/lws/file/upload', {
+    expect(fetch).toHaveBeenCalledWith(API_ENDPOINTS.FILE_UPLOAD, {
       method: 'POST',
       body: expect.any(FormData),
       headers: { 'Content-Type': 'multipart/form-data' }

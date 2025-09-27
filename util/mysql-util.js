@@ -1,12 +1,14 @@
 // MySQL utility functions
 
+import { API_ENDPOINTS } from './config.js';
+
 const log = (message) => {
   console.log(message);
 };
 
 // Function to query MySQL database
 const queryDatabase = (query, params, callback) => {
-  fetch('https://43.143.241.181/lws/mysql/query', {
+  fetch(API_ENDPOINTS.MYSQL_QUERY, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -26,7 +28,7 @@ const queryDatabase = (query, params, callback) => {
 
 // Function to get record by ID
 const getById = (table, id, callback) => {
-  fetch('https://43.143.241.181/lws/mysql/getById', {
+  fetch(API_ENDPOINTS.MYSQL_GET_BY_ID, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -46,7 +48,7 @@ const getById = (table, id, callback) => {
 
 // Function to insert record
 const insertRecord = (table, data, callback) => {
-  fetch('https://43.143.241.181/lws/mysql/insert', {
+  fetch(API_ENDPOINTS.MYSQL_INSERT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -77,7 +79,7 @@ const insertRecord = (table, data, callback) => {
 
 // Function to update record
 const updateRecord = (table, id, data, callback) => {
-  fetch('https://43.143.241.181/lws/mysql/update', {
+  fetch(API_ENDPOINTS.MYSQL_UPDATE, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -97,7 +99,7 @@ const updateRecord = (table, id, data, callback) => {
 
 // Function to delete record
 const deleteRecord = (table, id, callback) => {
-  fetch('https://43.143.241.181/lws/mysql/delete', {
+  fetch(API_ENDPOINTS.MYSQL_DELETE, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
