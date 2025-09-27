@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <title>十大诱人美女</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+   
+   <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff5722;
+        margin-bottom: 20px;
+    }
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .grid-item {
+        flex: 1 1 30%;
+        margin: 10px;
+        box-sizing: border-box;
+    }
+    .grid-item img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 768px) {
+        .grid-item {
+            flex: 1 1 45%;
+        }
+    }
+    @media (max-width: 480px) {
+        .grid-item {
+            flex: 1 1 90%;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+        <div class="grid" id="imageGrid"></div>
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    </div>
+
+    <script>
+        // JavaScript数组存储图片URL
+        const imageUrls = [
+            "https://letmetryai.cn/images/2491725962226_.pic.jpg",
+"https://letmetryai.cn/images/2081725797836_.pic.jpg",
+"https://letmetryai.cn/images/1891725676317_.pic.jpg",
+"https://letmetryai.cn/images/1621725673908_.pic.jpg",
+"https://letmetryai.cn/images/2421725962221_.pic.jpg",
+"https://letmetryai.cn/images/1631725673937_.pic.jpg",
+"https://letmetryai.cn/images/2221725798290_.pic.jpg",
+"https://letmetryai.cn/images/2831727614922_.pic.jpg",
+"https://letmetryai.cn/images/3211727614953_.pic.jpg",
+"https://letmetryai.cn/images/1921725676322_.pic.jpg",
+
+        ];
+
+        // 获取网格容器
+        const gridContainer = document.getElementById('imageGrid');
+
+        // 动态生成图片元素并添加到网格容器中
+        imageUrls.forEach((url, index) => {
+            const div = document.createElement('div');
+            div.classList.add('grid-item');
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `美女${index + 1}`;
+            div.appendChild(img);
+            gridContainer.appendChild(div);
+        });
+    </script>
+
+<style>
+    
+    .more {
+        display: block; /* 确保元素是可见的 */
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #e6f7ff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+        transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+        tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+        text-decoration: underline; /* 添加下划线效果 */
+        text-decoration-color: #007bff; /* 设置下划线颜色 */
+    }
+
+    .more:active {
+        background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+        transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+        text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+    }
+
+</style>
+
+
+<script>
+    function jumpToIndex() {
+
+        ks.navigateTo({
+            url: "/pages/index/index",
+        });
+    }
+</script>    
+</body>
+</html>
