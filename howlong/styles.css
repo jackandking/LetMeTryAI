@@ -1,0 +1,184 @@
+/**
+ * HowLong Application Styles
+ * Styling for the survey/quiz interface and result display
+ */
+
+/* Button Group Layout */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.button-group button {
+    width: 100%;
+    height: 4em;
+    font-size: 1.2em;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+}
+
+.button-group button:hover {
+    background-color: #ff8800;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+/* Touch device hover behavior */
+@media (hover: none) {
+    .button-group button:hover {
+        background-color: white;
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.button-group button:active {
+    background-color: #e67e22;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+}
+
+/* Bar Chart Styles */
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    height: 300px;
+    margin-top: 20px;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(to top, #ff6f61, #ff9f97);
+    border-radius: 5px 5px 0 0;
+    transition: height 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bar-label {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cup-label {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Show Result Button */
+.show-result-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin: 20px auto;
+    display: block;
+}
+
+.show-result-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Result Section */
+.result {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.result h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* More Section */
+.more {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+}
+
+.more a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.more a:hover {
+    text-decoration: underline;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .bar-chart {
+        gap: 15px;
+        height: 250px;
+    }
+    
+    .bar {
+        width: 35px;
+    }
+    
+    .bar-label,
+    .cup-label {
+        font-size: 12px;
+    }
+    
+    .button-group button {
+        height: 3.5em;
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .bar-chart {
+        gap: 10px;
+        height: 200px;
+    }
+    
+    .bar {
+        width: 30px;
+    }
+    
+    .bar-label,
+    .cup-label {
+        font-size: 11px;
+    }
+    
+    .button-group button {
+        height: 3em;
+        font-size: 1em;
+    }
+    
+    .show-result-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+}
