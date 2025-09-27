@@ -1,0 +1,244 @@
+<!--upload.ksml-->
+<view class="container">
+  <view class="form-container">
+    <view class="prompts-section">
+      <view class="prompt-box">
+        <text class="prompt-label">Original Prompt:</text>
+        <view class="prompt-display" bindtap="onPromptClick">
+          {{originalPrompt || 'No prompt available'}}
+        </view>
+      </view>
+      
+      <view class="prompt-box">
+        <text class="prompt-label">AI Generated Prompt:</text>
+        <view class="prompt-display" bindtap="onPromptClick">
+          {{prompts[0] || 'No prompt available'}}
+        </view>
+      </view>
+    </view>
+    
+    <textarea 
+      placeholder="Enter photo URL" 
+      value="{{photoUrl}}"
+      bindinput="onUrlInput"
+      class="url-input"
+      auto-height
+    />
+    
+    <view class="preview-container" ks:if="{{photoUrl}}">
+      <text class="preview-title">Preview:</text>
+      <view class="preview-prompt">{{prompts[0] || 'No prompt available'}}</view>
+      <image 
+        src="{{photoUrl}}" 
+        mode="aspectFit" 
+        class="preview-image"
+        binderror="onPreviewError"
+      />
+    </view>
+
+    <button type="primary" bindtap="onSubmit" class="submit-btn">
+      Submit Photo
+    </button>
+  </view>
+</view>
+upload.js
+Page({
+    data: {
+      prompts: [],
+      originalPrompt: '',
+      photoUrl: '',
+      previewError: false
+    },
+  
+    onLoad: function() {
+      this.loadAiPrompts();
+    },
+  
+    loadAiPrompts: function() {
+      const MySQLUtil = require('../../utils/mysql_utils');
+      const AIUtils = require('../../utils/ai_utils');
+      MySQLUtil.query('SELECT prompt FROM ks_woman_photos ORDER BY vote_count DESC LIMIT 1', [], (err, results) => {
+        if (err) {
+          console.error('Error loading AI prompts:', err);
+          ks.showToast({ title: 'Failed to load prompts', icon: 'none' });
+          return;
+        }
+        if (results && results.length > 0) {
+          const basePrompt = results[0].prompt;
+          this.setData({
+            originalPrompt: basePrompt.replace(/"/g, '')
+          });
+          AIUtils.generateInnovativePrompt(basePrompt, 0.1, (err, newPrompt) => {
+            if (err) {
+              console.error('Error generating innovative prompt:', err);
+              this.setData({
+                prompts: [basePrompt.replace(/"/g, '')]
+              });
+              return;
+            }
+            this.setData({
+              prompts: [newPrompt.replace(/"/g, '')]
+            });
+          });
+        } else {
+          this.setData({
+            prompts: [],
+            originalPrompt: ''
+          });
+        }
+      });
+    },
+    
+    onPromptClick: function() {
+      if (this.data.prompts.length > 0) {
+        ks.setClipboardData({
+          data: this.data.prompts[0],
+          success: () => {
+            ks.showToast({ title: 'Prompt copied to clipboard', icon: 'success' });
+          },
+          fail: () => {
+            ks.showToast({ title: 'Failed to copy prompt', icon: 'none' });
+          }
+        });
+      }
+    },
+  
+  
+  
+    onUrlInput: function(e) {
+      console.log(e.detail.value);
+      this.setData({
+        photoUrl: e.detail.value
+      });
+    },
+  
+    onSubmit: function() {
+      if (!this.data.prompts.length || !this.data.photoUrl) {
+        ks.showToast({ title: 'Please wait for prompt to load and enter URL', icon: 'none' });
+        return;
+      }
+  
+      const MySQLUtil = require('../../utils/mysql_utils');
+      const data = {
+        prompt: this.data.prompts[0],
+        url: this.data.photoUrl,
+        vote_count: 0,
+        devote_count: 0
+      };
+  
+      MySQLUtil.insert('ks_woman_photos', data, (err, result) => {
+        if (err) {
+          console.error('Error saving photo:', err);
+          ks.showToast({ title: 'Failed to save photo', icon: 'none' });
+          return;
+        }
+        ks.showToast({ title: 'Photo saved successfully', icon: 'success' });
+        this.setData({
+  
+          photoUrl: ''
+        });
+      });
+    }
+  });
+
+
+  ai_utils.js
+  // AI utility functions for chat integration
+
+const API_ENDPOINT = 'https://letmetryai.cn/lws/ai/chat';
+
+// Error messages
+const ERROR_MESSAGES = {
+  REQUEST_FAILED: 'Request to AI chat API failed',
+  INVALID_PARAMS: 'Invalid parameters provided'
+};
+
+/**
+ * Send a message to the AI chat service
+ * @param {string} message - The message to send to the AI
+ * @returns {Promise<Object>} - The chat response data
+ */
+async function sendChatMessage(message) {
+  if (!message) {
+    throw new Error(ERROR_MESSAGES.INVALID_PARAMS);
+  }
+  console.log('Sending message to AI:', message);
+
+  try {
+    const response = await new Promise((resolve, reject) => {
+      ks.request({
+        url: API_ENDPOINT,
+        method: 'POST',
+        data: { message },
+        header: {
+          'Content-Type': 'application/json'
+        },
+        success: (res) => resolve(res),
+        fail: (err) => reject(err)
+      });
+    });
+
+    const data = response.data;
+    console.log('AI response:', response);
+    
+    if (response.statusCode === 200 && data.success) {
+      console.log('AI response:', data.response);
+      return {
+        response: data.response,
+        timestamp: data.timestamp
+      };
+    } else {
+      console.error('AI request failed:', response);
+      throw new Error(response.data.error || ERROR_MESSAGES.REQUEST_FAILED);
+    }
+  } catch (error) {
+    console.error('Chat request failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Generate an innovative prompt based on a base prompt
+ * @param {string} basePrompt - The base prompt to enhance
+ * @param {number} creativityFactor - How much to modify the prompt (0-1)
+ * @param {function} callback - Callback with (error, newPrompt)
+ */
+function generateInnovativePrompt(basePrompt, creativityFactor, callback) {
+  if (!basePrompt || typeof creativityFactor !== 'number' || creativityFactor < 0 || creativityFactor > 1) {
+    getApp().log('[AI] Invalid parameters for generateInnovativePrompt', { 
+      basePrompt: basePrompt, 
+      creativityFactor: creativityFactor 
+    });
+    return callback(new Error('Invalid parameters'));
+  }
+
+  const prompt = `Take this creative prompt and enhance it with creativity level ${creativityFactor}: ${basePrompt}. only return the enhanced prompt.`;
+  getApp().log('[AI] Sending prompt to AI service', { 
+    basePrompt: basePrompt, 
+    creativityFactor: creativityFactor,
+    fullPrompt: prompt
+  });
+  
+  sendChatMessage(prompt)
+    .then(response => {
+      getApp().log('[AI] Received response from AI service', {
+        originalPrompt: basePrompt,
+        response: response.response
+      });
+      callback(null, response.response);
+    })
+    .catch(error => {
+      getApp().log('[AI] Error generating innovative prompt', {
+        error: error.message,
+        stack: error.stack,
+        basePrompt: basePrompt
+      });
+      callback(error);
+    });
+}
+
+module.exports = {
+  sendChatMessage,
+  generateInnovativePrompt,
+  ERROR_MESSAGES
+};

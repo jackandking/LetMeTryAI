@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美女罩杯鉴定榜</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+    <script src="../util.js"></script>
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        window.platformFilter = getUrlParameter('platform');
+        window.voteBudget = parseInt(getUrlParameter('budget')) || 0;
+        window.canDelete = parseInt(getUrlParameter('delete')) || 0;
+      
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { cursor: pointer; background-color: #f9f9f9; }
+        th:hover { background-color: #f1f1f1; }
+        .vote-btn { margin: 0 2px; cursor: pointer; }
+        .vote-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .upload-form { margin: 20px 0; padding: 20px; border: 1px solid #ddd; display: none; }
+        .upload-form input, .upload-form button { margin: 5px 0; padding: 5px; }
+        .show-form-btn { margin: 20px 0; padding: 10px; cursor: pointer; }
+        @media (max-width: 600px) {
+            .table-container { display: none; }
+        }
+        @media (min-width: 601px) {
+            .list-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    <div class="container">
+        <h1>美女罩杯鉴定榜</h1>
+        <div id="budget-display">剩余投票数: <span id="remaining-budget"></span></div>
+
+        <div class="list-container" id="technician-list"></div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-sort="photo">照片</th>
+                        <th data-sort="name">名称</th>
+                        <th data-sort="platform">平台</th>
+                        <th data-sort="cup">罩杯</th>
+                        <th data-sort="A">A分</th>
+                        <th data-sort="B">B分</th>
+                        <th data-sort="C">C分</th>
+                        <th data-sort="D">D分</th>
+                        <th data-sort="E">E分</th>
+                        <th data-sort="Eplus">E+分</th>
+                        <th>视频链接</th>
+
+                    </tr>
+                </thead>
+                <tbody id="technician-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <button class="show-form-btn" onclick="toggleForm('uploadForm')">添加新美女</button>
+
+        <div class="upload-form" id="uploadForm">
+            <h3>添加新美女</h3>
+            <form id="newTechnicianForm">
+                <input type="text" id="newName" placeholder="名称" value="" required><br>
+                <script>
+                    const girlNames = ['小芳', '美玲', '雅婷', '婷婷', '晓琳', '静怡', '佳怡', '雨萱', '雅琪', '雅雯', '思思', '欣怡', '梦琪', '佳欣', '雨欣', '雅静', '雅萱', '雅文', '雅琳', '雅涵'];
+                    document.getElementById('newName').value = girlNames[Math.floor(Math.random() * girlNames.length)];
+                </script>
+                <input type="url" id="newVideoLink" placeholder="视频链接" pattern=".*(https://(v.douyin.com|v.kuaishou.com)/.+).*" title="请输入有效的抖音或快手视频链接" required size="50"><br>
+                <small>示例视频链接格式：<br>
+                    抖音: https://v.douyin.com/iDnLafHJ/<br>
+                    快手: https://v.kuaishou.com/6Dxqi4<br>
+                </small>
+                <button type="submit">添加</button>
+                <button type="button" onclick="toggleForm('uploadForm')">取消</button>
+                <input type="text" id="newPlatform" placeholder="平台" value="快手" required><br>
+                <input type="text" id="newCup" placeholder="罩杯" value="A" required><br>
+                <input type="number" id="newA" placeholder="A分" value="80" min="0" max="100" required><br>
+                <input type="number" id="newB" placeholder="B分" value="80" min="0" max="100" required><br>
+                <input type="number" id="newC" placeholder="C分" value="80" min="0" max="100" required><br>
+                <input type="number" id="newD" placeholder="D分" value="80" min="0" max="100" required><br>
+                <input type="number" id="newE" placeholder="E分" value="80" min="0" max="100" required><br>
+                <input type="number" id="newEplus" placeholder="E+分" value="80" min="0" max="100" required><br>
+                <input type="url" id="newPhotoLink" placeholder="照片链接" value="https://eb118-file.cdn.bcebos.com/upload/8425c60a3dc54d1ea945c5d6f52edcb8_1046805855.png" pattern="https?://.+" title="请输入有效的URL地址（以http://或https://开头）" required size="50"><br>
+                
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const cupPhotoLinks = {//+
+            'A': 'https://eb118-file.cdn.bcebos.com/upload/ece02d6b3c26460faca9f07cc727a734_1111319079.png',//+
+            'B': 'https://eb118-file.cdn.bcebos.com/upload/89c316980f84404e9b81c67f9eeb5982_1111344623.png',//+
+            'C': 'https://eb118-file.cdn.bcebos.com/upload/5be17b1a21e74800966978e67a136f87_2025516952.png',//+
+            'D': 'https://eb118-file.cdn.bcebos.com/upload/8425c60a3dc54d1ea945c5d6f52edcb8_1046805855.png',//+
+            'E': 'https://eb118-file.cdn.bcebos.com/upload/3cc06cc37ccc43e09f06e0810f8d1f84_2025517163.png',//+
+            'E+': 'https://eb118-file.cdn.bcebos.com/upload/8425c60a3dc54d1ea945c5d6f52edcb8_1046805855.png'//+
+        };//
+        let technicians = [
+            {
+                cup: "A",
+                name: "芷柔",
+                platform: "抖音",
+                A: 95,
+                B: 94,
+                C: 93,
+                D: 92,
+                E: 91,
+                Eplus: 90,
+                photoLink: "https://letmetryai.cn/images/zhirou.jpg",
+                videoLink: "https://v.douyin.com/iDnLafHJ/"
+            },
+            {
+                cup: "B",
+                name: "芷",
+                platform: "抖音",
+                A: 95,
+                B: 94,
+                C: 93,
+                D: 92,
+                E: 96,
+                Eplus: 90,
+                photoLink: "https://letmetryai.cn/images/zhirou.jpg",
+                videoLink: "https://v.douyin.com/iDnLafHJ/"
+            }
+        ];
+
+        let remainingBudget = window.voteBudget;
+        let filteredTechnicians = [];
+
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function isValidUrl(url) {
+            try {
+                const parsedUrl = new URL(url);
+                return parsedUrl.href.startsWith('https://v.douyin.com') || parsedUrl.href.startsWith('https://v.kuaishou.com');
+            } catch (e) {
+                return false;
+            }
+        }
+
+        document.getElementById('newTechnicianForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const photoLink = document.getElementById('newPhotoLink').value;
+
+            const videoLinks = document.getElementById('newVideoLink').value.match(/https:\/\/(v\.douyin\.com|v\.kuaishou\.com)\/[^\s]+/);//+
+            if (videoLinks) {
+                videoLink = videoLinks[0];
+            } else {
+                alert('请输入有效的抖音或快手视频链接');
+                return;
+            }
+
+            const isDuplicateVideo = technicians.some(tech => tech.videoLink === videoLink);
+            if (isDuplicateVideo) {
+                alert('该视频链接已存在，请使用其他视频链接');
+                return;
+            }
+
+            const newTechnician = {
+                name: document.getElementById('newName').value,
+                platform: document.getElementById('newPlatform').value,
+                cup: document.getElementById('newCup').value,
+                A: parseInt(document.getElementById('newA').value),
+                B: parseInt(document.getElementById('newB').value),
+                C: parseInt(document.getElementById('newC').value),
+                D: parseInt(document.getElementById('newD').value),
+                E: parseInt(document.getElementById('newE').value),
+                Eplus: parseInt(document.getElementById('newEplus').value),
+                photoLink: photoLink,
+                videoLink: videoLink
+            };
+
+            technicians.push(newTechnician);
+            updateKeyValueStore("webview6.data", JSON.stringify(technicians));
+            setTimeout(() => {
+                initData();
+            }, 1000);
+            this.reset();
+            toggleForm('uploadForm');
+        });
+
+        async function initData(shuffle=false) {
+            setTimeout(() => {
+                readKeyValueStore("webview6.data", (storedData) => {
+                    if (storedData) {
+                        technicians = JSON.parse(storedData);
+                    }
+
+                    filteredTechnicians = window.platformFilter 
+                        ? technicians.filter(t => t.platform.trim().toLowerCase() === window.platformFilter.toLowerCase())
+                        : technicians;
+
+                    // Update cup size based on highest vote
+                    filteredTechnicians.forEach(tech => {
+                        const scores = {
+                            'A': tech.A,
+                            'B': tech.B,
+                            'C': tech.C,
+                            'D': tech.D,
+                            'E': tech.E,
+                            'E+': tech.Eplus
+                        };
+                        const maxScore = Math.max(...Object.values(scores));
+                        tech.cup = Object.keys(scores).find(key => scores[key] === maxScore);
+                    });
+
+                    updateBudgetDisplay();
+                    if (window.innerWidth <= 600) {
+                        if(shuffle){
+                            renderList(shuffleArray(filteredTechnicians));
+                        }else{
+                            renderList(filteredTechnicians);
+                        }
+                    } else {
+                        renderTable(filteredTechnicians);
+                    }
+
+
+                });
+            }, 1000);
+        }
+
+        function updateBudgetDisplay() {
+            document.getElementById('remaining-budget').textContent = remainingBudget;
+        }
+
+        function updateScore(technicianIndex, scoreType, increment) {
+            if (remainingBudget <= 0) return;
+
+            remainingBudget--;
+            if (increment) {
+                filteredTechnicians[technicianIndex][scoreType]++;
+            } else {
+                filteredTechnicians[technicianIndex][scoreType]--;
+            }
+
+            // Update cup size after score change
+            const tech = filteredTechnicians[technicianIndex];
+            const scores = {
+                'A': tech.A,
+                'B': tech.B,
+                'C': tech.C,
+                'D': tech.D,
+                'E': tech.E,
+                'E+': tech.Eplus
+            };
+            const maxScore = Math.max(...Object.values(scores));
+            const newCup = Object.keys(scores).find(key => scores[key] === maxScore);
+            tech.cup = newCup;
+
+            // Update photo link if it's a default one
+            const defaultPhotoLinks = Object.values(cupPhotoLinks);
+            if (defaultPhotoLinks.includes(tech.photoLink)) {
+                tech.photoLink = cupPhotoLinks[newCup] || tech.photoLink;
+            }
+
+            updateKeyValueStore("webview6.data", JSON.stringify(technicians));
+            initData();
+        }
+
+        function deleteTechnician(index) {
+            if (confirm('确定要删除这条记录吗？')) {
+                technicians.splice(index, 1);
+                updateKeyValueStore("webview6.data", JSON.stringify(technicians));
+                setTimeout(() => {
+                    initData();
+                }, 1000);
+            }
+        }
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                // 生成一个0到i之间的随机整数
+                const j = Math.floor(Math.random() * (i + 1));
+                
+                // 交换元素array[i]和array[j]
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        const technicianList = document.getElementById('technician-list');
+        const tableBody = document.getElementById('technician-table-body');
+
+        const renderList = (data) => {
+            technicianList.innerHTML = '';
+            data.forEach((technician, index) => {
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.borderBottom = '1px solid #ddd';
+                div.innerHTML = `
+                    <a href="${technician.videoLink}" target="_blank"><img src="${technician.photoLink}" alt="${technician.name}的照片" style="max-width: 100%; height: auto; display: block; margin-bottom: 10px;"></a>
+                    <h2>${technician.name}</h2>
+                    <a href="${technician.videoLink}" target="_blank">查看视频</a>
+                    <p>平台：${technician.platform} | 罩杯：${technician.cup}</p>
+                    <p>
+                        A分：${technician.A}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'A', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'A', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        B分：${technician.B}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'B', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'B', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        C分：${technician.C}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'C', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'C', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        D分：${technician.D}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'D', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'D', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        E分：${technician.E}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'E', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'E', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+                    <p>
+                        E+分：${technician.Eplus}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'Eplus', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'Eplus', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </p>
+
+                    
+                    ${new URLSearchParams(window.location.search).has('delete') ? `<button class="delete-btn" onclick="deleteTechnician(${index})">删除</button>` : ''}
+                `;
+                technicianList.appendChild(div);
+            });
+        };        
+        
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            data.forEach((technician, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+
+                    <td><img src="${technician.photoLink}" alt="${technician.name}的照片" style="width: 50px; height: auto;"></td>
+                    <td>${technician.name}</td>
+                    <td>${technician.platform}</td>
+                    <td>${technician.cup}</td>
+                    <td>
+                        ${technician.A}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'A', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'A', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.B}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'B', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'B', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.C}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'C', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'C', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.D}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'D', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'D', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.E}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'E', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'E', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+                    <td>
+                        ${technician.Eplus}
+                        <button class="vote-btn" onclick="updateScore(${index}, 'Eplus', true)" ${remainingBudget <= 0 ? 'disabled' : ''}>+1</button>
+                        <button class="vote-btn" onclick="updateScore(${index}, 'Eplus', false)" ${remainingBudget <= 0 ? 'disabled' : ''}>-1</button>
+                    </td>
+
+                    <td><a href="${technician.videoLink}" target="_blank">查看视频</a></td>
+                    <td>${new URLSearchParams(window.location.search).has('delete') ? `<button class="delete-btn" onclick="deleteTechnician(${index})">删除</button>` : ''}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        };
+        // 表格排序功能
+        document.querySelectorAll('th').forEach(header => {
+            header.addEventListener('click', () => {
+                const sortKey = header.getAttribute('data-sort');
+                const isAscending = header.classList.contains('ascending');
+                filteredTechnicians.sort((a, b) => {
+                    if (a[sortKey] < b[sortKey]) return isAscending ? -1 : 1;
+                    if (a[sortKey] > b[sortKey]) return isAscending ? 1 : -1;
+                    return 0;
+                });
+                header.classList.toggle('ascending');
+                header.classList.toggle('descending');
+                renderTable(filteredTechnicians);
+            });
+        });
+
+        // 监听窗口大小变化，动态切换视图
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 600) {
+                technicianList.style.display = 'block';
+                tableBody.style.display = 'none';
+                renderList(filteredTechnicians);
+            } else {
+                technicianList.style.display = 'none';
+                tableBody.style.display = 'block';
+                renderTable(filteredTechnicians);
+            }
+        });
+
+        // Initialize data when page loads
+        initData(true);
+    </script>
+    <style>
+    
+        .more {
+            display: block; /* 确保元素是可见的 */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+            tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+            text-decoration: underline; /* 添加下划线效果 */
+            text-decoration-color: #007bff; /* 设置下划线颜色 */
+        }
+
+        .more:active {
+            background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+            transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+            text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+        }
+    
+    </style>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+
+    <script>
+        function jumpToIndex() {
+
+            ks.navigateTo({
+                url: "/pages/index/index",
+            });
+        }
+    </script>
+</body>
+</html>

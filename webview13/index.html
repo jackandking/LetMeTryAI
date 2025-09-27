@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>入门宝</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.5;
+        }
+    </style>
+    <script src="../util.js"></script>
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        window.configId = getUrlParameter('configId');
+
+        window.texts = ["点击屏幕有惊喜"];
+
+        window.onload = function () {
+            getConfig(window.configId, (config) => {
+                if (config == null) {
+                    console.log("extra config is null, use webview default config");
+                    return;
+                }
+                window.text1 = config.text1 || "新年快乐";
+                window.texts = ["点击屏幕有惊喜", window.text1];
+            });
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>万事开头难</h1>
+        <p>俗话说：“万事开头难”，无论是学习一新的技能，还是从事一项新的工作，如果在一开始就能得到正确的指导和帮助，将会事半功倍。</p>
+        <p>今天，我们就来聊聊一些行业的开门秘籍，看看那些成功人士是如何开启他们的精彩人生之旅的。</p>
+
+        <h2>编程领域</h2>
+        <p>在编程领域，对于初学者来说，选择一门适合自己的编程语言并坚持学习是非常重要的。一些流行的编程语言，比如 Python、Java 或 JavaScript，都有着广泛的应用前景和丰富的在线学习资源。</p>
+        <p>除了学习编程语言本身之外，了解如何使用版本控制系统（例如 Git）来管理代码，以及如何使用调试工具来排错，也是成为一名优秀程序员的必备技能。</p>
+
+        <h2>设计领域</h2>
+        <p>在设计领域，掌握一些常用的设计软件，比如 Photoshop 或 Illustrator，是成为设计师的基本要求。此外，培养自己的审美能力和保持创新的思维，也是设计领域从业者需要具备的素质。许多成功的设计师建议初学者多观察、多模仿、多练习，从模仿大师的作品开始，逐渐发展出自己的风格。</p>
+        <!-- 继续添加更多行业的开门秘籍 -->
+
+        <h2>总结</h2>
+        <p>无论是哪个行业，只要肯下功夫，就有成功的机会。希望这些开门秘籍能够帮助你在新的领域或职业中少走弯路，早日取得成功！</p>
+    </div>
+</body>
+
+</html>

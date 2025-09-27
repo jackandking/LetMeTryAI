@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按摩技师排行榜</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+    <style>
+        /* 省略其他非关键样式 */
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { cursor: pointer; background-color: #f9f9f9; }
+        th:hover { background-color: #f1f1f1; }
+        @media (max-width: 600px) {
+            .table-container { display: none; }
+        }
+        @media (min-width: 601px) {
+            .list-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    <div class="container">
+        <h1>按摩技师排行榜</h1>
+
+        <!-- 列表视图，适用于移动设备 -->
+        <div class="list-container" id="technician-list"></div>
+
+        <!-- 表格视图，适用于桌面设备 -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-sort="rank">排名</th>
+                        <th data-sort="photo">照片</th>
+                        <th data-sort="name">名称</th>
+                        <th data-sort="platform">平台</th>
+                        <th data-sort="city">城市</th>
+                        <th data-sort="description">客户反馈</th>
+                        <th data-sort="beautyScore">颜值分数</th>
+                        <th data-sort="bodyScore">身材分数</th>
+                        <th data-sort="skillScore">技能分数</th>
+                        <th data-sort="totalScore">总分</th>
+                        <th>视频链接</th>
+                    </tr>
+                </thead>
+                <tbody id="technician-table-body">
+                    <!-- 技师数据将由JavaScript动态生成 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const technicians = [
+
+        {
+                rank: 1,
+                name: "芷柔",
+                platform: "泰温心",
+                city: "嘉兴",
+                description: "在嘉兴的泰温心，我偶遇了技艺超群的芷柔。她不仅是店里的明星技师，更是我心中的NO.1！芷柔经验丰富，手法娴熟，每一次服务都让我感到前所未有的放松与愉悦。她的颜值与身材更是让人赏心悦目，仿佛从画中走出的仙子。最令人难忘的是她那出神入化的技艺，让我彻底沉醉其中，无法自拔。如果你也想体验一番，不妨亲自去泰温心找找这位名叫芷柔的技师，相信你也会被她深深吸引！",
+                totalScore: 95,
+                beautyScore: 90,
+                bodyScore: 92,
+                skillScore: 92,
+                photoLink: "https://letmetryai.cn/images/zhirou.jpg",
+                videoLink: "https://v.douyin.com/iDnLafHJ/"
+            },
+            {
+                rank: 2,
+                name: "雅唸",
+                platform: "东郊到家",
+                city: "菏泽",
+                description: "在菏泽的东郊到家，我邂逅了沈涵雅。她就像一抹清新的春风，年轻有活力，技术更是娴熟得让人惊叹。她的美丽如同晨曦中的露珠，熠熠生辉，让人目不转睛，给我的美感体验直逼满分。而她的身手灵活，每一次服务都像是精心编排的舞蹈，让人沉醉。沈涵雅，你不仅是技艺的高手，更是心灵的疗愈师，让我的生活多了几分趣味与期待。",
+                totalScore: 90,
+                beautyScore: 95,
+                bodyScore: 88,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG366.jpg",
+                videoLink: "https://v.kuaishou.com/6Dxqi4"
+            },
+            {
+                rank: 3,
+                name: "韩蓁蓁",
+                platform: "东郊到家",
+                city: "长沙",
+                description: "在长沙的东郊到家，我邂逅了韩蓁蓁，一位成熟中不失活力的技师。她仿佛带着春天的气息，技术娴熟如同魔术师，每一次手法变换都让我惊叹不已。韩蓁蓁不仅颜值在线，美容功夫了得，连身体管理也让人赞叹。她的技能，就像是精心编排的舞蹈，每一个动作都恰到好处。这次体验，就像是开启了一场关于美的奇妙旅程，让我久久难忘。",
+                totalScore: 89,
+                beautyScore: 90,
+                bodyScore: 88,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG365.jpg",
+                videoLink: "https://v.kuaishou.com/4PZquL"
+            },
+		{
+                rank: 4,
+                name: "玉缘",
+                platform: "东郊到家",
+                city: "上海",
+                description: "在上海的繁忙都市中，我有幸通过东郊到家平台邂逅了名为“玉缘”的按摩技师，真是一次令人难以忘怀的体验！玉缘不仅以其健谈开朗的性格瞬间拉近了彼此的距离，让人感觉如沐春风，更拥有着令人羡慕的高挑身材，为整个按摩过程增添了几分赏心悦目的享受。她的专业技艺同样令人印象深刻，每一次手法都精准到位，既展现了深厚的技能功底，又不失细腻与温柔，让人在放松身心的同时，也感受到了被细心呵护的温暖。总之，玉缘的出现为我的日常生活带来了一抹亮色，强烈推荐给每一位追求高品质按摩服务的朋友，相信你们也会像我一样，被她独特的魅力与专业的服务所深深吸引！",
+                totalScore: 90,
+                beautyScore: 91,
+                bodyScore: 85,
+                skillScore: 87,
+                photoLink: "https://letmetryai.cn/images/WechatIMG371.jpg",
+                videoLink: "https://v.kuaishou.com/6AdR2i"
+            },
+            {
+                rank: 5,
+                name: "杨诗桃",
+                platform: "东郊到家",
+                city: "上海",
+                description: "在繁华的上海，通过东郊到家平台，我有幸体验到了杨诗桃技师的非凡服务。她不仅以极其认真的工作态度让人倍感舒心，那傲人的身材更是视觉上的绝佳享受。杨诗桃技师以其精湛的技艺、出众的美感与体态，以及无微不至的服务细节，为我带来了一场难以忘怀的放松之旅。她的专业技能与个人魅力完美融合，让人由衷地感到满意与惊喜，绝对是值得推荐给每一位追求高品质按摩体验的朋友！",
+                totalScore: 90,
+                beautyScore: 91,
+                bodyScore: 92,
+                skillScore: 92,
+                photoLink: "https://letmetryai.cn/images/WechatIMG374.jpg",
+                videoLink: "https://v.kuaishou.com/6AdR2i"
+            },
+            // ...更多技师数据
+        ];
+
+        // 计算总分
+        technicians.forEach(technician => {
+            technician.totalScore = technician.beautyScore + technician.bodyScore + technician.skillScore;
+        });
+
+        technicians.sort((a, b) => b.totalScore - a.totalScore);
+ 
+        // 更新排名
+        technicians.forEach((technician, index) => {
+            technician.rank = index + 1;
+        });
+
+        const technicianList = document.getElementById('technician-list');
+        const tableBody = document.getElementById('technician-table-body');
+
+        // 渲染列表视图
+        const renderList = (data) => {
+            technicianList.innerHTML = '';
+            data.forEach(technician => {
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.borderBottom = '1px solid #ddd';
+                div.innerHTML = `
+                    <img src="${technician.photoLink}" alt="${technician.name}的照片" style="max-width: 100%; height: auto; display: block; margin-bottom: 10px;">
+                    <h2>${technician.rank}. ${technician.name}</h2>
+                    <p>平台：${technician.platform} | 城市：${technician.city}</p>
+                    <p>${technician.description}</p>
+                    <p>颜值分数：${technician.beautyScore}</p>
+                    <p>身材分数：${technician.bodyScore}</p>
+                    <p>技能分数：${technician.skillScore}</p>
+                    <p>总分：${technician.totalScore}</p>
+                    <a href="${technician.videoLink}" target="_blank">查看视频</a>
+                `;
+                technicianList.appendChild(div);
+            });
+        };
+
+        // 渲染表格视图（增加了颜值分数、身材分数和技能分数的显示）
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            data.forEach(technician => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${technician.rank}</td>
+                    <td><img src="${technician.photoLink}" alt="${technician.name}的照片" style="width: 50px; height: auto;"></td>
+                    <td>${technician.name}</td>
+                    <td>${technician.platform}</td>
+                    <td>${technician.city}</td>
+                    <td>${technician.description}</td>
+                    <td>${technician.beautyScore}</td>
+                    <td>${technician.bodyScore}</td>
+                    <td>${technician.skillScore}</td>
+                    <td>${technician.totalScore}</td>
+                    <td><a href="${technician.videoLink}" target="_blank">查看视频</a></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        };
+
+        // 表格排序功能
+        document.querySelectorAll('th').forEach(header => {
+            header.addEventListener('click', () => {
+                const sortKey = header.getAttribute('data-sort');
+                const isAscending = header.classList.contains('ascending');
+                technicians.sort((a, b) => {
+                    if (a[sortKey] < b[sortKey]) return isAscending ? -1 : 1;
+                    if (a[sortKey] > b[sortKey]) return isAscending ? 1 : -1;
+                    return 0;
+                });
+                header.classList.toggle('ascending');
+                header.classList.toggle('descending');
+                renderTable(technicians);
+            });
+        });
+
+        // 根据屏幕宽度选择渲染方式
+        if (window.innerWidth <= 600) {
+            renderList(technicians);
+        } else {
+            renderTable(technicians);
+        }
+
+        // 监听窗口大小变化，动态切换视图
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 600) {
+                technicianList.style.display = 'block';
+                tableBody.style.display = 'none';
+                renderList(technicians);
+            } else {
+                technicianList.style.display = 'none';
+                tableBody.style.display = 'block';
+                renderTable(technicians);
+            }
+        });
+    </script>
+    <style>
+    
+        .more {
+            display: block; /* 确保元素是可见的 */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 虽然手机端不常用，但为了一些支持鼠标的设备，可以保留 */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s; /* 添加过渡效果 */
+            tap-highlight-color: rgba(0, 0, 0, 0); /* 禁止点击时的高亮效果，适用于移动端 */
+            text-decoration: underline; /* 添加下划线效果 */
+            text-decoration-color: #007bff; /* 设置下划线颜色 */
+        }
+
+        .more:active {
+            background-color: #d0eaff; /* 点击时改变背景色，提供触摸反馈 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 点击时增强阴影效果 */
+            transform: scale(0.95); /* 点击时轻微缩小，模拟按压效果 */
+            text-decoration-color: #ff6347; /* 点击时改变下划线颜色，增强反馈 */
+        }
+    
+    </style>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+
+    <script>
+        function jumpToIndex() {
+
+            ks.navigateTo({
+                url: "/pages/index/index",
+            });
+        }
+    </script>
+</body>
+</html>
