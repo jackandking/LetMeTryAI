@@ -1,5 +1,7 @@
 // File utility functions
 
+import { API_ENDPOINTS } from './config.js';
+
 function log(message, type = 'info') {
   const timestamp = new Date().toISOString();
   console.log(`[${timestamp}] [${type}] ${message}`);
@@ -32,7 +34,7 @@ async function uploadFile(fileObject, targetPath, uuid = null) {
       .map(([key, value]) => `${key}: ${typeof value === 'object' ? '[File Object]' : value}`)
       .join(', ')}`);
   try {
-    const response = await fetch('https://43.143.241.181/lws/file/upload', {
+    const response = await fetch(API_ENDPOINTS.FILE_UPLOAD, {
       method: 'POST',
       body: formData,
     });
@@ -57,7 +59,7 @@ async function deleteFile(filename) {
   log(`Starting deletion of file: ${filename}`);
 
   try {
-    const response = await fetch('https://43.143.241.181/lws/file/delete', {
+    const response = await fetch(API_ENDPOINTS.FILE_DELETE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -85,7 +87,7 @@ async function getFileInfo(filename) {
   log(`Retrieving info for file: ${filename}`);
 
   try {
-    const response = await fetch(`https://43.143.241.181/lws/file/info/${filename}`);
+    const response = await fetch(`${API_ENDPOINTS.FILE_INFO}/${filename}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
@@ -107,7 +109,7 @@ async function listFiles() {
   log('Starting file list retrieval');
 
   try {
-    const response = await fetch('https://43.143.241.181/lws/file/list');
+    const response = await fetch(API_ENDPOINTS.FILE_LIST);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
@@ -129,7 +131,7 @@ async function downloadFile(filename) {
   log(`Starting download of file: ${filename}`);
 
   try {
-    const response = await fetch(`https://43.143.241.181/lws/file/download/${filename}`);
+    const response = await fetch(`${API_ENDPOINTS.FILE_DOWNLOAD}/${filename}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
