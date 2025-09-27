@@ -1,107 +1,215 @@
-// Move all JavaScript code here
+/**
+ * Firework Animation System
+ * Provides particle effects and firework animations for the LetMeTryAI application
+ */
+
+/**
+ * Extracts URL parameter value by name
+ * @param {string} name - The parameter name to extract
+ * @returns {string} The decoded parameter value or empty string if not found
+ */
 function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
+    if (!name || typeof name !== 'string') {
+        return '';
+    }
+    
+    const escapedName = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + escapedName + '=([^&#]*)');
+    const results = regex.exec(location.search);
+    
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-// All classes (Particle and Firework) and other functions
+/**
+ * Particle class for firework explosion effects
+ */
 class Particle {
+    /**
+     * Creates a new particle
+     * @param {number} x - Initial x position
+     * @param {number} y - Initial y position
+     * @param {string} color - RGB color string (e.g., "255, 0, 0")
+     */
     constructor(x, y, color) {
         this.x = x;
         this.y = y;
         this.color = color;
+        
+        // Reduced velocity for more controlled animation
         this.velocity = {
-            x: (Math.random() - 0.5) * 2, // Reduced from 8 to 4
-            y: (Math.random() - 0.5) * 2  // Reduced from 8 to 4
+            x: (Math.random() - 0.5) * 2,
+            y: (Math.random() - 0.5) * 2
         };
+        
         this.alpha = 1;
-        this.friction = 0.98; // Increased from 0.95 to 0.98
-        this.gravity = 0.01; // Reduced from 0.2 to 0.1
+        this.friction = 0.98; // Higher friction for slower decay
+        this.gravity = 0.01;  // Lower gravity for floating effect
     }
 
+    /**
+     * Renders the particle on the canvas
+     */
     draw() {
+        if (!ctx) return;
+        
         ctx.beginPath();
         ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
         ctx.fill();
     }
 
+    /**
+     * Updates particle position and properties
+     */
     update() {
+        // Apply physics
         this.velocity.x *= this.friction;
         this.velocity.y *= this.friction;
         this.velocity.y += this.gravity;
+        
+        // Update position
         this.x += this.velocity.x;
         this.y += this.velocity.y;
-        this.alpha -= 0.005; // Reduced from 0.01 to 0.005
+        
+        // Fade out slowly
+        this.alpha -= 0.005;
     }
 }
 
 
+/**
+ * Firework class for animated firework effects
+ */
 class Firework {
+    /**
+     * Creates a new firework
+     * @param {number} startX - Starting x position
+     * @param {number} targetX - Target x position for explosion
+     * @param {number} targetY - Target y position for explosion
+     * @param {string} fireworkString - Text to display with the firework
+     */
     constructor(startX, targetX, targetY, fireworkString = 'test') {
+        // Validate canvas exists
+        if (!canvas) {
+            console.error('Canvas not initialized for firework');
+            return;
+        }
+
+        // Position and target
         this.x = startX;
         this.y = canvas.height;
         this.targetX = targetX;
         this.targetY = targetY;
-        this.fireworkString = fireworkString;
+        
+        // Display properties
+        this.fireworkString = fireworkString || 'test';
         this.textAlpha = 1;
         this.showText = true;
+        
+        // Explosion properties
         this.explosionX = targetX;
         this.explosionY = targetY;
-        this.speed = 2; // 减慢发射速度
+        
+        // Movement properties
+        this.speed = 2; // Controlled launch speed
         this.angle = Math.atan2(targetY - this.y, targetX - startX);
         this.velocity = {
             x: Math.cos(this.angle) * this.speed,
             y: Math.sin(this.angle) * this.speed
         };
+        
+        // Visual properties
         this.particles = [];
-        this.color = `${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}`;
+        this.color = this._generateRandomColor();
     }
 
+    /**
+     * Generates a random RGB color string
+     * @private
+     * @returns {string} RGB color values as comma-separated string
+     */
+    _generateRandomColor() {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `${r}, ${g}, ${b}`;
+    }
+
+    /**
+     * Renders the firework on the canvas
+     */
     draw() {
+        if (!ctx) return;
+
+        // Draw firework trail
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(this.x - this.velocity.x, this.y - this.velocity.y);
         ctx.strokeStyle = `rgb(${this.color})`;
-        ctx.lineWidth = 8; // 增加线条宽度
+        ctx.lineWidth = 8;
         ctx.stroke();
 
-        // Draw the text if showing
-        if (this.showText && this.textAlpha > 0) {
-            ctx.save();
-            ctx.fillStyle = `rgba(255, 255, 255, ${this.textAlpha})`;
-            ctx.font = 'bold 24px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this.fireworkString, this.explosionX, this.explosionY);
-            this.textAlpha -= 0.002; // Slower fade out
-            ctx.restore();
-        }
+        // Draw text overlay if active
+        this._drawText();
     }
 
+    /**
+     * Draws the firework text overlay
+     * @private
+     */
+    _drawText() {
+        if (!this.showText || this.textAlpha <= 0) return;
+
+        ctx.save();
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.textAlpha})`;
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.fireworkString, this.explosionX, this.explosionY);
+        
+        // Fade out text slowly
+        this.textAlpha -= 0.002;
+        ctx.restore();
+    }
+
+    /**
+     * Updates firework position
+     */
     update() {
         this.x += this.velocity.x;
         this.y += this.velocity.y;
     }
 
+    /**
+     * Generates points along a heart shape
+     * @private
+     * @param {number} pointCount - Number of points to generate
+     * @returns {Array<{x: number, y: number}>} Array of heart shape points
+     */
+    _generateHeartShape(pointCount) {
+        const heartPoints = [];
+        
+        for (let i = 0; i < pointCount; i++) {
+            const t = (i / pointCount) * Math.PI * 2;
+            // Heart shape parametric equations
+            const x = 8 * Math.pow(Math.sin(t), 3);
+            const y = 6.5 * Math.cos(t) - 2.5 * Math.cos(2*t) - 1 * Math.cos(3*t) - 0.5 * Math.cos(4*t);
+            heartPoints.push({x: x, y: y});
+        }
+        
+        return heartPoints;
+    }
+
+    /**
+     * Creates an explosion effect at the firework's current position
+     */
     explode() {
         // Store explosion coordinates
         this.explosionX = this.x;
         this.explosionY = this.y;
         
         const particleCount = 300;
-        const heartPoints = [];
-        
-        // Generate heart shape points
-        for (let i = 0; i < particleCount; i++) {
-            const t = (i / particleCount) * Math.PI * 2;
-            // Heart shape parametric equations
-            const x = 8 * Math.pow(Math.sin(t), 3);
-            const y = 6.5 * Math.cos(t) - 2.5 * Math.cos(2*t) - 1 * Math.cos(3*t) - 0.5 * Math.cos(4*t);
-            heartPoints.push({x: x, y: y});
-        }
+        const heartPoints = this._generateHeartShape(particleCount);
 
         // Create particles along heart shape
         for (let i = 0; i < particleCount; i++) {
@@ -122,99 +230,180 @@ class Firework {
             this.particles.push(particle);
         }
         
-        // 播放爆炸声音
-        explosionSound.currentTime = 0;
-        explosionSound.play();
+        // Play explosion sound if available
+        this._playExplosionSound();
 
-            // Add text display
+        // Add text display
         this.showText = true;
         setTimeout(() => {
             this.showText = false;
-        }, 10000); // Show text for 2 seconds
+        }, 10000); // Show text for 10 seconds
 
         // Add sparkle effect around heart shape
+        this._addSparkleEffect();
+    }
+
+    /**
+     * Plays explosion sound effect
+     * @private
+     */
+    _playExplosionSound() {
+        try {
+            if (typeof explosionSound !== 'undefined' && explosionSound) {
+                explosionSound.currentTime = 0;
+                explosionSound.play();
+            }
+        } catch (error) {
+            console.warn('Could not play explosion sound:', error);
+        }
+    }
+
+    /**
+     * Adds sparkle particles around the explosion
+     * @private
+     */
+    _addSparkleEffect() {
         for (let i = 0; i < 50; i++) {
             const angle = Math.random() * Math.PI * 2;
             const speed = 0.5 + Math.random();
             const particle = new Particle(this.x, this.y, this.color);
+            
             particle.velocity.x = Math.cos(angle) * speed;
             particle.velocity.y = Math.sin(angle) * speed;
             particle.gravity = 0.005;
             particle.friction = 0.995;
             particle.alpha = 0.1;
+            
             this.particles.push(particle);
         }
     }
 }
 
+/**
+ * Utility Functions for Firework Animation
+ */
 
-// All the other functions
+/**
+ * Sets the canvas size to match the window dimensions
+ */
 function setCanvasSize() {
+    if (!canvas) {
+        console.error('Canvas not initialized');
+        return;
+    }
+    
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 
+/**
+ * Gets the current city based on IP geolocation
+ * @returns {Promise<string>} The current city name or fallback
+ */
 async function getCurrentCity() {
     try {
         const response = await fetch('https://api.ipapi.is/');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        console.log(data);
-        return data.location.city || '未知城市';
+        console.log('Location data:', data);
+        
+        return data.location?.city || '未知城市';
     } catch (error) {
         console.error('Error getting location:', error);
         return '未知城市';
     }
 }
 
+/**
+ * Generates a UUID v4 string
+ * @returns {string} A unique identifier string
+ */
 function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }
 
+/**
+ * Main animation loop for fireworks and particles
+ */
 function animate() {
+    if (!ctx || !canvas) {
+        console.error('Canvas or context not initialized');
+        return;
+    }
+
     requestAnimationFrame(animate);
+    
+    // Clear canvas with fade effect
     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    let fireworks=window.fireworks;
-    // 更新烟花
+    
+    const fireworks = window.fireworks || [];
+    
+    // Update and draw fireworks
     for (let i = fireworks.length - 1; i >= 0; i--) {
-        fireworks[i].draw();
-        fireworks[i].update();
+        const firework = fireworks[i];
+        
+        if (!firework) continue;
+        
+        firework.draw();
+        firework.update();
 
-        // 检查是否到达目标点
+        // Check if firework reached target
         const distance = Math.hypot(
-            fireworks[i].x - fireworks[i].targetX,
-            fireworks[i].y - fireworks[i].targetY
+            firework.x - firework.targetX,
+            firework.y - firework.targetY
         );
 
         if (distance < 5) {
-            fireworks[i].explode();
-            particles = particles.concat(fireworks[i].particles);
+            firework.explode();
+            particles = particles.concat(firework.particles);
             fireworks.splice(i, 1);
         }
     }
 
-    // 更新粒子
+    // Update and draw particles
     for (let i = particles.length - 1; i >= 0; i--) {
-        particles[i].draw();
-        particles[i].update();
+        const particle = particles[i];
+        
+        if (!particle) continue;
+        
+        particle.draw();
+        particle.update();
 
-        if (particles[i].alpha <= 0) {
+        // Remove faded particles
+        if (particle.alpha <= 0) {
             particles.splice(i, 1);
         }
     }
 
-    // 绘制文字
+    // Draw scrolling text
+    _drawScrollingText();
+}
+
+/**
+ * Draws scrolling text on the canvas
+ * @private
+ */
+function _drawScrollingText() {
+    if (!ctx || !canvas || !window.texts) return;
+
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(window.texts[currentTextIndex], canvas.width / 2, textY);
+    
+    const text = window.texts[currentTextIndex] || '';
+    ctx.fillText(text, canvas.width / 2, textY);
 
-    // 更新文字位置
+    // Update text position
     textY += 1;
     if (textY > canvas.height) {
         textY = -20;
@@ -223,98 +412,281 @@ function animate() {
 }
 
 
-// Initialize everything when the document is loaded
-// Add these at the top of the file, after the getUrlParameter function
+/**
+ * Global Variables
+ */
 let canvas;
 let ctx;
 let particles = [];
 let currentTextIndex = 0;
 let textY;
 
-// Update the DOMContentLoaded event listener
+/**
+ * Application Initialization
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Global variables
-    window.configId = getUrlParameter('configId');
-    window.fireworkSound = new Audio('launch.wav');
-    window.explosionSound = new Audio('explode.wav');
-    window.fireworks = [];
-    window.texts = ["点击屏幕有惊喜"];
-    
-    // Update canvas setup to use global variables
+    initializeApplication();
+});
+
+/**
+ * Initializes the firework application
+ */
+function initializeApplication() {
+    try {
+        // Initialize global variables
+        window.configId = getUrlParameter('configId');
+        window.fireworks = [];
+        window.texts = ["点击屏幕有惊喜"];
+        
+        // Initialize audio
+        initializeAudio();
+        
+        // Setup canvas
+        initializeCanvas();
+        
+        // Setup event handlers
+        setupEventHandlers();
+        
+        // Start animation
+        animate();
+        
+        // Load initial configuration and data
+        loadInitialData();
+        
+    } catch (error) {
+        console.error('Error initializing application:', error);
+    }
+}
+
+/**
+ * Initializes audio elements
+ */
+function initializeAudio() {
+    try {
+        window.fireworkSound = new Audio('launch.wav');
+        window.explosionSound = new Audio('explode.wav');
+        
+        // Set audio properties
+        window.fireworkSound.volume = 0.3;
+        window.explosionSound.volume = 0.5;
+    } catch (error) {
+        console.warn('Error initializing audio:', error);
+    }
+}
+
+/**
+ * Initializes canvas and context
+ */
+function initializeCanvas() {
     canvas = document.getElementById('canvas');
+    
+    if (!canvas) {
+        throw new Error('Canvas element not found');
+    }
+    
     ctx = canvas.getContext('2d');
     textY = canvas.height / 2;
     
-    // Initialize canvas size
+    // Set initial canvas size
     setCanvasSize();
+    
+    // Handle window resize
     window.addEventListener('resize', setCanvasSize);
-    
-    // Setup click handler
-    canvas.addEventListener('click', async (e) => {
-        const startX = canvas.width * Math.random();
-            window.fireworks.push(new Firework(startX, e.clientX, e.clientY, window.currentCity || '未知城市'));
-            // 播放发射声音
-            window.fireworkSound.currentTime = 0;
-            window.fireworkSound.play();
-            const fireworkId = generateUUID();
-           
-            const fireworkType = 0;
-            uploadFirework(fireworkId, fireworkType, e.clientX, e.clientY, window.currentCity || '未知城市');
+}
 
-        // ... existing click handler code ...
+/**
+ * Sets up event handlers for user interaction
+ */
+function setupEventHandlers() {
+    if (!canvas) return;
+
+    canvas.addEventListener('click', async (e) => {
+        try {
+            await handleCanvasClick(e);
+        } catch (error) {
+            console.error('Error handling canvas click:', error);
+        }
     });
+}
+
+/**
+ * Handles canvas click events
+ * @param {MouseEvent} e - The click event
+ */
+async function handleCanvasClick(e) {
+    const startX = canvas.width * Math.random();
+    const currentCity = window.currentCity || '未知城市';
     
-    // Start animation
-    animate();
+    // Create new firework
+    const firework = new Firework(startX, e.clientX, e.clientY, currentCity);
+    window.fireworks.push(firework);
     
-    // Initial city load and config
-    (async function() {
+    // Play launch sound
+    playFireworkSound();
+    
+    // Upload firework data
+    const fireworkId = generateUUID();
+    uploadFirework(fireworkId, 0, e.clientX, e.clientY, currentCity);
+}
+
+/**
+ * Plays firework launch sound
+ */
+function playFireworkSound() {
+    try {
+        if (window.fireworkSound) {
+            window.fireworkSound.currentTime = 0;
+            window.fireworkSound.play().catch(error => {
+                console.warn('Could not play firework sound:', error);
+            });
+        }
+    } catch (error) {
+        console.warn('Error playing firework sound:', error);
+    }
+}
+/**
+ * Loads initial application data and configuration
+ */
+async function loadInitialData() {
+    try {
+        // Load current city
         window.currentCity = await getCurrentCity();
         console.log("Current city:", window.currentCity);
         
-        getConfig(window.configId, (config) => {
-            if(config == null) {
-                console.log("extra config is null, use webview default config");
-            }else{
-                window.text1= config.text1 || "新年快乐";
-                window.text2= config.text2 || "蛇年快乐";
-                window.text3= config.text3 || "转发好运";
-                window.text4= config.text4 || "转发祝福";
-                window.text5= "点击右下角花1块钱就可以定制祝福语";
-                window.texts = ["点击屏幕有惊喜", window.text1, window.text2,window.text3,window.text4,window.text5];
-            };// ... existing config handling code ...
-        });
+        // Load configuration
+        await loadConfiguration();
         
-        // Set up periodic firework loading
-        setInterval(() => {
-            downloadFireworks((dataArray) => {
-                console.log(dataArray);
+        // Setup periodic firework downloads
+        setupPeriodicDownloads();
+        
+        // Load initial fireworks
+        await loadInitialFireworks();
+        
+    } catch (error) {
+        console.error('Error loading initial data:', error);
+    }
+}
+
+/**
+ * Loads application configuration
+ * @returns {Promise<void>}
+ */
+function loadConfiguration() {
+    return new Promise((resolve) => {
+        getConfig(window.configId, (config) => {
+            try {
+                if (config == null) {
+                    console.log("Extra config is null, using default config");
+                    setDefaultTexts();
+                } else {
+                    setCustomTexts(config);
+                }
+                resolve();
+            } catch (error) {
+                console.error('Error processing configuration:', error);
+                setDefaultTexts();
+                resolve();
+            }
+        });
+    });
+}
+
+/**
+ * Sets default text messages
+ */
+function setDefaultTexts() {
+    window.texts = [
+        "点击屏幕有惊喜",
+        "新年快乐",
+        "蛇年快乐", 
+        "转发好运",
+        "转发祝福",
+        "点击右下角花1块钱就可以定制祝福语"
+    ];
+}
+
+/**
+ * Sets custom text messages from configuration
+ * @param {Object} config - Configuration object
+ */
+function setCustomTexts(config) {
+    const text1 = config.text1 || "新年快乐";
+    const text2 = config.text2 || "蛇年快乐";
+    const text3 = config.text3 || "转发好运";
+    const text4 = config.text4 || "转发祝福";
+    const text5 = "点击右下角花1块钱就可以定制祝福语";
+    
+    window.texts = [
+        "点击屏幕有惊喜", 
+        text1, 
+        text2, 
+        text3, 
+        text4, 
+        text5
+    ];
+}
+
+/**
+ * Sets up periodic firework downloads
+ */
+function setupPeriodicDownloads() {
+    setInterval(async () => {
+        try {
+            await downloadAndCreateFireworks();
+        } catch (error) {
+            console.error('Error in periodic firework download:', error);
+        }
+    }, 10000); // Every 10 seconds
+}
+
+/**
+ * Downloads fireworks data and creates firework objects
+ * @returns {Promise<void>}
+ */
+function downloadAndCreateFireworks() {
+    return new Promise((resolve) => {
+        downloadFireworks((dataArray) => {
+            try {
+                console.log('Downloaded fireworks:', dataArray);
+                
                 if (dataArray && Array.isArray(dataArray)) {
                     dataArray.forEach(data => {
-                        if (data && data.x && data.y) {
-                            const startX = canvas.width * Math.random();
-                            window.fireworks.push(new Firework(startX, data.x, data.y, data.string));
-                            window.fireworkSound.currentTime = 0;
-                            window.fireworkSound.play();
-                        }
+                        createFireworkFromData(data);
                     });
                 }
-            });
-        }, 10000);
-        
-        // Initial fireworks download
-        downloadFireworks((dataArray) => {
-            console.log(dataArray);
-                            if (dataArray && Array.isArray(dataArray)) {
-                                dataArray.forEach(data => {
-                                    if (data && data.x && data.y) {
-                                        const startX = canvas.width * Math.random();
-                                        window.fireworks.push(new Firework(startX, data.x, data.y, data.string || 'Unknown'));
-                                        window.fireworkSound.currentTime = 0;
-                                        window.fireworkSound.play();
-                                    }
-                                });
-                            }// ... existing initial firework loading code ...
+                resolve();
+            } catch (error) {
+                console.error('Error creating fireworks from data:', error);
+                resolve();
+            }
         });
-    })();
-});
+    });
+}
+
+/**
+ * Creates a firework from downloaded data
+ * @param {Object} data - Firework data object
+ */
+function createFireworkFromData(data) {
+    if (!data || !data.x || !data.y) {
+        console.warn('Invalid firework data:', data);
+        return;
+    }
+
+    const startX = canvas.width * Math.random();
+    const firework = new Firework(startX, data.x, data.y, data.string || 'Unknown');
+    
+    window.fireworks.push(firework);
+    playFireworkSound();
+}
+
+/**
+ * Loads initial fireworks on application start
+ */
+async function loadInitialFireworks() {
+    try {
+        await downloadAndCreateFireworks();
+    } catch (error) {
+        console.error('Error loading initial fireworks:', error);
+    }
+}

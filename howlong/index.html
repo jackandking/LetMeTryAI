@@ -16,6 +16,8 @@
     </script>
     <title>你能坚持多久？</title>
     <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -87,30 +89,6 @@
             margin: 5px 0;
         }
     </style>
-
-    <script>
-        // Configuration object for question and options
-        const questionConfig = {
-            title: "你能坚持多久？",
-            question: "和视频中的美女啪啪你能坚持多久？",
-            options: [
-                { value: "1", label: "10秒以下" },
-                { value: "2", label: "1分钟以上" },
-                { value: "3", label: "5分钟以上" },
-                { value: "4", label: "10分钟以上" },
-                { value: "5", label: "30分钟以上" }
-            ],
-            storageKey: "howlong1.data"
-        };
-
-        const urlParams = new URLSearchParams(window.location.search);
-        console.log(urlParams);
-
-
-            if (urlParams.get('finishedAd') === 'false') {
-                ks.navigateBack();
-            }
-    </script>
 </head>
 <body>
     <h1 id="pageTitle"></h1>
@@ -123,228 +101,13 @@
         </div>
     </form>
 
-    <script>
-        // Initialize page content
-        document.getElementById('pageTitle').textContent = questionConfig.title;
-        document.getElementById('questionText').textContent = questionConfig.question;
-        const optionsContainer = document.getElementById('optionsContainer');
-        
-        // Generate option buttons
-        questionConfig.options.forEach(option => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.onclick = () => nextQuestion(option.value);
-            button.textContent = option.label;
-            optionsContainer.appendChild(button);
-        });
-    </script>
-
-    <style>
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .button-group button {
-            width: 100%;
-            height: 4em;
-            font-size: 1.2em;
-            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #ddd;
-            background-color: white;
-        }
-
-        .button-group button:hover {
-            background-color: #ff8800;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transform: scale(1.02);
-        }
-
-        @media (hover: none) {
-            .button-group button:hover {
-                background-color: white;
-                transform: none;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-        }
-        .button-group button:active {
-            background-color: #e67e22;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            transform: scale(0.95);
-        }
-    </style>
-
-    <script>
-        let currentQuestion = 1;
-        let score = 0;
-        // 初始化投票数据
-        let voteData = {};
-        // Initialize voteData based on questionConfig options
-        questionConfig.options.forEach(option => {
-            voteData[option.label] = 0;
-        });
-
-        function nextQuestion(selectedOption) {
-            // 读取当前投票结果
-            getConfig(questionConfig.storageKey, (data) => {
-                if (data !== null) {
-                    voteData = data;
-                }
-                voteData[questionConfig.options[parseInt(selectedOption) - 1].label] += 1;
-
-                // 上传更新后的投票结果
-                updateConfig(questionConfig.storageKey, voteData);
-            });
-            
-            document.getElementById(`question${currentQuestion}`).style.display = 'none';
-            currentQuestion++;
-            if (currentQuestion <= 1) {
-                document.getElementById(`question${currentQuestion}`).style.display = 'block';
-            } else {
-                document.getElementById('showResultBtn').style.display = 'block';
-            }
-        }
-        
-    </script>
-
     <div class="result" id="result">
         <p>正在获取最新统计结果...</p>
     </div>
-    <style>
-        .bar-chart {
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-          gap: 20px;
-          height: 300px;
-          margin-top: 20px;
-        }
-      
-        .bar-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-      
-        .bar {
-          width: 40px;
-          background: linear-gradient(to top, #ff6f61, #ff9f97);
-          border-radius: 5px 5px 0 0;
-          transition: height 0.3s;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-      
-        .bar-label {
-          margin-top: 5px;
-          font-size: 14px;
-          font-weight: bold;
-          color: #333;
-        }
-      
-        .cup-label {
-          margin-top: 5px;
-          font-size: 14px;
-          color: #666;
-        }
-      </style>
+    
     <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">看完广告显示结果</button>
 
     <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
-    <script>
-        
-
-        function showAd() {
-            ks.navigateTo({
-                url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=howlong",
-            });
-        }
-
-        function jumpToWebview6() {
-
-            ks.navigateTo({
-                url: "/pages/webview6/webview6",
-            });
-        }
-
-        function jumpToIndex() {
-
-            ks.navigateTo({
-                url: "/pages/index/index",
-            });
-        }
-
-      
-        // 显示投票结果直方图
-        function showResult(voteData) {
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "<h2>全网用户统计结果</h2>";
-            resultDiv.innerHTML += "<p style='text-align:center;color:#666;margin-bottom:20px;'>以下是所有参与用户的真实数据统计</p>";
-
-            const barChart = document.createElement("div");
-            barChart.className = "bar-chart";
-
-            const maxCount = Math.max(...Object.values(voteData));
-            const scale = maxCount > 0 ? 200 / maxCount : 1;
-
-            const total = Object.values(voteData).reduce((a, b) => a + b, 0);
-
-            for (const [option, count] of Object.entries(voteData)) {
-                const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
-                
-                const barContainer = document.createElement("div");
-                barContainer.className = "bar-container";
-
-                const bar = document.createElement("div");
-                bar.className = "bar";
-                bar.style.height = `${count * scale}px`;
-
-                const barLabel = document.createElement("div");
-                barLabel.className = "bar-label";
-                barLabel.innerText = `${count}人 (${percentage}%)`;
-
-                const optionLabel = document.createElement("div");
-                optionLabel.className = "cup-label";
-                optionLabel.innerText = option + "";
-
-                barContainer.appendChild(bar);
-                barContainer.appendChild(barLabel);
-                barContainer.appendChild(optionLabel);
-                barChart.appendChild(barContainer);
-            }
-
-            resultDiv.appendChild(barChart);
-            
-            const totalVotes = document.createElement("p");
-            totalVotes.style.textAlign = "center";
-            totalVotes.style.marginTop = "20px";
-            totalVotes.innerText = `总计: ${total}人参与`;
-            resultDiv.appendChild(totalVotes);
-            // Add timestamp
-            const timestamp = document.createElement("p");
-            timestamp.style.textAlign = "center";
-            timestamp.style.fontSize = "12px";
-            timestamp.style.color = "#888";
-            timestamp.style.marginTop = "10px";
-            timestamp.innerText = `统计时间: ${new Date().toLocaleString()}`;
-            resultDiv.appendChild(timestamp);
-        }
-
-        if (urlParams.get('finishedAd') !== null) {
-            const finishedAd = urlParams.get('finishedAd') === 'true';
-
-            if (finishedAd) {       
-                document.getElementById('questionnaire').style.display = 'none';
-                document.getElementById('result').style.display = 'block';
-                getConfig(questionConfig.storageKey, (data) => {
-                    showResult(data);
-                });
-            }
-        }
-    </script>
 
 
 

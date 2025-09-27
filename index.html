@@ -8,6 +8,7 @@
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="config.js"></script>  
+    <script src="main.js"></script>  
     <script>
 	    var _hmt = _hmt || [];
 	    (function() {
@@ -57,51 +58,5 @@
         <a href=" " target="_blank">您的备案号</a >
 <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024092319号-1</a >
     </footer>
-
-    <script>
-        // Function to set image source with fallback
-        function setImageWithFallback(imgId, primaryUrl, fallbackPath) {
-            const img = document.getElementById(imgId);
-            if (!img) return;
-            
-            // Try the primary external URL first
-            img.src = primaryUrl;
-            
-            // If primary image fails to load, use local fallback
-            img.onerror = function() {
-                console.log('Primary image failed, using fallback for:', imgId);
-                this.src = fallbackPath; // Use direct relative path for local images
-                this.onerror = null; // Prevent infinite loop if fallback also fails
-            };
-        }
-
-        // Wait for DOM to be ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set images with external URLs and local fallbacks
-            setImageWithFallback(
-                'fireworks-img',
-                'https://eb118-file.cdn.bcebos.com/assistant/20250221/cee18cdc3ec141d99ac77096b422300e_16507586794?x-bce-process=style/i_e',
-                'images/game1.jpg'
-            );
-            
-            setImageWithFallback(
-                'beauty-img', 
-                'https://eb118-file.cdn.bcebos.com/upload/0a8055acdbaf4d87b87e04b2e60f632c_1100025253.png',
-                'images/1621725673908_.pic.jpg'
-            );
-            
-            setImageWithFallback(
-                'magic-img',
-                'https://eb118-file.cdn.bcebos.com/upload/5bb92b7e5fe840bcb80be62b17458453_1100027031.png', 
-                'images/game2.png'
-            );
-            
-            setImageWithFallback(
-                'study-img',
-                'https://eb118-file.cdn.bcebos.com/upload/5813a87a74374d8eb3625a40d5b25f3b_2056945912.png',
-                'images/sample1.png'
-            );
-        });
-    </script>
 </body>
 </html>
