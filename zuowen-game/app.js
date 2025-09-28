@@ -229,7 +229,7 @@ function generateExerciseContent() {
                 questionText += `<span style="background: #c8e6c9; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #2e7d32;">${userAnswers[i] || '___'}</span>`;
             } else {
                 // Future questions - show placeholder
-                questionText += '<span style="background: #f5f5f5; padding: 4px 8px; border-radius: 4px; color: #999;">___</span>';
+                questionText += '<span style="background: #e8f4fd; padding: 4px 8px; border-radius: 4px; color: #1976d2; border: 1px solid #bbdefb;">___</span>';
             }
         }
     }
