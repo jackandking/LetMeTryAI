@@ -4,9 +4,12 @@
 // Base URL for API and image resources
 window.BASE_URL = 'https://43.143.241.181';
 
+// DeepSeek API configuration
+window.DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+
 // API endpoints
 window.API_ENDPOINTS = {
-  AI_CHAT: `${window.BASE_URL}/lws/ai/chat`,
+  AI_CHAT: window.DEEPSEEK_API_URL, // Now points directly to DeepSeek API
   FILE_UPLOAD: `${window.BASE_URL}/lws/file/upload`,
   FILE_DELETE: `${window.BASE_URL}/lws/file/delete`,
   FILE_INFO: `${window.BASE_URL}/lws/file/info`,
