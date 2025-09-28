@@ -4,9 +4,12 @@
 // Base URL for API and image resources
 export const BASE_URL = 'https://43.143.241.181';
 
+// DeepSeek API configuration
+export const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+
 // API endpoints
 export const API_ENDPOINTS = {
-  AI_CHAT: `${BASE_URL}/lws/ai/chat`,
+  AI_CHAT: DEEPSEEK_API_URL, // Now points directly to DeepSeek API
   FILE_UPLOAD: `${BASE_URL}/lws/file/upload`,
   FILE_DELETE: `${BASE_URL}/lws/file/delete`,
   FILE_INFO: `${BASE_URL}/lws/file/info`,

@@ -1,4 +1,4 @@
-// AI utility functions for chat integration
+// AI utility functions for chat integration with DeepSeek API
 
 import { API_ENDPOINTS } from './config.js';
 
@@ -7,11 +7,25 @@ export const API_ENDPOINT = API_ENDPOINTS.AI_CHAT;
 // Error messages
 export const ERROR_MESSAGES = {
   REQUEST_FAILED: 'Request to AI chat API failed',
-  INVALID_PARAMS: 'Invalid parameters provided'
+  INVALID_PARAMS: 'Invalid parameters provided',
+  API_KEY_MISSING: 'DeepSeek API key is not configured'
 };
 
 /**
- * Send a message to the AI chat service
+ * Get the DeepSeek API key from environment or throw an error
+ * @returns {string} - The API key
+ * @throws {Error} - If API key is not found
+ */
+function getApiKey() {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) {
+    throw new Error(ERROR_MESSAGES.API_KEY_MISSING);
+  }
+  return apiKey;
+}
+
+/**
+ * Send a message to the DeepSeek AI chat service
  * @param {string} message - The message to send to the AI
  * @returns {Promise<Object>} - The chat response data
  */
@@ -19,33 +33,51 @@ export async function sendChatMessage(message) {
   if (!message) {
     throw new Error(ERROR_MESSAGES.INVALID_PARAMS);
   }
-  console.log('Sending message to AI:', message);
+  console.log('Sending message to DeepSeek AI:', message);
 
   try {
+    const apiKey = getApiKey();
+    
     const response = await fetch(API_ENDPOINT, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        max_tokens: 2048,
+        temperature: 0.7,
+        stream: false
+      })
     });
 
     if (!response.ok) {
-      throw new Error(ERROR_MESSAGES.REQUEST_FAILED);
+      const errorData = await response.json().catch(() => null);
+      const errorMessage = errorData?.error?.message || ERROR_MESSAGES.REQUEST_FAILED;
+      throw new Error(`${ERROR_MESSAGES.REQUEST_FAILED}: ${errorMessage}`);
     }
 
     const data = await response.json();
-    console.log('AI response:', data);
+    console.log('DeepSeek AI response:', data);
     
-    if (data.success) {
-      console.log('AI response:', data.response);
+    if (data.choices && data.choices.length > 0) {
+      const aiResponse = data.choices[0].message.content;
+      console.log('AI response:', aiResponse);
       return {
-        response: data.response,
-        timestamp: data.timestamp
+        response: aiResponse,
+        timestamp: new Date().toISOString(),
+        usage: data.usage || {}
       };
     } else {
-      console.error('AI request failed:', data);
-      throw new Error(data.error || ERROR_MESSAGES.REQUEST_FAILED);
+      console.error('Unexpected AI response format:', data);
+      throw new Error(ERROR_MESSAGES.REQUEST_FAILED);
     }
   } catch (error) {
     console.error('Chat request failed:', error);
