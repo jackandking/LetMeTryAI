@@ -246,4 +246,4 @@ MIT License - see LICENSE file for details
 
 - [Live Demo](https://letmetryai.cn)
 - [Documentation](./TESTING.md)
-- [Contributing Guidelines](./copilot-instructions.md)
+- [Contributing Guidelines](./.github/copilot-instructions.md)
