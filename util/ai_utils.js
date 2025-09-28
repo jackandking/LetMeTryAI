@@ -1,16 +1,3 @@
-// AI utility functions for chat integration
-
-import { API_ENDPOINTS } from './config.js';
-
-export const API_ENDPOINT = API_ENDPOINTS.AI_CHAT;
-
-// Error messages
-export const ERROR_MESSAGES = {
-  REQUEST_FAILED: 'Request to AI chat API failed',
-  INVALID_PARAMS: 'Invalid parameters provided',
-  API_KEY_MISSING: 'DeepSeek API key is not configured'
-};
-
 // AI utility functions for chat integration with DeepSeek API
 
 import { API_ENDPOINTS } from './config.js';

@@ -171,6 +171,47 @@ All components include accessibility features:
 
 ## 🔧 API Integration
 
+### DeepSeek AI Integration
+
+The application integrates directly with DeepSeek AI API for enhanced chat capabilities:
+
+```javascript
+// AI chat integration
+import { sendChatMessage, generateInnovativePrompt } from './util/ai_utils.js';
+
+// Send message to AI
+const response = await sendChatMessage('Hello, how are you?');
+console.log(response.response); // AI's response
+console.log(response.usage);    // Token usage information
+
+// Generate enhanced prompts
+generateInnovativePrompt('base prompt', 0.7, (error, enhancedPrompt) => {
+  if (!error) {
+    console.log('Enhanced:', enhancedPrompt);
+  }
+});
+```
+
+#### Environment Configuration
+
+Set up your DeepSeek API key:
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your actual API key
+DEEPSEEK_API_KEY=your_actual_api_key_here
+```
+
+Get your API key from [DeepSeek Platform](https://platform.deepseek.com/api_keys).
+
+**Security Notes:**
+- Never commit your `.env` file to version control
+- The API key is accessed securely via `process.env.DEEPSEEK_API_KEY`
+- API keys are not exposed in logs or error messages
+- Use environment variables in production deployments
+
 ### Configuration API
 
 The application integrates with external APIs:
@@ -178,7 +219,7 @@ The application integrates with external APIs:
 ```javascript
 // Centralized endpoints
 const API_ENDPOINTS = {
-    AI_CHAT: `${BASE_URL}/lws/ai/chat`,
+    AI_CHAT: 'https://api.deepseek.com/v1/chat/completions', // DeepSeek API
     FILE_UPLOAD: `${BASE_URL}/lws/file/upload`,
     MYSQL_QUERY: `${BASE_URL}/lws/mysql/query`
     // ... more endpoints
