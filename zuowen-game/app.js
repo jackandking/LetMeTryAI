@@ -342,6 +342,7 @@ function generateExerciseContent() {
                 questionText += `<input type="text" class="blank-input" 
                      placeholder="请填入词语" 
                      oninput="updateAnswer(${i}, this.value)"
+                     onkeypress="handleKeyPress(event)"
                      data-blank-index="${i}"
                      id="blank-${i}"
                      value="${userAnswers[i] || ''}"
@@ -371,11 +372,16 @@ function generateExerciseContent() {
     
     container.innerHTML = html;
     
-    // Focus on the current input
+    // Focus on the current input and scroll to it
     setTimeout(() => {
         const currentInput = document.getElementById(`blank-${currentQuestionIndex}`);
         if (currentInput) {
             currentInput.focus();
+            // Auto-scroll to ensure input is visible on mobile
+            currentInput.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
         }
     }, 100);
 }
@@ -407,6 +413,23 @@ function updateActionButtons() {
 }
 
 /**
+ * Handle key press events for better mobile experience
+ */
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const currentInput = document.getElementById(`blank-${currentQuestionIndex}`);
+        if (currentInput && currentInput.value.trim()) {
+            if (currentQuestionIndex < currentExercise.blanks.length - 1) {
+                nextQuestion();
+            } else {
+                submitAnswer();
+            }
+        }
+    }
+}
+
+/**
  * Move to next question
  */
 function nextQuestion() {
@@ -427,6 +450,17 @@ function nextQuestion() {
         
         // Hide any previous feedback
         document.getElementById('feedback').style.display = 'none';
+        
+        // Auto-scroll to new input field for better mobile experience
+        setTimeout(() => {
+            const newInput = document.getElementById(`blank-${currentQuestionIndex}`);
+            if (newInput) {
+                newInput.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }, 200);
     }
 }
 function updateAnswer(index, value) {
