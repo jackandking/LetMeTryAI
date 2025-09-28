@@ -108,7 +108,7 @@ describe('Configuration Changes', () => {
   });
 
   it('should use correct base URL', () => {
-    expect(BASE_URL).toBe('https://43.143.241.181');
+    expect(BASE_URL).toBe('https://letmetry.cloud');
     Object.values(API_ENDPOINTS).forEach(endpoint => {
       expect(endpoint).toStartWith(BASE_URL);
     });
@@ -134,7 +134,7 @@ describe('Frontend Integration', () => {
 
   it('should generate correct URLs for frontend use', () => {
     const imageUrl = window.getImageUrl('images/test.jpg');
-    expect(imageUrl).toBe('https://43.143.241.181/images/test.jpg');
+    expect(imageUrl).toBe('https://letmetry.cloud/images/test.jpg');
   });
 });
 ```
