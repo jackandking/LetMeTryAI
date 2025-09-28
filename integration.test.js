@@ -4,7 +4,7 @@ import { API_ENDPOINTS, BASE_URL, getImageUrl } from './util/config.js';
 describe('Integration Tests - Configuration System', () => {
   describe('End-to-End Configuration Consistency', () => {
     it('should have consistent BASE_URL across all modules', () => {
-      expect(BASE_URL).toBe('https://43.143.241.181');
+      expect(BASE_URL).toBe('https://letmetry.cloud');
       
       // All endpoints should use the same BASE_URL
       Object.values(API_ENDPOINTS).forEach(endpoint => {
@@ -14,7 +14,7 @@ describe('Integration Tests - Configuration System', () => {
 
     it('should generate consistent URLs across different utilities', () => {
       // Test that all utilities would generate the same base URLs
-      const expectedBase = 'https://43.143.241.181';
+      const expectedBase = 'https://letmetry.cloud';
       
       expect(BASE_URL).toBe(expectedBase);
       expect(API_ENDPOINTS.AI_CHAT).toStartWith(expectedBase);
@@ -97,7 +97,7 @@ describe('Integration Tests - Configuration System', () => {
 
       // All should use same base infrastructure
       [uploadUrl, listUrl, deleteUrl, imageUrl].forEach(url => {
-        expect(url).toStartWith('https://43.143.241.181');
+        expect(url).toStartWith('https://letmetry.cloud');
       });
     });
 
@@ -105,7 +105,7 @@ describe('Integration Tests - Configuration System', () => {
       const chatUrl = API_ENDPOINTS.AI_CHAT;
       
       expect(chatUrl).toContain('/lws/ai/chat');
-      expect(chatUrl).toBe('https://43.143.241.181/lws/ai/chat');
+      expect(chatUrl).toBe('https://letmetry.cloud/lws/ai/chat');
     });
 
     it('should support typical database operations workflow', () => {
@@ -119,7 +119,7 @@ describe('Integration Tests - Configuration System', () => {
 
       dbEndpoints.forEach(endpoint => {
         expect(endpoint).toContain('/lws/mysql/');
-        expect(endpoint).toStartWith('https://43.143.241.181');
+        expect(endpoint).toStartWith('https://letmetry.cloud');
       });
     });
 
@@ -134,7 +134,7 @@ describe('Integration Tests - Configuration System', () => {
       const imageUrls = imagePaths.map(path => getImageUrl(path));
       
       imageUrls.forEach((url, index) => {
-        expect(url).toBe(`https://43.143.241.181/${imagePaths[index]}`);
+        expect(url).toBe(`https://letmetry.cloud/${imagePaths[index]}`);
       });
     });
   });
@@ -211,7 +211,7 @@ describe('Integration Tests - Configuration System', () => {
       
       [...allEndpoints, BASE_URL, imageUrl].forEach(url => {
         expect(url).not.toContain('letmetryai.cn');
-        expect(url).toContain('43.143.241.181');
+        expect(url).toContain('letmetry.cloud');
       });
     });
 

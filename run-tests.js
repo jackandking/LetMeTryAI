@@ -48,9 +48,9 @@ class SimpleTestRunner {
         console.log(`  ✅ ${testFile} - Uses centralized configuration`);
       }
 
-      // Check for proper IP address usage
-      if (content.includes('43.143.241.181') && !content.includes('letmetryai.cn')) {
-        console.log(`  ✅ ${testFile} - Uses correct IP address`);
+      // Check for proper domain usage
+      if (content.includes('letmetry.cloud') && !content.includes('letmetryai.cn')) {
+        console.log(`  ✅ ${testFile} - Uses correct domain`);
       }
 
     } catch (error) {
@@ -114,7 +114,7 @@ class SimpleTestRunner {
         
         // Check that old domain is not present (except in preserved areas)
         const hasOldDomain = content.includes('letmetryai.cn');
-        const hasNewIp = content.includes('43.143.241.181') || content.includes('BASE_URL') || content.includes('getImageUrl');
+        const hasNewIp = content.includes('letmetry.cloud') || content.includes('BASE_URL') || content.includes('getImageUrl');
         
         if (file.includes('index.html') && file !== 'index.html') {
           // For webview pages, should use helper functions or IP

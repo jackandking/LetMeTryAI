@@ -44,7 +44,7 @@ describe('File Utility Functions', () => {
 
       const fetchCall = fetch.mock.calls[0];
       expect(fetchCall[0]).toBe(API_ENDPOINTS.FILE_UPLOAD);
-      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('43.143.241.181');
+      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('letmetry.cloud');
       expect(API_ENDPOINTS.FILE_UPLOAD).toContain('/lws/file/upload');
     });
 
@@ -183,17 +183,17 @@ describe('File Utility Functions', () => {
       // Verify that all functions use the centralized configuration
       const configValues = Object.values(API_ENDPOINTS);
       configValues.forEach(endpoint => {
-        expect(endpoint).toContain('43.143.241.181');
+        expect(endpoint).toContain('letmetry.cloud');
         expect(endpoint).not.toContain('letmetryai.cn');
       });
     });
 
     it('should maintain consistent URL structure', () => {
-      expect(API_ENDPOINTS.FILE_UPLOAD).toMatch(/^https:\/\/[\d.]+\/lws\/file\/upload$/);
-      expect(API_ENDPOINTS.FILE_DELETE).toMatch(/^https:\/\/[\d.]+\/lws\/file\/delete$/);
-      expect(API_ENDPOINTS.FILE_INFO).toMatch(/^https:\/\/[\d.]+\/lws\/file\/info$/);
-      expect(API_ENDPOINTS.FILE_LIST).toMatch(/^https:\/\/[\d.]+\/lws\/file\/list$/);
-      expect(API_ENDPOINTS.FILE_DOWNLOAD).toMatch(/^https:\/\/[\d.]+\/lws\/file\/download$/);
+      expect(API_ENDPOINTS.FILE_UPLOAD).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/upload$/);
+      expect(API_ENDPOINTS.FILE_DELETE).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/delete$/);
+      expect(API_ENDPOINTS.FILE_INFO).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/info$/);
+      expect(API_ENDPOINTS.FILE_LIST).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/list$/);
+      expect(API_ENDPOINTS.FILE_DOWNLOAD).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/download$/);
     });
   });
 });
