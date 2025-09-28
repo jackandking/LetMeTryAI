@@ -330,7 +330,12 @@ function generateExerciseContent() {
     // Build the sentence with only current blank shown as input
     let questionText = '';
     for (let i = 0; i < parts.length; i++) {
-        questionText += parts[i];
+        // Wrap text parts in spans with explicit dark color for better readability
+        if (parts[i].trim()) {
+            questionText += `<span style="color: #333; font-weight: 500;">${parts[i]}</span>`;
+        } else {
+            questionText += parts[i];
+        }
         if (i < blanks.length) {
             if (i === currentQuestionIndex) {
                 // Current question - show input
@@ -351,7 +356,7 @@ function generateExerciseContent() {
         }
     }
     
-    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0;">' + questionText + '</div>';
+    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0; color: #333; font-weight: 500;">' + questionText + '</div>';
     
     // Show example for current question
     if (currentBlank.example) {
