@@ -25,8 +25,8 @@ describe('Global Configuration', () => {
       expect(window.BASE_URL).toMatch(/^https?:\/\//);
     });
 
-    it('should use the correct IP address', () => {
-      expect(window.BASE_URL).toBe('https://43.143.241.181');
+    it('should use the correct domain', () => {
+      expect(window.BASE_URL).toBe('https://letmetry.cloud');
     });
   });
 

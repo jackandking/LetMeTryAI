@@ -22,8 +22,8 @@ describe('AI Utilities', () => {
       expect(API_ENDPOINT).toBe(API_ENDPOINTS.AI_CHAT);
     });
 
-    it('should use correct IP address and path', () => {
-      expect(API_ENDPOINT).toBe('https://43.143.241.181/lws/ai/chat');
+    it('should use correct domain and path', () => {
+      expect(API_ENDPOINT).toBe('https://letmetry.cloud/lws/ai/chat');
       expect(API_ENDPOINT).toContain('/lws/ai/chat');
       expect(API_ENDPOINT).not.toContain('letmetryai.cn');
     });
@@ -147,7 +147,7 @@ describe('AI Utilities', () => {
   describe('Configuration Integration', () => {
     it('should not use hardcoded endpoints', () => {
       expect(API_ENDPOINT).not.toContain('letmetryai.cn');
-      expect(API_ENDPOINT).toContain('43.143.241.181');
+      expect(API_ENDPOINT).toContain('letmetry.cloud');
     });
 
     it('should maintain HTTPS protocol', () => {
@@ -155,7 +155,7 @@ describe('AI Utilities', () => {
     });
 
     it('should use correct API path structure', () => {
-      expect(API_ENDPOINT).toMatch(/^https:\/\/[\d.]+\/lws\/ai\/chat$/);
+      expect(API_ENDPOINT).toMatch(/^https:\/\/letmetry\.cloud\/lws\/ai\/chat$/);
     });
   });
 });

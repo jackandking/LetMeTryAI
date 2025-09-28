@@ -84,7 +84,7 @@ npm run test:watch
 ## Key Test Scenarios
 
 ### Configuration System
-✅ BASE_URL uses correct IP address (43.143.241.181)  
+✅ BASE_URL uses correct domain (letmetry.cloud)  
 ✅ All API endpoints use centralized configuration  
 ✅ No hardcoded letmetryai.cn references in /lws or /images paths  
 ✅ Helper functions generate consistent URLs  
@@ -155,7 +155,7 @@ describe('New Feature', () => {
   it('should not use hardcoded URLs', () => {
     const result = newFunction();
     expect(result).not.toContain('letmetryai.cn');
-    expect(result).toContain('43.143.241.181');
+    expect(result).toContain('letmetry.cloud');
   });
 });
 ```
