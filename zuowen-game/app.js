@@ -810,7 +810,7 @@ function showGameComplete() {
         <div style="text-align: center; padding: 40px;">
             <h2 style="color: #4caf50;">🏆 恭喜完成所有关卡！</h2>
             <p style="font-size: 18px; margin: 20px 0;">您已经成功通过了所有的作文水平测试！</p>
-            <p style="color: #666;">总得分：${gameConfig.playerProgress.currentScore}分</p>
+            <p style="color: #555;">总得分：${gameConfig.playerProgress.currentScore}分</p>
             <button class="btn btn-primary" onclick="restartGame()" style="margin-top: 20px;">重新开始</button>
         </div>
     `;

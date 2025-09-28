@@ -239,13 +239,17 @@
     .blank-input {
         background: #555;
         color: #f0f0f0;
-        border-color: #666;
+        border-color: #999;
     }
     
     .hint {
         background: #444;
         border-left-color: #ff9800;
         color: #ffcc80;
+    }
+    
+    .level-indicator::after {
+        background: #bbb;
     }
 }
 
@@ -264,7 +268,7 @@
     
     .game-container {
         box-shadow: none !important;
-        border: 1px solid #ccc;
+        border: 1px solid #888;
     }
 }
 
