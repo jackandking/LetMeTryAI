@@ -83,6 +83,71 @@
     }
 }
 
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #2196f3;
+    }
+    to {
+        box-shadow: 0 0 20px #2196f3, 0 0 30px #2196f3;
+    }
+}
+
+@keyframes celebration {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(3deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(-3deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(2deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes flashFade {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 .game-container {
     animation: fadeIn 0.5s ease-out;
 }
@@ -95,6 +160,25 @@
 .blank-input:focus {
     transform: scale(1.05);
     transition: all 0.3s ease;
+    animation: glow 1s infinite alternate;
+}
+
+/* Answer effect classes */
+.correct-answer {
+    animation: bounce 0.6s ease-in-out;
+    background: linear-gradient(45deg, #4caf50, #81c784) !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.incorrect-answer {
+    animation: shake 0.5s ease-in-out;
+    background: linear-gradient(45deg, #f44336, #ef5350) !important;
+    color: white !important;
+}
+
+.celebration-mode {
+    animation: celebration 1s ease-in-out;
 }
 
 /* Button effects */
