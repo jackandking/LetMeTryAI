@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>语文作文水平趣味过关</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            color: #2196f3;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .level-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .level-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+        .level-indicator.completed {
+            background: #4caf50;
+        }
+        .level-indicator.current {
+            background: #2196f3;
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+        .level-indicator.locked {
+            background: #ccc;
+        }
+        .level-indicator::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            width: 20px;
+            height: 2px;
+            background: #ddd;
+        }
+        .level-indicator:last-child::after {
+            display: none;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .level-title {
+            font-size: 24px;
+            color: #2196f3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .exercise-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .blank-input {
+            display: inline-block;
+            min-width: 100px;
+            padding: 5px 10px;
+            border: 2px solid #2196f3;
+            border-radius: 5px;
+            background: white;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+        .blank-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #2196f3;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1976d2;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #607d8b;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #455a64;
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        .feedback.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .achievement {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            display: none;
+        }
+        .achievement.show {
+            display: block;
+            animation: slideInUp 0.5s ease-out;
+        }
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .hint {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #e65100;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎓 语文作文水平趣味过关</h1>
+    
+    <div class="level-progress" id="levelProgress">
+        <!-- Level indicators will be generated by JavaScript -->
+    </div>
+
+    <div class="game-container">
+        <div class="level-title" id="levelTitle">第一关：基础填空</div>
+        
+        <div class="exercise-content" id="exerciseContent">
+            <div class="loading">正在加载题目...</div>
+        </div>
+
+        <div class="hint" id="hint" style="display: none;">
+            💡 提示：仔细思考上下文的含义，选择最合适的词语填入空白处。
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">显示提示</button>
+            <button class="btn btn-primary" onclick="submitAnswer()" id="submitBtn">提交答案</button>
+            <button class="btn btn-secondary" onclick="nextLevel()" id="nextBtn" style="display: none;">下一关</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="achievement" id="achievement">
+            <h3>🎉 恭喜过关！</h3>
+            <p>你已经成功完成了这一关，继续加油！</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGame();
+        });
+
+        // URL parameter handling for mini-program integration
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log('URL parameters:', urlParams);
+
+        if (urlParams.get('finishedAd') === 'false') {
+            if (typeof ks !== 'undefined' && ks.navigateBack) {
+                ks.navigateBack();
+            }
+        }
+    </script>
+</body>
+</html>
