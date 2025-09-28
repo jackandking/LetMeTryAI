@@ -2,7 +2,7 @@
 // This provides the same functionality as util/config.js but for direct use in HTML script tags
 
 // Base URL for API and image resources
-window.BASE_URL = 'https://43.143.241.181';
+window.BASE_URL = 'https://letmetry.cloud';
 
 // API endpoints
 window.API_ENDPOINTS = {
