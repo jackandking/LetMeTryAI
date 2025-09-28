@@ -301,7 +301,7 @@ function loadLevel(levelNumber) {
 }
 
 /**
- * Generate exercise content with input fields - one question at a time
+ * Generate exercise content with enhanced user experience
  */
 function generateExerciseContent() {
     const container = document.getElementById('exerciseContent');
@@ -323,11 +323,11 @@ function generateExerciseContent() {
     
     html += '<div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #2196f3;">';
     
-    // Show current question only
+    // Show full sentence with all blanks visible for context
     const currentBlank = blanks[currentQuestionIndex];
     const parts = content.split('___');
     
-    // Build the sentence with only current blank shown as input
+    // Build the sentence with full context
     let questionText = '';
     for (let i = 0; i < parts.length; i++) {
         // Wrap text parts in spans with explicit dark color for better readability
@@ -338,32 +338,48 @@ function generateExerciseContent() {
         }
         if (i < blanks.length) {
             if (i === currentQuestionIndex) {
-                // Current question - show input
-                questionText += `<input type="text" class="blank-input" 
-                     placeholder="请填入词语" 
-                     oninput="updateAnswer(${i}, this.value)"
-                     onkeypress="handleKeyPress(event)"
-                     data-blank-index="${i}"
-                     id="blank-${i}"
-                     value="${userAnswers[i] || ''}"
-                     style="background: #ffffff; border-color: #2196f3; font-weight: bold; color: #2c3e50;">`;
+                // Current question - show input with highlighting
+                questionText += `<span style="background: #fff3e0; padding: 2px 4px; border-radius: 4px; border: 2px solid #ff9800;">
+                    <input type="text" class="blank-input" 
+                         placeholder="请填入词语" 
+                         oninput="updateAnswer(${i}, this.value)"
+                         onkeypress="handleKeyPress(event)"
+                         data-blank-index="${i}"
+                         id="blank-${i}"
+                         value="${userAnswers[i] || ''}"
+                         style="background: transparent; border: none; outline: none; font-weight: bold; color: #2c3e50; min-width: 80px; text-align: center;">
+                </span>`;
             } else if (i < currentQuestionIndex) {
                 // Already answered - show the answer
-                questionText += `<span style="background: #c8e6c9; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #2e7d32;">${userAnswers[i] || '___'}</span>`;
+                questionText += `<span style="background: #c8e6c9; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #2e7d32; position: relative;" title="已完成">${userAnswers[i] || '___'}<span style="position: absolute; top: -2px; right: -2px; color: #4caf50; font-size: 10px;">✓</span></span>`;
             } else {
-                // Future questions - show placeholder
-                questionText += '<span style="background: #e8f4fd; padding: 4px 8px; border-radius: 4px; color: #2c3e50; border: 1px solid #bbdefb;">___</span>';
+                // Future questions - show placeholder with number indicator
+                questionText += `<span style="background: #e8f4fd; padding: 4px 8px; border-radius: 4px; color: #2c3e50; border: 1px solid #bbdefb; position: relative;" title="待填写">___<span style="position: absolute; top: -8px; right: -8px; background: #2196f3; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center;">${i + 1}</span></span>`;
             }
         }
     }
     
-    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0; color: #2c3e50; font-weight: 500;">' + questionText + '</div>';
+    html += '<div style="font-size: 18px; line-height: 2.5; margin: 15px 0; color: #2c3e50; font-weight: 500;">' + questionText + '</div>';
+    
+    // Show current question details
+    html += `<div style="background: #f0f8ff; padding: 12px; border-radius: 6px; margin: 15px 0; border-left: 3px solid #2196f3;">
+        <strong style="color: #1976d2;">💡 当前题目 (第${currentQuestionIndex + 1}题)：</strong><br>
+        <span style="color: #666; font-size: 14px;">请为上面带橙色框的空白处填写合适的词语</span>
+    </div>`;
     
     // Show example for current question
     if (currentBlank.example) {
-        html += '<div style="margin: 15px 0; padding: 10px; background: #f0f8ff; border-radius: 6px; border-left: 3px solid #2196f3;">';
-        html += '<strong style="color: #1976d2;">💡 参考示例：</strong><br>';
+        html += '<div style="margin: 15px 0; padding: 10px; background: #fff3e0; border-radius: 6px; border-left: 3px solid #ff9800;">';
+        html += '<strong style="color: #f57c00;">🔖 参考示例：</strong><br>';
         html += '<span style="color: #7b1fa2; font-size: 14px; font-weight: 600;">' + currentBlank.example + '</span>';
+        html += '</div>';
+    }
+    
+    // Show hints for current question
+    if (currentBlank.hints && currentBlank.hints.length > 0) {
+        html += '<div style="margin: 15px 0; padding: 10px; background: #e8f5e8; border-radius: 6px; border-left: 3px solid #4caf50;">';
+        html += '<strong style="color: #388e3c;">💭 温馨提示：</strong><br>';
+        html += '<span style="color: #2e7d32; font-size: 14px;">' + currentBlank.hints[0] + '</span>';
         html += '</div>';
     }
     
@@ -401,15 +417,123 @@ function updateActionButtons() {
         submitBtn.onclick = () => nextQuestion();
         nextBtn.style.display = 'none';
     } else {
-        // Last question
-        submitBtn.textContent = '提交答案';
+        // Last question - show review option
+        submitBtn.textContent = '预览答案';
         submitBtn.style.display = 'inline-block';
-        submitBtn.onclick = () => submitAnswer();
+        submitBtn.onclick = () => showAnswerReview();
         nextBtn.style.display = 'none';
     }
     
     submitBtn.disabled = false;
     hintBtn.style.display = 'inline-block';
+}
+
+/**
+ * Show complete answer review before final submission
+ */
+function showAnswerReview() {
+    const container = document.getElementById('exerciseContent');
+    const content = currentExercise.content;
+    const blanks = currentExercise.blanks;
+    const parts = content.split('___');
+    
+    let html = `
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3 style="color: #2c3e50; text-align: center; margin-top: 0;">📋 答案预览</h3>
+            <p style="color: #666; text-align: center; margin-bottom: 20px;">请检查您的答案，确认无误后点击"提交答案"</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #2196f3;">
+                <h4 style="color: #2196f3; margin-top: 0;">完整句子：</h4>
+    `;
+    
+    // Build complete sentence with answers
+    let completeText = '';
+    for (let i = 0; i < parts.length; i++) {
+        completeText += `<span style="color: #2c3e50;">${parts[i]}</span>`;
+        if (i < blanks.length) {
+            const answer = userAnswers[i] || '___';
+            const isEmpty = !userAnswers[i];
+            completeText += `<span style="
+                background: ${isEmpty ? '#ffebee' : '#e8f5e8'}; 
+                color: ${isEmpty ? '#c62828' : '#2e7d32'}; 
+                padding: 4px 8px; 
+                border-radius: 4px; 
+                font-weight: bold;
+                border: 2px solid ${isEmpty ? '#f44336' : '#4caf50'};
+            ">${answer}</span>`;
+        }
+    }
+    html += `<div style="font-size: 18px; line-height: 2.2; margin: 10px 0;">${completeText}</div>`;
+    
+    // Show individual answers with indicators
+    html += `
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ff9800;">
+                <h4 style="color: #ff9800; margin-top: 0;">逐题检查：</h4>
+    `;
+    
+    for (let i = 0; i < blanks.length; i++) {
+        const answer = userAnswers[i] || '';
+        const isEmpty = !answer;
+        const icon = isEmpty ? '❌' : '✅';
+        const status = isEmpty ? '未填写' : '已填写';
+        
+        html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee;">
+                <span>第${i + 1}题:</span>
+                <span style="font-weight: bold; color: ${isEmpty ? '#c62828' : '#2e7d32'};">
+                    ${icon} "${answer || '空白'}" (${status})
+                </span>
+                <button onclick="editAnswer(${i})" style="padding: 4px 8px; background: #2196f3; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">
+                    编辑
+                </button>
+            </div>
+        `;
+    }
+    
+    html += `
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="backToAnswering()" style="padding: 12px 24px; background: #607d8b; color: white; border: none; border-radius: 25px; margin: 0 10px; cursor: pointer;">
+                    返回答题
+                </button>
+                <button onclick="finalSubmit()" style="padding: 12px 24px; background: #4caf50; color: white; border: none; border-radius: 25px; margin: 0 10px; cursor: pointer; font-weight: bold;">
+                    确认提交
+                </button>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Hide action buttons during review
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('hintBtn').style.display = 'none';
+}
+
+/**
+ * Edit a specific answer
+ */
+function editAnswer(index) {
+    currentQuestionIndex = index;
+    generateExerciseContent();
+    updateActionButtons();
+}
+
+/**
+ * Return to normal answering mode
+ */
+function backToAnswering() {
+    currentQuestionIndex = currentExercise.blanks.length - 1; // Go to last question
+    generateExerciseContent();
+    updateActionButtons();
+}
+
+/**
+ * Final submission after review
+ */
+function finalSubmit() {
+    submitAnswer();
 }
 
 /**
@@ -488,6 +612,9 @@ function updateAnswer(index, value) {
             inputElement.style.background = '#e3f2fd';
         }
     }
+    
+    // Prevent event bubbling that might cause issues
+    event.stopPropagation();
 }
 
 /**
@@ -555,6 +682,46 @@ const sparkleCSS = `
         transform: translateY(-30px) scale(0.5);
     }
 }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes flashFade {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.1; }
+    100% { opacity: 0; }
+}
+
+.correct-answer {
+    background: #c8e6c9 !important;
+    border-color: #4caf50 !important;
+    color: #2e7d32 !important;
+}
+
+.incorrect-answer {
+    background: #ffcdd2 !important;
+    border-color: #f44336 !important;
+    color: #c62828 !important;
+}
+
+.feedback.info {
+    background: #e3f2fd;
+    color: #1976d2;
+    border: 2px solid #2196f3;
+}
 `;
 
 // Add the CSS to the document
@@ -565,13 +732,48 @@ function showHint() {
     const hintElement = document.getElementById('hint');
     if (currentExercise && currentExercise.blanks[currentQuestionIndex]) {
         const currentBlank = currentExercise.blanks[currentQuestionIndex];
-        let hintText = '💡 提示：<br>';
-        hintText += `第${currentQuestionIndex + 1}题提示：${currentBlank.hints[0]}<br>`;
-        if (currentBlank.hints[1]) {
-            hintText += `补充提示：${currentBlank.hints[1]}`;
+        let hintText = `
+            <div style="background: #fff3e0; padding: 15px; border-radius: 8px; border-left: 4px solid #ff9800;">
+                <h4 style="color: #f57c00; margin-top: 0;">💡 第${currentQuestionIndex + 1}题详细提示</h4>
+        `;
+        
+        if (currentBlank.hints && currentBlank.hints.length > 0) {
+            hintText += `<p><strong>提示1：</strong>${currentBlank.hints[0]}</p>`;
+            if (currentBlank.hints[1]) {
+                hintText += `<p><strong>提示2：</strong>${currentBlank.hints[1]}</p>`;
+            }
         }
+        
+        if (currentBlank.example) {
+            hintText += `<p><strong>参考示例：</strong>${currentBlank.example}</p>`;
+        }
+        
+        // Add contextual analysis
+        const parts = currentExercise.content.split('___');
+        const beforeText = parts[currentQuestionIndex] ? parts[currentQuestionIndex].slice(-10) : '';
+        const afterText = parts[currentQuestionIndex + 1] ? parts[currentQuestionIndex + 1].slice(0, 10) : '';
+        
+        hintText += `
+                <p><strong>上下文分析：</strong></p>
+                <p style="background: #f5f5f5; padding: 8px; border-radius: 4px; font-family: monospace;">
+                    ...${beforeText}<span style="background: #ffeb3b; padding: 2px 4px; border-radius: 2px;">[请填入]</span>${afterText}...
+                </p>
+                <p style="font-size: 12px; color: #666;">
+                    💭 思考：这个位置需要什么样的词语？是形容词、副词还是名词？它在句子中起什么作用？
+                </p>
+            </div>
+        `;
+        
         hintElement.innerHTML = hintText;
         hintElement.style.display = 'block';
+        
+        // Scroll to hint for better visibility
+        setTimeout(() => {
+            hintElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }, 100);
     }
 }
 
@@ -591,45 +793,68 @@ async function submitAnswer() {
     }
     
     isSubmitted = true;
-    document.getElementById('submitBtn').textContent = '评判中...';
-    document.getElementById('submitBtn').disabled = true;
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.textContent = 'AI评判中...';
+    submitBtn.disabled = true;
+    
+    // Add visual loading indicator
+    submitBtn.innerHTML = `
+        <span style="display: inline-flex; align-items: center;">
+            <span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></span>
+            AI评判中...
+        </span>
+    `;
     
     try {
         // Prepare content for AI evaluation
         const exerciseText = currentExercise.content;
         const correctAnswers = currentExercise.blanks.map(blank => blank.answer);
         
-        // Create evaluation prompt
-        const prompt = `作为语文老师，请评判学生的填空练习答案。
+        // Enhanced evaluation prompt with more context
+        const prompt = `作为专业的语文老师，请评判学生的填空练习答案。
 
-题目：${exerciseText}
+题目内容：${exerciseText}
 
 标准答案：${correctAnswers.join('、')}
 学生答案：${userAnswers.join('、')}
 
 评判标准：
-1. 语义正确性（是否符合上下文含义）
-2. 语法正确性（词性和语法是否正确）
-3. 表达恰当性（是否使文章更生动）
+1. 语义正确性（是否符合上下文含义）- 权重40%
+2. 语法正确性（词性和语法是否正确）- 权重30%
+3. 表达恰当性（是否使文章更生动优美）- 权重30%
 
-请回答：
-1. 是否通过（通过/不通过）
-2. 具体评价（每个空的点评）
-3. 改进建议
+请详细分析每个空的填写情况，并按以下格式回答：
 
-回答格式：
 通过状态：[通过/不通过]
-评价：[具体评价内容]
-建议：[改进建议]`;
+评价：[对每个空的详细分析，指出优点和问题]
+建议：[具体的改进建议和学习方向]
+得分：[总体得分，满分100分]
 
+注意：如果学生答案在语义上正确且表达合理，即使与标准答案不完全相同也应该给予认可。`;
+
+        // Show user what's being evaluated
+        showFeedback(`正在评判您的答案...<br><small>题目：${currentExercise.title}</small>`, 'info');
+        
         // Call AI service for evaluation
         const aiResponse = await callAIService(prompt);
         processAIEvaluation(aiResponse);
         
     } catch (error) {
         console.error('AI evaluation error:', error);
-        // Fallback to simple matching evaluation
-        simpleEvaluation();
+        
+        // Show user-friendly error message
+        showFeedback(`AI评判遇到问题：${error.message}<br>将使用基础评判方式`, 'error');
+        
+        // Fallback to simple matching evaluation after a short delay
+        setTimeout(() => {
+            simpleEvaluation();
+        }, 2000);
+    } finally {
+        // Restore button appearance in case of error
+        setTimeout(() => {
+            submitBtn.innerHTML = '重新提交';
+            submitBtn.disabled = false;
+        }, 1000);
     }
 }
 
@@ -640,10 +865,25 @@ async function callAIService(prompt) {
     try {
         // Import AI utilities
         const { sendChatMessage } = await import('../util/ai_utils.js');
-        return await sendChatMessage(prompt);
+        
+        // Add timeout and retry logic
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('AI service timeout')), 10000)
+        );
+        
+        const aiPromise = sendChatMessage(prompt);
+        
+        return await Promise.race([aiPromise, timeoutPromise]);
     } catch (error) {
-        console.error('Failed to load AI utilities:', error);
-        throw error;
+        console.error('Failed to call AI service:', error);
+        // Provide more detailed error information
+        if (error.message.includes('timeout')) {
+            throw new Error('AI服务响应超时，请稍后重试');
+        } else if (error.message.includes('network')) {
+            throw new Error('网络连接失败，请检查网络连接');
+        } else {
+            throw new Error('AI服务暂时不可用，使用基础评判方式');
+        }
     }
 }
 
@@ -653,55 +893,137 @@ async function callAIService(prompt) {
 function processAIEvaluation(response) {
     try {
         const evaluation = response.response || response;
-        const isPassed = evaluation.includes('通过状态：通过') || 
-                        evaluation.includes('通过') && !evaluation.includes('不通过');
+        console.log('AI Evaluation Response:', evaluation);
+        
+        // Enhanced AI response parsing
+        let isPassed = false;
+        let detailedFeedback = '';
+        let suggestions = '';
+        
+        // Parse the structured response
+        if (evaluation.includes('通过状态：通过')) {
+            isPassed = true;
+        } else if (evaluation.includes('通过状态：不通过')) {
+            isPassed = false;
+        } else {
+            // Fallback parsing for less structured responses
+            const positiveKeywords = ['通过', '正确', '优秀', '很好', '不错'];
+            const negativeKeywords = ['不通过', '错误', '不正确', '需要改进'];
+            
+            const hasPositive = positiveKeywords.some(word => evaluation.includes(word));
+            const hasNegative = negativeKeywords.some(word => evaluation.includes(word));
+            
+            isPassed = hasPositive && !hasNegative;
+        }
+        
+        // Extract detailed feedback and suggestions
+        const evaluationLines = evaluation.split('\n');
+        evaluationLines.forEach(line => {
+            if (line.includes('评价：')) {
+                detailedFeedback = line.replace('评价：', '').trim();
+            } else if (line.includes('建议：')) {
+                suggestions = line.replace('建议：', '').trim();
+            }
+        });
+        
+        // Create comprehensive feedback
+        let comprehensiveFeedback = evaluation;
+        if (detailedFeedback || suggestions) {
+            comprehensiveFeedback = `${detailedFeedback}<br><br><strong>改进建议：</strong><br>${suggestions}`;
+        }
+        
+        // Add AI evaluation indicator
+        comprehensiveFeedback = `<div style="background: #e8f5e8; padding: 10px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4caf50;">
+            <strong>🤖 AI智能评判：</strong><br>${comprehensiveFeedback}
+        </div>`;
         
         if (isPassed) {
-            handleLevelComplete(evaluation);
+            handleLevelComplete(comprehensiveFeedback);
         } else {
-            handleLevelFailed(evaluation);
+            handleLevelFailed(comprehensiveFeedback);
         }
         
     } catch (error) {
         console.error('Failed to process AI evaluation:', error);
-        simpleEvaluation();
+        // Fallback to simple evaluation with explanation
+        showFeedback('AI评判出现问题，使用基础评判方式', 'error');
+        setTimeout(() => simpleEvaluation(), 1000);
     }
 }
 
 /**
- * Simple fallback evaluation (exact matching)
+ * Enhanced fallback evaluation with detailed feedback
  */
 function simpleEvaluation() {
     const correctAnswers = currentExercise.blanks.map(blank => blank.answer);
     let correctCount = 0;
-    let feedback = '';
+    let detailedFeedback = [];
+    let partialMatches = 0;
     
     for (let i = 0; i < userAnswers.length; i++) {
-        const isCorrect = userAnswers[i] === correctAnswers[i];
-        updatePlayerStats(isCorrect); // Update player statistics
+        const userAnswer = userAnswers[i];
+        const correctAnswer = correctAnswers[i];
+        const similarity = calculateSimilarity(userAnswer, correctAnswer);
         
-        if (isCorrect) {
+        updatePlayerStats(similarity > 0.8); // Update player statistics
+        
+        if (similarity === 1.0) {
             correctCount++;
+            detailedFeedback.push(`第${i + 1}个空：✅ 完全正确！"${userAnswer}"`);
+        } else if (similarity > 0.8) {
+            correctCount++;
+            partialMatches++;
+            detailedFeedback.push(`第${i + 1}个空：✅ 很好！"${userAnswer}" (标准答案："${correctAnswer}")`);
+        } else if (similarity > 0.5) {
+            partialMatches++;
+            detailedFeedback.push(`第${i + 1}个空：⚠️ 部分正确。"${userAnswer}" → 建议："${correctAnswer}"`);
         } else {
-            feedback += `第${i + 1}个空：建议填入"${correctAnswers[i]}"<br>`;
+            detailedFeedback.push(`第${i + 1}个空：❌ 需要改进。"${userAnswer}" → 建议："${correctAnswer}"`);
         }
     }
     
     const score = (correctCount / correctAnswers.length) * 100;
     const isPassed = score >= 60; // 60分及格
     
-    // Show player level info
+    // Enhanced player statistics
     const playerLevel = assessPlayerLevel();
     const levelNames = { 1: '初学者', 2: '进阶者', 3: '高手' };
     const accuracy = gameConfig.playerProgress.totalAnswers > 0 ? 
         ((gameConfig.playerProgress.correctAnswers / gameConfig.playerProgress.totalAnswers) * 100).toFixed(1) : 0;
     
-    const statsInfo = `<br><small>玩家等级：${levelNames[playerLevel]} | 总体准确率：${accuracy}%</small>`;
+    // Create comprehensive feedback
+    let comprehensiveFeedback = `
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+            <h4 style="color: #2c3e50; margin-top: 0;">📊 评判结果</h4>
+            <p><strong>得分：</strong> ${score.toFixed(0)}分 / 100分</p>
+            <p><strong>正确率：</strong> ${correctCount}/${correctAnswers.length} 
+               ${partialMatches > 0 ? `(其中 ${partialMatches} 个部分正确)` : ''}</p>
+            <div style="margin: 10px 0;">
+                ${detailedFeedback.join('<br>')}
+            </div>
+        </div>
+        
+        <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #2196f3;">
+            <strong>📈 学习进展：</strong><br>
+            玩家等级：${levelNames[playerLevel]} | 总体准确率：${accuracy}%<br>
+            完成关卡：${gameConfig.playerProgress.completedLevels.length}/${gameConfig.totalLevels}
+        </div>`;
     
     if (isPassed) {
-        handleLevelComplete(`恭喜！您答对了 ${correctCount}/${correctAnswers.length} 个，得分：${score.toFixed(0)}分${statsInfo}`);
+        comprehensiveFeedback += `
+            <div style="background: #e8f5e8; padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #4caf50;">
+                <strong>🎉 恭喜通过！</strong><br>
+                继续保持这样的水平，向下一关进发吧！
+            </div>`;
+        handleLevelComplete(comprehensiveFeedback);
     } else {
-        handleLevelFailed(`答对了 ${correctCount}/${correctAnswers.length} 个，得分：${score.toFixed(0)}分<br>${feedback}请再试一次！${statsInfo}`);
+        comprehensiveFeedback += `
+            <div style="background: #fff3e0; padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #ff9800;">
+                <strong>💪 继续努力！</strong><br>
+                多观察上下文的语境和语法结构，您一定可以做得更好！
+                ${score >= 50 ? '已经很接近及格线了，再试一次！' : '建议先复习相关知识点。'}
+            </div>`;
+        handleLevelFailed(comprehensiveFeedback);
     }
 }
 
