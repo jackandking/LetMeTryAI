@@ -24,11 +24,11 @@ const exercises = {
         type: "fill-blank",
         content: "春天来了，小鸟在枝头___唱歌，花儿在园子里___开放，孩子们在操场上___奔跑。这是一个___的季节，充满了___和希望。",
         blanks: [
-            { index: 0, answer: "欢快地", hints: ["表示动作的方式", "形容开心的样子"] },
-            { index: 1, answer: "美丽地", hints: ["形容花朵的状态", "表示美好的样子"] },
-            { index: 2, answer: "自由地", hints: ["表示没有约束", "形容轻松的状态"] },
-            { index: 3, answer: "温暖", hints: ["春天的特点", "让人感到舒适"] },
-            { index: 4, answer: "生机", hints: ["表示活力", "春天带来的感觉"] }
+            { index: 0, answer: "欢快地", hints: ["表示动作的方式", "形容开心的样子"], example: "如：高兴地、快乐地、愉快地" },
+            { index: 1, answer: "美丽地", hints: ["形容花朵的状态", "表示美好的样子"], example: "如：灿烂地、绚烂地、娇艳地" },
+            { index: 2, answer: "自由地", hints: ["表示没有约束", "形容轻松的状态"], example: "如：快乐地、尽情地、畅快地" },
+            { index: 3, answer: "温暖", hints: ["春天的特点", "让人感到舒适"], example: "如：美好、和谐、充满希望" },
+            { index: 4, answer: "生机", hints: ["表示活力", "春天带来的感觉"], example: "如：活力、朝气、希望" }
         ],
         instruction: "请在空白处填入合适的词语，让句子更加生动。",
         difficulty: "初级"
@@ -38,11 +38,11 @@ const exercises = {
         type: "fill-blank",
         content: "看着妈妈___的背影，我的心里___涌起一阵暖流。她为了我们的家___付出，从不___。我___要好好学习，报答她的恩情。",
         blanks: [
-            { index: 0, answer: "忙碌", hints: ["描述妈妈的状态", "表示很忙"] },
-            { index: 1, answer: "顿时", hints: ["表示时间", "立刻、马上"] },
-            { index: 2, answer: "默默地", hints: ["表示方式", "不声不响地"] },
-            { index: 3, answer: "抱怨", hints: ["表示不满", "埋怨"] },
-            { index: 4, answer: "暗下决心", hints: ["表示决定", "在心里决定"] }
+            { index: 0, answer: "忙碌", hints: ["描述妈妈的状态", "表示很忙"], example: "如：疲惫、劳累、辛苦" },
+            { index: 1, answer: "顿时", hints: ["表示时间", "立刻、马上"], example: "如：立刻、瞬间、马上" },
+            { index: 2, answer: "默默地", hints: ["表示方式", "不声不响地"], example: "如：悄悄地、静静地、无声地" },
+            { index: 3, answer: "抱怨", hints: ["表示不满", "埋怨"], example: "如：埋怨、责备、批评" },
+            { index: 4, answer: "暗下决心", hints: ["表示决定", "在心里决定"], example: "如：下定决心、立志、决定" }
         ],
         instruction: "填入恰当的词语，表达对母亲的感激之情。",
         difficulty: "初级"
@@ -97,6 +97,7 @@ const exercises = {
 let currentExercise = null;
 let userAnswers = [];
 let isSubmitted = false;
+let currentQuestionIndex = 0; // Track current question being answered
 
 /**
  * Initialize the game
@@ -169,21 +170,21 @@ function loadLevel(levelNumber) {
     currentExercise = exercises[levelNumber];
     userAnswers = new Array(currentExercise.blanks.length).fill('');
     isSubmitted = false;
+    currentQuestionIndex = 0; // Reset to first question
     
     // Update UI
     document.getElementById('levelTitle').textContent = currentExercise.title;
     generateExerciseContent();
     
     // Reset buttons and feedback
-    document.getElementById('submitBtn').style.display = 'inline-block';
-    document.getElementById('nextBtn').style.display = 'none';
+    updateActionButtons();
     document.getElementById('feedback').style.display = 'none';
     document.getElementById('achievement').classList.remove('show');
     document.getElementById('hint').style.display = 'none';
 }
 
 /**
- * Generate exercise content with input fields
+ * Generate exercise content with input fields - one question at a time
  */
 function generateExerciseContent() {
     const container = document.getElementById('exerciseContent');
@@ -191,45 +192,138 @@ function generateExerciseContent() {
     const blanks = currentExercise.blanks;
     
     let html = '<p><strong>题目说明：</strong>' + currentExercise.instruction + '</p>';
+    
+    // Progress indicator for questions
+    html += '<div style="margin: 10px 0; text-align: center; color: #666; font-size: 14px;">';
+    html += `第 ${currentQuestionIndex + 1} 题，共 ${blanks.length} 题`;
+    html += '</div>';
+    
+    // Progress bar
+    const progress = ((currentQuestionIndex + 1) / blanks.length) * 100;
+    html += '<div style="width: 100%; background: #e0e0e0; border-radius: 10px; margin: 10px 0; height: 8px;">';
+    html += `<div style="width: ${progress}%; background: #2196f3; height: 8px; border-radius: 10px; transition: width 0.3s;"></div>`;
+    html += '</div>';
+    
     html += '<div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #2196f3;">';
     
-    // Split content and insert input fields
+    // Show current question only
+    const currentBlank = blanks[currentQuestionIndex];
     const parts = content.split('___');
+    
+    // Build the sentence with only current blank shown as input
+    let questionText = '';
     for (let i = 0; i < parts.length; i++) {
-        html += parts[i];
+        questionText += parts[i];
         if (i < blanks.length) {
-            html += `<input type="text" class="blank-input" 
+            if (i === currentQuestionIndex) {
+                // Current question - show input
+                questionText += `<input type="text" class="blank-input" 
                      placeholder="请填入词语" 
                      oninput="updateAnswer(${i}, this.value)"
                      data-blank-index="${i}"
-                     id="blank-${i}">`;
+                     id="blank-${i}"
+                     value="${userAnswers[i] || ''}"
+                     style="background: #e3f2fd; border-color: #2196f3; font-weight: bold;">`;
+            } else if (i < currentQuestionIndex) {
+                // Already answered - show the answer
+                questionText += `<span style="background: #c8e6c9; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #2e7d32;">${userAnswers[i] || '___'}</span>`;
+            } else {
+                // Future questions - show placeholder
+                questionText += '<span style="background: #f5f5f5; padding: 4px 8px; border-radius: 4px; color: #999;">___</span>';
+            }
         }
+    }
+    
+    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0;">' + questionText + '</div>';
+    
+    // Show example for current question
+    if (currentBlank.example) {
+        html += '<div style="margin: 15px 0; padding: 10px; background: #f0f8ff; border-radius: 6px; border-left: 3px solid #2196f3;">';
+        html += '<strong style="color: #1976d2;">💡 参考示例：</strong><br>';
+        html += '<span style="color: #424242; font-size: 14px;">' + currentBlank.example + '</span>';
+        html += '</div>';
     }
     
     html += '</div>';
     html += `<p><strong>难度等级：</strong><span style="color: #ff9800;">${currentExercise.difficulty}</span></p>`;
     
     container.innerHTML = html;
+    
+    // Focus on the current input
+    setTimeout(() => {
+        const currentInput = document.getElementById(`blank-${currentQuestionIndex}`);
+        if (currentInput) {
+            currentInput.focus();
+        }
+    }, 100);
 }
 
 /**
- * Update user answer for a specific blank
+ * Update action buttons based on current state
  */
+function updateActionButtons() {
+    const submitBtn = document.getElementById('submitBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    
+    if (currentQuestionIndex < currentExercise.blanks.length - 1) {
+        // Still have more questions
+        submitBtn.textContent = '下一题';
+        submitBtn.style.display = 'inline-block';
+        submitBtn.onclick = () => nextQuestion();
+        nextBtn.style.display = 'none';
+    } else {
+        // Last question
+        submitBtn.textContent = '提交答案';
+        submitBtn.style.display = 'inline-block';
+        submitBtn.onclick = () => submitAnswer();
+        nextBtn.style.display = 'none';
+    }
+    
+    submitBtn.disabled = false;
+    hintBtn.style.display = 'inline-block';
+}
+
+/**
+ * Move to next question
+ */
+function nextQuestion() {
+    const currentInput = document.getElementById(`blank-${currentQuestionIndex}`);
+    if (!currentInput || !currentInput.value.trim()) {
+        showFeedback('请先填写当前题目的答案', 'error');
+        return;
+    }
+    
+    // Save current answer
+    userAnswers[currentQuestionIndex] = currentInput.value.trim();
+    
+    // Move to next question
+    if (currentQuestionIndex < currentExercise.blanks.length - 1) {
+        currentQuestionIndex++;
+        generateExerciseContent();
+        updateActionButtons();
+        
+        // Hide any previous feedback
+        document.getElementById('feedback').style.display = 'none';
+    }
+}
 function updateAnswer(index, value) {
     userAnswers[index] = value.trim();
     console.log(`Updated answer ${index}: ${value.trim()}`);
 }
 
 /**
- * Show hint for current level
+ * Show hint for current question
  */
 function showHint() {
     const hintElement = document.getElementById('hint');
-    if (currentExercise) {
+    if (currentExercise && currentExercise.blanks[currentQuestionIndex]) {
+        const currentBlank = currentExercise.blanks[currentQuestionIndex];
         let hintText = '💡 提示：<br>';
-        currentExercise.blanks.forEach((blank, index) => {
-            hintText += `第${index + 1}个空：${blank.hints[0]}<br>`;
-        });
+        hintText += `第${currentQuestionIndex + 1}题提示：${currentBlank.hints[0]}<br>`;
+        if (currentBlank.hints[1]) {
+            hintText += `补充提示：${currentBlank.hints[1]}`;
+        }
         hintElement.innerHTML = hintText;
         hintElement.style.display = 'block';
     }
