@@ -308,7 +308,7 @@ function generateExerciseContent() {
     const content = currentExercise.content;
     const blanks = currentExercise.blanks;
     
-    let html = '<p><strong>题目说明：</strong>' + currentExercise.instruction + '</p>';
+    let html = '<p style="color: #2c3e50; font-weight: 600;"><strong>题目说明：</strong>' + currentExercise.instruction + '</p>';
     
     // Progress indicator for questions
     html += '<div style="margin: 10px 0; text-align: center; color: #e91e63; font-size: 14px; font-weight: bold;">';
@@ -332,7 +332,7 @@ function generateExerciseContent() {
     for (let i = 0; i < parts.length; i++) {
         // Wrap text parts in spans with explicit dark color for better readability
         if (parts[i].trim()) {
-            questionText += `<span style="color: #333; font-weight: 500;">${parts[i]}</span>`;
+            questionText += `<span style="color: #2c3e50; font-weight: 500;">${parts[i]}</span>`;
         } else {
             questionText += parts[i];
         }
@@ -345,24 +345,24 @@ function generateExerciseContent() {
                      data-blank-index="${i}"
                      id="blank-${i}"
                      value="${userAnswers[i] || ''}"
-                     style="background: #e3f2fd; border-color: #2196f3; font-weight: bold;">`;
+                     style="background: #ffffff; border-color: #2196f3; font-weight: bold; color: #2c3e50;">`;
             } else if (i < currentQuestionIndex) {
                 // Already answered - show the answer
                 questionText += `<span style="background: #c8e6c9; padding: 4px 8px; border-radius: 4px; font-weight: bold; color: #2e7d32;">${userAnswers[i] || '___'}</span>`;
             } else {
                 // Future questions - show placeholder
-                questionText += '<span style="background: #e8f4fd; padding: 4px 8px; border-radius: 4px; color: #1976d2; border: 1px solid #bbdefb;">___</span>';
+                questionText += '<span style="background: #e8f4fd; padding: 4px 8px; border-radius: 4px; color: #2c3e50; border: 1px solid #bbdefb;">___</span>';
             }
         }
     }
     
-    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0; color: #333; font-weight: 500;">' + questionText + '</div>';
+    html += '<div style="font-size: 18px; line-height: 2; margin: 15px 0; color: #2c3e50; font-weight: 500;">' + questionText + '</div>';
     
     // Show example for current question
     if (currentBlank.example) {
         html += '<div style="margin: 15px 0; padding: 10px; background: #f0f8ff; border-radius: 6px; border-left: 3px solid #2196f3;">';
         html += '<strong style="color: #1976d2;">💡 参考示例：</strong><br>';
-        html += '<span style="color: #9c27b0; font-size: 14px; font-weight: 500;">' + currentBlank.example + '</span>';
+        html += '<span style="color: #7b1fa2; font-size: 14px; font-weight: 600;">' + currentBlank.example + '</span>';
         html += '</div>';
     }
     

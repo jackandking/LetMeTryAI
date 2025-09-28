@@ -33,6 +33,12 @@
         margin: 2px;
         display: block;
         margin-bottom: 10px;
+        color: #2c3e50;
+    }
+    
+    .blank-input::placeholder {
+        color: #6c757d;
+        opacity: 1;
     }
     
     .btn {
