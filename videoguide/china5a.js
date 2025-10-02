@@ -531,6 +531,11 @@ const china5a = {
             "longitude": 120.4167
         },
         {
+            "name": "湖州科技馆",
+            "latitude": 30.8703,
+            "longitude": 120.0933
+        },
+        {
             "name": "衢州市开化根宫佛国文化旅游区",
             "latitude": 29.1333,
             "longitude": 118.4167
@@ -1763,4 +1768,11 @@ const china5a = {
     ]
 };
 
-module.exports = china5a;
+// Support both browser global and module exports
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = china5a;
+}
+// For browser usage
+if (typeof window !== 'undefined') {
+    window.china5a = china5a;
+}
