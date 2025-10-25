@@ -1,0 +1,29 @@
+/* WW Top 10 styles */
+@import url('../stream/index.css');
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  width: min(92vw, 840px);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.card .meta {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 12px;
+}

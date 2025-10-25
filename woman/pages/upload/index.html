@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>看美男 - 上传</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <button id="back" data-target="/pages/index/index" class="link">返回首页</button>
+      <div id="version" class="muted"></div>
+    </header>
+
+    <main class="container">
+      <div class="field">
+        <label>AI 推荐 Prompt</label>
+        <textarea id="prompt" rows="3" readonly></textarea>
+        <div class="actions">
+          <button id="copy" class="btn secondary">复制</button>
+          <button id="regen" class="btn">再生成</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>图片 URL</label>
+        <input id="url" type="url" placeholder="https://..." />
+      </div>
+      <div class="actions">
+        <button id="submit" class="btn primary">提交</button>
+      </div>
+      <div id="msg" class="muted"></div>
+    </main>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

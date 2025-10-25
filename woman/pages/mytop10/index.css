@@ -1,0 +1,24 @@
+/* My Top 10 styles */
+@import url('../stream/index.css');
+
+.list {
+  width: min(92vw, 520px);
+  padding-left: 18px;
+}
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+.list img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.list .duration {
+  margin-left: auto;
+  color: #666;
+  font-size: 12px;
+}
