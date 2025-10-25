@@ -1,0 +1,8 @@
+/* ABTest page styles */
+@import url('../stream/index.css');
+
+.table { border-collapse: collapse; width: min(92vw, 840px); }
+.table th, .table td { border: 1px solid #eee; padding: 8px; text-align: left; }
+.table th { background: #fafafa; }
+.actions { display: flex; gap: 8px; }
+.btn.small { padding: 6px 10px; font-size: 12px; border-radius: 6px; }
