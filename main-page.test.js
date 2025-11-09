@@ -22,16 +22,32 @@ describe('Main Index Page - Parent Love Section Integration', () => {
       expect(htmlContent).toContain('家长爱');
     });
 
+    it('should have Elder Love section in main page', () => {
+      expect(htmlContent).toContain('老人爱');
+    });
+
     it('should have link to webview17', () => {
       expect(htmlContent).toContain('href="webview17"');
+    });
+
+    it('should have link to webview18', () => {
+      expect(htmlContent).toContain('href="webview18"');
     });
 
     it('should have parent-love-img element', () => {
       expect(htmlContent).toContain('id="parent-love-img"');
     });
 
-    it('should have appropriate alt text', () => {
+    it('should have elder-love-img element', () => {
+      expect(htmlContent).toContain('id="elder-love-img"');
+    });
+
+    it('should have appropriate alt text for parent love', () => {
       expect(htmlContent).toContain('alt="家长爱"');
+    });
+
+    it('should have appropriate alt text for elder love', () => {
+      expect(htmlContent).toContain('alt="老人爱"');
     });
 
     it('should maintain existing sections', () => {
@@ -54,6 +70,10 @@ describe('Main Index Page - Parent Love Section Integration', () => {
       expect(mainJsContent).toContain('parent-love-img');
     });
 
+    it('should have elder-love-img in imageConfig', () => {
+      expect(mainJsContent).toContain('elder-love-img');
+    });
+
     it('should have proper image configuration structure', () => {
       expect(mainJsContent).toContain('primary:');
       expect(mainJsContent).toContain('fallback:');
@@ -66,6 +86,14 @@ describe('Main Index Page - Parent Love Section Integration', () => {
         /'parent-love-img':\s*{[^}]+}/
       );
       expect(parentLoveConfig).toBeTruthy();
+    });
+
+    it('should have fallback image for elder-love section', () => {
+      // Check that there's a fallback image configured
+      const elderLoveConfig = mainJsContent.match(
+        /'elder-love-img':\s*{[^}]+}/
+      );
+      expect(elderLoveConfig).toBeTruthy();
     });
 
     it('should maintain existing image configurations', () => {
@@ -109,13 +137,13 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     it('should maintain proper section structure', () => {
       const sectionMatches = htmlContent.match(/<section class="section">/g);
       expect(sectionMatches).toBeTruthy();
-      expect(sectionMatches.length).toBeGreaterThanOrEqual(6); // At least 6 sections
+      expect(sectionMatches.length).toBeGreaterThanOrEqual(7); // At least 7 sections (including elder-love)
     });
 
     it('should have all sections with clickable links', () => {
       const linkMatches = htmlContent.match(/<a href="[^"]+"/g);
       expect(linkMatches).toBeTruthy();
-      expect(linkMatches.length).toBeGreaterThanOrEqual(6);
+      expect(linkMatches.length).toBeGreaterThanOrEqual(7);
     });
   });
 
