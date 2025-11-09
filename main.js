@@ -78,6 +78,11 @@ const imageConfig = {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/parent-love-default.png',
         fallback: 'images/1621725673908_.pic.jpg',
         alt: '家长爱'
+    },
+    'elder-love-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/elder-love-default.png',
+        fallback: 'images/1621725673908_.pic.jpg',
+        alt: '老人爱'
     }
 };
 
