@@ -1,5 +1,23 @@
 // test-setup.js - Jest setup file for global test configuration
-import { jest, beforeEach, afterAll } from '@jest/globals';
+import { jest, beforeEach, afterAll, expect } from '@jest/globals';
+
+// Add custom matchers
+expect.extend({
+  toStartWith(received, expected) {
+    const pass = typeof received === 'string' && received.startsWith(expected);
+    if (pass) {
+      return {
+        message: () => `expected ${received} not to start with ${expected}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to start with ${expected}`,
+        pass: false,
+      };
+    }
+  }
+});
 
 // Mock fetch globally for all tests
 global.fetch = jest.fn();

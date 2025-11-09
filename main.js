@@ -68,6 +68,16 @@ const imageConfig = {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/5813a87a74374d8eb3625a40d5b25f3b_2056945912.png',
         fallback: 'images/sample1.png',
         alt: '学习内容'
+    },
+    'zuowen-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/zuowen-default.png',
+        fallback: 'images/game1.jpg',
+        alt: '语文作文过关'
+    },
+    'parent-love-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/parent-love-default.png',
+        fallback: 'images/1621725673908_.pic.jpg',
+        alt: '家长爱'
     }
 };
 
