@@ -63,6 +63,15 @@ describe('Main Index Page - Parent Love Section Integration', () => {
         expect(htmlContent).toContain(section);
       });
     });
+
+    it('should have fireworks link pointing to external URL', () => {
+      expect(htmlContent).toContain('href="https://museumcheck.cn/fireworks-wall.html"');
+    });
+
+    it('should have fireworks link open in new tab', () => {
+      const fireworksLinkRegex = /href="https:\/\/museumcheck\.cn\/fireworks-wall\.html"[^>]*target="_blank"/;
+      expect(htmlContent).toMatch(fireworksLinkRegex);
+    });
   });
 
   describe('JavaScript Configuration', () => {
