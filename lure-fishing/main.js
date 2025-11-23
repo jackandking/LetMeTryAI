@@ -245,7 +245,7 @@ async function saveRecord(data) {
 async function loadRecords(clearExisting = true) {
     try {
         const offset = (currentPage - 1) * RECORDS_PER_PAGE;
-        const query = `SELECT * FROM ${TABLE_NAME} ORDER BY created_at DESC LIMIT ${RECORDS_PER_PAGE} OFFSET ${offset}`;
+        const query = 'SELECT * FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
         
         const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
@@ -254,7 +254,7 @@ async function loadRecords(clearExisting = true) {
             },
             body: JSON.stringify({
                 sql: query,
-                params: []
+                params: [TABLE_NAME, RECORDS_PER_PAGE, offset]
             })
         });
         
@@ -274,18 +274,10 @@ async function loadRecords(clearExisting = true) {
         
     } catch (error) {
         console.error('Error loading records:', error);
-        // Don't show error if it's just that the table doesn't exist yet
-        if (!error.message.includes("doesn't exist")) {
-            const gallery = document.getElementById('recordsGallery');
-            if (clearExisting) {
-                gallery.innerHTML = '<p>暂无数据，快来上传第一条记录吧！</p>';
-            }
-        } else {
-            // Table doesn't exist, show friendly message
-            const gallery = document.getElementById('recordsGallery');
-            if (clearExisting) {
-                gallery.innerHTML = '<p>暂无数据，快来上传第一条记录吧！</p>';
-            }
+        // Show friendly message for any error
+        const gallery = document.getElementById('recordsGallery');
+        if (clearExisting) {
+            gallery.innerHTML = '<p>暂无数据，快来上传第一条记录吧！</p>';
         }
     }
 }
@@ -318,19 +310,49 @@ function createRecordCard(record) {
     const card = document.createElement('div');
     card.className = 'record-card';
     
-    const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
+    // Sanitize and validate photo URL
+    const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
     const date = new Date(record.catch_date).toLocaleDateString('zh-CN');
     
-    card.innerHTML = `
-        <img src="${photoUrl}" alt="钓鱼成果" onerror="this.src='../images/game1.jpg'">
-        <div class="record-info">
-            <p><strong>日期:</strong> ${date}</p>
-            <p><strong>地点:</strong> ${record.location}</p>
-            <p><strong>温度:</strong> ${record.temperature}°C</p>
-            <p><strong>钓获:</strong> ${record.catch_count} 条</p>
-            ${record.notes ? `<p><strong>备注:</strong> ${record.notes}</p>` : ''}
-        </div>
-    `;
+    // Create elements programmatically to avoid XSS
+    const img = document.createElement('img');
+    img.src = photoUrl;
+    img.alt = '钓鱼成果';
+    img.onerror = function() { this.src = '../images/game1.jpg'; };
+    
+    const recordInfo = document.createElement('div');
+    recordInfo.className = 'record-info';
+    
+    const dateP = document.createElement('p');
+    dateP.innerHTML = '<strong>日期:</strong> ';
+    dateP.appendChild(document.createTextNode(date));
+    
+    const locationP = document.createElement('p');
+    locationP.innerHTML = '<strong>地点:</strong> ';
+    locationP.appendChild(document.createTextNode(record.location));
+    
+    const tempP = document.createElement('p');
+    tempP.innerHTML = '<strong>温度:</strong> ';
+    tempP.appendChild(document.createTextNode(`${record.temperature}°C`));
+    
+    const catchP = document.createElement('p');
+    catchP.innerHTML = '<strong>钓获:</strong> ';
+    catchP.appendChild(document.createTextNode(`${record.catch_count} 条`));
+    
+    recordInfo.appendChild(dateP);
+    recordInfo.appendChild(locationP);
+    recordInfo.appendChild(tempP);
+    recordInfo.appendChild(catchP);
+    
+    if (record.notes) {
+        const notesP = document.createElement('p');
+        notesP.innerHTML = '<strong>备注:</strong> ';
+        notesP.appendChild(document.createTextNode(record.notes));
+        recordInfo.appendChild(notesP);
+    }
+    
+    card.appendChild(img);
+    card.appendChild(recordInfo);
     
     return card;
 }
@@ -345,7 +367,7 @@ async function loadTemperatureStats() {
                 temperature,
                 COUNT(*) as count,
                 SUM(catch_count) as total_catch
-            FROM ${TABLE_NAME}
+            FROM ??
             GROUP BY temperature
             ORDER BY count DESC
         `;
@@ -357,7 +379,7 @@ async function loadTemperatureStats() {
             },
             body: JSON.stringify({
                 sql: query,
-                params: []
+                params: [TABLE_NAME]
             })
         });
         
