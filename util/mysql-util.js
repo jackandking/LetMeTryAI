@@ -6,6 +6,15 @@ const log = (message) => {
   console.log(message);
 };
 
+/**
+ * Format a Date object to MySQL datetime format (YYYY-MM-DD HH:MM:SS)
+ * @param {Date} date - The date to format (defaults to current date/time)
+ * @returns {string} Formatted datetime string for MySQL
+ */
+const formatDateTimeForMySQL = (date = new Date()) => {
+  return date.toISOString().slice(0, 19).replace('T', ' ');
+};
+
 // Function to query MySQL database
 const queryDatabase = (query, params, callback) => {
   fetch(API_ENDPOINTS.MYSQL_QUERY, {
@@ -118,4 +127,4 @@ const deleteRecord = (table, id, callback) => {
 }
 
 // Export all database utility functions
-export { queryDatabase, getById, insertRecord, updateRecord, deleteRecord };
+export { queryDatabase, getById, insertRecord, updateRecord, deleteRecord, formatDateTimeForMySQL };
