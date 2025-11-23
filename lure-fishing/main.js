@@ -171,7 +171,7 @@ async function handleFormSubmit(event) {
             temperature: temperature,
             catch_count: catchCount,
             notes: notes,
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
         };
         
         await saveRecord(recordData);
