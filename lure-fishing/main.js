@@ -1,0 +1,559 @@
+/**
+ * Lure Fishing Application
+ * Handles photo uploads, location tracking, and temperature data analysis
+ */
+
+// MySQL table name for fishing records
+const TABLE_NAME = 'lure_fishing_records';
+
+// Current page for pagination
+let currentPage = 1;
+const RECORDS_PER_PAGE = 9;
+
+/**
+ * Initialize the application when DOM is loaded
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    initializeForm();
+    loadRecords();
+    loadTemperatureStats();
+    setupEventListeners();
+});
+
+/**
+ * Initialize form with current date
+ */
+function initializeForm() {
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.value = today;
+    dateInput.max = today; // Prevent future dates
+}
+
+/**
+ * Setup all event listeners
+ */
+function setupEventListeners() {
+    // Photo upload preview
+    document.getElementById('photoUpload').addEventListener('change', handlePhotoPreview);
+    
+    // Get location button
+    document.getElementById('getLocationBtn').addEventListener('click', getLocation);
+    
+    // Form submission
+    document.getElementById('uploadForm').addEventListener('submit', handleFormSubmit);
+    
+    // Load more records
+    document.getElementById('loadMoreBtn').addEventListener('click', function() {
+        currentPage++;
+        loadRecords(false);
+    });
+}
+
+/**
+ * Handle photo preview
+ */
+function handlePhotoPreview(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = ''; // Clear previous preview
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Preview';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+/**
+ * Get user's current location
+ */
+function getLocation() {
+    const locationInput = document.getElementById('location');
+    const btn = document.getElementById('getLocationBtn');
+    
+    if (!navigator.geolocation) {
+        showStatus('浏览器不支持地理位置功能', 'error');
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '获取中...';
+    locationInput.value = '定位中...';
+    
+    navigator.geolocation.getCurrentPosition(
+        async function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            
+            // Use reverse geocoding to get address (simplified version)
+            // In a real application, you would call a geocoding API
+            const locationStr = `纬度: ${lat.toFixed(4)}, 经度: ${lon.toFixed(4)}`;
+            locationInput.value = locationStr;
+            
+            btn.disabled = false;
+            btn.textContent = '获取位置';
+            showStatus('位置获取成功', 'success');
+            
+            // Hide success message after 2 seconds
+            setTimeout(() => {
+                document.getElementById('uploadStatus').style.display = 'none';
+            }, 2000);
+        },
+        function(error) {
+            let errorMsg = '位置获取失败';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMsg = '用户拒绝了地理位置请求';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMsg = '位置信息不可用';
+                    break;
+                case error.TIMEOUT:
+                    errorMsg = '请求超时';
+                    break;
+            }
+            
+            locationInput.value = '';
+            btn.disabled = false;
+            btn.textContent = '获取位置';
+            showStatus(errorMsg, 'error');
+        }
+    );
+}
+
+/**
+ * Handle form submission
+ */
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '提交中...';
+    
+    try {
+        // Get form data
+        const photo = document.getElementById('photoUpload').files[0];
+        const location = document.getElementById('location').value;
+        const date = document.getElementById('date').value;
+        const temperature = parseFloat(document.getElementById('temperature').value);
+        const catchCount = parseInt(document.getElementById('catchCount').value);
+        const notes = document.getElementById('notes').value;
+        
+        if (!photo) {
+            throw new Error('请选择照片');
+        }
+        
+        if (!location) {
+            throw new Error('请获取位置信息');
+        }
+        
+        // Upload photo first
+        showStatus('正在上传照片...', 'success');
+        const uploadResult = await uploadPhoto(photo);
+        
+        if (!uploadResult || !uploadResult.filename) {
+            throw new Error('照片上传失败');
+        }
+        
+        // Save record to database
+        showStatus('正在保存记录...', 'success');
+        const recordData = {
+            photo_url: uploadResult.filename,
+            location: location,
+            catch_date: date,
+            temperature: temperature,
+            catch_count: catchCount,
+            notes: notes,
+            created_at: new Date().toISOString()
+        };
+        
+        await saveRecord(recordData);
+        
+        showStatus('成果提交成功！', 'success');
+        
+        // Reset form
+        document.getElementById('uploadForm').reset();
+        document.getElementById('photoPreview').innerHTML = '';
+        initializeForm();
+        
+        // Reload records and stats
+        currentPage = 1;
+        await loadRecords(true);
+        await loadTemperatureStats();
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            document.getElementById('uploadStatus').style.display = 'none';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        showStatus(`提交失败: ${error.message}`, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '提交成果';
+    }
+}
+
+/**
+ * Upload photo to server
+ */
+async function uploadPhoto(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('targetPath', 'lure-fishing/');
+    
+    const response = await fetch(window.API_ENDPOINTS.FILE_UPLOAD, {
+        method: 'POST',
+        body: formData
+    });
+    
+    if (!response.ok) {
+        throw new Error(`上传失败: ${response.status}`);
+    }
+    
+    return await response.json();
+}
+
+/**
+ * Save record to database
+ */
+async function saveRecord(data) {
+    const response = await fetch(window.API_ENDPOINTS.MYSQL_INSERT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            table: TABLE_NAME,
+            data: data
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`保存失败: ${response.status}`);
+    }
+    
+    return await response.json();
+}
+
+/**
+ * Load fishing records from database
+ */
+async function loadRecords(clearExisting = true) {
+    try {
+        const offset = (currentPage - 1) * RECORDS_PER_PAGE;
+        const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
+        
+        const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sql: query,
+                params: [TABLE_NAME, RECORDS_PER_PAGE, offset]
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`查询失败: ${response.status}`);
+        }
+        
+        const records = await response.json();
+        displayRecords(records, clearExisting);
+        
+        // Hide load more button if no more records
+        if (records.length < RECORDS_PER_PAGE) {
+            document.getElementById('loadMoreBtn').style.display = 'none';
+        } else {
+            document.getElementById('loadMoreBtn').style.display = 'block';
+        }
+        
+    } catch (error) {
+        console.error('Error loading records:', error);
+        // Show friendly message for any error
+        const gallery = document.getElementById('recordsGallery');
+        if (clearExisting) {
+            gallery.innerHTML = '<p>暂无数据，快来上传第一条记录吧！</p>';
+        }
+    }
+}
+
+/**
+ * Display records in gallery
+ */
+function displayRecords(records, clearExisting = true) {
+    const gallery = document.getElementById('recordsGallery');
+    
+    if (clearExisting) {
+        gallery.innerHTML = '';
+    }
+    
+    if (records.length === 0 && clearExisting) {
+        gallery.innerHTML = '<p>暂无数据，快来上传第一条记录吧！</p>';
+        return;
+    }
+    
+    records.forEach(record => {
+        const card = createRecordCard(record);
+        gallery.appendChild(card);
+    });
+}
+
+/**
+ * Create a record card element
+ */
+function createRecordCard(record) {
+    const card = document.createElement('div');
+    card.className = 'record-card';
+    
+    // Sanitize and validate photo URL
+    const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+    const date = new Date(record.catch_date).toLocaleDateString('zh-CN');
+    
+    // Create elements programmatically to avoid XSS
+    const img = document.createElement('img');
+    img.src = photoUrl;
+    img.alt = '钓鱼成果';
+    img.onerror = function() { this.src = '../images/game1.jpg'; };
+    
+    const recordInfo = document.createElement('div');
+    recordInfo.className = 'record-info';
+    
+    const dateP = document.createElement('p');
+    dateP.innerHTML = '<strong>日期:</strong> ';
+    dateP.appendChild(document.createTextNode(date));
+    
+    const locationP = document.createElement('p');
+    locationP.innerHTML = '<strong>地点:</strong> ';
+    locationP.appendChild(document.createTextNode(record.location));
+    
+    const tempP = document.createElement('p');
+    tempP.innerHTML = '<strong>温度:</strong> ';
+    tempP.appendChild(document.createTextNode(`${record.temperature}°C`));
+    
+    const catchP = document.createElement('p');
+    catchP.innerHTML = '<strong>钓获:</strong> ';
+    catchP.appendChild(document.createTextNode(`${record.catch_count} 条`));
+    
+    recordInfo.appendChild(dateP);
+    recordInfo.appendChild(locationP);
+    recordInfo.appendChild(tempP);
+    recordInfo.appendChild(catchP);
+    
+    if (record.notes) {
+        const notesP = document.createElement('p');
+        notesP.innerHTML = '<strong>备注:</strong> ';
+        notesP.appendChild(document.createTextNode(record.notes));
+        recordInfo.appendChild(notesP);
+    }
+    
+    card.appendChild(img);
+    card.appendChild(recordInfo);
+    
+    return card;
+}
+
+/**
+ * Load and display temperature statistics
+ */
+async function loadTemperatureStats() {
+    try {
+        const query = `
+            SELECT 
+                temperature,
+                COUNT(*) as count,
+                SUM(catch_count) as total_catch
+            FROM ??
+            GROUP BY temperature
+            ORDER BY count DESC
+        `;
+        
+        const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sql: query,
+                params: [TABLE_NAME]
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`查询失败: ${response.status}`);
+        }
+        
+        const stats = await response.json();
+        displayTemperatureStats(stats);
+        
+    } catch (error) {
+        console.error('Error loading temperature stats:', error);
+        const statsDiv = document.getElementById('temperatureStats');
+        statsDiv.innerHTML = '<p>暂无温度数据</p>';
+    }
+}
+
+/**
+ * Display temperature statistics
+ */
+function displayTemperatureStats(stats) {
+    const statsDiv = document.getElementById('temperatureStats');
+    
+    if (!stats || stats.length === 0) {
+        statsDiv.innerHTML = '<p>暂无温度数据</p>';
+        return;
+    }
+    
+    // Group by temperature ranges
+    const ranges = {
+        '0-10°C': { count: 0, totalCatch: 0 },
+        '10-15°C': { count: 0, totalCatch: 0 },
+        '15-20°C': { count: 0, totalCatch: 0 },
+        '20-25°C': { count: 0, totalCatch: 0 },
+        '25-30°C': { count: 0, totalCatch: 0 },
+        '30°C+': { count: 0, totalCatch: 0 }
+    };
+    
+    stats.forEach(stat => {
+        const temp = parseFloat(stat.temperature);
+        const count = parseInt(stat.count);
+        const totalCatch = parseInt(stat.total_catch);
+        
+        if (temp < 10) {
+            ranges['0-10°C'].count += count;
+            ranges['0-10°C'].totalCatch += totalCatch;
+        } else if (temp < 15) {
+            ranges['10-15°C'].count += count;
+            ranges['10-15°C'].totalCatch += totalCatch;
+        } else if (temp < 20) {
+            ranges['15-20°C'].count += count;
+            ranges['15-20°C'].totalCatch += totalCatch;
+        } else if (temp < 25) {
+            ranges['20-25°C'].count += count;
+            ranges['20-25°C'].totalCatch += totalCatch;
+        } else if (temp < 30) {
+            ranges['25-30°C'].count += count;
+            ranges['25-30°C'].totalCatch += totalCatch;
+        } else {
+            ranges['30°C+'].count += count;
+            ranges['30°C+'].totalCatch += totalCatch;
+        }
+    });
+    
+    // Create stat cards
+    statsDiv.innerHTML = '';
+    
+    // Sort ranges by count
+    const sortedRanges = Object.entries(ranges)
+        .filter(([_, data]) => data.count > 0)
+        .sort((a, b) => b[1].count - a[1].count);
+    
+    sortedRanges.forEach(([range, data]) => {
+        const card = document.createElement('div');
+        card.className = 'stat-card';
+        
+        const h3 = document.createElement('h3');
+        h3.textContent = range;
+        
+        const p1 = document.createElement('p');
+        p1.textContent = `记录次数: ${data.count} 次`;
+        
+        const p2 = document.createElement('p');
+        p2.textContent = `总钓获: ${data.totalCatch} 条`;
+        
+        const p3 = document.createElement('p');
+        p3.textContent = `平均每次: ${(data.totalCatch / data.count).toFixed(1)} 条`;
+        
+        card.appendChild(h3);
+        card.appendChild(p1);
+        card.appendChild(p2);
+        card.appendChild(p3);
+        
+        statsDiv.appendChild(card);
+    });
+    
+    // Simple text-based chart
+    drawSimpleChart(sortedRanges);
+}
+
+/**
+ * Draw a simple text-based chart
+ */
+function drawSimpleChart(sortedRanges) {
+    const canvas = document.getElementById('chartCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Set canvas size
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 300;
+    
+    if (sortedRanges.length === 0) {
+        ctx.fillStyle = '#666';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('暂无数据', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+    
+    const maxCount = Math.max(...sortedRanges.map(r => r[1].count));
+    const barWidth = (canvas.width - 60) / sortedRanges.length;
+    const chartHeight = canvas.height - 60;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw bars
+    sortedRanges.forEach(([range, data], index) => {
+        const barHeight = (data.count / maxCount) * chartHeight;
+        const x = 30 + index * barWidth;
+        const y = canvas.height - 30 - barHeight;
+        
+        // Draw bar
+        const gradient = ctx.createLinearGradient(0, y, 0, canvas.height - 30);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x + 5, y, barWidth - 10, barHeight);
+        
+        // Draw count
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(data.count, x + barWidth / 2, y - 5);
+        
+        // Draw label
+        ctx.fillStyle = '#666';
+        ctx.font = '12px Arial';
+        ctx.save();
+        ctx.translate(x + barWidth / 2, canvas.height - 10);
+        ctx.rotate(-Math.PI / 4);
+        ctx.fillText(range, 0, 0);
+        ctx.restore();
+    });
+    
+    // Draw axis
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(30, canvas.height - 30);
+    ctx.lineTo(canvas.width - 30, canvas.height - 30);
+    ctx.stroke();
+}
+
+/**
+ * Show status message
+ */
+function showStatus(message, type) {
+    const statusDiv = document.getElementById('uploadStatus');
+    statusDiv.textContent = message;
+    statusDiv.className = type;
+    statusDiv.style.display = 'block';
+}
