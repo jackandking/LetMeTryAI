@@ -283,13 +283,15 @@ async function compressImage(file) {
                         }
                         
                         // If still too large and haven't reached max attempts, try lower quality
-                        if (blob.size > MAX_SIZE && attempt < maxAttempts) {
+                        if (blob.size > MAX_SIZE && attempt < maxAttempts - 1) {
                             quality -= 0.1;
                             attempt++;
                             tryCompress();
                         } else {
                             // Create a new File object from the blob
-                            const compressedFile = new File([blob], file.name, {
+                            // Update filename to reflect JPEG format
+                            const newFileName = file.name.replace(/\.[^.]+$/, '.jpg');
+                            const compressedFile = new File([blob], newFileName, {
                                 type: 'image/jpeg',
                                 lastModified: Date.now()
                             });
