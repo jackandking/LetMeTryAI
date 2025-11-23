@@ -85,7 +85,7 @@ const imageConfig = {
         alt: '老人爱'
     },
     'lure-fishing-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/lure-fishing-default.png',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/01d3457ddd6d4448b806f5947ad87b0d_2219023232.png?x-bce-process=image/format,f_auto/resize,m_lfit,limit_1,w_500,h_500/quality,q_85&',
         fallback: 'images/game2.png',
         alt: '路亚白条'
     }
