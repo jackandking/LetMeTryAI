@@ -70,22 +70,22 @@ const imageConfig = {
         alt: '学习内容'
     },
     'zuowen-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/zuowen-default.png',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/e422be599d9044bf93bf1400614cdf99_2219023800.png',
         fallback: 'images/game1.jpg',
         alt: '语文作文过关'
     },
     'parent-love-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/parent-love-default.png',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/ea7d9b2b03454189b6a3bc8f3cc62506_2219023744.png',
         fallback: 'images/1621725673908_.pic.jpg',
         alt: '家长爱'
     },
     'elder-love-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/elder-love-default.png',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/bf04dbc675104963936a7500a1ce8680_1284052778.png',
         fallback: 'images/1621725673908_.pic.jpg',
         alt: '老人爱'
     },
     'lure-fishing-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/01d3457ddd6d4448b806f5947ad87b0d_2219023232.png?x-bce-process=image/format,f_auto/resize,m_lfit,limit_1,w_500,h_500/quality,q_85&',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/01d3457ddd6d4448b806f5947ad87b0d_2219023232.png',
         fallback: 'images/game2.png',
         alt: '路亚白条'
     }
