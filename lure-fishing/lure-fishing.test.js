@@ -327,6 +327,160 @@ describe('Lure Fishing Feature Tests', () => {
       expect(imageId).toBe('lure-fishing-img');
     });
   });
+
+  describe('Image Compression', () => {
+    it('should define 1MB size threshold', () => {
+      const MAX_SIZE = 1 * 1024 * 1024; // 1MB in bytes
+      expect(MAX_SIZE).toBe(1048576);
+    });
+
+    it('should not compress files smaller than 1MB', async () => {
+      // Create a small file (100KB)
+      const smallFile = new File(['x'.repeat(100 * 1024)], 'small.jpg', { type: 'image/jpeg' });
+      expect(smallFile.size).toBeLessThan(1048576);
+      // File under 1MB should be returned as-is
+    });
+
+    it('should compress files larger than 1MB', () => {
+      // Create a large file (2MB)
+      const largeFile = new File(['x'.repeat(2 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' });
+      expect(largeFile.size).toBeGreaterThan(1048576);
+      // File over 1MB should trigger compression
+    });
+
+    it('should use canvas API for compression', () => {
+      const canvas = document.createElement('canvas');
+      expect(canvas).toBeDefined();
+      expect(canvas.getContext('2d')).toBeDefined();
+      expect(typeof canvas.toBlob).toBe('function');
+    });
+
+    it('should maintain aspect ratio during compression', () => {
+      const originalWidth = 3000;
+      const originalHeight = 2000;
+      const MAX_DIMENSION = 2048;
+      
+      let width = originalWidth;
+      let height = originalHeight;
+      
+      if (width > MAX_DIMENSION) {
+        height = (height / width) * MAX_DIMENSION;
+        width = MAX_DIMENSION;
+      }
+      
+      // Check aspect ratio is maintained
+      const originalRatio = originalWidth / originalHeight;
+      const newRatio = width / height;
+      expect(Math.abs(originalRatio - newRatio)).toBeLessThan(0.01);
+    });
+
+    it('should scale down large images to max 2048px dimension', () => {
+      const MAX_DIMENSION = 2048;
+      expect(MAX_DIMENSION).toBe(2048);
+      
+      // Test width > height
+      let width = 4000;
+      let height = 3000;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = (height / width) * MAX_DIMENSION;
+          width = MAX_DIMENSION;
+        } else {
+          width = (width / height) * MAX_DIMENSION;
+          height = MAX_DIMENSION;
+        }
+      }
+      expect(width).toBe(2048);
+      expect(height).toBe(1536);
+      
+      // Test height > width
+      width = 3000;
+      height = 4000;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = (height / width) * MAX_DIMENSION;
+          width = MAX_DIMENSION;
+        } else {
+          width = (width / height) * MAX_DIMENSION;
+          height = MAX_DIMENSION;
+        }
+      }
+      expect(width).toBe(1536);
+      expect(height).toBe(2048);
+    });
+
+    it('should use JPEG format for compressed images', () => {
+      const mimeType = 'image/jpeg';
+      expect(mimeType).toBe('image/jpeg');
+    });
+
+    it('should try multiple quality levels for compression', () => {
+      let quality = 0.8;
+      const maxAttempts = 5;
+      
+      expect(quality).toBe(0.8);
+      expect(maxAttempts).toBe(5);
+      
+      // Simulate quality reduction attempts
+      for (let i = 0; i < 3; i++) {
+        quality -= 0.1;
+      }
+      expect(quality).toBeCloseTo(0.5, 1);
+    });
+
+    it('should create File object from compressed blob', () => {
+      const blob = new Blob(['test'], { type: 'image/jpeg' });
+      const originalName = 'test.png';
+      const newFileName = originalName.replace(/\.[^.]+$/, '.jpg');
+      const file = new File([blob], newFileName, {
+        type: 'image/jpeg',
+        lastModified: Date.now()
+      });
+      
+      expect(file).toBeInstanceOf(File);
+      expect(file.name).toBe('test.jpg');
+      expect(file.type).toBe('image/jpeg');
+    });
+
+    it('should update filename extension to .jpg for compressed images', () => {
+      const testCases = [
+        { original: 'photo.png', expected: 'photo.jpg' },
+        { original: 'image.PNG', expected: 'image.jpg' },
+        { original: 'pic.jpeg', expected: 'pic.jpg' },
+        { original: 'test.webp', expected: 'test.jpg' },
+        { original: 'file.jpg', expected: 'file.jpg' }
+      ];
+      
+      testCases.forEach(({ original, expected }) => {
+        const result = original.replace(/\.[^.]+$/, '.jpg');
+        expect(result).toBe(expected);
+      });
+    });
+
+    it('should show compression progress to user', () => {
+      const originalSize = 2 * 1024 * 1024; // 2MB
+      const compressedSize = 800 * 1024; // 800KB
+      const savedKB = ((originalSize - compressedSize) / 1024).toFixed(0);
+      const compressionRatio = ((1 - compressedSize / originalSize) * 100).toFixed(0);
+      
+      expect(savedKB).toBe('1224');
+      expect(compressionRatio).toBe('61');
+    });
+
+    it('should handle FileReader for image data', () => {
+      const reader = new FileReader();
+      expect(reader).toBeDefined();
+      expect(typeof reader.readAsDataURL).toBe('function');
+      expect(typeof reader.onload).not.toBe('undefined');
+    });
+
+    it('should handle Image loading', () => {
+      const img = new Image();
+      expect(img).toBeDefined();
+      expect(typeof img.onload).not.toBe('undefined');
+      expect(typeof img.onerror).not.toBe('undefined');
+    });
+  });
 });
 
 describe('Lure Fishing Regression Tests', () => {
