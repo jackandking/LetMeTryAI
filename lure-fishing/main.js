@@ -16,6 +16,10 @@ const RECORDS_PER_PAGE = 9;
 // Store current location coordinates for weather fetching
 let currentCoordinates = null;
 
+// UI timeout constants (in milliseconds)
+const SUCCESS_MESSAGE_TIMEOUT = 3000; // 3 seconds
+const LOCATION_SUCCESS_TIMEOUT = 2000; // 2 seconds
+
 /**
  * Format a Date object to MySQL datetime format (YYYY-MM-DD HH:MM:SS)
  * @param {Date} date - The date to format (defaults to current date/time)
@@ -124,7 +128,7 @@ function getLocation() {
             // Hide success message after 2 seconds
             setTimeout(() => {
                 document.getElementById('uploadStatus').style.display = 'none';
-            }, 2000);
+            }, LOCATION_SUCCESS_TIMEOUT);
         },
         function(error) {
             let errorMsg = '位置获取失败';
@@ -196,7 +200,7 @@ async function getTemperature() {
         // Hide success message after 3 seconds
         setTimeout(() => {
             document.getElementById('uploadStatus').style.display = 'none';
-        }, 3000);
+        }, SUCCESS_MESSAGE_TIMEOUT);
         
     } catch (error) {
         console.error('Error fetching temperature:', error);
@@ -271,7 +275,7 @@ async function handleFormSubmit(event) {
         // Hide success message after 3 seconds
         setTimeout(() => {
             document.getElementById('uploadStatus').style.display = 'none';
-        }, 3000);
+        }, SUCCESS_MESSAGE_TIMEOUT);
         
     } catch (error) {
         console.error('Error submitting form:', error);
