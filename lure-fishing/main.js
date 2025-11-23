@@ -11,6 +11,15 @@ let currentPage = 1;
 const RECORDS_PER_PAGE = 9;
 
 /**
+ * Format a Date object to MySQL datetime format (YYYY-MM-DD HH:MM:SS)
+ * @param {Date} date - The date to format (defaults to current date/time)
+ * @returns {string} Formatted datetime string for MySQL
+ */
+function formatDateTimeForMySQL(date = new Date()) {
+    return date.toISOString().slice(0, 19).replace('T', ' ');
+}
+
+/**
  * Initialize the application when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', function() {
@@ -171,7 +180,7 @@ async function handleFormSubmit(event) {
             temperature: temperature,
             catch_count: catchCount,
             notes: notes,
-            created_at: new Date().toISOString()
+            created_at: formatDateTimeForMySQL()
         };
         
         await saveRecord(recordData);
