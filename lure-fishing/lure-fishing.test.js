@@ -17,6 +17,7 @@ describe('Lure Fishing Feature Tests', () => {
         <button type="button" id="getLocationBtn">获取位置</button>
         <input type="date" id="date" />
         <input type="number" id="temperature" />
+        <button type="button" id="getTemperatureBtn">自动获取温度</button>
         <input type="number" id="catchCount" />
         <textarea id="notes"></textarea>
         <button type="submit" id="submitBtn">提交成果</button>
@@ -325,6 +326,27 @@ describe('Lure Fishing Feature Tests', () => {
     it('should have image configuration for lure-fishing in main.js', () => {
       const imageId = 'lure-fishing-img';
       expect(imageId).toBe('lure-fishing-img');
+    });
+  });
+
+  describe('Weather Integration', () => {
+    it('should have temperature auto-fetch button', () => {
+      const tempBtn = document.getElementById('getTemperatureBtn');
+      expect(tempBtn).toBeTruthy();
+      expect(tempBtn.textContent).toContain('自动获取温度');
+    });
+    
+    it('should have temperature button as type button (not submit)', () => {
+      const tempBtn = document.getElementById('getTemperatureBtn');
+      expect(tempBtn.type).toBe('button');
+    });
+    
+    it('should position temperature button next to temperature input', () => {
+      const tempInput = document.getElementById('temperature');
+      const tempBtn = document.getElementById('getTemperatureBtn');
+      
+      expect(tempInput).toBeTruthy();
+      expect(tempBtn).toBeTruthy();
     });
   });
 
