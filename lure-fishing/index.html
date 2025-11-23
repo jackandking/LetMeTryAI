@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路亚白条 - 新手最佳实践</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+	    var _hmt = _hmt || [];
+	    (function() {
+		    var hm = document.createElement("script");
+		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+		    var s = document.getElementsByTagName("script")[0];
+		    s.parentNode.insertBefore(hm, s);
+	    })();
+    </script>
+</head>
+<body>
+    <header>
+        <h1>路亚白条</h1>
+        <p>新手最佳实践 - 记录你的每一次收获</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>欢迎来到路亚白条专区！</h2>
+            <p>在这里，你可以学习路亚白条的技巧，记录你的钓鱼成果，并查看最佳的钓鱼温度数据。</p>
+        </section>
+        
+        <section class="upload-section">
+            <h2>上传你的成果</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="photoUpload">钓鱼照片：</label>
+                    <input type="file" id="photoUpload" accept="image/*" required>
+                    <div id="photoPreview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">地点：</label>
+                    <input type="text" id="location" placeholder="自动获取..." readonly>
+                    <button type="button" id="getLocationBtn">获取位置</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">日期：</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="temperature">温度 (°C)：</label>
+                    <input type="number" id="temperature" step="0.1" required placeholder="例如: 25.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="catchCount">钓获数量：</label>
+                    <input type="number" id="catchCount" min="1" required placeholder="例如: 5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">备注：</label>
+                    <textarea id="notes" rows="3" placeholder="记录你的经验..."></textarea>
+                </div>
+                
+                <button type="submit" id="submitBtn">提交成果</button>
+            </form>
+            <div id="uploadStatus"></div>
+        </section>
+        
+        <section class="data-section">
+            <h2>温度数据分析</h2>
+            <p>查看哪些温度区间钓获最多</p>
+            <div id="temperatureChart">
+                <canvas id="chartCanvas"></canvas>
+            </div>
+            <div id="temperatureStats"></div>
+        </section>
+        
+        <section class="gallery-section">
+            <h2>钓友成果展示</h2>
+            <div id="recordsGallery"></div>
+            <button id="loadMoreBtn">加载更多</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025 路亚白条. 保留所有权利.</p>
+        <a href="../index.html">返回首页</a>
+    </footer>
+    
+    <script src="main.js"></script>
+</body>
+</html>

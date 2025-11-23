@@ -83,6 +83,11 @@ const imageConfig = {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/elder-love-default.png',
         fallback: 'images/1621725673908_.pic.jpg',
         alt: '老人爱'
+    },
+    'lure-fishing-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/lure-fishing-default.png',
+        fallback: 'images/game2.png',
+        alt: '路亚白条'
     }
 };
 

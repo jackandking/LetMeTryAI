@@ -26,6 +26,10 @@ describe('Main Index Page - Parent Love Section Integration', () => {
       expect(htmlContent).toContain('老人爱');
     });
 
+    it('should have Lure Fishing section in main page', () => {
+      expect(htmlContent).toContain('路亚白条');
+    });
+
     it('should have link to webview17', () => {
       expect(htmlContent).toContain('href="webview17"');
     });
@@ -42,12 +46,24 @@ describe('Main Index Page - Parent Love Section Integration', () => {
       expect(htmlContent).toContain('id="elder-love-img"');
     });
 
+    it('should have lure-fishing-img element', () => {
+      expect(htmlContent).toContain('id="lure-fishing-img"');
+    });
+
     it('should have appropriate alt text for parent love', () => {
       expect(htmlContent).toContain('alt="家长爱"');
     });
 
     it('should have appropriate alt text for elder love', () => {
       expect(htmlContent).toContain('alt="老人爱"');
+    });
+
+    it('should have appropriate alt text for lure fishing', () => {
+      expect(htmlContent).toContain('alt="路亚白条"');
+    });
+
+    it('should have link to lure-fishing directory', () => {
+      expect(htmlContent).toContain('href="lure-fishing"');
     });
 
     it('should maintain existing sections', () => {
@@ -81,6 +97,10 @@ describe('Main Index Page - Parent Love Section Integration', () => {
 
     it('should have elder-love-img in imageConfig', () => {
       expect(mainJsContent).toContain('elder-love-img');
+    });
+
+    it('should have lure-fishing-img in imageConfig', () => {
+      expect(mainJsContent).toContain('lure-fishing-img');
     });
 
     it('should have proper image configuration structure', () => {
@@ -146,13 +166,13 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     it('should maintain proper section structure', () => {
       const sectionMatches = htmlContent.match(/<section class="section">/g);
       expect(sectionMatches).toBeTruthy();
-      expect(sectionMatches.length).toBeGreaterThanOrEqual(7); // At least 7 sections (including elder-love)
+      expect(sectionMatches.length).toBeGreaterThanOrEqual(8); // At least 8 sections (including lure-fishing)
     });
 
     it('should have all sections with clickable links', () => {
       const linkMatches = htmlContent.match(/<a href="[^"]+"/g);
       expect(linkMatches).toBeTruthy();
-      expect(linkMatches.length).toBeGreaterThanOrEqual(7);
+      expect(linkMatches.length).toBeGreaterThanOrEqual(8);
     });
   });
 
