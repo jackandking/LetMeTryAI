@@ -3,12 +3,18 @@
  * Handles photo uploads, location tracking, and temperature data analysis
  */
 
+// Import weather utility functions
+import { fetchWeatherByLocationAndDate, formatTemperature, getTemperatureDescription } from '../util/weather-util.js';
+
 // MySQL table name for fishing records
 const TABLE_NAME = 'lure_fishing_records';
 
 // Current page for pagination
 let currentPage = 1;
 const RECORDS_PER_PAGE = 9;
+
+// Store current location coordinates for weather fetching
+let currentCoordinates = null;
 
 /**
  * Format a Date object to MySQL datetime format (YYYY-MM-DD HH:MM:SS)
@@ -48,6 +54,9 @@ function setupEventListeners() {
     
     // Get location button
     document.getElementById('getLocationBtn').addEventListener('click', getLocation);
+    
+    // Get temperature button
+    document.getElementById('getTemperatureBtn').addEventListener('click', getTemperature);
     
     // Form submission
     document.getElementById('uploadForm').addEventListener('submit', handleFormSubmit);
@@ -100,6 +109,9 @@ function getLocation() {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             
+            // Store coordinates for weather fetching
+            currentCoordinates = { latitude: lat, longitude: lon };
+            
             // Use reverse geocoding to get address (simplified version)
             // In a real application, you would call a geocoding API
             const locationStr = `纬度: ${lat.toFixed(4)}, 经度: ${lon.toFixed(4)}`;
@@ -134,6 +146,65 @@ function getLocation() {
             showStatus(errorMsg, 'error');
         }
     );
+}
+
+/**
+ * Get temperature based on location and date
+ */
+async function getTemperature() {
+    const temperatureInput = document.getElementById('temperature');
+    const dateInput = document.getElementById('date');
+    const btn = document.getElementById('getTemperatureBtn');
+    
+    // Validate that location has been obtained
+    if (!currentCoordinates) {
+        showStatus('请先获取位置信息', 'error');
+        return;
+    }
+    
+    // Validate that date has been selected
+    const date = dateInput.value;
+    if (!date) {
+        showStatus('请先选择日期', 'error');
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '获取中...';
+    temperatureInput.value = '';
+    
+    try {
+        showStatus('正在获取天气数据...', 'success');
+        
+        const weatherData = await fetchWeatherByLocationAndDate(
+            currentCoordinates.latitude,
+            currentCoordinates.longitude,
+            date
+        );
+        
+        // Use mean temperature as the default value
+        const temperature = weatherData.temperature_mean;
+        temperatureInput.value = formatTemperature(temperature, 1);
+        
+        // Show success message with additional info
+        const description = getTemperatureDescription(temperature);
+        showStatus(
+            `温度获取成功！当日平均温度: ${formatTemperature(temperature)}°C (${description})`,
+            'success'
+        );
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            document.getElementById('uploadStatus').style.display = 'none';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error fetching temperature:', error);
+        showStatus(`温度获取失败: ${error.message}`, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '自动获取温度';
+    }
 }
 
 /**
