@@ -381,9 +381,14 @@ describe('Lure Fishing Feature Tests', () => {
       // Test width > height
       let width = 4000;
       let height = 3000;
-      if (width > MAX_DIMENSION) {
-        height = (height / width) * MAX_DIMENSION;
-        width = MAX_DIMENSION;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = (height / width) * MAX_DIMENSION;
+          width = MAX_DIMENSION;
+        } else {
+          width = (width / height) * MAX_DIMENSION;
+          height = MAX_DIMENSION;
+        }
       }
       expect(width).toBe(2048);
       expect(height).toBe(1536);
@@ -391,9 +396,14 @@ describe('Lure Fishing Feature Tests', () => {
       // Test height > width
       width = 3000;
       height = 4000;
-      if (height > MAX_DIMENSION) {
-        width = (width / height) * MAX_DIMENSION;
-        height = MAX_DIMENSION;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = (height / width) * MAX_DIMENSION;
+          width = MAX_DIMENSION;
+        } else {
+          width = (width / height) * MAX_DIMENSION;
+          height = MAX_DIMENSION;
+        }
       }
       expect(width).toBe(1536);
       expect(height).toBe(2048);
@@ -420,7 +430,9 @@ describe('Lure Fishing Feature Tests', () => {
 
     it('should create File object from compressed blob', () => {
       const blob = new Blob(['test'], { type: 'image/jpeg' });
-      const file = new File([blob], 'test.jpg', {
+      const originalName = 'test.png';
+      const newFileName = originalName.replace(/\.[^.]+$/, '.jpg');
+      const file = new File([blob], newFileName, {
         type: 'image/jpeg',
         lastModified: Date.now()
       });
@@ -428,6 +440,21 @@ describe('Lure Fishing Feature Tests', () => {
       expect(file).toBeInstanceOf(File);
       expect(file.name).toBe('test.jpg');
       expect(file.type).toBe('image/jpeg');
+    });
+
+    it('should update filename extension to .jpg for compressed images', () => {
+      const testCases = [
+        { original: 'photo.png', expected: 'photo.jpg' },
+        { original: 'image.PNG', expected: 'image.jpg' },
+        { original: 'pic.jpeg', expected: 'pic.jpg' },
+        { original: 'test.webp', expected: 'test.jpg' },
+        { original: 'file.jpg', expected: 'file.jpg' }
+      ];
+      
+      testCases.forEach(({ original, expected }) => {
+        const result = original.replace(/\.[^.]+$/, '.jpg');
+        expect(result).toBe(expected);
+      });
     });
 
     it('should show compression progress to user', () => {
