@@ -250,7 +250,7 @@ async function saveRecord(data) {
 async function loadRecords(clearExisting = true) {
     try {
         const offset = (currentPage - 1) * RECORDS_PER_PAGE;
-        const query = 'SELECT * FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
+        const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
         
         const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
