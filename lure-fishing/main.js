@@ -163,9 +163,22 @@ async function handleFormSubmit(event) {
             throw new Error('请获取位置信息');
         }
         
-        // Upload photo first
+        // Compress photo if needed
+        showStatus('正在处理照片...', 'success');
+        const originalSize = photo.size;
+        const processedPhoto = await compressImage(photo);
+        
+        // Show compression info if image was compressed
+        if (processedPhoto.size < originalSize) {
+            const savedKB = ((originalSize - processedPhoto.size) / 1024).toFixed(0);
+            const compressionRatio = ((1 - processedPhoto.size / originalSize) * 100).toFixed(0);
+            showStatus(`照片已压缩 ${compressionRatio}%（节省 ${savedKB}KB）`, 'success');
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Show message briefly
+        }
+        
+        // Upload photo
         showStatus('正在上传照片...', 'success');
-        const uploadResult = await uploadPhoto(photo);
+        const uploadResult = await uploadPhoto(processedPhoto);
         
         if (!uploadResult || !uploadResult.filename) {
             throw new Error('照片上传失败');
@@ -209,6 +222,92 @@ async function handleFormSubmit(event) {
         submitBtn.disabled = false;
         submitBtn.textContent = '提交成果';
     }
+}
+
+/**
+ * Compress image if larger than 1MB
+ * @param {File} file - The image file to compress
+ * @returns {Promise<File|Blob>} Compressed image or original file if under 1MB
+ */
+async function compressImage(file) {
+    const MAX_SIZE = 1 * 1024 * 1024; // 1MB in bytes
+    
+    // If file is already under 1MB, return it as-is
+    if (file.size <= MAX_SIZE) {
+        return file;
+    }
+    
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Calculate new dimensions (maintain aspect ratio)
+                let width = img.width;
+                let height = img.height;
+                
+                // If image is very large, scale it down
+                const MAX_DIMENSION = 2048;
+                if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                    if (width > height) {
+                        height = (height / width) * MAX_DIMENSION;
+                        width = MAX_DIMENSION;
+                    } else {
+                        width = (width / height) * MAX_DIMENSION;
+                        height = MAX_DIMENSION;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw image on canvas
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Try different quality levels to get under 1MB
+                let quality = 0.8;
+                let attempt = 0;
+                const maxAttempts = 5;
+                
+                const tryCompress = () => {
+                    canvas.toBlob(function(blob) {
+                        if (!blob) {
+                            reject(new Error('图片压缩失败'));
+                            return;
+                        }
+                        
+                        // If still too large and haven't reached max attempts, try lower quality
+                        if (blob.size > MAX_SIZE && attempt < maxAttempts) {
+                            quality -= 0.1;
+                            attempt++;
+                            tryCompress();
+                        } else {
+                            // Create a new File object from the blob
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            });
+                            resolve(compressedFile);
+                        }
+                    }, 'image/jpeg', quality);
+                };
+                
+                tryCompress();
+            };
+            img.onerror = function() {
+                reject(new Error('图片加载失败'));
+            };
+        };
+        reader.onerror = function() {
+            reject(new Error('文件读取失败'));
+        };
+    });
 }
 
 /**
