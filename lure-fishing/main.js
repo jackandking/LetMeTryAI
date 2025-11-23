@@ -59,7 +59,12 @@ function handlePhotoPreview(event) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const preview = document.getElementById('photoPreview');
-            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            preview.innerHTML = ''; // Clear previous preview
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Preview';
+            preview.appendChild(img);
         };
         reader.readAsDataURL(file);
     }
@@ -455,12 +460,24 @@ function displayTemperatureStats(stats) {
     sortedRanges.forEach(([range, data]) => {
         const card = document.createElement('div');
         card.className = 'stat-card';
-        card.innerHTML = `
-            <h3>${range}</h3>
-            <p>记录次数: ${data.count} 次</p>
-            <p>总钓获: ${data.totalCatch} 条</p>
-            <p>平均每次: ${(data.totalCatch / data.count).toFixed(1)} 条</p>
-        `;
+        
+        const h3 = document.createElement('h3');
+        h3.textContent = range;
+        
+        const p1 = document.createElement('p');
+        p1.textContent = `记录次数: ${data.count} 次`;
+        
+        const p2 = document.createElement('p');
+        p2.textContent = `总钓获: ${data.totalCatch} 条`;
+        
+        const p3 = document.createElement('p');
+        p3.textContent = `平均每次: ${(data.totalCatch / data.count).toFixed(1)} 条`;
+        
+        card.appendChild(h3);
+        card.appendChild(p1);
+        card.appendChild(p2);
+        card.appendChild(p3);
+        
         statsDiv.appendChild(card);
     });
     
