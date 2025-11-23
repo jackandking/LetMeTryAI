@@ -113,7 +113,7 @@ describe('Lure Fishing Feature Tests', () => {
         temperature: 25.5,
         catch_count: 5,
         notes: 'Test notes',
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
       };
       
       expect(recordData).toHaveProperty('photo_url');
@@ -123,6 +123,27 @@ describe('Lure Fishing Feature Tests', () => {
       expect(recordData).toHaveProperty('catch_count');
       expect(recordData).toHaveProperty('notes');
       expect(recordData).toHaveProperty('created_at');
+    });
+
+    it('should format created_at for MySQL datetime compatibility', () => {
+      const mysqlDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      
+      // Should match MySQL datetime format: YYYY-MM-DD HH:MM:SS
+      expect(mysqlDatetime).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
+      
+      // Should NOT contain 'T' or 'Z' characters
+      expect(mysqlDatetime).not.toContain('T');
+      expect(mysqlDatetime).not.toContain('Z');
+      
+      // Should be exactly 19 characters long
+      expect(mysqlDatetime.length).toBe(19);
+    });
+
+    it('should convert ISO format to MySQL format correctly', () => {
+      const testDate = new Date('2025-11-23T10:28:10.222Z');
+      const mysqlFormat = testDate.toISOString().slice(0, 19).replace('T', ' ');
+      
+      expect(mysqlFormat).toBe('2025-11-23 10:28:10');
     });
   });
   

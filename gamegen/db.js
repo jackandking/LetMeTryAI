@@ -3,18 +3,16 @@
 const TASKS_TABLE = 'game_tasks';
 
 // Import MySQL utilities
-import { queryDatabase, getById, insertRecord, updateRecord, deleteRecord } from '../util/mysql-util.js';
+import { queryDatabase, getById, insertRecord, updateRecord, deleteRecord, formatDateTimeForMySQL } from '../util/mysql-util.js';
 
 // Create a new task
 function createTask(filename, inputPath, callback) {
-  const now = new Date();
-  const mysqlDatetime = now.toISOString().slice(0, 19).replace('T', ' ');
   const taskData = {
     filename: filename,
     input_path: inputPath,
     status: 'pending',
-    created_at: mysqlDatetime,
-    updated_at: mysqlDatetime
+    created_at: formatDateTimeForMySQL(),
+    updated_at: formatDateTimeForMySQL()
   };
 
   insertRecord(TASKS_TABLE, taskData, (err, taskId) => {
@@ -65,7 +63,7 @@ function updateTaskStatus(taskId, status, outputPath, errorMessage, callback) {
     status: status,
     output_path: outputPath,
     error_message: errorMessage,
-    updated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+    updated_at: formatDateTimeForMySQL()
   };
 
   updateRecord(TASKS_TABLE, taskId, updateData, (err, affectedRows) => {
