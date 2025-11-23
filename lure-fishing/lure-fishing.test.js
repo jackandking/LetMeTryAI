@@ -210,37 +210,41 @@ describe('Lure Fishing Feature Tests', () => {
   });
   
   describe('SQL Query Structure', () => {
-    it('should construct valid SELECT query', () => {
+    it('should construct valid SELECT query with parameterization', () => {
       const TABLE_NAME = 'lure_fishing_records';
       const RECORDS_PER_PAGE = 9;
       const offset = 0;
-      const query = `SELECT * FROM ${TABLE_NAME} ORDER BY created_at DESC LIMIT ${RECORDS_PER_PAGE} OFFSET ${offset}`;
+      const query = 'SELECT * FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
+      const params = [TABLE_NAME, RECORDS_PER_PAGE, offset];
       
-      expect(query).toContain('SELECT * FROM');
-      expect(query).toContain('lure_fishing_records');
+      expect(query).toContain('SELECT * FROM ??');
       expect(query).toContain('ORDER BY created_at DESC');
-      expect(query).toContain('LIMIT 9');
-      expect(query).toContain('OFFSET 0');
+      expect(query).toContain('LIMIT ?');
+      expect(query).toContain('OFFSET ?');
+      expect(params).toEqual(['lure_fishing_records', 9, 0]);
     });
     
-    it('should construct valid aggregation query for temperature stats', () => {
+    it('should construct valid aggregation query with parameterization', () => {
       const TABLE_NAME = 'lure_fishing_records';
       const query = `
         SELECT 
           temperature,
           COUNT(*) as count,
           SUM(catch_count) as total_catch
-        FROM ${TABLE_NAME}
+        FROM ??
         GROUP BY temperature
         ORDER BY count DESC
       `;
+      const params = [TABLE_NAME];
       
       expect(query).toContain('SELECT');
       expect(query).toContain('temperature');
       expect(query).toContain('COUNT(*)');
       expect(query).toContain('SUM(catch_count)');
+      expect(query).toContain('FROM ??');
       expect(query).toContain('GROUP BY temperature');
       expect(query).toContain('ORDER BY count DESC');
+      expect(params).toEqual(['lure_fishing_records']);
     });
   });
   
@@ -258,6 +262,13 @@ describe('Lure Fishing Feature Tests', () => {
       const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
       
       expect(photoUrl).not.toContain('letmetryai.cn');
+    });
+    
+    it('should encode URLs to prevent XSS', () => {
+      const record = { photo_url: 'lure-fishing/test.jpg' };
+      const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+      
+      expect(photoUrl).toBe('https://letmetry.cloud/lure-fishing/test.jpg');
     });
   });
   
