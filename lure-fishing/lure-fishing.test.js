@@ -214,10 +214,10 @@ describe('Lure Fishing Feature Tests', () => {
       const TABLE_NAME = 'lure_fishing_records';
       const RECORDS_PER_PAGE = 9;
       const offset = 0;
-      const query = 'SELECT * FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
+      const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
       const params = [TABLE_NAME, RECORDS_PER_PAGE, offset];
       
-      expect(query).toContain('SELECT * FROM ??');
+      expect(query).toContain('SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ??');
       expect(query).toContain('ORDER BY created_at DESC');
       expect(query).toContain('LIMIT ?');
       expect(query).toContain('OFFSET ?');
