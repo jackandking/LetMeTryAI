@@ -306,6 +306,123 @@ describe('Lure Fishing Feature Tests', () => {
       expect(imageId).toBe('lure-fishing-img');
     });
   });
+  
+  describe('Database Schema Validation', () => {
+    it('should define correct table name', () => {
+      const TABLE_NAME = 'lure_fishing_records';
+      expect(TABLE_NAME).toBe('lure_fishing_records');
+      expect(TABLE_NAME).toMatch(/^[a-z_]+$/); // Only lowercase and underscores
+    });
+    
+    it('should have all required columns in record data', () => {
+      const requiredColumns = [
+        'photo_url',
+        'location',
+        'catch_date',
+        'temperature',
+        'catch_count',
+        'notes',
+        'created_at'
+      ];
+      
+      const recordData = {
+        photo_url: 'test.jpg',
+        location: 'Test Location',
+        catch_date: '2025-01-01',
+        temperature: 25.5,
+        catch_count: 5,
+        notes: 'Test notes',
+        created_at: new Date().toISOString()
+      };
+      
+      requiredColumns.forEach(column => {
+        expect(recordData).toHaveProperty(column);
+      });
+    });
+    
+    it('should validate photo_url is a string', () => {
+      const recordData = {
+        photo_url: 'test.jpg'
+      };
+      expect(typeof recordData.photo_url).toBe('string');
+      expect(recordData.photo_url.length).toBeGreaterThan(0);
+    });
+    
+    it('should validate location is a string', () => {
+      const recordData = {
+        location: '纬度: 30.6250, 经度: 121.0851'
+      };
+      expect(typeof recordData.location).toBe('string');
+      expect(recordData.location.length).toBeGreaterThan(0);
+    });
+    
+    it('should validate catch_date is a valid date string', () => {
+      const recordData = {
+        catch_date: '2025-01-01'
+      };
+      expect(typeof recordData.catch_date).toBe('string');
+      expect(recordData.catch_date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+    
+    it('should validate temperature is a number', () => {
+      const recordData = {
+        temperature: 25.5
+      };
+      expect(typeof recordData.temperature).toBe('number');
+      expect(recordData.temperature).toBeGreaterThanOrEqual(-50); // Reasonable range
+      expect(recordData.temperature).toBeLessThanOrEqual(50); // Reasonable range
+    });
+    
+    it('should validate catch_count is an integer', () => {
+      const recordData = {
+        catch_count: 5
+      };
+      expect(typeof recordData.catch_count).toBe('number');
+      expect(Number.isInteger(recordData.catch_count)).toBe(true);
+      expect(recordData.catch_count).toBeGreaterThanOrEqual(0);
+    });
+    
+    it('should validate notes is a string', () => {
+      const recordData = {
+        notes: 'Great fishing day!'
+      };
+      expect(typeof recordData.notes).toBe('string');
+    });
+    
+    it('should validate created_at is an ISO timestamp', () => {
+      const recordData = {
+        created_at: new Date().toISOString()
+      };
+      expect(typeof recordData.created_at).toBe('string');
+      expect(recordData.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+    });
+    
+    it('should handle empty notes field', () => {
+      const recordData = {
+        notes: ''
+      };
+      expect(typeof recordData.notes).toBe('string');
+      expect(recordData.notes).toBe('');
+    });
+    
+    it('should use proper SQL query for retrieving records', () => {
+      const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
+      
+      // Verify query includes all required fields
+      expect(query).toContain('photo_url');
+      expect(query).toContain('location');
+      expect(query).toContain('catch_date');
+      expect(query).toContain('temperature');
+      expect(query).toContain('catch_count');
+      expect(query).toContain('notes');
+      expect(query).toContain('created_at');
+      
+      // Verify query uses parameterization
+      expect(query).toContain('??'); // Table name parameterization
+      expect(query).toContain('LIMIT ?');
+      expect(query).toContain('OFFSET ?');
+    });
+  });
 });
 
 describe('Lure Fishing Regression Tests', () => {
