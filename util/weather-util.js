@@ -12,7 +12,7 @@
  * @returns {Promise<Object>} Weather data including temperature
  */
 export async function fetchWeatherByLocationAndDate(latitude, longitude, date) {
-  if (!latitude || !longitude || !date) {
+  if (latitude === null || latitude === undefined || longitude === null || longitude === undefined || !date) {
     throw new Error('Latitude, longitude, and date are required');
   }
 

@@ -177,6 +177,30 @@ describe('Weather Utility Module', () => {
       expect(result.temperature_mean).toBe(5.0);
     });
 
+    it('should accept coordinates of 0 (equator/prime meridian)', async () => {
+      const mockWeatherData = {
+        latitude: 0,
+        longitude: 0,
+        timezone: 'UTC',
+        daily: {
+          time: ['2025-01-15'],
+          temperature_2m_mean: [28.0],
+          temperature_2m_max: [32.0],
+          temperature_2m_min: [24.0]
+        }
+      };
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => mockWeatherData
+      });
+
+      const result = await fetchWeatherByLocationAndDate(0, 0, '2025-01-15');
+      expect(result.temperature_mean).toBe(28.0);
+      expect(result.latitude).toBe(0);
+      expect(result.longitude).toBe(0);
+    });
+
     it('should use Open-Meteo archive API', async () => {
       const mockWeatherData = {
         latitude: 39.9,
