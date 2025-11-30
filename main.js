@@ -74,6 +74,11 @@ const imageConfig = {
         fallback: 'images/game1.jpg',
         alt: '语文作文过关'
     },
+    'typing-game-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/5813a87a74374d8eb3625a40d5b25f3b_2056945912.png',
+        fallback: 'images/game2.png',
+        alt: '打字小游戏'
+    },
     'parent-love-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/ea7d9b2b03454189b6a3bc8f3cc62506_2219023744.png',
         fallback: 'images/1621725673908_.pic.jpg',
