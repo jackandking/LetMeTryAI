@@ -200,20 +200,6 @@ function showAd() {
 }
 
 /**
- * Navigates to webview6 page
- * @deprecated This function appears unused
- */
-function jumpToWebview6() {
-    if (typeof ks !== 'undefined' && ks.navigateTo) {
-        ks.navigateTo({
-            url: "/pages/webview6/webview6",
-        });
-    } else {
-        console.warn('Mini-program navigation not available');
-    }
-}
-
-/**
  * Navigates to index page
  */
 function jumpToIndex() {
