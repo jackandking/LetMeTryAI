@@ -655,6 +655,28 @@ h1 {
     100% { transform: scale(1); }
 }
 
+@keyframes toastFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes toastFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
@@ -697,7 +719,15 @@ h1 {
     }
     
     .keyboard-visual {
-        display: none; /* Hide on mobile for cleaner UI */
+        padding: 10px;
+        transform: scale(0.85);
+        transform-origin: top center;
+    }
+    
+    .keyboard-key {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
     }
     
     .word-input {
@@ -831,9 +861,9 @@ h1 {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        animation-duration: 0.2s !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
     }
 }
 
