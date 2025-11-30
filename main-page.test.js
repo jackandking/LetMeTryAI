@@ -69,7 +69,6 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     it('should maintain existing sections', () => {
       const existingSections = [
         '爱烟花',
-        '爱美女',
         '爱魔术',
         '爱学习',
         '爱语文'
@@ -128,7 +127,6 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     it('should maintain existing image configurations', () => {
       const existingConfigs = [
         'fireworks-img',
-        'beauty-img',
         'magic-img',
         'study-img'
       ];
@@ -166,13 +164,13 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     it('should maintain proper section structure', () => {
       const sectionMatches = htmlContent.match(/<section class="section">/g);
       expect(sectionMatches).toBeTruthy();
-      expect(sectionMatches.length).toBeGreaterThanOrEqual(8); // At least 8 sections (including lure-fishing)
+      expect(sectionMatches.length).toBeGreaterThanOrEqual(7); // At least 7 sections (including lure-fishing, after removing 爱美女)
     });
 
     it('should have all sections with clickable links', () => {
       const linkMatches = htmlContent.match(/<a href="[^"]+"/g);
       expect(linkMatches).toBeTruthy();
-      expect(linkMatches.length).toBeGreaterThanOrEqual(8);
+      expect(linkMatches.length).toBeGreaterThanOrEqual(7);
     });
   });
 
