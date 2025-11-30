@@ -19,15 +19,15 @@ describe('Main Index Page - Parent Love Section Integration', () => {
 
   describe('HTML Section', () => {
     it('should have Parent Love section in main page', () => {
-      expect(htmlContent).toContain('家长爱');
+      expect(htmlContent).toContain('爱家长');
     });
 
     it('should have Elder Love section in main page', () => {
-      expect(htmlContent).toContain('老人爱');
+      expect(htmlContent).toContain('爱老人');
     });
 
     it('should have Lure Fishing section in main page', () => {
-      expect(htmlContent).toContain('路亚白条');
+      expect(htmlContent).toContain('爱钓鱼');
     });
 
     it('should have link to webview17', () => {
@@ -51,15 +51,15 @@ describe('Main Index Page - Parent Love Section Integration', () => {
     });
 
     it('should have appropriate alt text for parent love', () => {
-      expect(htmlContent).toContain('alt="家长爱"');
+      expect(htmlContent).toContain('alt="爱家长"');
     });
 
     it('should have appropriate alt text for elder love', () => {
-      expect(htmlContent).toContain('alt="老人爱"');
+      expect(htmlContent).toContain('alt="爱老人"');
     });
 
     it('should have appropriate alt text for lure fishing', () => {
-      expect(htmlContent).toContain('alt="路亚白条"');
+      expect(htmlContent).toContain('alt="爱钓鱼"');
     });
 
     it('should have link to lure-fishing directory', () => {
@@ -72,7 +72,7 @@ describe('Main Index Page - Parent Love Section Integration', () => {
         '爱美女',
         '爱魔术',
         '爱学习',
-        '语文作文过关'
+        '爱语文'
       ];
 
       existingSections.forEach(section => {
