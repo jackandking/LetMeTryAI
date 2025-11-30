@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>打字小游戏 - 快乐学单词</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>⌨️ 打字小游戏 - 快乐学单词</h1>
+    
+    <div class="game-stats" id="gameStats">
+        <div class="stat-item">
+            <span class="stat-label">得分</span>
+            <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">连击</span>
+            <span class="stat-value" id="combo">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">剩余时间</span>
+            <span class="stat-value" id="timer">60</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">正确率</span>
+            <span class="stat-value" id="accuracy">100%</span>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="screen" id="startScreen">
+            <div class="start-content">
+                <h2>🎮 欢迎来到打字小游戏！</h2>
+                <p>通过打字练习，熟悉键盘布局，轻松记住英语单词！</p>
+                
+                <div class="difficulty-selector">
+                    <h3>选择难度</h3>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn active" data-difficulty="easy" onclick="selectDifficulty('easy')">
+                            🌟 简单
+                            <span class="difficulty-desc">常见单词，60秒</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="medium" onclick="selectDifficulty('medium')">
+                            ⭐⭐ 中等
+                            <span class="difficulty-desc">更多单词，45秒</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="hard" onclick="selectDifficulty('hard')">
+                            ⭐⭐⭐ 困难
+                            <span class="difficulty-desc">挑战单词，30秒</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="category-selector">
+                    <h3>选择单词类别</h3>
+                    <div class="category-options">
+                        <button class="category-btn active" data-category="animals" onclick="selectCategory('animals')">
+                            🐱 动物
+                        </button>
+                        <button class="category-btn" data-category="fruits" onclick="selectCategory('fruits')">
+                            🍎 水果
+                        </button>
+                        <button class="category-btn" data-category="colors" onclick="selectCategory('colors')">
+                            🌈 颜色
+                        </button>
+                        <button class="category-btn" data-category="numbers" onclick="selectCategory('numbers')">
+                            🔢 数字
+                        </button>
+                        <button class="category-btn" data-category="family" onclick="selectCategory('family')">
+                            👨‍👩‍👧 家庭
+                        </button>
+                        <button class="category-btn" data-category="daily" onclick="selectCategory('daily')">
+                            📅 日常
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="start-btn" onclick="startGame()">
+                    🚀 开始游戏
+                </button>
+                
+                <div class="instructions">
+                    <h4>📖 游戏说明</h4>
+                    <ul>
+                        <li>屏幕上会显示英语单词和中文翻译</li>
+                        <li>正确输入单词即可得分</li>
+                        <li>连续正确输入可获得连击加分</li>
+                        <li>输入错误会打断连击</li>
+                        <li>计时结束游戏结束</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Screen -->
+        <div class="screen hidden" id="gameScreen">
+            <div class="word-display">
+                <div class="chinese-word" id="chineseWord">苹果</div>
+                <div class="english-word" id="englishWord">
+                    <span class="word-letter"></span>
+                </div>
+                <div class="word-hint" id="wordHint">
+                    💡 提示：这是一种常见的红色水果
+                </div>
+            </div>
+            
+            <div class="keyboard-visual" id="keyboardVisual">
+                <!-- Keyboard will be rendered by JavaScript -->
+            </div>
+            
+            <div class="input-area">
+                <input type="text" 
+                       id="wordInput" 
+                       class="word-input" 
+                       placeholder="在这里输入单词..."
+                       autocomplete="off"
+                       autocapitalize="off"
+                       spellcheck="false">
+                <div class="input-feedback" id="inputFeedback"></div>
+            </div>
+            
+            <div class="game-actions">
+                <button class="action-btn hint-btn" onclick="showHint()">
+                    💡 提示
+                </button>
+                <button class="action-btn skip-btn" onclick="skipWord()">
+                    ⏭️ 跳过
+                </button>
+                <button class="action-btn pause-btn" onclick="togglePause()">
+                    ⏸️ 暂停
+                </button>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div class="screen hidden" id="resultScreen">
+            <div class="result-content">
+                <h2 id="resultTitle">🎉 游戏结束！</h2>
+                
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span class="result-icon">🏆</span>
+                        <span class="result-label">最终得分</span>
+                        <span class="result-value" id="finalScore">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-icon">✅</span>
+                        <span class="result-label">正确单词</span>
+                        <span class="result-value" id="correctWords">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-icon">🎯</span>
+                        <span class="result-label">正确率</span>
+                        <span class="result-value" id="finalAccuracy">0%</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-icon">🔥</span>
+                        <span class="result-label">最高连击</span>
+                        <span class="result-value" id="maxCombo">0</span>
+                    </div>
+                </div>
+                
+                <div class="learned-words" id="learnedWords">
+                    <h3>📚 今日学习的单词</h3>
+                    <div class="words-list" id="wordsList">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="achievement" id="resultAchievement">
+                    <!-- Achievement will be shown here -->
+                </div>
+                
+                <div class="result-actions">
+                    <button class="action-btn primary-btn" onclick="restartGame()">
+                        🔄 再玩一次
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="backToStart()">
+                        🏠 返回首页
+                    </button>
+                    <button class="action-btn share-btn" onclick="shareResult()">
+                        📤 分享成绩
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating encouragement messages -->
+    <div class="floating-messages" id="floatingMessages"></div>
+    
+    <!-- Celebration effects container -->
+    <div class="celebration-container" id="celebrationContainer"></div>
+
+    <script>
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGame();
+        });
+
+        // URL parameter handling for mini-program integration
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log('URL parameters:', urlParams);
+
+        if (urlParams.get('finishedAd') === 'false') {
+            if (typeof ks !== 'undefined' && ks.navigateBack) {
+                ks.navigateBack();
+            }
+        }
+    </script>
+</body>
+</html>
