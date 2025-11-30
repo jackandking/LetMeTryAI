@@ -72,27 +72,27 @@ const imageConfig = {
     'zuowen-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/e422be599d9044bf93bf1400614cdf99_2219023800.png',
         fallback: 'images/game1.jpg',
-        alt: '语文作文过关'
+        alt: '爱语文'
     },
     'typing-game-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/5813a87a74374d8eb3625a40d5b25f3b_2056945912.png',
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/df2637b04769453fa258de217ba8861f_1285226600.png',
         fallback: 'images/game2.png',
-        alt: '打字小游戏'
+        alt: '爱打字'
     },
     'parent-love-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/ea7d9b2b03454189b6a3bc8f3cc62506_2219023744.png',
         fallback: 'images/1621725673908_.pic.jpg',
-        alt: '家长爱'
+        alt: '爱家长'
     },
     'elder-love-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/bf04dbc675104963936a7500a1ce8680_1284052778.png',
         fallback: 'images/1621725673908_.pic.jpg',
-        alt: '老人爱'
+        alt: '爱老人'
     },
     'lure-fishing-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/01d3457ddd6d4448b806f5947ad87b0d_2219023232.png',
         fallback: 'images/game2.png',
-        alt: '路亚白条'
+        alt: '爱钓鱼'
     }
 };
 
