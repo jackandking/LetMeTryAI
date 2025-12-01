@@ -110,6 +110,25 @@ h1 {
     margin-bottom: 30px;
 }
 
+/* High Score Display on Start Screen */
+.high-score-display {
+    background: linear-gradient(135deg, #ffd700 0%, #ffeb3b 100%);
+    color: #333;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    animation: highScorePulse 2s ease-in-out infinite;
+}
+
+@keyframes highScorePulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+    50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6); }
+}
+
 /* Difficulty Selector */
 .difficulty-selector,
 .category-selector {
@@ -457,6 +476,16 @@ h1 {
     color: #667eea;
 }
 
+/* High Score Stat */
+.high-score-stat {
+    background: linear-gradient(135deg, #ffd700 0%, #ffeb3b 100%);
+    border: 2px solid #ffc107;
+}
+
+.high-score-stat .result-value {
+    color: #ff6b6b;
+}
+
 /* Learned Words */
 .learned-words {
     background: #e8f5e8;
@@ -589,6 +618,136 @@ h1 {
     height: 10px;
     border-radius: 2px;
     animation: confettiFall 3s linear forwards;
+}
+
+/* New Record Celebration Effects */
+.new-record-confetti {
+    width: 15px;
+    height: 15px;
+    animation: confettiFall 4s linear forwards;
+}
+
+.new-record-star {
+    animation: newRecordStar 3s ease forwards;
+}
+
+.celebration-firework {
+    position: absolute;
+    animation: fireworkBurst 2.5s ease-out forwards;
+}
+
+/* New High Score Banner */
+.new-high-score-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 50%, #ff9800 100%);
+    padding: 30px 50px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 10px 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 107, 107, 0.4);
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+.new-high-score-banner.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: bannerGlow 1s ease-in-out infinite alternate;
+}
+
+.new-record-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+    animation: titleBounce 0.6s ease infinite;
+}
+
+.new-record-score {
+    font-size: 60px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    margin-bottom: 10px;
+    animation: scoreGrow 0.5s ease-out;
+}
+
+.new-record-diff {
+    font-size: 18px;
+    color: #fff;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.new-record-congrats {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    animation: congratsBounce 0.8s ease infinite;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes newRecordStar {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1.5) rotate(180deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(360deg) translateY(-100px);
+    }
+}
+
+@keyframes fireworkBurst {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-50px);
+    }
+}
+
+@keyframes bannerGlow {
+    0% {
+        box-shadow: 0 10px 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 107, 107, 0.4);
+    }
+    100% {
+        box-shadow: 0 15px 70px rgba(255, 215, 0, 0.8), 0 0 150px rgba(255, 107, 107, 0.6);
+    }
+}
+
+@keyframes titleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes scoreGrow {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes congratsBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 /* ==========================================================================
