@@ -54,11 +54,7 @@ const imageConfig = {
         fallback: 'images/game1.jpg',
         alt: '爱烟花'
     },
-    'beauty-img': {
-        primary: 'https://eb118-file.cdn.bcebos.com/upload/0a8055acdbaf4d87b87e04b2e60f632c_1100025253.png',
-        fallback: 'images/1621725673908_.pic.jpg',
-        alt: '美女图片'
-    },
+
     'magic-img': {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/5bb92b7e5fe840bcb80be62b17458453_1100027031.png',
         fallback: 'images/game2.png',
