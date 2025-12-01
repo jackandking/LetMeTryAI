@@ -179,6 +179,7 @@ function initializeGame() {
         loadProgress();
         renderKeyboard();
         setupEventListeners();
+        updateHighScoreDisplay();
         console.log('Typing game initialized successfully');
     } catch (error) {
         console.error('Error initializing game:', error);
@@ -681,9 +682,26 @@ function endGame() {
 }
 
 /**
+ * Check if current score is a new high score
+ * @returns {{isNew: boolean, previousHighScore: number}} Object with new record status and previous high score
+ */
+function checkNewHighScore() {
+    const previousHighScore = getHighScore();
+    return {
+        isNew: gameState.score > previousHighScore && gameState.score > 0,
+        previousHighScore: previousHighScore
+    };
+}
+
+/**
  * Show result screen
  */
 function showResultScreen() {
+    // Check for new high score BEFORE saving (so we compare with previous record)
+    const highScoreResult = checkNewHighScore();
+    const newRecord = highScoreResult.isNew;
+    const previousHighScore = highScoreResult.previousHighScore;
+    
     // Update result stats
     document.getElementById('finalScore').textContent = gameState.score;
     document.getElementById('correctWords').textContent = gameState.correctWords;
@@ -693,6 +711,13 @@ function showResultScreen() {
         ? Math.round((gameState.correctWords / gameState.totalAttempts) * 100) 
         : 0;
     document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+    
+    // Update high score display
+    const highScoreElement = document.getElementById('highScore');
+    if (highScoreElement) {
+        const displayHighScore = newRecord ? gameState.score : previousHighScore;
+        highScoreElement.textContent = displayHighScore;
+    }
     
     // Show learned words
     const wordsList = document.getElementById('wordsList');
@@ -717,8 +742,10 @@ function showResultScreen() {
     // Show result screen
     showScreen('resultScreen');
     
-    // Celebration effects
-    if (gameState.score >= 100) {
+    // Celebration effects - extra special for new high score!
+    if (newRecord) {
+        createNewHighScoreCelebration(previousHighScore);
+    } else if (gameState.score >= 100) {
         createBigCelebration();
     }
 }
@@ -773,6 +800,112 @@ function createBigCelebration() {
 }
 
 /**
+ * Create special celebration for new high score
+ * @param {number} previousHighScore - The previous high score that was beaten
+ */
+function createNewHighScoreCelebration(previousHighScore) {
+    const container = document.getElementById('celebrationContainer');
+    const colors = ['#ffd700', '#ff6b6b', '#ff9800', '#ffeb3b', '#ff5722', '#e91e63'];
+    
+    // Show the new high score banner
+    showNewHighScoreBanner(previousHighScore);
+    
+    // Extra confetti for new high score (more than regular celebration)
+    for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti new-record-confetti';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.animationDuration = `${2 + Math.random() * 3}s`;
+            container.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 5000);
+        }, i * 30);
+    }
+    
+    // Golden stars burst
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const star = document.createElement('div');
+            star.className = 'celebration-star new-record-star';
+            star.innerHTML = '⭐';
+            star.style.left = `${10 + Math.random() * 80}%`;
+            star.style.top = `${10 + Math.random() * 40}%`;
+            star.style.fontSize = `${24 + Math.random() * 20}px`;
+            container.appendChild(star);
+            
+            setTimeout(() => star.remove(), 3000);
+        }, i * 100);
+    }
+    
+    // Firework emoji bursts
+    const fireworkEmojis = ['🎆', '🎇', '✨', '💫', '🌟', '🎉', '🎊'];
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const firework = document.createElement('div');
+            firework.className = 'celebration-firework';
+            firework.innerHTML = fireworkEmojis[Math.floor(Math.random() * fireworkEmojis.length)];
+            firework.style.left = `${Math.random() * 100}%`;
+            firework.style.top = `${Math.random() * 60}%`;
+            firework.style.fontSize = `${30 + Math.random() * 30}px`;
+            container.appendChild(firework);
+            
+            setTimeout(() => firework.remove(), 2500);
+        }, i * 150);
+    }
+}
+
+/**
+ * Show the new high score banner with animation
+ * @param {number} previousHighScore - The previous high score
+ */
+function showNewHighScoreBanner(previousHighScore) {
+    const container = document.getElementById('celebrationContainer');
+    
+    // Create the banner element
+    const banner = document.createElement('div');
+    banner.className = 'new-high-score-banner';
+    banner.innerHTML = `
+        <div class="new-record-title">🏆 新纪录！🏆</div>
+        <div class="new-record-score">${gameState.score} 分</div>
+        <div class="new-record-diff">超越了之前的记录 ${previousHighScore} 分！</div>
+        <div class="new-record-congrats">🎉 太厉害了！你是最棒的！🎉</div>
+    `;
+    
+    container.appendChild(banner);
+    
+    // Trigger the animation after a brief delay
+    setTimeout(() => {
+        banner.classList.add('show');
+    }, 100);
+    
+    // Remove after animation completes
+    setTimeout(() => {
+        banner.classList.remove('show');
+        setTimeout(() => banner.remove(), 500);
+    }, 6000);
+}
+
+/**
+ * Update high score display on start screen
+ */
+function updateHighScoreDisplay() {
+    const highScoreDisplayElement = document.getElementById('highScoreDisplay');
+    const highScore = getHighScore();
+    
+    if (highScoreDisplayElement) {
+        if (highScore > 0) {
+            highScoreDisplayElement.textContent = `历史最高分：${highScore} 分`;
+            highScoreDisplayElement.style.display = 'block';
+        } else {
+            highScoreDisplayElement.textContent = '还没有历史记录，快来挑战吧！';
+            highScoreDisplayElement.style.display = 'block';
+        }
+    }
+}
+
+/**
  * Restart the game
  */
 function restartGame() {
@@ -783,6 +916,7 @@ function restartGame() {
  * Go back to start screen
  */
 function backToStart() {
+    updateHighScoreDisplay();
     showScreen('startScreen');
 }
 
@@ -881,6 +1015,8 @@ if (typeof module !== 'undefined' && module.exports) {
         handleCorrectAnswer,
         skipWord,
         updateStats,
-        getHighScore
+        getHighScore,
+        checkNewHighScore,
+        updateHighScoreDisplay
     };
 }

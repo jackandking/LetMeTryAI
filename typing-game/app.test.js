@@ -322,6 +322,97 @@ describe('Typing Game', () => {
         });
     });
 
+    describe('High Score Functionality', () => {
+        it('should detect new high score when current score exceeds previous', () => {
+            // Simulate game state with score
+            const gameState = { score: 500 };
+            const previousHighScore = 300;
+            
+            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            expect(isNewRecord).toBe(true);
+        });
+
+        it('should not detect new high score when current score is lower', () => {
+            const gameState = { score: 200 };
+            const previousHighScore = 300;
+            
+            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            expect(isNewRecord).toBe(false);
+        });
+
+        it('should not detect new high score when current score equals previous', () => {
+            const gameState = { score: 300 };
+            const previousHighScore = 300;
+            
+            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            expect(isNewRecord).toBe(false);
+        });
+
+        it('should not detect new high score when score is zero', () => {
+            const gameState = { score: 0 };
+            const previousHighScore = 0;
+            
+            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            expect(isNewRecord).toBe(false);
+        });
+
+        it('should return correct high score from localStorage', () => {
+            const progress = {
+                highScore: 750
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(progress);
+            const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
+            expect(retrieved.highScore).toBe(750);
+        });
+
+        it('should return 0 when no high score exists', () => {
+            localStorageMock.clear();
+            const saved = localStorageMock.store['typing-game-progress'];
+            const highScore = saved ? JSON.parse(saved).highScore || 0 : 0;
+            expect(highScore).toBe(0);
+        });
+
+        it('should update high score when new record is achieved', () => {
+            const previousProgress = {
+                highScore: 500
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(previousProgress);
+            
+            // Simulate new high score
+            const newScore = 800;
+            const previousHighScore = JSON.parse(localStorageMock.store['typing-game-progress']).highScore;
+            const newHighScore = Math.max(newScore, previousHighScore);
+            
+            const newProgress = {
+                highScore: newHighScore
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(newProgress);
+            
+            const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
+            expect(retrieved.highScore).toBe(800);
+        });
+
+        it('should keep previous high score when new score is lower', () => {
+            const previousProgress = {
+                highScore: 500
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(previousProgress);
+            
+            // Simulate lower score
+            const newScore = 300;
+            const previousHighScore = JSON.parse(localStorageMock.store['typing-game-progress']).highScore;
+            const newHighScore = Math.max(newScore, previousHighScore);
+            
+            const newProgress = {
+                highScore: newHighScore
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(newProgress);
+            
+            const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
+            expect(retrieved.highScore).toBe(500);
+        });
+    });
+
     describe('Keyboard Layout', () => {
         const keyboardLayout = [
             ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
