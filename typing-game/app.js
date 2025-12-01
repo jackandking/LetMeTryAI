@@ -683,10 +683,14 @@ function endGame() {
 
 /**
  * Check if current score is a new high score
+ * @returns {{isNew: boolean, previousHighScore: number}} Object with new record status and previous high score
  */
-function isNewHighScore() {
+function checkNewHighScore() {
     const previousHighScore = getHighScore();
-    return gameState.score > previousHighScore && gameState.score > 0;
+    return {
+        isNew: gameState.score > previousHighScore && gameState.score > 0,
+        previousHighScore: previousHighScore
+    };
 }
 
 /**
@@ -694,8 +698,9 @@ function isNewHighScore() {
  */
 function showResultScreen() {
     // Check for new high score BEFORE saving (so we compare with previous record)
-    const newRecord = isNewHighScore();
-    const previousHighScore = getHighScore();
+    const highScoreResult = checkNewHighScore();
+    const newRecord = highScoreResult.isNew;
+    const previousHighScore = highScoreResult.previousHighScore;
     
     // Update result stats
     document.getElementById('finalScore').textContent = gameState.score;
@@ -1011,7 +1016,7 @@ if (typeof module !== 'undefined' && module.exports) {
         skipWord,
         updateStats,
         getHighScore,
-        isNewHighScore,
+        checkNewHighScore,
         updateHighScoreDisplay
     };
 }
