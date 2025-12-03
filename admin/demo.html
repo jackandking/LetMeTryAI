@@ -81,11 +81,12 @@
     // Mock data for demonstration
     const mockData = {
         'indexURLs_0.1.0': 'https://picsum.photos/200/300\nhttps://picsum.photos/200/301\nhttps://picsum.photos/200/302',
-        'indexURLs_1.0.0': 'https://via.placeholder.com/200x200/FF0000/FFFFFF?text=Image1\nhttps://via.placeholder.com/200x200/00FF00/FFFFFF?text=Image2'
+        'indexURLs_1.0.0': 'https://via.placeholder.com/200x200/FF0000/FFFFFF?text=Image1\nhttps://via.placeholder.com/200x200/00FF00/FFFFFF?text=Image2',
+        'stripURLs_0.0.1': 'https://picsum.photos/200/300\nhttps://via.placeholder.com/150x150\nhttps://picsum.photos/200/301\nhttps://picsum.photos/200/300'
     };
 
     function isImageListKey(key) {
-        return key && key.startsWith('indexURLs_');
+        return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
     }
 
     function loadDemo() {
@@ -100,7 +101,21 @@
                 document.getElementById('result').textContent = 'Not an indexURLs key';
             }
         } else {
-            document.getElementById('result').innerHTML = '<div class="info-box">No demo data for this key. Try: indexURLs_0.1.0 or indexURLs_1.0.0</div>';
+            document.getElementById('result').innerHTML = '<div class="info-box">No demo data for this key. Try: indexURLs_0.1.0, indexURLs_1.0.0, or stripURLs_0.0.1</div>';
+        }
+    }
+
+    function deduplicateUrls() {
+        const originalCount = currentUrls.length;
+        const uniqueUrls = [...new Set(currentUrls)];
+        const duplicatesRemoved = originalCount - uniqueUrls.length;
+        
+        if (duplicatesRemoved > 0) {
+            currentUrls = uniqueUrls;
+            renderImageList(true);
+            alert(`Removed ${duplicatesRemoved} duplicate URL(s). Total URLs: ${currentUrls.length}`);
+        } else {
+            alert('No duplicates found. All URLs are unique.');
         }
     }
 
@@ -109,6 +124,7 @@
         html += '<label style="font-weight: bold;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
         if (updateAllowed) {
             html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
+            html += ' <button onclick="deduplicateUrls()" style="margin-left: 10px;">Remove Duplicates</button>';
             html += ' <button onclick="saveChanges()">Save Changes</button>';
         }
         html += '</div>';
@@ -186,8 +202,8 @@
     <h1>Admin Panel - Demo</h1>
     <div class="info-box">
         <strong>Demo Mode</strong><br>
-        This is a demonstration of the new indexURLs_* feature.<br>
-        Try these keys: <code>indexURLs_0.1.0</code> or <code>indexURLs_1.0.0</code>
+        This is a demonstration of the new indexURLs_* and stripURLs_* features.<br>
+        Try these keys: <code>indexURLs_0.1.0</code>, <code>indexURLs_1.0.0</code>, or <code>stripURLs_0.0.1</code> (includes duplicates)
     </div>
     <div class="input-group">
         <input type="text" id="keyInput" placeholder="Enter key" value="indexURLs_0.1.0" style="width: 300px;"/>
