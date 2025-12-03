@@ -1,0 +1,328 @@
+/**
+ * What Fish Application Styles
+ * Enhanced styling for the fish identification interface and result display
+ */
+
+/* Button Group Layout */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.button-group button {
+    width: 100%;
+    height: 4em;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    border: 2px solid #ddd;
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+}
+
+.button-group button:hover {
+    background: linear-gradient(to bottom, #4a90e2, #357abd);
+    border-color: #357abd;
+    color: white;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Touch device hover behavior */
+@media (hover: none) {
+    .button-group button:hover {
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        color: #333;
+        border-color: #ddd;
+        transform: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.button-group button:active {
+    background: linear-gradient(to bottom, #357abd, #2a5f8f);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+/* Fish Image Display */
+.fish-image-container {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fish-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.fish-image:hover {
+    transform: scale(1.02);
+}
+
+/* Bar Chart Styles - Enhanced */
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 25px;
+    height: 320px;
+    margin: 30px 0;
+    padding: 20px;
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.bar {
+    width: 45px;
+    background: linear-gradient(to top, #4a90e2, #7fb3e8);
+    border-radius: 6px 6px 0 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+    position: relative;
+}
+
+.bar:hover {
+    transform: scaleY(1.05);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.5);
+}
+
+/* Correct answer styling */
+.bar-container.correct-answer .bar {
+    background: linear-gradient(to top, #28a745, #5cb85c);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
+}
+
+.bar-container.correct-answer .bar:hover {
+    box-shadow: 0 4px 14px rgba(40, 167, 69, 0.6);
+}
+
+.bar-label {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.fish-label {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #555;
+    font-weight: 600;
+}
+
+.correct-badge {
+    display: inline-block;
+    margin-left: 5px;
+    color: #28a745;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Correct Answer Note */
+.correct-answer-note {
+    text-align: center;
+    padding: 15px;
+    margin: 20px 0;
+    background: linear-gradient(135deg, #28a745, #5cb85c);
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Accuracy Statistics */
+.accuracy-stats {
+    text-align: center;
+    padding: 15px;
+    margin: 20px 0;
+    background: linear-gradient(135deg, #6c757d, #868e96);
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Show Result Button */
+.show-result-btn {
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.show-result-btn:hover {
+    background: linear-gradient(135deg, #357abd, #2a5f8f);
+    box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+    transform: translateY(-2px);
+}
+
+.show-result-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Result Section */
+.result {
+    margin-top: 20px;
+    padding: 25px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+}
+
+.result h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* More Section */
+.more {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.more:hover {
+    background: #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.more a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.more a:hover {
+    text-decoration: underline;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .bar-chart {
+        gap: 18px;
+        height: 280px;
+        padding: 15px;
+    }
+    
+    .bar {
+        width: 38px;
+    }
+    
+    .bar-label {
+        font-size: 13px;
+    }
+    
+    .fish-label {
+        font-size: 14px;
+    }
+    
+    .button-group button {
+        height: 3.5em;
+        font-size: 1.1em;
+    }
+    
+    .result h2 {
+        font-size: 24px;
+    }
+    
+    .fish-image-container {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bar-chart {
+        gap: 12px;
+        height: 240px;
+        padding: 10px;
+    }
+    
+    .bar {
+        width: 32px;
+    }
+    
+    .bar-label {
+        font-size: 12px;
+    }
+    
+    .fish-label {
+        font-size: 13px;
+    }
+    
+    .button-group button {
+        height: 3em;
+        font-size: 1em;
+    }
+    
+    .show-result-btn {
+        padding: 12px 28px;
+        font-size: 16px;
+    }
+    
+    .result h2 {
+        font-size: 20px;
+    }
+    
+    .correct-answer-note,
+    .accuracy-stats {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
