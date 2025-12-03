@@ -112,7 +112,7 @@
                 
                 // Special handling for indexURLs_* keys
                 if (isImageListKey(key)) {
-                    currentUrls = value.split('\n').filter(url => url.trim());
+                    currentUrls = value.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
                     renderImageList(updateAllowed);
                 } else {
                     try {
@@ -196,7 +196,7 @@
         const rawTextarea = document.getElementById('rawUrlEditor');
         if (rawTextarea) {
             const rawContent = rawTextarea.value;
-            currentUrls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+            currentUrls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
         }
     }
 

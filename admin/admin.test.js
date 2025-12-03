@@ -78,7 +78,7 @@ describe('Admin Page - Image List Management', () => {
   describe('URL List Parsing', () => {
     it('should parse newline-separated URLs correctly', () => {
       const testValue = 'https://example.com/image1.jpg\nhttps://example.com/image2.jpg\nhttps://example.com/image3.jpg';
-      const urls = testValue.split('\n').filter(url => url.trim());
+      const urls = testValue.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(3);
       expect(urls[0]).toBe('https://example.com/image1.jpg');
@@ -88,14 +88,14 @@ describe('Admin Page - Image List Management', () => {
 
     it('should filter out empty lines', () => {
       const testValue = 'https://example.com/image1.jpg\n\nhttps://example.com/image2.jpg\n\n';
-      const urls = testValue.split('\n').filter(url => url.trim());
+      const urls = testValue.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(2);
     });
 
     it('should handle single URL', () => {
       const testValue = 'https://example.com/image.jpg';
-      const urls = testValue.split('\n').filter(url => url.trim());
+      const urls = testValue.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(1);
       expect(urls[0]).toBe('https://example.com/image.jpg');
@@ -103,7 +103,7 @@ describe('Admin Page - Image List Management', () => {
 
     it('should handle empty value', () => {
       const testValue = '';
-      const urls = testValue.split('\n').filter(url => url.trim());
+      const urls = testValue.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(0);
     });
@@ -362,7 +362,7 @@ describe('Admin Page - Integration', () => {
     
     expect(isImageListKey(key)).toBe(true);
     
-    const urls = value.split('\n').filter(url => url.trim());
+    const urls = value.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
     expect(urls).toHaveLength(2);
   });
 
@@ -376,7 +376,7 @@ describe('Admin Page - Integration', () => {
     
     expect(isImageListKey(key)).toBe(true);
     
-    const urls = value.split('\n').filter(url => url.trim());
+    const urls = value.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
     expect(urls).toHaveLength(3);
     
     // Test deduplication
@@ -388,7 +388,7 @@ describe('Admin Page - Integration', () => {
     const originalValue = 'https://example.com/image1.jpg\nhttps://example.com/image2.jpg\nhttps://example.com/image3.jpg';
     
     // Parse
-    const urls = originalValue.split('\n').filter(url => url.trim());
+    const urls = originalValue.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
     
     // Serialize
     const serializedValue = urls.join('\n');
