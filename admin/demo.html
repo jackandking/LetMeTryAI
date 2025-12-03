@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Demo - indexURLs Feature</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input[type="text"] {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-group button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .input-group button:hover {
+            background-color: #45a049;
+        }
+        .url-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .url-item input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .delete-btn {
+            background-color: #f44336 !important;
+            padding: 5px 10px !important;
+            margin-right: 10px !important;
+        }
+        .delete-btn:hover {
+            background-color: #da190b !important;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+            border-radius: 3px;
+        }
+        .error-msg {
+            color: red;
+            font-style: italic;
+        }
+        .info-box {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<script>
+    let currentUrls = [];
+    let showImages = true;
+
+    // Mock data for demonstration
+    const mockData = {
+        'indexURLs_0.1.0': 'https://picsum.photos/200/300\nhttps://picsum.photos/200/301\nhttps://picsum.photos/200/302',
+        'indexURLs_1.0.0': 'https://via.placeholder.com/200x200/FF0000/FFFFFF?text=Image1\nhttps://via.placeholder.com/200x200/00FF00/FFFFFF?text=Image2'
+    };
+
+    function isImageListKey(key) {
+        return key && key.startsWith('indexURLs_');
+    }
+
+    function loadDemo() {
+        const key = document.getElementById('keyInput').value;
+        const value = mockData[key];
+        
+        if (value) {
+            if (isImageListKey(key)) {
+                currentUrls = value.split('\n').filter(url => url.trim());
+                renderImageList(true);
+            } else {
+                document.getElementById('result').textContent = 'Not an indexURLs key';
+            }
+        } else {
+            document.getElementById('result').innerHTML = '<div class="info-box">No demo data for this key. Try: indexURLs_0.1.0 or indexURLs_1.0.0</div>';
+        }
+    }
+
+    function renderImageList(updateAllowed) {
+        let html = '<div style="margin-bottom: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">';
+        html += '<label style="font-weight: bold;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
+        if (updateAllowed) {
+            html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
+            html += ' <button onclick="saveChanges()">Save Changes</button>';
+        }
+        html += '</div>';
+        html += '<div id="imageListContainer">';
+        
+        currentUrls.forEach((url, index) => {
+            html += '<div class="url-item">';
+            html += '<div style="margin-bottom: 5px;">';
+            if (updateAllowed) {
+                html += '<button class="delete-btn" onclick="deleteUrl(' + index + ')">Delete</button>';
+            }
+            html += '<input type="text" id="url_' + index + '" value="' + escapeHtml(url) + '" style="width: calc(100% - 100px);" ' + (updateAllowed ? '' : 'readonly') + '>';
+            html += '</div>';
+            if (showImages) {
+                html += '<div><img src="' + escapeHtml(url) + '" class="image-preview" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">';
+                html += '<div class="error-msg" style="display: none;">Failed to load image</div></div>';
+            }
+            html += '</div>';
+        });
+        
+        html += '</div>';
+        document.getElementById('result').innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function toggleImages() {
+        showImages = document.getElementById('showImagesToggle').checked;
+        renderImageList(true);
+    }
+
+    function deleteUrl(index) {
+        if (confirm('Are you sure you want to delete this URL?')) {
+            currentUrls.splice(index, 1);
+            renderImageList(true);
+        }
+    }
+
+    function addNewUrl() {
+        const newUrl = prompt('Enter new image URL:');
+        if (newUrl && newUrl.trim()) {
+            currentUrls.push(newUrl.trim());
+            renderImageList(true);
+        }
+    }
+
+    function saveChanges() {
+        // Collect all URLs from input fields
+        const updatedUrls = [];
+        for (let i = 0; i < currentUrls.length; i++) {
+            const inputElement = document.getElementById('url_' + i);
+            if (inputElement) {
+                const url = inputElement.value.trim();
+                if (url) {
+                    updatedUrls.push(url);
+                }
+            }
+        }
+        
+        const key = document.getElementById('keyInput').value;
+        const value = updatedUrls.join('\n');
+        
+        console.log('Saving to key:', key);
+        console.log('Value:', value);
+        
+        alert('Demo: Changes would be saved!\n\nKey: ' + key + '\nURLs: ' + updatedUrls.length);
+        currentUrls = updatedUrls;
+    }
+</script>
+<body>
+    <h1>Admin Panel - Demo</h1>
+    <div class="info-box">
+        <strong>Demo Mode</strong><br>
+        This is a demonstration of the new indexURLs_* feature.<br>
+        Try these keys: <code>indexURLs_0.1.0</code> or <code>indexURLs_1.0.0</code>
+    </div>
+    <div class="input-group">
+        <input type="text" id="keyInput" placeholder="Enter key" value="indexURLs_0.1.0" style="width: 300px;"/>
+        <button onclick="loadDemo()">Load Demo</button>
+    </div>
+    <div id="result"></div>
+</body>
+</html>
