@@ -401,7 +401,7 @@ describe('Admin Page - Raw Edit Mode', () => {
   describe('Raw Text Parsing', () => {
     it('should parse raw textarea content into URL list', () => {
       const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(3);
       expect(urls[0]).toBe('https://example.com/img1.jpg');
@@ -411,7 +411,7 @@ describe('Admin Page - Raw Edit Mode', () => {
 
     it('should handle raw content with empty lines and whitespace', () => {
       const rawContent = '  https://example.com/img1.jpg  \n\n  https://example.com/img2.jpg\n\n  ';
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls).toHaveLength(2);
       expect(urls[0]).toBe('https://example.com/img1.jpg');
@@ -427,7 +427,7 @@ describe('Admin Page - Raw Edit Mode', () => {
 
     it('should preserve URL order from raw content', () => {
       const rawContent = 'https://example.com/img3.jpg\nhttps://example.com/img1.jpg\nhttps://example.com/img2.jpg';
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls[0]).toBe('https://example.com/img3.jpg');
       expect(urls[1]).toBe('https://example.com/img1.jpg');
@@ -472,14 +472,14 @@ describe('Admin Page - Raw Edit Mode', () => {
       
       // Simulate switching to raw mode
       const rawContent = visualUrls.join('\n');
-      expect(rawContent.split('\n').length).toBe(3);
+      expect(rawContent.split(/\r?\n/).length).toBe(3);
     });
 
     it('should maintain URL data when switching from raw to visual mode', () => {
       const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
       
       // Simulate switching to visual mode
-      const visualUrls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const visualUrls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       expect(visualUrls).toHaveLength(3);
     });
 
@@ -493,7 +493,7 @@ describe('Admin Page - Raw Edit Mode', () => {
       const rawContent = originalUrls.join('\n');
       
       // Raw -> Visual
-      const parsedUrls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const parsedUrls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(parsedUrls).toEqual(originalUrls);
     });
@@ -506,7 +506,7 @@ describe('Admin Page - Raw Edit Mode', () => {
       // Simulate find/replace operation
       rawContent = rawContent.replace(/old-domain\.com/g, 'new-domain.com');
       
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       
       expect(urls[0]).toBe('https://new-domain.com/img1.jpg');
       expect(urls[1]).toBe('https://new-domain.com/img2.jpg');
@@ -517,7 +517,7 @@ describe('Admin Page - Raw Edit Mode', () => {
       let rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
       
       // Simulate adding query parameters to all URLs
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       const modifiedUrls = urls.map(url => url + '?size=large');
       rawContent = modifiedUrls.join('\n');
       
@@ -530,7 +530,7 @@ describe('Admin Page - Raw Edit Mode', () => {
       const rawContent = 'https://example.com/img1.jpg\nhttps://test.com/img2.jpg\nhttps://example.com/img3.jpg\nhttps://test.com/img4.jpg';
       
       // Filter out test.com URLs
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       const filteredUrls = urls.filter(url => !url.includes('test.com'));
       
       expect(filteredUrls).toHaveLength(2);
@@ -542,7 +542,7 @@ describe('Admin Page - Raw Edit Mode', () => {
   describe('Deduplication in Raw Mode', () => {
     it('should deduplicate URLs after parsing from raw content', () => {
       const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img1.jpg\nhttps://example.com/img3.jpg';
-      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
       const uniqueUrls = [...new Set(urls)];
       
       expect(uniqueUrls).toHaveLength(3);
