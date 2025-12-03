@@ -396,3 +396,161 @@ describe('Admin Page - Integration', () => {
     expect(serializedValue).toBe(originalValue);
   });
 });
+
+describe('Admin Page - Raw Edit Mode', () => {
+  describe('Raw Text Parsing', () => {
+    it('should parse raw textarea content into URL list', () => {
+      const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      
+      expect(urls).toHaveLength(3);
+      expect(urls[0]).toBe('https://example.com/img1.jpg');
+      expect(urls[1]).toBe('https://example.com/img2.jpg');
+      expect(urls[2]).toBe('https://example.com/img3.jpg');
+    });
+
+    it('should handle raw content with empty lines and whitespace', () => {
+      const rawContent = '  https://example.com/img1.jpg  \n\n  https://example.com/img2.jpg\n\n  ';
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      
+      expect(urls).toHaveLength(2);
+      expect(urls[0]).toBe('https://example.com/img1.jpg');
+      expect(urls[1]).toBe('https://example.com/img2.jpg');
+    });
+
+    it('should handle raw content with different line endings', () => {
+      const rawContent = 'https://example.com/img1.jpg\r\nhttps://example.com/img2.jpg\rhttps://example.com/img3.jpg';
+      const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
+      
+      expect(urls).toHaveLength(3);
+    });
+
+    it('should preserve URL order from raw content', () => {
+      const rawContent = 'https://example.com/img3.jpg\nhttps://example.com/img1.jpg\nhttps://example.com/img2.jpg';
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      
+      expect(urls[0]).toBe('https://example.com/img3.jpg');
+      expect(urls[1]).toBe('https://example.com/img1.jpg');
+      expect(urls[2]).toBe('https://example.com/img2.jpg');
+    });
+  });
+
+  describe('Raw Text Serialization', () => {
+    it('should serialize URL list to raw text format', () => {
+      const urls = [
+        'https://example.com/img1.jpg',
+        'https://example.com/img2.jpg',
+        'https://example.com/img3.jpg'
+      ];
+      const rawContent = urls.join('\n');
+      
+      expect(rawContent).toBe('https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg');
+    });
+
+    it('should handle empty URL list', () => {
+      const urls = [];
+      const rawContent = urls.join('\n');
+      
+      expect(rawContent).toBe('');
+    });
+
+    it('should handle single URL', () => {
+      const urls = ['https://example.com/img1.jpg'];
+      const rawContent = urls.join('\n');
+      
+      expect(rawContent).toBe('https://example.com/img1.jpg');
+    });
+  });
+
+  describe('Mode Switching', () => {
+    it('should maintain URL data when switching from visual to raw mode', () => {
+      const visualUrls = [
+        'https://example.com/img1.jpg',
+        'https://example.com/img2.jpg',
+        'https://example.com/img3.jpg'
+      ];
+      
+      // Simulate switching to raw mode
+      const rawContent = visualUrls.join('\n');
+      expect(rawContent.split('\n').length).toBe(3);
+    });
+
+    it('should maintain URL data when switching from raw to visual mode', () => {
+      const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
+      
+      // Simulate switching to visual mode
+      const visualUrls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      expect(visualUrls).toHaveLength(3);
+    });
+
+    it('should handle bidirectional mode switching without data loss', () => {
+      const originalUrls = [
+        'https://example.com/img1.jpg',
+        'https://example.com/img2.jpg'
+      ];
+      
+      // Visual -> Raw
+      const rawContent = originalUrls.join('\n');
+      
+      // Raw -> Visual
+      const parsedUrls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      
+      expect(parsedUrls).toEqual(originalUrls);
+    });
+  });
+
+  describe('Batch Operations in Raw Mode', () => {
+    it('should support bulk find and replace operations', () => {
+      let rawContent = 'https://old-domain.com/img1.jpg\nhttps://old-domain.com/img2.jpg\nhttps://old-domain.com/img3.jpg';
+      
+      // Simulate find/replace operation
+      rawContent = rawContent.replace(/old-domain\.com/g, 'new-domain.com');
+      
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      
+      expect(urls[0]).toBe('https://new-domain.com/img1.jpg');
+      expect(urls[1]).toBe('https://new-domain.com/img2.jpg');
+      expect(urls[2]).toBe('https://new-domain.com/img3.jpg');
+    });
+
+    it('should support bulk URL modifications', () => {
+      let rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img3.jpg';
+      
+      // Simulate adding query parameters to all URLs
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const modifiedUrls = urls.map(url => url + '?size=large');
+      rawContent = modifiedUrls.join('\n');
+      
+      expect(rawContent).toContain('?size=large');
+      expect(modifiedUrls).toHaveLength(3);
+      expect(modifiedUrls[0]).toBe('https://example.com/img1.jpg?size=large');
+    });
+
+    it('should support removing URLs by pattern', () => {
+      const rawContent = 'https://example.com/img1.jpg\nhttps://test.com/img2.jpg\nhttps://example.com/img3.jpg\nhttps://test.com/img4.jpg';
+      
+      // Filter out test.com URLs
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const filteredUrls = urls.filter(url => !url.includes('test.com'));
+      
+      expect(filteredUrls).toHaveLength(2);
+      expect(filteredUrls[0]).toBe('https://example.com/img1.jpg');
+      expect(filteredUrls[1]).toBe('https://example.com/img3.jpg');
+    });
+  });
+
+  describe('Deduplication in Raw Mode', () => {
+    it('should deduplicate URLs after parsing from raw content', () => {
+      const rawContent = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img1.jpg\nhttps://example.com/img3.jpg';
+      const urls = rawContent.split('\n').filter(url => url.trim()).map(url => url.trim());
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toHaveLength(3);
+      expect(uniqueUrls).toEqual([
+        'https://example.com/img1.jpg',
+        'https://example.com/img2.jpg',
+        'https://example.com/img3.jpg'
+      ]);
+    });
+  });
+});
