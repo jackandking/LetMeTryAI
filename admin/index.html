@@ -97,6 +97,7 @@
     let searchHistory = [];
     let currentUrls = [];
     let showImages = true;
+    let rawEditMode = false;
 
     function isImageListKey(key) {
         return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
@@ -111,7 +112,7 @@
                 
                 // Special handling for indexURLs_* keys
                 if (isImageListKey(key)) {
-                    currentUrls = value.split('\n').filter(url => url.trim());
+                    currentUrls = value.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
                     renderImageList(updateAllowed);
                 } else {
                     try {
@@ -137,6 +138,13 @@
     }
 
     function deduplicateUrls() {
+        // If in raw edit mode, sync URLs from textarea first
+        if (rawEditMode) {
+            syncUrlsFromRawEdit();
+        } else {
+            syncUrlsFromInputs();
+        }
+        
         const originalCount = currentUrls.length;
         const uniqueUrls = [...new Set(currentUrls)];
         const duplicatesRemoved = originalCount - uniqueUrls.length;
@@ -152,33 +160,96 @@
         }
     }
 
+    function toggleRawEditMode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const updateAllowed = urlParams.has('update');
+        
+        if (rawEditMode) {
+            // Switching FROM raw mode TO visual mode: sync URLs from textarea first
+            syncUrlsFromRawEdit();
+        } else {
+            // Switching FROM visual mode TO raw mode: sync URLs from input fields first
+            syncUrlsFromInputs();
+        }
+        
+        rawEditMode = !rawEditMode;
+        renderImageList(updateAllowed);
+    }
+    
+    function syncUrlsFromInputs() {
+        // Collect all URLs from input fields before switching modes
+        const updatedUrls = [];
+        for (let i = 0; i < currentUrls.length; i++) {
+            const inputElement = document.getElementById('url_' + i);
+            if (inputElement) {
+                const url = inputElement.value.trim();
+                if (url) {
+                    updatedUrls.push(url);
+                }
+            }
+        }
+        currentUrls = updatedUrls;
+    }
+    
+    function syncUrlsFromRawEdit() {
+        // Sync URLs from raw textarea
+        const rawTextarea = document.getElementById('rawUrlEditor');
+        if (rawTextarea) {
+            const rawContent = rawTextarea.value;
+            currentUrls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
+        }
+    }
+
     function renderImageList(updateAllowed) {
         let html = '<div style="margin-bottom: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">';
-        html += '<label style="font-weight: bold;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
+        html += '<label style="font-weight: bold;"><input type="checkbox" id="rawEditToggle" ' + (rawEditMode ? 'checked' : '') + ' onchange="toggleRawEditMode()"> Raw Edit Mode</label>';
+        
+        if (!rawEditMode) {
+            html += ' <label style="font-weight: bold; margin-left: 15px;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
+        }
+        
         if (updateAllowed) {
-            html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
-            html += ' <button onclick="deduplicateUrls()" style="margin-left: 10px;">Remove Duplicates</button>';
+            if (!rawEditMode) {
+                html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
+                html += ' <button onclick="deduplicateUrls()" style="margin-left: 10px;">Remove Duplicates</button>';
+            }
             html += ' <button onclick="uploadImageList()">Save Changes</button>';
         }
         html += '</div>';
-        html += '<div id="imageListContainer">';
         
-        currentUrls.forEach((url, index) => {
-            html += '<div class="url-item">';
-            html += '<div style="margin-bottom: 5px;">';
-            if (updateAllowed) {
-                html += '<button class="delete-btn" onclick="deleteUrl(' + index + ')">Delete</button>';
-            }
-            html += '<input type="text" id="url_' + index + '" value="' + escapeHtml(url) + '" style="width: calc(100% - 100px);" ' + (updateAllowed ? '' : 'readonly') + '>';
+        if (rawEditMode) {
+            // Raw edit mode: show textarea with all URLs
+            html += '<div style="margin-bottom: 10px; font-size: 14px; color: #666;">';
+            html += 'Edit URLs as plain text (one per line). This makes batch operations like find/replace easier.';
             html += '</div>';
-            if (showImages) {
-                html += '<div><img src="' + escapeHtml(url) + '" class="image-preview" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">';
-                html += '<div class="error-msg" style="display: none;">Failed to load image</div></div>';
-            }
+            html += '<textarea id="rawUrlEditor" rows="20" style="width: 100%; font-family: monospace; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" ' + (updateAllowed ? '' : 'readonly') + '>';
+            html += escapeHtml(currentUrls.join('\n'));
+            html += '</textarea>';
+            html += '<div style="margin-top: 10px; font-size: 13px; color: #666;">';
+            html += 'Total URLs: <span id="urlCount">' + currentUrls.length + '</span>';
             html += '</div>';
-        });
+        } else {
+            // Visual mode: show individual inputs with images
+            html += '<div id="imageListContainer">';
+            
+            currentUrls.forEach((url, index) => {
+                html += '<div class="url-item">';
+                html += '<div style="margin-bottom: 5px;">';
+                if (updateAllowed) {
+                    html += '<button class="delete-btn" onclick="deleteUrl(' + index + ')">Delete</button>';
+                }
+                html += '<input type="text" id="url_' + index + '" value="' + escapeHtml(url) + '" style="width: calc(100% - 100px);" ' + (updateAllowed ? '' : 'readonly') + '>';
+                html += '</div>';
+                if (showImages) {
+                    html += '<div><img src="' + escapeHtml(url) + '" class="image-preview" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">';
+                    html += '<div class="error-msg" style="display: none;">Failed to load image</div></div>';
+                }
+                html += '</div>';
+            });
+            
+            html += '</div>';
+        }
         
-        html += '</div>';
         document.getElementById('result').innerHTML = html;
     }
 
@@ -215,14 +286,21 @@
     }
 
     function uploadImageList() {
-        // Collect all URLs from input fields
-        const updatedUrls = [];
-        for (let i = 0; i < currentUrls.length; i++) {
-            const inputElement = document.getElementById('url_' + i);
-            if (inputElement) {
-                const url = inputElement.value.trim();
-                if (url) {
-                    updatedUrls.push(url);
+        let updatedUrls = [];
+        
+        if (rawEditMode) {
+            // In raw edit mode, get URLs from textarea
+            syncUrlsFromRawEdit();
+            updatedUrls = currentUrls;
+        } else {
+            // In visual mode, collect all URLs from input fields
+            for (let i = 0; i < currentUrls.length; i++) {
+                const inputElement = document.getElementById('url_' + i);
+                if (inputElement) {
+                    const url = inputElement.value.trim();
+                    if (url) {
+                        updatedUrls.push(url);
+                    }
                 }
             }
         }

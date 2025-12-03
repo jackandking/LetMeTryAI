@@ -101,3 +101,6 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Demo and test files
+admin/demo-raw-mode.html
