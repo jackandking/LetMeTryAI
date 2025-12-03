@@ -212,9 +212,16 @@
         
         const key = document.getElementById('keyInput').value;
         const value = updatedUrls.join('\n');
-        updateKeyValueStore(key, value);
-        alert('Image list updated successfully');
-        currentUrls = updatedUrls;
+        
+        updateKeyValueStore(key, value)
+            .then(() => {
+                alert('Image list updated successfully');
+                currentUrls = updatedUrls;
+            })
+            .catch((error) => {
+                alert('Failed to update image list: ' + error.message);
+                console.error('Upload error:', error);
+            });
     }
 
     function uploadValue() {

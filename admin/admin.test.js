@@ -127,14 +127,8 @@ describe('Admin Page - Image List Management', () => {
   });
 
   describe('HTML Escaping', () => {
-    it('should escape HTML special characters', () => {
-      const testCases = [
-        { input: '<script>alert("xss")</script>', expected: '&lt;script&gt;alert("xss")&lt;/script&gt;' },
-        { input: 'https://example.com/image.jpg?param=1&other=2', expected: 'https://example.com/image.jpg?param=1&amp;other=2' },
-        { input: 'Normal URL', expected: 'Normal URL' }
-      ];
-
-      // Mock the DOM behavior for escaping
+    it('should escape script tags', () => {
+      const input = '<script>alert("xss")</script>';
       const realEscapeHtml = function(text) {
         return text
           .replace(/&/g, '&amp;')
@@ -143,14 +137,40 @@ describe('Admin Page - Image List Management', () => {
           .replace(/"/g, '&quot;')
           .replace(/'/g, '&#039;');
       };
+      
+      const result = realEscapeHtml(input);
+      expect(result).toContain('&lt;script&gt;');
+      expect(result).not.toContain('<script>');
+    });
 
-      testCases.forEach(({ input, expected }) => {
-        const result = realEscapeHtml(input);
-        expect(result).toContain(input.includes('<') || input.includes('&') ? 
-          (input.includes('<') ? '&lt;' : '&amp;') : 
-          input.split('?')[0]
-        );
-      });
+    it('should escape ampersands in URLs', () => {
+      const input = 'https://example.com/image.jpg?param=1&other=2';
+      const realEscapeHtml = function(text) {
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      };
+      
+      const result = realEscapeHtml(input);
+      expect(result).toContain('&amp;');
+    });
+
+    it('should not modify normal URLs', () => {
+      const input = 'https://example.com/image.jpg';
+      const realEscapeHtml = function(text) {
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      };
+      
+      const result = realEscapeHtml(input);
+      expect(result).toBe(input);
     });
   });
 
