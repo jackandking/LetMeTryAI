@@ -16,30 +16,116 @@
     </script>
     <script src="../util.js"></script>
     <title>Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input[type="text"] {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-group button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .input-group button:hover {
+            background-color: #45a049;
+        }
+        .url-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .url-item input[type="text"] {
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .delete-btn {
+            background-color: #f44336 !important;
+            padding: 5px 10px !important;
+            margin-right: 10px !important;
+        }
+        .delete-btn:hover {
+            background-color: #da190b !important;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+            border-radius: 3px;
+        }
+        .error-msg {
+            color: red;
+            font-style: italic;
+        }
+        #historyList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #historyList li {
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #historyList li:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <script>
     let searchHistory = [];
+    let currentUrls = [];
+    let showImages = true;
+
+    function isImageListKey(key) {
+        return key && key.startsWith('indexURLs_');
+    }
+
     function fetchValue() {
         const key = document.getElementById('keyInput').value;
         readKeyValueStore(key, function(value) {
             if (value) {
-                try {
-                    const jsonValue = JSON.parse(value);
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const updateAllowed = urlParams.has('update');
-                    const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
-                    document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + JSON.stringify(jsonValue, null, 2) + '</textarea><br>' + uploadButton;
-                } catch (e) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    
-                    const updateRawAllowed = urlParams.has('raw');
-                    if(updateRawAllowed){
-                        const updateAllowed = urlParams.has('update');
-                        const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
-                        document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + value + '</textarea><br>' + uploadButton;
-                    }else{
-                        document.getElementById('result').textContent = 'Error: Invalid JSON. Raw data: ' + value;
+                const urlParams = new URLSearchParams(window.location.search);
+                const updateAllowed = urlParams.has('update');
                 
+                // Special handling for indexURLs_* keys
+                if (isImageListKey(key)) {
+                    currentUrls = value.split('\n').filter(url => url.trim());
+                    renderImageList(updateAllowed);
+                } else {
+                    try {
+                        const jsonValue = JSON.parse(value);
+                        const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
+                        document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + JSON.stringify(jsonValue, null, 2) + '</textarea><br>' + uploadButton;
+                    } catch (e) {
+                        const updateRawAllowed = urlParams.has('raw');
+                        if(updateRawAllowed){
+                            const uploadButton = updateAllowed ? '<button onclick="uploadValue()">Upload Changes</button>' : '';
+                            document.getElementById('result').innerHTML = '<textarea id="jsonEditor" rows="10" cols="50">' + value + '</textarea><br>' + uploadButton;
+                        }else{
+                            document.getElementById('result').textContent = 'Error: Invalid JSON. Raw data: ' + value;
+                        }
                     }
                 }
                 addToHistory(key);
@@ -48,6 +134,87 @@
                 document.getElementById('result').textContent = 'No value found for the given key';
             }
         });
+    }
+
+    function renderImageList(updateAllowed) {
+        let html = '<div style="margin-bottom: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">';
+        html += '<label style="font-weight: bold;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
+        if (updateAllowed) {
+            html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
+            html += ' <button onclick="uploadImageList()">Save Changes</button>';
+        }
+        html += '</div>';
+        html += '<div id="imageListContainer">';
+        
+        currentUrls.forEach((url, index) => {
+            html += '<div class="url-item">';
+            html += '<div style="margin-bottom: 5px;">';
+            if (updateAllowed) {
+                html += '<button class="delete-btn" onclick="deleteUrl(' + index + ')">Delete</button>';
+            }
+            html += '<input type="text" id="url_' + index + '" value="' + escapeHtml(url) + '" style="width: calc(100% - 100px);" ' + (updateAllowed ? '' : 'readonly') + '>';
+            html += '</div>';
+            if (showImages) {
+                html += '<div><img src="' + escapeHtml(url) + '" class="image-preview" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">';
+                html += '<div class="error-msg" style="display: none;">Failed to load image</div></div>';
+            }
+            html += '</div>';
+        });
+        
+        html += '</div>';
+        document.getElementById('result').innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function toggleImages() {
+        showImages = document.getElementById('showImagesToggle').checked;
+        const urlParams = new URLSearchParams(window.location.search);
+        const updateAllowed = urlParams.has('update');
+        renderImageList(updateAllowed);
+    }
+
+    function deleteUrl(index) {
+        if (confirm('Are you sure you want to delete this URL?')) {
+            currentUrls.splice(index, 1);
+            const urlParams = new URLSearchParams(window.location.search);
+            const updateAllowed = urlParams.has('update');
+            renderImageList(updateAllowed);
+        }
+    }
+
+    function addNewUrl() {
+        const newUrl = prompt('Enter new image URL:');
+        if (newUrl && newUrl.trim()) {
+            currentUrls.push(newUrl.trim());
+            const urlParams = new URLSearchParams(window.location.search);
+            const updateAllowed = urlParams.has('update');
+            renderImageList(updateAllowed);
+        }
+    }
+
+    function uploadImageList() {
+        // Collect all URLs from input fields
+        const updatedUrls = [];
+        for (let i = 0; i < currentUrls.length; i++) {
+            const inputElement = document.getElementById('url_' + i);
+            if (inputElement) {
+                const url = inputElement.value.trim();
+                if (url) {
+                    updatedUrls.push(url);
+                }
+            }
+        }
+        
+        const key = document.getElementById('keyInput').value;
+        const value = updatedUrls.join('\n');
+        updateKeyValueStore(key, value);
+        alert('Image list updated successfully');
+        currentUrls = updatedUrls;
     }
 
     function uploadValue() {
@@ -104,8 +271,9 @@
     };
 </script>
 <body>
-    <div>
-        <input type="text" id="keyInput" placeholder="Enter key" value="LetMeTryManKS.1.7.0"/>
+    <h1>Admin Panel</h1>
+    <div class="input-group">
+        <input type="text" id="keyInput" placeholder="Enter key" value="LetMeTryManKS.1.7.0" style="width: 300px;"/>
         <button onclick="fetchValue()">Fetch Value</button>
     </div>
     <div id="result"></div>
