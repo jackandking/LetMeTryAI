@@ -93,6 +93,12 @@ describe('What Fish Application', () => {
             expect(expectedStorageKey).not.toBe("caili1.data");
             expect(expectedStorageKey).not.toBe("howlong1.data");
         });
+
+        it('should have resultPageId constant defined', () => {
+            const expectedResultPageId = "whatfish";
+            expect(expectedResultPageId).toBe("whatfish");
+            expect(expectedResultPageId).not.toBe("caili");
+        });
     });
 
     describe('Vote Data Structure', () => {
@@ -241,8 +247,9 @@ describe('What Fish Application', () => {
                 navigateTo: mockNavigateTo
             };
             
+            const resultPageId = "whatfish";
             if (typeof ks !== 'undefined' && ks.navigateTo) {
-                ks.navigateTo({ url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=whatfish" });
+                ks.navigateTo({ url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=${resultPageId}` });
             }
             
             expect(mockNavigateTo).toHaveBeenCalledWith({

@@ -18,7 +18,8 @@ const questionConfig = {
         { value: "5", label: "鲢鱼" }
     ],
     correctAnswer: "鲫鱼",
-    storageKey: "whatfish1.data"
+    storageKey: "whatfish1.data",
+    resultPageId: "whatfish"
 };
 
 /**
@@ -201,7 +202,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 function showAd() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=whatfish",
+            url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=${questionConfig.resultPageId}`,
         });
     } else {
         console.warn('Mini-program navigation not available');
