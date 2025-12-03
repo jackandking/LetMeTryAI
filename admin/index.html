@@ -99,7 +99,7 @@
     let showImages = true;
 
     function isImageListKey(key) {
-        return key && key.startsWith('indexURLs_');
+        return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
     }
 
     function fetchValue() {
@@ -136,11 +136,28 @@
         });
     }
 
+    function deduplicateUrls() {
+        const originalCount = currentUrls.length;
+        const uniqueUrls = [...new Set(currentUrls)];
+        const duplicatesRemoved = originalCount - uniqueUrls.length;
+        
+        if (duplicatesRemoved > 0) {
+            currentUrls = uniqueUrls;
+            const urlParams = new URLSearchParams(window.location.search);
+            const updateAllowed = urlParams.has('update');
+            renderImageList(updateAllowed);
+            alert(`Removed ${duplicatesRemoved} duplicate URL(s). Total URLs: ${currentUrls.length}`);
+        } else {
+            alert('No duplicates found. All URLs are unique.');
+        }
+    }
+
     function renderImageList(updateAllowed) {
         let html = '<div style="margin-bottom: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">';
         html += '<label style="font-weight: bold;"><input type="checkbox" id="showImagesToggle" ' + (showImages ? 'checked' : '') + ' onchange="toggleImages()"> Show Images</label>';
         if (updateAllowed) {
             html += ' <button onclick="addNewUrl()" style="margin-left: 10px;">Add URL</button>';
+            html += ' <button onclick="deduplicateUrls()" style="margin-left: 10px;">Remove Duplicates</button>';
             html += ' <button onclick="uploadImageList()">Save Changes</button>';
         }
         html += '</div>';
