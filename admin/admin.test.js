@@ -31,7 +31,7 @@ describe('Admin Page - Image List Management', () => {
 
     // Define the function from admin page
     isImageListKey = function(key) {
-      return key && key.startsWith('indexURLs_');
+      return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
     };
 
     escapeHtml = function(text) {
@@ -52,7 +52,17 @@ describe('Admin Page - Image List Management', () => {
       expect(isImageListKey('indexURLs_')).toBe(true);
     });
 
-    it('should not identify non-indexURLs keys as image list keys', () => {
+    it('should identify stripURLs_0.0.1 as an image list key', () => {
+      expect(isImageListKey('stripURLs_0.0.1')).toBe(true);
+    });
+
+    it('should identify any stripURLs_* pattern as an image list key', () => {
+      expect(isImageListKey('stripURLs_1.0.0')).toBe(true);
+      expect(isImageListKey('stripURLs_test')).toBe(true);
+      expect(isImageListKey('stripURLs_')).toBe(true);
+    });
+
+    it('should not identify non-indexURLs or stripURLs keys as image list keys', () => {
       expect(isImageListKey('LetMeTryManKS.1.7.0')).toBe(false);
       expect(isImageListKey('webview7.data')).toBe(false);
       expect(isImageListKey('randomKey')).toBe(false);
@@ -207,6 +217,92 @@ describe('Admin Page - Image List Management', () => {
       expect(trimmed).toBe('https://example.com/image.jpg');
     });
   });
+
+  describe('URL Deduplication', () => {
+    it('should remove duplicate URLs from list', () => {
+      const urls = [
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+        'https://example.com/image1.jpg',
+        'https://example.com/image3.jpg',
+        'https://example.com/image2.jpg'
+      ];
+      
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toHaveLength(3);
+      expect(uniqueUrls).toEqual([
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+        'https://example.com/image3.jpg'
+      ]);
+    });
+
+    it('should preserve order when deduplicating', () => {
+      const urls = [
+        'https://example.com/image3.jpg',
+        'https://example.com/image1.jpg',
+        'https://example.com/image3.jpg',
+        'https://example.com/image2.jpg'
+      ];
+      
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toEqual([
+        'https://example.com/image3.jpg',
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg'
+      ]);
+    });
+
+    it('should handle list with no duplicates', () => {
+      const urls = [
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+        'https://example.com/image3.jpg'
+      ];
+      
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toHaveLength(3);
+      expect(uniqueUrls).toEqual(urls);
+    });
+
+    it('should handle empty list', () => {
+      const urls = [];
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toHaveLength(0);
+    });
+
+    it('should handle list with all duplicates', () => {
+      const urls = [
+        'https://example.com/image1.jpg',
+        'https://example.com/image1.jpg',
+        'https://example.com/image1.jpg'
+      ];
+      
+      const uniqueUrls = [...new Set(urls)];
+      
+      expect(uniqueUrls).toHaveLength(1);
+      expect(uniqueUrls[0]).toBe('https://example.com/image1.jpg');
+    });
+
+    it('should correctly count removed duplicates', () => {
+      const urls = [
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+        'https://example.com/image1.jpg',
+        'https://example.com/image3.jpg',
+        'https://example.com/image2.jpg'
+      ];
+      const originalCount = urls.length;
+      const uniqueUrls = [...new Set(urls)];
+      const duplicatesRemoved = originalCount - uniqueUrls.length;
+      
+      expect(duplicatesRemoved).toBe(2);
+    });
+  });
 });
 
 describe('Admin Page - Backward Compatibility', () => {
@@ -237,9 +333,9 @@ describe('Admin Page - Backward Compatibility', () => {
     expect(isValidJson).toBe(false);
   });
 
-  it('should preserve existing functionality for non-indexURLs keys', () => {
+  it('should preserve existing functionality for non-indexURLs and non-stripURLs keys', () => {
     const isImageListKey = function(key) {
-      return key && key.startsWith('indexURLs_');
+      return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
     };
 
     const regularKeys = [
@@ -261,13 +357,31 @@ describe('Admin Page - Integration', () => {
     const value = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg';
     
     const isImageListKey = function(key) {
-      return key && key.startsWith('indexURLs_');
+      return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
     };
     
     expect(isImageListKey(key)).toBe(true);
     
     const urls = value.split('\n').filter(url => url.trim());
     expect(urls).toHaveLength(2);
+  });
+
+  it('should correctly process stripURLs_0.0.1 key with URL list', () => {
+    const key = 'stripURLs_0.0.1';
+    const value = 'https://example.com/img1.jpg\nhttps://example.com/img2.jpg\nhttps://example.com/img1.jpg';
+    
+    const isImageListKey = function(key) {
+      return key && (key.startsWith('indexURLs_') || key.startsWith('stripURLs_'));
+    };
+    
+    expect(isImageListKey(key)).toBe(true);
+    
+    const urls = value.split('\n').filter(url => url.trim());
+    expect(urls).toHaveLength(3);
+    
+    // Test deduplication
+    const uniqueUrls = [...new Set(urls)];
+    expect(uniqueUrls).toHaveLength(2);
   });
 
   it('should handle round-trip conversion (parse and serialize)', () => {
