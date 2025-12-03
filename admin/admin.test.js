@@ -531,7 +531,13 @@ describe('Admin Page - Raw Edit Mode', () => {
       
       // Filter out test.com URLs
       const urls = rawContent.split(/\r?\n/).filter(url => url.trim()).map(url => url.trim());
-      const filteredUrls = urls.filter(url => !url.includes('test.com'));
+      const filteredUrls = urls.filter(url => {
+        try {
+          return new URL(url).host !== 'test.com';
+        } catch {
+          return true; // Optionally remove or keep invalid URLs
+        }
+      });
       
       expect(filteredUrls).toHaveLength(2);
       expect(filteredUrls[0]).toBe('https://example.com/img1.jpg');
