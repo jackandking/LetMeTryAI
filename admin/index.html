@@ -335,7 +335,7 @@
     function addToHistory(key) {
         if (!searchHistory.includes(key)) {
             searchHistory.unshift(key);
-            if (searchHistory.length > 10) {
+            if (searchHistory.length > 100) {
                 searchHistory.pop();
             }
             updateHistoryDisplay();

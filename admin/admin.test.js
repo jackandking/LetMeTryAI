@@ -560,3 +560,185 @@ describe('Admin Page - Raw Edit Mode', () => {
     });
   });
 });
+
+describe('Admin Page - Search History', () => {
+  describe('History Size Limit', () => {
+    it('should maintain history up to 100 items', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Simulate adding 150 items
+      for (let i = 0; i < 150; i++) {
+        const key = `key_${i}`;
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      expect(searchHistory.length).toBe(100);
+    });
+
+    it('should keep the most recent 100 items in history', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add 150 items
+      for (let i = 0; i < 150; i++) {
+        const key = `key_${i}`;
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      // The most recent item should be key_149
+      expect(searchHistory[0]).toBe('key_149');
+      // The oldest item should be key_50 (150 - 100 = 50)
+      expect(searchHistory[99]).toBe('key_50');
+    });
+
+    it('should not add duplicate keys to history', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add the same key multiple times
+      for (let i = 0; i < 5; i++) {
+        const key = 'duplicate_key';
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      expect(searchHistory.length).toBe(1);
+      expect(searchHistory[0]).toBe('duplicate_key');
+    });
+
+    it('should maintain history under 100 items when fewer items are added', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add only 50 items
+      for (let i = 0; i < 50; i++) {
+        const key = `key_${i}`;
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      expect(searchHistory.length).toBe(50);
+    });
+
+    it('should exactly maintain 100 items when 101 unique items are added', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add exactly 101 items
+      for (let i = 0; i < 101; i++) {
+        const key = `key_${i}`;
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      expect(searchHistory.length).toBe(100);
+      expect(searchHistory[0]).toBe('key_100');
+      expect(searchHistory[99]).toBe('key_1');
+      expect(searchHistory.includes('key_0')).toBe(false);
+    });
+
+    it('should use unshift to add new items to the beginning', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add a few items
+      const keys = ['first', 'second', 'third'];
+      keys.forEach(key => {
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      });
+      
+      // Most recent should be at index 0
+      expect(searchHistory[0]).toBe('third');
+      expect(searchHistory[1]).toBe('second');
+      expect(searchHistory[2]).toBe('first');
+    });
+
+    it('should use pop to remove oldest item when limit is exceeded', () => {
+      const searchHistory = ['item3', 'item2', 'item1'];
+      const maxHistorySize = 3;
+      
+      // Add a new item that will exceed the limit
+      const key = 'new_item';
+      if (!searchHistory.includes(key)) {
+        searchHistory.unshift(key);
+        if (searchHistory.length > maxHistorySize) {
+          const removed = searchHistory.pop();
+          expect(removed).toBe('item1'); // Oldest item removed
+        }
+      }
+      
+      expect(searchHistory.length).toBe(3);
+      expect(searchHistory).toEqual(['new_item', 'item3', 'item2']);
+    });
+  });
+
+  describe('History Operations', () => {
+    it('should maintain correct order when adding new keys', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      const keysToAdd = ['indexURLs_1.0.0', 'stripURLs_0.0.1', 'LetMeTryManKS.1.7.0'];
+      
+      keysToAdd.forEach(key => {
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      });
+      
+      expect(searchHistory[0]).toBe('LetMeTryManKS.1.7.0');
+      expect(searchHistory[1]).toBe('stripURLs_0.0.1');
+      expect(searchHistory[2]).toBe('indexURLs_1.0.0');
+    });
+
+    it('should preserve history order across multiple additions', () => {
+      const searchHistory = [];
+      const maxHistorySize = 100;
+      
+      // Add items in batches
+      for (let i = 0; i < 25; i++) {
+        const key = `batch1_${i}`;
+        if (!searchHistory.includes(key)) {
+          searchHistory.unshift(key);
+          if (searchHistory.length > maxHistorySize) {
+            searchHistory.pop();
+          }
+        }
+      }
+      
+      expect(searchHistory.length).toBe(25);
+      expect(searchHistory[0]).toBe('batch1_24');
+      expect(searchHistory[24]).toBe('batch1_0');
+    });
+  });
+});
