@@ -132,15 +132,16 @@ const gameConfig = {
     category: 'animals',
     timeLimit: {
         easy: 60,
-        medium: 45,
-        hard: 30
+        medium: 60,
+        hard: 60
     },
     scoreMultiplier: {
         easy: 1,
         medium: 1.5,
         hard: 2
     },
-    comboBonus: 10
+    comboBonus: 10,
+    keyboardHintMode: 'pre' // 'pre' for showing hints before typing, 'post' for showing after keypress
 };
 
 /**
@@ -205,20 +206,33 @@ function saveProgress() {
     const progress = {
         difficulty: gameConfig.difficulty,
         category: gameConfig.category,
-        highScore: Math.max(gameState.score, getHighScore()),
+        highScore: getHighScore(), // Keep existing high score
+        highTypingCount: Math.max(gameState.correctWords, getHighTypingCount()), // Track typing quantity
         wordsLearned: gameState.wordsLearned.length
     };
     localStorage.setItem('typing-game-progress', JSON.stringify(progress));
 }
 
 /**
- * Get high score from localStorage
+ * Get high score from localStorage (kept for backward compatibility)
  */
 function getHighScore() {
     const saved = localStorage.getItem('typing-game-progress');
     if (saved) {
         const progress = JSON.parse(saved);
         return progress.highScore || 0;
+    }
+    return 0;
+}
+
+/**
+ * Get high typing count (number of correct words) from localStorage
+ */
+function getHighTypingCount() {
+    const saved = localStorage.getItem('typing-game-progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        return progress.highTypingCount || 0;
     }
     return 0;
 }
@@ -302,6 +316,19 @@ function selectCategory(category) {
         btn.classList.remove('active');
     });
     document.querySelector(`[data-category="${category}"]`).classList.add('active');
+}
+
+/**
+ * Select keyboard hint mode
+ */
+function selectHintMode(mode) {
+    gameConfig.keyboardHintMode = mode;
+    
+    // Update UI
+    document.querySelectorAll('.hint-mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
 }
 
 /**
@@ -446,6 +473,33 @@ function displayWord(word) {
     if (hintElement) {
         hintElement.innerHTML = `💡 提示：${word.hint}`;
     }
+    
+    // Highlight the first key in 'pre' hint mode
+    if (gameConfig.keyboardHintMode === 'pre' && word.english.length > 0) {
+        highlightNextKey(word.english[0].toUpperCase());
+    } else {
+        clearKeyboardHighlights();
+    }
+}
+
+/**
+ * Highlight the next key to press on the keyboard
+ */
+function highlightNextKey(key) {
+    clearKeyboardHighlights();
+    const keyElement = document.getElementById(`key-${key}`);
+    if (keyElement) {
+        keyElement.classList.add('next-key');
+    }
+}
+
+/**
+ * Clear all keyboard highlights except active key presses
+ */
+function clearKeyboardHighlights() {
+    document.querySelectorAll('.keyboard-key').forEach(key => {
+        key.classList.remove('next-key');
+    });
 }
 
 /**
@@ -460,6 +514,13 @@ function handleInput(e) {
     
     // Highlight matching letters
     highlightMatchingLetters(userInput, targetWord);
+    
+    // Highlight next key in 'pre' mode
+    if (gameConfig.keyboardHintMode === 'pre' && userInput.length < targetWord.length) {
+        highlightNextKey(targetWord[userInput.length].toUpperCase());
+    } else if (gameConfig.keyboardHintMode === 'pre') {
+        clearKeyboardHighlights();
+    }
     
     // Check if complete word is typed
     if (userInput === targetWord) {
@@ -682,14 +743,14 @@ function endGame() {
 }
 
 /**
- * Check if current score is a new high score
- * @returns {{isNew: boolean, previousHighScore: number}} Object with new record status and previous high score
+ * Check if current typing count is a new high record
+ * @returns {{isNew: boolean, previousHighTypingCount: number}} Object with new record status and previous high typing count
  */
 function checkNewHighScore() {
-    const previousHighScore = getHighScore();
+    const previousHighTypingCount = getHighTypingCount();
     return {
-        isNew: gameState.score > previousHighScore && gameState.score > 0,
-        previousHighScore: previousHighScore
+        isNew: gameState.correctWords > previousHighTypingCount && gameState.correctWords > 0,
+        previousHighTypingCount: previousHighTypingCount
     };
 }
 
@@ -700,7 +761,7 @@ function showResultScreen() {
     // Check for new high score BEFORE saving (so we compare with previous record)
     const highScoreResult = checkNewHighScore();
     const newRecord = highScoreResult.isNew;
-    const previousHighScore = highScoreResult.previousHighScore;
+    const previousHighTypingCount = highScoreResult.previousHighTypingCount;
     
     // Update result stats
     document.getElementById('finalScore').textContent = gameState.score;
@@ -712,11 +773,11 @@ function showResultScreen() {
         : 0;
     document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
     
-    // Update high score display
+    // Update high score display - show typing count as the main record
     const highScoreElement = document.getElementById('highScore');
     if (highScoreElement) {
-        const displayHighScore = newRecord ? gameState.score : previousHighScore;
-        highScoreElement.textContent = displayHighScore;
+        const displayHighTypingCount = newRecord ? gameState.correctWords : previousHighTypingCount;
+        highScoreElement.textContent = displayHighTypingCount;
     }
     
     // Show learned words
@@ -744,7 +805,9 @@ function showResultScreen() {
     
     // Celebration effects - extra special for new high score!
     if (newRecord) {
-        createNewHighScoreCelebration(previousHighScore);
+        createNewHighScoreCelebration(previousHighTypingCount);
+        // Show game reward modal
+        showGameRewardModal();
     } else if (gameState.score >= 100) {
         createBigCelebration();
     }
@@ -801,14 +864,14 @@ function createBigCelebration() {
 
 /**
  * Create special celebration for new high score
- * @param {number} previousHighScore - The previous high score that was beaten
+ * @param {number} previousHighTypingCount - The previous high typing count that was beaten
  */
-function createNewHighScoreCelebration(previousHighScore) {
+function createNewHighScoreCelebration(previousHighTypingCount) {
     const container = document.getElementById('celebrationContainer');
     const colors = ['#ffd700', '#ff6b6b', '#ff9800', '#ffeb3b', '#ff5722', '#e91e63'];
     
     // Show the new high score banner
-    showNewHighScoreBanner(previousHighScore);
+    showNewHighScoreBanner(previousHighTypingCount);
     
     // Extra confetti for new high score (more than regular celebration)
     for (let i = 0; i < 100; i++) {
@@ -858,9 +921,9 @@ function createNewHighScoreCelebration(previousHighScore) {
 
 /**
  * Show the new high score banner with animation
- * @param {number} previousHighScore - The previous high score
+ * @param {number} previousHighTypingCount - The previous high typing count
  */
-function showNewHighScoreBanner(previousHighScore) {
+function showNewHighScoreBanner(previousHighTypingCount) {
     const container = document.getElementById('celebrationContainer');
     
     // Create the banner element
@@ -868,8 +931,8 @@ function showNewHighScoreBanner(previousHighScore) {
     banner.className = 'new-high-score-banner';
     banner.innerHTML = `
         <div class="new-record-title">🏆 新纪录！🏆</div>
-        <div class="new-record-score">${gameState.score} 分</div>
-        <div class="new-record-diff">超越了之前的记录 ${previousHighScore} 分！</div>
+        <div class="new-record-score">${gameState.correctWords} 个单词</div>
+        <div class="new-record-diff">超越了之前的记录 ${previousHighTypingCount} 个单词！</div>
         <div class="new-record-congrats">🎉 太厉害了！你是最棒的！🎉</div>
     `;
     
@@ -892,11 +955,11 @@ function showNewHighScoreBanner(previousHighScore) {
  */
 function updateHighScoreDisplay() {
     const highScoreDisplayElement = document.getElementById('highScoreDisplay');
-    const highScore = getHighScore();
+    const highTypingCount = getHighTypingCount();
     
     if (highScoreDisplayElement) {
-        if (highScore > 0) {
-            highScoreDisplayElement.textContent = `历史最高分：${highScore} 分`;
+        if (highTypingCount > 0) {
+            highScoreDisplayElement.textContent = `历史最高记录：${highTypingCount} 个单词`;
             highScoreDisplayElement.style.display = 'block';
         } else {
             highScoreDisplayElement.textContent = '还没有历史记录，快来挑战吧！';
@@ -1002,6 +1065,493 @@ function jumpToIndex() {
     }
 }
 
+/**
+ * Show game reward modal
+ */
+function showGameRewardModal() {
+    const modal = document.getElementById('gameRewardModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Skip reward game and close modal
+ */
+function skipRewardGame() {
+    const modal = document.getElementById('gameRewardModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Mini-game state
+ */
+let miniGameState = {
+    timeRemaining: 60,
+    timer: null,
+    currentGame: null
+};
+
+/**
+ * Play selected reward game
+ */
+function playRewardGame(gameType) {
+    // Hide the modal
+    const modal = document.getElementById('gameRewardModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    
+    // Show mini-game container
+    const container = document.getElementById('miniGameContainer');
+    if (container) {
+        container.classList.remove('hidden');
+    }
+    
+    // Set game title
+    const titles = {
+        memory: '🧠 记忆翻牌',
+        whackamole: '🔨 打地鼠',
+        snake: '🐍 贪吃蛇',
+        catch: '🎯 接水果',
+        bubble: '🫧 泡泡龙',
+        maze: '🧩 走迷宫',
+        match3: '💎 消消乐',
+        jump: '🦘 跳跃游戏',
+        puzzle: '🧩 拼图游戏',
+        breakout: '🎮 打砖块'
+    };
+    
+    const titleElement = document.getElementById('miniGameTitle');
+    if (titleElement) {
+        titleElement.textContent = titles[gameType] || '游戏时间';
+    }
+    
+    // Initialize game
+    miniGameState.currentGame = gameType;
+    miniGameState.timeRemaining = 60;
+    startMiniGameTimer();
+    loadMiniGame(gameType);
+}
+
+/**
+ * Start mini-game timer
+ */
+function startMiniGameTimer() {
+    updateMiniGameTimer();
+    
+    miniGameState.timer = setInterval(() => {
+        miniGameState.timeRemaining--;
+        updateMiniGameTimer();
+        
+        if (miniGameState.timeRemaining <= 0) {
+            exitMiniGame();
+        }
+    }, 1000);
+}
+
+/**
+ * Update mini-game timer display
+ */
+function updateMiniGameTimer() {
+    const timerElement = document.getElementById('miniGameTimer');
+    if (timerElement) {
+        timerElement.textContent = miniGameState.timeRemaining;
+    }
+}
+
+/**
+ * Exit mini-game
+ */
+function exitMiniGame() {
+    // Stop timer
+    if (miniGameState.timer) {
+        clearInterval(miniGameState.timer);
+        miniGameState.timer = null;
+    }
+    
+    // Hide container
+    const container = document.getElementById('miniGameContainer');
+    if (container) {
+        container.classList.add('hidden');
+    }
+    
+    // Clean up game
+    const canvas = document.getElementById('miniGameCanvas');
+    if (canvas) {
+        canvas.innerHTML = '';
+    }
+    
+    miniGameState.currentGame = null;
+}
+
+/**
+ * Load and initialize the selected mini-game
+ */
+function loadMiniGame(gameType) {
+    const canvas = document.getElementById('miniGameCanvas');
+    if (!canvas) return;
+    
+    // Clear previous content
+    canvas.innerHTML = '';
+    
+    // Load the appropriate game
+    switch(gameType) {
+        case 'memory':
+            initMemoryGame(canvas);
+            break;
+        case 'whackamole':
+            initWhackAMoleGame(canvas);
+            break;
+        case 'snake':
+            initSnakeGame(canvas);
+            break;
+        case 'catch':
+            initCatchGame(canvas);
+            break;
+        case 'bubble':
+            initBubbleGame(canvas);
+            break;
+        case 'maze':
+            initMazeGame(canvas);
+            break;
+        case 'match3':
+            initMatch3Game(canvas);
+            break;
+        case 'jump':
+            initJumpGame(canvas);
+            break;
+        case 'puzzle':
+            initPuzzleGame(canvas);
+            break;
+        case 'breakout':
+            initBreakoutGame(canvas);
+            break;
+        default:
+            canvas.innerHTML = '<p style="color: #666;">游戏加载中...</p>';
+    }
+}
+
+/**
+ * Memory Card Game
+ */
+function initMemoryGame(container) {
+    const emojis = ['🐱', '🐶', '🐼', '🦊', '🐸', '🐰', '🦁', '🐯'];
+    const cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    
+    let flippedCards = [];
+    let matchedPairs = 0;
+    
+    const gameBoard = document.createElement('div');
+    gameBoard.style.cssText = 'display: grid; grid-template-columns: repeat(4, 100px); gap: 10px;';
+    
+    cards.forEach((emoji, index) => {
+        const card = document.createElement('div');
+        card.style.cssText = `
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        `;
+        card.dataset.emoji = emoji;
+        card.dataset.index = index;
+        
+        card.addEventListener('click', () => {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.textContent = emoji;
+                card.classList.add('flipped');
+                flippedCards.push({ card, emoji, index });
+                
+                if (flippedCards.length === 2) {
+                    setTimeout(() => {
+                        if (flippedCards[0].emoji === flippedCards[1].emoji) {
+                            matchedPairs++;
+                            if (matchedPairs === emojis.length) {
+                                setTimeout(() => {
+                                    alert('🎉 恭喜完成！');
+                                }, 300);
+                            }
+                        } else {
+                            flippedCards.forEach(item => {
+                                item.card.textContent = '';
+                                item.card.classList.remove('flipped');
+                            });
+                        }
+                        flippedCards = [];
+                    }, 500);
+                }
+            }
+        });
+        
+        gameBoard.appendChild(card);
+    });
+    
+    container.appendChild(gameBoard);
+}
+
+/**
+ * Whack-a-Mole Game
+ */
+function initWhackAMoleGame(container) {
+    let score = 0;
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    const gameBoard = document.createElement('div');
+    gameBoard.style.cssText = 'display: grid; grid-template-columns: repeat(3, 120px); gap: 15px;';
+    
+    const holes = [];
+    for (let i = 0; i < 9; i++) {
+        const hole = document.createElement('div');
+        hole.style.cssText = `
+            width: 120px;
+            height: 120px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            cursor: pointer;
+            border: 3px solid #ddd;
+        `;
+        
+        hole.addEventListener('click', () => {
+            if (hole.textContent === '🦫') {
+                hole.textContent = '💥';
+                score++;
+                scoreDisplay.textContent = `得分: ${score}`;
+                setTimeout(() => {
+                    hole.textContent = '';
+                }, 300);
+            }
+        });
+        
+        holes.push(hole);
+        gameBoard.appendChild(hole);
+    }
+    
+    // Randomly show moles
+    const moleInterval = setInterval(() => {
+        if (miniGameState.timeRemaining <= 0) {
+            clearInterval(moleInterval);
+            return;
+        }
+        
+        const emptyHoles = holes.filter(h => h.textContent === '');
+        if (emptyHoles.length > 0) {
+            const randomHole = emptyHoles[Math.floor(Math.random() * emptyHoles.length)];
+            randomHole.textContent = '🦫';
+            setTimeout(() => {
+                if (randomHole.textContent === '🦫') {
+                    randomHole.textContent = '';
+                }
+            }, 1000);
+        }
+    }, 800);
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(gameBoard);
+}
+
+/**
+ * Snake Game (Simplified)
+ */
+function initSnakeGame(container) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    const gridSize = 20;
+    let snake = [{x: 10, y: 10}];
+    let food = {x: 15, y: 15};
+    let direction = {x: 1, y: 0};
+    let score = 0;
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    document.addEventListener('keydown', (e) => {
+        if (!miniGameState.currentGame) return;
+        
+        switch(e.key) {
+            case 'ArrowUp': if (direction.y === 0) direction = {x: 0, y: -1}; break;
+            case 'ArrowDown': if (direction.y === 0) direction = {x: 0, y: 1}; break;
+            case 'ArrowLeft': if (direction.x === 0) direction = {x: -1, y: 0}; break;
+            case 'ArrowRight': if (direction.x === 0) direction = {x: 1, y: 0}; break;
+        }
+    });
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
+        
+        // Move snake
+        const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+        
+        // Check collision with walls
+        if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
+            alert('游戏结束！得分: ' + score);
+            return;
+        }
+        
+        // Check collision with self
+        if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+            alert('游戏结束！得分: ' + score);
+            return;
+        }
+        
+        snake.unshift(head);
+        
+        // Check if ate food
+        if (head.x === food.x && head.y === food.y) {
+            score++;
+            scoreDisplay.textContent = `得分: ${score}`;
+            food = {
+                x: Math.floor(Math.random() * 20),
+                y: Math.floor(Math.random() * 20)
+            };
+        } else {
+            snake.pop();
+        }
+        
+        // Draw
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw snake
+        ctx.fillStyle = '#667eea';
+        snake.forEach(segment => {
+            ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+        });
+        
+        // Draw food
+        ctx.fillStyle = '#ff6b6b';
+        ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+        
+        setTimeout(gameLoop, 150);
+    }
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(canvas);
+    gameLoop();
+}
+
+/**
+ * Catch Game (Catch falling fruits)
+ */
+function initCatchGame(container) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    let basketX = 175;
+    let score = 0;
+    let fruits = [];
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    const fruitEmojis = ['🍎', '🍊', '🍋', '🍌', '🍇', '🍓'];
+    
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        basketX = e.clientX - rect.left - 25;
+    });
+    
+    function spawnFruit() {
+        if (miniGameState.timeRemaining <= 0) return;
+        fruits.push({
+            x: Math.random() * 350,
+            y: 0,
+            emoji: fruitEmojis[Math.floor(Math.random() * fruitEmojis.length)]
+        });
+    }
+    
+    const spawnInterval = setInterval(spawnFruit, 1000);
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) {
+            clearInterval(spawnInterval);
+            return;
+        }
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update and draw fruits
+        fruits = fruits.filter(fruit => {
+            fruit.y += 3;
+            
+            // Check if caught
+            if (fruit.y >= 350 && fruit.x >= basketX && fruit.x <= basketX + 50) {
+                score++;
+                scoreDisplay.textContent = `得分: ${score}`;
+                return false;
+            }
+            
+            // Remove if fell off screen
+            if (fruit.y > 400) return false;
+            
+            // Draw fruit
+            ctx.font = '30px Arial';
+            ctx.fillText(fruit.emoji, fruit.x, fruit.y);
+            return true;
+        });
+        
+        // Draw basket
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(basketX, 370, 50, 10);
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(canvas);
+    gameLoop();
+}
+
+/**
+ * Placeholder for other games
+ */
+function initBubbleGame(container) {
+    container.innerHTML = '<div style="font-size: 48px;">🫧</div><p style="color: #667eea; font-size: 18px;">泡泡龙游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
+function initMazeGame(container) {
+    container.innerHTML = '<div style="font-size: 48px;">🧩</div><p style="color: #667eea; font-size: 18px;">走迷宫游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
+function initMatch3Game(container) {
+    container.innerHTML = '<div style="font-size: 48px;">💎</div><p style="color: #667eea; font-size: 18px;">消消乐游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
+function initJumpGame(container) {
+    container.innerHTML = '<div style="font-size: 48px;">🦘</div><p style="color: #667eea; font-size: 18px;">跳跃游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
+function initPuzzleGame(container) {
+    container.innerHTML = '<div style="font-size: 48px;">🧩</div><p style="color: #667eea; font-size: 18px;">拼图游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
+function initBreakoutGame(container) {
+    container.innerHTML = '<div style="font-size: 48px;">🎮</div><p style="color: #667eea; font-size: 18px;">打砖块游戏</p><p style="color: #666;">敬请期待！</p>';
+}
+
 // Export functions for testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -1010,13 +1560,18 @@ if (typeof module !== 'undefined' && module.exports) {
         encouragingMessages,
         selectDifficulty,
         selectCategory,
+        selectHintMode,
         initializeGame,
         startGame,
         handleCorrectAnswer,
         skipWord,
         updateStats,
         getHighScore,
+        getHighTypingCount,
         checkNewHighScore,
-        updateHighScoreDisplay
+        updateHighScoreDisplay,
+        showGameRewardModal,
+        playRewardGame,
+        exitMiniGame
     };
 }

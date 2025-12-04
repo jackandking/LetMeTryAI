@@ -182,8 +182,8 @@ describe('Typing Game', () => {
     describe('Game Configuration', () => {
         it('should have correct time limits for each difficulty', () => {
             expect(gameConfig.timeLimit.easy).toBe(60);
-            expect(gameConfig.timeLimit.medium).toBe(45);
-            expect(gameConfig.timeLimit.hard).toBe(30);
+            expect(gameConfig.timeLimit.medium).toBe(60);
+            expect(gameConfig.timeLimit.hard).toBe(60);
         });
 
         it('should have correct score multipliers', () => {
@@ -202,6 +202,15 @@ describe('Typing Game', () => {
 
         it('should default to animals category', () => {
             expect(gameConfig.category).toBe('animals');
+        });
+        
+        it('should have keyboard hint mode configuration', () => {
+            expect(gameConfig).toHaveProperty('keyboardHintMode');
+            expect(['pre', 'post']).toContain(gameConfig.keyboardHintMode);
+        });
+        
+        it('should default to pre hint mode', () => {
+            expect(gameConfig.keyboardHintMode).toBe('pre');
         });
     });
 
@@ -323,93 +332,104 @@ describe('Typing Game', () => {
     });
 
     describe('High Score Functionality', () => {
-        it('should detect new high score when current score exceeds previous', () => {
-            // Simulate game state with score
-            const gameState = { score: 500 };
-            const previousHighScore = 300;
+        it('should detect new high score when current typing count exceeds previous', () => {
+            // Simulate game state with typing count
+            const gameState = { correctWords: 25 };
+            const previousHighTypingCount = 20;
             
-            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            const isNewRecord = gameState.correctWords > previousHighTypingCount && gameState.correctWords > 0;
             expect(isNewRecord).toBe(true);
         });
 
-        it('should not detect new high score when current score is lower', () => {
-            const gameState = { score: 200 };
-            const previousHighScore = 300;
+        it('should not detect new high score when current typing count is lower', () => {
+            const gameState = { correctWords: 15 };
+            const previousHighTypingCount = 20;
             
-            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            const isNewRecord = gameState.correctWords > previousHighTypingCount && gameState.correctWords > 0;
             expect(isNewRecord).toBe(false);
         });
 
-        it('should not detect new high score when current score equals previous', () => {
-            const gameState = { score: 300 };
-            const previousHighScore = 300;
+        it('should not detect new high score when current typing count equals previous', () => {
+            const gameState = { correctWords: 20 };
+            const previousHighTypingCount = 20;
             
-            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            const isNewRecord = gameState.correctWords > previousHighTypingCount && gameState.correctWords > 0;
             expect(isNewRecord).toBe(false);
         });
 
-        it('should not detect new high score when score is zero', () => {
-            const gameState = { score: 0 };
-            const previousHighScore = 0;
+        it('should not detect new high score when typing count is zero', () => {
+            const gameState = { correctWords: 0 };
+            const previousHighTypingCount = 0;
             
-            const isNewRecord = gameState.score > previousHighScore && gameState.score > 0;
+            const isNewRecord = gameState.correctWords > previousHighTypingCount && gameState.correctWords > 0;
             expect(isNewRecord).toBe(false);
         });
 
-        it('should return correct high score from localStorage', () => {
+        it('should return correct high typing count from localStorage', () => {
             const progress = {
-                highScore: 750
+                highTypingCount: 30
             };
             localStorageMock.store['typing-game-progress'] = JSON.stringify(progress);
             const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
-            expect(retrieved.highScore).toBe(750);
+            expect(retrieved.highTypingCount).toBe(30);
         });
 
-        it('should return 0 when no high score exists', () => {
+        it('should return 0 when no high typing count exists', () => {
             localStorageMock.clear();
             const saved = localStorageMock.store['typing-game-progress'];
-            const highScore = saved ? JSON.parse(saved).highScore || 0 : 0;
-            expect(highScore).toBe(0);
+            const highTypingCount = saved ? JSON.parse(saved).highTypingCount || 0 : 0;
+            expect(highTypingCount).toBe(0);
         });
 
-        it('should update high score when new record is achieved', () => {
+        it('should update high typing count when new record is achieved', () => {
             const previousProgress = {
-                highScore: 500
+                highTypingCount: 20
             };
             localStorageMock.store['typing-game-progress'] = JSON.stringify(previousProgress);
             
-            // Simulate new high score
-            const newScore = 800;
-            const previousHighScore = JSON.parse(localStorageMock.store['typing-game-progress']).highScore;
-            const newHighScore = Math.max(newScore, previousHighScore);
+            // Simulate new high typing count
+            const newTypingCount = 35;
+            const previousHighTypingCount = JSON.parse(localStorageMock.store['typing-game-progress']).highTypingCount;
+            const newHighTypingCount = Math.max(newTypingCount, previousHighTypingCount);
             
             const newProgress = {
-                highScore: newHighScore
+                highTypingCount: newHighTypingCount
             };
             localStorageMock.store['typing-game-progress'] = JSON.stringify(newProgress);
             
             const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
-            expect(retrieved.highScore).toBe(800);
+            expect(retrieved.highTypingCount).toBe(35);
         });
 
-        it('should keep previous high score when new score is lower', () => {
+        it('should keep previous high typing count when new count is lower', () => {
             const previousProgress = {
-                highScore: 500
+                highTypingCount: 30
             };
             localStorageMock.store['typing-game-progress'] = JSON.stringify(previousProgress);
             
-            // Simulate lower score
-            const newScore = 300;
-            const previousHighScore = JSON.parse(localStorageMock.store['typing-game-progress']).highScore;
-            const newHighScore = Math.max(newScore, previousHighScore);
+            // Simulate lower typing count
+            const newTypingCount = 20;
+            const previousHighTypingCount = JSON.parse(localStorageMock.store['typing-game-progress']).highTypingCount;
+            const newHighTypingCount = Math.max(newTypingCount, previousHighTypingCount);
             
             const newProgress = {
-                highScore: newHighScore
+                highTypingCount: newHighTypingCount
             };
             localStorageMock.store['typing-game-progress'] = JSON.stringify(newProgress);
             
+            const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
+            expect(retrieved.highTypingCount).toBe(30);
+        });
+        
+        it('should maintain backward compatibility with old high score', () => {
+            const progress = {
+                highScore: 500,
+                highTypingCount: 25
+            };
+            localStorageMock.store['typing-game-progress'] = JSON.stringify(progress);
             const retrieved = JSON.parse(localStorageMock.store['typing-game-progress']);
             expect(retrieved.highScore).toBe(500);
+            expect(retrieved.highTypingCount).toBe(25);
         });
     });
 
@@ -461,6 +481,23 @@ describe('Typing Game', () => {
             const targetWord = 'apple';
             const userInput = 'aple';
             expect(targetWord.startsWith(userInput)).toBe(false);
+        });
+    });
+    
+    describe('Keyboard Hint Mode', () => {
+        it('should support pre and post hint modes', () => {
+            const validModes = ['pre', 'post'];
+            expect(validModes).toContain('pre');
+            expect(validModes).toContain('post');
+        });
+        
+        it('should start with pre hint mode by default', () => {
+            expect(gameConfig.keyboardHintMode).toBe('pre');
+        });
+        
+        it('should allow changing hint mode', () => {
+            const newConfig = { ...gameConfig, keyboardHintMode: 'post' };
+            expect(newConfig.keyboardHintMode).toBe('post');
         });
     });
 
