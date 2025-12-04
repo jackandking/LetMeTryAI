@@ -62,11 +62,11 @@
                         </button>
                         <button class="difficulty-btn" data-difficulty="medium" onclick="selectDifficulty('medium')">
                             ⭐⭐ 中等
-                            <span class="difficulty-desc">更多单词，45秒</span>
+                            <span class="difficulty-desc">更多单词，60秒</span>
                         </button>
                         <button class="difficulty-btn" data-difficulty="hard" onclick="selectDifficulty('hard')">
                             ⭐⭐⭐ 困难
-                            <span class="difficulty-desc">挑战单词，30秒</span>
+                            <span class="difficulty-desc">挑战单词，60秒</span>
                         </button>
                     </div>
                 </div>
@@ -91,6 +91,20 @@
                         </button>
                         <button class="category-btn" data-category="daily" onclick="selectCategory('daily')">
                             📅 日常
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="keyboard-hint-selector">
+                    <h3>键盘提示模式</h3>
+                    <div class="hint-mode-options">
+                        <button class="hint-mode-btn active" data-mode="pre" onclick="selectHintMode('pre')">
+                            ⌨️ 提前提示
+                            <span class="hint-mode-desc">提前显示按键位置</span>
+                        </button>
+                        <button class="hint-mode-btn" data-mode="post" onclick="selectHintMode('post')">
+                            🔍 按键后提示
+                            <span class="hint-mode-desc">按键后才显示位置</span>
                         </button>
                     </div>
                 </div>
@@ -182,6 +196,7 @@
                         <span class="result-icon">👑</span>
                         <span class="result-label">历史最高</span>
                         <span class="result-value" id="highScore">0</span>
+                        <span class="result-unit">个单词</span>
                     </div>
                 </div>
                 
@@ -216,6 +231,65 @@
     
     <!-- Celebration effects container -->
     <div class="celebration-container" id="celebrationContainer"></div>
+    
+    <!-- Game Reward Modal -->
+    <div class="game-reward-modal hidden" id="gameRewardModal">
+        <div class="game-reward-content">
+            <h2>🎉 恭喜打破记录！🎉</h2>
+            <p>你获得了1分钟游戏奖励！选择一个游戏来玩吧！</p>
+            <div class="game-selection">
+                <button class="game-btn" onclick="playRewardGame('memory')">
+                    🧠 记忆翻牌
+                </button>
+                <button class="game-btn" onclick="playRewardGame('whackamole')">
+                    🔨 打地鼠
+                </button>
+                <button class="game-btn" onclick="playRewardGame('snake')">
+                    🐍 贪吃蛇
+                </button>
+                <button class="game-btn" onclick="playRewardGame('catch')">
+                    🎯 接水果
+                </button>
+                <button class="game-btn" onclick="playRewardGame('bubble')">
+                    🫧 泡泡龙
+                </button>
+                <button class="game-btn" onclick="playRewardGame('maze')">
+                    🧩 走迷宫
+                </button>
+                <button class="game-btn" onclick="playRewardGame('match3')">
+                    💎 消消乐
+                </button>
+                <button class="game-btn" onclick="playRewardGame('jump')">
+                    🦘 跳跃游戏
+                </button>
+                <button class="game-btn" onclick="playRewardGame('puzzle')">
+                    🧩 拼图游戏
+                </button>
+                <button class="game-btn" onclick="playRewardGame('breakout')">
+                    🎮 打砖块
+                </button>
+            </div>
+            <button class="skip-game-btn" onclick="skipRewardGame()">
+                跳过奖励游戏
+            </button>
+        </div>
+    </div>
+
+    <!-- Mini Game Container -->
+    <div class="mini-game-container hidden" id="miniGameContainer">
+        <div class="mini-game-header">
+            <h3 id="miniGameTitle">游戏时间</h3>
+            <div class="mini-game-timer">
+                剩余时间: <span id="miniGameTimer">60</span> 秒
+            </div>
+        </div>
+        <div class="mini-game-canvas" id="miniGameCanvas">
+            <!-- Game content will be injected here -->
+        </div>
+        <button class="mini-game-exit" onclick="exitMiniGame()">
+            退出游戏
+        </button>
+    </div>
 
     <script>
         // Initialize the game when the page loads
