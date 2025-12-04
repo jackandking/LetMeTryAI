@@ -682,7 +682,7 @@ describe('Admin Page - Search History', () => {
     });
 
     it('should use pop to remove oldest item when limit is exceeded', () => {
-      const searchHistory = ['item1', 'item2', 'item3'];
+      const searchHistory = ['item3', 'item2', 'item1'];
       const maxHistorySize = 3;
       
       // Add a new item that will exceed the limit
@@ -696,7 +696,7 @@ describe('Admin Page - Search History', () => {
       }
       
       expect(searchHistory.length).toBe(3);
-      expect(searchHistory).toEqual(['new_item', 'item1', 'item2']);
+      expect(searchHistory).toEqual(['new_item', 'item3', 'item2']);
     });
   });
 
