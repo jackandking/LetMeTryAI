@@ -1533,27 +1533,865 @@ function initCatchGame(container) {
  * Placeholder for other games
  */
 function initBubbleGame(container) {
-    container.innerHTML = '<div style="font-size: 48px;">🫧</div><p style="color: #667eea; font-size: 18px;">泡泡龙游戏</p><p style="color: #666;">敬请期待！</p>';
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    const bubbleColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
+    let score = 0;
+    let bubbles = [];
+    let shooter = { x: 200, y: 380, angle: -90 };
+    let currentBubble = { color: bubbleColors[Math.floor(Math.random() * bubbleColors.length)] };
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    // Initialize bubbles
+    for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 10; col++) {
+            bubbles.push({
+                x: col * 40 + 20,
+                y: row * 40 + 20,
+                color: bubbleColors[Math.floor(Math.random() * bubbleColors.length)],
+                radius: 18
+            });
+        }
+    }
+    
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        shooter.angle = Math.atan2(mouseY - shooter.y, mouseX - shooter.x) * 180 / Math.PI;
+    });
+    
+    canvas.addEventListener('click', () => {
+        shootBubble();
+    });
+    
+    function shootBubble() {
+        const speed = 5;
+        const radians = shooter.angle * Math.PI / 180;
+        let bubbleX = shooter.x;
+        let bubbleY = shooter.y;
+        const dx = Math.cos(radians) * speed;
+        const dy = Math.sin(radians) * speed;
+        
+        const interval = setInterval(() => {
+            if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) {
+                clearInterval(interval);
+                return;
+            }
+            
+            bubbleX += dx;
+            bubbleY += dy;
+            
+            // Wall collision
+            if (bubbleX <= 18 || bubbleX >= 382) {
+                bubbleX = bubbleX <= 18 ? 18 : 382;
+            }
+            
+            // Check collision with other bubbles
+            let collided = false;
+            for (let bubble of bubbles) {
+                const dist = Math.sqrt((bubbleX - bubble.x) ** 2 + (bubbleY - bubble.y) ** 2);
+                if (dist < 36) {
+                    bubbles.push({
+                        x: bubbleX,
+                        y: bubbleY,
+                        color: currentBubble.color,
+                        radius: 18
+                    });
+                    collided = true;
+                    break;
+                }
+            }
+            
+            // Top collision
+            if (bubbleY <= 18) {
+                bubbles.push({
+                    x: bubbleX,
+                    y: 18,
+                    color: currentBubble.color,
+                    radius: 18
+                });
+                collided = true;
+            }
+            
+            if (collided) {
+                clearInterval(interval);
+                checkMatches();
+                currentBubble = { color: bubbleColors[Math.floor(Math.random() * bubbleColors.length)] };
+            }
+        }, 20);
+    }
+    
+    function checkMatches() {
+        // Simple match check - remove bubbles of same color that are adjacent
+        const toRemove = new Set();
+        bubbles.forEach((bubble, i) => {
+            let matchCount = 0;
+            bubbles.forEach((other, j) => {
+                if (i !== j) {
+                    const dist = Math.sqrt((bubble.x - other.x) ** 2 + (bubble.y - other.y) ** 2);
+                    if (dist < 40 && bubble.color === other.color) {
+                        matchCount++;
+                        if (matchCount >= 2) {
+                            toRemove.add(i);
+                        }
+                    }
+                }
+            });
+        });
+        
+        if (toRemove.size > 0) {
+            score += toRemove.size * 10;
+            scoreDisplay.textContent = `得分: ${score}`;
+            bubbles = bubbles.filter((_, i) => !toRemove.has(i));
+        }
+    }
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw bubbles
+        bubbles.forEach(bubble => {
+            ctx.beginPath();
+            ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+            ctx.fillStyle = bubble.color;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        });
+        
+        // Draw shooter
+        ctx.save();
+        ctx.translate(shooter.x, shooter.y);
+        ctx.rotate(shooter.angle * Math.PI / 180);
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(0, -5, 30, 10);
+        ctx.restore();
+        
+        // Draw current bubble
+        ctx.beginPath();
+        ctx.arc(shooter.x, shooter.y, 18, 0, Math.PI * 2);
+        ctx.fillStyle = currentBubble.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(canvas);
+    gameLoop();
 }
 
 function initMazeGame(container) {
-    container.innerHTML = '<div style="font-size: 48px;">🧩</div><p style="color: #667eea; font-size: 18px;">走迷宫游戏</p><p style="color: #666;">敬请期待！</p>';
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    const cellSize = 20;
+    const gridSize = 20;
+    let player = { x: 0, y: 0 };
+    let goal = { x: gridSize - 1, y: gridSize - 1 };
+    let maze = [];
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = '使用方向键移动到黄色目标！';
+    
+    // Generate maze using simple random walk
+    function generateMaze() {
+        maze = Array(gridSize).fill().map(() => Array(gridSize).fill(1));
+        
+        // Simple path generation
+        let x = 0, y = 0;
+        maze[y][x] = 0;
+        
+        while (x < gridSize - 1 || y < gridSize - 1) {
+            const canGoRight = x < gridSize - 1;
+            const canGoDown = y < gridSize - 1;
+            
+            if (canGoRight && canGoDown) {
+                if (Math.random() > 0.5) {
+                    x++;
+                } else {
+                    y++;
+                }
+            } else if (canGoRight) {
+                x++;
+            } else if (canGoDown) {
+                y++;
+            }
+            
+            maze[y][x] = 0;
+            
+            // Add some random paths
+            if (Math.random() > 0.7) {
+                if (x > 0 && Math.random() > 0.5) maze[y][x-1] = 0;
+                if (y > 0 && Math.random() > 0.5) maze[y-1][x] = 0;
+            }
+        }
+        
+        // Ensure start and goal are open
+        maze[0][0] = 0;
+        maze[gridSize-1][gridSize-1] = 0;
+    }
+    
+    function movePlayer(dx, dy) {
+        const newX = player.x + dx;
+        const newY = player.y + dy;
+        
+        if (newX >= 0 && newX < gridSize && newY >= 0 && newY < gridSize) {
+            if (maze[newY][newX] === 0) {
+                player.x = newX;
+                player.y = newY;
+                
+                // Check if reached goal
+                if (player.x === goal.x && player.y === goal.y) {
+                    scoreDisplay.textContent = '🎉 恭喜通关！按任意键重新开始';
+                    setTimeout(() => {
+                        player = { x: 0, y: 0 };
+                        generateMaze();
+                    }, 2000);
+                }
+            }
+        }
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (!miniGameState.currentGame || miniGameState.currentGame !== 'maze') return;
+        
+        switch(e.key) {
+            case 'ArrowUp': movePlayer(0, -1); break;
+            case 'ArrowDown': movePlayer(0, 1); break;
+            case 'ArrowLeft': movePlayer(-1, 0); break;
+            case 'ArrowRight': movePlayer(1, 0); break;
+        }
+    });
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw maze
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                ctx.fillStyle = maze[y][x] === 1 ? '#333' : '#f0f0f0';
+                ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                ctx.strokeStyle = '#ddd';
+                ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            }
+        }
+        
+        // Draw goal
+        ctx.fillStyle = '#ffd700';
+        ctx.fillRect(goal.x * cellSize, goal.y * cellSize, cellSize, cellSize);
+        
+        // Draw player
+        ctx.fillStyle = '#667eea';
+        ctx.beginPath();
+        ctx.arc(player.x * cellSize + cellSize/2, player.y * cellSize + cellSize/2, cellSize/2 - 2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    generateMaze();
+    container.appendChild(scoreDisplay);
+    container.appendChild(canvas);
+    gameLoop();
 }
 
 function initMatch3Game(container) {
-    container.innerHTML = '<div style="font-size: 48px;">💎</div><p style="color: #667eea; font-size: 18px;">消消乐游戏</p><p style="color: #666;">敬请期待！</p>';
+    const gridSize = 8;
+    const gemTypes = ['💎', '💍', '🔮', '⭐', '💫', '✨'];
+    let score = 0;
+    let grid = [];
+    let selectedGem = null;
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    const gameBoard = document.createElement('div');
+    gameBoard.style.cssText = 'display: grid; grid-template-columns: repeat(8, 50px); gap: 5px;';
+    
+    // Initialize grid
+    function initializeGrid() {
+        grid = [];
+        for (let y = 0; y < gridSize; y++) {
+            grid[y] = [];
+            for (let x = 0; x < gridSize; x++) {
+                grid[y][x] = gemTypes[Math.floor(Math.random() * gemTypes.length)];
+            }
+        }
+        // Ensure no initial matches
+        removeInitialMatches();
+    }
+    
+    function removeInitialMatches() {
+        let hasMatches = true;
+        while (hasMatches) {
+            hasMatches = false;
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    if (checkMatch(x, y)) {
+                        grid[y][x] = gemTypes[Math.floor(Math.random() * gemTypes.length)];
+                        hasMatches = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    function checkMatch(x, y) {
+        const gem = grid[y][x];
+        // Check horizontal
+        if (x >= 2 && grid[y][x-1] === gem && grid[y][x-2] === gem) return true;
+        if (x <= gridSize-3 && grid[y][x+1] === gem && grid[y][x+2] === gem) return true;
+        if (x >= 1 && x <= gridSize-2 && grid[y][x-1] === gem && grid[y][x+1] === gem) return true;
+        // Check vertical
+        if (y >= 2 && grid[y-1][x] === gem && grid[y-2][x] === gem) return true;
+        if (y <= gridSize-3 && grid[y+1][x] === gem && grid[y+2][x] === gem) return true;
+        if (y >= 1 && y <= gridSize-2 && grid[y-1][x] === gem && grid[y+1][x] === gem) return true;
+        return false;
+    }
+    
+    function findMatches() {
+        const matches = [];
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                const gem = grid[y][x];
+                // Horizontal match
+                if (x <= gridSize - 3) {
+                    if (grid[y][x+1] === gem && grid[y][x+2] === gem) {
+                        let matchLen = 3;
+                        while (x + matchLen < gridSize && grid[y][x+matchLen] === gem) matchLen++;
+                        for (let i = 0; i < matchLen; i++) {
+                            if (!matches.some(m => m.x === x+i && m.y === y)) {
+                                matches.push({x: x+i, y});
+                            }
+                        }
+                    }
+                }
+                // Vertical match
+                if (y <= gridSize - 3) {
+                    if (grid[y+1][x] === gem && grid[y+2][x] === gem) {
+                        let matchLen = 3;
+                        while (y + matchLen < gridSize && grid[y+matchLen][x] === gem) matchLen++;
+                        for (let i = 0; i < matchLen; i++) {
+                            if (!matches.some(m => m.x === x && m.y === y+i)) {
+                                matches.push({x, y: y+i});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return matches;
+    }
+    
+    function removeMatches(matches) {
+        matches.forEach(m => {
+            grid[m.y][m.x] = null;
+        });
+        score += matches.length * 10;
+        scoreDisplay.textContent = `得分: ${score}`;
+    }
+    
+    function dropGems() {
+        for (let x = 0; x < gridSize; x++) {
+            let emptySpaces = 0;
+            for (let y = gridSize - 1; y >= 0; y--) {
+                if (grid[y][x] === null) {
+                    emptySpaces++;
+                } else if (emptySpaces > 0) {
+                    grid[y + emptySpaces][x] = grid[y][x];
+                    grid[y][x] = null;
+                }
+            }
+            // Fill empty spaces at top
+            for (let y = 0; y < emptySpaces; y++) {
+                grid[y][x] = gemTypes[Math.floor(Math.random() * gemTypes.length)];
+            }
+        }
+    }
+    
+    function renderGrid() {
+        gameBoard.innerHTML = '';
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                const cell = document.createElement('div');
+                cell.style.cssText = `
+                    width: 50px;
+                    height: 50px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 30px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                `;
+                cell.textContent = grid[y][x];
+                cell.dataset.x = x;
+                cell.dataset.y = y;
+                
+                if (selectedGem && selectedGem.x === x && selectedGem.y === y) {
+                    cell.style.transform = 'scale(1.1)';
+                    cell.style.boxShadow = '0 0 10px rgba(255,215,0,0.8)';
+                }
+                
+                cell.addEventListener('click', () => selectGem(x, y, cell));
+                gameBoard.appendChild(cell);
+            }
+        }
+    }
+    
+    function selectGem(x, y, cell) {
+        if (!selectedGem) {
+            selectedGem = {x, y};
+            renderGrid();
+        } else {
+            const dx = Math.abs(selectedGem.x - x);
+            const dy = Math.abs(selectedGem.y - y);
+            
+            // Check if adjacent
+            if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
+                // Swap gems
+                const temp = grid[selectedGem.y][selectedGem.x];
+                grid[selectedGem.y][selectedGem.x] = grid[y][x];
+                grid[y][x] = temp;
+                
+                selectedGem = null;
+                renderGrid();
+                
+                // Check for matches after swap
+                setTimeout(() => {
+                    let matches = findMatches();
+                    if (matches.length > 0) {
+                        processMatches();
+                    } else {
+                        // Swap back if no match
+                        const temp2 = grid[y][x];
+                        grid[y][x] = grid[selectedGem ? selectedGem.y : y][selectedGem ? selectedGem.x : x];
+                        if (selectedGem) grid[selectedGem.y][selectedGem.x] = temp2;
+                        renderGrid();
+                    }
+                }, 300);
+            } else {
+                selectedGem = {x, y};
+                renderGrid();
+            }
+        }
+    }
+    
+    function processMatches() {
+        const matches = findMatches();
+        if (matches.length > 0) {
+            removeMatches(matches);
+            setTimeout(() => {
+                dropGems();
+                renderGrid();
+                setTimeout(() => processMatches(), 300);
+            }, 300);
+        }
+    }
+    
+    initializeGrid();
+    renderGrid();
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(gameBoard);
 }
 
 function initJumpGame(container) {
-    container.innerHTML = '<div style="font-size: 48px;">🦘</div><p style="color: #667eea; font-size: 18px;">跳跃游戏</p><p style="color: #666;">敬请期待！</p>';
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    let score = 0;
+    let player = { x: 50, y: 300, vy: 0, isJumping: false };
+    let obstacles = [];
+    let gameSpeed = 3;
+    let frameCount = 0;
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    const instructions = document.createElement('div');
+    instructions.style.cssText = 'font-size: 16px; margin-bottom: 10px; color: #666;';
+    instructions.textContent = '按空格键跳跃！';
+    
+    document.addEventListener('keydown', (e) => {
+        if (!miniGameState.currentGame || miniGameState.currentGame !== 'jump') return;
+        
+        if (e.code === 'Space' && !player.isJumping) {
+            player.vy = -12;
+            player.isJumping = true;
+        }
+    });
+    
+    canvas.addEventListener('click', () => {
+        if (!player.isJumping) {
+            player.vy = -12;
+            player.isJumping = true;
+        }
+    });
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
+        
+        frameCount++;
+        
+        // Update player
+        player.vy += 0.5; // Gravity
+        player.y += player.vy;
+        
+        // Ground collision
+        if (player.y >= 300) {
+            player.y = 300;
+            player.vy = 0;
+            player.isJumping = false;
+        }
+        
+        // Spawn obstacles
+        if (frameCount % 60 === 0) {
+            obstacles.push({
+                x: 400,
+                y: 320,
+                width: 20,
+                height: Math.random() > 0.5 ? 40 : 60
+            });
+        }
+        
+        // Update obstacles
+        obstacles = obstacles.filter(obs => {
+            obs.x -= gameSpeed;
+            
+            // Check collision
+            if (obs.x < player.x + 30 && obs.x + obs.width > player.x &&
+                player.y + 30 > obs.y) {
+                scoreDisplay.textContent = `游戏结束！得分: ${score}`;
+                obstacles = [];
+                score = 0;
+                return false;
+            }
+            
+            // Remove off-screen obstacles and add score
+            if (obs.x + obs.width < 0) {
+                score++;
+                scoreDisplay.textContent = `得分: ${score}`;
+                return false;
+            }
+            
+            return true;
+        });
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw ground
+        ctx.fillStyle = '#96ceb4';
+        ctx.fillRect(0, 330, 400, 70);
+        
+        // Draw player
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(player.x, player.y, 30, 30);
+        
+        // Draw obstacles
+        ctx.fillStyle = '#ff6b6b';
+        obstacles.forEach(obs => {
+            ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+        });
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(instructions);
+    container.appendChild(canvas);
+    gameLoop();
 }
 
 function initPuzzleGame(container) {
-    container.innerHTML = '<div style="font-size: 48px;">🧩</div><p style="color: #667eea; font-size: 18px;">拼图游戏</p><p style="color: #666;">敬请期待！</p>';
+    const gridSize = 3;
+    const cellSize = 120;
+    let tiles = [];
+    let emptyPos = { x: 2, y: 2 };
+    let moves = 0;
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `移动次数: ${moves}`;
+    
+    const gameBoard = document.createElement('div');
+    gameBoard.style.cssText = 'display: grid; grid-template-columns: repeat(3, 120px); gap: 5px; background: #f0f0f0; padding: 10px; border-radius: 10px;';
+    
+    // Initialize puzzle
+    function initPuzzle() {
+        tiles = [];
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                const num = y * gridSize + x + 1;
+                if (num < gridSize * gridSize) {
+                    tiles.push({ num, x, y });
+                }
+            }
+        }
+        
+        // Shuffle
+        for (let i = 0; i < 100; i++) {
+            const validMoves = getValidMoves();
+            const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+            moveTile(randomMove.x, randomMove.y, false);
+        }
+        
+        moves = 0;
+        scoreDisplay.textContent = `移动次数: ${moves}`;
+    }
+    
+    function getValidMoves() {
+        const valid = [];
+        const dirs = [{x:0,y:-1}, {x:0,y:1}, {x:-1,y:0}, {x:1,y:0}];
+        
+        dirs.forEach(dir => {
+            const newX = emptyPos.x + dir.x;
+            const newY = emptyPos.y + dir.y;
+            if (newX >= 0 && newX < gridSize && newY >= 0 && newY < gridSize) {
+                valid.push({ x: newX, y: newY });
+            }
+        });
+        
+        return valid;
+    }
+    
+    function moveTile(x, y, countMove = true) {
+        const tile = tiles.find(t => t.x === x && t.y === y);
+        if (!tile) return;
+        
+        // Check if adjacent to empty space
+        const dx = Math.abs(tile.x - emptyPos.x);
+        const dy = Math.abs(tile.y - emptyPos.y);
+        
+        if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
+            // Swap with empty
+            const oldEmpty = { ...emptyPos };
+            emptyPos.x = tile.x;
+            emptyPos.y = tile.y;
+            tile.x = oldEmpty.x;
+            tile.y = oldEmpty.y;
+            
+            if (countMove) {
+                moves++;
+                scoreDisplay.textContent = `移动次数: ${moves}`;
+            }
+            
+            renderPuzzle();
+            checkWin();
+        }
+    }
+    
+    function checkWin() {
+        let solved = true;
+        tiles.forEach(tile => {
+            const expectedX = (tile.num - 1) % gridSize;
+            const expectedY = Math.floor((tile.num - 1) / gridSize);
+            if (tile.x !== expectedX || tile.y !== expectedY) {
+                solved = false;
+            }
+        });
+        
+        if (solved && emptyPos.x === 2 && emptyPos.y === 2) {
+            setTimeout(() => {
+                scoreDisplay.textContent = `🎉 完成！用了 ${moves} 步！`;
+            }, 100);
+        }
+    }
+    
+    function renderPuzzle() {
+        gameBoard.innerHTML = '';
+        
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                const tile = tiles.find(t => t.x === x && t.y === y);
+                const cell = document.createElement('div');
+                cell.style.cssText = `
+                    width: 120px;
+                    height: 120px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 48px;
+                    font-weight: bold;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                `;
+                
+                if (tile) {
+                    cell.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    cell.style.color = 'white';
+                    cell.textContent = tile.num;
+                    cell.addEventListener('click', () => moveTile(x, y));
+                } else {
+                    cell.style.background = 'transparent';
+                }
+                
+                gameBoard.appendChild(cell);
+            }
+        }
+    }
+    
+    initPuzzle();
+    renderPuzzle();
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(gameBoard);
 }
 
 function initBreakoutGame(container) {
-    container.innerHTML = '<div style="font-size: 48px;">🎮</div><p style="color: #667eea; font-size: 18px;">打砖块游戏</p><p style="color: #666;">敬请期待！</p>';
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    canvas.style.border = '2px solid #667eea';
+    canvas.style.borderRadius = '10px';
+    const ctx = canvas.getContext('2d');
+    
+    let score = 0;
+    let paddle = { x: 160, y: 370, width: 80, height: 10 };
+    let ball = { x: 200, y: 200, dx: 3, dy: -3, radius: 8 };
+    let bricks = [];
+    
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
+    scoreDisplay.textContent = `得分: ${score}`;
+    
+    // Initialize bricks
+    const brickRowCount = 5;
+    const brickColumnCount = 8;
+    const brickWidth = 45;
+    const brickHeight = 20;
+    const brickPadding = 5;
+    const brickOffsetTop = 30;
+    const brickOffsetLeft = 10;
+    
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks.push({
+                x: (c * (brickWidth + brickPadding)) + brickOffsetLeft,
+                y: (r * (brickHeight + brickPadding)) + brickOffsetTop,
+                status: 1,
+                color: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'][r % 5]
+            });
+        }
+    }
+    
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        paddle.x = Math.max(0, Math.min(mouseX - paddle.width / 2, canvas.width - paddle.width));
+    });
+    
+    function gameLoop() {
+        if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update ball
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+        
+        // Wall collision
+        if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
+            ball.dx = -ball.dx;
+        }
+        if (ball.y + ball.dy < ball.radius) {
+            ball.dy = -ball.dy;
+        }
+        
+        // Paddle collision
+        if (ball.y + ball.dy > paddle.y - ball.radius && 
+            ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+            ball.dy = -ball.dy;
+        }
+        
+        // Bottom collision (game over)
+        if (ball.y + ball.dy > canvas.height - ball.radius) {
+            ball.x = 200;
+            ball.y = 200;
+            ball.dx = 3;
+            ball.dy = -3;
+        }
+        
+        // Brick collision
+        bricks.forEach(brick => {
+            if (brick.status === 1) {
+                if (ball.x > brick.x && ball.x < brick.x + brickWidth &&
+                    ball.y > brick.y && ball.y < brick.y + brickHeight) {
+                    ball.dy = -ball.dy;
+                    brick.status = 0;
+                    score += 10;
+                    scoreDisplay.textContent = `得分: ${score}`;
+                }
+            }
+        });
+        
+        // Draw bricks
+        bricks.forEach(brick => {
+            if (brick.status === 1) {
+                ctx.fillStyle = brick.color;
+                ctx.fillRect(brick.x, brick.y, brickWidth, brickHeight);
+                ctx.strokeStyle = '#fff';
+                ctx.strokeRect(brick.x, brick.y, brickWidth, brickHeight);
+            }
+        });
+        
+        // Draw paddle
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+        
+        // Draw ball
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff6b6b';
+        ctx.fill();
+        ctx.closePath();
+        
+        // Check win
+        if (bricks.every(b => b.status === 0)) {
+            scoreDisplay.textContent = `🎉 恭喜通关！得分: ${score}`;
+            ball.dx = 0;
+            ball.dy = 0;
+        }
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    container.appendChild(scoreDisplay);
+    container.appendChild(canvas);
+    gameLoop();
 }
 
 // Export functions for testing
