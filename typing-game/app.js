@@ -735,8 +735,8 @@ function endGame() {
         clearInterval(gameState.timer);
     }
     
-    // Save progress
-    saveProgress();
+    // Note: saveProgress() is now called in showResultScreen() after checking for new high score
+    // This ensures we can properly detect new records before saving
     
     // Show result screen
     showResultScreen();
@@ -762,6 +762,10 @@ function showResultScreen() {
     const highScoreResult = checkNewHighScore();
     const newRecord = highScoreResult.isNew;
     const previousHighTypingCount = highScoreResult.previousHighTypingCount;
+    
+    // Now save progress AFTER checking for new record
+    // This ensures the comparison happens with the old record value
+    saveProgress();
     
     // Update result stats
     document.getElementById('finalScore').textContent = gameState.score;
