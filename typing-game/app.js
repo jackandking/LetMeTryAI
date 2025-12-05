@@ -1590,9 +1590,18 @@ function initBubbleGame(container) {
             bubbleX += dx;
             bubbleY += dy;
             
-            // Wall collision
+            // Wall collision - bubble sticks to wall
             if (bubbleX <= 18 || bubbleX >= 382) {
-                bubbleX = bubbleX <= 18 ? 18 : 382;
+                bubbles.push({
+                    x: bubbleX <= 18 ? 18 : 382,
+                    y: bubbleY,
+                    color: currentBubble.color,
+                    radius: 18
+                });
+                clearInterval(interval);
+                checkMatches();
+                currentBubble = { color: bubbleColors[Math.floor(Math.random() * bubbleColors.length)] };
+                return;
             }
             
             // Check collision with other bubbles
@@ -1977,6 +1986,7 @@ function initMatch3Game(container) {
             if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
                 // Swap gems
                 const temp = grid[selectedGem.y][selectedGem.x];
+                const oldSelected = { ...selectedGem };
                 grid[selectedGem.y][selectedGem.x] = grid[y][x];
                 grid[y][x] = temp;
                 
@@ -1991,8 +2001,8 @@ function initMatch3Game(container) {
                     } else {
                         // Swap back if no match
                         const temp2 = grid[y][x];
-                        grid[y][x] = grid[selectedGem ? selectedGem.y : y][selectedGem ? selectedGem.x : x];
-                        if (selectedGem) grid[selectedGem.y][selectedGem.x] = temp2;
+                        grid[y][x] = grid[oldSelected.y][oldSelected.x];
+                        grid[oldSelected.y][oldSelected.x] = temp2;
                         renderGrid();
                     }
                 }, 300);
@@ -2090,9 +2100,9 @@ function initJumpGame(container) {
         obstacles = obstacles.filter(obs => {
             obs.x -= gameSpeed;
             
-            // Check collision
+            // Check collision - proper AABB collision detection
             if (obs.x < player.x + 30 && obs.x + obs.width > player.x &&
-                player.y + 30 > obs.y) {
+                player.y + 30 > obs.y && player.y < obs.y + obs.height) {
                 scoreDisplay.textContent = `游戏结束！得分: ${score}`;
                 obstacles = [];
                 score = 0;
