@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>投票结果 - 谁美一点</title>
+    <script src="../util.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .result-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .winner-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .winner-section h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .winner-image {
+            max-width: 300px;
+            max-height: 400px;
+            border: 5px solid white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .winner-votes {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .results-section {
+            margin-top: 40px;
+        }
+
+        .results-section h2 {
+            text-align: center;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-image {
+            width: 100px;
+            height: 133px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a90e2;
+            margin-right: 15px;
+        }
+
+        .result-votes {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .vote-bar {
+            height: 20px;
+            background: linear-gradient(to right, #4a90e2, #88c9ff);
+            border-radius: 10px;
+            margin-top: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .retry-button {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .retry-button:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>投票结果</h1>
+
+        <div id="loadingMessage">正在加载投票结果...</div>
+
+        <div id="winnerSection" class="winner-section" style="display: none;">
+            <h2>🏆 票选最美</h2>
+            <img id="winnerImage" class="winner-image" alt="Winner">
+            <div class="winner-votes" id="winnerVotes"></div>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2>所有参选者投票结果</h2>
+            <div id="resultsList"></div>
+            
+            <div style="text-align: center; margin-top: 20px; color: #888; font-size: 14px;">
+                <p id="totalVotes"></p>
+                <p id="timestamp"></p>
+            </div>
+        </div>
+
+        <button class="retry-button" onclick="retryVote()">再来一次</button>
+
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    </div>
+
+    <script>
+        const beautyVoteConfig = {
+            storageKey: "beautyVote.data"
+        };
+
+        /**
+         * Initialize results page
+         */
+        function initializeResults() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Only show results if ad was finished
+            if (urlParams.get('finishedAd') === 'true' || urlParams.get('finishedAd') === null) {
+                loadAndDisplayResults();
+            } else {
+                document.getElementById('loadingMessage').textContent = '请先完成投票';
+            }
+        }
+
+        /**
+         * Load and display voting results
+         */
+        function loadAndDisplayResults() {
+            readKeyValueStore(beautyVoteConfig.storageKey, (value) => {
+                if (value) {
+                    try {
+                        const voteData = JSON.parse(value);
+                        displayResults(voteData);
+                    } catch (error) {
+                        console.error('Error parsing vote data:', error);
+                        document.getElementById('loadingMessage').textContent = '加载结果失败';
+                    }
+                } else {
+                    document.getElementById('loadingMessage').textContent = '暂无投票数据';
+                }
+            });
+        }
+
+        /**
+         * Display voting results
+         * @param {Object} voteData - Object with image URLs as keys and vote counts as values
+         */
+        function displayResults(voteData) {
+            // Convert to array and sort by votes
+            const sortedResults = Object.entries(voteData)
+                .map(([url, votes]) => ({ url, votes }))
+                .sort((a, b) => b.votes - a.votes);
+
+            if (sortedResults.length === 0) {
+                document.getElementById('loadingMessage').textContent = '暂无投票数据';
+                return;
+            }
+
+            // Hide loading message
+            document.getElementById('loadingMessage').style.display = 'none';
+
+            // Display winner
+            const winner = sortedResults[0];
+            displayWinner(winner);
+
+            // Display all results
+            displayAllResults(sortedResults);
+
+            // Calculate and display total votes
+            const totalVotes = sortedResults.reduce((sum, item) => sum + item.votes, 0);
+            document.getElementById('totalVotes').textContent = `总投票数: ${totalVotes}`;
+            document.getElementById('timestamp').textContent = `统计时间: ${new Date().toLocaleString()}`;
+        }
+
+        /**
+         * Display the winner
+         * @param {Object} winner - Winner object with url and votes
+         */
+        function displayWinner(winner) {
+            const winnerSection = document.getElementById('winnerSection');
+            const winnerImage = document.getElementById('winnerImage');
+            const winnerVotes = document.getElementById('winnerVotes');
+
+            winnerImage.src = winner.url;
+            winnerVotes.textContent = `获得 ${winner.votes} 票`;
+            winnerSection.style.display = 'block';
+        }
+
+        /**
+         * Display all results with ranking
+         * @param {Array} sortedResults - Sorted array of result objects
+         */
+        function displayAllResults(sortedResults) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsList = document.getElementById('resultsList');
+            
+            // Find max votes for calculating bar width
+            const maxVotes = sortedResults[0].votes;
+
+            resultsList.innerHTML = '';
+            sortedResults.forEach((result, index) => {
+                const resultItem = createResultItem(result, index + 1, maxVotes);
+                resultsList.appendChild(resultItem);
+            });
+
+            resultsSection.style.display = 'block';
+        }
+
+        /**
+         * Create a result item element
+         * @param {Object} result - Result object with url and votes
+         * @param {number} rank - Rank of this result
+         * @param {number} maxVotes - Maximum votes for percentage calculation
+         * @returns {HTMLElement} Result item element
+         */
+        function createResultItem(result, rank, maxVotes) {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+
+            const img = document.createElement('img');
+            img.className = 'result-image';
+            img.src = result.url;
+            img.alt = `排名 ${rank}`;
+            img.onerror = () => {
+                img.style.display = 'none';
+            };
+
+            const info = document.createElement('div');
+            info.className = 'result-info';
+
+            const rankSpan = document.createElement('span');
+            rankSpan.className = 'result-rank';
+            rankSpan.textContent = `#${rank}`;
+
+            const votesSpan = document.createElement('span');
+            votesSpan.className = 'result-votes';
+            votesSpan.textContent = `${result.votes} 票`;
+
+            const barContainer = document.createElement('div');
+            barContainer.style.backgroundColor = '#e0e0e0';
+            barContainer.style.borderRadius = '10px';
+            barContainer.style.height = '20px';
+            barContainer.style.marginTop = '10px';
+
+            const bar = document.createElement('div');
+            bar.className = 'vote-bar';
+            const percentage = maxVotes > 0 ? (result.votes / maxVotes) * 100 : 0;
+            bar.style.width = `${percentage}%`;
+
+            barContainer.appendChild(bar);
+
+            info.appendChild(rankSpan);
+            info.appendChild(votesSpan);
+            info.appendChild(barContainer);
+
+            item.appendChild(img);
+            item.appendChild(info);
+
+            return item;
+        }
+
+        /**
+         * Retry voting - navigate back to voting page
+         */
+        function retryVote() {
+            window.location.href = 'index.html';
+        }
+
+        /**
+         * Navigate to index page
+         */
+        function jumpToIndex() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: "/pages/index/index",
+                });
+            } else {
+                console.warn('Mini-program navigation not available');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeResults);
+    </script>
+</body>
+</html>
