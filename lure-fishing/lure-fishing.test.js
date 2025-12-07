@@ -36,7 +36,7 @@ describe('Lure Fishing Feature Tests', () => {
     // Mock window.API_ENDPOINTS
     window.API_ENDPOINTS = {
       FILE_UPLOAD: 'https://letmetry.cloud/lws/file/upload',
-      IMAGE_UPLOAD: 'https://letmetry.cloud/lws/image/upload',
+      IMAGE_UPLOAD: 'https://letmetry.cloud/image/upload',
       MYSQL_INSERT: 'https://letmetry.cloud/lws/mysql/insert',
       MYSQL_QUERY: 'https://letmetry.cloud/lws/mysql/query'
     };
@@ -51,7 +51,7 @@ describe('Lure Fishing Feature Tests', () => {
   describe('Configuration Integration', () => {
     it('should use centralized API endpoints for image upload', () => {
       expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('letmetry.cloud');
-      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('/lws/image/upload');
+      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('/image/upload');
     });
     
     it('should use centralized API endpoints for MySQL operations', () => {
