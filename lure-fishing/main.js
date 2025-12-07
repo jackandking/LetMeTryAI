@@ -395,7 +395,7 @@ async function uploadPhoto(file) {
     formData.append('file', file);
     formData.append('targetPath', 'lure-fishing/');
     
-    const response = await fetch(window.API_ENDPOINTS.FILE_UPLOAD, {
+    const response = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, {
         method: 'POST',
         body: formData
     });
