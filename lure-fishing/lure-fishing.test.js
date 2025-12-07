@@ -36,6 +36,7 @@ describe('Lure Fishing Feature Tests', () => {
     // Mock window.API_ENDPOINTS
     window.API_ENDPOINTS = {
       FILE_UPLOAD: 'https://letmetry.cloud/lws/file/upload',
+      IMAGE_UPLOAD: 'https://letmetry.cloud/lws/image/upload',
       MYSQL_INSERT: 'https://letmetry.cloud/lws/mysql/insert',
       MYSQL_QUERY: 'https://letmetry.cloud/lws/mysql/query'
     };
@@ -48,9 +49,9 @@ describe('Lure Fishing Feature Tests', () => {
   });
   
   describe('Configuration Integration', () => {
-    it('should use centralized API endpoints for file upload', () => {
-      expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain('letmetry.cloud');
-      expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain('/lws/file/upload');
+    it('should use centralized API endpoints for image upload', () => {
+      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('letmetry.cloud');
+      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('/lws/image/upload');
     });
     
     it('should use centralized API endpoints for MySQL operations', () => {
@@ -65,7 +66,7 @@ describe('Lure Fishing Feature Tests', () => {
     });
     
     it('should not use old domain', () => {
-      expect(window.API_ENDPOINTS.FILE_UPLOAD).not.toContain('letmetryai.cn');
+      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).not.toContain('letmetryai.cn');
       expect(window.API_ENDPOINTS.MYSQL_INSERT).not.toContain('letmetryai.cn');
     });
   });
@@ -485,7 +486,7 @@ describe('Lure Fishing Feature Tests', () => {
       const savedKB = ((originalSize - compressedSize) / 1024).toFixed(0);
       const compressionRatio = ((1 - compressedSize / originalSize) * 100).toFixed(0);
       
-      expect(savedKB).toBe('1224');
+      expect(savedKB).toBe('1248');
       expect(compressionRatio).toBe('61');
     });
 

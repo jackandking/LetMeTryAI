@@ -43,6 +43,7 @@ describe('Global Configuration', () => {
         'FILE_INFO',
         'FILE_LIST',
         'FILE_DOWNLOAD',
+        'IMAGE_UPLOAD',
         'MYSQL_QUERY',
         'MYSQL_GET_BY_ID',
         'MYSQL_INSERT',

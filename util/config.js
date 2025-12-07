@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   FILE_INFO: `${BASE_URL}/lws/file/info`,
   FILE_LIST: `${BASE_URL}/lws/file/list`,
   FILE_DOWNLOAD: `${BASE_URL}/lws/file/download`,
+  IMAGE_UPLOAD: `${BASE_URL}/lws/image/upload`,
   MYSQL_QUERY: `${BASE_URL}/lws/mysql/query`,
   MYSQL_GET_BY_ID: `${BASE_URL}/lws/mysql/getById`,
   MYSQL_INSERT: `${BASE_URL}/lws/mysql/insert`,
