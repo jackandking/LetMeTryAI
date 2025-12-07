@@ -1,0 +1,191 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background-color: #f0f8ff;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #4a90e2;
+    margin-bottom: 20px;
+}
+
+#loadingMessage {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+}
+
+.instruction {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4a90e2;
+}
+
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.image-container {
+    position: relative;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+.image-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.image-container.selected {
+    border-color: #4a90e2;
+    border-width: 4px;
+    box-shadow: 0 8px 20px rgba(74, 144, 226, 0.5);
+}
+
+.masked-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 133%; /* 3:4 aspect ratio */
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+.masked-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mask-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: linear-gradient(45deg, #ccc 25%, #999 25%, #999 50%, #ccc 50%, #ccc 75%, #999 75%, #999);
+    background-size: 20px 20px;
+    z-index: 1;
+}
+
+.mask-overlay.top {
+    top: 0;
+    height: 50%;
+}
+
+.mask-overlay.bottom {
+    bottom: 0;
+    height: 50%;
+}
+
+.show-result-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 16px;
+}
+
+.show-result-btn:hover {
+    background-color: #0056b3;
+}
+
+.more {
+    display: block;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #e6f7ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s;
+    tap-highlight-color: rgba(0, 0, 0, 0);
+    text-decoration: underline;
+    text-decoration-color: #007bff;
+    text-align: center;
+}
+
+.more:active {
+    background-color: #d0eaff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    text-decoration-color: #ff6347;
+}
+
+.more a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.result {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #e6f7ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bar-chart {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    min-height: 250px;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.bar {
+    background: linear-gradient(to top, #4a90e2, #88c9ff);
+    width: 100%;
+    max-width: 80px;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s ease;
+}
+
+.bar-label {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cup-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    word-wrap: break-word;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>谁美一点 - Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">谁美一点 - Demo</h1>
+
+    <div id="loadingMessage" style="display: none;">正在加载美女照片...</div>
+
+    <div id="votingSection">
+        <p class="instruction">请选择你认为最美的一位：</p>
+        <div id="imageGallery" class="image-gallery">
+            <!-- Images will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="goToResults()">查看投票结果</button>
+
+    <div class="more" id="more" style="cursor: pointer; text-align: center;">
+        <a>快手男人宝小程序主页看更多美女</a>
+    </div>
+
+    <script>
+        // Mock image data for demo purposes - using colored rectangles as placeholders
+        const mockImageUrls = [
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23FF6B6B"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人1%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%234ECDC4"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人2%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%2395E1D3"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人3%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23F38181"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人4%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23AA96DA"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人5%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23FCBAD3"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人6%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23FFFFD2"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="%23333"%3E候选人7%3C/text%3E%3C/svg%3E',
+            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="400"%3E%3Crect width="300" height="400" fill="%23A8DADC"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="white"%3E候选人8%3C/text%3E%3C/svg%3E'
+        ];
+
+        let selectedImages = [];
+        let selectedImageIndex = null;
+        const numberOfImages = 5;
+
+        /**
+         * Get random images from the image list
+         */
+        function getRandomImages(imageList, count) {
+            const shuffled = [...imageList].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count).map(url => ({
+                url: url,
+                maskPosition: Math.random() < 0.5 ? 'top' : 'bottom'
+            }));
+        }
+
+        /**
+         * Display images in the gallery
+         */
+        function displayImages(images) {
+            const gallery = document.getElementById('imageGallery');
+            gallery.innerHTML = '';
+
+            images.forEach((imageData, index) => {
+                const container = createImageContainer(imageData, index);
+                gallery.appendChild(container);
+            });
+        }
+
+        /**
+         * Create an image container with masking
+         */
+        function createImageContainer(imageData, index) {
+            const container = document.createElement('div');
+            container.className = 'image-container';
+            container.onclick = () => selectImage(index);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'masked-image-wrapper';
+
+            const img = document.createElement('img');
+            img.className = 'masked-image';
+            img.src = imageData.url;
+            img.alt = `候选人 ${index + 1}`;
+            img.onerror = () => {
+                console.error(`Failed to load image: ${imageData.url}`);
+            };
+
+            const mask = document.createElement('div');
+            mask.className = `mask-overlay ${imageData.maskPosition}`;
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(mask);
+            container.appendChild(wrapper);
+
+            return container;
+        }
+
+        /**
+         * Handle image selection
+         */
+        function selectImage(index) {
+            const containers = document.querySelectorAll('.image-container');
+            containers.forEach(c => c.classList.remove('selected'));
+
+            containers[index].classList.add('selected');
+            selectedImageIndex = index;
+
+            // Save selection to localStorage for demo
+            const voteData = JSON.parse(localStorage.getItem('beautyVote_demo') || '{}');
+            const imageUrl = selectedImages[index].url;
+            voteData[imageUrl] = (voteData[imageUrl] || 0) + 1;
+            localStorage.setItem('beautyVote_demo', JSON.stringify(voteData));
+            
+            // Store selected images for result page
+            localStorage.setItem('beautyVote_selected', JSON.stringify(selectedImages));
+
+            const showResultBtn = document.getElementById('showResultBtn');
+            if (showResultBtn) {
+                showResultBtn.style.display = 'block';
+            }
+        }
+
+        /**
+         * Navigate to results page
+         */
+        function goToResults() {
+            window.location.href = 'demo-result.html';
+        }
+
+        // Initialize demo on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            selectedImages = getRandomImages(mockImageUrls, numberOfImages);
+            displayImages(selectedImages);
+        });
+    </script>
+</body>
+</html>
