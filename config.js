@@ -12,6 +12,7 @@ window.API_ENDPOINTS = {
   FILE_INFO: `${window.BASE_URL}/lws/file/info`,
   FILE_LIST: `${window.BASE_URL}/lws/file/list`,
   FILE_DOWNLOAD: `${window.BASE_URL}/lws/file/download`,
+  IMAGE_UPLOAD: `${window.BASE_URL}/image/upload`,
   MYSQL_QUERY: `${window.BASE_URL}/lws/mysql/query`,
   MYSQL_GET_BY_ID: `${window.BASE_URL}/lws/mysql/getById`,
   MYSQL_INSERT: `${window.BASE_URL}/lws/mysql/insert`,
