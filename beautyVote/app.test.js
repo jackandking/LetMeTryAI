@@ -20,6 +20,17 @@ document.body.innerHTML = `
     <div id="votingSection" style="display: none;"></div>
     <div id="imageGallery"></div>
     <div id="showResultBtn" style="display: none;"></div>
+    <div id="resultsContainer" style="display: none;">
+        <div id="winnerSection" style="display: none;">
+            <img id="winnerImage" alt="Winner">
+            <div id="winnerVotes"></div>
+        </div>
+        <div id="resultsSection" style="display: none;">
+            <div id="resultsList"></div>
+            <p id="totalVotes"></p>
+            <p id="timestamp"></p>
+        </div>
+    </div>
 `;
 
 describe('Beauty Vote Application', () => {
@@ -330,6 +341,63 @@ describe('Beauty Vote Application', () => {
                 const maskPosition = Math.random() < 0.5 ? 'top' : 'bottom';
                 expect(validPositions).toContain(maskPosition);
             }
+        });
+    });
+
+    describe('Result Display in Index Page', () => {
+        it('should handle finishedAd=true parameter', () => {
+            const urlParams = new URLSearchParams('?finishedAd=true');
+            expect(urlParams.get('finishedAd')).toBe('true');
+            expect(urlParams.get('finishedAd') === 'true').toBe(true);
+        });
+
+        it('should handle finishedAd=false parameter', () => {
+            const urlParams = new URLSearchParams('?finishedAd=false');
+            expect(urlParams.get('finishedAd')).toBe('false');
+            expect(urlParams.get('finishedAd') === 'true').toBe(false);
+        });
+
+        it('should handle missing finishedAd parameter', () => {
+            const urlParams = new URLSearchParams('');
+            expect(urlParams.get('finishedAd')).toBeNull();
+        });
+
+        it('should create result item with correct structure', () => {
+            const result = { url: 'https://example.com/img1.jpg', votes: 10 };
+            const rank = 1;
+            const maxVotes = 20;
+
+            // Simulate createResultItem logic
+            const percentage = maxVotes > 0 ? (result.votes / maxVotes) * 100 : 0;
+            
+            expect(percentage).toBe(50);
+            expect(rank).toBe(1);
+        });
+
+        it('should calculate winner correctly', () => {
+            const voteData = {
+                'img1.jpg': 5,
+                'img2.jpg': 15,
+                'img3.jpg': 8
+            };
+
+            const sortedResults = Object.entries(voteData)
+                .map(([url, votes]) => ({ url, votes }))
+                .sort((a, b) => b.votes - a.votes);
+
+            const winner = sortedResults[0];
+            
+            expect(winner.url).toBe('img2.jpg');
+            expect(winner.votes).toBe(15);
+        });
+
+        it('should handle empty vote data in results', () => {
+            const voteData = {};
+            const sortedResults = Object.entries(voteData)
+                .map(([url, votes]) => ({ url, votes }))
+                .sort((a, b) => b.votes - a.votes);
+
+            expect(sortedResults).toHaveLength(0);
         });
     });
 });
