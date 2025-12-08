@@ -98,13 +98,23 @@ function loadClickData() {
  * Sorts gallery items by click count in descending order
  */
 function sortGalleryByClicks() {
-    galleryItems.sort((a, b) => {
-        const indexA = galleryItems.indexOf(a);
-        const indexB = galleryItems.indexOf(b);
-        const clicksA = clickData[indexA] || 0;
-        const clicksB = clickData[indexB] || 0;
-        return clicksB - clicksA;
+    // Create array with items and their original indices
+    const itemsWithIndices = galleryItems.map((item, index) => ({
+        item,
+        originalIndex: index,
+        clicks: clickData[index] || 0
+    }));
+    
+    // Sort by click count (descending)
+    itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
+    
+    // Update galleryItems array and clickData with new indices
+    const newClickData = {};
+    galleryItems = itemsWithIndices.map((entry, newIndex) => {
+        newClickData[newIndex] = entry.clicks;
+        return entry.item;
     });
+    clickData = newClickData;
 }
 
 /**
@@ -144,6 +154,7 @@ function displayGallery() {
 function createImageCard(item, index) {
     const card = document.createElement('div');
     card.className = 'image-card';
+    card.style.setProperty('--card-index', index);
     
     // Create image
     const img = document.createElement('img');
