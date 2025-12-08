@@ -33,6 +33,26 @@
 
     <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">看完广告显示结果</button>
 
+    <div id="resultsContainer" style="display: none;">
+        <div id="winnerSection" class="winner-section" style="display: none;">
+            <h2>🏆 票选最美</h2>
+            <img id="winnerImage" class="winner-image" alt="Winner">
+            <div class="winner-votes" id="winnerVotes"></div>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2>所有参选者投票结果</h2>
+            <div id="resultsList"></div>
+            
+            <div style="text-align: center; margin-top: 20px; color: #888; font-size: 14px;">
+                <p id="totalVotes"></p>
+                <p id="timestamp"></p>
+            </div>
+        </div>
+
+        <button class="retry-button" onclick="retryVote()">再来一次</button>
+    </div>
+
     <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
 
 </body>

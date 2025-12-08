@@ -26,7 +26,7 @@ let selectedImageIndex = null;
 function initializeApp() {
     try {
         checkUrlParameters();
-        loadImagesAndSetupVoting();
+        handleResultDisplay();
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('初始化失败，请刷新页面重试');
@@ -264,9 +264,9 @@ function showAd() {
             url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=beautyVote",
         });
     } else {
-        // For web testing, directly navigate to results
-        console.warn('Mini-program navigation not available, redirecting to results');
-        window.location.href = 'result.html?finishedAd=true';
+        // For web testing, reload with finishedAd parameter
+        console.warn('Mini-program navigation not available, reloading with finishedAd parameter');
+        window.location.href = 'index.html?finishedAd=true';
     }
 }
 
@@ -281,4 +281,198 @@ function jumpToIndex() {
     } else {
         console.warn('Mini-program navigation not available');
     }
+}
+
+/**
+ * Results Display Functions
+ */
+
+/**
+ * Handles URL parameters for result display
+ */
+function handleResultDisplay() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('finishedAd') !== null) {
+        const finishedAd = urlParams.get('finishedAd') === 'true';
+
+        if (finishedAd) {
+            // Hide voting section and show results
+            const loadingMessage = document.getElementById('loadingMessage');
+            const votingSection = document.getElementById('votingSection');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (loadingMessage) loadingMessage.style.display = 'none';
+            if (votingSection) votingSection.style.display = 'none';
+            if (resultsContainer) resultsContainer.style.display = 'block';
+            
+            // Load and display results
+            loadAndDisplayResults();
+        } else {
+            // Show voting interface
+            loadImagesAndSetupVoting();
+        }
+    } else {
+        // Default: show voting interface
+        loadImagesAndSetupVoting();
+    }
+}
+
+/**
+ * Load and display voting results
+ */
+function loadAndDisplayResults() {
+    getConfig(beautyVoteConfig.storageKey, (voteData) => {
+        if (voteData && Object.keys(voteData).length > 0) {
+            displayResults(voteData);
+        } else {
+            const resultsContainer = document.getElementById('resultsContainer');
+            if (resultsContainer) {
+                resultsContainer.innerHTML = '<p style="text-align: center; padding: 40px; font-size: 18px; color: #666;">暂无投票数据</p>';
+            }
+        }
+    });
+}
+
+/**
+ * Display voting results
+ * @param {Object} voteData - Object with image URLs as keys and vote counts as values
+ */
+function displayResults(voteData) {
+    // Convert to array and sort by votes
+    const sortedResults = Object.entries(voteData)
+        .map(([url, votes]) => ({ url, votes }))
+        .sort((a, b) => b.votes - a.votes);
+
+    if (sortedResults.length === 0) {
+        return;
+    }
+
+    // Display winner
+    const winner = sortedResults[0];
+    displayWinner(winner);
+
+    // Display all results
+    displayAllResults(sortedResults);
+
+    // Calculate and display total votes
+    const totalVotes = sortedResults.reduce((sum, item) => sum + item.votes, 0);
+    const totalVotesElement = document.getElementById('totalVotes');
+    const timestampElement = document.getElementById('timestamp');
+    
+    if (totalVotesElement) {
+        totalVotesElement.textContent = `总投票数: ${totalVotes}`;
+    }
+    if (timestampElement) {
+        timestampElement.textContent = `统计时间: ${new Date().toLocaleString()}`;
+    }
+}
+
+/**
+ * Display the winner
+ * @param {Object} winner - Winner object with url and votes
+ */
+function displayWinner(winner) {
+    const winnerSection = document.getElementById('winnerSection');
+    const winnerImage = document.getElementById('winnerImage');
+    const winnerVotes = document.getElementById('winnerVotes');
+
+    if (winnerImage) {
+        winnerImage.src = winner.url;
+        winnerImage.onerror = () => {
+            winnerImage.style.display = 'none';
+        };
+    }
+    if (winnerVotes) {
+        winnerVotes.textContent = `获得 ${winner.votes} 票`;
+    }
+    if (winnerSection) {
+        winnerSection.style.display = 'block';
+    }
+}
+
+/**
+ * Display all results with ranking
+ * @param {Array} sortedResults - Sorted array of result objects
+ */
+function displayAllResults(sortedResults) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsList = document.getElementById('resultsList');
+    
+    if (!resultsList) {
+        return;
+    }
+
+    // Find max votes for calculating bar width
+    const maxVotes = sortedResults[0].votes;
+
+    resultsList.innerHTML = '';
+    sortedResults.forEach((result, index) => {
+        const resultItem = createResultItem(result, index + 1, maxVotes);
+        resultsList.appendChild(resultItem);
+    });
+
+    if (resultsSection) {
+        resultsSection.style.display = 'block';
+    }
+}
+
+/**
+ * Create a result item element
+ * @param {Object} result - Result object with url and votes
+ * @param {number} rank - Rank of this result
+ * @param {number} maxVotes - Maximum votes for percentage calculation
+ * @returns {HTMLElement} Result item element
+ */
+function createResultItem(result, rank, maxVotes) {
+    const item = document.createElement('div');
+    item.className = 'result-item';
+
+    const img = document.createElement('img');
+    img.className = 'result-image';
+    img.src = result.url;
+    img.alt = `排名 ${rank}`;
+    img.onerror = () => {
+        img.style.display = 'none';
+    };
+
+    const info = document.createElement('div');
+    info.className = 'result-info';
+
+    const rankSpan = document.createElement('span');
+    rankSpan.className = 'result-rank';
+    rankSpan.textContent = `#${rank}`;
+
+    const votesSpan = document.createElement('span');
+    votesSpan.className = 'result-votes';
+    votesSpan.textContent = `${result.votes} 票`;
+
+    const barContainer = document.createElement('div');
+    barContainer.style.backgroundColor = '#e0e0e0';
+    barContainer.style.borderRadius = '10px';
+    barContainer.style.height = '20px';
+    barContainer.style.marginTop = '10px';
+
+    const bar = document.createElement('div');
+    bar.className = 'vote-bar';
+    const percentage = maxVotes > 0 ? (result.votes / maxVotes) * 100 : 0;
+    bar.style.width = `${percentage}%`;
+
+    barContainer.appendChild(bar);
+
+    info.appendChild(rankSpan);
+    info.appendChild(votesSpan);
+    info.appendChild(barContainer);
+
+    item.appendChild(img);
+    item.appendChild(info);
+
+    return item;
+}
+
+/**
+ * Retry voting - reload page without parameters
+ */
+function retryVote() {
+    window.location.href = 'index.html';
 }
