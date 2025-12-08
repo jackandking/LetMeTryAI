@@ -171,15 +171,21 @@
             uploadBtn.textContent = '上传中...';
 
             // Upload using util.js updateConfig function
+            // Note: updateConfig in util.js uses async updateKeyValueStore internally
+            // but doesn't provide a callback. We show success message after a delay
+            // to allow the async operation to complete.
             try {
                 updateConfig(CONFIG_KEY, config);
                 
-                // Show success after a delay (to allow async operation to complete)
+                // Show pending status immediately
+                showStatus('success', `⏳ 配置上传中，请稍候... (${config.length} 个项目)`);
+                
+                // Show success after delay to allow async operation
                 setTimeout(() => {
-                    showStatus('success', `✅ 配置已成功上传！包含 ${config.length} 个项目。`);
+                    showStatus('success', `✅ 配置已提交！包含 ${config.length} 个项目。请等待几秒后刷新页面验证。`);
                     uploadBtn.disabled = false;
                     uploadBtn.textContent = '上传配置';
-                }, 1000);
+                }, 2000);
             } catch (error) {
                 showStatus('error', `上传失败：${error.message}`);
                 uploadBtn.disabled = false;

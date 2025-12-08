@@ -3,6 +3,23 @@
  * Styling for the image gallery and interactive elements
  */
 
+/* Base Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+}
+
 /* Gallery Grid Layout */
 .gallery {
     display: grid;
@@ -205,11 +222,6 @@
 
 .image-card {
     animation: fadeInUp 0.5s ease-out;
+    /* Animation delay calculated based on grid position: 0.1s per item, max 1s */
+    animation-delay: calc(0.1s * min(var(--card-index, 0), 10));
 }
-
-.image-card:nth-child(1) { animation-delay: 0.1s; }
-.image-card:nth-child(2) { animation-delay: 0.2s; }
-.image-card:nth-child(3) { animation-delay: 0.3s; }
-.image-card:nth-child(4) { animation-delay: 0.4s; }
-.image-card:nth-child(5) { animation-delay: 0.5s; }
-.image-card:nth-child(6) { animation-delay: 0.6s; }
