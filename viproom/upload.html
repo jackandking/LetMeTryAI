@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Room - 配置上传工具</title>
+    <script src="../util.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+        .info h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VIP Room 配置上传工具</h1>
+        
+        <div class="info">
+            <h3>使用说明</h3>
+            <p>此工具用于上传VIP房间的配置到kvstore。配置包含美女图片和对应的视频链接。</p>
+            <p><strong>配置格式：</strong>JSON数组，每个元素包含 <code>imgUrl</code> 和 <code>videoUrl</code> 字段。</p>
+        </div>
+
+        <div class="example">
+            <strong>配置示例：</strong><br><br>
+            [<br>
+            &nbsp;&nbsp;{<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"imgUrl": "https://example.com/image1.jpg",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"videoUrl": "https://v.kuaishou.com/video1"<br>
+            &nbsp;&nbsp;},<br>
+            &nbsp;&nbsp;{<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"imgUrl": "https://example.com/image2.jpg",<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;"videoUrl": "https://v.kuaishou.com/video2"<br>
+            &nbsp;&nbsp;}<br>
+            ]
+        </div>
+
+        <label for="configInput"><strong>配置JSON：</strong></label>
+        <textarea id="configInput" placeholder="在此粘贴配置JSON...">[
+  {
+    "imgUrl": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0b2ff364c29c41a9af3ad231b4dc82cc~tplv-tb4s082cfz-aigc_resize:2400:2400.webp?lk3s=4fa96020&x-expires=1767744000&x-signature=M8YrzjHRC4VEmkO965JBVbUPHrQ%3D",
+    "videoUrl": "https://v.kuaishou.com/KL337Hat"
+  }
+]</textarea>
+
+        <button id="uploadBtn" onclick="uploadConfiguration()">上传配置</button>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        const CONFIG_KEY = 'viproom.conf';
+
+        function uploadConfiguration() {
+            const configInput = document.getElementById('configInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const statusDiv = document.getElementById('status');
+
+            // Clear previous status
+            statusDiv.style.display = 'none';
+            statusDiv.className = 'status';
+
+            // Validate input
+            let config;
+            try {
+                config = JSON.parse(configInput.value.trim());
+            } catch (error) {
+                showStatus('error', '配置格式错误：JSON解析失败。请检查格式是否正确。');
+                return;
+            }
+
+            // Validate array
+            if (!Array.isArray(config)) {
+                showStatus('error', '配置必须是一个数组。');
+                return;
+            }
+
+            // Validate each item
+            for (let i = 0; i < config.length; i++) {
+                const item = config[i];
+                if (!item.imgUrl || !item.videoUrl) {
+                    showStatus('error', `配置项 ${i + 1} 缺少必需字段（imgUrl 或 videoUrl）。`);
+                    return;
+                }
+                if (typeof item.imgUrl !== 'string' || typeof item.videoUrl !== 'string') {
+                    showStatus('error', `配置项 ${i + 1} 的字段必须是字符串。`);
+                    return;
+                }
+            }
+
+            // Disable button during upload
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = '上传中...';
+
+            // Upload using util.js updateConfig function
+            try {
+                updateConfig(CONFIG_KEY, config);
+                
+                // Show success after a delay (to allow async operation to complete)
+                setTimeout(() => {
+                    showStatus('success', `✅ 配置已成功上传！包含 ${config.length} 个项目。`);
+                    uploadBtn.disabled = false;
+                    uploadBtn.textContent = '上传配置';
+                }, 1000);
+            } catch (error) {
+                showStatus('error', `上传失败：${error.message}`);
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = '上传配置';
+            }
+        }
+
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
