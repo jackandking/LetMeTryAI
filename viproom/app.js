@@ -33,16 +33,22 @@ function initializeApp() {
  */
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log('URL parameters:', urlParams);
+    console.log('URL parameters:', urlParams.toString());
 
     // Check if ad is finished - play video if true
     if (urlParams.get('finishedAd') === 'true') {
         const videoUrl = urlParams.get('videoUrl');
+        console.log('Ad finished, video URL:', videoUrl);
         if (videoUrl) {
-            playVideo(decodeURIComponent(videoUrl));
+            const decodedUrl = decodeURIComponent(videoUrl);
+            console.log('Playing video after ad:', decodedUrl);
+            playVideo(decodedUrl);
+        } else {
+            console.error('Ad finished but no video URL provided in parameters');
         }
     } else if (urlParams.get('finishedAd') === 'false') {
         // Ad was not completed, navigate back if possible
+        console.log('Ad was cancelled, navigating back');
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
         }
@@ -189,10 +195,19 @@ function createImageCard(item, index) {
  * @param {number} index - Item index
  */
 function handleImageClick(item, index) {
-    console.log('Image clicked:', index, item);
+    console.log('Image clicked - Index:', index, 'Item:', item);
+    console.log('Video URL to be played:', item.videoUrl);
+    
+    // Validate that item has videoUrl
+    if (!item || !item.videoUrl) {
+        console.error('Invalid item or missing videoUrl:', item);
+        showError('视频信息无效，请刷新页面重试');
+        return;
+    }
     
     // Increment click count
     clickData[index] = (clickData[index] || 0) + 1;
+    console.log('Updated click count for index', index, ':', clickData[index]);
     
     // Save updated click data
     updateConfig(CLICKS_KEY, clickData);
@@ -206,13 +221,25 @@ function handleImageClick(item, index) {
  * @param {string} videoUrl - URL of the video to play after ad
  */
 function showAdBeforeVideo(videoUrl) {
-    console.log('Showing ad before video:', videoUrl);
+    console.log('Preparing to show ad before video:', videoUrl);
+    
+    // Validate videoUrl
+    if (!videoUrl || typeof videoUrl !== 'string') {
+        console.error('Invalid video URL:', videoUrl);
+        showError('视频链接无效');
+        return;
+    }
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         // Navigate to ad page with video URL as parameter
         const encodedVideoUrl = encodeURIComponent(videoUrl);
+        const adPageUrl = `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`;
+        console.log('Navigating to ad page with URL:', adPageUrl);
+        console.log('Encoded video URL:', encodedVideoUrl);
+        console.log('Original video URL:', videoUrl);
+        
         ks.navigateTo({
-            url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`,
+            url: adPageUrl,
         });
     } else {
         // Fallback: directly play video if mini-program environment not available
@@ -226,18 +253,30 @@ function showAdBeforeVideo(videoUrl) {
  * @param {string} videoUrl - URL of the video to play
  */
 function playVideo(videoUrl) {
-    console.log('Playing video:', videoUrl);
+    console.log('=== PLAYING VIDEO ===');
+    console.log('Video URL:', videoUrl);
+    
+    // Validate videoUrl
+    if (!videoUrl || typeof videoUrl !== 'string') {
+        console.error('Cannot play video - invalid URL:', videoUrl);
+        showError('无法播放视频：链接无效');
+        return;
+    }
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         // Navigate to video page or open video
         // In mini-program environment, this might open external browser or video player
+        const encodedUrl = encodeURIComponent(videoUrl);
+        console.log('Using mini-program navigation to play video');
         ks.navigateTo({
-            url: `/pages/video/video?url=${encodeURIComponent(videoUrl)}`,
+            url: `/pages/video/video?url=${encodedUrl}`,
         });
     } else {
         // Fallback: open video URL in new window/tab
+        console.log('Using fallback: opening video in new window');
         window.open(videoUrl, '_blank');
     }
+    console.log('=== END PLAYING VIDEO ===');
 }
 
 /**

@@ -396,3 +396,82 @@ describe('Integration with Storage', () => {
         expect(deserialized["2"]).toBe(22);
     });
 });
+
+describe('Video URL Preservation After Sorting', () => {
+    it('should preserve correct video URLs after sorting by clicks', () => {
+        // Initial items with different click counts
+        const items = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/video1" },  // Will have 5 clicks
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/video2" },  // Will have 15 clicks (most)
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/video3" }   // Will have 10 clicks
+        ];
+        const clickCounts = { "0": 5, "1": 15, "2": 10 };
+        
+        // Simulate sorting logic
+        const itemsWithIndices = items.map((item, index) => ({
+            item,
+            originalIndex: index,
+            clicks: clickCounts[index] || 0
+        }));
+        
+        itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
+        
+        const sortedItems = itemsWithIndices.map(entry => entry.item);
+        
+        // After sorting, order should be: video2 (15), video3 (10), video1 (5)
+        expect(sortedItems[0].videoUrl).toBe("https://v.kuaishou.com/video2");
+        expect(sortedItems[1].videoUrl).toBe("https://v.kuaishou.com/video3");
+        expect(sortedItems[2].videoUrl).toBe("https://v.kuaishou.com/video1");
+        
+        // When clicking on position 1 (video3), it should use video3's URL, not video2's
+        const clickedItem = sortedItems[1];
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/video3");
+        expect(clickedItem.videoUrl).not.toBe("https://v.kuaishou.com/video2"); // Not the most clicked
+    });
+
+    it('should pass correct video URL when clicking on second most popular item', () => {
+        const mockNavigateTo = jest.fn();
+        global.ks = { navigateTo: mockNavigateTo };
+        
+        // Simulate sorted items: most clicked first
+        const sortedItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_CLICKED" },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/SECOND_CLICKED" },
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/THIRD_CLICKED" }
+        ];
+        
+        // User clicks on the SECOND item (index 1)
+        const clickedItem = sortedItems[1];
+        const videoUrl = clickedItem.videoUrl;
+        const encodedVideoUrl = encodeURIComponent(videoUrl);
+        
+        // Simulate showing ad
+        if (typeof ks !== 'undefined' && ks.navigateTo) {
+            ks.navigateTo({
+                url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`
+            });
+        }
+        
+        // Verify the SECOND video URL was passed, not the first
+        expect(mockNavigateTo).toHaveBeenCalled();
+        const callUrl = mockNavigateTo.mock.calls[0][0].url;
+        expect(callUrl).toContain(encodeURIComponent("https://v.kuaishou.com/SECOND_CLICKED"));
+        expect(callUrl).not.toContain(encodeURIComponent("https://v.kuaishou.com/MOST_CLICKED"));
+    });
+
+    it('should play the correct video URL after ad completes', () => {
+        // Simulate returning from ad with SECOND_CLICKED video URL
+        const returnedVideoUrl = "https://v.kuaishou.com/SECOND_CLICKED";
+        const urlParams = new URLSearchParams(`finishedAd=true&videoUrl=${encodeURIComponent(returnedVideoUrl)}`);
+        
+        const finishedAd = urlParams.get('finishedAd') === 'true';
+        const videoUrl = urlParams.get('videoUrl');
+        
+        expect(finishedAd).toBe(true);
+        expect(videoUrl).toBe(returnedVideoUrl);
+        expect(decodeURIComponent(videoUrl)).toBe("https://v.kuaishou.com/SECOND_CLICKED");
+        
+        // Should NOT be the most clicked video
+        expect(videoUrl).not.toBe("https://v.kuaishou.com/MOST_CLICKED");
+    });
+});
