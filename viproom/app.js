@@ -211,7 +211,7 @@ function handleImageClick(item, index) {
  * @param {string} videoUrl - URL of the video to play after ad
  */
 function showAdBeforeVideo(videoUrl) {
-    console.log('Showing ad before video:', videoUrl);
+    console.log('Showing ad before video (videoUrl used for fallback only):', videoUrl);
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         // Navigate to ad page without video URL parameter (not supported)
