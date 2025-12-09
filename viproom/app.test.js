@@ -397,141 +397,61 @@ describe('Integration with Storage', () => {
     });
 });
 
-describe('Video URL Preservation After Sorting', () => {
-    it('should preserve correct video URLs after sorting by clicks', () => {
-        // Initial items with different click counts
-        const items = [
-            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/video1" },  // Will have 5 clicks
-            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/video2" },  // Will have 15 clicks (most)
-            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/video3" }   // Will have 10 clicks
-        ];
-        const clickCounts = { "0": 5, "1": 15, "2": 10 };
-        
-        // Simulate sorting logic
-        const itemsWithIndices = items.map((item, index) => ({
-            item,
-            originalIndex: index,
-            clicks: clickCounts[index] || 0
-        }));
-        
-        itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
-        
-        // Use the new logic: preserve original indices
-        const sortedItems = itemsWithIndices.map(entry => ({
-            ...entry.item,
-            _originalIndex: entry.originalIndex
-        }));
-        
-        // After sorting, order should be: video2 (15), video3 (10), video1 (5)
-        expect(sortedItems[0].videoUrl).toBe("https://v.kuaishou.com/video2");
-        expect(sortedItems[1].videoUrl).toBe("https://v.kuaishou.com/video3");
-        expect(sortedItems[2].videoUrl).toBe("https://v.kuaishou.com/video1");
-        
-        // Original indices should be preserved
-        expect(sortedItems[0]._originalIndex).toBe(1); // video2 was originally at index 1
-        expect(sortedItems[1]._originalIndex).toBe(2); // video3 was originally at index 2
-        expect(sortedItems[2]._originalIndex).toBe(0); // video1 was originally at index 0
-        
-        // When clicking on position 1 (video3), it should use video3's URL and original index 2
-        const clickedItem = sortedItems[1];
-        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/video3");
-        expect(clickedItem._originalIndex).toBe(2);
-        expect(clickedItem.videoUrl).not.toBe("https://v.kuaishou.com/video2"); // Not the most clicked
-    });
-
-    it('should maintain click data indexed by original configuration positions', () => {
-        // Initial setup
-        const items = [
-            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/video1" },
-            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/video2" },
-            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/video3" }
-        ];
-        let clickData = { "0": 5, "1": 15, "2": 10 };
-        
-        // Sort items by click count (descending)
-        const itemsWithIndices = items.map((item, index) => ({
-            item,
-            originalIndex: index,
-            clicks: clickData[index] || 0
-        }));
-        itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
-        
-        // Verify items are sorted correctly
-        expect(itemsWithIndices[0].clicks).toBe(15); // Highest first
-        expect(itemsWithIndices[1].clicks).toBe(10); // Second highest
-        expect(itemsWithIndices[2].clicks).toBe(5);  // Lowest last
-        
-        const sortedItems = itemsWithIndices.map(entry => ({
-            ...entry.item,
-            _originalIndex: entry.originalIndex
-        }));
-        
-        // Verify sorted order
-        expect(sortedItems[0].videoUrl).toBe("https://v.kuaishou.com/video2"); // Was at index 1
-        expect(sortedItems[1].videoUrl).toBe("https://v.kuaishou.com/video3"); // Was at index 2  
-        expect(sortedItems[2].videoUrl).toBe("https://v.kuaishou.com/video1"); // Was at index 0
-        
-        // User clicks on display position 1 (which is video3, original index 2)
-        const clickedItem = sortedItems[1];
-        const originalIndex = clickedItem._originalIndex;
-        
-        expect(originalIndex).toBe(2); // Verify we have the right original index
-        
-        // Increment click count using ORIGINAL index
-        clickData[originalIndex] = (clickData[originalIndex] || 0) + 1;
-        
-        // Click data should now be: {0: 5, 1: 15, 2: 11}
-        expect(clickData[0]).toBe(5);  // video1 still has 5 clicks
-        expect(clickData[1]).toBe(15); // video2 still has 15 clicks
-        expect(clickData[2]).toBe(11); // video3 now has 11 clicks (was 10)
-        
-        // On next page load, this click data can be correctly applied to the original config
-        expect(clickData).toEqual({ "0": 5, "1": 15, "2": 11 });
-    });
-
-    it('should pass correct video URL when clicking on second most popular item', () => {
+describe('Most Voted Video After Ad', () => {
+    it('should always play the most voted video after ad, not the clicked one', () => {
         const mockNavigateTo = jest.fn();
         global.ks = { navigateTo: mockNavigateTo };
         
-        // Simulate sorted items: most clicked first
-        const sortedItems = [
-            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_CLICKED" },
-            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/SECOND_CLICKED" },
-            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/THIRD_CLICKED" }
+        // Simulate sorted gallery items (already sorted by clicks - highest first)
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_VOTED" },   // Most clicks
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/SECOND_VOTED" }, // Second most
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/THIRD_VOTED" }   // Third most
         ];
         
-        // User clicks on the SECOND item (index 1)
-        const clickedItem = sortedItems[1];
-        const videoUrl = clickedItem.videoUrl;
-        const encodedVideoUrl = encodeURIComponent(videoUrl);
+        // User clicks on the THIRD video (index 2)
+        const clickedItem = galleryItems[2];
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/THIRD_VOTED");
         
-        // Simulate showing ad
+        // But should navigate to ad with the MOST VOTED video URL
+        const mostVotedVideoUrl = galleryItems[0].videoUrl;
+        const encodedVideoUrl = encodeURIComponent(mostVotedVideoUrl);
+        
         if (typeof ks !== 'undefined' && ks.navigateTo) {
             ks.navigateTo({
                 url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`
             });
         }
         
-        // Verify the SECOND video URL was passed, not the first
+        // Verify the MOST VOTED video URL was passed, not the clicked one
         expect(mockNavigateTo).toHaveBeenCalled();
         const callUrl = mockNavigateTo.mock.calls[0][0].url;
-        expect(callUrl).toContain(encodeURIComponent("https://v.kuaishou.com/SECOND_CLICKED"));
-        expect(callUrl).not.toContain(encodeURIComponent("https://v.kuaishou.com/MOST_CLICKED"));
+        expect(callUrl).toContain(encodeURIComponent("https://v.kuaishou.com/MOST_VOTED"));
+        expect(callUrl).not.toContain(encodeURIComponent("https://v.kuaishou.com/THIRD_VOTED"));
     });
 
-    it('should play the correct video URL after ad completes', () => {
-        // Simulate returning from ad with SECOND_CLICKED video URL
-        const returnedVideoUrl = "https://v.kuaishou.com/SECOND_CLICKED";
-        const urlParams = new URLSearchParams(`finishedAd=true&videoUrl=${encodeURIComponent(returnedVideoUrl)}`);
+    it('should use first item videoUrl as most voted video', () => {
+        // Gallery items are sorted by click count (highest first)
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/TOP_VIDEO", clicks: 100 },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_2", clicks: 50 },
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_3", clicks: 10 }
+        ];
         
-        const finishedAd = urlParams.get('finishedAd') === 'true';
-        const videoUrl = urlParams.get('videoUrl');
+        // Most voted video is the first one
+        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : null;
         
-        expect(finishedAd).toBe(true);
-        expect(videoUrl).toBe(returnedVideoUrl);
-        expect(decodeURIComponent(videoUrl)).toBe("https://v.kuaishou.com/SECOND_CLICKED");
+        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/TOP_VIDEO");
+        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_2");
+        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_3");
+    });
+
+    it('should fallback to clicked item videoUrl if gallery is empty', () => {
+        const galleryItems = [];
+        const clickedItem = { imgUrl: "img.jpg", videoUrl: "https://v.kuaishou.com/FALLBACK" };
         
-        // Should NOT be the most clicked video
-        expect(videoUrl).not.toBe("https://v.kuaishou.com/MOST_CLICKED");
+        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : clickedItem.videoUrl;
+        
+        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/FALLBACK");
     });
 });

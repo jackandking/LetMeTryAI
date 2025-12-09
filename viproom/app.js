@@ -33,22 +33,16 @@ function initializeApp() {
  */
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log('URL parameters:', urlParams.toString());
+    console.log('URL parameters:', urlParams);
 
     // Check if ad is finished - play video if true
     if (urlParams.get('finishedAd') === 'true') {
         const videoUrl = urlParams.get('videoUrl');
-        console.log('Ad finished, video URL:', videoUrl);
         if (videoUrl) {
-            const decodedUrl = decodeURIComponent(videoUrl);
-            console.log('Playing video after ad:', decodedUrl);
-            playVideo(decodedUrl);
-        } else {
-            console.error('Ad finished but no video URL provided in parameters');
+            playVideo(decodeURIComponent(videoUrl));
         }
     } else if (urlParams.get('finishedAd') === 'false') {
         // Ad was not completed, navigate back if possible
-        console.log('Ad was cancelled, navigating back');
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
         }
@@ -114,17 +108,13 @@ function sortGalleryByClicks() {
     // Sort by click count (descending)
     itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
     
-    // Create sorted gallery items array, preserving original indices
-    galleryItems = itemsWithIndices.map(entry => {
-        // Attach the original index to the item for tracking
-        return {
-            ...entry.item,
-            _originalIndex: entry.originalIndex
-        };
+    // Update galleryItems array and clickData with new indices
+    const newClickData = {};
+    galleryItems = itemsWithIndices.map((entry, newIndex) => {
+        newClickData[newIndex] = entry.clicks;
+        return entry.item;
     });
-    
-    // Do NOT remap clickData - keep it tied to original indices
-    // clickData remains indexed by original configuration position
+    clickData = newClickData;
 }
 
 /**
@@ -149,8 +139,8 @@ function displayGallery() {
     galleryContainer.innerHTML = '';
     
     // Create image cards
-    galleryItems.forEach((item, currentIndex) => {
-        const card = createImageCard(item, currentIndex);
+    galleryItems.forEach((item, originalIndex) => {
+        const card = createImageCard(item, originalIndex);
         galleryContainer.appendChild(card);
     });
 }
@@ -158,26 +148,18 @@ function displayGallery() {
 /**
  * Creates an image card element
  * @param {Object} item - Gallery item with imgUrl and videoUrl
- * @param {number} displayIndex - Item display index (sorted position)
+ * @param {number} index - Item index
  * @returns {HTMLElement} Image card element
  */
-function createImageCard(item, displayIndex) {
+function createImageCard(item, index) {
     const card = document.createElement('div');
     card.className = 'image-card';
-    card.style.setProperty('--card-index', displayIndex);
-    
-    // Get the original index for click tracking
-    // If _originalIndex is not set, items are in original order (not sorted yet)
-    const originalIndex = item._originalIndex !== undefined ? item._originalIndex : displayIndex;
-    
-    if (item._originalIndex === undefined) {
-        console.log('Item missing _originalIndex, using displayIndex:', displayIndex);
-    }
+    card.style.setProperty('--card-index', index);
     
     // Create image
     const img = document.createElement('img');
     img.src = item.imgUrl;
-    img.alt = `美女图片 ${displayIndex + 1}`;
+    img.alt = `美女图片 ${index + 1}`;
     img.onerror = function() {
         this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect fill="%23ddd" width="300" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3E图片加载失败%3C/text%3E%3C/svg%3E';
     };
@@ -188,13 +170,12 @@ function createImageCard(item, displayIndex) {
     
     const clickCount = document.createElement('div');
     clickCount.className = 'click-count';
-    // Use originalIndex to get the correct click count
-    clickCount.innerHTML = `点击量: <span class="count">${clickData[originalIndex] || 0}</span>`;
+    clickCount.innerHTML = `点击量: <span class="count">${clickData[index] || 0}</span>`;
     
     info.appendChild(clickCount);
     
-    // Add click handler - pass both item and originalIndex
-    card.onclick = () => handleImageClick(item, originalIndex);
+    // Add click handler
+    card.onclick = () => handleImageClick(item, index);
     
     card.appendChild(img);
     card.appendChild(info);
@@ -205,28 +186,24 @@ function createImageCard(item, displayIndex) {
 /**
  * Handles image click event
  * @param {Object} item - Gallery item
- * @param {number} originalIndex - Item's original index in the configuration
+ * @param {number} index - Item index
  */
-function handleImageClick(item, originalIndex) {
-    console.log('Image clicked - Original Index:', originalIndex, 'Item:', item);
-    console.log('Video URL to be played:', item.videoUrl);
+function handleImageClick(item, index) {
+    console.log('Image clicked:', index, item);
     
-    // Validate that item has videoUrl
-    if (!item || !item.videoUrl) {
-        console.error('Invalid item or missing videoUrl:', item);
-        showError('视频信息无效，请刷新页面重试');
-        return;
-    }
-    
-    // Increment click count using original index
-    clickData[originalIndex] = (clickData[originalIndex] || 0) + 1;
-    console.log('Updated click count for original index', originalIndex, ':', clickData[originalIndex]);
+    // Increment click count
+    clickData[index] = (clickData[index] || 0) + 1;
     
     // Save updated click data
     updateConfig(CLICKS_KEY, clickData);
     
-    // Show ad before playing video
-    showAdBeforeVideo(item.videoUrl);
+    // Always show the most voted (most clicked) video after ad
+    // Gallery items are already sorted by click count (highest first)
+    // So the first item (index 0) is the most voted video
+    const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : item.videoUrl;
+    
+    // Show ad before playing the most voted video
+    showAdBeforeVideo(mostVotedVideoUrl);
 }
 
 /**
@@ -234,25 +211,13 @@ function handleImageClick(item, originalIndex) {
  * @param {string} videoUrl - URL of the video to play after ad
  */
 function showAdBeforeVideo(videoUrl) {
-    console.log('Preparing to show ad before video:', videoUrl);
-    
-    // Validate videoUrl
-    if (!videoUrl || typeof videoUrl !== 'string') {
-        console.error('Invalid video URL:', videoUrl);
-        showError('视频链接无效');
-        return;
-    }
+    console.log('Showing ad before video:', videoUrl);
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         // Navigate to ad page with video URL as parameter
         const encodedVideoUrl = encodeURIComponent(videoUrl);
-        const adPageUrl = `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`;
-        console.log('Navigating to ad page with URL:', adPageUrl);
-        console.log('Encoded video URL:', encodedVideoUrl);
-        console.log('Original video URL:', videoUrl);
-        
         ks.navigateTo({
-            url: adPageUrl,
+            url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`,
         });
     } else {
         // Fallback: directly play video if mini-program environment not available
@@ -266,30 +231,18 @@ function showAdBeforeVideo(videoUrl) {
  * @param {string} videoUrl - URL of the video to play
  */
 function playVideo(videoUrl) {
-    console.log('=== PLAYING VIDEO ===');
-    console.log('Video URL:', videoUrl);
-    
-    // Validate videoUrl
-    if (!videoUrl || typeof videoUrl !== 'string') {
-        console.error('Cannot play video - invalid URL:', videoUrl);
-        showError('无法播放视频：链接无效');
-        return;
-    }
+    console.log('Playing video:', videoUrl);
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         // Navigate to video page or open video
         // In mini-program environment, this might open external browser or video player
-        const encodedUrl = encodeURIComponent(videoUrl);
-        console.log('Using mini-program navigation to play video');
         ks.navigateTo({
-            url: `/pages/video/video?url=${encodedUrl}`,
+            url: `/pages/video/video?url=${encodeURIComponent(videoUrl)}`,
         });
     } else {
         // Fallback: open video URL in new window/tab
-        console.log('Using fallback: opening video in new window');
         window.open(videoUrl, '_blank');
     }
-    console.log('=== END PLAYING VIDEO ===');
 }
 
 /**
