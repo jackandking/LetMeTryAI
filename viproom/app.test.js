@@ -219,18 +219,15 @@ describe('VIP Room Application', () => {
             }).not.toThrow();
         });
 
-        it('should call ks.navigateTo for ad display', () => {
+        it('should call ks.navigateTo for ad display without videoUrl parameter', () => {
             const mockNavigateTo = jest.fn();
             global.ks = {
                 navigateTo: mockNavigateTo
             };
             
-            const videoUrl = 'https://v.kuaishou.com/KL337Hat';
-            const encodedVideoUrl = encodeURIComponent(videoUrl);
-            
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
-                    url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`
+                    url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom`
                 });
             }
             
@@ -238,7 +235,7 @@ describe('VIP Room Application', () => {
                 url: expect.stringContaining('result_page_id=viproom')
             });
             expect(mockNavigateTo).toHaveBeenCalledWith({
-                url: expect.stringContaining('videoUrl=')
+                url: expect.not.stringContaining('videoUrl=')
             });
         });
 
@@ -398,7 +395,7 @@ describe('Integration with Storage', () => {
 });
 
 describe('Most Voted Video After Ad', () => {
-    it('should always play the most voted video after ad, not the clicked one', () => {
+    it('should navigate to ad page without videoUrl parameter', () => {
         const mockNavigateTo = jest.fn();
         global.ks = { navigateTo: mockNavigateTo };
         
@@ -409,25 +406,22 @@ describe('Most Voted Video After Ad', () => {
             { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/THIRD_VOTED" }   // Third most
         ];
         
-        // User clicks on the THIRD video (index 2)
+        // User clicks on any video
         const clickedItem = galleryItems[2];
         expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/THIRD_VOTED");
         
-        // But should navigate to ad with the MOST VOTED video URL
-        const mostVotedVideoUrl = galleryItems[0].videoUrl;
-        const encodedVideoUrl = encodeURIComponent(mostVotedVideoUrl);
-        
+        // Navigate to ad page without videoUrl parameter (not supported)
         if (typeof ks !== 'undefined' && ks.navigateTo) {
             ks.navigateTo({
-                url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`
+                url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom`
             });
         }
         
-        // Verify the MOST VOTED video URL was passed, not the clicked one
+        // Verify navigation was called with only result_page_id, no videoUrl
         expect(mockNavigateTo).toHaveBeenCalled();
         const callUrl = mockNavigateTo.mock.calls[0][0].url;
-        expect(callUrl).toContain(encodeURIComponent("https://v.kuaishou.com/MOST_VOTED"));
-        expect(callUrl).not.toContain(encodeURIComponent("https://v.kuaishou.com/THIRD_VOTED"));
+        expect(callUrl).toContain('result_page_id=viproom');
+        expect(callUrl).not.toContain('videoUrl=');
     });
 
     it('should use first item videoUrl as most voted video', () => {
