@@ -132,6 +132,16 @@ function normalizeImageUrl(url) {
 }
 
 /**
+ * Add cache-busting timestamp to URL for retry
+ * @param {string} url - Base URL
+ * @returns {string} URL with timestamp parameter
+ */
+function addCacheBuster(url) {
+    const separator = url.includes('?') ? '&' : '?';
+    return url + separator + 't=' + Date.now();
+}
+
+/**
  * Create an image container with masking
  * @param {Object} imageData - Image data object with url and maskPosition
  * @param {number} index - Index of the image
@@ -166,8 +176,7 @@ function createImageContainer(imageData, index) {
             
             setTimeout(() => {
                 console.log(`Retrying image load (attempt ${retryCount + 1}): ${normalizedUrl}`);
-                // Force reload by adding timestamp
-                img.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+                img.src = addCacheBuster(normalizedUrl);
             }, retryDelay);
         } else {
             // All retries failed, show error placeholder
@@ -426,7 +435,7 @@ function displayWinner(winner) {
             if (retryCount < 2) {
                 retryCount++;
                 setTimeout(() => {
-                    winnerImage.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+                    winnerImage.src = addCacheBuster(normalizedUrl);
                 }, retryCount * 1000);
             } else {
                 winnerImage.style.display = 'none';
@@ -489,7 +498,7 @@ function createResultItem(result, rank, maxVotes) {
         if (retryCount < 2) {
             retryCount++;
             setTimeout(() => {
-                img.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+                img.src = addCacheBuster(normalizedUrl);
             }, retryCount * 1000);
         } else {
             img.style.display = 'none';
