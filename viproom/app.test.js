@@ -4,6 +4,9 @@
 
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 
+// Constants used across multiple test suites
+const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+
 describe('VIP Room Application', () => {
     let originalDocument;
     let mockGetConfig;
@@ -183,8 +186,6 @@ describe('VIP Room Application', () => {
     });
 
     describe('URL Parameters', () => {
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
-        
         it('should handle finishedAd=true with stored video URL in localStorage', () => {
             // Setup: store a video URL in localStorage
             const videoUrl = 'https://v.kuaishou.com/KL337Hat';
@@ -235,8 +236,6 @@ describe('VIP Room Application', () => {
     });
 
     describe('Navigation Functions', () => {
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
-        
         it('should handle missing ks object gracefully', () => {
             global.ks = undefined;
             
@@ -506,8 +505,6 @@ describe('Most Voted Video After Ad', () => {
 });
 
 describe('LocalStorage Video Playback Flow', () => {
-    const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
-    
     beforeEach(() => {
         // Clear localStorage before each test
         localStorage.clear();
