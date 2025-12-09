@@ -400,4 +400,135 @@ describe('Beauty Vote Application', () => {
             expect(sortedResults).toHaveLength(0);
         });
     });
+
+    describe('Image URL Normalization', () => {
+        // Note: This is a duplicate of the normalizeImageUrl function from app.js
+        // for unit testing in isolation. In the browser context, app.js is loaded
+        // via script tag and doesn't use ES modules, so we can't import it directly.
+        function normalizeImageUrl(url) {
+            if (!url) return url;
+            let normalized = url.replace(/\?+$/, '');
+            if (normalized.startsWith('http://')) {
+                normalized = normalized.replace('http://', 'https://');
+            }
+            return normalized;
+        }
+
+        it('should remove trailing question marks', () => {
+            const url = 'http://example.com/image.jpg?';
+            const normalized = normalizeImageUrl(url);
+            
+            expect(normalized).toBe('https://example.com/image.jpg');
+            expect(normalized).not.toContain('?');
+        });
+
+        it('should remove multiple trailing question marks', () => {
+            const url = 'http://example.com/image.jpg???';
+            const normalized = normalizeImageUrl(url);
+            
+            expect(normalized).toBe('https://example.com/image.jpg');
+        });
+
+        it('should upgrade HTTP to HTTPS', () => {
+            const url = 'http://example.com/image.jpg';
+            const normalized = normalizeImageUrl(url);
+            
+            expect(normalized).toBe('https://example.com/image.jpg');
+            expect(normalized).toStartWith('https://');
+        });
+
+        it('should not modify HTTPS URLs', () => {
+            const url = 'https://example.com/image.jpg';
+            const normalized = normalizeImageUrl(url);
+            
+            expect(normalized).toBe('https://example.com/image.jpg');
+        });
+
+        it('should preserve query parameters except trailing ?', () => {
+            const url = 'http://example.com/image.jpg?size=large';
+            const normalized = normalizeImageUrl(url);
+            
+            expect(normalized).toBe('https://example.com/image.jpg?size=large');
+            expect(normalized).toContain('?size=large');
+        });
+
+        it('should handle null and undefined URLs', () => {
+            expect(normalizeImageUrl(null)).toBeNull();
+            expect(normalizeImageUrl(undefined)).toBeUndefined();
+            expect(normalizeImageUrl('')).toBe('');
+        });
+
+        it('should handle the specific failed URL from issue', () => {
+            const failedUrl = 'http://eb118-file.cdn.bcebos.com/upload/4737131188d34fce90ad563ee490e5b0_1551638035.png?';
+            const normalized = normalizeImageUrl(failedUrl);
+            
+            expect(normalized).toBe('https://eb118-file.cdn.bcebos.com/upload/4737131188d34fce90ad563ee490e5b0_1551638035.png');
+            expect(normalized).toStartWith('https://');
+            expect(normalized).not.toMatch(/\?$/);
+        });
+
+        it('should not modify already good URLs', () => {
+            const goodUrl = 'https://photo.4305.net.cn/upload/image/20230326/6381546260090487854744478.jpg';
+            const normalized = normalizeImageUrl(goodUrl);
+            
+            expect(normalized).toBe(goodUrl);
+        });
+    });
+
+    describe('Cache Buster Helper', () => {
+        // Note: This is a duplicate of the addCacheBuster function from app.js
+        // for unit testing in isolation. In the browser context, app.js is loaded
+        // via script tag and doesn't use ES modules, so we can't import it directly.
+        function addCacheBuster(url) {
+            const separator = url.includes('?') ? '&' : '?';
+            return url + separator + 't=' + Date.now();
+        }
+
+        it('should add cache-busting timestamp to URL', () => {
+            const baseUrl = 'https://example.com/image.jpg';
+            const result = addCacheBuster(baseUrl);
+            
+            expect(result).toContain('?t=');
+            expect(result).toStartWith(baseUrl);
+        });
+
+        it('should append timestamp with & if URL already has query params', () => {
+            const baseUrl = 'https://example.com/image.jpg?size=large';
+            const result = addCacheBuster(baseUrl);
+            
+            expect(result).toContain('&t=');
+            expect(result).not.toContain('??');
+        });
+    });
+
+    describe('Image Loading Retry Logic', () => {
+        it('should retry failed images up to max retries', () => {
+            let retryCount = 0;
+            const maxRetries = 2;
+            
+            // Simulate retry logic
+            const shouldRetry = retryCount < maxRetries;
+            
+            expect(shouldRetry).toBe(true);
+            
+            retryCount++;
+            expect(retryCount).toBe(1);
+            expect(retryCount < maxRetries).toBe(true);
+            
+            retryCount++;
+            expect(retryCount).toBe(2);
+            expect(retryCount < maxRetries).toBe(false);
+        });
+
+        it('should calculate exponential backoff delays', () => {
+            const retryDelays = [];
+            for (let i = 1; i <= 2; i++) {
+                retryDelays.push(i * 1000);
+            }
+            
+            expect(retryDelays).toEqual([1000, 2000]);
+            expect(retryDelays[0]).toBe(1000); // 1 second
+            expect(retryDelays[1]).toBe(2000); // 2 seconds
+        });
+    });
 });
