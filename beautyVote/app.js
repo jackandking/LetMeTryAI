@@ -113,6 +113,25 @@ function displayImages(images) {
 }
 
 /**
+ * Normalize image URL to fix common loading issues
+ * @param {string} url - Original image URL
+ * @returns {string} Normalized URL
+ */
+function normalizeImageUrl(url) {
+    if (!url) return url;
+    
+    // Remove trailing question marks that can cause loading issues
+    let normalized = url.replace(/\?+$/, '');
+    
+    // Upgrade HTTP to HTTPS for better webview compatibility
+    if (normalized.startsWith('http://')) {
+        normalized = normalized.replace('http://', 'https://');
+    }
+    
+    return normalized;
+}
+
+/**
  * Create an image container with masking
  * @param {Object} imageData - Image data object with url and maskPosition
  * @param {number} index - Index of the image
@@ -128,12 +147,33 @@ function createImageContainer(imageData, index) {
 
     const img = document.createElement('img');
     img.className = 'masked-image';
-    img.src = imageData.url;
+    
+    // Normalize URL before setting
+    const normalizedUrl = normalizeImageUrl(imageData.url);
+    img.src = normalizedUrl;
     img.alt = `候选人 ${index + 1}`;
+    
+    let retryCount = 0;
+    const maxRetries = 2;
+    
     img.onerror = () => {
-        console.error(`Failed to load image: ${imageData.url}`);
-        img.style.display = 'none';
-        wrapper.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;">加载失败</div>';
+        console.error(`Failed to load image (attempt ${retryCount + 1}): ${img.src}`);
+        
+        // Try retry with delay for network issues
+        if (retryCount < maxRetries) {
+            retryCount++;
+            const retryDelay = retryCount * 1000; // 1s, 2s delays
+            
+            setTimeout(() => {
+                console.log(`Retrying image load (attempt ${retryCount + 1}): ${normalizedUrl}`);
+                // Force reload by adding timestamp
+                img.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+            }, retryDelay);
+        } else {
+            // All retries failed, show error placeholder
+            img.style.display = 'none';
+            wrapper.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;">加载失败</div>';
+        }
     };
 
     const mask = document.createElement('div');
@@ -378,9 +418,19 @@ function displayWinner(winner) {
     const winnerVotes = document.getElementById('winnerVotes');
 
     if (winnerImage) {
-        winnerImage.src = winner.url;
+        const normalizedUrl = normalizeImageUrl(winner.url);
+        winnerImage.src = normalizedUrl;
+        
+        let retryCount = 0;
         winnerImage.onerror = () => {
-            winnerImage.style.display = 'none';
+            if (retryCount < 2) {
+                retryCount++;
+                setTimeout(() => {
+                    winnerImage.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+                }, retryCount * 1000);
+            } else {
+                winnerImage.style.display = 'none';
+            }
         };
     }
     if (winnerVotes) {
@@ -430,10 +480,20 @@ function createResultItem(result, rank, maxVotes) {
 
     const img = document.createElement('img');
     img.className = 'result-image';
-    img.src = result.url;
+    const normalizedUrl = normalizeImageUrl(result.url);
+    img.src = normalizedUrl;
     img.alt = `排名 ${rank}`;
+    
+    let retryCount = 0;
     img.onerror = () => {
-        img.style.display = 'none';
+        if (retryCount < 2) {
+            retryCount++;
+            setTimeout(() => {
+                img.src = normalizedUrl + (normalizedUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+            }, retryCount * 1000);
+        } else {
+            img.style.display = 'none';
+        }
     };
 
     const info = document.createElement('div');
