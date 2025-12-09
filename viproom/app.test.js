@@ -448,7 +448,7 @@ describe('Video URL Preservation After Sorting', () => {
         ];
         let clickData = { "0": 5, "1": 15, "2": 10 };
         
-        // Sort items
+        // Sort items by click count (descending)
         const itemsWithIndices = items.map((item, index) => ({
             item,
             originalIndex: index,
@@ -456,14 +456,26 @@ describe('Video URL Preservation After Sorting', () => {
         }));
         itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
         
+        // Verify items are sorted correctly
+        expect(itemsWithIndices[0].clicks).toBe(15); // Highest first
+        expect(itemsWithIndices[1].clicks).toBe(10); // Second highest
+        expect(itemsWithIndices[2].clicks).toBe(5);  // Lowest last
+        
         const sortedItems = itemsWithIndices.map(entry => ({
             ...entry.item,
             _originalIndex: entry.originalIndex
         }));
         
+        // Verify sorted order
+        expect(sortedItems[0].videoUrl).toBe("https://v.kuaishou.com/video2"); // Was at index 1
+        expect(sortedItems[1].videoUrl).toBe("https://v.kuaishou.com/video3"); // Was at index 2  
+        expect(sortedItems[2].videoUrl).toBe("https://v.kuaishou.com/video1"); // Was at index 0
+        
         // User clicks on display position 1 (which is video3, original index 2)
         const clickedItem = sortedItems[1];
         const originalIndex = clickedItem._originalIndex;
+        
+        expect(originalIndex).toBe(2); // Verify we have the right original index
         
         // Increment click count using ORIGINAL index
         clickData[originalIndex] = (clickData[originalIndex] || 0) + 1;
