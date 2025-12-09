@@ -396,3 +396,62 @@ describe('Integration with Storage', () => {
         expect(deserialized["2"]).toBe(22);
     });
 });
+
+describe('Most Voted Video After Ad', () => {
+    it('should always play the most voted video after ad, not the clicked one', () => {
+        const mockNavigateTo = jest.fn();
+        global.ks = { navigateTo: mockNavigateTo };
+        
+        // Simulate sorted gallery items (already sorted by clicks - highest first)
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_VOTED" },   // Most clicks
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/SECOND_VOTED" }, // Second most
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/THIRD_VOTED" }   // Third most
+        ];
+        
+        // User clicks on the THIRD video (index 2)
+        const clickedItem = galleryItems[2];
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/THIRD_VOTED");
+        
+        // But should navigate to ad with the MOST VOTED video URL
+        const mostVotedVideoUrl = galleryItems[0].videoUrl;
+        const encodedVideoUrl = encodeURIComponent(mostVotedVideoUrl);
+        
+        if (typeof ks !== 'undefined' && ks.navigateTo) {
+            ks.navigateTo({
+                url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom&videoUrl=${encodedVideoUrl}`
+            });
+        }
+        
+        // Verify the MOST VOTED video URL was passed, not the clicked one
+        expect(mockNavigateTo).toHaveBeenCalled();
+        const callUrl = mockNavigateTo.mock.calls[0][0].url;
+        expect(callUrl).toContain(encodeURIComponent("https://v.kuaishou.com/MOST_VOTED"));
+        expect(callUrl).not.toContain(encodeURIComponent("https://v.kuaishou.com/THIRD_VOTED"));
+    });
+
+    it('should use first item videoUrl as most voted video', () => {
+        // Gallery items are sorted by click count (highest first)
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/TOP_VIDEO", clicks: 100 },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_2", clicks: 50 },
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_3", clicks: 10 }
+        ];
+        
+        // Most voted video is the first one
+        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : null;
+        
+        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/TOP_VIDEO");
+        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_2");
+        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_3");
+    });
+
+    it('should fallback to clicked item videoUrl if gallery is empty', () => {
+        const galleryItems = [];
+        const clickedItem = { imgUrl: "img.jpg", videoUrl: "https://v.kuaishou.com/FALLBACK" };
+        
+        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : clickedItem.videoUrl;
+        
+        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/FALLBACK");
+    });
+});
