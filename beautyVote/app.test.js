@@ -402,7 +402,9 @@ describe('Beauty Vote Application', () => {
     });
 
     describe('Image URL Normalization', () => {
-        // Shared helper function for tests
+        // Note: This is a duplicate of the normalizeImageUrl function from app.js
+        // for unit testing in isolation. In the browser context, app.js is loaded
+        // via script tag and doesn't use ES modules, so we can't import it directly.
         function normalizeImageUrl(url) {
             if (!url) return url;
             let normalized = url.replace(/\?+$/, '');
@@ -474,6 +476,9 @@ describe('Beauty Vote Application', () => {
     });
 
     describe('Cache Buster Helper', () => {
+        // Note: This is a duplicate of the addCacheBuster function from app.js
+        // for unit testing in isolation. In the browser context, app.js is loaded
+        // via script tag and doesn't use ES modules, so we can't import it directly.
         function addCacheBuster(url) {
             const separator = url.includes('?') ? '&' : '?';
             return url + separator + 't=' + Date.now();
