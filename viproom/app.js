@@ -167,7 +167,12 @@ function createImageCard(item, displayIndex) {
     card.style.setProperty('--card-index', displayIndex);
     
     // Get the original index for click tracking
+    // If _originalIndex is not set, items are in original order (not sorted yet)
     const originalIndex = item._originalIndex !== undefined ? item._originalIndex : displayIndex;
+    
+    if (item._originalIndex === undefined) {
+        console.log('Item missing _originalIndex, using displayIndex:', displayIndex);
+    }
     
     // Create image
     const img = document.createElement('img');
