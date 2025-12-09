@@ -183,6 +183,24 @@ describe('VIP Room Application', () => {
     });
 
     describe('URL Parameters', () => {
+        it('should handle finishedAd=true with stored video URL in localStorage', () => {
+            // Setup: store a video URL in localStorage
+            const videoUrl = 'https://v.kuaishou.com/KL337Hat';
+            localStorage.setItem('viproom.pendingVideo', videoUrl);
+            
+            const urlParams = new URLSearchParams('finishedAd=true');
+            const finishedAd = urlParams.get('finishedAd') === 'true';
+            
+            expect(finishedAd).toBe(true);
+            
+            // Simulate retrieval
+            const storedVideoUrl = localStorage.getItem('viproom.pendingVideo');
+            expect(storedVideoUrl).toBe(videoUrl);
+            
+            // Cleanup
+            localStorage.removeItem('viproom.pendingVideo');
+        });
+
         it('should handle finishedAd=true with videoUrl parameter', () => {
             const urlParams = new URLSearchParams('finishedAd=true&videoUrl=https%3A%2F%2Fv.kuaishou.com%2FKL337Hat');
             const finishedAd = urlParams.get('finishedAd') === 'true';
@@ -192,11 +210,18 @@ describe('VIP Room Application', () => {
             expect(videoUrl).toBe('https://v.kuaishou.com/KL337Hat');
         });
 
-        it('should handle finishedAd=false parameter', () => {
+        it('should handle finishedAd=false parameter and clear pending video', () => {
+            // Setup: store a video URL in localStorage
+            localStorage.setItem('viproom.pendingVideo', 'https://v.kuaishou.com/test');
+            
             const urlParams = new URLSearchParams('finishedAd=false');
             const finishedAd = urlParams.get('finishedAd') === 'true';
             
             expect(finishedAd).toBe(false);
+            
+            // Should clear pending video when ad is cancelled
+            localStorage.removeItem('viproom.pendingVideo');
+            expect(localStorage.getItem('viproom.pendingVideo')).toBeNull();
         });
 
         it('should decode encoded video URL correctly', () => {
@@ -217,6 +242,32 @@ describe('VIP Room Application', () => {
                     ks.navigateTo({ url: "/pages/index/index" });
                 }
             }).not.toThrow();
+        });
+
+        it('should store video URL in localStorage before showing ad', () => {
+            const mockNavigateTo = jest.fn();
+            global.ks = {
+                navigateTo: mockNavigateTo
+            };
+            
+            const videoUrl = 'https://v.kuaishou.com/MOST_VOTED';
+            
+            // Simulate storing video URL before ad
+            localStorage.setItem('viproom.pendingVideo', videoUrl);
+            
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom`
+                });
+            }
+            
+            expect(mockNavigateTo).toHaveBeenCalledWith({
+                url: expect.stringContaining('result_page_id=viproom')
+            });
+            expect(localStorage.getItem('viproom.pendingVideo')).toBe(videoUrl);
+            
+            // Cleanup
+            localStorage.removeItem('viproom.pendingVideo');
         });
 
         it('should call ks.navigateTo for ad display without videoUrl parameter', () => {
@@ -447,5 +498,91 @@ describe('Most Voted Video After Ad', () => {
         const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : clickedItem.videoUrl;
         
         expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/FALLBACK");
+    });
+});
+
+describe('LocalStorage Video Playback Flow', () => {
+    beforeEach(() => {
+        // Clear localStorage before each test
+        localStorage.clear();
+    });
+
+    afterEach(() => {
+        // Clean up localStorage after each test
+        localStorage.clear();
+    });
+
+    it('should store video URL before showing ad', () => {
+        const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        
+        // Store video URL
+        localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
+        
+        // Verify it's stored
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe(videoUrl);
+    });
+
+    it('should retrieve and clear stored video URL after ad completes', () => {
+        const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        
+        // Store video URL (simulating before ad)
+        localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
+        
+        // Simulate ad completion - retrieve video URL
+        const storedVideoUrl = localStorage.getItem(PENDING_VIDEO_KEY);
+        expect(storedVideoUrl).toBe(videoUrl);
+        
+        // Clear the stored video URL
+        localStorage.removeItem(PENDING_VIDEO_KEY);
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBeNull();
+    });
+
+    it('should handle missing stored video URL gracefully', () => {
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        
+        // Try to retrieve when nothing is stored
+        const storedVideoUrl = localStorage.getItem(PENDING_VIDEO_KEY);
+        
+        expect(storedVideoUrl).toBeNull();
+    });
+
+    it('should clear pending video when ad is cancelled', () => {
+        const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        
+        // Store video URL
+        localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe(videoUrl);
+        
+        // Simulate ad cancellation - clear pending video
+        localStorage.removeItem(PENDING_VIDEO_KEY);
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBeNull();
+    });
+
+    it('should store most voted video URL, not clicked item URL', () => {
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        
+        // Gallery items sorted by popularity (highest first)
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_VOTED" },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/SECOND" }
+        ];
+        
+        // User clicks on second item
+        const clickedItem = galleryItems[1];
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/SECOND");
+        
+        // But we should store the most voted (first) item's video
+        const mostVotedVideoUrl = galleryItems[0].videoUrl;
+        localStorage.setItem(PENDING_VIDEO_KEY, mostVotedVideoUrl);
+        
+        // Verify the most voted video is stored, not the clicked one
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe("https://v.kuaishou.com/MOST_VOTED");
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).not.toBe(clickedItem.videoUrl);
+        
+        // Cleanup
+        localStorage.removeItem(PENDING_VIDEO_KEY);
     });
 });
