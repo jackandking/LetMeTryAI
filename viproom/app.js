@@ -114,13 +114,17 @@ function sortGalleryByClicks() {
     // Sort by click count (descending)
     itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
     
-    // Update galleryItems array and clickData with new indices
-    const newClickData = {};
-    galleryItems = itemsWithIndices.map((entry, newIndex) => {
-        newClickData[newIndex] = entry.clicks;
-        return entry.item;
+    // Create sorted gallery items array, preserving original indices
+    galleryItems = itemsWithIndices.map(entry => {
+        // Attach the original index to the item for tracking
+        return {
+            ...entry.item,
+            _originalIndex: entry.originalIndex
+        };
     });
-    clickData = newClickData;
+    
+    // Do NOT remap clickData - keep it tied to original indices
+    // clickData remains indexed by original configuration position
 }
 
 /**
@@ -145,8 +149,8 @@ function displayGallery() {
     galleryContainer.innerHTML = '';
     
     // Create image cards
-    galleryItems.forEach((item, originalIndex) => {
-        const card = createImageCard(item, originalIndex);
+    galleryItems.forEach((item, currentIndex) => {
+        const card = createImageCard(item, currentIndex);
         galleryContainer.appendChild(card);
     });
 }
@@ -154,18 +158,21 @@ function displayGallery() {
 /**
  * Creates an image card element
  * @param {Object} item - Gallery item with imgUrl and videoUrl
- * @param {number} index - Item index
+ * @param {number} displayIndex - Item display index (sorted position)
  * @returns {HTMLElement} Image card element
  */
-function createImageCard(item, index) {
+function createImageCard(item, displayIndex) {
     const card = document.createElement('div');
     card.className = 'image-card';
-    card.style.setProperty('--card-index', index);
+    card.style.setProperty('--card-index', displayIndex);
+    
+    // Get the original index for click tracking
+    const originalIndex = item._originalIndex !== undefined ? item._originalIndex : displayIndex;
     
     // Create image
     const img = document.createElement('img');
     img.src = item.imgUrl;
-    img.alt = `美女图片 ${index + 1}`;
+    img.alt = `美女图片 ${displayIndex + 1}`;
     img.onerror = function() {
         this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect fill="%23ddd" width="300" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3E图片加载失败%3C/text%3E%3C/svg%3E';
     };
@@ -176,12 +183,13 @@ function createImageCard(item, index) {
     
     const clickCount = document.createElement('div');
     clickCount.className = 'click-count';
-    clickCount.innerHTML = `点击量: <span class="count">${clickData[index] || 0}</span>`;
+    // Use originalIndex to get the correct click count
+    clickCount.innerHTML = `点击量: <span class="count">${clickData[originalIndex] || 0}</span>`;
     
     info.appendChild(clickCount);
     
-    // Add click handler
-    card.onclick = () => handleImageClick(item, index);
+    // Add click handler - pass both item and originalIndex
+    card.onclick = () => handleImageClick(item, originalIndex);
     
     card.appendChild(img);
     card.appendChild(info);
@@ -192,10 +200,10 @@ function createImageCard(item, index) {
 /**
  * Handles image click event
  * @param {Object} item - Gallery item
- * @param {number} index - Item index
+ * @param {number} originalIndex - Item's original index in the configuration
  */
-function handleImageClick(item, index) {
-    console.log('Image clicked - Index:', index, 'Item:', item);
+function handleImageClick(item, originalIndex) {
+    console.log('Image clicked - Original Index:', originalIndex, 'Item:', item);
     console.log('Video URL to be played:', item.videoUrl);
     
     // Validate that item has videoUrl
@@ -205,9 +213,9 @@ function handleImageClick(item, index) {
         return;
     }
     
-    // Increment click count
-    clickData[index] = (clickData[index] || 0) + 1;
-    console.log('Updated click count for index', index, ':', clickData[index]);
+    // Increment click count using original index
+    clickData[originalIndex] = (clickData[originalIndex] || 0) + 1;
+    console.log('Updated click count for original index', originalIndex, ':', clickData[originalIndex]);
     
     // Save updated click data
     updateConfig(CLICKS_KEY, clickData);

@@ -416,17 +416,65 @@ describe('Video URL Preservation After Sorting', () => {
         
         itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
         
-        const sortedItems = itemsWithIndices.map(entry => entry.item);
+        // Use the new logic: preserve original indices
+        const sortedItems = itemsWithIndices.map(entry => ({
+            ...entry.item,
+            _originalIndex: entry.originalIndex
+        }));
         
         // After sorting, order should be: video2 (15), video3 (10), video1 (5)
         expect(sortedItems[0].videoUrl).toBe("https://v.kuaishou.com/video2");
         expect(sortedItems[1].videoUrl).toBe("https://v.kuaishou.com/video3");
         expect(sortedItems[2].videoUrl).toBe("https://v.kuaishou.com/video1");
         
-        // When clicking on position 1 (video3), it should use video3's URL, not video2's
+        // Original indices should be preserved
+        expect(sortedItems[0]._originalIndex).toBe(1); // video2 was originally at index 1
+        expect(sortedItems[1]._originalIndex).toBe(2); // video3 was originally at index 2
+        expect(sortedItems[2]._originalIndex).toBe(0); // video1 was originally at index 0
+        
+        // When clicking on position 1 (video3), it should use video3's URL and original index 2
         const clickedItem = sortedItems[1];
         expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/video3");
+        expect(clickedItem._originalIndex).toBe(2);
         expect(clickedItem.videoUrl).not.toBe("https://v.kuaishou.com/video2"); // Not the most clicked
+    });
+
+    it('should maintain click data indexed by original configuration positions', () => {
+        // Initial setup
+        const items = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/video1" },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/video2" },
+            { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/video3" }
+        ];
+        let clickData = { "0": 5, "1": 15, "2": 10 };
+        
+        // Sort items
+        const itemsWithIndices = items.map((item, index) => ({
+            item,
+            originalIndex: index,
+            clicks: clickData[index] || 0
+        }));
+        itemsWithIndices.sort((a, b) => b.clicks - a.clicks);
+        
+        const sortedItems = itemsWithIndices.map(entry => ({
+            ...entry.item,
+            _originalIndex: entry.originalIndex
+        }));
+        
+        // User clicks on display position 1 (which is video3, original index 2)
+        const clickedItem = sortedItems[1];
+        const originalIndex = clickedItem._originalIndex;
+        
+        // Increment click count using ORIGINAL index
+        clickData[originalIndex] = (clickData[originalIndex] || 0) + 1;
+        
+        // Click data should now be: {0: 5, 1: 15, 2: 11}
+        expect(clickData[0]).toBe(5);  // video1 still has 5 clicks
+        expect(clickData[1]).toBe(15); // video2 still has 15 clicks
+        expect(clickData[2]).toBe(11); // video3 now has 11 clicks (was 10)
+        
+        // On next page load, this click data can be correctly applied to the original config
+        expect(clickData).toEqual({ "0": 5, "1": 15, "2": 11 });
     });
 
     it('should pass correct video URL when clicking on second most popular item', () => {
