@@ -8,6 +8,7 @@
  */
 const CONFIG_KEY = 'viproom.conf';
 const CLICKS_KEY = 'viproom.clicks';
+const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
 
 /**
  * Application state
@@ -37,12 +38,18 @@ function checkUrlParameters() {
 
     // Check if ad is finished - play video if true
     if (urlParams.get('finishedAd') === 'true') {
-        const videoUrl = urlParams.get('videoUrl');
-        if (videoUrl) {
-            playVideo(decodeURIComponent(videoUrl));
+        // Retrieve the stored video URL from localStorage
+        const storedVideoUrl = localStorage.getItem(PENDING_VIDEO_KEY);
+        if (storedVideoUrl) {
+            // Clear the stored video URL
+            localStorage.removeItem(PENDING_VIDEO_KEY);
+            // Play the video
+            playVideo(storedVideoUrl);
         }
     } else if (urlParams.get('finishedAd') === 'false') {
         // Ad was not completed, navigate back if possible
+        // Clear any pending video
+        localStorage.removeItem(PENDING_VIDEO_KEY);
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
         }
@@ -211,10 +218,13 @@ function handleImageClick(item, index) {
  * @param {string} videoUrl - URL of the video to play after ad
  */
 function showAdBeforeVideo(videoUrl) {
-    console.log('Showing ad before video (videoUrl used for fallback only):', videoUrl);
+    console.log('Showing ad before video:', videoUrl);
     
     if (typeof ks !== 'undefined' && ks.navigateTo) {
-        // Navigate to ad page without video URL parameter (not supported)
+        // Store the video URL in localStorage to retrieve after ad completes
+        localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
+        
+        // Navigate to ad page
         ks.navigateTo({
             url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom`,
         });
