@@ -502,6 +502,8 @@ describe('Most Voted Video After Ad', () => {
 });
 
 describe('LocalStorage Video Playback Flow', () => {
+    const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+    
     beforeEach(() => {
         // Clear localStorage before each test
         localStorage.clear();
@@ -514,7 +516,6 @@ describe('LocalStorage Video Playback Flow', () => {
 
     it('should store video URL before showing ad', () => {
         const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
         
         // Store video URL
         localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
@@ -525,7 +526,6 @@ describe('LocalStorage Video Playback Flow', () => {
 
     it('should retrieve and clear stored video URL after ad completes', () => {
         const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
         
         // Store video URL (simulating before ad)
         localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
@@ -540,8 +540,6 @@ describe('LocalStorage Video Playback Flow', () => {
     });
 
     it('should handle missing stored video URL gracefully', () => {
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
-        
         // Try to retrieve when nothing is stored
         const storedVideoUrl = localStorage.getItem(PENDING_VIDEO_KEY);
         
@@ -550,7 +548,6 @@ describe('LocalStorage Video Playback Flow', () => {
 
     it('should clear pending video when ad is cancelled', () => {
         const videoUrl = 'https://v.kuaishou.com/TEST_VIDEO';
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
         
         // Store video URL
         localStorage.setItem(PENDING_VIDEO_KEY, videoUrl);
@@ -562,8 +559,6 @@ describe('LocalStorage Video Playback Flow', () => {
     });
 
     it('should store most voted video URL, not clicked item URL', () => {
-        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
-        
         // Gallery items sorted by popularity (highest first)
         const galleryItems = [
             { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_VOTED" },
