@@ -204,13 +204,8 @@ function handleImageClick(item, index) {
     // Save updated click data
     updateConfig(CLICKS_KEY, clickData);
     
-    // Always show the most voted (most clicked) video after ad
-    // Gallery items are already sorted by click count (highest first)
-    // So the first item (index 0) is the most voted video
-    const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : item.videoUrl;
-    
-    // Show ad before playing the most voted video
-    showAdBeforeVideo(mostVotedVideoUrl);
+    // Show ad before playing the clicked photo's corresponding video
+    showAdBeforeVideo(item.videoUrl);
 }
 
 /**
