@@ -4,8 +4,27 @@
 
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 
-// Mock the DOM environment
+// Mock the configuration
 beforeEach(() => {
+    // Set up window configuration
+    global.window = global.window || {};
+    global.window.BASE_URL = 'https://letmetry.cloud';
+    global.window.API_ENDPOINTS = {
+        AI_CHAT: `${global.window.BASE_URL}/lws/ai/chat`,
+        FILE_UPLOAD: `${global.window.BASE_URL}/lws/file/upload`,
+        FILE_DELETE: `${global.window.BASE_URL}/lws/file/delete`,
+        FILE_INFO: `${global.window.BASE_URL}/lws/file/info`,
+        FILE_LIST: `${global.window.BASE_URL}/lws/file/list`,
+        FILE_DOWNLOAD: `${global.window.BASE_URL}/lws/file/download`,
+        IMAGE_UPLOAD: `${global.window.BASE_URL}/image/upload`,
+        MYSQL_QUERY: `${global.window.BASE_URL}/lws/mysql/query`,
+        MYSQL_GET_BY_ID: `${global.window.BASE_URL}/lws/mysql/getById`,
+        MYSQL_INSERT: `${global.window.BASE_URL}/lws/mysql/insert`,
+        MYSQL_UPDATE: `${global.window.BASE_URL}/lws/mysql/update`,
+        MYSQL_DELETE: `${global.window.BASE_URL}/lws/mysql/delete`
+    };
+    
+    // Mock the DOM environment
     document.body.innerHTML = `
         <input type="file" id="fileInput" />
         <button id="uploadBtn">Upload</button>
