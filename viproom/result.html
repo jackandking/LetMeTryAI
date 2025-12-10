@@ -225,13 +225,18 @@
 
         <button class="retry-button" onclick="retryVote()">返回投票</button>
 
-        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+        <div class="more" id="more"><a onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
     </div>
 
     <script>
         const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
         const CONFIG_KEY = 'viproom.conf';
         const CLICKS_KEY = 'viproom.clicks';
+        
+        // Navigation paths
+        const AD_PAGE_PATH = '/pages/showRewardedVideoAd/showRewardedVideoAd';
+        const VIDEO_PAGE_PATH = '/pages/video/video';
+        const INDEX_PAGE_PATH = '/pages/index/index';
 
         let galleryItems = [];
         let clickData = {};
@@ -435,7 +440,7 @@
             // Show ad before playing video
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
-                    url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom-result`,
+                    url: `${AD_PAGE_PATH}?result_page_id=viproom-result`,
                 });
             } else {
                 // Fallback: directly play video if mini-program environment not available
@@ -453,7 +458,7 @@
             
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
-                    url: `/pages/video/video?url=${encodeURIComponent(videoUrl)}`,
+                    url: `${VIDEO_PAGE_PATH}?url=${encodeURIComponent(videoUrl)}`,
                 });
             } else {
                 // Fallback: open video URL in new window/tab
@@ -474,7 +479,7 @@
         function jumpToIndex() {
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
-                    url: "/pages/index/index",
+                    url: INDEX_PAGE_PATH,
                 });
             } else {
                 console.warn('Mini-program navigation not available');

@@ -8,6 +8,9 @@ import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals
 const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
 const CONFIG_KEY = 'viproom.conf';
 const CLICKS_KEY = 'viproom.clicks';
+const AD_PAGE_PATH = '/pages/showRewardedVideoAd/showRewardedVideoAd';
+const VIDEO_PAGE_PATH = '/pages/video/video';
+const INDEX_PAGE_PATH = '/pages/index/index';
 
 describe('VIP Room Result Page', () => {
     let originalDocument;
@@ -64,6 +67,12 @@ describe('VIP Room Result Page', () => {
             expect(CONFIG_KEY).toBe('viproom.conf');
             expect(CLICKS_KEY).toBe('viproom.clicks');
             expect(PENDING_VIDEO_KEY).toBe('viproom.pendingVideo');
+        });
+
+        it('should use correct navigation paths', () => {
+            expect(AD_PAGE_PATH).toBe('/pages/showRewardedVideoAd/showRewardedVideoAd');
+            expect(VIDEO_PAGE_PATH).toBe('/pages/video/video');
+            expect(INDEX_PAGE_PATH).toBe('/pages/index/index');
         });
 
         it('should handle valid configuration data', () => {
