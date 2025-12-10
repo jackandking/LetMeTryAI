@@ -393,9 +393,9 @@
             
             // Scroll to bottom to show new record
             const container = document.getElementById('recordsContainer');
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 container.scrollTop = container.scrollHeight;
-            }, 100);
+            });
         }
 
         function deleteRecord(id) {
@@ -432,7 +432,7 @@
             if (record.imgUrl) {
                 previewImg.src = record.imgUrl;
                 previewImg.onerror = function() {
-                    this.style.display = 'none';
+                    this.classList.remove('loaded');
                     placeholder.style.display = 'block';
                     placeholder.textContent = '图片加载失败';
                 };
@@ -455,40 +455,78 @@
             records.forEach((record, index) => {
                 const card = document.createElement('div');
                 card.className = 'record-card';
-                card.innerHTML = `
-                    <div class="record-header">
-                        <span class="record-number">记录 #${index + 1}</span>
-                        <button class="delete-btn" onclick="deleteRecord(${record.id})">🗑️ 删除</button>
-                    </div>
-                    <div class="form-group">
-                        <label>图片URL：</label>
-                        <input 
-                            type="text" 
-                            value="${record.imgUrl}" 
-                            placeholder="https://example.com/image.jpg"
-                            oninput="updateRecord(${record.id}, 'imgUrl', this.value)"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label>视频URL：</label>
-                        <input 
-                            type="text" 
-                            value="${record.videoUrl}" 
-                            placeholder="https://v.kuaishou.com/video"
-                            oninput="updateRecord(${record.id}, 'videoUrl', this.value)"
-                        />
-                    </div>
-                    <div class="preview-container">
-                        <div id="placeholder-${record.id}" class="preview-placeholder">
-                            ${record.imgUrl ? '加载中...' : '请输入图片URL以查看预览'}
-                        </div>
-                        <img 
-                            id="preview-${record.id}" 
-                            class="preview-image" 
-                            alt="图片预览"
-                        />
-                    </div>
-                `;
+                
+                // Create header
+                const header = document.createElement('div');
+                header.className = 'record-header';
+                
+                const recordNumber = document.createElement('span');
+                recordNumber.className = 'record-number';
+                recordNumber.textContent = `记录 #${index + 1}`;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '🗑️ 删除';
+                deleteBtn.onclick = () => deleteRecord(record.id);
+                
+                header.appendChild(recordNumber);
+                header.appendChild(deleteBtn);
+                
+                // Create imgUrl field
+                const imgGroup = document.createElement('div');
+                imgGroup.className = 'form-group';
+                
+                const imgLabel = document.createElement('label');
+                imgLabel.textContent = '图片URL：';
+                
+                const imgInput = document.createElement('input');
+                imgInput.type = 'text';
+                imgInput.value = record.imgUrl;
+                imgInput.placeholder = 'https://example.com/image.jpg';
+                imgInput.oninput = (e) => updateRecord(record.id, 'imgUrl', e.target.value);
+                
+                imgGroup.appendChild(imgLabel);
+                imgGroup.appendChild(imgInput);
+                
+                // Create videoUrl field
+                const videoGroup = document.createElement('div');
+                videoGroup.className = 'form-group';
+                
+                const videoLabel = document.createElement('label');
+                videoLabel.textContent = '视频URL：';
+                
+                const videoInput = document.createElement('input');
+                videoInput.type = 'text';
+                videoInput.value = record.videoUrl;
+                videoInput.placeholder = 'https://v.kuaishou.com/video';
+                videoInput.oninput = (e) => updateRecord(record.id, 'videoUrl', e.target.value);
+                
+                videoGroup.appendChild(videoLabel);
+                videoGroup.appendChild(videoInput);
+                
+                // Create preview container
+                const previewContainer = document.createElement('div');
+                previewContainer.className = 'preview-container';
+                
+                const placeholder = document.createElement('div');
+                placeholder.id = `placeholder-${record.id}`;
+                placeholder.className = 'preview-placeholder';
+                placeholder.textContent = record.imgUrl ? '加载中...' : '请输入图片URL以查看预览';
+                
+                const previewImg = document.createElement('img');
+                previewImg.id = `preview-${record.id}`;
+                previewImg.className = 'preview-image';
+                previewImg.alt = '图片预览';
+                
+                previewContainer.appendChild(placeholder);
+                previewContainer.appendChild(previewImg);
+                
+                // Assemble card
+                card.appendChild(header);
+                card.appendChild(imgGroup);
+                card.appendChild(videoGroup);
+                card.appendChild(previewContainer);
+                
                 container.appendChild(card);
                 
                 // Update preview if URL exists
