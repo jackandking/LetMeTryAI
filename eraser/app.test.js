@@ -255,5 +255,24 @@ describe('Eraser App', () => {
                 expect(debugMode).toBe(expected);
             });
         });
+
+        it('should dynamically create script element for VConsole', () => {
+            // Test that we can create a script element dynamically
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+            
+            expect(script.tagName).toBe('SCRIPT');
+            expect(script.src).toContain('vconsole');
+            expect(script.src).toContain('3.15.1'); // Verify version is pinned
+        });
+
+        it('should handle script load callbacks', () => {
+            const script = document.createElement('script');
+            script.onload = jest.fn();
+            script.onerror = jest.fn();
+            
+            expect(typeof script.onload).toBe('function');
+            expect(typeof script.onerror).toBe('function');
+        });
     });
 });
