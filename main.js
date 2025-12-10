@@ -89,6 +89,11 @@ const imageConfig = {
         primary: 'https://eb118-file.cdn.bcebos.com/upload/01d3457ddd6d4448b806f5947ad87b0d_2219023232.png',
         fallback: 'images/game2.png',
         alt: '爱钓鱼'
+    },
+    'eraser-img': {
+        primary: 'https://eb118-file.cdn.bcebos.com/upload/eraser_icon.png',
+        fallback: 'images/game1.jpg',
+        alt: '爱橡皮'
     }
 };
 
