@@ -141,10 +141,10 @@ function validateAndPreviewFile(file) {
             previewArea.classList.remove('hidden');
         } else {
             console.error('Preview FileReader returned empty result');
-            alert('图片预览失败，但文件已选择。您可以继续尝试处理。');
-            // Still set the selected file so user can try to process
-            uploadArea.style.display = 'none';
-            previewArea.classList.remove('hidden');
+            alert('图片预览失败，请重新选择图片。');
+            // Reset state since preview failed
+            selectedFile = null;
+            fileInput.value = '';
         }
     };
     reader.onerror = (e) => {
@@ -170,23 +170,38 @@ function resetUpload() {
     uploadSection.classList.remove('hidden');
 }
 
+/**
+ * Validate that a file object is valid and ready to be read
+ * @param {File|Blob} file - The file object to validate
+ * @returns {Object} - { valid: boolean, error: string|null }
+ */
+function validateFileObject(file) {
+    if (!file) {
+        return { valid: false, error: '文件对象无效：文件为空' };
+    }
+    
+    if (!(file instanceof File) && !(file instanceof Blob)) {
+        return { valid: false, error: `文件对象类型无效：${typeof file}` };
+    }
+    
+    if (file.size === 0) {
+        return { valid: false, error: '文件大小为0，请选择有效的图片文件' };
+    }
+    
+    return { valid: true, error: null };
+}
+
 async function processImage() {
     if (!selectedFile) {
         alert('请先选择图片！');
         return;
     }
     
-    // Additional validation before processing
-    if (!(selectedFile instanceof File) && !(selectedFile instanceof Blob)) {
-        console.error('selectedFile is not a valid File/Blob object:', selectedFile);
-        alert('文件对象无效，请重新选择图片！');
-        resetUpload();
-        return;
-    }
-    
-    if (selectedFile.size === 0) {
-        console.error('selectedFile has 0 bytes');
-        alert('文件大小为0，请重新选择图片！');
+    // Validate file object before processing
+    const validation = validateFileObject(selectedFile);
+    if (!validation.valid) {
+        console.error('File validation failed:', validation.error);
+        alert(validation.error + '\n请重新选择图片！');
         resetUpload();
         return;
     }
@@ -229,21 +244,10 @@ async function processImage() {
 async function processImageFromFile(file) {
     return new Promise((resolve, reject) => {
         // Validate file object before reading
-        if (!file) {
-            console.error('File object is null or undefined');
-            reject(new Error('文件对象无效'));
-            return;
-        }
-        
-        if (!(file instanceof File) && !(file instanceof Blob)) {
-            console.error('Invalid file object type:', typeof file);
-            reject(new Error('文件对象类型无效'));
-            return;
-        }
-        
-        if (file.size === 0) {
-            console.error('File size is 0 bytes');
-            reject(new Error('文件大小为0，请选择有效的图片文件'));
+        const validation = validateFileObject(file);
+        if (!validation.valid) {
+            console.error('File validation failed:', validation.error);
+            reject(new Error(validation.error));
             return;
         }
         
@@ -588,6 +592,7 @@ export {
     initializeElements,
     setupEventListeners,
     validateAndPreviewFile,
+    validateFileObject,
     resetUpload,
     processImage,
     processImageFromFile,
