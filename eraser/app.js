@@ -373,7 +373,7 @@ async function processImageClientSide(imageUrl) {
 
 /**
  * Process image data to erase Chinese characters
- * Uses heuristic approach to detect and erase dark regions (characters)
+ * Uses improved adaptive thresholding to detect and erase dark regions (characters)
  * while preserving lighter grid lines and pinyin text
  */
 function processImageData(data, width, height) {
@@ -390,131 +390,214 @@ function processImageData(data, width, height) {
         brightness[pixelIndex] = 0.299 * r + 0.587 * g + 0.114 * b;
     }
     
-    // Detect character regions using a sliding window approach
-    // Characters are typically darker (low brightness) and form connected regions
-    const cellSize = estimateCellSize(brightness, width, height);
+    // Calculate adaptive threshold based on image statistics
+    const threshold = calculateAdaptiveThreshold(brightness, width, height);
     
-    if (cellSize > 0) {
-        eraseCharactersInCells(data, brightness, width, height, cellSize);
-    } else {
-        // Fallback: use simple threshold-based erasing
-        eraseByThreshold(data, brightness, width, height);
-    }
+    // Apply improved erasing algorithm with better grid detection
+    eraseCharactersAdaptive(data, brightness, width, height, threshold);
 }
 
 /**
- * Estimate the size of grid cells (田字格)
- * Returns estimated cell size in pixels, or 0 if can't detect
+ * Calculate adaptive threshold using Otsu's method
+ * This automatically finds the optimal threshold for separating foreground (text/grid) from background
  */
-function estimateCellSize(brightness, width, height) {
-    // Look for repeating patterns in horizontal and vertical directions
-    // Grid lines create periodic dark lines
-    
-    // Sample the middle rows to detect vertical patterns
-    const middleY = Math.floor(height / 2);
-    const rowSample = [];
-    
-    for (let x = 0; x < width; x++) {
-        const idx = middleY * width + x;
-        rowSample.push(brightness[idx]);
+function calculateAdaptiveThreshold(brightness, width, height) {
+    // Build histogram
+    const histogram = new Array(256).fill(0);
+    for (let i = 0; i < brightness.length; i++) {
+        histogram[Math.floor(brightness[i])]++;
     }
     
-    // Find the most common distance between dark lines (grid lines)
-    // This is a simplified approach - a real implementation would use FFT or autocorrelation
-    const darkThreshold = 100; // Pixels darker than this might be grid lines
-    const darkPoints = [];
+    // Calculate total number of pixels
+    const total = width * height;
     
-    for (let x = 0; x < width; x++) {
-        if (rowSample[x] < darkThreshold) {
-            darkPoints.push(x);
-        }
+    // Calculate sum of all brightness values
+    let sum = 0;
+    for (let i = 0; i < 256; i++) {
+        sum += i * histogram[i];
     }
     
-    // Estimate cell size from gaps between dark points
-    if (darkPoints.length > 2) {
-        const gaps = [];
-        for (let i = 1; i < darkPoints.length; i++) {
-            const gap = darkPoints[i] - darkPoints[i - 1];
-            if (gap > 20 && gap < width / 2) { // Reasonable cell size range
-                gaps.push(gap);
-            }
-        }
+    // Find optimal threshold using Otsu's method
+    let sumB = 0;
+    let wB = 0;
+    let wF = 0;
+    let maxVariance = 0;
+    let threshold = 128; // Default threshold
+    
+    for (let t = 0; t < 256; t++) {
+        wB += histogram[t];
+        if (wB === 0) continue;
         
-        if (gaps.length > 0) {
-            // Return median gap as estimated cell size
-            gaps.sort((a, b) => a - b);
-            return gaps[Math.floor(gaps.length / 2)];
+        wF = total - wB;
+        if (wF === 0) break;
+        
+        sumB += t * histogram[t];
+        
+        const mB = sumB / wB;
+        const mF = (sum - sumB) / wF;
+        
+        const variance = wB * wF * (mB - mF) * (mB - mF);
+        
+        if (variance > maxVariance) {
+            maxVariance = variance;
+            threshold = t;
         }
     }
     
-    return 0; // Couldn't detect cell size
+    return threshold;
 }
 
 /**
- * Erase characters within detected cells
- * Preserves pinyin (top portion) and grid lines (edges)
+ * Improved character erasing with adaptive thresholding
+ * Uses morphological analysis to better distinguish characters from grid lines
  */
-function eraseCharactersInCells(data, brightness, width, height, cellSize) {
-    const pinyinRatio = 0.30; // Top 30% is typically pinyin
-    const gridLineWidth = Math.max(2, Math.floor(cellSize * 0.05)); // Grid lines are about 5% of cell width
+function eraseCharactersAdaptive(data, brightness, width, height, threshold) {
+    // First pass: identify what should be preserved (pinyin and grid lines)
+    const preserve = new Uint8Array(width * height);
     
+    // Detect grid lines using edge detection
+    detectGridLines(brightness, preserve, width, height);
+    
+    // Detect pinyin region (typically top 25-35% of image with small text)
+    detectPinyinRegion(brightness, preserve, width, height);
+    
+    // Second pass: erase characters (dark regions not marked for preservation)
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             const idx = y * width + x;
             const pixelIdx = idx * 4;
             
-            // Determine position within cell
-            const cellX = x % cellSize;
-            const cellY = y % cellSize;
-            
-            // Skip if in pinyin region (top portion of cell)
-            if (cellY < cellSize * pinyinRatio) {
+            // Skip if marked for preservation
+            if (preserve[idx] > 0) {
                 continue;
             }
             
-            // Skip if near grid lines (edges of cells)
-            const nearEdge = cellX < gridLineWidth || cellX > cellSize - gridLineWidth ||
-                           cellY < gridLineWidth || cellY > cellSize - gridLineWidth;
-            
-            if (nearEdge) {
-                continue;
-            }
-            
-            // Erase if this pixel is dark (likely part of a character)
-            if (brightness[idx] < 200) {
-                // Replace with white
-                data[pixelIdx] = 255;
-                data[pixelIdx + 1] = 255;
-                data[pixelIdx + 2] = 255;
+            // Erase if pixel is darker than threshold
+            if (brightness[idx] < threshold) {
+                // Get background color from neighboring pixels
+                const bgColor = estimateBackgroundColor(data, x, y, width, height, preserve);
+                
+                data[pixelIdx] = bgColor.r;
+                data[pixelIdx + 1] = bgColor.g;
+                data[pixelIdx + 2] = bgColor.b;
             }
         }
     }
 }
 
 /**
- * Fallback erasing method using simple threshold
- * Erases dark regions while trying to preserve thin lines
+ * Detect grid lines using edge continuity analysis
+ * Grid lines are straight, thin lines that span across the image
  */
-function eraseByThreshold(data, brightness, width, height) {
-    const characterThreshold = 180; // Darker pixels are likely characters
-    const lineThreshold = 50; // Very dark pixels are likely grid lines
+function detectGridLines(brightness, preserve, width, height) {
+    const lineThreshold = 120; // Pixels darker than this might be grid lines
+    const minLineLength = Math.min(width, height) * 0.3; // Grid lines should be fairly long
     
-    for (let y = Math.floor(height * 0.2); y < height; y++) { // Skip top 20% for pinyin
+    // Detect horizontal grid lines
+    for (let y = 0; y < height; y++) {
+        let lineLength = 0;
+        let darkPixels = [];
+        
         for (let x = 0; x < width; x++) {
             const idx = y * width + x;
-            const pixelIdx = idx * 4;
-            const b = brightness[idx];
             
-            // Erase pixels that are dark but not extremely dark (grid lines)
-            if (b < characterThreshold && b > lineThreshold) {
-                // Check if this is part of a thin line (grid) by examining neighbors
-                const isGridLine = checkIfGridLine(brightness, width, height, x, y);
-                
-                if (!isGridLine) {
-                    // Replace with white to erase character
-                    data[pixelIdx] = 255;
-                    data[pixelIdx + 1] = 255;
-                    data[pixelIdx + 2] = 255;
+            if (brightness[idx] < lineThreshold) {
+                lineLength++;
+                darkPixels.push(idx);
+            } else {
+                // Check if we have a line
+                if (lineLength > minLineLength) {
+                    // Mark these pixels as part of grid line
+                    for (const pixelIdx of darkPixels) {
+                        preserve[pixelIdx] = 1;
+                    }
+                }
+                lineLength = 0;
+                darkPixels = [];
+            }
+        }
+        
+        // Check end of row
+        if (lineLength > minLineLength) {
+            for (const pixelIdx of darkPixels) {
+                preserve[pixelIdx] = 1;
+            }
+        }
+    }
+    
+    // Detect vertical grid lines
+    for (let x = 0; x < width; x++) {
+        let lineLength = 0;
+        let darkPixels = [];
+        
+        for (let y = 0; y < height; y++) {
+            const idx = y * width + x;
+            
+            if (brightness[idx] < lineThreshold) {
+                lineLength++;
+                darkPixels.push(idx);
+            } else {
+                // Check if we have a line
+                if (lineLength > minLineLength) {
+                    // Mark these pixels as part of grid line
+                    for (const pixelIdx of darkPixels) {
+                        preserve[pixelIdx] = 1;
+                    }
+                }
+                lineLength = 0;
+                darkPixels = [];
+            }
+        }
+        
+        // Check end of column
+        if (lineLength > minLineLength) {
+            for (const pixelIdx of darkPixels) {
+                preserve[pixelIdx] = 1;
+            }
+        }
+    }
+}
+
+/**
+ * Detect pinyin region (typically top portion with smaller text)
+ * Uses density analysis to identify regions with text
+ */
+function detectPinyinRegion(brightness, preserve, width, height) {
+    // Analyze top 40% of image for pinyin
+    const pinyinHeight = Math.floor(height * 0.4);
+    const textThreshold = 150; // Threshold for text detection
+    
+    // Divide into horizontal bands and analyze text density
+    const bandHeight = Math.floor(height / 20);
+    
+    for (let band = 0; band < Math.floor(pinyinHeight / bandHeight); band++) {
+        const startY = band * bandHeight;
+        const endY = Math.min(startY + bandHeight, pinyinHeight);
+        
+        // Calculate text density in this band
+        let darkPixelCount = 0;
+        let totalPixels = 0;
+        
+        for (let y = startY; y < endY; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = y * width + x;
+                totalPixels++;
+                if (brightness[idx] < textThreshold) {
+                    darkPixelCount++;
+                }
+            }
+        }
+        
+        const density = darkPixelCount / totalPixels;
+        
+        // If this band has text (density between 5% and 30%), preserve it
+        if (density > 0.05 && density < 0.3) {
+            for (let y = startY; y < endY; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = y * width + x;
+                    if (brightness[idx] < textThreshold) {
+                        preserve[idx] = 1;
+                    }
                 }
             }
         }
@@ -522,39 +605,48 @@ function eraseByThreshold(data, brightness, width, height) {
 }
 
 /**
- * Check if a pixel is part of a thin grid line
- * Grid lines are typically 1-3 pixels wide
+ * Estimate background color from neighboring preserved pixels
+ * This helps blend erased areas with the background
  */
-function checkIfGridLine(brightness, width, height, x, y) {
-    const lineThreshold = 100;
-    const idx = y * width + x;
+function estimateBackgroundColor(data, x, y, width, height, preserve) {
+    let sumR = 0, sumG = 0, sumB = 0;
+    let count = 0;
     
-    // Check horizontal continuity (left and right)
-    let horizontalCount = 0;
-    for (let dx = -3; dx <= 3; dx++) {
-        const nx = x + dx;
-        if (nx >= 0 && nx < width) {
-            const nidx = y * width + nx;
-            if (brightness[nidx] < lineThreshold) {
-                horizontalCount++;
+    // Sample neighboring pixels that are not dark (likely background)
+    const radius = 5;
+    
+    for (let dy = -radius; dy <= radius; dy++) {
+        for (let dx = -radius; dx <= radius; dx++) {
+            const nx = x + dx;
+            const ny = y + dy;
+            
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                const idx = ny * width + nx;
+                const pixelIdx = idx * 4;
+                
+                // Sample bright pixels (likely background)
+                const brightness = 0.299 * data[pixelIdx] + 0.587 * data[pixelIdx + 1] + 0.114 * data[pixelIdx + 2];
+                
+                if (brightness > 200) {
+                    sumR += data[pixelIdx];
+                    sumG += data[pixelIdx + 1];
+                    sumB += data[pixelIdx + 2];
+                    count++;
+                }
             }
         }
     }
     
-    // Check vertical continuity (up and down)
-    let verticalCount = 0;
-    for (let dy = -3; dy <= 3; dy++) {
-        const ny = y + dy;
-        if (ny >= 0 && ny < height) {
-            const nidx = ny * width + x;
-            if (brightness[nidx] < lineThreshold) {
-                verticalCount++;
-            }
-        }
+    // Return average background color, or white if no samples
+    if (count > 0) {
+        return {
+            r: Math.round(sumR / count),
+            g: Math.round(sumG / count),
+            b: Math.round(sumB / count)
+        };
+    } else {
+        return { r: 255, g: 255, b: 255 };
     }
-    
-    // If pixel has strong horizontal or vertical continuity, it's likely a grid line
-    return horizontalCount >= 5 || verticalCount >= 5;
 }
 
 function downloadAsImage() {
