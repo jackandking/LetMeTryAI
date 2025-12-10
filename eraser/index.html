@@ -98,5 +98,20 @@
     </div>
 
     <script type="module" src="app.js"></script>
+    
+    <!-- VConsole for mobile debugging - loads when ?debug=true is in URL -->
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+    <script>
+        // Initialize VConsole if debug parameter is present
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode && window.VConsole) {
+                const vConsole = new window.VConsole();
+                console.log('VConsole initialized for debugging');
+            }
+        })();
+    </script>
 </body>
 </html>
