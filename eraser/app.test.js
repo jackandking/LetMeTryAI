@@ -284,18 +284,16 @@ describe('Eraser App', () => {
             expect(largeFileSize).toBeGreaterThan(maxSize);
         });
 
-        it('should handle FileReader error events', (done) => {
+        it('should handle FileReader error events', () => {
             const reader = new FileReader();
             
             reader.onerror = (e) => {
                 expect(e).toBeDefined();
                 expect(reader.error).toBeDefined();
-                done();
             };
             
             // We can't easily trigger a real error, but we can verify the handler exists
             expect(typeof reader.onerror).toBe('function');
-            done();
         });
 
         it('should log file information for debugging', () => {

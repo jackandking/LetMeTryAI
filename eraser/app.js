@@ -173,7 +173,7 @@ function resetUpload() {
 /**
  * Validate that a file object is valid and ready to be read
  * @param {File|Blob} file - The file object to validate
- * @returns {Object} - { valid: boolean, error: string|null }
+ * @returns {{valid: boolean, error: string|null}} Validation result with error message if invalid
  */
 function validateFileObject(file) {
     if (!file) {
