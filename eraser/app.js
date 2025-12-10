@@ -106,6 +106,12 @@ function handleDrop(event) {
 }
 
 function validateAndPreviewFile(file) {
+    // Validate file exists
+    if (!file) {
+        alert('未选择文件，请重试！');
+        return;
+    }
+    
     // Validate file type
     if (!file.type.match('image/(jpeg|jpg|png)')) {
         alert('请上传 JPG 或 PNG 格式的图片！');
@@ -118,14 +124,35 @@ function validateAndPreviewFile(file) {
         return;
     }
     
+    // Validate file size is not 0
+    if (file.size === 0) {
+        alert('图片文件为空，请选择有效的图片！');
+        return;
+    }
+    
     selectedFile = file;
     
     // Preview image
     const reader = new FileReader();
     reader.onload = (e) => {
-        originalImage.src = e.target.result;
-        uploadArea.style.display = 'none';
-        previewArea.classList.remove('hidden');
+        if (e.target.result) {
+            originalImage.src = e.target.result;
+            uploadArea.style.display = 'none';
+            previewArea.classList.remove('hidden');
+        } else {
+            console.error('Preview FileReader returned empty result');
+            alert('图片预览失败，请重新选择图片。');
+            // Reset state since preview failed
+            selectedFile = null;
+            fileInput.value = '';
+        }
+    };
+    reader.onerror = (e) => {
+        console.error('Preview FileReader error:', e, reader.error);
+        alert('图片预览失败：' + (reader.error?.message || '未知错误') + '\n您可以尝试重新选择图片。');
+        // Reset the state
+        selectedFile = null;
+        fileInput.value = '';
     };
     reader.readAsDataURL(file);
 }
@@ -143,9 +170,39 @@ function resetUpload() {
     uploadSection.classList.remove('hidden');
 }
 
+/**
+ * Validate that a file object is valid and ready to be read
+ * @param {File|Blob} file - The file object to validate
+ * @returns {{valid: boolean, error: string|null}} Validation result with error message if invalid
+ */
+function validateFileObject(file) {
+    if (!file) {
+        return { valid: false, error: '文件对象无效：文件为空' };
+    }
+    
+    if (!(file instanceof File) && !(file instanceof Blob)) {
+        return { valid: false, error: `文件对象类型无效：${typeof file}` };
+    }
+    
+    if (file.size === 0) {
+        return { valid: false, error: '文件大小为0，请选择有效的图片文件' };
+    }
+    
+    return { valid: true, error: null };
+}
+
 async function processImage() {
     if (!selectedFile) {
         alert('请先选择图片！');
+        return;
+    }
+    
+    // Validate file object before processing
+    const validation = validateFileObject(selectedFile);
+    if (!validation.valid) {
+        console.error('File validation failed:', validation.error);
+        alert(validation.error + '\n请重新选择图片！');
+        resetUpload();
         return;
     }
     
@@ -157,6 +214,12 @@ async function processImage() {
         // Process image directly from file using FileReader
         // This avoids CORS issues and doesn't require server upload for processing
         console.log('Processing image on client side...');
+        console.log('File to process:', {
+            name: selectedFile.name,
+            type: selectedFile.type,
+            size: selectedFile.size
+        });
+        
         const processedUrl = await processImageFromFile(selectedFile);
         
         processedImageUrl = processedUrl;
@@ -180,9 +243,31 @@ async function processImage() {
  */
 async function processImageFromFile(file) {
     return new Promise((resolve, reject) => {
+        // Validate file object before reading
+        const validation = validateFileObject(file);
+        if (!validation.valid) {
+            console.error('File validation failed:', validation.error);
+            reject(new Error(validation.error));
+            return;
+        }
+        
+        console.log('Reading file:', {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            lastModified: file.lastModified
+        });
+        
         const reader = new FileReader();
+        
         reader.onload = async (e) => {
             const dataUrl = e.target.result;
+            if (!dataUrl) {
+                console.error('FileReader returned empty result');
+                reject(new Error('文件读取结果为空'));
+                return;
+            }
+            
             try {
                 const processedUrl = await processImageClientSide(dataUrl);
                 resolve(processedUrl);
@@ -191,10 +276,46 @@ async function processImageFromFile(file) {
                 reject(error);
             }
         };
-        reader.onerror = () => {
-            reject(new Error('无法读取图片文件'));
+        
+        reader.onerror = (e) => {
+            const errorCode = reader.error?.code;
+            const errorName = reader.error?.name;
+            const errorMessage = reader.error?.message;
+            
+            console.error('FileReader error:', {
+                code: errorCode,
+                name: errorName,
+                message: errorMessage,
+                event: e
+            });
+            
+            let userMessage = '无法读取图片文件';
+            
+            // Provide more specific error messages based on error type
+            if (errorName === 'NotFoundError') {
+                userMessage = '文件未找到，请重新选择';
+            } else if (errorName === 'NotReadableError') {
+                userMessage = '文件无法读取，可能文件已损坏';
+            } else if (errorName === 'SecurityError') {
+                userMessage = '安全限制：无法读取此文件';
+            } else if (errorMessage) {
+                userMessage = `读取失败：${errorMessage}`;
+            }
+            
+            reject(new Error(userMessage));
         };
-        reader.readAsDataURL(file);
+        
+        reader.onabort = () => {
+            console.error('FileReader was aborted');
+            reject(new Error('文件读取被中断'));
+        };
+        
+        try {
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error('Exception when starting FileReader:', error);
+            reject(new Error(`启动文件读取失败：${error.message}`));
+        }
     });
 }
 
@@ -471,6 +592,7 @@ export {
     initializeElements,
     setupEventListeners,
     validateAndPreviewFile,
+    validateFileObject,
     resetUpload,
     processImage,
     processImageFromFile,

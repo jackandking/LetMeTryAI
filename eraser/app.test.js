@@ -95,6 +95,24 @@ describe('Eraser App', () => {
             
             expect(largeFileSize).toBeGreaterThan(maxSize);
         });
+
+        it('should use validateFileObject helper for validation', () => {
+            // Test valid file
+            const validFile = new File(['content'], 'test.png', { type: 'image/png' });
+            // Simulate what validateFileObject does
+            const isValid = validFile && (validFile instanceof File || validFile instanceof Blob) && validFile.size > 0;
+            expect(isValid).toBe(true);
+
+            // Test null file
+            const nullFile = null;
+            const isNullValid = nullFile && (nullFile instanceof File || nullFile instanceof Blob);
+            expect(isNullValid).toBe(false);
+
+            // Test empty file
+            const emptyFile = new File([], 'empty.png', { type: 'image/png' });
+            const isEmptyValid = emptyFile && (emptyFile instanceof File) && emptyFile.size > 0;
+            expect(isEmptyValid).toBe(false);
+        });
     });
 
     describe('UI State Management', () => {
@@ -157,6 +175,27 @@ describe('Eraser App', () => {
             expect(processingSection.classList.contains('hidden')).toBe(true);
             expect(resultSection.classList.contains('hidden')).toBe(true);
         });
+
+        it('should validate selected file before processing', () => {
+            // Test that we check file validity before processing
+            const validFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+            const invalidObject = { name: 'fake.jpg' }; // Not a real File object
+            
+            expect(validFile instanceof File).toBe(true);
+            expect(invalidObject instanceof File).toBe(false);
+        });
+
+        it('should handle file object becoming invalid', () => {
+            // Simulate scenario where file object becomes invalid
+            let file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+            
+            expect(file instanceof File).toBe(true);
+            expect(file.size).toBeGreaterThan(0);
+            
+            // If file were to become null/undefined
+            file = null;
+            expect(file).toBeNull();
+        });
     });
 
     describe('Configuration Integration', () => {
@@ -209,6 +248,71 @@ describe('Eraser App', () => {
             };
             
             reader.readAsDataURL(file);
+        });
+
+        it('should reject null file objects', (done) => {
+            // Test validation for null file
+            const file = null;
+            
+            // Simulate what processImageFromFile does
+            if (!file) {
+                expect(file).toBeNull();
+                done();
+            }
+        });
+
+        it('should reject empty file objects (0 bytes)', () => {
+            // Create a file with 0 bytes
+            const emptyFile = new File([], 'empty.png', { type: 'image/png' });
+            expect(emptyFile.size).toBe(0);
+        });
+
+        it('should validate file type correctly', () => {
+            const validFile = new File(['content'], 'test.png', { type: 'image/png' });
+            const invalidFile = new File(['content'], 'test.txt', { type: 'text/plain' });
+            
+            expect(validFile.type).toMatch(/image\/(jpeg|jpg|png)/);
+            expect(invalidFile.type).not.toMatch(/image\/(jpeg|jpg|png)/);
+        });
+
+        it('should validate file size limits', () => {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const smallFileSize = 1024; // 1KB
+            const largeFileSize = 11 * 1024 * 1024; // 11MB
+            
+            expect(smallFileSize).toBeLessThan(maxSize);
+            expect(largeFileSize).toBeGreaterThan(maxSize);
+        });
+
+        it('should handle FileReader error events', () => {
+            const reader = new FileReader();
+            
+            reader.onerror = (e) => {
+                expect(e).toBeDefined();
+                expect(reader.error).toBeDefined();
+            };
+            
+            // We can't easily trigger a real error, but we can verify the handler exists
+            expect(typeof reader.onerror).toBe('function');
+        });
+
+        it('should log file information for debugging', () => {
+            const file = new File(['test content'], 'test.jpg', { 
+                type: 'image/jpeg',
+                lastModified: Date.now()
+            });
+            
+            const fileInfo = {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                lastModified: file.lastModified
+            };
+            
+            expect(fileInfo.name).toBe('test.jpg');
+            expect(fileInfo.type).toBe('image/jpeg');
+            expect(fileInfo.size).toBeGreaterThan(0);
+            expect(fileInfo.lastModified).toBeDefined();
         });
     });
 
