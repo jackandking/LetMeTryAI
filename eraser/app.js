@@ -1,5 +1,5 @@
 // Import utilities
-import { uploadFile } from '../util/file-util.js';
+// Note: uploadFile is not used as image processing is done client-side
 
 // DOM elements
 let fileInput;
@@ -211,7 +211,7 @@ async function processImageFromFile(file) {
 async function processImageClientSide(imageUrl) {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        // Try without CORS first for same-origin images
+        // Load image without setting crossOrigin to avoid CORS issues with data URLs
         img.onload = () => {
             try {
                 const canvas = document.createElement('canvas');
@@ -236,7 +236,7 @@ async function processImageClientSide(imageUrl) {
                 resolve(processedDataUrl);
             } catch (error) {
                 console.error('Error processing image data:', error);
-                // If CORS error, return original URL as fallback
+                // If error processing image data (e.g., CORS, memory issues), return original URL as fallback
                 console.log('Falling back to original image URL');
                 resolve(imageUrl);
             }
