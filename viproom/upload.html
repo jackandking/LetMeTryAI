@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
             background: #f5f5f5;
@@ -23,6 +23,130 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .mode-btn {
+            background: #e0e0e0;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        .mode-btn:hover {
+            transform: translateY(-2px);
+        }
+        .editor-mode, .json-mode {
+            display: none;
+        }
+        .editor-mode.active, .json-mode.active {
+            display: block;
+        }
+        .record-card {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .record-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .record-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 18px;
+        }
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .delete-btn:hover {
+            background: #ff5252;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .preview-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .preview-image.loaded {
+            display: block;
+        }
+        .preview-placeholder {
+            padding: 60px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            color: #999;
+            font-style: italic;
+        }
+        .add-record-btn {
+            background: #51cf66;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        .add-record-btn:hover {
+            background: #40c057;
+        }
         textarea {
             width: 100%;
             min-height: 300px;
@@ -32,8 +156,9 @@
             font-family: 'Courier New', monospace;
             font-size: 14px;
             margin-bottom: 20px;
+            box-sizing: border-box;
         }
-        button {
+        button.upload-btn {
             background: #667eea;
             color: white;
             padding: 12px 30px;
@@ -44,10 +169,10 @@
             width: 100%;
             transition: background 0.3s;
         }
-        button:hover {
+        button.upload-btn:hover {
             background: #5568d3;
         }
-        button:disabled {
+        button.upload-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
@@ -78,14 +203,38 @@
             margin-top: 0;
             color: #667eea;
         }
-        .example {
-            background: #f8f9fa;
-            padding: 15px;
+        .records-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .records-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .records-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .records-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .records-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .import-json-btn {
+            background: #748ffc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
             margin-bottom: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            overflow-x: auto;
+            transition: background 0.3s;
+        }
+        .import-json-btn:hover {
+            background: #5c7cfa;
         }
     </style>
 </head>
@@ -96,42 +245,291 @@
         <div class="info">
             <h3>使用说明</h3>
             <p>此工具用于上传VIP房间的配置到kvstore。配置包含美女图片和对应的视频链接。</p>
-            <p><strong>配置格式：</strong>JSON数组，每个元素包含 <code>imgUrl</code> 和 <code>videoUrl</code> 字段。</p>
+            <p><strong>两种编辑模式：</strong></p>
+            <ul>
+                <li><strong>可视化编辑：</strong>单独编辑每条记录，带图片预览</li>
+                <li><strong>JSON编辑：</strong>直接编辑完整的JSON配置</li>
+            </ul>
         </div>
 
-        <div class="example">
-            <strong>配置示例：</strong><br><br>
-            [<br>
-            &nbsp;&nbsp;{<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;"imgUrl": "https://example.com/image1.jpg",<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;"videoUrl": "https://v.kuaishou.com/video1"<br>
-            &nbsp;&nbsp;},<br>
-            &nbsp;&nbsp;{<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;"imgUrl": "https://example.com/image2.jpg",<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;"videoUrl": "https://v.kuaishou.com/video2"<br>
-            &nbsp;&nbsp;}<br>
-            ]
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="switchMode('editor')">可视化编辑</button>
+            <button class="mode-btn" onclick="switchMode('json')">JSON编辑</button>
         </div>
 
-        <label for="configInput"><strong>配置JSON：</strong></label>
-        <textarea id="configInput" placeholder="在此粘贴配置JSON...">[
+        <!-- Editor Mode -->
+        <div class="editor-mode active">
+            <button class="import-json-btn" onclick="showImportDialog()">📋 从JSON导入</button>
+            <div class="records-container" id="recordsContainer">
+                <!-- Records will be added here dynamically -->
+            </div>
+            <button class="add-record-btn" onclick="addRecord()">➕ 添加新记录</button>
+            <button class="upload-btn" id="uploadBtnEditor" onclick="uploadFromEditor()">上传配置</button>
+        </div>
+
+        <!-- JSON Mode -->
+        <div class="json-mode">
+            <label for="configInput"><strong>配置JSON：</strong></label>
+            <textarea id="configInput" placeholder="在此粘贴配置JSON...">[
   {
     "imgUrl": "https://p3-dreamina-sign.byteimg.com/tos-cn-i-tb4s082cfz/0b2ff364c29c41a9af3ad231b4dc82cc~tplv-tb4s082cfz-aigc_resize:2400:2400.webp?lk3s=4fa96020&x-expires=1767744000&x-signature=M8YrzjHRC4VEmkO965JBVbUPHrQ%3D",
     "videoUrl": "https://v.kuaishou.com/KL337Hat"
   }
 ]</textarea>
-
-        <button id="uploadBtn" onclick="uploadConfiguration()">上传配置</button>
+            <button class="upload-btn" id="uploadBtnJson" onclick="uploadFromJson()">上传配置</button>
+        </div>
 
         <div id="status" class="status"></div>
     </div>
 
     <script>
         const CONFIG_KEY = 'viproom.conf';
+        let records = [];
+        let recordIdCounter = 0;
 
-        function uploadConfiguration() {
+        // Initialize with one empty record
+        function initializeEditor() {
+            // Try to load existing configuration
+            getConfig(CONFIG_KEY, (config) => {
+                if (config && Array.isArray(config) && config.length > 0) {
+                    records = config.map((item, index) => ({
+                        id: recordIdCounter++,
+                        imgUrl: item.imgUrl || '',
+                        videoUrl: item.videoUrl || ''
+                    }));
+                } else {
+                    records = [{
+                        id: recordIdCounter++,
+                        imgUrl: '',
+                        videoUrl: ''
+                    }];
+                }
+                renderRecords();
+            });
+        }
+
+        function switchMode(mode) {
+            const editorMode = document.querySelector('.editor-mode');
+            const jsonMode = document.querySelector('.json-mode');
+            const modeBtns = document.querySelectorAll('.mode-btn');
+
+            if (mode === 'editor') {
+                editorMode.classList.add('active');
+                jsonMode.classList.remove('active');
+                modeBtns[0].classList.add('active');
+                modeBtns[1].classList.remove('active');
+                
+                // Sync from JSON to editor if JSON has content
+                syncJsonToEditor();
+            } else {
+                editorMode.classList.remove('active');
+                jsonMode.classList.add('active');
+                modeBtns[0].classList.remove('active');
+                modeBtns[1].classList.add('active');
+                
+                // Sync from editor to JSON
+                syncEditorToJson();
+            }
+        }
+
+        function syncEditorToJson() {
+            const config = records.map(r => ({
+                imgUrl: r.imgUrl,
+                videoUrl: r.videoUrl
+            }));
+            document.getElementById('configInput').value = JSON.stringify(config, null, 2);
+        }
+
+        function syncJsonToEditor() {
+            try {
+                const jsonText = document.getElementById('configInput').value.trim();
+                if (!jsonText) return;
+                
+                const config = JSON.parse(jsonText);
+                if (Array.isArray(config) && config.length > 0) {
+                    records = config.map((item, index) => ({
+                        id: recordIdCounter++,
+                        imgUrl: item.imgUrl || '',
+                        videoUrl: item.videoUrl || ''
+                    }));
+                    renderRecords();
+                }
+            } catch (error) {
+                console.log('Could not sync from JSON:', error.message);
+            }
+        }
+
+        function showImportDialog() {
+            const jsonText = prompt('请粘贴JSON配置：\n\n示例格式：\n[\n  {\n    "imgUrl": "https://example.com/image.jpg",\n    "videoUrl": "https://v.kuaishou.com/video"\n  }\n]');
+            
+            if (jsonText) {
+                try {
+                    const config = JSON.parse(jsonText);
+                    if (!Array.isArray(config)) {
+                        alert('配置必须是一个数组！');
+                        return;
+                    }
+                    
+                    records = config.map((item, index) => ({
+                        id: recordIdCounter++,
+                        imgUrl: item.imgUrl || '',
+                        videoUrl: item.videoUrl || ''
+                    }));
+                    renderRecords();
+                    showStatus('success', `✅ 成功导入 ${records.length} 条记录！`);
+                } catch (error) {
+                    alert('JSON格式错误：' + error.message);
+                }
+            }
+        }
+
+        function addRecord() {
+            records.push({
+                id: recordIdCounter++,
+                imgUrl: '',
+                videoUrl: ''
+            });
+            renderRecords();
+            
+            // Scroll to bottom to show new record
+            const container = document.getElementById('recordsContainer');
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
+        }
+
+        function deleteRecord(id) {
+            if (records.length === 1) {
+                alert('至少需要保留一条记录！');
+                return;
+            }
+            
+            if (confirm('确定要删除这条记录吗？')) {
+                records = records.filter(r => r.id !== id);
+                renderRecords();
+            }
+        }
+
+        function updateRecord(id, field, value) {
+            const record = records.find(r => r.id === id);
+            if (record) {
+                record[field] = value;
+                
+                // If imgUrl changed, update preview
+                if (field === 'imgUrl') {
+                    updateImagePreview(id);
+                }
+            }
+        }
+
+        function updateImagePreview(id) {
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+            
+            const previewImg = document.getElementById(`preview-${id}`);
+            const placeholder = document.getElementById(`placeholder-${id}`);
+            
+            if (record.imgUrl) {
+                previewImg.src = record.imgUrl;
+                previewImg.onerror = function() {
+                    this.style.display = 'none';
+                    placeholder.style.display = 'block';
+                    placeholder.textContent = '图片加载失败';
+                };
+                previewImg.onload = function() {
+                    this.classList.add('loaded');
+                    placeholder.style.display = 'none';
+                };
+            } else {
+                previewImg.classList.remove('loaded');
+                previewImg.src = '';
+                placeholder.style.display = 'block';
+                placeholder.textContent = '请输入图片URL以查看预览';
+            }
+        }
+
+        function renderRecords() {
+            const container = document.getElementById('recordsContainer');
+            container.innerHTML = '';
+            
+            records.forEach((record, index) => {
+                const card = document.createElement('div');
+                card.className = 'record-card';
+                card.innerHTML = `
+                    <div class="record-header">
+                        <span class="record-number">记录 #${index + 1}</span>
+                        <button class="delete-btn" onclick="deleteRecord(${record.id})">🗑️ 删除</button>
+                    </div>
+                    <div class="form-group">
+                        <label>图片URL：</label>
+                        <input 
+                            type="text" 
+                            value="${record.imgUrl}" 
+                            placeholder="https://example.com/image.jpg"
+                            oninput="updateRecord(${record.id}, 'imgUrl', this.value)"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>视频URL：</label>
+                        <input 
+                            type="text" 
+                            value="${record.videoUrl}" 
+                            placeholder="https://v.kuaishou.com/video"
+                            oninput="updateRecord(${record.id}, 'videoUrl', this.value)"
+                        />
+                    </div>
+                    <div class="preview-container">
+                        <div id="placeholder-${record.id}" class="preview-placeholder">
+                            ${record.imgUrl ? '加载中...' : '请输入图片URL以查看预览'}
+                        </div>
+                        <img 
+                            id="preview-${record.id}" 
+                            class="preview-image" 
+                            alt="图片预览"
+                        />
+                    </div>
+                `;
+                container.appendChild(card);
+                
+                // Update preview if URL exists
+                if (record.imgUrl) {
+                    updateImagePreview(record.id);
+                }
+            });
+        }
+
+        function uploadFromEditor() {
+            const uploadBtn = document.getElementById('uploadBtnEditor');
+            const statusDiv = document.getElementById('status');
+
+            // Clear previous status
+            statusDiv.style.display = 'none';
+            statusDiv.className = 'status';
+
+            // Validate records
+            const config = [];
+            for (let i = 0; i < records.length; i++) {
+                const record = records[i];
+                if (!record.imgUrl || !record.videoUrl) {
+                    showStatus('error', `记录 #${i + 1} 缺少必需字段（图片URL 或 视频URL）。`);
+                    return;
+                }
+                if (typeof record.imgUrl !== 'string' || typeof record.videoUrl !== 'string') {
+                    showStatus('error', `记录 #${i + 1} 的字段必须是字符串。`);
+                    return;
+                }
+                config.push({
+                    imgUrl: record.imgUrl.trim(),
+                    videoUrl: record.videoUrl.trim()
+                });
+            }
+
+            uploadConfiguration(config, uploadBtn);
+        }
+
+        function uploadFromJson() {
             const configInput = document.getElementById('configInput');
-            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadBtn = document.getElementById('uploadBtnJson');
             const statusDiv = document.getElementById('status');
 
             // Clear previous status
@@ -166,14 +564,15 @@
                 }
             }
 
+            uploadConfiguration(config, uploadBtn);
+        }
+
+        function uploadConfiguration(config, uploadBtn) {
             // Disable button during upload
             uploadBtn.disabled = true;
             uploadBtn.textContent = '上传中...';
 
             // Upload using util.js updateConfig function
-            // Note: updateConfig in util.js uses async updateKeyValueStore internally
-            // but doesn't provide a callback. We show success message after a delay
-            // to allow the async operation to complete.
             try {
                 updateConfig(CONFIG_KEY, config);
                 
@@ -199,6 +598,9 @@
             statusDiv.textContent = message;
             statusDiv.style.display = 'block';
         }
+
+        // Initialize editor when page loads
+        document.addEventListener('DOMContentLoaded', initializeEditor);
     </script>
 </body>
 </html>
