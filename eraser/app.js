@@ -106,6 +106,12 @@ function handleDrop(event) {
 }
 
 function validateAndPreviewFile(file) {
+    // Validate file exists
+    if (!file) {
+        alert('未选择文件，请重试！');
+        return;
+    }
+    
     // Validate file type
     if (!file.type.match('image/(jpeg|jpg|png)')) {
         alert('请上传 JPG 或 PNG 格式的图片！');
@@ -118,14 +124,35 @@ function validateAndPreviewFile(file) {
         return;
     }
     
+    // Validate file size is not 0
+    if (file.size === 0) {
+        alert('图片文件为空，请选择有效的图片！');
+        return;
+    }
+    
     selectedFile = file;
     
     // Preview image
     const reader = new FileReader();
     reader.onload = (e) => {
-        originalImage.src = e.target.result;
-        uploadArea.style.display = 'none';
-        previewArea.classList.remove('hidden');
+        if (e.target.result) {
+            originalImage.src = e.target.result;
+            uploadArea.style.display = 'none';
+            previewArea.classList.remove('hidden');
+        } else {
+            console.error('Preview FileReader returned empty result');
+            alert('图片预览失败，但文件已选择。您可以继续尝试处理。');
+            // Still set the selected file so user can try to process
+            uploadArea.style.display = 'none';
+            previewArea.classList.remove('hidden');
+        }
+    };
+    reader.onerror = (e) => {
+        console.error('Preview FileReader error:', e, reader.error);
+        alert('图片预览失败：' + (reader.error?.message || '未知错误') + '\n您可以尝试重新选择图片。');
+        // Reset the state
+        selectedFile = null;
+        fileInput.value = '';
     };
     reader.readAsDataURL(file);
 }
@@ -180,9 +207,42 @@ async function processImage() {
  */
 async function processImageFromFile(file) {
     return new Promise((resolve, reject) => {
+        // Validate file object before reading
+        if (!file) {
+            console.error('File object is null or undefined');
+            reject(new Error('文件对象无效'));
+            return;
+        }
+        
+        if (!(file instanceof File) && !(file instanceof Blob)) {
+            console.error('Invalid file object type:', typeof file);
+            reject(new Error('文件对象类型无效'));
+            return;
+        }
+        
+        if (file.size === 0) {
+            console.error('File size is 0 bytes');
+            reject(new Error('文件大小为0，请选择有效的图片文件'));
+            return;
+        }
+        
+        console.log('Reading file:', {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            lastModified: file.lastModified
+        });
+        
         const reader = new FileReader();
+        
         reader.onload = async (e) => {
             const dataUrl = e.target.result;
+            if (!dataUrl) {
+                console.error('FileReader returned empty result');
+                reject(new Error('文件读取结果为空'));
+                return;
+            }
+            
             try {
                 const processedUrl = await processImageClientSide(dataUrl);
                 resolve(processedUrl);
@@ -191,10 +251,46 @@ async function processImageFromFile(file) {
                 reject(error);
             }
         };
-        reader.onerror = () => {
-            reject(new Error('无法读取图片文件'));
+        
+        reader.onerror = (e) => {
+            const errorCode = reader.error?.code;
+            const errorName = reader.error?.name;
+            const errorMessage = reader.error?.message;
+            
+            console.error('FileReader error:', {
+                code: errorCode,
+                name: errorName,
+                message: errorMessage,
+                event: e
+            });
+            
+            let userMessage = '无法读取图片文件';
+            
+            // Provide more specific error messages based on error type
+            if (errorName === 'NotFoundError') {
+                userMessage = '文件未找到，请重新选择';
+            } else if (errorName === 'NotReadableError') {
+                userMessage = '文件无法读取，可能文件已损坏';
+            } else if (errorName === 'SecurityError') {
+                userMessage = '安全限制：无法读取此文件';
+            } else if (errorMessage) {
+                userMessage = `读取失败：${errorMessage}`;
+            }
+            
+            reject(new Error(userMessage));
         };
-        reader.readAsDataURL(file);
+        
+        reader.onabort = () => {
+            console.error('FileReader was aborted');
+            reject(new Error('文件读取被中断'));
+        };
+        
+        try {
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error('Exception when starting FileReader:', error);
+            reject(new Error(`启动文件读取失败：${error.message}`));
+        }
     });
 }
 
