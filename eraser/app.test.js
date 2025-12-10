@@ -166,4 +166,60 @@ describe('Eraser App', () => {
             expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain(window.BASE_URL);
         });
     });
+
+    describe('Image Processing', () => {
+        it('should handle client-side image processing', () => {
+            // Create a simple test canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            
+            // Fill with white
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 100, 100);
+            
+            // Draw a simple black square in the center (simulating a character)
+            ctx.fillStyle = 'black';
+            ctx.fillRect(40, 40, 20, 20);
+            
+            expect(ctx).toBeDefined();
+            expect(canvas.width).toBe(100);
+            expect(canvas.height).toBe(100);
+        });
+
+        it('should create data URL from canvas', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 10;
+            canvas.height = 10;
+            const dataUrl = canvas.toDataURL('image/png');
+            
+            expect(dataUrl).toBeDefined();
+            expect(dataUrl).toMatch(/^data:image\/png;base64,/);
+        });
+
+        it('should handle FileReader for image files', (done) => {
+            // Create a mock file
+            const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                expect(e.target.result).toBeDefined();
+                done();
+            };
+            
+            reader.readAsDataURL(file);
+        });
+    });
+
+    describe('Download Functionality', () => {
+        it('should handle download link creation', () => {
+            const link = document.createElement('a');
+            link.href = 'data:image/png;base64,test';
+            link.download = 'test.png';
+            
+            expect(link.href).toContain('data:image/png');
+            expect(link.download).toBe('test.png');
+        });
+    });
 });

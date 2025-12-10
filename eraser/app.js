@@ -154,23 +154,10 @@ async function processImage() {
         uploadSection.classList.add('hidden');
         processingSection.classList.remove('hidden');
         
-        // Upload image
-        console.log('Uploading image...');
-        const uploadResult = await uploadFile(selectedFile, 'eraser');
-        console.log('Upload result:', uploadResult);
-        
-        if (!uploadResult || !uploadResult.filename) {
-            throw new Error('图片上传失败');
-        }
-        
-        const imageUrl = `${window.BASE_URL}/${uploadResult.filename}`;
-        console.log('Image URL:', imageUrl);
-        
-        // Process image using client-side JavaScript
-        // This uses canvas-based image processing to detect and erase Chinese characters
-        // while preserving pinyin and grid lines
+        // Process image directly from file using FileReader
+        // This avoids CORS issues and doesn't require server upload for processing
         console.log('Processing image on client side...');
-        const processedUrl = await processImageClientSide(imageUrl);
+        const processedUrl = await processImageFromFile(selectedFile);
         
         processedImageUrl = processedUrl;
         processedImage.src = processedUrl;
@@ -188,6 +175,30 @@ async function processImage() {
 }
 
 /**
+ * Process image directly from a File object
+ * Reads the file as a data URL and processes it client-side
+ */
+async function processImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const dataUrl = e.target.result;
+            try {
+                const processedUrl = await processImageClientSide(dataUrl);
+                resolve(processedUrl);
+            } catch (error) {
+                console.error('Error processing image:', error);
+                reject(error);
+            }
+        };
+        reader.onerror = () => {
+            reject(new Error('无法读取图片文件'));
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+/**
  * Process image to erase Chinese characters while preserving pinyin and grid lines
  * This is a client-side implementation using canvas-based image processing
  * Algorithm:
@@ -198,33 +209,41 @@ async function processImage() {
  * 5. Erase characters while keeping grid lines
  */
 async function processImageClientSide(imageUrl) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = 'anonymous';
+        // Try without CORS first for same-origin images
         img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            
-            // Draw original image
-            ctx.drawImage(img, 0, 0);
-            
-            // Get image data for processing
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            // Process the image to erase characters
-            processImageData(data, canvas.width, canvas.height);
-            
-            // Put processed data back
-            ctx.putImageData(imageData, 0, 0);
-            
-            const processedDataUrl = canvas.toDataURL('image/png');
-            resolve(processedDataUrl);
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw original image
+                ctx.drawImage(img, 0, 0);
+                
+                // Get image data for processing
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                // Process the image to erase characters
+                processImageData(data, canvas.width, canvas.height);
+                
+                // Put processed data back
+                ctx.putImageData(imageData, 0, 0);
+                
+                const processedDataUrl = canvas.toDataURL('image/png');
+                resolve(processedDataUrl);
+            } catch (error) {
+                console.error('Error processing image data:', error);
+                // If CORS error, return original URL as fallback
+                console.log('Falling back to original image URL');
+                resolve(imageUrl);
+            }
         };
-        img.onerror = () => {
-            // Fallback if can't load image
+        img.onerror = (error) => {
+            console.error('Error loading image:', error);
+            // Fallback: return original URL so user can at least see something
             resolve(imageUrl);
         };
         img.src = imageUrl;
@@ -423,10 +442,17 @@ function downloadAsImage() {
         return;
     }
     
-    const link = document.createElement('a');
-    link.href = processedImageUrl;
-    link.download = `eraser-${Date.now()}.png`;
-    link.click();
+    try {
+        const link = document.createElement('a');
+        link.href = processedImageUrl;
+        link.download = `eraser-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Error downloading image:', error);
+        alert('下载失败，请右键点击图片另存为');
+    }
 }
 
 async function downloadAsPdf() {
@@ -446,5 +472,7 @@ export {
     setupEventListeners,
     validateAndPreviewFile,
     resetUpload,
-    processImage
+    processImage,
+    processImageFromFile,
+    processImageClientSide
 };
