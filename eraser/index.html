@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爱橡皮 - 汉字练习助手</title>
+    <script src="../config.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧹 爱橡皮 - 汉字练习助手</h1>
+            <p class="subtitle">上传田字格汉字图片，生成可打印的练字模板（擦除汉字，保留拼音）</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📤</div>
+                    <h2>点击或拖拽上传图片</h2>
+                    <p>支持 JPG、PNG 格式，建议图片清晰度高</p>
+                    <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+                    <button class="upload-btn" id="uploadBtn">选择图片</button>
+                </div>
+                
+                <div class="preview-area hidden" id="previewArea">
+                    <h3>📋 原始图片预览</h3>
+                    <img id="originalImage" alt="原始图片">
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="processBtn">🔄 开始处理</button>
+                        <button class="btn btn-secondary" id="resetBtn">🔄 重新上传</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section hidden" id="processingSection">
+                <div class="spinner"></div>
+                <h3>⏳ AI正在处理中...</h3>
+                <p>正在擦除汉字，保留拼音，请稍候...</p>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section hidden" id="resultSection">
+                <h3>✅ 处理完成！</h3>
+                <div class="result-preview">
+                    <div class="result-image-container">
+                        <h4>处理后的图片</h4>
+                        <img id="processedImage" alt="处理后的图片">
+                    </div>
+                </div>
+                <div class="download-buttons">
+                    <button class="btn btn-success" id="downloadImageBtn">📥 下载图片</button>
+                    <button class="btn btn-success" id="downloadPdfBtn">📄 下载PDF</button>
+                    <button class="btn btn-secondary" id="newProcessBtn">➕ 处理新图片</button>
+                </div>
+            </section>
+
+            <!-- Instructions Section -->
+            <section class="instructions-section">
+                <h3>📖 使用说明</h3>
+                <ol>
+                    <li>上传包含田字格汉字的图片（如作业本、练习册截图）</li>
+                    <li>AI会自动识别并擦除田字格中的汉字，同时保留拼音部分</li>
+                    <li>下载处理后的图片或PDF，即可打印给孩子练习写字</li>
+                    <li>建议使用清晰、光线充足的图片以获得最佳效果</li>
+                </ol>
+                
+                <div class="example-section">
+                    <h4>📸 示例效果</h4>
+                    <p>上传类似下图的田字格汉字图片：</p>
+                    <div class="example-placeholder">
+                        <p>🔤 上方：拼音（保留）</p>
+                        <p>🀄 中间：汉字（擦除）</p>
+                        <p>🔲 田字格线条（保留）</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 人人爱. 保留所有权利.</p>
+            <a href="/" class="back-home">🏠 返回首页</a>
+        </footer>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
