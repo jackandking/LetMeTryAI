@@ -448,7 +448,7 @@ describe('Integration with Storage', () => {
     });
 });
 
-describe('Most Voted Video After Ad', () => {
+describe('Clicked Photo Video After Ad', () => {
     it('should navigate to ad page without videoUrl parameter', () => {
         const mockNavigateTo = jest.fn();
         global.ks = { navigateTo: mockNavigateTo };
@@ -478,7 +478,7 @@ describe('Most Voted Video After Ad', () => {
         expect(callUrl).not.toContain('videoUrl=');
     });
 
-    it('should use first item videoUrl as most voted video', () => {
+    it('should use clicked item videoUrl, not most voted video', () => {
         // Gallery items are sorted by click count (highest first)
         const galleryItems = [
             { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/TOP_VIDEO", clicks: 100 },
@@ -486,21 +486,24 @@ describe('Most Voted Video After Ad', () => {
             { imgUrl: "img3.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_3", clicks: 10 }
         ];
         
-        // Most voted video is the first one
-        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : null;
+        // User clicks on the third item (least voted)
+        const clickedItem = galleryItems[2];
         
-        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/TOP_VIDEO");
-        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_2");
-        expect(mostVotedVideoUrl).not.toBe("https://v.kuaishou.com/VIDEO_3");
+        // Should use clicked item's video URL, not the most voted
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/VIDEO_3");
+        expect(clickedItem.videoUrl).not.toBe("https://v.kuaishou.com/TOP_VIDEO");
+        expect(clickedItem.videoUrl).not.toBe("https://v.kuaishou.com/VIDEO_2");
     });
 
-    it('should fallback to clicked item videoUrl if gallery is empty', () => {
-        const galleryItems = [];
-        const clickedItem = { imgUrl: "img.jpg", videoUrl: "https://v.kuaishou.com/FALLBACK" };
+    it('should use clicked item videoUrl directly', () => {
+        const galleryItems = [
+            { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/TOP_VIDEO" },
+            { imgUrl: "img2.jpg", videoUrl: "https://v.kuaishou.com/VIDEO_2" }
+        ];
+        const clickedItem = galleryItems[1];
         
-        const mostVotedVideoUrl = galleryItems.length > 0 ? galleryItems[0].videoUrl : clickedItem.videoUrl;
-        
-        expect(mostVotedVideoUrl).toBe("https://v.kuaishou.com/FALLBACK");
+        // Should use the clicked item's videoUrl
+        expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/VIDEO_2");
     });
 });
 
@@ -559,7 +562,7 @@ describe('LocalStorage Video Playback Flow', () => {
         expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBeNull();
     });
 
-    it('should store most voted video URL, not clicked item URL', () => {
+    it('should store clicked item video URL, not most voted video', () => {
         // Gallery items sorted by popularity (highest first)
         const galleryItems = [
             { imgUrl: "img1.jpg", videoUrl: "https://v.kuaishou.com/MOST_VOTED" },
@@ -570,13 +573,13 @@ describe('LocalStorage Video Playback Flow', () => {
         const clickedItem = galleryItems[1];
         expect(clickedItem.videoUrl).toBe("https://v.kuaishou.com/SECOND");
         
-        // But we should store the most voted (first) item's video
-        const mostVotedVideoUrl = galleryItems[0].videoUrl;
-        localStorage.setItem(PENDING_VIDEO_KEY, mostVotedVideoUrl);
+        // We should store the clicked item's video URL
+        localStorage.setItem(PENDING_VIDEO_KEY, clickedItem.videoUrl);
         
-        // Verify the most voted video is stored, not the clicked one
-        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe("https://v.kuaishou.com/MOST_VOTED");
-        expect(localStorage.getItem(PENDING_VIDEO_KEY)).not.toBe(clickedItem.videoUrl);
+        // Verify the clicked item's video is stored, not the most voted one
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe("https://v.kuaishou.com/SECOND");
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).toBe(clickedItem.videoUrl);
+        expect(localStorage.getItem(PENDING_VIDEO_KEY)).not.toBe("https://v.kuaishou.com/MOST_VOTED");
         
         // Cleanup
         localStorage.removeItem(PENDING_VIDEO_KEY);
