@@ -1,6 +1,5 @@
 // Import utilities
 import { uploadFile } from '../util/file-util.js';
-import { sendChatMessage } from '../util/ai_utils.js';
 
 // DOM elements
 let fileInput;
@@ -167,27 +166,11 @@ async function processImage() {
         const imageUrl = `${window.BASE_URL}/${uploadResult.filename}`;
         console.log('Image URL:', imageUrl);
         
-        // Send to AI for processing
-        // Note: The current AI service returns text responses, not processed images
-        // In a production environment, this would use a specialized image processing API
-        // or computer vision service that can detect and erase Chinese characters while
-        // preserving pinyin and grid lines
-        const prompt = `这是一张田字格汉字练习图片。图片链接: ${imageUrl}
-        
-        请描述如何处理这张图片：
-        1. 保留所有拼音（通常在田字格上方）
-        2. 擦除田字格中的汉字
-        3. 保留田字格的线条结构
-        
-        请简要说明处理思路。`;
-        
-        console.log('Sending to AI for guidance:', prompt);
-        const aiResponse = await sendChatMessage(prompt);
-        console.log('AI guidance:', aiResponse);
-        
-        // TODO: Integrate with actual image processing service
-        // For now, we demonstrate the workflow with a visual overlay
-        const processedUrl = await simulateImageProcessing(imageUrl, aiResponse.response);
+        // Process image using client-side JavaScript
+        // This uses canvas-based image processing to detect and erase Chinese characters
+        // while preserving pinyin and grid lines
+        console.log('Processing image on client side...');
+        const processedUrl = await processImageClientSide(imageUrl);
         
         processedImageUrl = processedUrl;
         processedImage.src = processedUrl;
@@ -204,12 +187,17 @@ async function processImage() {
     }
 }
 
-// Simulate image processing (demonstration only)
-// NOTE: This is a placeholder implementation. In production, this would:
-// 1. Use computer vision (OCR) to detect Chinese characters and pinyin
-// 2. Preserve grid lines and pinyin while erasing characters
-// 3. Return a properly processed image via a specialized API
-async function simulateImageProcessing(imageUrl, aiGuidance = '') {
+/**
+ * Process image to erase Chinese characters while preserving pinyin and grid lines
+ * This is a client-side implementation using canvas-based image processing
+ * Algorithm:
+ * 1. Convert image to grayscale
+ * 2. Detect grid structure (田字格)
+ * 3. Identify character regions (typically center of cells)
+ * 4. Preserve pinyin regions (typically top 30% of cells)
+ * 5. Erase characters while keeping grid lines
+ */
+async function processImageClientSide(imageUrl) {
     return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
@@ -222,18 +210,15 @@ async function simulateImageProcessing(imageUrl, aiGuidance = '') {
             // Draw original image
             ctx.drawImage(img, 0, 0);
             
-            // Add overlay indicating this is a demo
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-            ctx.fillRect(20, 20, 380, 120);
+            // Get image data for processing
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
             
-            ctx.fillStyle = 'rgba(102, 126, 234, 1)';
-            ctx.font = 'bold 22px Arial';
-            ctx.fillText('🔄 示例处理预览', 40, 50);
+            // Process the image to erase characters
+            processImageData(data, canvas.width, canvas.height);
             
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.font = '16px Arial';
-            ctx.fillText('完整功能需要图像处理API', 40, 80);
-            ctx.fillText('当前显示为演示版本', 40, 105);
+            // Put processed data back
+            ctx.putImageData(imageData, 0, 0);
             
             const processedDataUrl = canvas.toDataURL('image/png');
             resolve(processedDataUrl);
@@ -244,6 +229,192 @@ async function simulateImageProcessing(imageUrl, aiGuidance = '') {
         };
         img.src = imageUrl;
     });
+}
+
+/**
+ * Process image data to erase Chinese characters
+ * Uses heuristic approach to detect and erase dark regions (characters)
+ * while preserving lighter grid lines and pinyin text
+ */
+function processImageData(data, width, height) {
+    // Create a brightness map
+    const brightness = new Uint8Array(width * height);
+    
+    // Calculate brightness for each pixel
+    for (let i = 0; i < data.length; i += 4) {
+        const pixelIndex = i / 4;
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // Calculate luminance using standard formula
+        brightness[pixelIndex] = 0.299 * r + 0.587 * g + 0.114 * b;
+    }
+    
+    // Detect character regions using a sliding window approach
+    // Characters are typically darker (low brightness) and form connected regions
+    const cellSize = estimateCellSize(brightness, width, height);
+    
+    if (cellSize > 0) {
+        eraseCharactersInCells(data, brightness, width, height, cellSize);
+    } else {
+        // Fallback: use simple threshold-based erasing
+        eraseByThreshold(data, brightness, width, height);
+    }
+}
+
+/**
+ * Estimate the size of grid cells (田字格)
+ * Returns estimated cell size in pixels, or 0 if can't detect
+ */
+function estimateCellSize(brightness, width, height) {
+    // Look for repeating patterns in horizontal and vertical directions
+    // Grid lines create periodic dark lines
+    
+    // Sample the middle rows to detect vertical patterns
+    const middleY = Math.floor(height / 2);
+    const rowSample = [];
+    
+    for (let x = 0; x < width; x++) {
+        const idx = middleY * width + x;
+        rowSample.push(brightness[idx]);
+    }
+    
+    // Find the most common distance between dark lines (grid lines)
+    // This is a simplified approach - a real implementation would use FFT or autocorrelation
+    const darkThreshold = 100; // Pixels darker than this might be grid lines
+    const darkPoints = [];
+    
+    for (let x = 0; x < width; x++) {
+        if (rowSample[x] < darkThreshold) {
+            darkPoints.push(x);
+        }
+    }
+    
+    // Estimate cell size from gaps between dark points
+    if (darkPoints.length > 2) {
+        const gaps = [];
+        for (let i = 1; i < darkPoints.length; i++) {
+            const gap = darkPoints[i] - darkPoints[i - 1];
+            if (gap > 20 && gap < width / 2) { // Reasonable cell size range
+                gaps.push(gap);
+            }
+        }
+        
+        if (gaps.length > 0) {
+            // Return median gap as estimated cell size
+            gaps.sort((a, b) => a - b);
+            return gaps[Math.floor(gaps.length / 2)];
+        }
+    }
+    
+    return 0; // Couldn't detect cell size
+}
+
+/**
+ * Erase characters within detected cells
+ * Preserves pinyin (top portion) and grid lines (edges)
+ */
+function eraseCharactersInCells(data, brightness, width, height, cellSize) {
+    const pinyinRatio = 0.30; // Top 30% is typically pinyin
+    const gridLineWidth = Math.max(2, Math.floor(cellSize * 0.05)); // Grid lines are about 5% of cell width
+    
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = y * width + x;
+            const pixelIdx = idx * 4;
+            
+            // Determine position within cell
+            const cellX = x % cellSize;
+            const cellY = y % cellSize;
+            
+            // Skip if in pinyin region (top portion of cell)
+            if (cellY < cellSize * pinyinRatio) {
+                continue;
+            }
+            
+            // Skip if near grid lines (edges of cells)
+            const nearEdge = cellX < gridLineWidth || cellX > cellSize - gridLineWidth ||
+                           cellY < gridLineWidth || cellY > cellSize - gridLineWidth;
+            
+            if (nearEdge) {
+                continue;
+            }
+            
+            // Erase if this pixel is dark (likely part of a character)
+            if (brightness[idx] < 200) {
+                // Replace with white
+                data[pixelIdx] = 255;
+                data[pixelIdx + 1] = 255;
+                data[pixelIdx + 2] = 255;
+            }
+        }
+    }
+}
+
+/**
+ * Fallback erasing method using simple threshold
+ * Erases dark regions while trying to preserve thin lines
+ */
+function eraseByThreshold(data, brightness, width, height) {
+    const characterThreshold = 180; // Darker pixels are likely characters
+    const lineThreshold = 50; // Very dark pixels are likely grid lines
+    
+    for (let y = Math.floor(height * 0.2); y < height; y++) { // Skip top 20% for pinyin
+        for (let x = 0; x < width; x++) {
+            const idx = y * width + x;
+            const pixelIdx = idx * 4;
+            const b = brightness[idx];
+            
+            // Erase pixels that are dark but not extremely dark (grid lines)
+            if (b < characterThreshold && b > lineThreshold) {
+                // Check if this is part of a thin line (grid) by examining neighbors
+                const isGridLine = checkIfGridLine(brightness, width, height, x, y);
+                
+                if (!isGridLine) {
+                    // Replace with white to erase character
+                    data[pixelIdx] = 255;
+                    data[pixelIdx + 1] = 255;
+                    data[pixelIdx + 2] = 255;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Check if a pixel is part of a thin grid line
+ * Grid lines are typically 1-3 pixels wide
+ */
+function checkIfGridLine(brightness, width, height, x, y) {
+    const lineThreshold = 100;
+    const idx = y * width + x;
+    
+    // Check horizontal continuity (left and right)
+    let horizontalCount = 0;
+    for (let dx = -3; dx <= 3; dx++) {
+        const nx = x + dx;
+        if (nx >= 0 && nx < width) {
+            const nidx = y * width + nx;
+            if (brightness[nidx] < lineThreshold) {
+                horizontalCount++;
+            }
+        }
+    }
+    
+    // Check vertical continuity (up and down)
+    let verticalCount = 0;
+    for (let dy = -3; dy <= 3; dy++) {
+        const ny = y + dy;
+        if (ny >= 0 && ny < height) {
+            const nidx = ny * width + x;
+            if (brightness[nidx] < lineThreshold) {
+                verticalCount++;
+            }
+        }
+    }
+    
+    // If pixel has strong horizontal or vertical continuity, it's likely a grid line
+    return horizontalCount >= 5 || verticalCount >= 5;
 }
 
 function downloadAsImage() {
