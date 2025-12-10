@@ -168,26 +168,26 @@ async function processImage() {
         console.log('Image URL:', imageUrl);
         
         // Send to AI for processing
-        const prompt = `请分析这张田字格汉字练习图片。这是一张包含拼音和汉字的练习册图片。
+        // Note: The current AI service returns text responses, not processed images
+        // In a production environment, this would use a specialized image processing API
+        // or computer vision service that can detect and erase Chinese characters while
+        // preserving pinyin and grid lines
+        const prompt = `这是一张田字格汉字练习图片。图片链接: ${imageUrl}
         
-        你的任务是：
-        1. 识别图片中的所有文字内容
-        2. 保留所有拼音（通常在上方）
-        3. 将田字格中的汉字擦除/替换为空白
-        4. 保留田字格的线条结构
+        请描述如何处理这张图片：
+        1. 保留所有拼音（通常在田字格上方）
+        2. 擦除田字格中的汉字
+        3. 保留田字格的线条结构
         
-        图片链接: ${imageUrl}
+        请简要说明处理思路。`;
         
-        请生成一张处理后的图片，并返回图片的URL或base64数据。`;
-        
-        console.log('Sending to AI:', prompt);
+        console.log('Sending to AI for guidance:', prompt);
         const aiResponse = await sendChatMessage(prompt);
-        console.log('AI response:', aiResponse);
+        console.log('AI guidance:', aiResponse);
         
-        // Parse AI response for image
-        // The AI should return either a URL or instructions
-        // For now, we'll use a simulated response
-        const processedUrl = await simulateImageProcessing(imageUrl);
+        // TODO: Integrate with actual image processing service
+        // For now, we demonstrate the workflow with a visual overlay
+        const processedUrl = await simulateImageProcessing(imageUrl, aiResponse.response);
         
         processedImageUrl = processedUrl;
         processedImage.src = processedUrl;
@@ -204,10 +204,12 @@ async function processImage() {
     }
 }
 
-// Simulate image processing (in real implementation, this would be done by AI)
-async function simulateImageProcessing(imageUrl) {
-    // In a real implementation, the AI would process the image and return a new URL
-    // For now, we'll simulate by creating a canvas and drawing instructions
+// Simulate image processing (demonstration only)
+// NOTE: This is a placeholder implementation. In production, this would:
+// 1. Use computer vision (OCR) to detect Chinese characters and pinyin
+// 2. Preserve grid lines and pinyin while erasing characters
+// 3. Return a properly processed image via a specialized API
+async function simulateImageProcessing(imageUrl, aiGuidance = '') {
     return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
@@ -220,11 +222,18 @@ async function simulateImageProcessing(imageUrl) {
             // Draw original image
             ctx.drawImage(img, 0, 0);
             
-            // Add overlay text (simulation)
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.font = '20px Arial';
-            ctx.fillText('处理后的图片预览', 50, 50);
-            ctx.fillText('(实际处理由AI完成)', 50, 80);
+            // Add overlay indicating this is a demo
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            ctx.fillRect(20, 20, 380, 120);
+            
+            ctx.fillStyle = 'rgba(102, 126, 234, 1)';
+            ctx.font = 'bold 22px Arial';
+            ctx.fillText('🔄 示例处理预览', 40, 50);
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.font = '16px Arial';
+            ctx.fillText('完整功能需要图像处理API', 40, 80);
+            ctx.fillText('当前显示为演示版本', 40, 105);
             
             const processedDataUrl = canvas.toDataURL('image/png');
             resolve(processedDataUrl);
@@ -255,9 +264,9 @@ async function downloadAsPdf() {
         return;
     }
     
-    // For PDF generation, we would use jsPDF or similar library
-    // For now, we'll show an alert
-    alert('PDF下载功能开发中...\n\n您可以先下载图片，然后使用系统自带的打印功能选择"另存为PDF"来生成PDF文件。');
+    // PDF generation requires jsPDF library or similar
+    // Users can use print-to-PDF as a workaround
+    alert('PDF下载功能开发中...\n\n临时方案：\n1. 先下载图片\n2. 使用浏览器的"打印"功能\n3. 选择"另存为PDF"来生成PDF文件\n\n或者将图片插入Word文档后保存为PDF。');
 }
 
 // Export functions for testing
