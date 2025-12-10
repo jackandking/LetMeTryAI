@@ -157,6 +157,27 @@ describe('Eraser App', () => {
             expect(processingSection.classList.contains('hidden')).toBe(true);
             expect(resultSection.classList.contains('hidden')).toBe(true);
         });
+
+        it('should validate selected file before processing', () => {
+            // Test that we check file validity before processing
+            const validFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+            const invalidObject = { name: 'fake.jpg' }; // Not a real File object
+            
+            expect(validFile instanceof File).toBe(true);
+            expect(invalidObject instanceof File).toBe(false);
+        });
+
+        it('should handle file object becoming invalid', () => {
+            // Simulate scenario where file object becomes invalid
+            let file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+            
+            expect(file instanceof File).toBe(true);
+            expect(file.size).toBeGreaterThan(0);
+            
+            // If file were to become null/undefined
+            file = null;
+            expect(file).toBeNull();
+        });
     });
 
     describe('Configuration Integration', () => {

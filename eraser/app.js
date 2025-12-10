@@ -176,6 +176,21 @@ async function processImage() {
         return;
     }
     
+    // Additional validation before processing
+    if (!(selectedFile instanceof File) && !(selectedFile instanceof Blob)) {
+        console.error('selectedFile is not a valid File/Blob object:', selectedFile);
+        alert('文件对象无效，请重新选择图片！');
+        resetUpload();
+        return;
+    }
+    
+    if (selectedFile.size === 0) {
+        console.error('selectedFile has 0 bytes');
+        alert('文件大小为0，请重新选择图片！');
+        resetUpload();
+        return;
+    }
+    
     try {
         // Show processing section
         uploadSection.classList.add('hidden');
@@ -184,6 +199,12 @@ async function processImage() {
         // Process image directly from file using FileReader
         // This avoids CORS issues and doesn't require server upload for processing
         console.log('Processing image on client side...');
+        console.log('File to process:', {
+            name: selectedFile.name,
+            type: selectedFile.type,
+            size: selectedFile.size
+        });
+        
         const processedUrl = await processImageFromFile(selectedFile);
         
         processedImageUrl = processedUrl;
