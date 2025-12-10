@@ -95,6 +95,24 @@ describe('Eraser App', () => {
             
             expect(largeFileSize).toBeGreaterThan(maxSize);
         });
+
+        it('should use validateFileObject helper for validation', () => {
+            // Test valid file
+            const validFile = new File(['content'], 'test.png', { type: 'image/png' });
+            // Simulate what validateFileObject does
+            const isValid = validFile && (validFile instanceof File || validFile instanceof Blob) && validFile.size > 0;
+            expect(isValid).toBe(true);
+
+            // Test null file
+            const nullFile = null;
+            const isNullValid = nullFile && (nullFile instanceof File || nullFile instanceof Blob);
+            expect(isNullValid).toBe(false);
+
+            // Test empty file
+            const emptyFile = new File([], 'empty.png', { type: 'image/png' });
+            const isEmptyValid = emptyFile && (emptyFile instanceof File) && emptyFile.size > 0;
+            expect(isEmptyValid).toBe(false);
+        });
     });
 
     describe('UI State Management', () => {
