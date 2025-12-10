@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>投票结果 - VIP房间</title>
+    <script src="../util.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .result-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .winner-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .winner-section h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .winner-image {
+            max-width: 300px;
+            max-height: 400px;
+            border: 5px solid white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .winner-image:hover {
+            transform: scale(1.05);
+        }
+
+        .winner-votes {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .play-button {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-button:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .play-button:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            margin-top: 40px;
+        }
+
+        .results-section h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-image {
+            width: 100px;
+            height: 133px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 15px;
+        }
+
+        .result-votes {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .vote-bar {
+            height: 20px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border-radius: 10px;
+            margin-top: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .retry-button {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .retry-button:hover {
+            background-color: #764ba2;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ffffff;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        .stats-info {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-info p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .winner-section {
+                padding: 20px;
+            }
+
+            .winner-section h2 {
+                font-size: 24px;
+            }
+
+            .winner-image {
+                max-width: 250px;
+            }
+
+            .result-item {
+                padding: 12px;
+            }
+
+            .result-image {
+                width: 80px;
+                height: 106px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>VIP房间投票结果</h1>
+
+        <div id="loadingMessage" class="loading">正在加载投票结果...</div>
+
+        <div id="winnerSection" class="winner-section" style="display: none;">
+            <h2>🏆 票选最受欢迎</h2>
+            <img id="winnerImage" class="winner-image" alt="Winner" onclick="playWinnerVideo()">
+            <div class="winner-votes" id="winnerVotes"></div>
+            <button class="play-button" onclick="playWinnerVideo()">▶ 观看视频</button>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2>所有投票结果</h2>
+            <div id="resultsList"></div>
+            
+            <div class="stats-info">
+                <p id="totalVotes"></p>
+                <p id="timestamp"></p>
+            </div>
+        </div>
+
+        <button class="retry-button" onclick="retryVote()">返回投票</button>
+
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">快手男人宝小程序主页看更多美女</a></div>
+    </div>
+
+    <script>
+        const PENDING_VIDEO_KEY = 'viproom.pendingVideo';
+        const CONFIG_KEY = 'viproom.conf';
+        const CLICKS_KEY = 'viproom.clicks';
+
+        let galleryItems = [];
+        let clickData = {};
+        let winnerVideoUrl = '';
+
+        /**
+         * Initialize results page
+         */
+        function initializeResults() {
+            checkUrlParameters();
+            loadAndDisplayResults();
+        }
+
+        /**
+         * Check URL parameters for video playback after ad
+         */
+        function checkUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check if ad is finished - play video if true
+            if (urlParams.get('finishedAd') === 'true') {
+                // Retrieve the stored video URL from localStorage
+                const storedVideoUrl = localStorage.getItem(PENDING_VIDEO_KEY);
+                if (storedVideoUrl) {
+                    // Clear the stored video URL
+                    localStorage.removeItem(PENDING_VIDEO_KEY);
+                    // Play the video
+                    playVideo(storedVideoUrl);
+                }
+            } else if (urlParams.get('finishedAd') === 'false') {
+                // Ad was not completed
+                localStorage.removeItem(PENDING_VIDEO_KEY);
+            }
+        }
+
+        /**
+         * Load and display voting results
+         */
+        function loadAndDisplayResults() {
+            // Load configuration
+            getConfig(CONFIG_KEY, (config) => {
+                if (!config || !Array.isArray(config) || config.length === 0) {
+                    document.getElementById('loadingMessage').textContent = '暂无投票数据';
+                    return;
+                }
+
+                galleryItems = config;
+
+                // Load click data
+                getConfig(CLICKS_KEY, (data) => {
+                    if (data && typeof data === 'object') {
+                        clickData = data;
+                    } else {
+                        // Initialize click data
+                        clickData = {};
+                        galleryItems.forEach((item, index) => {
+                            clickData[index] = 0;
+                        });
+                    }
+
+                    displayResults();
+                });
+            });
+        }
+
+        /**
+         * Display voting results
+         */
+        function displayResults() {
+            // Create array with items and click counts
+            const resultsWithClicks = galleryItems.map((item, index) => ({
+                item,
+                index,
+                clicks: clickData[index] || 0
+            }));
+
+            // Sort by click count (descending)
+            resultsWithClicks.sort((a, b) => b.clicks - a.clicks);
+
+            if (resultsWithClicks.length === 0) {
+                document.getElementById('loadingMessage').textContent = '暂无投票数据';
+                return;
+            }
+
+            // Hide loading message
+            document.getElementById('loadingMessage').style.display = 'none';
+
+            // Display winner
+            const winner = resultsWithClicks[0];
+            displayWinner(winner);
+
+            // Display all results
+            displayAllResults(resultsWithClicks);
+
+            // Calculate and display total votes
+            const totalVotes = resultsWithClicks.reduce((sum, entry) => sum + entry.clicks, 0);
+            document.getElementById('totalVotes').textContent = `总投票数: ${totalVotes}`;
+            document.getElementById('timestamp').textContent = `统计时间: ${new Date().toLocaleString()}`;
+        }
+
+        /**
+         * Display the winner
+         * @param {Object} winner - Winner object with item, index, and clicks
+         */
+        function displayWinner(winner) {
+            const winnerSection = document.getElementById('winnerSection');
+            const winnerImage = document.getElementById('winnerImage');
+            const winnerVotes = document.getElementById('winnerVotes');
+
+            winnerImage.src = winner.item.imgUrl;
+            winnerVotes.textContent = `获得 ${winner.clicks} 票`;
+            winnerVideoUrl = winner.item.videoUrl;
+            winnerSection.style.display = 'block';
+        }
+
+        /**
+         * Display all results with ranking
+         * @param {Array} sortedResults - Sorted array of result objects
+         */
+        function displayAllResults(sortedResults) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsList = document.getElementById('resultsList');
+            
+            // Find max votes for calculating bar width
+            const maxVotes = sortedResults[0].clicks;
+
+            resultsList.innerHTML = '';
+            sortedResults.forEach((result, rank) => {
+                const resultItem = createResultItem(result, rank + 1, maxVotes);
+                resultsList.appendChild(resultItem);
+            });
+
+            resultsSection.style.display = 'block';
+        }
+
+        /**
+         * Create a result item element
+         * @param {Object} result - Result object with item, index, and clicks
+         * @param {number} rank - Rank of this result
+         * @param {number} maxVotes - Maximum votes for percentage calculation
+         * @returns {HTMLElement} Result item element
+         */
+        function createResultItem(result, rank, maxVotes) {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+
+            const img = document.createElement('img');
+            img.className = 'result-image';
+            img.src = result.item.imgUrl;
+            img.alt = `排名 ${rank}`;
+            img.onerror = () => {
+                img.style.display = 'none';
+            };
+
+            const info = document.createElement('div');
+            info.className = 'result-info';
+
+            const rankSpan = document.createElement('span');
+            rankSpan.className = 'result-rank';
+            rankSpan.textContent = `#${rank}`;
+
+            const votesSpan = document.createElement('span');
+            votesSpan.className = 'result-votes';
+            votesSpan.textContent = `${result.clicks} 票`;
+
+            const barContainer = document.createElement('div');
+            barContainer.style.backgroundColor = '#e0e0e0';
+            barContainer.style.borderRadius = '10px';
+            barContainer.style.height = '20px';
+            barContainer.style.marginTop = '10px';
+
+            const bar = document.createElement('div');
+            bar.className = 'vote-bar';
+            const percentage = maxVotes > 0 ? (result.clicks / maxVotes) * 100 : 0;
+            bar.style.width = `${percentage}%`;
+
+            barContainer.appendChild(bar);
+
+            info.appendChild(rankSpan);
+            info.appendChild(votesSpan);
+            info.appendChild(barContainer);
+
+            item.appendChild(img);
+            item.appendChild(info);
+
+            return item;
+        }
+
+        /**
+         * Play the winner's video
+         */
+        function playWinnerVideo() {
+            if (!winnerVideoUrl) {
+                console.warn('No winner video URL available');
+                return;
+            }
+
+            // Store video URL in localStorage before showing ad
+            localStorage.setItem(PENDING_VIDEO_KEY, winnerVideoUrl);
+
+            // Show ad before playing video
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=viproom-result`,
+                });
+            } else {
+                // Fallback: directly play video if mini-program environment not available
+                console.warn('Mini-program navigation not available, playing video directly');
+                playVideo(winnerVideoUrl);
+            }
+        }
+
+        /**
+         * Plays the video
+         * @param {string} videoUrl - URL of the video to play
+         */
+        function playVideo(videoUrl) {
+            console.log('Playing video:', videoUrl);
+            
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: `/pages/video/video?url=${encodeURIComponent(videoUrl)}`,
+                });
+            } else {
+                // Fallback: open video URL in new window/tab
+                window.open(videoUrl, '_blank');
+            }
+        }
+
+        /**
+         * Retry voting - navigate back to voting page
+         */
+        function retryVote() {
+            window.location.href = 'index.html';
+        }
+
+        /**
+         * Navigate to index page
+         */
+        function jumpToIndex() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: "/pages/index/index",
+                });
+            } else {
+                console.warn('Mini-program navigation not available');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeResults);
+    </script>
+</body>
+</html>

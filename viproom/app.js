@@ -130,6 +130,7 @@ function sortGalleryByClicks() {
 function displayGallery() {
     const loadingContainer = document.getElementById('loadingContainer');
     const galleryContainer = document.getElementById('galleryContainer');
+    const viewResultsLink = document.getElementById('viewResults');
     
     if (!galleryContainer) {
         console.error('Gallery container not found');
@@ -141,6 +142,11 @@ function displayGallery() {
         loadingContainer.style.display = 'none';
     }
     galleryContainer.style.display = 'grid';
+    
+    // Show view results link
+    if (viewResultsLink) {
+        viewResultsLink.style.display = 'block';
+    }
     
     // Clear existing content
     galleryContainer.innerHTML = '';

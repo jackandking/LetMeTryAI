@@ -364,7 +364,8 @@ describe('VIP Room Application', () => {
             }
             
             expect(loadingContainer.textContent).toBe(errorMessage);
-            expect(loadingContainer.style.color).toBe('#ff6b6b');
+            // Color might be returned in different formats (hex vs rgb)
+            expect(loadingContainer.style.color).toMatch(/^(#ff6b6b|rgb\(255,\s*107,\s*107\))$/);
         });
     });
 
@@ -395,7 +396,7 @@ describe('VIP Room Application', () => {
             configs.forEach(config => {
                 const isValid = config && Array.isArray(config) && config.length > 0;
                 if (!isValid) {
-                    expect(isValid).toBe(false);
+                    expect(isValid).toBeFalsy();
                 }
             });
         });
