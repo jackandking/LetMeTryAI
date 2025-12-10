@@ -31,7 +31,6 @@ describe('Configuration Module', () => {
         'FILE_LIST',
         'FILE_DOWNLOAD',
         'IMAGE_UPLOAD',
-        'IMAGE_PROCESS',
         'MYSQL_QUERY',
         'MYSQL_GET_BY_ID',
         'MYSQL_INSERT',
@@ -57,7 +56,6 @@ describe('Configuration Module', () => {
       expect(API_ENDPOINTS.FILE_UPLOAD).toBe(`${BASE_URL}/lws/file/upload`);
       expect(API_ENDPOINTS.FILE_DELETE).toBe(`${BASE_URL}/lws/file/delete`);
       expect(API_ENDPOINTS.IMAGE_UPLOAD).toBe(`${BASE_URL}/image/upload`);
-      expect(API_ENDPOINTS.IMAGE_PROCESS).toBe(`${BASE_URL}/lws/image/process`);
       expect(API_ENDPOINTS.MYSQL_QUERY).toBe(`${BASE_URL}/lws/mysql/query`);
     });
   });

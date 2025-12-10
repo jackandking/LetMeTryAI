@@ -39,21 +39,11 @@ describe('Configuration Regression Tests', () => {
     });
 
     it('should maintain consistent URL formatting across all endpoints', () => {
-      // Some endpoints like IMAGE_UPLOAD use different paths (not under /lws/)
-      const lwsEndpoints = Object.entries(API_ENDPOINTS)
-        .filter(([key]) => key !== 'IMAGE_UPLOAD')
-        .map(([_, value]) => value);
-      
-      lwsEndpoints.forEach(endpoint => {
-        expect(endpoint).toMatch(/^https:\/\/[a-zA-Z0-9.-]+\//);
-        expect(endpoint).not.toContain(';;');
-        expect(endpoint).not.toMatch(/['"]/);
-      });
-
-      // Verify all endpoints are valid URLs
       Object.values(API_ENDPOINTS).forEach(endpoint => {
-        expect(endpoint).toMatch(/^https:\/\//);
-        expect(endpoint).not.toContain('//lws'); // No double slashes before lws
+        expect(endpoint).toMatch(/^https:\/\/[a-zA-Z0-9.-]+\/lws\//);
+        expect(endpoint).not.toContain(';;');
+        expect(endpoint).not.toContain('//lws');
+        expect(endpoint).not.toMatch(/['"]/);
       });
     });
 
