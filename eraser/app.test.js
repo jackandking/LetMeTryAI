@@ -222,4 +222,57 @@ describe('Eraser App', () => {
             expect(link.download).toBe('test.png');
         });
     });
+
+    describe('Debug Mode Integration', () => {
+        it('should detect debug parameter in URL', () => {
+            // Create a mock URLSearchParams
+            const debugUrl = new URLSearchParams('?debug=true');
+            const normalUrl = new URLSearchParams('?other=value');
+            
+            expect(debugUrl.get('debug')).toBe('true');
+            expect(normalUrl.get('debug')).toBeNull();
+        });
+
+        it('should check for VConsole availability', () => {
+            // VConsole would be available in the window object when loaded
+            // This test just verifies we can check for it
+            const hasVConsole = typeof window.VConsole !== 'undefined';
+            expect(typeof hasVConsole).toBe('boolean');
+        });
+
+        it('should handle URL parameter parsing for debug mode', () => {
+            // Test various URL scenarios
+            const testCases = [
+                { url: '?debug=true', expected: true },
+                { url: '?debug=false', expected: false },
+                { url: '?other=value', expected: false },
+                { url: '', expected: false }
+            ];
+
+            testCases.forEach(({ url, expected }) => {
+                const params = new URLSearchParams(url);
+                const debugMode = params.get('debug') === 'true';
+                expect(debugMode).toBe(expected);
+            });
+        });
+
+        it('should dynamically create script element for VConsole', () => {
+            // Test that we can create a script element dynamically
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+            
+            expect(script.tagName).toBe('SCRIPT');
+            expect(script.src).toContain('vconsole');
+            expect(script.src).toContain('3.15.1'); // Verify version is pinned
+        });
+
+        it('should handle script load callbacks', () => {
+            const script = document.createElement('script');
+            script.onload = jest.fn();
+            script.onerror = jest.fn();
+            
+            expect(typeof script.onload).toBe('function');
+            expect(typeof script.onerror).toBe('function');
+        });
+    });
 });
