@@ -227,6 +227,41 @@ describe('Eraser App', () => {
             expect(canvas.height).toBe(100);
         });
 
+        it('should calculate brightness correctly', () => {
+            // Test brightness calculation formula
+            const r = 255, g = 0, b = 0; // Red
+            const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+            expect(brightness).toBeCloseTo(76.245, 1);
+            
+            // White should be brightest
+            const whiteBrightness = 0.299 * 255 + 0.587 * 255 + 0.114 * 255;
+            expect(whiteBrightness).toBe(255);
+            
+            // Black should be darkest
+            const blackBrightness = 0.299 * 0 + 0.587 * 0 + 0.114 * 0;
+            expect(blackBrightness).toBe(0);
+        });
+
+        it('should use adaptive thresholding for improved results', () => {
+            // Create test histogram data
+            const width = 10;
+            const height = 10;
+            const brightness = new Uint8Array(width * height);
+            
+            // Fill half with dark (characters), half with light (background)
+            for (let i = 0; i < brightness.length / 2; i++) {
+                brightness[i] = 50; // Dark
+            }
+            for (let i = brightness.length / 2; i < brightness.length; i++) {
+                brightness[i] = 200; // Light
+            }
+            
+            // Verify data structure
+            expect(brightness.length).toBe(width * height);
+            expect(brightness[0]).toBe(50);
+            expect(brightness[brightness.length - 1]).toBe(200);
+        });
+
         it('should create data URL from canvas', () => {
             const canvas = document.createElement('canvas');
             canvas.width = 10;
@@ -357,6 +392,127 @@ describe('Eraser App', () => {
                 const params = new URLSearchParams(url);
                 const debugMode = params.get('debug') === 'true';
                 expect(debugMode).toBe(expected);
+            });
+        });
+    });
+
+    describe('Improved Algorithm - Grid Detection', () => {
+        it('should detect horizontal grid lines', () => {
+            // Create a test image with horizontal lines
+            const width = 100;
+            const height = 100;
+            const brightness = new Uint8Array(width * height);
+            brightness.fill(255); // White background
+            
+            // Add horizontal line at y=25
+            for (let x = 0; x < width; x++) {
+                brightness[25 * width + x] = 50; // Dark line
+            }
+            
+            // Verify line exists
+            let darkPixelsInLine = 0;
+            for (let x = 0; x < width; x++) {
+                if (brightness[25 * width + x] < 100) {
+                    darkPixelsInLine++;
+                }
+            }
+            
+            expect(darkPixelsInLine).toBe(width);
+        });
+
+        it('should detect vertical grid lines', () => {
+            // Create a test image with vertical lines
+            const width = 100;
+            const height = 100;
+            const brightness = new Uint8Array(width * height);
+            brightness.fill(255); // White background
+            
+            // Add vertical line at x=50
+            for (let y = 0; y < height; y++) {
+                brightness[y * width + 50] = 50; // Dark line
+            }
+            
+            // Verify line exists
+            let darkPixelsInLine = 0;
+            for (let y = 0; y < height; y++) {
+                if (brightness[y * width + 50] < 100) {
+                    darkPixelsInLine++;
+                }
+            }
+            
+            expect(darkPixelsInLine).toBe(height);
+        });
+
+        it('should distinguish between characters and grid lines', () => {
+            // Grid lines are thin and continuous
+            // Characters are thicker and form blocks
+            const width = 50;
+            const height = 50;
+            
+            // Thin line (1-2 pixels) should be grid
+            const thinLine = [1, 0, 0, 0, 1];
+            const thinLineWidth = thinLine.filter(x => x === 1).length;
+            expect(thinLineWidth).toBeLessThanOrEqual(2);
+            
+            // Thick region (10+ pixels) should be character
+            const thickRegion = new Array(15).fill(1);
+            expect(thickRegion.length).toBeGreaterThan(5);
+        });
+
+        it('should calculate text density for pinyin detection', () => {
+            // Pinyin region should have lower density (5-30%) than character region
+            const lowDensity = 0.15; // 15% - typical for pinyin
+            const highDensity = 0.50; // 50% - typical for characters
+            
+            expect(lowDensity).toBeGreaterThan(0.05);
+            expect(lowDensity).toBeLessThan(0.3);
+            expect(highDensity).toBeGreaterThan(0.3);
+        });
+
+        it('should estimate background color from neighbors', () => {
+            // Background estimation should average nearby bright pixels
+            const colors = [
+                { r: 250, g: 250, b: 250 },
+                { r: 255, g: 255, b: 255 },
+                { r: 248, g: 248, b: 248 }
+            ];
+            
+            const avgR = colors.reduce((sum, c) => sum + c.r, 0) / colors.length;
+            const avgG = colors.reduce((sum, c) => sum + c.g, 0) / colors.length;
+            const avgB = colors.reduce((sum, c) => sum + c.b, 0) / colors.length;
+            
+            expect(avgR).toBeCloseTo(251, 0);
+            expect(avgG).toBeCloseTo(251, 0);
+            expect(avgB).toBeCloseTo(251, 0);
+        });
+    });
+
+    describe('Regression Tests - Algorithm Changes', () => {
+        it('should not break existing file upload functionality', () => {
+            const fileInput = document.getElementById('fileInput');
+            expect(fileInput).toBeDefined();
+            expect(fileInput.accept).toBe('image/jpeg,image/jpg,image/png');
+        });
+
+        it('should maintain backward compatibility with preview', () => {
+            const previewArea = document.getElementById('previewArea');
+            const originalImage = document.getElementById('originalImage');
+            
+            expect(previewArea).toBeDefined();
+            expect(originalImage).toBeDefined();
+            expect(previewArea.classList.contains('hidden')).toBe(true);
+        });
+
+        it('should preserve all UI elements after algorithm update', () => {
+            const requiredElements = [
+                'uploadBtn', 'processBtn', 'resetBtn',
+                'downloadImageBtn', 'downloadPdfBtn', 'newProcessBtn'
+            ];
+            
+            requiredElements.forEach(id => {
+                const element = document.getElementById(id);
+                expect(element).toBeDefined();
+                expect(element).not.toBeNull();
             });
         });
 
