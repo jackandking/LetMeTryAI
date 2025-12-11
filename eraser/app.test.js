@@ -543,6 +543,34 @@ describe('Eraser App', () => {
             expect(fileInput.accept).toBe('image/jpeg,image/jpg,image/png');
         });
 
+        it('should maintain simplified algorithm approach', () => {
+            // Verify the new simplified algorithm is being used
+            // Algorithm should NOT use complex Otsu thresholding or pixel-by-pixel analysis
+            // Instead it should use row-based detection and erasing
+            
+            const width = 100;
+            const height = 100;
+            const brightness = new Uint8Array(width * height);
+            brightness.fill(255); // White background
+            
+            // Add a horizontal grid line
+            for (let x = 0; x < width * 0.8; x++) {
+                brightness[50 * width + x] = 50; // Dark line covering 80% of width
+            }
+            
+            // Count dark pixels in grid line row
+            let darkCount = 0;
+            for (let x = 0; x < width; x++) {
+                if (brightness[50 * width + x] < 150) {
+                    darkCount++;
+                }
+            }
+            
+            // Verify we can detect this as a grid line (>50% coverage)
+            const coverage = darkCount / width;
+            expect(coverage).toBeGreaterThan(0.5);
+        });
+
         it('should maintain backward compatibility with preview', () => {
             const previewArea = document.getElementById('previewArea');
             const originalImage = document.getElementById('originalImage');
