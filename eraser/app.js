@@ -394,6 +394,14 @@ function processImageData(data, width, height) {
     eraseCharacterRows(data, brightness, width, height);
 }
 
+// Algorithm constants for image processing
+const GRID_LINE_BRIGHTNESS_THRESHOLD = 150; // Pixels darker than this might be part of grid line
+const MIN_GRID_LINE_COVERAGE = 0.5; // Grid line should cover at least 50% of width
+const GRID_LINE_MERGE_DISTANCE = 5; // Merge grid lines within this many pixels
+const PINYIN_REGION_RATIO = 0.35; // Pinyin typically in top 35% of image
+const CHARACTER_BRIGHTNESS_THRESHOLD = 200; // Erase pixels darker than this
+const GRID_LINE_PROTECTION_PIXELS = 2; // Protect this many pixels above/below grid lines
+
 /**
  * Simplified row-based character erasing algorithm
  * Strategy: Identify horizontal grid lines, then erase entire rows between them
@@ -417,8 +425,6 @@ function eraseCharacterRows(data, brightness, width, height) {
  */
 function detectHorizontalGridLines(brightness, width, height) {
     const gridLines = [];
-    const lineThreshold = 150; // Pixels darker than this might be part of grid line
-    const minLineCoverage = 0.5; // Grid line should cover at least 50% of width
     
     for (let y = 0; y < height; y++) {
         let darkPixelCount = 0;
@@ -426,14 +432,14 @@ function detectHorizontalGridLines(brightness, width, height) {
         // Count dark pixels in this row
         for (let x = 0; x < width; x++) {
             const idx = y * width + x;
-            if (brightness[idx] < lineThreshold) {
+            if (brightness[idx] < GRID_LINE_BRIGHTNESS_THRESHOLD) {
                 darkPixelCount++;
             }
         }
         
         // If this row has enough dark pixels spanning across, it's likely a grid line
         const coverage = darkPixelCount / width;
-        if (coverage > minLineCoverage) {
+        if (coverage > MIN_GRID_LINE_COVERAGE) {
             gridLines.push(y);
         }
     }
@@ -454,8 +460,8 @@ function mergeAdjacentLines(lines) {
     let groupEnd = lines[0];
     
     for (let i = 1; i < lines.length; i++) {
-        if (lines[i] - lines[i - 1] <= 5) {
-            // Part of same grid line (within 5 pixels)
+        if (lines[i] - lines[i - 1] <= GRID_LINE_MERGE_DISTANCE) {
+            // Part of same grid line (within merge distance)
             groupEnd = lines[i];
         } else {
             // New grid line group
@@ -479,13 +485,13 @@ function findPinyinRegionEnd(brightness, width, height, gridLines) {
     // If we found grid lines, pinyin is likely above the first grid line
     if (gridLines.length > 0) {
         // Look for the start of the grid structure
-        // Pinyin typically ends around 30-40% from top or just before first grid line
+        // Pinyin typically ends before first grid line or at the configured ratio from top
         const firstGridLine = gridLines[0];
-        return Math.min(firstGridLine, Math.floor(height * 0.35));
+        return Math.min(firstGridLine, Math.floor(height * PINYIN_REGION_RATIO));
     }
     
-    // Fallback: assume pinyin is in top 30% of image
-    return Math.floor(height * 0.3);
+    // Fallback: assume pinyin is in top portion of image (slightly less than configured ratio)
+    return Math.floor(height * (PINYIN_REGION_RATIO - 0.05));
 }
 
 /**
@@ -496,10 +502,10 @@ function eraseRowsBetweenGridLines(data, brightness, width, height, gridLines, p
     // Create a set of grid line rows for fast lookup
     const gridLineSet = new Set(gridLines);
     
-    // For each grid line, also protect a few pixels above and below it
+    // For each grid line, also protect pixels above and below it
     const protectedRows = new Set();
     for (const line of gridLines) {
-        for (let offset = -2; offset <= 2; offset++) {
+        for (let offset = -GRID_LINE_PROTECTION_PIXELS; offset <= GRID_LINE_PROTECTION_PIXELS; offset++) {
             protectedRows.add(line + offset);
         }
     }
@@ -525,7 +531,7 @@ function eraseRowsBetweenGridLines(data, brightness, width, height, gridLines, p
             const pixelIdx = idx * 4;
             
             // Only erase dark pixels (characters), leave background as-is
-            if (brightness[idx] < 200) {
+            if (brightness[idx] < CHARACTER_BRIGHTNESS_THRESHOLD) {
                 data[pixelIdx] = bgColor.r;
                 data[pixelIdx + 1] = bgColor.g;
                 data[pixelIdx + 2] = bgColor.b;
