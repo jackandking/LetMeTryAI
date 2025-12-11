@@ -1,5 +1,5 @@
 /**
- * Tests for webview18 - 老人爱 (Elder Love) section
+ * Tests for elder-love - 老人爱 (Elder Love) section
  */
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -8,7 +8,7 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('webview18 - 老人爱 Section', () => {
+describe('elder-love - 老人爱 Section', () => {
   let htmlContent;
 
   beforeAll(() => {
