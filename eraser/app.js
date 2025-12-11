@@ -534,8 +534,6 @@ function eraseRowsBetweenGridLines(data, brightness, width, height, gridLines, p
     }
 }
 
-
-
 function downloadAsImage() {
     if (!processedImageUrl) {
         alert('没有可下载的图片！');
