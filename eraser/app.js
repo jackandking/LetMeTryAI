@@ -475,7 +475,7 @@ function eraseCharactersAdaptive(data, brightness, width, height, threshold) {
             // Erase if pixel is darker than threshold
             if (brightness[idx] < threshold) {
                 // Get background color from neighboring pixels
-                const bgColor = estimateBackgroundColor(data, x, y, width, height, preserve);
+                const bgColor = estimateBackgroundColor(data, x, y, width, height);
                 
                 data[pixelIdx] = bgColor.r;
                 data[pixelIdx + 1] = bgColor.g;
@@ -605,10 +605,10 @@ function detectPinyinRegion(brightness, preserve, width, height) {
 }
 
 /**
- * Estimate background color from neighboring preserved pixels
+ * Estimate background color from neighboring pixels
  * This helps blend erased areas with the background
  */
-function estimateBackgroundColor(data, x, y, width, height, preserve) {
+function estimateBackgroundColor(data, x, y, width, height) {
     let sumR = 0, sumG = 0, sumB = 0;
     let count = 0;
     
