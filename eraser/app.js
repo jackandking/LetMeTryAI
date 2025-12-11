@@ -1,6 +1,28 @@
 // Import utilities
 // Note: uploadFile is not used as image processing is done client-side
 
+/**
+ * 爱橡皮 (Love Eraser) - Optimized Algorithm
+ * 
+ * This implementation uses a simplified row-based approach for erasing Chinese characters
+ * from 田字格 (grid cells) while preserving pinyin and grid structure.
+ * 
+ * Key Optimization (Issue #xxx): Instead of complex pixel-by-pixel analysis,
+ * we now directly delete entire rows where grid cells contain characters.
+ * This approach is simpler, more reliable, and produces better results.
+ * 
+ * Algorithm Overview:
+ * 1. Detect horizontal grid lines (>50% dark pixel coverage across width)
+ * 2. Identify pinyin region (top 35% or area before first grid line)
+ * 3. Erase entire rows between grid lines (excluding pinyin and grid lines)
+ * 
+ * Benefits:
+ * - More predictable and consistent results
+ * - Better performance (fewer operations)
+ * - Easier to understand and maintain
+ * - Algorithm parameters are clearly defined and adjustable
+ */
+
 // DOM elements
 let fileInput;
 let uploadBtn;
