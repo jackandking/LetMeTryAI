@@ -408,7 +408,7 @@ describe('Eraser App', () => {
         });
     });
 
-    describe('Simplified Algorithm - Row-Based Erasing', () => {
+    describe('Optimized Algorithm - Cell-Based Erasing', () => {
         it('should detect horizontal grid lines spanning across width', () => {
             // Create a test image with horizontal lines
             const width = 100;
@@ -452,15 +452,18 @@ describe('Eraser App', () => {
             expect(mergedCount).toBeGreaterThan(0); // Should identify separate groups
         });
 
-        it('should identify pinyin region as top portion', () => {
-            // Pinyin typically ends before first grid line or at 30-35% from top
-            const height = 100;
-            const firstGridLine = 40;
+        it('should identify pinyin region within each cell', () => {
+            // Pinyin is in top 30% of each individual cell
+            const cellTop = 50;
+            const cellBottom = 150;
+            const cellHeight = cellBottom - cellTop; // 100 pixels
             
-            const pinyinEnd = Math.min(firstGridLine, Math.floor(height * 0.35));
+            const pinyinRatio = 0.30;
+            const pinyinEndInCell = cellTop + Math.floor(cellHeight * pinyinRatio);
             
-            expect(pinyinEnd).toBeLessThanOrEqual(firstGridLine);
-            expect(pinyinEnd).toBeLessThanOrEqual(Math.floor(height * 0.35));
+            expect(pinyinEndInCell).toBe(80); // 50 + 30
+            expect(pinyinEndInCell).toBeLessThan(cellBottom);
+            expect(pinyinEndInCell).toBeGreaterThan(cellTop);
         });
 
         it('should protect grid lines and nearby rows', () => {
@@ -527,12 +530,53 @@ describe('Eraser App', () => {
         });
 
         it('should calculate grid line coverage correctly', () => {
-            // Grid line detection needs at least 50% coverage
+            // Grid line detection needs at least 40% coverage (optimized threshold)
             const width = 100;
-            const darkPixelCount = 60;
+            const darkPixelCount = 45;
             const coverage = darkPixelCount / width;
             
-            expect(coverage).toBeGreaterThan(0.5);
+            expect(coverage).toBeGreaterThan(0.4);
+        });
+
+        it('should process cells individually for pinyin preservation', () => {
+            // Test cell-based processing logic
+            const gridLines = [0, 100, 200, 300]; // 3 cells
+            const minCellHeight = 40;
+            
+            // Calculate cells
+            const cells = [];
+            for (let i = 0; i < gridLines.length - 1; i++) {
+                const cellHeight = gridLines[i + 1] - gridLines[i];
+                if (cellHeight >= minCellHeight) {
+                    cells.push({
+                        top: gridLines[i],
+                        bottom: gridLines[i + 1],
+                        height: cellHeight,
+                        pinyinEnd: gridLines[i] + Math.floor(cellHeight * 0.30)
+                    });
+                }
+            }
+            
+            expect(cells.length).toBe(3);
+            expect(cells[0].pinyinEnd).toBe(30); // 0 + 30% of 100
+            expect(cells[1].pinyinEnd).toBe(130); // 100 + 30% of 100
+        });
+
+        it('should skip cells that are too small', () => {
+            // Small cells (< MIN_CELL_HEIGHT) should be skipped
+            const minCellHeight = 40;
+            const gridLines = [0, 20, 100]; // First cell is only 20 pixels
+            
+            const validCells = [];
+            for (let i = 0; i < gridLines.length - 1; i++) {
+                const cellHeight = gridLines[i + 1] - gridLines[i];
+                if (cellHeight >= minCellHeight) {
+                    validCells.push(cellHeight);
+                }
+            }
+            
+            expect(validCells.length).toBe(1); // Only second cell is valid
+            expect(validCells[0]).toBe(80); // 100 - 20
         });
     });
 
@@ -543,32 +587,35 @@ describe('Eraser App', () => {
             expect(fileInput.accept).toBe('image/jpeg,image/jpg,image/png');
         });
 
-        it('should maintain simplified algorithm approach', () => {
-            // Verify the new simplified algorithm is being used
-            // Algorithm should NOT use complex Otsu thresholding or pixel-by-pixel analysis
-            // Instead it should use row-based detection and erasing
+        it('should maintain cell-based algorithm approach', () => {
+            // Verify the new cell-based algorithm is being used
+            // Algorithm should process each cell individually
+            // Each cell has its own pinyin region (top 30%)
             
             const width = 100;
-            const height = 100;
+            const height = 300;
             const brightness = new Uint8Array(width * height);
             brightness.fill(255); // White background
             
-            // Add a horizontal grid line
-            for (let x = 0; x < width * 0.8; x++) {
-                brightness[50 * width + x] = 50; // Dark line covering 80% of width
-            }
+            // Add horizontal grid lines at y=0, 100, 200, 300
+            const gridLines = [0, 100, 200];
+            gridLines.forEach(y => {
+                for (let x = 0; x < width * 0.5; x++) {
+                    brightness[y * width + x] = 50; // Dark line covering 50% of width
+                }
+            });
             
             // Count dark pixels in grid line row
             let darkCount = 0;
             for (let x = 0; x < width; x++) {
-                if (brightness[50 * width + x] < 150) {
+                if (brightness[100 * width + x] < 150) {
                     darkCount++;
                 }
             }
             
-            // Verify we can detect this as a grid line (>50% coverage)
+            // Verify we can detect this as a grid line (>40% coverage with new threshold)
             const coverage = darkCount / width;
-            expect(coverage).toBeGreaterThan(0.5);
+            expect(coverage).toBeGreaterThanOrEqual(0.4);
         });
 
         it('should maintain backward compatibility with preview', () => {

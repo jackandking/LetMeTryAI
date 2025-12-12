@@ -4,23 +4,25 @@
 /**
  * 爱橡皮 (Love Eraser) - Optimized Algorithm
  * 
- * This implementation uses a simplified row-based approach for erasing Chinese characters
+ * This implementation uses a cell-based approach for erasing Chinese characters
  * from 田字格 (grid cells) while preserving pinyin and grid structure.
  * 
- * Key Optimization (Issue #xxx): Instead of complex pixel-by-pixel analysis,
- * we now directly delete entire rows where grid cells contain characters.
- * This approach is simpler, more reliable, and produces better results.
+ * Key Optimization: Process each cell individually to preserve pinyin within each cell.
+ * The previous approach used a global pinyin region, but real images have pinyin
+ * above each character within individual cells.
  * 
  * Algorithm Overview:
- * 1. Detect horizontal grid lines (>50% dark pixel coverage across width)
- * 2. Identify pinyin region (top 35% or area before first grid line)
- * 3. Erase entire rows between grid lines (excluding pinyin and grid lines)
+ * 1. Detect horizontal grid lines (>40% dark pixel coverage across width)
+ * 2. Identify individual cells (regions between consecutive grid lines)
+ * 3. Within each cell, preserve top 30% (pinyin region)
+ * 4. Erase bottom 70% of each cell (character region)
+ * 5. Keep grid lines intact for structure
  * 
  * Benefits:
- * - More predictable and consistent results
- * - Better performance (fewer operations)
- * - Easier to understand and maintain
- * - Algorithm parameters are clearly defined and adjustable
+ * - Better pinyin preservation (works with pinyin in each cell)
+ * - More accurate character erasure
+ * - Handles varied layouts (different cell heights)
+ * - Cleaner output with empty grid boxes below pinyin
  */
 
 // DOM elements
@@ -418,56 +420,74 @@ function processImageData(data, width, height) {
 
 // Algorithm constants for image processing
 const GRID_LINE_BRIGHTNESS_THRESHOLD = 150; // Pixels darker than this might be part of grid line
-const MIN_GRID_LINE_COVERAGE = 0.5; // Grid line should cover at least 50% of width
-const GRID_LINE_MERGE_DISTANCE = 5; // Merge grid lines within this many pixels
-const PINYIN_REGION_RATIO = 0.35; // Pinyin typically in top 35% of image
-const CHARACTER_BRIGHTNESS_THRESHOLD = 200; // Erase pixels darker than this
-const GRID_LINE_PROTECTION_PIXELS = 2; // Protect this many pixels above/below grid lines
+const MIN_GRID_LINE_COVERAGE = 0.4; // Grid line should cover at least 40% of width (reduced for better detection)
+const GRID_LINE_MERGE_DISTANCE = 3; // Merge grid lines within this many pixels (reduced for precision)
+const PINYIN_RATIO_IN_CELL = 0.30; // Pinyin typically in top 30% of each cell
+const CHARACTER_BRIGHTNESS_THRESHOLD = 180; // Erase pixels darker than this (lowered for better detection)
+const GRID_LINE_PROTECTION_PIXELS = 1; // Protect this many pixels above/below grid lines (reduced to 1)
+const MIN_CELL_HEIGHT = 40; // Minimum height of a cell to be considered valid (in pixels)
 
 /**
- * Simplified row-based character erasing algorithm
- * Strategy: Identify horizontal grid lines, then erase entire rows between them
- * This is simpler and more reliable than complex pixel analysis
+ * Optimized cell-based character erasing algorithm
+ * Strategy: Identify grid cells, then erase characters while preserving pinyin in each cell
+ * This approach works better for images where pinyin is within each cell rather than a global top region
  */
 function eraseCharacterRows(data, brightness, width, height) {
     // Step 1: Detect all horizontal grid line positions
     const gridLineRows = detectHorizontalGridLines(brightness, width, height);
     
-    // Step 2: Identify pinyin region (top portion before first major grid)
-    const pinyinEndRow = findPinyinRegionEnd(brightness, width, height, gridLineRows);
+    if (gridLineRows.length === 0) {
+        console.warn('No grid lines detected, using fallback algorithm');
+        // Fallback: use simple top-region approach
+        const pinyinEndRow = Math.floor(height * 0.25);
+        eraseRowsBetweenGridLines(data, brightness, width, height, [], pinyinEndRow);
+        return;
+    }
     
-    // Step 3: Erase content in rows between grid lines (where characters are)
-    // Keep the grid lines themselves and the pinyin region
-    eraseRowsBetweenGridLines(data, brightness, width, height, gridLineRows, pinyinEndRow);
+    // Step 2: Process each cell individually (between consecutive grid lines)
+    // This allows us to preserve pinyin within each cell
+    eraseCellsWithPinyinPreservation(data, brightness, width, height, gridLineRows);
 }
 
 /**
  * Detect horizontal grid lines by looking for rows with high density of dark pixels
  * Grid lines span across the width of the image
+ * Improved version with better threshold handling
  */
 function detectHorizontalGridLines(brightness, width, height) {
     const gridLines = [];
+    const rowDarkness = new Array(height).fill(0);
     
+    // Calculate darkness score for each row
     for (let y = 0; y < height; y++) {
         let darkPixelCount = 0;
+        let totalDarkness = 0;
         
-        // Count dark pixels in this row
+        // Count dark pixels and accumulate darkness in this row
         for (let x = 0; x < width; x++) {
             const idx = y * width + x;
-            if (brightness[idx] < GRID_LINE_BRIGHTNESS_THRESHOLD) {
+            const pixelBrightness = brightness[idx];
+            if (pixelBrightness < GRID_LINE_BRIGHTNESS_THRESHOLD) {
                 darkPixelCount++;
+                totalDarkness += (GRID_LINE_BRIGHTNESS_THRESHOLD - pixelBrightness);
             }
         }
         
-        // If this row has enough dark pixels spanning across, it's likely a grid line
+        // Calculate coverage ratio
         const coverage = darkPixelCount / width;
+        rowDarkness[y] = coverage;
+        
+        // If this row has enough dark pixels spanning across, it's likely a grid line
         if (coverage > MIN_GRID_LINE_COVERAGE) {
             gridLines.push(y);
         }
     }
     
     // Merge adjacent grid lines (grid lines can be multiple pixels thick)
-    return mergeAdjacentLines(gridLines);
+    const mergedLines = mergeAdjacentLines(gridLines);
+    
+    console.log(`Detected ${mergedLines.length} grid lines at rows: ${mergedLines.join(', ')}`);
+    return mergedLines;
 }
 
 /**
@@ -509,11 +529,66 @@ function findPinyinRegionEnd(brightness, width, height, gridLines) {
         // Look for the start of the grid structure
         // Pinyin typically ends before first grid line or at the configured ratio from top
         const firstGridLine = gridLines[0];
-        return Math.min(firstGridLine, Math.floor(height * PINYIN_REGION_RATIO));
+        return Math.min(firstGridLine, Math.floor(height * 0.25));
     }
     
-    // Fallback: assume pinyin is in top portion of image (slightly less than configured ratio)
-    return Math.floor(height * (PINYIN_REGION_RATIO - 0.05));
+    // Fallback: assume pinyin is in top portion of image
+    return Math.floor(height * 0.20);
+}
+
+/**
+ * Process each cell individually to preserve pinyin while erasing characters
+ * This is the optimized approach that handles pinyin within each cell
+ */
+function eraseCellsWithPinyinPreservation(data, brightness, width, height, gridLineRows) {
+    // Estimate background color (typically white or near-white)
+    const bgColor = { r: 255, g: 255, b: 255 };
+    
+    // Create a set for fast grid line lookup
+    const gridLineSet = new Set(gridLineRows);
+    const protectedRows = new Set();
+    for (const line of gridLineRows) {
+        for (let offset = -GRID_LINE_PROTECTION_PIXELS; offset <= GRID_LINE_PROTECTION_PIXELS; offset++) {
+            protectedRows.add(line + offset);
+        }
+    }
+    
+    // Process each cell (region between consecutive grid lines)
+    for (let i = 0; i < gridLineRows.length - 1; i++) {
+        const cellTopLine = gridLineRows[i];
+        const cellBottomLine = gridLineRows[i + 1];
+        const cellHeight = cellBottomLine - cellTopLine;
+        
+        // Skip cells that are too small (likely noise)
+        if (cellHeight < MIN_CELL_HEIGHT) {
+            continue;
+        }
+        
+        // Calculate pinyin region within this cell
+        // Pinyin is typically in the top 30% of each cell
+        const pinyinEndInCell = cellTopLine + Math.floor(cellHeight * PINYIN_RATIO_IN_CELL);
+        
+        // Erase rows in the character region (below pinyin, above bottom grid line)
+        for (let y = pinyinEndInCell; y < cellBottomLine; y++) {
+            // Skip if this is a protected grid line row
+            if (protectedRows.has(y)) {
+                continue;
+            }
+            
+            // Erase this row (character region)
+            for (let x = 0; x < width; x++) {
+                const idx = y * width + x;
+                const pixelIdx = idx * 4;
+                
+                // Only erase dark pixels (characters), leave background
+                if (brightness[idx] < CHARACTER_BRIGHTNESS_THRESHOLD) {
+                    data[pixelIdx] = bgColor.r;
+                    data[pixelIdx + 1] = bgColor.g;
+                    data[pixelIdx + 2] = bgColor.b;
+                }
+            }
+        }
+    }
 }
 
 /**
