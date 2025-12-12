@@ -554,6 +554,7 @@ function eraseCellsWithPinyinPreservation(data, brightness, width, height, gridL
     }
     
     // Process each cell (region between consecutive grid lines)
+    let processedCells = 0;
     for (let i = 0; i < gridLineRows.length - 1; i++) {
         const cellTopLine = gridLineRows[i];
         const cellBottomLine = gridLineRows[i + 1];
@@ -561,14 +562,19 @@ function eraseCellsWithPinyinPreservation(data, brightness, width, height, gridL
         
         // Skip cells that are too small (likely noise)
         if (cellHeight < MIN_CELL_HEIGHT) {
+            console.log(`Skipping small cell at ${cellTopLine}-${cellBottomLine} (height: ${cellHeight}px)`);
             continue;
         }
         
         // Calculate pinyin region within this cell
         // Pinyin is typically in the top 30% of each cell
         const pinyinEndInCell = cellTopLine + Math.floor(cellHeight * PINYIN_RATIO_IN_CELL);
+        const characterRegionHeight = cellBottomLine - pinyinEndInCell;
+        
+        console.log(`Processing cell ${i + 1}: top=${cellTopLine}, bottom=${cellBottomLine}, height=${cellHeight}px, pinyin_end=${pinyinEndInCell}, char_region=${characterRegionHeight}px`);
         
         // Erase rows in the character region (below pinyin, above bottom grid line)
+        let erasedPixels = 0;
         for (let y = pinyinEndInCell; y < cellBottomLine; y++) {
             // Skip if this is a protected grid line row
             if (protectedRows.has(y)) {
@@ -585,10 +591,16 @@ function eraseCellsWithPinyinPreservation(data, brightness, width, height, gridL
                     data[pixelIdx] = bgColor.r;
                     data[pixelIdx + 1] = bgColor.g;
                     data[pixelIdx + 2] = bgColor.b;
+                    erasedPixels++;
                 }
             }
         }
+        
+        console.log(`  Erased ${erasedPixels} pixels in cell ${i + 1}`);
+        processedCells++;
     }
+    
+    console.log(`Processed ${processedCells} cells total`);
 }
 
 /**
