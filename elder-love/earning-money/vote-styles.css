@@ -1,0 +1,269 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+    background: linear-gradient(135deg, #d5f4e6 0%, #a8e6cf 50%, #ffaaa5 100%);
+    color: #2d3436;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#loadingMessage {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.5em;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+#votingSection {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.instruction {
+    text-align: center;
+    font-size: 1.3em;
+    color: white;
+    margin-bottom: 25px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.tip-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tip-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tip-container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.tip-container.selected {
+    border: 4px solid #27ae60;
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe6e6 100%);
+}
+
+.tip-name {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #27ae60;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.tip-description {
+    font-size: 1em;
+    color: #555;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.show-result-btn {
+    display: block;
+    margin: 30px auto;
+    padding: 15px 40px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #00b894 0%, #00a080 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.show-result-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+}
+
+#resultsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.winner-section {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.winner-section h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.winner-tip {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.winner-votes {
+    margin-top: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.results-section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.results-section h2 {
+    text-align: center;
+    color: #27ae60;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe6e6 100%);
+    border-radius: 10px;
+    border: 2px solid #a8e6cf;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+}
+
+.result-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.result-rank {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #27ae60;
+    margin-right: 20px;
+    min-width: 50px;
+}
+
+.result-name {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2d3436;
+}
+
+.result-votes {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #27ae60;
+    background: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+.retry-button {
+    display: block;
+    margin: 30px auto;
+    padding: 15px 40px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.retry-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.back-link a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+    display: inline-block;
+}
+
+.back-link a:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .tip-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .tip-name {
+        font-size: 1.5em;
+    }
+    
+    .winner-tip {
+        font-size: 2em;
+    }
+    
+    .result-rank {
+        font-size: 1.5em;
+        min-width: 40px;
+    }
+    
+    .result-name {
+        font-size: 1.1em;
+    }
+}
