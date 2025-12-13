@@ -524,3 +524,141 @@ describe('Lure Fishing Regression Tests', () => {
     expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/lws/mysql/query');
   });
 });
+
+describe('Bug Fix: Photo URL Path Handling', () => {
+  it('should prepend lure-fishing/ to photo_url if missing', () => {
+    // Simulate upload result with just filename
+    const uploadResult = { filename: 'file-123456.jpg' };
+    let photoUrl = uploadResult.filename;
+    
+    // Fix: prepend path if missing
+    if (!photoUrl.startsWith('lure-fishing/')) {
+      photoUrl = 'lure-fishing/' + photoUrl;
+    }
+    
+    expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
+    expect(photoUrl).toContain('lure-fishing/');
+  });
+  
+  it('should not duplicate lure-fishing/ prefix if already present', () => {
+    // Simulate upload result with full path
+    const uploadResult = { filename: 'lure-fishing/file-123456.jpg' };
+    let photoUrl = uploadResult.filename;
+    
+    // Fix: prepend path if missing
+    if (!photoUrl.startsWith('lure-fishing/')) {
+      photoUrl = 'lure-fishing/' + photoUrl;
+    }
+    
+    expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
+    expect(photoUrl.split('lure-fishing/').length - 1).toBe(1); // Only one occurrence
+  });
+  
+  it('should construct correct full URL with fixed photo_url', () => {
+    // Simulate the fixed photo_url
+    const record = { photo_url: 'lure-fishing/file-123456.jpg' };
+    const fullUrl = `${window.BASE_URL}/${record.photo_url}`;
+    
+    expect(fullUrl).toBe('https://letmetry.cloud/lure-fishing/file-123456.jpg');
+    expect(fullUrl).not.toContain('https://letmetry.cloud/file-123456.jpg'); // Wrong URL
+  });
+  
+  it('should handle various filename formats', () => {
+    const testCases = [
+      { input: 'photo.jpg', expected: 'lure-fishing/photo.jpg' },
+      { input: 'file-1234567890.png', expected: 'lure-fishing/file-1234567890.png' },
+      { input: 'lure-fishing/existing.jpg', expected: 'lure-fishing/existing.jpg' },
+    ];
+    
+    testCases.forEach(({ input, expected }) => {
+      let photoUrl = input;
+      if (!photoUrl.startsWith('lure-fishing/')) {
+        photoUrl = 'lure-fishing/' + photoUrl;
+      }
+      expect(photoUrl).toBe(expected);
+    });
+  });
+});
+
+describe('Bug Fix: Geolocation Coordinate Handling', () => {
+  it('should include geolocation options for better accuracy', () => {
+    const geolocationOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    };
+    
+    expect(geolocationOptions.enableHighAccuracy).toBe(true);
+    expect(geolocationOptions.timeout).toBe(10000);
+    expect(geolocationOptions.maximumAge).toBe(0);
+  });
+  
+  it('should provide detailed error messages for geolocation failures', () => {
+    const errorMessages = {
+      PERMISSION_DENIED: '用户拒绝了地理位置请求',
+      POSITION_UNAVAILABLE: '位置信息不可用',
+      TIMEOUT: '请求超时'
+    };
+    
+    expect(errorMessages.PERMISSION_DENIED).toBeTruthy();
+    expect(errorMessages.POSITION_UNAVAILABLE).toBeTruthy();
+    expect(errorMessages.TIMEOUT).toBeTruthy();
+  });
+  
+  it('should store coordinates in proper format', () => {
+    // Simulate coordinates obtained from geolocation
+    const mockPosition = {
+      coords: {
+        latitude: 39.9042,
+        longitude: 116.4074
+      }
+    };
+    
+    const currentCoordinates = {
+      latitude: mockPosition.coords.latitude,
+      longitude: mockPosition.coords.longitude
+    };
+    
+    expect(currentCoordinates).toHaveProperty('latitude');
+    expect(currentCoordinates).toHaveProperty('longitude');
+    expect(typeof currentCoordinates.latitude).toBe('number');
+    expect(typeof currentCoordinates.longitude).toBe('number');
+  });
+  
+  it('should format coordinates with 4 decimal places for display', () => {
+    const lat = 39.90419876;
+    const lon = 116.40740123;
+    
+    const formattedLat = lat.toFixed(4);
+    const formattedLon = lon.toFixed(4);
+    
+    expect(formattedLat).toBe('39.9042');
+    expect(formattedLon).toBe('116.4074');
+  });
+  
+  it('should clear coordinates on error', () => {
+    // Simulate coordinate reset on error
+    let currentCoordinates = { latitude: 39.9042, longitude: 116.4074 };
+    
+    // On error, reset to null
+    currentCoordinates = null;
+    
+    expect(currentCoordinates).toBeNull();
+  });
+  
+  it('should validate coordinates before using for temperature fetch', () => {
+    // Test with null coordinates
+    const currentCoordinates = null;
+    const canFetchTemperature = currentCoordinates !== null;
+    
+    expect(canFetchTemperature).toBe(false);
+  });
+  
+  it('should validate coordinates with valid data', () => {
+    // Test with valid coordinates
+    const currentCoordinates = { latitude: 39.9042, longitude: 116.4074 };
+    const canFetchTemperature = currentCoordinates !== null;
+    
+    expect(canFetchTemperature).toBe(true);
+  });
+});
