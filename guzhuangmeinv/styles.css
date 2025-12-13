@@ -5,28 +5,32 @@
 
 /* Button Group Layout */
 .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
     width: 100%;
+    padding: 10px;
 }
 
 .button-group button {
     width: 100%;
-    height: 4em;
-    font-size: 1.2em;
+    height: auto;
+    font-size: 1em;
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
     background-color: white;
     cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .button-group button:hover {
-    background-color: #ff8800;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.03);
 }
 
 /* Touch device hover behavior */
@@ -39,9 +43,32 @@
 }
 
 .button-group button:active {
-    background-color: #e67e22;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transform: scale(0.95);
+    transform: scale(0.98);
+}
+
+/* Image Button Styles */
+.image-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.option-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.option-label {
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+    background-color: #f8f9fa;
+    width: 100%;
 }
 
 /* Bar Chart Styles */
@@ -156,9 +183,18 @@ label {
         font-size: 12px;
     }
     
-    .button-group button {
-        height: 3.5em;
-        font-size: 1.1em;
+    .button-group {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .option-image {
+        height: 250px;
+    }
+    
+    .option-label {
+        font-size: 1em;
+        padding: 12px;
     }
 }
 
@@ -185,9 +221,18 @@ label {
         max-width: 80px;
     }
     
-    .button-group button {
-        height: 3em;
-        font-size: 1em;
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .option-image {
+        height: 300px;
+    }
+    
+    .option-label {
+        font-size: 0.95em;
+        padding: 10px;
     }
     
     .show-result-btn {
