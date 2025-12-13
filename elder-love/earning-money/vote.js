@@ -86,7 +86,7 @@ function loadTipsAndSetupVoting() {
                 showError('加载技巧失败，请刷新页面重试');
             }
         } else {
-            showError('暂无技巧数据，请先在爱做饭页面添加技巧');
+            showError('暂无技巧数据，请先在爱赚钱页面添加技巧');
         }
     });
 }
