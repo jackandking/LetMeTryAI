@@ -123,7 +123,10 @@ function getLocation() {
             
             btn.disabled = false;
             btn.textContent = '获取位置';
-            showStatus('位置获取成功', 'success');
+            showStatus('位置获取成功！坐标已保存', 'success');
+            
+            // Log coordinates for debugging
+            console.log('Coordinates obtained:', currentCoordinates);
             
             // Hide success message after 2 seconds
             setTimeout(() => {
@@ -132,22 +135,34 @@ function getLocation() {
         },
         function(error) {
             let errorMsg = '位置获取失败';
+            let errorDetail = '';
             switch(error.code) {
                 case error.PERMISSION_DENIED:
                     errorMsg = '用户拒绝了地理位置请求';
+                    errorDetail = '请在浏览器设置中允许位置访问权限';
                     break;
                 case error.POSITION_UNAVAILABLE:
                     errorMsg = '位置信息不可用';
+                    errorDetail = '请确保设备GPS已开启';
                     break;
                 case error.TIMEOUT:
                     errorMsg = '请求超时';
+                    errorDetail = '请重试';
                     break;
             }
             
+            // Reset coordinates on error
+            currentCoordinates = null;
             locationInput.value = '';
             btn.disabled = false;
             btn.textContent = '获取位置';
-            showStatus(errorMsg, 'error');
+            showStatus(`${errorMsg}：${errorDetail}`, 'error');
+            console.error('Geolocation error:', error);
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         }
     );
 }
@@ -259,10 +274,17 @@ async function handleFormSubmit(event) {
             throw new Error('照片上传失败');
         }
         
+        // Ensure photo_url includes the full path
+        // If the server returns just the filename, prepend the targetPath
+        let photoUrl = uploadResult.filename;
+        if (!photoUrl.startsWith('lure-fishing/')) {
+            photoUrl = 'lure-fishing/' + photoUrl;
+        }
+        
         // Save record to database
         showStatus('正在保存记录...', 'success');
         const recordData = {
-            photo_url: uploadResult.filename,
+            photo_url: photoUrl,
             location: location,
             catch_date: date,
             temperature: temperature,
