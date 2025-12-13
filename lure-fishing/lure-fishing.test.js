@@ -224,11 +224,12 @@ describe('Lure Fishing Feature Tests', () => {
     });
   });
   
-  describe('File Upload Path', () => {
-    it('should use correct target path for lure-fishing photos', () => {
-      const targetPath = 'lure-fishing/';
-      expect(targetPath).toBe('lure-fishing/');
-      expect(targetPath).toContain('lure-fishing');
+  describe('Image Upload API', () => {
+    it('should use image/upload endpoint without targetPath', () => {
+      // Note: image/upload API does not support targetPath parameter
+      const endpoint = window.API_ENDPOINTS.IMAGE_UPLOAD;
+      expect(endpoint).toContain('/image/upload');
+      expect(endpoint).toBe('https://letmetry.cloud/image/upload');
     });
   });
   
@@ -531,14 +532,9 @@ describe('Lure Fishing Regression Tests', () => {
 
 describe('Bug Fix: Photo URL Path Handling', () => {
   const PHOTO_URL_PREFIX = 'images/';
-  const PHOTO_UPLOAD_PATH = 'lure-fishing/';
   
   it('should define photo URL prefix constant for accessing images', () => {
     expect(PHOTO_URL_PREFIX).toBe('images/');
-  });
-  
-  it('should define photo upload path for organizing server files', () => {
-    expect(PHOTO_UPLOAD_PATH).toBe('lure-fishing/');
   });
   
   it('should store just the filename in database', () => {
@@ -573,12 +569,10 @@ describe('Bug Fix: Photo URL Path Handling', () => {
     });
   });
   
-  it('should separate upload path from display URL prefix', () => {
-    // Upload uses targetPath for server organization
-    // Display uses images/ prefix for accessing files
-    expect(PHOTO_UPLOAD_PATH).toBe('lure-fishing/');
-    expect(PHOTO_URL_PREFIX).toBe('images/');
-    expect(PHOTO_UPLOAD_PATH).not.toBe(PHOTO_URL_PREFIX);
+  it('should not use targetPath parameter in image upload', () => {
+    // Note: image/upload API does not support targetPath parameter
+    // Files are uploaded to a default location and accessed via /images/ prefix
+    expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toBe('https://letmetry.cloud/image/upload');
   });
 });
 
