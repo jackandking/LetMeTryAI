@@ -9,6 +9,9 @@ import { fetchWeatherByLocationAndDate, formatTemperature, getTemperatureDescrip
 // MySQL table name for fishing records
 const TABLE_NAME = 'lure_fishing_records';
 
+// Photo storage path prefix
+const PHOTO_PATH_PREFIX = 'lure-fishing/';
+
 // Current page for pagination
 let currentPage = 1;
 const RECORDS_PER_PAGE = 9;
@@ -275,10 +278,10 @@ async function handleFormSubmit(event) {
         }
         
         // Ensure photo_url includes the full path
-        // If the server returns just the filename, prepend the targetPath
+        // If the server returns just the filename, prepend the path prefix
         let photoUrl = uploadResult.filename;
-        if (!photoUrl.startsWith('lure-fishing/')) {
-            photoUrl = 'lure-fishing/' + photoUrl;
+        if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
+            photoUrl = PHOTO_PATH_PREFIX + photoUrl;
         }
         
         // Save record to database
@@ -415,7 +418,7 @@ async function compressImage(file) {
 async function uploadPhoto(file) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('targetPath', 'lure-fishing/');
+    formData.append('targetPath', PHOTO_PATH_PREFIX);
     
     const response = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, {
         method: 'POST',

@@ -526,32 +526,38 @@ describe('Lure Fishing Regression Tests', () => {
 });
 
 describe('Bug Fix: Photo URL Path Handling', () => {
-  it('should prepend lure-fishing/ to photo_url if missing', () => {
+  const PHOTO_PATH_PREFIX = 'lure-fishing/';
+  
+  it('should define photo path prefix constant', () => {
+    expect(PHOTO_PATH_PREFIX).toBe('lure-fishing/');
+  });
+  
+  it('should prepend path prefix to photo_url if missing', () => {
     // Simulate upload result with just filename
     const uploadResult = { filename: 'file-123456.jpg' };
     let photoUrl = uploadResult.filename;
     
     // Fix: prepend path if missing
-    if (!photoUrl.startsWith('lure-fishing/')) {
-      photoUrl = 'lure-fishing/' + photoUrl;
+    if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
+      photoUrl = PHOTO_PATH_PREFIX + photoUrl;
     }
     
     expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
-    expect(photoUrl).toContain('lure-fishing/');
+    expect(photoUrl).toContain(PHOTO_PATH_PREFIX);
   });
   
-  it('should not duplicate lure-fishing/ prefix if already present', () => {
+  it('should not duplicate path prefix if already present', () => {
     // Simulate upload result with full path
     const uploadResult = { filename: 'lure-fishing/file-123456.jpg' };
     let photoUrl = uploadResult.filename;
     
     // Fix: prepend path if missing
-    if (!photoUrl.startsWith('lure-fishing/')) {
-      photoUrl = 'lure-fishing/' + photoUrl;
+    if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
+      photoUrl = PHOTO_PATH_PREFIX + photoUrl;
     }
     
     expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
-    expect(photoUrl.split('lure-fishing/').length - 1).toBe(1); // Only one occurrence
+    expect(photoUrl.split(PHOTO_PATH_PREFIX).length - 1).toBe(1); // Only one occurrence
   });
   
   it('should construct correct full URL with fixed photo_url', () => {
@@ -572,8 +578,8 @@ describe('Bug Fix: Photo URL Path Handling', () => {
     
     testCases.forEach(({ input, expected }) => {
       let photoUrl = input;
-      if (!photoUrl.startsWith('lure-fishing/')) {
-        photoUrl = 'lure-fishing/' + photoUrl;
+      if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
+        photoUrl = PHOTO_PATH_PREFIX + photoUrl;
       }
       expect(photoUrl).toBe(expected);
     });
