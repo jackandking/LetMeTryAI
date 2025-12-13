@@ -49,8 +49,9 @@ async function handleFormSubmit(event) {
         return;
     }
     
-    // Create dish object
+    // Create dish object with unique ID
     const dish = {
+        id: `dish-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         name: dishName,
         videoLink: videoLink,
         description: description,
@@ -191,8 +192,14 @@ function createDishCard(dish) {
 
 /**
  * Get dishes for voting
- * This is used by the voting page
+ * Utility function that can be called by voting page if needed in future
+ * Currently the voting page reads directly from storage for data consistency
  */
 function getDishesForVoting() {
     return dishes.filter(dish => dish.name && dish.name.trim());
+}
+
+// Export for potential use by voting page
+if (typeof window !== 'undefined') {
+    window.getDishesForVoting = getDishesForVoting;
 }
