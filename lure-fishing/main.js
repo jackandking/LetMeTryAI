@@ -9,10 +9,7 @@ import { fetchWeatherByLocationAndDate, formatTemperature, getTemperatureDescrip
 // MySQL table name for fishing records
 const TABLE_NAME = 'lure_fishing_records';
 
-// Photo upload target path (for organizing uploads on server)
-const PHOTO_UPLOAD_PATH = 'lure-fishing/';
-
-// Photo URL prefix (for accessing uploaded images)
+// Photo URL prefix (for accessing uploaded images via API)
 const PHOTO_URL_PREFIX = 'images/';
 
 // Current page for pagination
@@ -415,7 +412,7 @@ async function compressImage(file) {
 async function uploadPhoto(file) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('targetPath', PHOTO_UPLOAD_PATH);
+    // Note: image/upload API does not support targetPath parameter
     
     const response = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, {
         method: 'POST',
