@@ -97,7 +97,23 @@ function generateOptionButtons(container) {
         const button = document.createElement('button');
         button.type = 'button';
         button.onclick = () => nextQuestion(option.value);
-        button.textContent = option.label;
+        button.className = 'image-button';
+        
+        // Create image element
+        if (option.image) {
+            const img = document.createElement('img');
+            img.src = option.image;
+            img.alt = option.label;
+            img.className = 'option-image';
+            button.appendChild(img);
+        }
+        
+        // Create label element
+        const label = document.createElement('div');
+        label.className = 'option-label';
+        label.textContent = option.label;
+        button.appendChild(label);
+        
         container.appendChild(button);
     });
 }
