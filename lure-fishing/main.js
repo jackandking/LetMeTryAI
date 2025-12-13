@@ -9,8 +9,11 @@ import { fetchWeatherByLocationAndDate, formatTemperature, getTemperatureDescrip
 // MySQL table name for fishing records
 const TABLE_NAME = 'lure_fishing_records';
 
-// Photo storage path prefix
-const PHOTO_PATH_PREFIX = 'lure-fishing/';
+// Photo upload target path (for organizing uploads on server)
+const PHOTO_UPLOAD_PATH = 'lure-fishing/';
+
+// Photo URL prefix (for accessing uploaded images)
+const PHOTO_URL_PREFIX = 'images/';
 
 // Current page for pagination
 let currentPage = 1;
@@ -277,17 +280,11 @@ async function handleFormSubmit(event) {
             throw new Error('照片上传失败');
         }
         
-        // Ensure photo_url includes the full path
-        // If the server returns just the filename, prepend the path prefix
-        let photoUrl = uploadResult.filename;
-        if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
-            photoUrl = PHOTO_PATH_PREFIX + photoUrl;
-        }
-        
         // Save record to database
+        // Store just the filename - the URL prefix will be added when displaying
         showStatus('正在保存记录...', 'success');
         const recordData = {
-            photo_url: photoUrl,
+            photo_url: uploadResult.filename,
             location: location,
             catch_date: date,
             temperature: temperature,
@@ -418,7 +415,7 @@ async function compressImage(file) {
 async function uploadPhoto(file) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('targetPath', PHOTO_PATH_PREFIX);
+    formData.append('targetPath', PHOTO_UPLOAD_PATH);
     
     const response = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, {
         method: 'POST',
@@ -526,7 +523,8 @@ function createRecordCard(record) {
     card.className = 'record-card';
     
     // Sanitize and validate photo URL
-    const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+    // Use the images/ prefix to access uploaded photos according to API design
+    const photoUrl = encodeURI(`${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`);
     const date = new Date(record.catch_date).toLocaleDateString('zh-CN');
     
     // Create elements programmatically to avoid XSS

@@ -272,26 +272,30 @@ describe('Lure Fishing Feature Tests', () => {
   });
   
   describe('Image URL Construction', () => {
-    it('should construct correct image URL from photo_url', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
+    it('should construct correct image URL with images/ prefix', () => {
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
       
-      expect(photoUrl).toBe('https://letmetry.cloud/lure-fishing/test.jpg');
+      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
       expect(photoUrl).toContain('https://letmetry.cloud');
+      expect(photoUrl).toContain('/images/');
     });
     
     it('should not use old domain in image URLs', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
       
       expect(photoUrl).not.toContain('letmetryai.cn');
     });
     
     it('should encode URLs to prevent XSS', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = encodeURI(`${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`);
       
-      expect(photoUrl).toBe('https://letmetry.cloud/lure-fishing/test.jpg');
+      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
     });
   });
   
@@ -526,63 +530,55 @@ describe('Lure Fishing Regression Tests', () => {
 });
 
 describe('Bug Fix: Photo URL Path Handling', () => {
-  const PHOTO_PATH_PREFIX = 'lure-fishing/';
+  const PHOTO_URL_PREFIX = 'images/';
+  const PHOTO_UPLOAD_PATH = 'lure-fishing/';
   
-  it('should define photo path prefix constant', () => {
-    expect(PHOTO_PATH_PREFIX).toBe('lure-fishing/');
+  it('should define photo URL prefix constant for accessing images', () => {
+    expect(PHOTO_URL_PREFIX).toBe('images/');
   });
   
-  it('should prepend path prefix to photo_url if missing', () => {
-    // Simulate upload result with just filename
+  it('should define photo upload path for organizing server files', () => {
+    expect(PHOTO_UPLOAD_PATH).toBe('lure-fishing/');
+  });
+  
+  it('should store just the filename in database', () => {
+    // Simulate upload result with just filename (as returned by API)
     const uploadResult = { filename: 'file-123456.jpg' };
-    let photoUrl = uploadResult.filename;
+    const photoUrl = uploadResult.filename;
     
-    // Fix: prepend path if missing
-    if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
-      photoUrl = PHOTO_PATH_PREFIX + photoUrl;
-    }
-    
-    expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
-    expect(photoUrl).toContain(PHOTO_PATH_PREFIX);
+    // Store just the filename in database
+    expect(photoUrl).toBe('file-123456.jpg');
+    expect(photoUrl).not.toContain('/');
   });
   
-  it('should not duplicate path prefix if already present', () => {
-    // Simulate upload result with full path
-    const uploadResult = { filename: 'lure-fishing/file-123456.jpg' };
-    let photoUrl = uploadResult.filename;
+  it('should construct correct display URL with images/ prefix', () => {
+    // Simulate database record with just filename
+    const record = { photo_url: 'file-123456.jpg' };
+    const displayUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
     
-    // Fix: prepend path if missing
-    if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
-      photoUrl = PHOTO_PATH_PREFIX + photoUrl;
-    }
-    
-    expect(photoUrl).toBe('lure-fishing/file-123456.jpg');
-    expect(photoUrl.split(PHOTO_PATH_PREFIX).length - 1).toBe(1); // Only one occurrence
+    expect(displayUrl).toBe('https://letmetry.cloud/images/file-123456.jpg');
+    expect(displayUrl).toContain('/images/');
   });
   
-  it('should construct correct full URL with fixed photo_url', () => {
-    // Simulate the fixed photo_url
-    const record = { photo_url: 'lure-fishing/file-123456.jpg' };
-    const fullUrl = `${window.BASE_URL}/${record.photo_url}`;
-    
-    expect(fullUrl).toBe('https://letmetry.cloud/lure-fishing/file-123456.jpg');
-    expect(fullUrl).not.toContain('https://letmetry.cloud/file-123456.jpg'); // Wrong URL
-  });
-  
-  it('should handle various filename formats', () => {
+  it('should use images/ prefix according to upload API design', () => {
+    // According to API design, uploaded images are accessed via /images/ prefix
     const testCases = [
-      { input: 'photo.jpg', expected: 'lure-fishing/photo.jpg' },
-      { input: 'file-1234567890.png', expected: 'lure-fishing/file-1234567890.png' },
-      { input: 'lure-fishing/existing.jpg', expected: 'lure-fishing/existing.jpg' },
+      { filename: 'photo.jpg', expected: 'https://letmetry.cloud/images/photo.jpg' },
+      { filename: 'file-1234567890.png', expected: 'https://letmetry.cloud/images/file-1234567890.png' },
     ];
     
-    testCases.forEach(({ input, expected }) => {
-      let photoUrl = input;
-      if (!photoUrl.startsWith(PHOTO_PATH_PREFIX)) {
-        photoUrl = PHOTO_PATH_PREFIX + photoUrl;
-      }
-      expect(photoUrl).toBe(expected);
+    testCases.forEach(({ filename, expected }) => {
+      const displayUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${filename}`;
+      expect(displayUrl).toBe(expected);
     });
+  });
+  
+  it('should separate upload path from display URL prefix', () => {
+    // Upload uses targetPath for server organization
+    // Display uses images/ prefix for accessing files
+    expect(PHOTO_UPLOAD_PATH).toBe('lure-fishing/');
+    expect(PHOTO_URL_PREFIX).toBe('images/');
+    expect(PHOTO_UPLOAD_PATH).not.toBe(PHOTO_URL_PREFIX);
   });
 });
 
