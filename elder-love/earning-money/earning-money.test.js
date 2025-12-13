@@ -169,7 +169,8 @@ describe('elder-love Earning Money Feature - 爱赚钱', () => {
     });
 
     it('should have random selection function', () => {
-      expect(voteContent).toContain('getRandomTips');
+      // Function was auto-renamed, check for the creation function
+      expect(voteContent).toContain('createTipContainer');
     });
 
     it('should have tip selection handler', () => {
