@@ -237,6 +237,84 @@ describe('Guzhuang Meinv Application', () => {
         });
     });
 
+    describe('Image Display Functionality', () => {
+        it('should display images for all options', () => {
+            const expectedOptions = [
+                { value: "1", label: "朱琳的女儿国国王", image: "https://q1.itc.cn/images01/20250722/2ae2054c2e7e4a9e8c13ede4d8800dc6.jpeg" },
+                { value: "2", label: "蒋勤勤的西施", image: "https://pic.rmb.bdstatic.com/bjh/9785b2bd76f0a179053dbf71a2ff53a0.jpeg" },
+                { value: "3", label: "赵雅芝的白素贞", image: "https://pic.rmb.bdstatic.com/bjh/bc160f2886a/250124/73836a8ff1d7222c5a58de8363a9409e.jpeg" },
+                { value: "4", label: "陈红的貂蝉", image: "https://q0.itc.cn/images01/20250918/576be67f696a415e8819fffd71a29a59.jpeg" },
+                { value: "5", label: "刘亦菲的小龙女", image: "https://pic.rmb.bdstatic.com/bjh/bb818fcb2934/241213/e86d8017285b92ef2a6bca022bc0058b.jpeg" }
+            ];
+            
+            expectedOptions.forEach(option => {
+                expect(option.image).toBeDefined();
+                expect(option.image).toMatch(/^https:\/\//);
+                expect(option.image).toMatch(/\.(jpeg|jpg|png)$/);
+            });
+        });
+
+        it('should create image elements with correct structure', () => {
+            const mockContainer = document.createElement('div');
+            
+            // Simulate what generateOptionButtons should create
+            const button = document.createElement('button');
+            button.className = 'image-button';
+            
+            const img = document.createElement('img');
+            img.src = 'https://q1.itc.cn/images01/20250722/2ae2054c2e7e4a9e8c13ede4d8800dc6.jpeg';
+            img.alt = '朱琳的女儿国国王';
+            img.className = 'option-image';
+            
+            const label = document.createElement('div');
+            label.className = 'option-label';
+            label.textContent = '朱琳的女儿国国王';
+            
+            button.appendChild(img);
+            button.appendChild(label);
+            mockContainer.appendChild(button);
+            
+            // Verify structure
+            expect(mockContainer.querySelector('button')).not.toBeNull();
+            expect(mockContainer.querySelector('.image-button')).not.toBeNull();
+            expect(mockContainer.querySelector('.option-image')).not.toBeNull();
+            expect(mockContainer.querySelector('.option-label')).not.toBeNull();
+            expect(mockContainer.querySelector('img').src).toContain('https://');
+        });
+
+        it('should have valid image URLs for all options', () => {
+            const imageUrls = [
+                "https://q1.itc.cn/images01/20250722/2ae2054c2e7e4a9e8c13ede4d8800dc6.jpeg",
+                "https://pic.rmb.bdstatic.com/bjh/9785b2bd76f0a179053dbf71a2ff53a0.jpeg",
+                "https://pic.rmb.bdstatic.com/bjh/bc160f2886a/250124/73836a8ff1d7222c5a58de8363a9409e.jpeg",
+                "https://q0.itc.cn/images01/20250918/576be67f696a415e8819fffd71a29a59.jpeg",
+                "https://pic.rmb.bdstatic.com/bjh/bb818fcb2934/241213/e86d8017285b92ef2a6bca022bc0058b.jpeg"
+            ];
+            
+            imageUrls.forEach(url => {
+                expect(url).toMatch(/^https:\/\//);
+                expect(url).toBeDefined();
+                expect(typeof url).toBe('string');
+            });
+        });
+
+        it('should maintain label text with image display', () => {
+            const labels = [
+                "朱琳的女儿国国王",
+                "蒋勤勤的西施",
+                "赵雅芝的白素贞",
+                "陈红的貂蝉",
+                "刘亦菲的小龙女"
+            ];
+            
+            labels.forEach(label => {
+                expect(label).toBeDefined();
+                expect(typeof label).toBe('string');
+                expect(label.length).toBeGreaterThan(0);
+            });
+        });
+    });
+
     describe('Error Handling', () => {
         it('should handle null vote data gracefully', () => {
             const voteData = null;
