@@ -92,10 +92,15 @@ function loadDishesAndSetupVoting() {
 }
 
 /**
- * Get random dishes from the dish list
+ * Get random dishes from the dish list using Fisher-Yates shuffle
  */
 function getRandomDishes(dishList, count) {
-    const shuffled = [...dishList].sort(() => Math.random() - 0.5);
+    const shuffled = [...dishList];
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
     return shuffled.slice(0, count);
 }
 
@@ -187,10 +192,19 @@ function showAd() {
 function saveVote() {
     const selectedDish = selectedDishes[selectedDishIndex];
     
-    // Update vote count in allDishes
-    const dishIndex = allDishes.findIndex(d => d.name === selectedDish.name && d.timestamp === selectedDish.timestamp);
-    if (dishIndex !== -1) {
-        allDishes[dishIndex].votes = (allDishes[dishIndex].votes || 0) + 1;
+    // Create a Map for O(1) lookup if dish has ID, otherwise fallback to findIndex
+    if (selectedDish.id) {
+        const dishMap = new Map(allDishes.map(d => [d.id, d]));
+        const dish = dishMap.get(selectedDish.id);
+        if (dish) {
+            dish.votes = (dish.votes || 0) + 1;
+        }
+    } else {
+        // Fallback for dishes without IDs (backward compatibility)
+        const dishIndex = allDishes.findIndex(d => d.name === selectedDish.name && d.timestamp === selectedDish.timestamp);
+        if (dishIndex !== -1) {
+            allDishes[dishIndex].votes = (allDishes[dishIndex].votes || 0) + 1;
+        }
     }
     
     // Save updated dishes
