@@ -47,7 +47,7 @@ function checkUrlParameters() {
 }
 
 /**
- * Handle result display or load tipes for voting
+ * Handle result display or load tips for voting
  */
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -55,34 +55,34 @@ function handleResultDisplay() {
     if (urlParams.get('showResults') === 'true') {
         displayResults();
     } else {
-        loadTipesAndSetupVoting();
+        loadTipsAndSetupVoting();
     }
 }
 
 /**
- * Load tipes from storage and setup voting interface
+ * Load tips from storage and setup voting interface
  */
-function loadTipesAndSetupVoting() {
-    readKeyValueStore(voteConfig.tipesKey, (data) => {
+function loadTipsAndSetupVoting() {
+    readKeyValueStore(voteConfig.tipsKey, (data) => {
         if (data) {
             try {
-                allTipes = JSON.parse(data);
-                console.log(`Loaded ${allTipes.length} tipes`);
+                allTips = JSON.parse(data);
+                console.log(`Loaded ${allTips.length} tips`);
                 
-                if (allTipes.length < voteConfig.numberOfTipes) {
-                    showError(`技巧数量不足，至少需要${voteConfig.numberOfTipes}道技巧`);
+                if (allTips.length < voteConfig.numberOfTips) {
+                    showError(`技巧数量不足，至少需要${voteConfig.numberOfTips}道技巧`);
                     return;
                 }
                 
-                // Select random tipes and display them
-                selectedTipes = getRandomTipes(allTipes, voteConfig.numberOfTipes);
-                displayTipes(selectedTipes);
+                // Select random tips and display them
+                selectedTips = getRandomTips(allTips, voteConfig.numberOfTips);
+                displayTips(selectedTips);
                 
                 // Hide loading message and show voting section
                 document.getElementById('loadingMessage').style.display = 'none';
                 document.getElementById('votingSection').style.display = 'block';
             } catch (error) {
-                console.error('Error processing tipes:', error);
+                console.error('Error processing tips:', error);
                 showError('加载技巧失败，请刷新页面重试');
             }
         } else {
@@ -92,9 +92,9 @@ function loadTipesAndSetupVoting() {
 }
 
 /**
- * Get random tipes from the tip list using Fisher-Yates shuffle
+ * Get random tips from the tip list using Fisher-Yates shuffle
  */
-function getRandomTipes(tipList, count) {
+function getRandomTips(tipList, count) {
     const shuffled = [...tipList];
     // Fisher-Yates shuffle algorithm
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -105,13 +105,13 @@ function getRandomTipes(tipList, count) {
 }
 
 /**
- * Display tipes in the gallery
+ * Display tips in the gallery
  */
-function displayTipes(tipes) {
+function displayTips(tips) {
     const gallery = document.getElementById('tipGallery');
     gallery.innerHTML = '';
     
-    tipes.forEach((tip, index) => {
+    tips.forEach((tip, index) => {
         const container = createTipContainer(tip, index);
         gallery.appendChild(container);
     });
@@ -190,26 +190,26 @@ function showAd() {
  * Save vote to storage
  */
 function saveVote() {
-    const selectedTip = selectedTipes[selectedTipIndex];
+    const selectedTip = selectedTips[selectedTipIndex];
     
     // Create a Map for O(1) lookup if tip has ID, otherwise fallback to findIndex
     if (selectedTip.id) {
-        const tipMap = new Map(allTipes.map(d => [d.id, d]));
+        const tipMap = new Map(allTips.map(d => [d.id, d]));
         const tip = tipMap.get(selectedTip.id);
         if (tip) {
             tip.votes = (tip.votes || 0) + 1;
         }
     } else {
-        // Fallback for tipes without IDs (backward compatibility)
-        const tipIndex = allTipes.findIndex(d => d.name === selectedTip.name && d.timestamp === selectedTip.timestamp);
+        // Fallback for tips without IDs (backward compatibility)
+        const tipIndex = allTips.findIndex(d => d.name === selectedTip.name && d.timestamp === selectedTip.timestamp);
         if (tipIndex !== -1) {
-            allTipes[tipIndex].votes = (allTipes[tipIndex].votes || 0) + 1;
+            allTips[tipIndex].votes = (allTips[tipIndex].votes || 0) + 1;
         }
     }
     
-    // Save updated tipes
-    const tipesData = JSON.stringify(allTipes);
-    updateKeyValueStore(voteConfig.tipesKey, tipesData)
+    // Save updated tips
+    const tipsData = JSON.stringify(allTips);
+    updateKeyValueStore(voteConfig.tipsKey, tipsData)
         .then(() => {
             console.log('Vote saved successfully');
         })
@@ -222,13 +222,13 @@ function saveVote() {
  * Display voting results
  */
 function displayResults() {
-    readKeyValueStore(voteConfig.tipesKey, (data) => {
+    readKeyValueStore(voteConfig.tipsKey, (data) => {
         if (data) {
             try {
-                const tipes = JSON.parse(data);
+                const tips = JSON.parse(data);
                 
                 // Sort by votes
-                const sortedTipes = [...tipes].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+                const sortedTips = [...tips].sort((a, b) => (b.votes || 0) - (a.votes || 0));
                 
                 // Hide voting section, show results
                 document.getElementById('loadingMessage').style.display = 'none';
@@ -236,8 +236,8 @@ function displayResults() {
                 document.getElementById('resultsContainer').style.display = 'block';
                 
                 // Show winner
-                if (sortedTipes.length > 0) {
-                    const winner = sortedTipes[0];
+                if (sortedTips.length > 0) {
+                    const winner = sortedTips[0];
                     document.getElementById('winnerSection').style.display = 'block';
                     document.getElementById('winnerTip').textContent = winner.name;
                     document.getElementById('winnerVotes').textContent = `获得 ${winner.votes || 0} 票`;
@@ -245,10 +245,10 @@ function displayResults() {
                 
                 // Show all results
                 document.getElementById('resultsSection').style.display = 'block';
-                displayResultsList(sortedTipes);
+                displayResultsList(sortedTips);
                 
                 // Display statistics
-                const totalVotes = sortedTipes.reduce((sum, tip) => sum + (tip.votes || 0), 0);
+                const totalVotes = sortedTips.reduce((sum, tip) => sum + (tip.votes || 0), 0);
                 document.getElementById('totalVotes').textContent = `总投票数：${totalVotes}`;
                 document.getElementById('timestamp').textContent = `更新时间：${new Date().toLocaleString('zh-CN')}`;
                 
@@ -265,11 +265,11 @@ function displayResults() {
 /**
  * Display results list
  */
-function displayResultsList(tipes) {
+function displayResultsList(tips) {
     const resultsList = document.getElementById('resultsList');
     resultsList.innerHTML = '';
     
-    tipes.forEach((tip, index) => {
+    tips.forEach((tip, index) => {
         const item = document.createElement('div');
         item.className = 'result-item';
         

@@ -45,31 +45,26 @@ describe('elder-love - 老人爱 Section', () => {
       expect(htmlContent).toContain('老人爱');
     });
 
-    it('should have health and wellness section', () => {
-      expect(htmlContent).toContain('健康养生');
-      expect(htmlContent).toContain('养生保健');
-      expect(htmlContent).toContain('健康饮食');
+    it('should have simplified life section', () => {
+      expect(htmlContent).toContain('精彩生活');
+      expect(htmlContent).toContain('快乐每一天');
     });
 
-    it('should have family happiness section', () => {
-      expect(htmlContent).toContain('天伦之乐');
-      expect(htmlContent).toContain('隔代育儿');
+    it('should have cooking feature link', () => {
+      expect(htmlContent).toContain('爱做饭');
+      expect(htmlContent).toContain('cooking/');
+      expect(htmlContent).toContain('分享拿手好菜');
     });
 
-    it('should have hobbies and interests section', () => {
-      expect(htmlContent).toContain('兴趣爱好');
-      expect(htmlContent).toContain('文体活动');
+    it('should have earning money feature link', () => {
+      expect(htmlContent).toContain('爱赚钱');
+      expect(htmlContent).toContain('earning-money/');
+      expect(htmlContent).toContain('分享赚钱小技巧');
     });
 
-    it('should have traditional culture section', () => {
-      expect(htmlContent).toContain('传统文化');
-      expect(htmlContent).toContain('传统节日');
-    });
-
-    it('should have short video watching tips', () => {
-      expect(htmlContent).toContain('看短视频小贴士');
-      expect(htmlContent).toContain('保护眼睛');
-      expect(htmlContent).toContain('防诈骗');
+    it('should have health warning section', () => {
+      expect(htmlContent).toContain('健康提醒');
+      expect(htmlContent).toContain('保健品');
     });
   });
 
@@ -100,14 +95,18 @@ describe('elder-love - 老人爱 Section', () => {
   });
 
   describe('Safety Features', () => {
-    it('should have anti-fraud warnings', () => {
-      expect(htmlContent).toContain('防诈骗');
+    it('should have health warnings', () => {
       expect(htmlContent).toContain('健康提醒');
     });
 
     it('should warn about fake health products', () => {
       expect(htmlContent).toContain('保健品');
       expect(htmlContent).toContain('偏方');
+    });
+
+    it('should warn about phone scams', () => {
+      expect(htmlContent).toContain('推销电话');
+      expect(htmlContent).toContain('陌生链接');
     });
   });
 });
