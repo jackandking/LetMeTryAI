@@ -9,7 +9,7 @@
 const questionConfig = {
     title: "这是什么鱼？",
     question: "看图猜猜这是什么鱼？",
-    imageUrl: "https://tse3.mm.bing.net/th/id/OIP.FfAh_Lpt9nDSK_Nsy5G80gHaEg?ucfimg=1&dpr=3&pid=ImgDetMain&o=7&rm=3",
+    imageUrl: "https://gips3.baidu.com/it/u=3832229163,2532227846&fm=3074&app=3074&f=JPEG",
     options: [
         { value: "1", label: "白条" },
         { value: "2", label: "鲫鱼" },
