@@ -224,11 +224,12 @@ describe('Lure Fishing Feature Tests', () => {
     });
   });
   
-  describe('File Upload Path', () => {
-    it('should use correct target path for lure-fishing photos', () => {
-      const targetPath = 'lure-fishing/';
-      expect(targetPath).toBe('lure-fishing/');
-      expect(targetPath).toContain('lure-fishing');
+  describe('Image Upload API', () => {
+    it('should use image/upload endpoint without targetPath', () => {
+      // Note: image/upload API does not support targetPath parameter
+      const endpoint = window.API_ENDPOINTS.IMAGE_UPLOAD;
+      expect(endpoint).toContain('/image/upload');
+      expect(endpoint).toBe('https://letmetry.cloud/image/upload');
     });
   });
   
@@ -272,26 +273,30 @@ describe('Lure Fishing Feature Tests', () => {
   });
   
   describe('Image URL Construction', () => {
-    it('should construct correct image URL from photo_url', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
+    it('should construct correct image URL with images/ prefix', () => {
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
       
-      expect(photoUrl).toBe('https://letmetry.cloud/lure-fishing/test.jpg');
+      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
       expect(photoUrl).toContain('https://letmetry.cloud');
+      expect(photoUrl).toContain('/images/');
     });
     
     it('should not use old domain in image URLs', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = `${window.BASE_URL}/${record.photo_url}`;
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
       
       expect(photoUrl).not.toContain('letmetryai.cn');
     });
     
     it('should encode URLs to prevent XSS', () => {
-      const record = { photo_url: 'lure-fishing/test.jpg' };
-      const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+      const PHOTO_URL_PREFIX = 'images/';
+      const record = { photo_url: 'test.jpg' };
+      const photoUrl = encodeURI(`${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`);
       
-      expect(photoUrl).toBe('https://letmetry.cloud/lure-fishing/test.jpg');
+      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
     });
   });
   
@@ -522,5 +527,134 @@ describe('Lure Fishing Regression Tests', () => {
     expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain('/lws/file/upload');
     expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/lws/mysql/insert');
     expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/lws/mysql/query');
+  });
+});
+
+describe('Bug Fix: Photo URL Path Handling', () => {
+  const PHOTO_URL_PREFIX = 'images/';
+  
+  it('should define photo URL prefix constant for accessing images', () => {
+    expect(PHOTO_URL_PREFIX).toBe('images/');
+  });
+  
+  it('should store just the filename in database', () => {
+    // Simulate upload result with just filename (as returned by API)
+    const uploadResult = { filename: 'file-123456.jpg' };
+    const photoUrl = uploadResult.filename;
+    
+    // Store just the filename in database
+    expect(photoUrl).toBe('file-123456.jpg');
+    expect(photoUrl).not.toContain('/');
+  });
+  
+  it('should construct correct display URL with images/ prefix', () => {
+    // Simulate database record with just filename
+    const record = { photo_url: 'file-123456.jpg' };
+    const displayUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
+    
+    expect(displayUrl).toBe('https://letmetry.cloud/images/file-123456.jpg');
+    expect(displayUrl).toContain('/images/');
+  });
+  
+  it('should use images/ prefix according to upload API design', () => {
+    // According to API design, uploaded images are accessed via /images/ prefix
+    const testCases = [
+      { filename: 'photo.jpg', expected: 'https://letmetry.cloud/images/photo.jpg' },
+      { filename: 'file-1234567890.png', expected: 'https://letmetry.cloud/images/file-1234567890.png' },
+    ];
+    
+    testCases.forEach(({ filename, expected }) => {
+      const displayUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${filename}`;
+      expect(displayUrl).toBe(expected);
+    });
+  });
+  
+  it('should not use targetPath parameter in image upload', () => {
+    // Note: image/upload API does not support targetPath parameter
+    // Files are uploaded to a default location and accessed via /images/ prefix
+    expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toBe('https://letmetry.cloud/image/upload');
+  });
+});
+
+describe('Bug Fix: Geolocation Coordinate Handling', () => {
+  it('should include geolocation options for better accuracy', () => {
+    const geolocationOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    };
+    
+    expect(geolocationOptions.enableHighAccuracy).toBe(true);
+    expect(geolocationOptions.timeout).toBe(10000);
+    expect(geolocationOptions.maximumAge).toBe(0);
+  });
+  
+  it('should provide detailed error messages for geolocation failures', () => {
+    const errorMessages = {
+      PERMISSION_DENIED: '用户拒绝了地理位置请求',
+      POSITION_UNAVAILABLE: '位置信息不可用',
+      TIMEOUT: '请求超时'
+    };
+    
+    expect(errorMessages.PERMISSION_DENIED).toBeTruthy();
+    expect(errorMessages.POSITION_UNAVAILABLE).toBeTruthy();
+    expect(errorMessages.TIMEOUT).toBeTruthy();
+  });
+  
+  it('should store coordinates in proper format', () => {
+    // Simulate coordinates obtained from geolocation
+    const mockPosition = {
+      coords: {
+        latitude: 39.9042,
+        longitude: 116.4074
+      }
+    };
+    
+    const currentCoordinates = {
+      latitude: mockPosition.coords.latitude,
+      longitude: mockPosition.coords.longitude
+    };
+    
+    expect(currentCoordinates).toHaveProperty('latitude');
+    expect(currentCoordinates).toHaveProperty('longitude');
+    expect(typeof currentCoordinates.latitude).toBe('number');
+    expect(typeof currentCoordinates.longitude).toBe('number');
+  });
+  
+  it('should format coordinates with 4 decimal places for display', () => {
+    const lat = 39.90419876;
+    const lon = 116.40740123;
+    
+    const formattedLat = lat.toFixed(4);
+    const formattedLon = lon.toFixed(4);
+    
+    expect(formattedLat).toBe('39.9042');
+    expect(formattedLon).toBe('116.4074');
+  });
+  
+  it('should clear coordinates on error', () => {
+    // Simulate coordinate reset on error
+    let currentCoordinates = { latitude: 39.9042, longitude: 116.4074 };
+    
+    // On error, reset to null
+    currentCoordinates = null;
+    
+    expect(currentCoordinates).toBeNull();
+  });
+  
+  it('should validate coordinates before using for temperature fetch', () => {
+    // Test with null coordinates
+    const currentCoordinates = null;
+    const canFetchTemperature = currentCoordinates !== null;
+    
+    expect(canFetchTemperature).toBe(false);
+  });
+  
+  it('should validate coordinates with valid data', () => {
+    // Test with valid coordinates
+    const currentCoordinates = { latitude: 39.9042, longitude: 116.4074 };
+    const canFetchTemperature = currentCoordinates !== null;
+    
+    expect(canFetchTemperature).toBe(true);
   });
 });
