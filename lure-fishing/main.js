@@ -9,6 +9,9 @@ import { fetchWeatherByLocationAndDate, formatTemperature, getTemperatureDescrip
 // MySQL table name for fishing records
 const TABLE_NAME = 'lure_fishing_records';
 
+// Photo URL prefix (for accessing uploaded images via API)
+const PHOTO_URL_PREFIX = 'images/';
+
 // Current page for pagination
 let currentPage = 1;
 const RECORDS_PER_PAGE = 9;
@@ -123,7 +126,10 @@ function getLocation() {
             
             btn.disabled = false;
             btn.textContent = '获取位置';
-            showStatus('位置获取成功', 'success');
+            showStatus('位置获取成功！坐标已保存', 'success');
+            
+            // Log coordinates for debugging
+            console.log('Coordinates obtained:', currentCoordinates);
             
             // Hide success message after 2 seconds
             setTimeout(() => {
@@ -132,22 +138,34 @@ function getLocation() {
         },
         function(error) {
             let errorMsg = '位置获取失败';
+            let errorDetail = '';
             switch(error.code) {
                 case error.PERMISSION_DENIED:
                     errorMsg = '用户拒绝了地理位置请求';
+                    errorDetail = '请在浏览器设置中允许位置访问权限';
                     break;
                 case error.POSITION_UNAVAILABLE:
                     errorMsg = '位置信息不可用';
+                    errorDetail = '请确保设备GPS已开启';
                     break;
                 case error.TIMEOUT:
                     errorMsg = '请求超时';
+                    errorDetail = '请重试';
                     break;
             }
             
+            // Reset coordinates on error
+            currentCoordinates = null;
             locationInput.value = '';
             btn.disabled = false;
             btn.textContent = '获取位置';
-            showStatus(errorMsg, 'error');
+            showStatus(`${errorMsg}：${errorDetail}`, 'error');
+            console.error('Geolocation error:', error);
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         }
     );
 }
@@ -260,6 +278,7 @@ async function handleFormSubmit(event) {
         }
         
         // Save record to database
+        // Store just the filename - the URL prefix will be added when displaying
         showStatus('正在保存记录...', 'success');
         const recordData = {
             photo_url: uploadResult.filename,
@@ -393,7 +412,7 @@ async function compressImage(file) {
 async function uploadPhoto(file) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('targetPath', 'lure-fishing/');
+    // Note: image/upload API does not support targetPath parameter
     
     const response = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, {
         method: 'POST',
@@ -501,7 +520,8 @@ function createRecordCard(record) {
     card.className = 'record-card';
     
     // Sanitize and validate photo URL
-    const photoUrl = encodeURI(`${window.BASE_URL}/${record.photo_url}`);
+    // Use the images/ prefix to access uploaded photos according to API design
+    const photoUrl = encodeURI(`${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`);
     const date = new Date(record.catch_date).toLocaleDateString('zh-CN');
     
     // Create elements programmatically to avoid XSS

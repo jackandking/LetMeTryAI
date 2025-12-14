@@ -1,0 +1,242 @@
+/**
+ * Guzhuang Meinv Application Styles
+ * Styling for the ancient costume beauty voting interface and result display
+ */
+
+/* Button Group Layout */
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
+}
+
+.button-group button {
+    width: 100%;
+    height: auto;
+    font-size: 1em;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-group button:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.03);
+}
+
+/* Touch device hover behavior */
+@media (hover: none) {
+    .button-group button:hover {
+        background-color: white;
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.button-group button:active {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+/* Image Button Styles */
+.image-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.option-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.option-label {
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+    background-color: #f8f9fa;
+    width: 100%;
+}
+
+/* Bar Chart Styles */
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 15px;
+    height: 300px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(to top, #ff6f61, #ff9f97);
+    border-radius: 5px 5px 0 0;
+    transition: height 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bar-label {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cup-label {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 100px;
+}
+
+/* Show Result Button */
+.show-result-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin: 20px auto;
+    display: block;
+}
+
+.show-result-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Result Section */
+.result {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.result h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* More Section */
+.more {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+}
+
+.more a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.more a:hover {
+    text-decoration: underline;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .bar-chart {
+        gap: 10px;
+        height: 250px;
+    }
+    
+    .bar {
+        width: 35px;
+    }
+    
+    .bar-label,
+    .cup-label {
+        font-size: 12px;
+    }
+    
+    .button-group {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .option-image {
+        height: 250px;
+    }
+    
+    .option-label {
+        font-size: 1em;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bar-chart {
+        gap: 8px;
+        height: 200px;
+    }
+    
+    .bar-container {
+        min-width: 50px;
+    }
+    
+    .bar {
+        width: 30px;
+    }
+    
+    .bar-label,
+    .cup-label {
+        font-size: 11px;
+    }
+    
+    .cup-label {
+        max-width: 80px;
+    }
+    
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .option-image {
+        height: 300px;
+    }
+    
+    .option-label {
+        font-size: 0.95em;
+        padding: 10px;
+    }
+    
+    .show-result-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+}
