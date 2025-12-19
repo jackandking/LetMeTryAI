@@ -55,6 +55,22 @@ describe('elder-love Earning Money Feature - 爱赚钱', () => {
     it('should have hint about auto-extraction', () => {
       expect(htmlContent).toContain('自动提取链接');
     });
+
+    it('should have sections in correct order: tips, vote, upload', () => {
+      // Find the positions of each section
+      const tipsPosition = htmlContent.indexOf('class="section tips-section"');
+      const votePosition = htmlContent.indexOf('class="section vote-section"');
+      const uploadPosition = htmlContent.indexOf('class="section upload-section"');
+      
+      // Verify all sections exist
+      expect(tipsPosition).toBeGreaterThan(-1);
+      expect(votePosition).toBeGreaterThan(-1);
+      expect(uploadPosition).toBeGreaterThan(-1);
+      
+      // Verify correct order: tips < vote < upload
+      expect(tipsPosition).toBeLessThan(votePosition);
+      expect(votePosition).toBeLessThan(uploadPosition);
+    });
   });
 
   describe('Voting Page', () => {
