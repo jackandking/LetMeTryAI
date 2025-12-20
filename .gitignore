@@ -104,3 +104,12 @@ Thumbs.db
 
 # Demo and test files
 admin/demo-raw-mode.html
+
+# MCP Server build artifacts
+mcp-servers/**/node_modules/
+mcp-servers/**/dist/
+mcp-servers/**/*.js
+mcp-servers/**/*.js.map
+mcp-servers/**/*.d.ts
+mcp-servers/**/*.d.ts.map
+mcp-servers/**/package-lock.json
