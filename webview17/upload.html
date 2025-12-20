@@ -230,6 +230,10 @@
     </footer>
 
     <script>
+        // NOTE: This validation logic is duplicated from url-validator.js for simplicity
+        // since this HTML page uses inline JavaScript without a module bundler.
+        // If you update these domains, also update url-validator.js to maintain consistency.
+        
         // Allowed domains pattern
         const allowedDomains = [
             'eb118-file.cdn.bcebos.com',
