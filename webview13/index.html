@@ -81,6 +81,32 @@
         <h2>总结</h2>
         <p>无论是哪个行业，只要肯下功夫，就有成功的机会。希望这些开门秘籍能够帮助你在新的领域或职业中少走弯路，早日取得成功！</p>
     </div>
+    
+    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+    <script>
+        // Load and initialize VConsole only if debug parameter is present
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                // Dynamically load VConsole script only when needed
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+
 </body>
 
 </html>
