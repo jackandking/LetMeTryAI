@@ -26,6 +26,43 @@ const LETMETRY_API_BASE = 'https://letmetry.cloud/lws';
 const MYSQL_QUERY_ENDPOINT = `${LETMETRY_API_BASE}/mysql/query`;
 
 /**
+ * Validate and sanitize SQL identifier (table name, column name)
+ * @param identifier - The identifier to validate
+ * @returns Sanitized identifier or throws error
+ */
+function sanitizeIdentifier(identifier: string): string {
+  // Only allow alphanumeric characters, underscores, and dots
+  if (!/^[a-zA-Z0-9_\.]+$/.test(identifier)) {
+    throw new Error(`Invalid identifier: ${identifier}. Only alphanumeric characters, underscores, and dots are allowed.`);
+  }
+  return identifier;
+}
+
+/**
+ * Escape string value for SQL
+ * @param value - The value to escape
+ * @returns Escaped value
+ */
+function escapeStringValue(value: string): string {
+  // Replace single quotes with double single quotes
+  // and escape backslashes
+  return value.replace(/\\/g, '\\\\').replace(/'/g, "''");
+}
+
+/**
+ * Validate limit value
+ * @param limit - The limit value to validate
+ * @returns Validated limit
+ */
+function validateLimit(limit: number): number {
+  const parsedLimit = parseInt(String(limit), 10);
+  if (isNaN(parsedLimit) || parsedLimit < 0 || parsedLimit > 10000) {
+    throw new Error('Limit must be a positive number between 0 and 10000');
+  }
+  return parsedLimit;
+}
+
+/**
  * Execute a SQL query against the LetMeTry MySQL database
  * @param sql - The SQL query to execute
  * @returns Query results or error message
@@ -216,30 +253,70 @@ class LetMeTryMySQLServer {
               limit?: number;
             };
 
-            let sql = `SELECT ${columns} FROM ${table}`;
-            
-            if (where) {
-              sql += ` WHERE ${where}`;
-            }
-            
-            if (orderBy) {
-              sql += ` ORDER BY ${orderBy}`;
-            }
-            
-            if (limit) {
-              sql += ` LIMIT ${limit}`;
-            }
+            try {
+              // Sanitize table name
+              const sanitizedTable = sanitizeIdentifier(table);
+              
+              // Sanitize column names (split by comma and validate each)
+              const sanitizedColumns = columns.split(',')
+                .map(col => col.trim())
+                .map(col => col === '*' ? '*' : sanitizeIdentifier(col))
+                .join(', ');
+              
+              let sql = `SELECT ${sanitizedColumns} FROM ${sanitizedTable}`;
+              
+              // Note: WHERE and ORDER BY clauses are passed through as-is
+              // This is intentional for flexibility, but users should be aware
+              // For production use, consider more strict validation
+              if (where) {
+                sql += ` WHERE ${where}`;
+              }
+              
+              if (orderBy) {
+                // Sanitize ORDER BY clause
+                const sanitizedOrderBy = orderBy.split(',')
+                  .map(clause => {
+                    const parts = clause.trim().split(/\s+/);
+                    const column = sanitizeIdentifier(parts[0]);
+                    const direction = parts[1]?.toUpperCase();
+                    if (direction && direction !== 'ASC' && direction !== 'DESC') {
+                      throw new Error('ORDER BY direction must be ASC or DESC');
+                    }
+                    return direction ? `${column} ${direction}` : column;
+                  })
+                  .join(', ');
+                sql += ` ORDER BY ${sanitizedOrderBy}`;
+              }
+              
+              if (limit) {
+                const sanitizedLimit = validateLimit(limit);
+                sql += ` LIMIT ${sanitizedLimit}`;
+              }
 
-            const result = await executeQuery(sql);
-            
-            return {
-              content: [
-                {
-                  type: 'text',
-                  text: JSON.stringify(result, null, 2)
-                }
-              ]
-            };
+              const result = await executeQuery(sql);
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(result, null, 2)
+                  }
+                ]
+              };
+            } catch (error: any) {
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({
+                      success: false,
+                      error: error.message
+                    }, null, 2)
+                  }
+                ],
+                isError: true
+              };
+            }
           }
 
           case 'mysql_insert': {
@@ -248,22 +325,57 @@ class LetMeTryMySQLServer {
               data: Record<string, any>;
             };
 
-            const columns = Object.keys(data).join(', ');
-            const values = Object.values(data)
-              .map(v => typeof v === 'string' ? `'${v.replace(/'/g, "''")}'` : v)
-              .join(', ');
+            try {
+              // Sanitize table name
+              const sanitizedTable = sanitizeIdentifier(table);
+              
+              // Sanitize column names
+              const sanitizedColumns = Object.keys(data)
+                .map(col => sanitizeIdentifier(col))
+                .join(', ');
+              
+              // Escape values properly
+              const values = Object.values(data)
+                .map(v => {
+                  if (v === null) {
+                    return 'NULL';
+                  } else if (typeof v === 'string') {
+                    return `'${escapeStringValue(v)}'`;
+                  } else if (typeof v === 'number') {
+                    return String(v);
+                  } else if (typeof v === 'boolean') {
+                    return v ? '1' : '0';
+                  } else {
+                    throw new Error(`Unsupported value type: ${typeof v}`);
+                  }
+                })
+                .join(', ');
 
-            const sql = `INSERT INTO ${table} (${columns}) VALUES (${values})`;
-            const result = await executeQuery(sql);
-            
-            return {
-              content: [
-                {
-                  type: 'text',
-                  text: JSON.stringify(result, null, 2)
-                }
-              ]
-            };
+              const sql = `INSERT INTO ${sanitizedTable} (${sanitizedColumns}) VALUES (${values})`;
+              const result = await executeQuery(sql);
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(result, null, 2)
+                  }
+                ]
+              };
+            } catch (error: any) {
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({
+                      success: false,
+                      error: error.message
+                    }, null, 2)
+                  }
+                ],
+                isError: true
+              };
+            }
           }
 
           case 'get_table_schema': {

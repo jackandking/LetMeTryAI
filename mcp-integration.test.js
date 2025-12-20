@@ -253,5 +253,42 @@ describe('MCP Server Integration Tests', () => {
       // Check for SQL escaping in insert operations
       expect(serverContent).toContain("replace(/'/g");
     });
+
+    it('should have input sanitization functions', () => {
+      const serverPath = join(__dirname, 'mcp-servers', 'letmetry-mysql', 'src', 'index.ts');
+      const serverContent = readFileSync(serverPath, 'utf-8');
+      
+      // Check for sanitization functions
+      expect(serverContent).toContain('sanitizeIdentifier');
+      expect(serverContent).toContain('escapeStringValue');
+      expect(serverContent).toContain('validateLimit');
+    });
+
+    it('should validate SQL identifiers with regex', () => {
+      const serverPath = join(__dirname, 'mcp-servers', 'letmetry-mysql', 'src', 'index.ts');
+      const serverContent = readFileSync(serverPath, 'utf-8');
+      
+      // Check for identifier validation regex
+      expect(serverContent).toContain('[a-zA-Z0-9_');
+      expect(serverContent).toContain('Invalid identifier');
+    });
+
+    it('should escape backslashes and quotes in string values', () => {
+      const serverPath = join(__dirname, 'mcp-servers', 'letmetry-mysql', 'src', 'index.ts');
+      const serverContent = readFileSync(serverPath, 'utf-8');
+      
+      // Check for proper escaping
+      expect(serverContent).toContain("replace(/\\\\/g");
+      expect(serverContent).toMatch(/escapeStringValue/);
+    });
+
+    it('should limit query results to prevent abuse', () => {
+      const serverPath = join(__dirname, 'mcp-servers', 'letmetry-mysql', 'src', 'index.ts');
+      const serverContent = readFileSync(serverPath, 'utf-8');
+      
+      // Check for limit validation
+      expect(serverContent).toContain('validateLimit');
+      expect(serverContent).toContain('10000'); // Max limit
+    });
   });
 });
