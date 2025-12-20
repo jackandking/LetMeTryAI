@@ -6,18 +6,18 @@ window.BASE_URL = 'https://letmetry.cloud';
 
 // API endpoints
 window.API_ENDPOINTS = {
-  AI_CHAT: `${window.BASE_URL}/lws/ai/chat`,
-  FILE_UPLOAD: `${window.BASE_URL}/lws/file/upload`,
-  FILE_DELETE: `${window.BASE_URL}/lws/file/delete`,
-  FILE_INFO: `${window.BASE_URL}/lws/file/info`,
-  FILE_LIST: `${window.BASE_URL}/lws/file/list`,
-  FILE_DOWNLOAD: `${window.BASE_URL}/lws/file/download`,
+  AI_CHAT: `${window.BASE_URL}/ai/chat`,
+  FILE_UPLOAD: `${window.BASE_URL}/file/upload`,
+  FILE_DELETE: `${window.BASE_URL}/file/delete`,
+  FILE_INFO: `${window.BASE_URL}/file/info`,
+  FILE_LIST: `${window.BASE_URL}/file/list`,
+  FILE_DOWNLOAD: `${window.BASE_URL}/file/download`,
   IMAGE_UPLOAD: `${window.BASE_URL}/image/upload`,
-  MYSQL_QUERY: `${window.BASE_URL}/lws/mysql/query`,
-  MYSQL_GET_BY_ID: `${window.BASE_URL}/lws/mysql/getById`,
-  MYSQL_INSERT: `${window.BASE_URL}/lws/mysql/insert`,
-  MYSQL_UPDATE: `${window.BASE_URL}/lws/mysql/update`,
-  MYSQL_DELETE: `${window.BASE_URL}/lws/mysql/delete`
+  MYSQL_QUERY: `${window.BASE_URL}/mysql/query`,
+  MYSQL_GET_BY_ID: `${window.BASE_URL}/mysql/getById`,
+  MYSQL_INSERT: `${window.BASE_URL}/mysql/insert`,
+  MYSQL_UPDATE: `${window.BASE_URL}/mysql/update`,
+  MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`
 };
 
 // Helper function to get image URL
