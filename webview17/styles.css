@@ -1,0 +1,104 @@
+body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+}
+
+header {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    color: #667eea;
+    font-size: 2em;
+}
+
+header p {
+    margin: 10px 0 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card-content {
+    padding: 30px;
+}
+
+.card-content h2 {
+    margin: 0 0 10px;
+    color: #667eea;
+    font-size: 1.5em;
+}
+
+.card-content p {
+    margin: 0;
+    color: #666;
+    font-size: 1em;
+}
+
+footer {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #666;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.5em;
+    }
+    
+    .card-content {
+        padding: 20px;
+    }
+    
+    .card-content h2 {
+        font-size: 1.3em;
+    }
+}

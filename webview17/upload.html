@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传美女 - 男人宝</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2em;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            text-decoration: none;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .upload-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .allowed-domains {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .allowed-domains h3 {
+            margin: 0 0 10px;
+            color: #667eea;
+            font-size: 1em;
+        }
+
+        .allowed-domains ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .preview-area {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-area img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #666;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 10px;
+            }
+
+            .upload-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>上传美女</h1>
+    </header>
+    
+    <div class="container">
+        <div class="upload-form">
+            <div class="allowed-domains">
+                <h3>支持的图片来源：</h3>
+                <ul>
+                    <li>eb118-file.cdn.bcebos.com</li>
+                    <li>*.myqcloud.com</li>
+                    <li>*.byteimg.com</li>
+                    <li>其他可信来源</li>
+                </ul>
+            </div>
+
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="imageUrl">图片URL地址：</label>
+                    <input 
+                        type="url" 
+                        id="imageUrl" 
+                        name="imageUrl" 
+                        placeholder="请输入图片URL地址（https://...）"
+                        required
+                    >
+                </div>
+
+                <div class="preview-area" id="previewArea">
+                    <img id="previewImage" alt="预览图片">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">提交上传</button>
+            </form>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 男人宝. 保留所有权利.</p>
+    </footer>
+
+    <script>
+        // Allowed domains pattern
+        const allowedDomains = [
+            'eb118-file.cdn.bcebos.com',
+            '.myqcloud.com',
+            '.byteimg.com',
+            'letmetry.cloud',
+            '.qpic.cn'
+        ];
+
+        // Validate URL
+        function isValidImageUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                
+                // Check if it's HTTPS
+                if (urlObj.protocol !== 'https:') {
+                    return { valid: false, error: '仅支持HTTPS链接' };
+                }
+
+                // Check if domain is allowed
+                const hostname = urlObj.hostname;
+                const isAllowed = allowedDomains.some(domain => {
+                    if (domain.startsWith('.')) {
+                        return hostname.endsWith(domain.slice(1)) || hostname === domain.slice(1);
+                    }
+                    return hostname === domain;
+                });
+
+                if (!isAllowed) {
+                    return { valid: false, error: '不支持的图片来源域名' };
+                }
+
+                return { valid: true };
+            } catch (e) {
+                return { valid: false, error: '无效的URL格式' };
+            }
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Preview image
+        const imageUrlInput = document.getElementById('imageUrl');
+        const previewArea = document.getElementById('previewArea');
+        const previewImage = document.getElementById('previewImage');
+
+        imageUrlInput.addEventListener('blur', function() {
+            const url = this.value.trim();
+            if (url) {
+                const validation = isValidImageUrl(url);
+                if (validation.valid) {
+                    previewImage.src = url;
+                    previewArea.style.display = 'block';
+                    previewImage.onerror = function() {
+                        showMessage('图片加载失败，请检查URL是否正确', 'error');
+                        previewArea.style.display = 'none';
+                    };
+                } else {
+                    showMessage(validation.error, 'error');
+                    previewArea.style.display = 'none';
+                }
+            } else {
+                previewArea.style.display = 'none';
+            }
+        });
+
+        // Submit form
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const url = imageUrlInput.value.trim();
+            
+            // Validate URL
+            const validation = isValidImageUrl(url);
+            if (!validation.valid) {
+                showMessage(validation.error, 'error');
+                return;
+            }
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = '上传中...';
+
+            try {
+                // Insert into database
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_INSERT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        table: 'beauty_images',
+                        data: {
+                            image_url: url,
+                            created_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('上传失败');
+                }
+
+                const result = await response.json();
+                
+                if (result.insertId) {
+                    showMessage('上传成功！', 'success');
+                    uploadForm.reset();
+                    previewArea.style.display = 'none';
+                    
+                    // Redirect to appreciate page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'appreciate.html';
+                    }, 2000);
+                } else {
+                    throw new Error('上传失败');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showMessage('上传失败，请稍后重试', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交上传';
+            }
+        });
+    </script>
+</body>
+</html>
