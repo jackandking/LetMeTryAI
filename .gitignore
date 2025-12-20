@@ -112,4 +112,3 @@ mcp-servers/**/*.js
 mcp-servers/**/*.js.map
 mcp-servers/**/*.d.ts
 mcp-servers/**/*.d.ts.map
-mcp-servers/**/package-lock.json

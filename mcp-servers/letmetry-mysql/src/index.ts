@@ -265,9 +265,11 @@ class LetMeTryMySQLServer {
               
               let sql = `SELECT ${sanitizedColumns} FROM ${sanitizedTable}`;
               
-              // Note: WHERE and ORDER BY clauses are passed through as-is
-              // This is intentional for flexibility, but users should be aware
-              // For production use, consider more strict validation
+              // SECURITY NOTE: WHERE clause is passed through for flexibility
+              // This is intentional to support complex queries, but means:
+              // - Only use with trusted inputs
+              // - For production use with untrusted data, implement additional validation
+              // - Consider using mysql_query with parameterized queries for sensitive operations
               if (where) {
                 sql += ` WHERE ${where}`;
               }

@@ -208,10 +208,55 @@ mcp-servers/letmetry-mysql/
 
 ## 🔐 Security
 
-- **No API Key Required**: The server connects directly to the public letmetry.cloud endpoint
-- **Read-Only Operations Recommended**: For production use, limit to SELECT queries
-- **Input Sanitization**: Basic SQL injection protection is included, but always validate inputs
-- **Rate Limiting**: Respect the API rate limits of letmetry.cloud
+### Input Sanitization
+
+The MCP server implements multiple layers of security:
+
+1. **Identifier Validation**: Table and column names are validated with regex `[a-zA-Z0-9_\.]+`
+   - Only alphanumeric characters, underscores, and dots allowed
+   - Prevents SQL injection through identifiers
+
+2. **String Value Escaping**: 
+   - Backslashes are escaped: `\` → `\\`
+   - Single quotes are escaped: `'` → `''`
+   - Uses `escapeStringValue()` function
+
+3. **Limit Validation**: 
+   - Maximum limit of 10,000 records per query
+   - Prevents resource exhaustion attacks
+
+4. **Type-Safe Values**:
+   - Explicit handling for NULL, string, number, and boolean types
+   - Rejects unsupported types with clear error messages
+
+### Security Considerations
+
+**⚠️ Important Security Notes:**
+
+- **WHERE Clause Flexibility**: The `mysql_query_table` tool's `where` parameter accepts free-form SQL for flexibility. While convenient, this means:
+  - Users should only use trusted inputs in WHERE clauses
+  - For complex queries, prefer using the `mysql_query` tool with carefully constructed SQL
+  - In production environments, consider implementing additional WHERE clause validation
+
+- **Recommended Usage**:
+  - ✅ **Safe**: Use `mysql_query` for vetted, specific queries
+  - ✅ **Safe**: Use `mysql_query_table` with simple, known-safe WHERE conditions
+  - ⚠️ **Caution**: Avoid user-provided WHERE clauses in production
+  - ❌ **Unsafe**: Never use untrusted external input directly in queries
+
+- **Best Practices**:
+  - Limit to READ operations (SELECT) in production
+  - Use INSERT operations only with validated data
+  - Never expose raw `mysql_query` to end users
+  - Implement application-level access controls
+  - Monitor and log all database operations
+  - Respect API rate limits
+
+### No API Key Required
+
+- The server connects directly to the public letmetry.cloud endpoint
+- No authentication tokens or API keys needed
+- Simplifies setup and deployment
 
 ## 🐛 Troubleshooting
 
