@@ -1,4 +1,4 @@
-// webview17/index.test.js - Tests for Parent's Love section
+// parent-tools/index.test.js - Tests for Parent's Love section
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -6,7 +6,7 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('Parent Love Section - webview17', () => {
+describe('Parent Love Section - parent-tools', () => {
   let htmlContent;
 
   beforeAll(() => {
@@ -28,7 +28,7 @@ describe('Parent Love Section - webview17', () => {
     });
 
     it('should have correct page title', () => {
-      expect(htmlContent).toContain('<title>家长爱 - 周末带孩子好去处</title>');
+      expect(htmlContent).toContain('<title>家长爱 - 亲子关系改善工具</title>');
     });
 
     it('should have favicon reference', () => {
@@ -39,7 +39,7 @@ describe('Parent Love Section - webview17', () => {
   describe('Content Sections', () => {
     it('should have main header with title', () => {
       expect(htmlContent).toContain('家长爱');
-      expect(htmlContent).toContain('周末带上小学男孩干什么好');
+      expect(htmlContent).toContain('实用工具助力亲子关系改善');
     });
 
     it('should have introduction section', () => {
@@ -82,6 +82,24 @@ describe('Parent Love Section - webview17', () => {
       expect(htmlContent).toContain('放下手机，全心投入');
       expect(htmlContent).toContain('安全第一');
       expect(htmlContent).toContain('重在过程，不在结果');
+    });
+
+    it('should have practical parenting tools section', () => {
+      expect(htmlContent).toContain('实用育儿工具');
+      expect(htmlContent).toContain('亲子时间记录表');
+      expect(htmlContent).toContain('亲子沟通话术库');
+      expect(htmlContent).toContain('行为观察清单');
+      expect(htmlContent).toContain('目标设定工具');
+      expect(htmlContent).toContain('情绪管理技巧');
+    });
+
+    it('should have problem-solving tools section', () => {
+      expect(htmlContent).toContain('常见问题解决工具');
+      expect(htmlContent).toContain('手机依赖问题');
+      expect(htmlContent).toContain('学习动力不足');
+      expect(htmlContent).toContain('亲子冲突频繁');
+      expect(htmlContent).toContain('孩子缺乏自信');
+      expect(htmlContent).toContain('社交能力较弱');
     });
 
     it('should have age-appropriate activity suggestions', () => {
