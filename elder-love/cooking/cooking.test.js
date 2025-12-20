@@ -55,6 +55,22 @@ describe('elder-love Cooking Feature - 爱做饭', () => {
     it('should have back link to parent page', () => {
       expect(htmlContent).toContain('返回');
     });
+
+    it('should have sections in correct order: dishes, vote, upload', () => {
+      // Find the positions of each section
+      const dishesPosition = htmlContent.indexOf('class="section dishes-section"');
+      const votePosition = htmlContent.indexOf('class="section vote-section"');
+      const uploadPosition = htmlContent.indexOf('class="section upload-section"');
+      
+      // Verify all sections exist
+      expect(dishesPosition).toBeGreaterThan(-1);
+      expect(votePosition).toBeGreaterThan(-1);
+      expect(uploadPosition).toBeGreaterThan(-1);
+      
+      // Verify correct order: dishes < vote < upload
+      expect(dishesPosition).toBeLessThan(votePosition);
+      expect(votePosition).toBeLessThan(uploadPosition);
+    });
   });
 
   describe('Voting Page', () => {
