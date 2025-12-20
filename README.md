@@ -9,27 +9,38 @@ A modern, responsive web application featuring interactive content and games.
 - **Responsive Design**: Mobile-first approach with progressive enhancement
 - **Centralized Configuration**: Unified API and resource management
 - **Modular Architecture**: Well-organized, maintainable codebase
+- **🆕 MCP Server Integration**: GitHub Copilot MySQL operations without API keys
 
 ## 📋 Project Structure
 
 ```
 LetMeTryAI/
-├── util/                    # Utility modules
-│   ├── config.js           # Centralized configuration (ES modules)
-│   ├── ai_utils.js         # AI integration utilities
-│   ├── file-util.js        # File management utilities
-│   └── mysql-util.js       # Database utilities
-├── howlong/                # Survey component
-│   ├── index.html          # Survey page markup
-│   ├── app.js             # Survey logic and interactions
-│   └── styles.css         # Component-specific styles
-├── webview*/              # Various content pages
-├── config.js              # Global configuration (for HTML usage)
-├── util.js                # Legacy utility functions
-├── firework.js            # Firework animation system
-├── main.js                # Main application logic
-├── styles.css             # Global styles
-└── index.html             # Application entry point
+├── mcp-servers/            # MCP Server for GitHub Copilot
+│   └── letmetry-mysql/    # MySQL MCP Server (no API key required)
+│       ├── src/           # TypeScript source files
+│       ├── dist/          # Compiled JavaScript
+│       ├── package.json   # Server dependencies
+│       └── README.md      # MCP Server documentation
+├── scripts/               # Utility scripts
+│   └── setup-mcp.sh      # MCP Server installation script
+├── util/                  # Utility modules
+│   ├── config.js         # Centralized configuration (ES modules)
+│   ├── ai_utils.js       # AI integration utilities
+│   ├── file-util.js      # File management utilities
+│   └── mysql-util.js     # Database utilities
+├── howlong/              # Survey component
+│   ├── index.html        # Survey page markup
+│   ├── app.js           # Survey logic and interactions
+│   └── styles.css       # Component-specific styles
+├── webview*/            # Various content pages
+├── .github/             # GitHub configuration
+│   └── copilot-mcp.json # Copilot MCP Server configuration
+├── config.js            # Global configuration (for HTML usage)
+├── util.js              # Legacy utility functions
+├── firework.js          # Firework animation system
+├── main.js              # Main application logic
+├── styles.css           # Global styles
+└── index.html           # Application entry point
 ```
 
 ## 🛠️ Development
@@ -49,7 +60,33 @@ cd LetMeTryAI
 
 # Install dependencies
 npm install
+
+# Set up MCP Server for GitHub Copilot (optional)
+./scripts/setup-mcp.sh
 ```
+
+### MCP Server Setup (GitHub Copilot Integration)
+
+The repository includes an MCP (Model Context Protocol) server that allows GitHub Copilot to interact with the MySQL database without requiring API keys.
+
+**Quick Setup:**
+```bash
+./scripts/setup-mcp.sh
+```
+
+**What it does:**
+- Installs MCP server dependencies
+- Builds the TypeScript MCP server
+- Configures GitHub Copilot integration
+
+**Usage with Copilot:**
+```
+@workspace Show me the latest 10 images from beauty_images table
+@workspace Query the beauty_images table
+@workspace Get the schema for beauty_images table
+```
+
+For detailed MCP server documentation, see [mcp-servers/letmetry-mysql/README.md](mcp-servers/letmetry-mysql/README.md).
 
 ### Development Commands
 
