@@ -1,4 +1,4 @@
--- Database schema for 男人宝 (webview17) beauty images feature
+-- Database schema for 男人宝 (nanrenbao) beauty images feature
 -- This table stores URLs of beauty images uploaded by users
 
 CREATE TABLE IF NOT EXISTS beauty_images (

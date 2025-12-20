@@ -1,8 +1,8 @@
 /**
- * Integration tests for webview17 (男人宝) feature
+ * Integration tests for nanrenbao (男人宝) feature
  */
 
-describe('webview17 男人宝 Integration Tests', () => {
+describe('nanrenbao 男人宝 Integration Tests', () => {
     describe('Page Structure', () => {
         it('should have required HTML files', () => {
             const fs = require('fs');

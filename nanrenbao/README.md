@@ -1,4 +1,4 @@
-# 男人宝 (Man's Treasure) - Webview17
+# 男人宝 (Man's Treasure)
 
 ## 概述 (Overview)
 
@@ -59,21 +59,21 @@
 ## 文件结构 (File Structure)
 
 ```
-webview17/
+nanrenbao/
 ├── index.html              # 主页
 ├── appreciate.html         # 欣赏美女页面
 ├── upload.html             # 上传美女页面
 ├── styles.css              # 主页样式
 ├── url-validator.js        # URL验证工具模块
 ├── url-validator.test.js   # URL验证单元测试
-├── webview17.test.js       # 集成测试
+├── nanrenbao.test.js       # 集成测试
 ├── database-schema.sql     # 数据库表结构
 └── README.md               # 本文档
 ```
 
 ## 访问方式 (Access)
 
-直接访问: `https://letmetry.cloud/webview17/`
+直接访问: `https://letmetry.cloud/nanrenbao/`
 
 注意：本功能不在主页显示入口卡片，仅供直接访问。
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS beauty_images (
 
 ### 运行单元测试
 ```bash
-npm test -- webview17
+npm test -- nanrenbao
 ```
 
 ### 测试覆盖
