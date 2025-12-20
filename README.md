@@ -86,7 +86,9 @@ The repository includes an MCP (Model Context Protocol) server that allows GitHu
 @workspace Get the schema for beauty_images table
 ```
 
-For detailed MCP server documentation, see [mcp-servers/letmetry-mysql/README.md](mcp-servers/letmetry-mysql/README.md).
+For detailed MCP server documentation and comprehensive usage examples:
+- [MCP Server README](mcp-servers/letmetry-mysql/README.md)
+- [Usage Examples](docs/MCP-USAGE-EXAMPLES.md)
 
 ### Development Commands
 
