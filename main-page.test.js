@@ -30,8 +30,8 @@ describe('Main Index Page - Parent Love Section Integration', () => {
       expect(htmlContent).toContain('爱钓鱼');
     });
 
-    it('should have link to webview17', () => {
-      expect(htmlContent).toContain('href="webview17"');
+    it('should have link to parent-tools', () => {
+      expect(htmlContent).toContain('href="parent-tools"');
     });
 
     it('should have link to elder-love', () => {
