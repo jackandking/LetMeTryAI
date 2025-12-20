@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "letmetry-mysql": {
+      "command": "node",
+      "args": [
+        "./mcp-servers/letmetry-mysql/dist/index.js"
+      ],
+      "description": "LetMeTry MySQL MCP Server - Execute MySQL queries without API key",
+      "disabled": false
+    }
+  }
+}
