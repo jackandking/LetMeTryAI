@@ -228,4 +228,69 @@ When reviewing code changes:
 
 ---
 
+## 🗄️ Database Operations via MCP Server
+
+This project has a MySQL MCP (Model Context Protocol) server configured for database operations. When working with database-related tasks in GitHub Issues or PRs:
+
+### Available Database Tools
+
+The MCP server provides direct MySQL access to `letmetry.cloud` database:
+
+**Query Operations:**
+```
+Show me the latest 10 images from beauty_images table
+Get all records from [table_name] where [condition]
+Count total records in [table_name]
+```
+
+**Insert Operations:**
+```
+Insert a new image with URL https://example.com/img.jpg to beauty_images
+Add record to [table_name] with [values]
+```
+
+**Schema Operations:**
+```
+Show me the schema for beauty_images table
+What tables are available in the database?
+Describe the structure of [table_name]
+```
+
+### Database Tables
+
+- **beauty_images**: Stores beauty image URLs for nanrenbao feature
+  - Columns: `id`, `image_url`, `created_at`, `updated_at`
+  - Schema: [nanrenbao/database-schema.sql](nanrenbao/database-schema.sql)
+
+### Using MCP in GitHub Issues
+
+When creating GitHub Issues that require database operations:
+
+1. **Reference the MCP server**: Mention that database operations can be performed via the MCP server
+2. **Be specific**: Include exact table names, column names, and operations needed
+3. **Include schema**: Reference or include the relevant schema file
+4. **Test queries**: Provide example queries that should work after implementation
+
+**Example Issue Template:**
+```markdown
+## Database Enhancement Request
+
+**Table**: beauty_images
+**Operation**: Add pagination support
+**MCP Query Example**: 
+- SELECT * FROM beauty_images ORDER BY created_at DESC LIMIT 10 OFFSET 0
+
+**Schema Reference**: See [database-schema.sql](nanrenbao/database-schema.sql)
+**MCP Enabled**: Yes - Copilot can test queries directly
+```
+
+### MCP Server Configuration
+
+- **Location**: `mcp-servers/letmetry-mysql/`
+- **Config**: `.vscode/settings.json` and `.github/copilot-mcp.json`
+- **Setup**: Run `./scripts/setup-mcp.sh` to build
+- **No API Key Required**: Direct connection to letmetry.cloud
+
+---
+
 **Remember**: Tests are not optional - they protect the codebase and enable confident changes. Every commit should leave the project in a more tested state than before.
