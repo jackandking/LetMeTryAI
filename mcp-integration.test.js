@@ -58,7 +58,7 @@ describe('MCP Server Integration Tests', () => {
       
       // Check for LetMeTry endpoint
       expect(serverContent).toContain('letmetry.cloud');
-      expect(serverContent).toContain('/lws/mysql/query');
+      expect(serverContent).toContain('/mysql/query');
       
       // Check for tool implementations
       expect(serverContent).toContain('mysql_query');
@@ -137,7 +137,7 @@ describe('MCP Server Integration Tests', () => {
       const serverContent = readFileSync(serverPath, 'utf-8');
       
       // Check endpoint configuration
-      expect(serverContent).toContain('https://letmetry.cloud/lws');
+      expect(serverContent).toContain('https://letmetry.cloud');
       expect(serverContent).toContain('/mysql/query');
       
       // Ensure no hardcoded API keys

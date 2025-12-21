@@ -19,7 +19,7 @@ Integrate a Model Context Protocol (MCP) server to enable GitHub Copilot to perf
   - `mysql_query_table`: Convenient table queries with filters
   - `mysql_insert`: Insert new records
   - `get_table_schema`: Get table structure information
-- ✅ Direct connection to `letmetry.cloud/lws/mysql/query`
+- ✅ Direct connection to `letmetry.cloud/mysql/query`
 - ✅ No API key required
 
 **File Structure:**

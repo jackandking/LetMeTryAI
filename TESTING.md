@@ -86,7 +86,7 @@ npm run test:watch
 ### Configuration System
 ✅ BASE_URL uses correct domain (letmetry.cloud)  
 ✅ All API endpoints use centralized configuration  
-✅ No hardcoded letmetryai.cn references in /lws or /images paths  
+✅ No hardcoded letmetryai.cn references  
 ✅ Helper functions generate consistent URLs  
 
 ### API Endpoints
@@ -104,7 +104,7 @@ npm run test:watch
 ### Regression Protection
 ✅ OAuth redirect URIs remain unchanged (letmetryai.cn)  
 ✅ Page branding remains unchanged (letmetryai.cn)  
-✅ Only /lws and /images paths use IP address  
+✅ API endpoints use correct paths after /lws prefix removal  
 ✅ No unintended side effects from centralization  
 
 ## Mock Infrastructure

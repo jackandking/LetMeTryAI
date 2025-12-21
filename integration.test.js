@@ -90,9 +90,9 @@ describe('Integration Tests - Configuration System', () => {
       const deleteUrl = API_ENDPOINTS.FILE_DELETE;
       const imageUrl = getImageUrl('images/uploaded-file.jpg');
 
-      expect(uploadUrl).toContain('/lws/file/upload');
-      expect(listUrl).toContain('/lws/file/list');
-      expect(deleteUrl).toContain('/lws/file/delete');
+      expect(uploadUrl).toContain('/file/upload');
+      expect(listUrl).toContain('/file/list');
+      expect(deleteUrl).toContain('/file/delete');
       expect(imageUrl).toContain('/images/uploaded-file.jpg');
 
       // All should use same base infrastructure
@@ -104,8 +104,8 @@ describe('Integration Tests - Configuration System', () => {
     it('should support typical AI chat workflow', () => {
       const chatUrl = API_ENDPOINTS.AI_CHAT;
       
-      expect(chatUrl).toContain('/lws/ai/chat');
-      expect(chatUrl).toBe('https://letmetry.cloud/lws/ai/chat');
+      expect(chatUrl).toContain('/ai/chat');
+      expect(chatUrl).toBe('https://letmetry.cloud/ai/chat');
     });
 
     it('should support typical database operations workflow', () => {
@@ -118,7 +118,7 @@ describe('Integration Tests - Configuration System', () => {
       ];
 
       dbEndpoints.forEach(endpoint => {
-        expect(endpoint).toContain('/lws/mysql/');
+        expect(endpoint).toContain('/mysql/');
         expect(endpoint).toStartWith('https://letmetry.cloud');
       });
     });

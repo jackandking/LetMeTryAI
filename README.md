@@ -217,9 +217,9 @@ The application integrates with external APIs:
 ```javascript
 // Centralized endpoints
 const API_ENDPOINTS = {
-    AI_CHAT: `${BASE_URL}/lws/ai/chat`,
-    FILE_UPLOAD: `${BASE_URL}/lws/file/upload`,
-    MYSQL_QUERY: `${BASE_URL}/lws/mysql/query`
+    AI_CHAT: `${BASE_URL}/ai/chat`,
+    FILE_UPLOAD: `${BASE_URL}/file/upload`,
+    MYSQL_QUERY: `${BASE_URL}/mysql/query`
     // ... more endpoints
 };
 ```

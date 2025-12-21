@@ -145,7 +145,7 @@ Page({
   ai_utils.js
   // AI utility functions for chat integration
 
-const API_ENDPOINT = 'https://letmetryai.cn/lws/ai/chat';
+const API_ENDPOINT = 'https://letmetry.cloud/ai/chat';
 
 // Error messages
 const ERROR_MESSAGES = {

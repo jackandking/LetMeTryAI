@@ -28,8 +28,8 @@ describe('Zuowen Game AI Integration', () => {
     it('should use correct endpoint for AI grading service', async () => {
       const { API_ENDPOINT } = await import('../util/ai_utils.js');
       
-      expect(API_ENDPOINT).toBe('https://letmetry.cloud/lws/ai/chat');
-      expect(API_ENDPOINT).toContain('/lws/ai/chat');
+      expect(API_ENDPOINT).toBe('https://letmetry.cloud/ai/chat');
+      expect(API_ENDPOINT).toContain('/ai/chat');
       expect(API_ENDPOINT).not.toContain('undefined');
     });
   });
@@ -71,7 +71,7 @@ describe('Zuowen Game AI Integration', () => {
 
       const result = await sendChatMessage(testPrompt);
 
-      expect(fetch).toHaveBeenCalledWith('https://letmetry.cloud/lws/ai/chat', {
+      expect(fetch).toHaveBeenCalledWith('https://letmetry.cloud/ai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -150,7 +150,7 @@ describe('Zuowen Game AI Integration', () => {
       expect(BASE_URL).toMatch(/^https:\/\//);
       
       // Ensure AI_CHAT endpoint is properly constructed
-      expect(API_ENDPOINTS.AI_CHAT).toBe(`${BASE_URL}/lws/ai/chat`);
+      expect(API_ENDPOINTS.AI_CHAT).toBe(`${BASE_URL}/ai/chat`);
       expect(API_ENDPOINTS.AI_CHAT).not.toContain('undefined');
       expect(API_ENDPOINTS.AI_CHAT).not.toContain('null');
     });

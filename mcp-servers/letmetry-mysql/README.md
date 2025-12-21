@@ -278,7 +278,7 @@ The MCP server implements multiple layers of security:
 1. Check the SQL syntax is correct
 2. Verify table and column names match the schema
 3. Review error messages in the MCP server output
-4. Test queries directly at https://letmetry.cloud/lws/mysql/query
+4. Test queries directly at https://letmetry.cloud/mysql/query
 
 ## 📝 Example Workflows
 
@@ -334,4 +334,4 @@ MIT License - see main project LICENSE file for details
 - [MCP Protocol Documentation](https://modelcontextprotocol.io)
 - [GitHub Copilot Documentation](https://docs.github.com/copilot)
 - [LetMeTryAI Main Repository](https://github.com/jackandking/LetMeTryAI)
-- [API Endpoint](https://letmetry.cloud/lws/mysql/query)
+- [API Endpoint](https://letmetry.cloud/mysql/query)

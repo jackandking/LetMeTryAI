@@ -10,18 +10,18 @@ beforeEach(() => {
     global.window = global.window || {};
     global.window.BASE_URL = 'https://letmetry.cloud';
     global.window.API_ENDPOINTS = {
-        AI_CHAT: `${global.window.BASE_URL}/lws/ai/chat`,
-        FILE_UPLOAD: `${global.window.BASE_URL}/lws/file/upload`,
-        FILE_DELETE: `${global.window.BASE_URL}/lws/file/delete`,
-        FILE_INFO: `${global.window.BASE_URL}/lws/file/info`,
-        FILE_LIST: `${global.window.BASE_URL}/lws/file/list`,
-        FILE_DOWNLOAD: `${global.window.BASE_URL}/lws/file/download`,
+        AI_CHAT: `${global.window.BASE_URL}/ai/chat`,
+        FILE_UPLOAD: `${global.window.BASE_URL}/file/upload`,
+        FILE_DELETE: `${global.window.BASE_URL}/file/delete`,
+        FILE_INFO: `${global.window.BASE_URL}/file/info`,
+        FILE_LIST: `${global.window.BASE_URL}/file/list`,
+        FILE_DOWNLOAD: `${global.window.BASE_URL}/file/download`,
         IMAGE_UPLOAD: `${global.window.BASE_URL}/image/upload`,
-        MYSQL_QUERY: `${global.window.BASE_URL}/lws/mysql/query`,
-        MYSQL_GET_BY_ID: `${global.window.BASE_URL}/lws/mysql/getById`,
-        MYSQL_INSERT: `${global.window.BASE_URL}/lws/mysql/insert`,
-        MYSQL_UPDATE: `${global.window.BASE_URL}/lws/mysql/update`,
-        MYSQL_DELETE: `${global.window.BASE_URL}/lws/mysql/delete`
+        MYSQL_QUERY: `${global.window.BASE_URL}/mysql/query`,
+        MYSQL_GET_BY_ID: `${global.window.BASE_URL}/mysql/getById`,
+        MYSQL_INSERT: `${global.window.BASE_URL}/mysql/insert`,
+        MYSQL_UPDATE: `${global.window.BASE_URL}/mysql/update`,
+        MYSQL_DELETE: `${global.window.BASE_URL}/mysql/delete`
     };
     
     // Mock the DOM environment

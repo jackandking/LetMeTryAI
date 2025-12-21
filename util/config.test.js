@@ -52,11 +52,11 @@ describe('Configuration Module', () => {
     });
 
     it('should have correct API paths', () => {
-      expect(API_ENDPOINTS.AI_CHAT).toBe(`${BASE_URL}/lws/ai/chat`);
-      expect(API_ENDPOINTS.FILE_UPLOAD).toBe(`${BASE_URL}/lws/file/upload`);
-      expect(API_ENDPOINTS.FILE_DELETE).toBe(`${BASE_URL}/lws/file/delete`);
+      expect(API_ENDPOINTS.AI_CHAT).toBe(`${BASE_URL}/ai/chat`);
+      expect(API_ENDPOINTS.FILE_UPLOAD).toBe(`${BASE_URL}/file/upload`);
+      expect(API_ENDPOINTS.FILE_DELETE).toBe(`${BASE_URL}/file/delete`);
       expect(API_ENDPOINTS.IMAGE_UPLOAD).toBe(`${BASE_URL}/image/upload`);
-      expect(API_ENDPOINTS.MYSQL_QUERY).toBe(`${BASE_URL}/lws/mysql/query`);
+      expect(API_ENDPOINTS.MYSQL_QUERY).toBe(`${BASE_URL}/mysql/query`);
     });
   });
 
