@@ -4,7 +4,7 @@
  * LetMeTry MySQL MCP Server
  * 
  * This MCP server provides MySQL database operations through the LetMeTry Cloud API.
- * No API key is required - it connects directly to letmetry.cloud/lws/mysql/query
+ * No API key is required - it connects directly to letmetry.cloud/mysql/query
  * 
  * Features:
  * - Execute SQL queries (SELECT, INSERT, UPDATE, DELETE)
@@ -22,7 +22,7 @@ import {
 import axios from 'axios';
 
 // LetMeTry Cloud API endpoint - no API key required
-const LETMETRY_API_BASE = 'https://letmetry.cloud/lws';
+const LETMETRY_API_BASE = 'https://letmetry.cloud';
 const MYSQL_QUERY_ENDPOINT = `${LETMETRY_API_BASE}/mysql/query`;
 
 /**

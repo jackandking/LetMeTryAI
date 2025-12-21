@@ -45,7 +45,7 @@ describe('File Utility Functions', () => {
       const fetchCall = fetch.mock.calls[0];
       expect(fetchCall[0]).toBe(API_ENDPOINTS.FILE_UPLOAD);
       expect(API_ENDPOINTS.FILE_UPLOAD).toContain('letmetry.cloud');
-      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('/lws/file/upload');
+      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('/file/upload');
     });
 
     it('should throw an error for invalid targetPath', async () => {
@@ -124,7 +124,7 @@ describe('File Utility Functions', () => {
 
       const fetchCall = fetch.mock.calls[0];
       expect(fetchCall[0]).toBe(API_ENDPOINTS.FILE_DELETE);
-      expect(API_ENDPOINTS.FILE_DELETE).toContain('/lws/file/delete');
+      expect(API_ENDPOINTS.FILE_DELETE).toContain('/file/delete');
     });
   });
 
@@ -189,11 +189,11 @@ describe('File Utility Functions', () => {
     });
 
     it('should maintain consistent URL structure', () => {
-      expect(API_ENDPOINTS.FILE_UPLOAD).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/upload$/);
-      expect(API_ENDPOINTS.FILE_DELETE).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/delete$/);
-      expect(API_ENDPOINTS.FILE_INFO).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/info$/);
-      expect(API_ENDPOINTS.FILE_LIST).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/list$/);
-      expect(API_ENDPOINTS.FILE_DOWNLOAD).toMatch(/^https:\/\/letmetry\.cloud\/lws\/file\/download$/);
+      expect(API_ENDPOINTS.FILE_UPLOAD).toMatch(/^https:\/\/letmetry\.cloud\/file\/upload$/);
+      expect(API_ENDPOINTS.FILE_DELETE).toMatch(/^https:\/\/letmetry\.cloud\/file\/delete$/);
+      expect(API_ENDPOINTS.FILE_INFO).toMatch(/^https:\/\/letmetry\.cloud\/file\/info$/);
+      expect(API_ENDPOINTS.FILE_LIST).toMatch(/^https:\/\/letmetry\.cloud\/file\/list$/);
+      expect(API_ENDPOINTS.FILE_DOWNLOAD).toMatch(/^https:\/\/letmetry\.cloud\/file\/download$/);
     });
   });
 });

@@ -171,7 +171,7 @@ For functions that use API endpoints:
 it('should use correct API endpoint', () => {
   const result = apiFunction();
   expect(result).toContain(API_ENDPOINTS.EXPECTED_ENDPOINT);
-  expect(result).toContain('/lws/'); // Ensure correct path
+  expect(result).toContain('/mysql/'); // Ensure correct path
 });
 ```
 

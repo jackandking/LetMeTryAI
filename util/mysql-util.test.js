@@ -41,7 +41,7 @@ describe('MySQL Utilities', () => {
         const fetchCall = fetch.mock.calls[0];
         expect(fetchCall[0]).toBe(API_ENDPOINTS.MYSQL_QUERY);
         expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
-        expect(API_ENDPOINTS.MYSQL_QUERY).toContain('/lws/mysql/query');
+        expect(API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
         done();
       });
     });
@@ -211,17 +211,17 @@ describe('MySQL Utilities', () => {
       mysqlEndpoints.forEach(endpoint => {
         expect(API_ENDPOINTS[endpoint]).toBeDefined();
         expect(API_ENDPOINTS[endpoint]).toContain('letmetry.cloud');
-        expect(API_ENDPOINTS[endpoint]).toContain('/lws/mysql/');
+        expect(API_ENDPOINTS[endpoint]).toContain('/mysql/');
         expect(API_ENDPOINTS[endpoint]).not.toContain('letmetryai.cn');
       });
     });
 
     it('should maintain consistent URL structure', () => {
-      expect(API_ENDPOINTS.MYSQL_QUERY).toMatch(/^https:\/\/[a-z0-9.-]+\/lws\/mysql\/query$/);
-      expect(API_ENDPOINTS.MYSQL_GET_BY_ID).toMatch(/^https:\/\/[a-z0-9.-]+\/lws\/mysql\/getById$/);
-      expect(API_ENDPOINTS.MYSQL_INSERT).toMatch(/^https:\/\/[a-z0-9.-]+\/lws\/mysql\/insert$/);
-      expect(API_ENDPOINTS.MYSQL_UPDATE).toMatch(/^https:\/\/[a-z0-9.-]+\/lws\/mysql\/update$/);
-      expect(API_ENDPOINTS.MYSQL_DELETE).toMatch(/^https:\/\/[a-z0-9.-]+\/lws\/mysql\/delete$/);
+      expect(API_ENDPOINTS.MYSQL_QUERY).toMatch(/^https:\/\/[a-z0-9.-]+\/mysql\/query$/);
+      expect(API_ENDPOINTS.MYSQL_GET_BY_ID).toMatch(/^https:\/\/[a-z0-9.-]+\/mysql\/getById$/);
+      expect(API_ENDPOINTS.MYSQL_INSERT).toMatch(/^https:\/\/[a-z0-9.-]+\/mysql\/insert$/);
+      expect(API_ENDPOINTS.MYSQL_UPDATE).toMatch(/^https:\/\/[a-z0-9.-]+\/mysql\/update$/);
+      expect(API_ENDPOINTS.MYSQL_DELETE).toMatch(/^https:\/\/[a-z0-9.-]+\/mysql\/delete$/);
     });
   });
 

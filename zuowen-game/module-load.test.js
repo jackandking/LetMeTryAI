@@ -24,7 +24,7 @@ describe('Zuowen Game Module Loading', () => {
     expect(async () => {
       const config = await import('../util/config.js');
       const endpoint = config.API_ENDPOINTS.AI_CHAT;
-      expect(endpoint).toContain('/lws/ai/chat');
+      expect(endpoint).toContain('/ai/chat');
       expect(endpoint).toMatch(/^https:\/\//);
       expect(endpoint).not.toContain('undefined');
     }).not.toThrow();

@@ -24,22 +24,22 @@ describe('Configuration Regression Tests', () => {
 
     it('should have valid AI chat endpoint configuration', () => {
       expect(API_ENDPOINT).toBe(API_ENDPOINTS.AI_CHAT);
-      expect(API_ENDPOINT).toBe('https://letmetry.cloud/lws/ai/chat');
-      expect(API_ENDPOINT).toMatch(/^https:\/\/[a-zA-Z0-9.-]+\/lws\/ai\/chat$/);
+      expect(API_ENDPOINT).toBe('https://letmetry.cloud/ai/chat');
+      expect(API_ENDPOINT).toMatch(/^https:\/\/[a-zA-Z0-9.-]+\/ai\/chat$/);
     });
   });
 
   describe('AI Service Integration Points', () => {
     it('should provide valid endpoint for 作文游戏 AI grading', () => {
       // Test the specific endpoint used by zuowen-game
-      expect(API_ENDPOINTS.AI_CHAT).toContain('/lws/ai/chat');
+      expect(API_ENDPOINTS.AI_CHAT).toContain('/ai/chat');
       expect(API_ENDPOINTS.AI_CHAT).toStartWith('https://');
       expect(API_ENDPOINTS.AI_CHAT).not.toContain('undefined');
       expect(API_ENDPOINTS.AI_CHAT).not.toContain('null');
     });
 
     it('should maintain consistent URL formatting across all endpoints', () => {
-      // Some endpoints like IMAGE_UPLOAD use different paths (not under /lws/)
+      // Some endpoints like IMAGE_UPLOAD use different paths
       const lwsEndpoints = Object.entries(API_ENDPOINTS)
         .filter(([key]) => key !== 'IMAGE_UPLOAD')
         .map(([_, value]) => value);
@@ -53,7 +53,6 @@ describe('Configuration Regression Tests', () => {
       // Verify all endpoints are valid URLs
       Object.values(API_ENDPOINTS).forEach(endpoint => {
         expect(endpoint).toMatch(/^https:\/\//);
-        expect(endpoint).not.toContain('//lws'); // No double slashes before lws
       });
     });
 
@@ -87,7 +86,6 @@ describe('Configuration Regression Tests', () => {
       testPaths.forEach(path => {
         const constructedUrl = `${BASE_URL}/${path.startsWith('/') ? path.slice(1) : path}`;
         expect(constructedUrl).toMatch(/^https:\/\/[^\/]+\/[^\/]/);
-        expect(constructedUrl).not.toContain('//lws');
         expect(constructedUrl).not.toContain('///');
       });
     });
@@ -111,7 +109,7 @@ describe('Configuration Regression Tests', () => {
       // Verify that the AI utilities module uses the correct endpoint
       expect(API_ENDPOINT).toBe(API_ENDPOINTS.AI_CHAT);
       expect(API_ENDPOINT).toContain('letmetry.cloud');
-      expect(API_ENDPOINT).toContain('/lws/ai/chat');
+      expect(API_ENDPOINT).toContain('/ai/chat');
     });
   });
 });

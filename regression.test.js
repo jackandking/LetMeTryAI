@@ -17,17 +17,17 @@ describe('Regression Tests - Domain to IP Migration', () => {
 
     it('should maintain correct API paths after migration', () => {
       const expectedPaths = {
-        AI_CHAT: '/lws/ai/chat',
-        FILE_UPLOAD: '/lws/file/upload',
-        FILE_DELETE: '/lws/file/delete',
-        FILE_INFO: '/lws/file/info',
-        FILE_LIST: '/lws/file/list',
-        FILE_DOWNLOAD: '/lws/file/download',
-        MYSQL_QUERY: '/lws/mysql/query',
-        MYSQL_GET_BY_ID: '/lws/mysql/getById',
-        MYSQL_INSERT: '/lws/mysql/insert',
-        MYSQL_UPDATE: '/lws/mysql/update',
-        MYSQL_DELETE: '/lws/mysql/delete'
+        AI_CHAT: '/ai/chat',
+        FILE_UPLOAD: '/file/upload',
+        FILE_DELETE: '/file/delete',
+        FILE_INFO: '/file/info',
+        FILE_LIST: '/file/list',
+        FILE_DOWNLOAD: '/file/download',
+        MYSQL_QUERY: '/mysql/query',
+        MYSQL_GET_BY_ID: '/mysql/getById',
+        MYSQL_INSERT: '/mysql/insert',
+        MYSQL_UPDATE: '/mysql/update',
+        MYSQL_DELETE: '/mysql/delete'
       };
 
       Object.entries(expectedPaths).forEach(([key, path]) => {
@@ -112,11 +112,15 @@ describe('Regression Tests - Domain to IP Migration', () => {
       expect(preservedDomainUsages).toHaveLength(2);
     });
 
-    it('should only affect /lws and /images paths as requested', () => {
-      // All endpoints should have /lws in their path
+    it('should use correct API paths after /lws prefix removal', () => {
+      // All endpoints should not have /lws in their path anymore
       Object.entries(API_ENDPOINTS).forEach(([key, endpoint]) => {
         if (key.startsWith('FILE_') || key.startsWith('MYSQL_') || key === 'AI_CHAT') {
-          expect(endpoint).toContain('/lws/');
+          expect(endpoint).not.toContain('/lws/');
+          // Verify they have the correct new paths
+          if (key === 'AI_CHAT') expect(endpoint).toContain('/ai/chat');
+          if (key.startsWith('FILE_')) expect(endpoint).toMatch(/\/file\/(upload|delete|info|list|download)/);
+          if (key.startsWith('MYSQL_')) expect(endpoint).toMatch(/\/mysql\//);
         }
       });
     });

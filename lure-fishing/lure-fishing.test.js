@@ -35,10 +35,10 @@ describe('Lure Fishing Feature Tests', () => {
     
     // Mock window.API_ENDPOINTS
     window.API_ENDPOINTS = {
-      FILE_UPLOAD: 'https://letmetry.cloud/lws/file/upload',
+      FILE_UPLOAD: 'https://letmetry.cloud/file/upload',
       IMAGE_UPLOAD: 'https://letmetry.cloud/image/upload',
-      MYSQL_INSERT: 'https://letmetry.cloud/lws/mysql/insert',
-      MYSQL_QUERY: 'https://letmetry.cloud/lws/mysql/query'
+      MYSQL_INSERT: 'https://letmetry.cloud/mysql/insert',
+      MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
     };
     
     window.BASE_URL = 'https://letmetry.cloud';
@@ -56,9 +56,9 @@ describe('Lure Fishing Feature Tests', () => {
     
     it('should use centralized API endpoints for MySQL operations', () => {
       expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cloud');
-      expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/lws/mysql/insert');
+      expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/mysql/insert');
       expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
-      expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/lws/mysql/query');
+      expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
     });
     
     it('should use centralized BASE_URL for image construction', () => {
@@ -524,9 +524,9 @@ describe('Lure Fishing Regression Tests', () => {
   });
   
   it('should use correct API paths', () => {
-    expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain('/lws/file/upload');
-    expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/lws/mysql/insert');
-    expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/lws/mysql/query');
+    expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain('/file/upload');
+    expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/mysql/insert');
+    expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
   });
 });
 
