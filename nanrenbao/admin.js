@@ -128,6 +128,7 @@ async function insertImageUrl(url) {
         });
 
         if (!response.ok) {
+            const errorText = await response.text();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -135,7 +136,14 @@ async function insertImageUrl(url) {
         return { success: true, data: result };
     } catch (error) {
         console.error('Insert error:', error);
-        return { success: false, error: error.message };
+        
+        // Check if error is due to duplicate key (UNIQUE constraint violation)
+        const errorMsg = error.message.toLowerCase();
+        if (errorMsg.includes('duplicate') || errorMsg.includes('unique')) {
+            return { success: false, error: error.message, isDuplicate: true };
+        }
+        
+        return { success: false, error: error.message, isDuplicate: false };
     }
 }
 
@@ -160,6 +168,9 @@ async function processBatchUpload(urls) {
         if (result.success) {
             state.successCount++;
             addLog(`✓ 成功: ${url.substring(0, 50)}...`, 'success');
+        } else if (result.isDuplicate) {
+            state.skipCount++;
+            addLog(`⊘ 跳过 (已存在): ${url.substring(0, 50)}...`, 'info');
         } else {
             state.errorCount++;
             addLog(`✗ 失败: ${url.substring(0, 50)}... (${result.error})`, 'error');
