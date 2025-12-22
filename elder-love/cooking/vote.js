@@ -173,7 +173,7 @@ function showAd() {
     // Check if running in Kuaishou environment
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=elder-love-cooking",
+            url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=elder-love/cooking",
         });
     } else {
         // If not in Kuaishou environment, directly show results
