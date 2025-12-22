@@ -197,6 +197,25 @@ describe('elder-love Cooking Feature - 爱做饭', () => {
       expect(voteContent).toContain('showAd');
     });
 
+    it('should use ks.navigateTo for Kuaishou ad display', () => {
+      expect(voteContent).toContain('ks.navigateTo');
+      expect(voteContent).toContain('/pages/showRewardedVideoAd/showRewardedVideoAd');
+      expect(voteContent).toContain('result_page_id=elder-love-cooking');
+    });
+
+    it('should not use deprecated ks.showAd API', () => {
+      expect(voteContent).not.toContain('ks.showAd');
+    });
+
+    it('should check for finishedAd parameter for result display', () => {
+      expect(voteContent).toContain("urlParams.get('finishedAd')");
+      expect(voteContent).toContain("finishedAd === 'true'");
+    });
+
+    it('should support backward compatibility with showResults parameter', () => {
+      expect(voteContent).toContain("urlParams.get('showResults')");
+    });
+
     it('should have save vote function', () => {
       expect(voteContent).toContain('saveVote');
       expect(voteContent).toContain('updateKeyValueStore');
