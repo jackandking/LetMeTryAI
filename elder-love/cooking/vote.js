@@ -52,7 +52,8 @@ function checkUrlParameters() {
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    if (urlParams.get('showResults') === 'true') {
+    // Check if ad is finished and should show results
+    if (urlParams.get('finishedAd') === 'true' || urlParams.get('showResults') === 'true') {
         displayResults();
     } else {
         loadDishesAndSetupVoting();
@@ -170,18 +171,13 @@ function showAd() {
     saveVote();
     
     // Check if running in Kuaishou environment
-    if (typeof ks !== 'undefined' && ks.showAd) {
-        ks.showAd({
-            success: function() {
-                window.location.href = 'vote.html?showResults=true';
-            },
-            fail: function() {
-                // If ad fails, still show results
-                window.location.href = 'vote.html?showResults=true';
-            }
+    if (typeof ks !== 'undefined' && ks.navigateTo) {
+        ks.navigateTo({
+            url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=elder-love-cooking",
         });
     } else {
         // If not in Kuaishou environment, directly show results
+        console.warn('Mini-program navigation not available');
         window.location.href = 'vote.html?showResults=true';
     }
 }
