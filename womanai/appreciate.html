@@ -215,10 +215,9 @@
                     throw new Error('加载图片失败');
                 }
 
-                const data = await response.json();
-                const images = data.data || [];
+                const images = await response.json();
 
-                if (images.length === 0) {
+                if (!Array.isArray(images) || images.length === 0) {
                     hasMoreImages = false;
                     if (currentPage === 1) {
                         errorDiv.textContent = '还没有帅哥图片，快去上传吧！';

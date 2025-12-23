@@ -179,4 +179,33 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
             expect(content).toContain('max-width');
         });
     });
+
+    describe('Image Error Handling', () => {
+        it('should hide images when they fail to load', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const appreciatePath = path.join(__dirname, 'appreciate.html');
+            const content = fs.readFileSync(appreciatePath, 'utf-8');
+
+            // Check that img.onerror is implemented
+            expect(content).toContain('img.onerror');
+            
+            // Check that it hides the container on error
+            expect(content).toContain("div.style.display = 'none'");
+            
+            // Ensure it doesn't show placeholder image anymore
+            expect(content).not.toContain('data:image/svg+xml');
+        });
+
+        it('should log failed image URLs for debugging', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const appreciatePath = path.join(__dirname, 'appreciate.html');
+            const content = fs.readFileSync(appreciatePath, 'utf-8');
+
+            // Check that error logging is present
+            expect(content).toContain('console.log');
+            expect(content).toContain('图片加载失败');
+        });
+    });
 });
