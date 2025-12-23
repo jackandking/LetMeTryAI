@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欣赏帅哥 - 女人爱</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            color: #f5576c;
+            font-size: 2em;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            text-decoration: none;
+            color: #f5576c;
+            font-size: 1.2em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        #loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding-bottom: 80px;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item .info {
+            padding: 15px;
+        }
+
+        .gallery-item .info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.85em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .load-more {
+            text-align: center;
+            margin: 40px 0;
+            padding-bottom: 40px;
+        }
+
+        .load-more button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .load-more button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .load-more button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .error {
+            text-align: center;
+            color: white;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .gallery-item img {
+                height: 200px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>欣赏帅哥</h1>
+    </header>
+    
+    <div class="container">
+        <div id="loading">正在加载帅哥图片...</div>
+        <div id="gallery" class="gallery"></div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div class="load-more" id="loadMoreSection" style="display: none;">
+            <button id="loadMoreBtn">加载更多</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 女人爱. 保留所有权利.</p>
+    </footer>
+
+    <script>
+        let currentPage = 1;
+        const imagesPerPage = 20;
+        let isLoading = false;
+        let hasMoreImages = true;
+
+        async function loadImages() {
+            if (isLoading || !hasMoreImages) return;
+            
+            isLoading = true;
+            const loadingDiv = document.getElementById('loading');
+            const errorDiv = document.getElementById('error');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            
+            loadingDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            if (loadMoreBtn) loadMoreBtn.disabled = true;
+
+            try {
+                // Query handsome men images from database
+                const sql = `SELECT id, image_url, created_at FROM handsome_images ORDER BY created_at DESC LIMIT ${imagesPerPage} OFFSET ${(currentPage - 1) * imagesPerPage}`;
+                
+                const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ sql })
+                });
+
+                if (!response.ok) {
+                    throw new Error('加载图片失败');
+                }
+
+                const data = await response.json();
+                const images = data.data || [];
+
+                if (images.length === 0) {
+                    hasMoreImages = false;
+                    if (currentPage === 1) {
+                        errorDiv.textContent = '还没有帅哥图片，快去上传吧！';
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    displayImages(images);
+                    currentPage++;
+                    
+                    if (images.length < imagesPerPage) {
+                        hasMoreImages = false;
+                    }
+                }
+
+                // Show/hide load more button
+                const loadMoreSection = document.getElementById('loadMoreSection');
+                if (hasMoreImages && images.length > 0) {
+                    loadMoreSection.style.display = 'block';
+                } else {
+                    loadMoreSection.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error loading images:', error);
+                errorDiv.textContent = '加载图片时出错，请稍后再试';
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                isLoading = false;
+                if (loadMoreBtn) loadMoreBtn.disabled = false;
+            }
+        }
+
+        function displayImages(images) {
+            const gallery = document.getElementById('gallery');
+            
+            images.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
+                const img = document.createElement('img');
+                img.src = image.image_url;
+                img.alt = '帅哥图片';
+                img.loading = 'lazy';
+                
+                // Handle image load error
+                img.onerror = function() {
+                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="280" height="300"%3E%3Crect fill="%23ddd" width="280" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23999"%3E图片加载失败%3C/text%3E%3C/svg%3E';
+                };
+                
+                const info = document.createElement('div');
+                info.className = 'info';
+                
+                const date = new Date(image.created_at);
+                const dateStr = date.toLocaleDateString('zh-CN');
+                
+                info.innerHTML = `<p>上传时间: ${dateStr}</p>`;
+                
+                item.appendChild(img);
+                item.appendChild(info);
+                gallery.appendChild(item);
+            });
+        }
+
+        // Load more button event
+        document.getElementById('loadMoreBtn').addEventListener('click', loadImages);
+
+        // Initial load
+        loadImages();
+
+        // VConsole for debugging
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
