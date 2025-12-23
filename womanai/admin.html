@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 批量上传 - 女人爱</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        header h1 {
+            color: #f5576c;
+            font-size: 2em;
+        }
+
+        header p {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #f5576c;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .nav-back:hover {
+            color: #f093fb;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .admin-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #f5576c;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f093fb;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .help-text code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .status-panel {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .status-panel h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            color: #f5576c;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .log-container {
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-entry.success {
+            color: #4caf50;
+        }
+
+        .log-entry.error {
+            color: #f44336;
+        }
+
+        .log-entry.info {
+            color: #2196f3;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .validation-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        #validationResult {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .validation-summary {
+            margin-bottom: 15px;
+        }
+
+        .validation-summary p {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .validation-summary .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .validation-summary .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .validation-summary .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .invalid-urls {
+            margin-top: 15px;
+        }
+
+        .invalid-urls h4 {
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+
+        .invalid-urls ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .invalid-urls li {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-left: 3px solid #f44336;
+            border-radius: 3px;
+        }
+
+        .invalid-urls small {
+            color: #999;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .nav-back {
+                font-size: 1em;
+            }
+
+            .admin-panel {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>🔧 管理后台</h1>
+        <p>批量上传帅哥图片URL</p>
+    </header>
+
+    <div class="container">
+        <div class="admin-panel">
+            <div id="alertContainer"></div>
+
+            <h2 class="section-title">批量上传URL</h2>
+            
+            <div class="form-group">
+                <label for="urlInput">图片URL列表</label>
+                <textarea 
+                    id="urlInput" 
+                    placeholder="每行输入一个图片URL&#10;例如：&#10;https://example.com/image1.jpg&#10;https://example.com/image2.png&#10;https://example.com/image3.webp"
+                ></textarea>
+                <div class="help-text">
+                    • 每行一个URL地址<br>
+                    • 支持的格式：<code>.jpg</code> <code>.jpeg</code> <code>.png</code> <code>.gif</code> <code>.webp</code><br>
+                    • 空行和无效URL将被自动跳过<br>
+                    • 重复的URL将被自动去重<br>
+                    • 仅允许来自：小红书、知乎、Instagram、微博、Unsplash、Pexels
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <button class="btn-secondary" id="validateBtn" style="width: 100%;">
+                    ✓ 验证URL
+                </button>
+                <div id="validationResult"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="uploadBtn">
+                    📤 开始批量上传
+                </button>
+                <button class="btn-danger" id="cancelBtn" disabled>
+                    ✕ 取消上传
+                </button>
+                <button class="btn-secondary" id="clearLogsBtn">
+                    🗑️ 清空日志
+                </button>
+            </div>
+
+            <div class="status-panel" id="statusPanel">
+                <h3>上传进度</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="label">总数</div>
+                        <div class="value" id="totalCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">成功</div>
+                        <div class="value" id="successCount" style="color: #4caf50;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">失败</div>
+                        <div class="value" id="errorCount" style="color: #f44336;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">跳过</div>
+                        <div class="value" id="skipCount" style="color: #ff9800;">0</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar">0%</div>
+                </div>
+
+                <div class="log-container" id="logContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

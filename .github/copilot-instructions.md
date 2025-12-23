@@ -228,7 +228,127 @@ When reviewing code changes:
 
 ---
 
-## 🗄️ Database Operations via MCP Server
+## � API Documentation and Usage
+
+### API Documentation Reference
+
+**Always refer to the official API documentation for correct usage:**
+- **API Docs URL**: https://letmetry.cloud/api-docs
+- Check this documentation for the latest API endpoints, parameters, and response formats
+- All API operations should follow the patterns defined in the API docs
+
+### MySQL Database Operations
+
+**IMPORTANT: All MySQL database operations must use the query endpoint:**
+
+```javascript
+// ✅ CORRECT: Use /mysql/query for ALL database operations
+const API_ENDPOINTS = {
+    MYSQL_QUERY: 'https://letmetry.cloud/mysql/query',  // Use for SELECT, INSERT, UPDATE, DELETE
+    // Note: MYSQL_INSERT is deprecated, always use MYSQL_QUERY
+};
+```
+
+**Database Operation Examples:**
+
+**CRITICAL: The API uses `sql` as the parameter name, NOT `query`!**
+
+```javascript
+// ✅ CORRECT: Use 'sql' parameter with optional 'params' array
+// SELECT Query
+const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sql: 'SELECT * FROM table_name WHERE condition'
+    })
+});
+
+// SELECT with Parameters (recommended for security)
+const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sql: 'SELECT * FROM users WHERE id = ?',
+        params: [userId]
+    })
+});
+
+// INSERT Query
+const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sql: 'INSERT INTO table_name (column1, column2) VALUES (?, ?)',
+        params: ['value1', 'value2']
+    })
+});
+
+// UPDATE Query
+const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sql: 'UPDATE table_name SET column1 = ? WHERE id = ?',
+        params: ['new_value', 123]
+    })
+});
+
+// DELETE Query
+const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        sql: 'DELETE FROM table_name WHERE id = ?',
+        params: [123]
+    })
+});
+```
+
+### API Best Practices
+
+1. **Check API Docs First**: Always consult https://letmetry.cloud/api-docs before implementing new features
+2. **Use Centralized Config**: Reference API_ENDPOINTS from config.js
+3. **Error Handling**: Always handle API errors gracefully
+4. **SQL Injection Prevention**: Use parameterized queries or proper escaping
+5. **Consistent Endpoint**: Use MYSQL_QUERY for all database operations
+
+### Testing API Integration
+
+```javascript
+describe('API Integration Tests', () => {
+  it('should use MYSQL_QUERY endpoint for database operations', () => {
+    const endpoint = API_ENDPOINTS.MYSQL_QUERY;
+    expect(endpoint).toBe('https://letmetry.cloud/mysql/query');
+  });
+
+  it('should send queries in correct format with sql parameter', async () => {
+    const sql = 'SELECT * FROM test_table';
+    const body = JSON.stringify({ sql });
+    expect(JSON.parse(body)).toHaveProperty('sql');
+    expect(JSON.parse(body)).not.toHaveProperty('query'); // Wrong parameter name
+  });
+
+  it('should support parameterized queries', async () => {
+    const body = JSON.stringify({ 
+      sql: 'SELECT * FROM users WHERE id = ?',
+      params: [1]
+    });
+    const parsed = JSON.parse(body);
+    expect(parsed).toHaveProperty('sql');
+    expect(parsed).toHaveProperty('params');
+    expect(Array.isArray(parsed.params)).toBe(true);
+  });
+
+  it('should handle API errors gracefully', async () => {
+    // Test error handling implementation
+  });
+});
+```
+
+---
+
+## �🗄️ Database Operations via MCP Server
 
 This project has a MySQL MCP (Model Context Protocol) server configured for database operations. When working with database-related tasks in GitHub Issues or PRs:
 
@@ -261,6 +381,10 @@ Describe the structure of [table_name]
 - **beauty_images**: Stores beauty image URLs for nanrenbao feature
   - Columns: `id`, `image_url`, `created_at`, `updated_at`
   - Schema: [nanrenbao/database-schema.sql](nanrenbao/database-schema.sql)
+  
+- **handsome_images**: Stores handsome men image URLs for womanai feature
+  - Columns: `id`, `image_url`, `created_at`, `updated_at`
+  - Schema: [womanai/database-schema.sql](womanai/database-schema.sql)
 
 ### Using MCP in GitHub Issues
 

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传帅哥 - 女人爱</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            color: #f5576c;
+            font-size: 2em;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            text-decoration: none;
+            color: #f5576c;
+            font-size: 1.2em;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .upload-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .allowed-domains {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .allowed-domains h3 {
+            margin: 0 0 10px;
+            color: #f5576c;
+            font-size: 1em;
+        }
+
+        .allowed-domains ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .allowed-domains li {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .preview-section {
+            margin-top: 20px;
+        }
+
+        .preview-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .upload-form {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>上传帅哥</h1>
+    </header>
+    
+    <div class="container">
+        <div class="upload-form">
+            <div class="allowed-domains">
+                <h3>允许的图片来源域名：</h3>
+                <ul>
+                    <li>小红书: *.xiaohongshu.com</li>
+                    <li>知乎: *.zhihu.com</li>
+                    <li>Instagram: *.cdninstagram.com</li>
+                    <li>微博: *.sinaimg.cn</li>
+                    <li>Unsplash: *.unsplash.com</li>
+                    <li>Pexels: *.pexels.com</li>
+                </ul>
+            </div>
+
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="imageUrl">帅哥图片链接:</label>
+                    <input 
+                        type="url" 
+                        id="imageUrl" 
+                        name="imageUrl" 
+                        placeholder="请输入图片URL" 
+                        required
+                    >
+                </div>
+
+                <div class="preview-section" id="previewSection" style="display: none;">
+                    <h3>预览:</h3>
+                    <img id="previewImage" alt="预览图片">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">上传图片</button>
+            </form>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 女人爱. 保留所有权利.</p>
+    </footer>
+
+    <script src="url-validator.js"></script>
+    <script>
+        const imageUrlInput = document.getElementById('imageUrl');
+        const previewSection = document.getElementById('previewSection');
+        const previewImage = document.getElementById('previewImage');
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('message');
+
+        // Preview image when URL is entered
+        imageUrlInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url && isValidUrl(url)) {
+                previewImage.src = url;
+                previewSection.style.display = 'block';
+                
+                previewImage.onerror = function() {
+                    previewSection.style.display = 'none';
+                    showMessage('无法加载预览图片，请检查URL是否正确', 'error');
+                };
+            } else {
+                previewSection.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const imageUrl = imageUrlInput.value.trim();
+            
+            // Validate URL
+            if (!isValidUrl(imageUrl)) {
+                showMessage('请输入有效的图片URL', 'error');
+                return;
+            }
+
+            // Validate domain
+            if (!isAllowedDomain(imageUrl)) {
+                showMessage('该图片来源域名不在允许列表中，请使用小红书、知乎、Instagram等平台的图片', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '上传中...';
+
+            try {
+                // Insert image URL into database using parameterized query
+                const sql = 'INSERT INTO handsome_images (image_url, created_at) VALUES (?, NOW())';
+                const params = [imageUrl];
+                
+                const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ sql, params })
+                });
+
+                if (!response.ok) {
+                    throw new Error('上传失败');
+                }
+
+                const result = await response.json();
+                
+                if (result.success || result.data) {
+                    showMessage('上传成功！感谢分享 😊', 'success');
+                    imageUrlInput.value = '';
+                    previewSection.style.display = 'none';
+                    
+                    // Redirect to appreciate page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'appreciate.html';
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || '上传失败');
+                }
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                
+                if (error.message.includes('Duplicate')) {
+                    showMessage('这张图片已经存在了！', 'error');
+                } else {
+                    showMessage('上传失败: ' + error.message, 'error');
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '上传图片';
+            }
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return url.startsWith('http://') || url.startsWith('https://');
+            } catch {
+                return false;
+            }
+        }
+
+        // VConsole for debugging
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
