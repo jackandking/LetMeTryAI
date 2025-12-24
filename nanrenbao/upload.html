@@ -7,6 +7,7 @@
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
+    <script src="points-system.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -45,6 +46,57 @@
             text-decoration: none;
             color: #667eea;
             font-size: 1.2em;
+        }
+
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .points-display .points-icon {
+            margin-right: 5px;
+        }
+
+        .points-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 2.5s;
+            display: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
         }
 
         .container {
@@ -165,10 +217,8 @@
             background-color: rgba(255, 255, 255, 0.95);
             color: #666;
             text-align: center;
-            padding: 15px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            padding: 20px;
+            margin-top: 40px;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -181,6 +231,20 @@
             .upload-form {
                 padding: 20px;
             }
+
+            .points-display {
+                position: relative;
+                right: auto;
+                top: auto;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+                font-size: 0.9em;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
@@ -188,7 +252,14 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>上传美女</h1>
+        <div class="points-display">
+            <span class="points-icon">💎</span>
+            <span id="pointsValue">0</span> 分
+        </div>
     </header>
+
+    <!-- Points notification -->
+    <div id="pointsNotification" class="points-notification"></div>
     
     <div class="container">
         <div class="upload-form">
@@ -202,6 +273,26 @@
                         placeholder="请输入图片URL地址（https://...）"
                         required
                     >
+                </div>
+
+                <div class="allowed-domains">
+                    <h3>📋 支持的图片来源：</h3>
+                    <ul>
+                        <li>eb118-file.cdn.bcebos.com</li>
+                        <li>*.myqcloud.com</li>
+                        <li>*.byteimg.com</li>
+                        <li>letmetry.cloud</li>
+                        <li>*.qpic.cn</li>
+                    </ul>
+                </div>
+
+                <div class="allowed-domains" style="background-color: #e8f5e9; border: 1px solid #4caf50;">
+                    <h3>💎 积分获取方式：</h3>
+                    <ul>
+                        <li>每日访问：+10 积分</li>
+                        <li>上传图片：+10 积分/张</li>
+                        <li>查看图片消费：-1 积分/张（3天内免费重看）</li>
+                    </ul>
                 </div>
 
                 <div class="preview-area" id="previewArea">
@@ -220,6 +311,36 @@
     </footer>
 
     <script>
+        // Initialize points system
+        const pointsInfo = PointsSystem.initialize();
+        const pointsValueElement = document.getElementById('pointsValue');
+        const pointsNotification = document.getElementById('pointsNotification');
+
+        // Update points display
+        function updatePointsDisplay() {
+            pointsValueElement.textContent = PointsSystem.getPoints();
+        }
+
+        // Show points notification
+        function showPointsNotification(message) {
+            pointsNotification.textContent = message;
+            pointsNotification.style.display = 'block';
+            
+            setTimeout(() => {
+                pointsNotification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize display
+        updatePointsDisplay();
+
+        // Show notifications for new user or daily visit
+        if (pointsInfo.isNewUser) {
+            showPointsNotification(`🎉 欢迎新用户！获得 ${PointsSystem.POINTS_CONFIG.NEW_USER} 积分`);
+        } else if (pointsInfo.dailyVisit.awarded) {
+            showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
+        }
+
         // NOTE: This validation logic is duplicated from url-validator.js for simplicity
         // since this HTML page uses inline JavaScript without a module bundler.
         // If you update these domains, also update url-validator.js to maintain consistency.
@@ -253,7 +374,13 @@
                 });
 
                 if (!isAllowed) {
-                    return { valid: false, error: '不支持的图片来源域名' };
+                    const supportedDomains = allowedDomains.map(domain => 
+                        domain.startsWith('.') ? `*${domain}` : domain
+                    ).join('、');
+                    return { 
+                        valid: false, 
+                        error: `不支持的图片来源。支持的域名：${supportedDomains}` 
+                    };
                 }
 
                 return { valid: true };
@@ -317,21 +444,42 @@
 
             // Disable submit button
             submitBtn.disabled = true;
-            submitBtn.textContent = '上传中...';
+            submitBtn.textContent = '检查中...';
 
             try {
-                // Insert into database
-                const response = await fetch(window.API_ENDPOINTS.MYSQL_INSERT, {
+                // Check if image URL already exists
+                const checkResponse = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        table: 'beauty_images',
-                        data: {
-                            image_url: url,
-                            created_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
-                        }
+                        sql: 'SELECT id FROM beauty_images WHERE image_url = ?',
+                        params: [url]
+                    })
+                });
+
+                const existingImages = await checkResponse.json();
+                
+                if (existingImages && existingImages.length > 0) {
+                    showMessage('⚠️ 该图片已存在，请勿重复上传', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '提交上传';
+                    return;
+                }
+
+                // Image doesn't exist, proceed with upload
+                submitBtn.textContent = '上传中...';
+                
+                // Insert into database
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sql: 'INSERT INTO beauty_images (image_url, created_at) VALUES (?, ?)',
+                        params: [url, new Date().toISOString().slice(0, 19).replace('T', ' ')]
                     })
                 });
 
@@ -341,8 +489,14 @@
 
                 const result = await response.json();
                 
-                if (result.insertId) {
-                    showMessage('上传成功！', 'success');
+                if (result.affectedRows > 0) {
+                    // Award upload points
+                    const newTotal = PointsSystem.awardUploadPoints();
+                    updatePointsDisplay();
+                    
+                    showMessage(`上传成功！获得 ${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE} 积分`, 'success');
+                    showPointsNotification(`🎁 上传奖励！+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE} 积分`);
+                    
                     uploadForm.reset();
                     previewArea.style.display = 'none';
                     
