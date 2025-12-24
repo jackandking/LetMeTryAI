@@ -13,8 +13,8 @@ const PointsSystem = (function() {
     };
 
     const POINTS_CONFIG = {
-        NEW_USER: 20,           // Initial points for new users
-        DAILY_VISIT: 10,        // Points for daily visit
+        NEW_USER: 3,           // Initial points for new users
+        DAILY_VISIT: 5,        // Points for daily visit
         UPLOAD_IMAGE: 10,       // Points for uploading an image
         VIEW_IMAGE: 1,          // Points to view a full image
         AD_FULL: 10,            // Points for watching full ad
