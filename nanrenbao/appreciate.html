@@ -7,6 +7,7 @@
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
+    <script src="points-system.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -47,6 +48,57 @@
             font-size: 1.2em;
         }
 
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .points-display .points-icon {
+            margin-right: 5px;
+        }
+
+        .points-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 2.5s;
+            display: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 20px auto;
@@ -64,7 +116,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
         }
 
         .gallery-item {
@@ -73,10 +125,18 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .gallery-item:hover {
             transform: translateY(-5px);
+        }
+
+        .gallery-item .image-wrapper {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
         }
 
         .gallery-item img {
@@ -84,6 +144,73 @@
             height: 300px;
             object-fit: cover;
             display: block;
+        }
+
+        .gallery-item .blur-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Modal for full image */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: zoomIn 0.3s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: translateY(-50%) scale(0.8); }
+            to { transform: translateY(-50%) scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
         }
 
         .gallery-item .info {
@@ -111,10 +238,8 @@
             background-color: rgba(255, 255, 255, 0.95);
             color: #666;
             text-align: center;
-            padding: 15px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            padding: 20px;
+            margin-top: 40px;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -124,8 +249,32 @@
                 gap: 10px;
             }
 
+            .gallery-item .image-wrapper {
+                height: 200px;
+            }
+
             .gallery-item img {
                 height: 200px;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+            }
+
+            .points-display {
+                position: relative;
+                right: auto;
+                top: auto;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+                font-size: 0.9em;
+            }
+
+            header h1 {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -134,12 +283,32 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>欣赏美女</h1>
+        <div class="points-display">
+            <span class="points-icon">💎</span>
+            <span id="pointsValue">0</span> 分
+        </div>
     </header>
+
+    <!-- Points notification -->
+    <div id="pointsNotification" class="points-notification"></div>
     
     <div class="container">
+        <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-size: 1.1em; font-weight: bold; color: #2e7d32; margin-bottom: 8px;">💎 积分说明</div>
+            <div style="font-size: 0.9em; color: #1b5e20; line-height: 1.6;">
+                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张<br>
+                <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
+            </div>
+        </div>
         <div id="loading">正在加载图片...</div>
         <div id="no-images">暂无图片，快去上传吧！</div>
         <div id="gallery" class="gallery"></div>
+    </div>
+
+    <!-- Modal for full image -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
     
     <footer>
@@ -147,6 +316,121 @@
     </footer>
 
     <script>
+        // Initialize points system
+        const pointsInfo = PointsSystem.initialize();
+        const pointsValueElement = document.getElementById('pointsValue');
+        const pointsNotification = document.getElementById('pointsNotification');
+
+        // Update points display
+        function updatePointsDisplay() {
+            pointsValueElement.textContent = PointsSystem.getPoints();
+        }
+
+        // Show points notification
+        function showPointsNotification(message) {
+            pointsNotification.textContent = message;
+            pointsNotification.style.display = 'block';
+            
+            setTimeout(() => {
+                pointsNotification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize display
+        updatePointsDisplay();
+
+        // Show notifications for new user or daily visit
+        if (pointsInfo.isNewUser) {
+            showPointsNotification(`🎉 欢迎新用户！获得 ${PointsSystem.POINTS_CONFIG.NEW_USER} 积分`);
+        } else if (pointsInfo.dailyVisit.awarded) {
+            showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        // Update blur overlay for unlocked image
+        function updateBlurOverlay(imageUrl) {
+            // Find the gallery item with this image URL
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                const img = item.querySelector('img');
+                if (img && img.src === imageUrl) {
+                    const blurOverlay = item.querySelector('.blur-overlay');
+                    if (blurOverlay) {
+                        const viewStatus = PointsSystem.canViewImage(imageUrl);
+                        if (!viewStatus.needsPayment) {
+                            // Update to unlocked state
+                            blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>`;
+                            blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
+                            blurOverlay.style.backdropFilter = 'none';
+                            blurOverlay.style.webkitBackdropFilter = 'none';
+                        }
+                    }
+                }
+            });
+        }
+
+        async function showModal(imageUrl) {
+            // Check if user can view the image
+            const viewStatus = PointsSystem.canViewImage(imageUrl);
+            
+            if (!viewStatus.canView) {
+                showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
+                // Show how to earn points with a delay
+                setTimeout(() => {
+                    showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
+                }, 3500);
+                return;
+            }
+
+            // Process the view (deduct points if needed)
+            const result = await PointsSystem.viewImage(imageUrl);
+            
+            if (!result.success) {
+                showPointsNotification(`❌ ${result.message}`);
+                return;
+            }
+
+            // Update points display
+            updatePointsDisplay();
+            
+            // Show notification about points spent
+            if (result.pointsSpent > 0) {
+                showPointsNotification(`💎 ${result.message}`);
+                // Update the thumbnail to remove blur
+                updateBlurOverlay(imageUrl);
+            }
+
+            // Show the modal
+            modal.style.display = 'block';
+            modalImg.src = imageUrl;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        closeBtn.onclick = closeModal;
+        
+        // Close modal when clicking outside the image
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
         // Load images from database
         async function loadImages() {
             const loading = document.getElementById('loading');
@@ -160,7 +444,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        sql: 'SELECT id, image_url, created_at FROM beauty_images ORDER BY created_at DESC',
+                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC',
                         params: []
                     })
                 });
@@ -170,20 +454,62 @@
 
                 if (data && data.length > 0) {
                     data.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'gallery-item';
-                        
-                        const img = document.createElement('img');
-                        img.src = item.image_url;
-                        img.alt = '美女图片';
-                        img.onerror = function() {
-                            // 图片加载失败时隐藏整个图片容器
-                            div.style.display = 'none';
-                            console.log('图片加载失败，已隐藏:', item.image_url);
-                        };
-                        
-                        div.appendChild(img);
-                        gallery.appendChild(div);
+                        try {
+                            const div = document.createElement('div');
+                            div.className = 'gallery-item';
+                            
+                            const imageWrapper = document.createElement('div');
+                            imageWrapper.className = 'image-wrapper';
+                            
+                            const img = document.createElement('img');
+                            img.src = item.image_url;
+                            img.alt = '美女图片';
+                            img.onerror = function() {
+                                // 图片加载失败时隐藏整个图片容器
+                                div.style.display = 'none';
+                                console.log('图片加载失败，已隐藏:', item.image_url);
+                            };
+                            
+                            const blurOverlay = document.createElement('div');
+                            blurOverlay.className = 'blur-overlay';
+                            
+                            // Check if image has been viewed
+                            try {
+                                const viewStatus = PointsSystem.canViewImage(item.image_url);
+                                const viewCount = item.view_count || 0;
+                                const viewCountText = viewCount > 0 ? `<div style="font-size: 0.7em; margin-top: 3px; opacity: 0.8;">🔥 ${viewCount}人已看</div>` : '';
+                                
+                                if (viewStatus.needsPayment) {
+                                    // Not viewed or expired - show cost with blur
+                                    blurOverlay.innerHTML = `<div>点击查看</div><div style="font-size: 0.8em; margin-top: 5px;">消费 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分</div>${viewCountText}`;
+                                    imageWrapper.appendChild(blurOverlay);
+                                } else {
+                                    // Already viewed - no blur, just show small indicator
+                                    blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>${viewCountText}`;
+                                    blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
+                                    blurOverlay.style.backdropFilter = 'none';
+                                    blurOverlay.style.webkitBackdropFilter = 'none';
+                                    imageWrapper.appendChild(blurOverlay);
+                                }
+                            } catch (err) {
+                                // Fallback to default display if check fails
+                                console.warn('查看状态检查失败:', err);
+                                blurOverlay.innerHTML = `<div>点击查看</div><div style="font-size: 0.8em; margin-top: 5px;">消费 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分</div>`;
+                                imageWrapper.appendChild(blurOverlay);
+                            }
+                            
+                            imageWrapper.appendChild(img);
+                            div.appendChild(imageWrapper);
+                            
+                            // Click to view full image
+                            div.onclick = function() {
+                                showModal(item.image_url);
+                            };
+                            
+                            gallery.appendChild(div);
+                        } catch (itemError) {
+                            console.error('创建图片项失败:', itemError, item);
+                        }
                     });
                 } else {
                     noImages.style.display = 'block';
