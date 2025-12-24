@@ -16,7 +16,9 @@ const PointsSystem = (function() {
         NEW_USER: 20,           // Initial points for new users
         DAILY_VISIT: 10,        // Points for daily visit
         UPLOAD_IMAGE: 10,       // Points for uploading an image
-        VIEW_IMAGE: 1           // Points to view a full image
+        VIEW_IMAGE: 1,          // Points to view a full image
+        AD_FULL: 10,            // Points for watching full ad
+        AD_PARTIAL: 3           // Points for partially watching ad
     };
 
     /**
@@ -126,6 +128,22 @@ const PointsSystem = (function() {
         const newTotal = addPoints(POINTS_CONFIG.UPLOAD_IMAGE);
         console.log(`Upload bonus: +${POINTS_CONFIG.UPLOAD_IMAGE} points. Total: ${newTotal}`);
         return newTotal;
+    }
+
+    /**
+     * Award points for watching advertisement
+     * @param {boolean} watchedFull - Whether user watched the full ad
+     * @returns {object} Result with points awarded and new total
+     */
+    function awardAdPoints(watchedFull) {
+        const pointsToAward = watchedFull ? POINTS_CONFIG.AD_FULL : POINTS_CONFIG.AD_PARTIAL;
+        const newTotal = addPoints(pointsToAward);
+        console.log(`Ad bonus (${watchedFull ? 'full' : 'partial'}): +${pointsToAward} points. Total: ${newTotal}`);
+        return {
+            pointsAwarded: pointsToAward,
+            newTotal: newTotal,
+            watchedFull: watchedFull
+        };
     }
 
     /**
@@ -334,6 +352,7 @@ const PointsSystem = (function() {
         getPoints: getPoints,
         addPoints: addPoints,
         awardUploadPoints: awardUploadPoints,
+        awardAdPoints: awardAdPoints,
         checkDailyVisit: checkDailyVisit,
         getUserInfo: getUserInfo,
         resetUser: resetUser,
