@@ -234,6 +234,34 @@
             display: none;
         }
 
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0 10px;
+        }
+
+        .watch-ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .watch-ad-btn:active {
+            transform: translateY(0);
+        }
+
+        .ad-buttons-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         footer {
             background-color: rgba(255, 255, 255, 0.95);
             color: #666;
@@ -296,9 +324,14 @@
         <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <div style="font-size: 1.1em; font-weight: bold; color: #2e7d32; margin-bottom: 8px;">💎 积分说明</div>
             <div style="font-size: 0.9em; color: #1b5e20; line-height: 1.6;">
-                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张<br>
+                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张 | 看广告+3~10分<br>
                 <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
             </div>
+        </div>
+        
+        <!-- Watch Ad Button -->
+        <div class="ad-buttons-container">
+            <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
         <div id="loading">正在加载图片...</div>
         <div id="no-images">暂无图片，快去上传吧！</div>
@@ -316,7 +349,57 @@
     </footer>
 
     <script>
-        // Initialize points system
+        // Check URL parameters for ad completion
+        function handleAdReturn() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const finishedAd = urlParams.get('finishedAd');
+            
+            if (finishedAd !== null) {
+                let pointsToAdd = 0;
+                let message = '';
+                
+                if (finishedAd === 'true') {
+                    // User watched full ad
+                    pointsToAdd = 10;
+                    message = '🎉 感谢观看完整广告！获得 10 积分';
+                } else {
+                    // User didn't finish ad
+                    pointsToAdd = 3;
+                    message = '👍 感谢观看！获得 3 积分';
+                }
+                
+                // Award points
+                PointsSystem.addPoints(pointsToAdd);
+                
+                // Update display
+                updatePointsDisplay();
+                
+                // Show notification
+                showPointsNotification(message);
+                
+                // Clean URL without page reload
+                const cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+
+        /**
+         * Shows advertisement for earning points
+         */
+        function showAdForPoints() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/appreciate",
+                });
+            } else {
+                // Fallback for testing in browser
+                console.log('Mini-program navigation not available');
+                showPointsNotification('⚠️ 广告功能仅在小程序中可用');
+            }
+        }
+
+        // Initialize points system and handle ad return
+        handleAdReturn();
         const pointsInfo = PointsSystem.initialize();
         const pointsValueElement = document.getElementById('pointsValue');
         const pointsNotification = document.getElementById('pointsNotification');
