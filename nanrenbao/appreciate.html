@@ -398,8 +398,7 @@
             }
         }
 
-        // Initialize points system and handle ad return
-        handleAdReturn();
+        // Initialize points system (don't handle ad return yet)
         const pointsInfo = PointsSystem.initialize();
         const pointsValueElement = document.getElementById('pointsValue');
         const pointsNotification = document.getElementById('pointsNotification');
@@ -603,8 +602,14 @@
             }
         }
 
-        // Load images when page loads
-        window.addEventListener('DOMContentLoaded', loadImages);
+        // Load images and handle ad return when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            // First, handle ad return to update points
+            handleAdReturn();
+            
+            // Then load images
+            loadImages();
+        });
     </script>
     
     <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
