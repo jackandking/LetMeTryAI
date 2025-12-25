@@ -118,11 +118,11 @@ describe('Back View Killer Upload Page', () => {
         expect(content).toContain('preview-container');
     });
 
-    it('should use url-validator for validation', () => {
+    it('should have inline URL validation', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
-        expect(content).toContain('src="url-validator.js"');
-        expect(content).toContain('URLValidator.isValidImageURL');
+        expect(content).toContain('function isValidImageURL');
+        expect(content).toContain('isValidImageURL(url)');
     });
 
     it('should check for duplicate images', () => {
