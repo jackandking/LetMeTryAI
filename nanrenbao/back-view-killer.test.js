@@ -191,3 +191,24 @@ describe('Back View Killer - SQL Parameter Format', () => {
         expect(uploadContent).toContain('params:');
     });
 });
+
+describe('Back View Killer - Database Initialization', () => {
+    it('should have database initialization page', () => {
+        const fs = require('fs');
+        const exists = fs.existsSync('./nanrenbao/init-back-view-killer-db.html');
+        expect(exists).toBe(true);
+    });
+
+    it('should have database initialization script', () => {
+        const fs = require('fs');
+        const exists = fs.existsSync('./nanrenbao/scripts/init-back-view-killer-db.js');
+        expect(exists).toBe(true);
+    });
+
+    it('initialization page should use centralized config', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/init-back-view-killer-db.html', 'utf8');
+        expect(content).toContain('src="../config.js"');
+        expect(content).toContain('window.API_ENDPOINTS.MYSQL_QUERY');
+    });
+});
