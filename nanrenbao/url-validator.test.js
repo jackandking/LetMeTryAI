@@ -8,7 +8,8 @@ describe('Beauty Image URL Validator', () => {
                 'https://example.myqcloud.com/photo.png',
                 'https://cdn.byteimg.com/avatar.gif',
                 'https://letmetry.cloud/images/beauty.jpg',
-                'https://img.qpic.cn/test.jpg'
+                'https://img.qpic.cn/test.jpg',
+                'https://cdn.klingai.com/test.jpg'
             ];
 
             validUrls.forEach(url => {
@@ -57,7 +58,9 @@ describe('Beauty Image URL Validator', () => {
                 'https://img.myqcloud.com/test.jpg',
                 'https://static.myqcloud.com/image.png',
                 'https://cdn.byteimg.com/photo.jpg',
-                'https://p1.qpic.cn/avatar.jpg'
+                'https://p1.qpic.cn/avatar.jpg',
+                'https://cdn.klingai.com/video.jpg',
+                'https://img.klingai.com/image.png'
             ];
 
             subdomainUrls.forEach(url => {
