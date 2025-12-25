@@ -59,7 +59,8 @@ describe('Upload Supported Domains Display', () => {
         '*.myqcloud.com',
         '*.byteimg.com',
         'letmetry.cloud',
-        '*.qpic.cn'
+        '*.qpic.cn',
+        '*.klingai.com'
       ];
       
       supportedDomains.forEach(domain => {
