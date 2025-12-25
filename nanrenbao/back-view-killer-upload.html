@@ -393,7 +393,7 @@
                     return false;
                 }
                 // Check if it looks like an image (has common image extension)
-                const path = urlObj.pathname.toLowerCase();
+                const path = urlObj.pathname;
                 const hasImageExt = path.match(/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$)/i);
                 return hasImageExt !== null;
             } catch (e) {
@@ -407,10 +407,22 @@
         const backPreview = document.getElementById('backPreview');
         const frontPreview = document.getElementById('frontPreview');
 
+        // Helper function to safely create image preview
+        function createImagePreview(url) {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = '预览';
+            img.onerror = function() {
+                this.parentElement.innerHTML = '<div class="no-preview">图片加载失败</div>';
+            };
+            return img;
+        }
+
         backImageInput.addEventListener('input', function() {
             const url = this.value.trim();
             if (url && isValidImageURL(url)) {
-                backPreview.innerHTML = `<img src="${url}" alt="背影预览" onerror="this.parentElement.innerHTML='<div class=\\'no-preview\\'>图片加载失败</div>'">`;
+                backPreview.innerHTML = '';
+                backPreview.appendChild(createImagePreview(url));
             } else {
                 backPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
             }
@@ -419,7 +431,8 @@
         frontImageInput.addEventListener('input', function() {
             const url = this.value.trim();
             if (url && isValidImageURL(url)) {
-                frontPreview.innerHTML = `<img src="${url}" alt="正面预览" onerror="this.parentElement.innerHTML='<div class=\\'no-preview\\'>图片加载失败</div>'">`;
+                frontPreview.innerHTML = '';
+                frontPreview.appendChild(createImagePreview(url));
             } else {
                 frontPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
             }

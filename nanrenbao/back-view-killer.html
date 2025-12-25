@@ -505,6 +505,16 @@
 
                 if (data && data.length > 0) {
                     data.forEach(item => {
+                        // Escape HTML attributes to prevent XSS
+                        const escapeHtml = (unsafe) => {
+                            return unsafe
+                                .replace(/&/g, "&amp;")
+                                .replace(/</g, "&lt;")
+                                .replace(/>/g, "&gt;")
+                                .replace(/"/g, "&quot;")
+                                .replace(/'/g, "&#039;");
+                        };
+
                         const flipCard = document.createElement('div');
                         flipCard.className = 'flip-card';
                         
@@ -512,19 +522,25 @@
                         const viewStatus = PointsSystem.canViewImage(viewKey);
                         const isUnlocked = !viewStatus.needsPayment;
 
+                        // Use escaped URLs for security
+                        const safeBackUrl = escapeHtml(item.back_image_url);
+                        const safeFrontUrl = escapeHtml(item.front_image_url);
+                        const safeClickCount = parseInt(item.click_count) || 0;
+                        const safeDaysLeft = parseInt(viewStatus.daysLeft) || 0;
+
                         flipCard.innerHTML = `
                             <div class="flip-card-inner">
                                 <div class="flip-card-front">
-                                    <img src="${item.back_image_url}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
+                                    <img src="${safeBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
                                     <div class="card-overlay">
                                         <div class="click-hint">👆 点击翻转看正面</div>
-                                        ${!isUnlocked ? `<div class="points-cost">消费 1 积分</div>` : `<div class="points-cost" style="color: #4caf50;">已解锁 ${viewStatus.daysLeft} 天</div>`}
-                                        ${item.click_count > 0 ? `<div class="popularity">🔥 ${item.click_count} 人已翻</div>` : ''}
+                                        ${!isUnlocked ? `<div class="points-cost">消费 1 积分</div>` : `<div class="points-cost" style="color: #4caf50;">已解锁 ${safeDaysLeft} 天</div>`}
+                                        ${safeClickCount > 0 ? `<div class="popularity">🔥 ${safeClickCount} 人已翻</div>` : ''}
                                     </div>
                                     ${!isUnlocked && PointsSystem.getPoints() < 1 ? '<div class="locked-overlay">🔒 积分不足</div>' : ''}
                                 </div>
                                 <div class="flip-card-back">
-                                    <img src="${item.front_image_url}" alt="正面" class="card-image">
+                                    <img src="${safeFrontUrl}" alt="正面" class="card-image">
                                     <div class="card-overlay">
                                         <div class="click-hint">💝 正面照片</div>
                                         <div class="popularity">再次点击可翻回背面</div>
