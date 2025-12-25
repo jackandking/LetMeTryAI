@@ -8,7 +8,6 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
-    <script src="url-validator.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -381,6 +380,27 @@
             showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
         }
 
+        // Simple URL validator
+        function isValidImageURL(url) {
+            if (!url || typeof url !== 'string') {
+                return false;
+            }
+            
+            try {
+                const urlObj = new URL(url);
+                // Check if it's HTTP or HTTPS
+                if (urlObj.protocol !== 'https:' && urlObj.protocol !== 'http:') {
+                    return false;
+                }
+                // Check if it looks like an image (has common image extension)
+                const path = urlObj.pathname.toLowerCase();
+                const hasImageExt = path.match(/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$)/i);
+                return hasImageExt !== null;
+            } catch (e) {
+                return false;
+            }
+        }
+
         // Preview images as user types
         const backImageInput = document.getElementById('backImageUrl');
         const frontImageInput = document.getElementById('frontImageUrl');
@@ -389,7 +409,7 @@
 
         backImageInput.addEventListener('input', function() {
             const url = this.value.trim();
-            if (url && URLValidator.isValidImageURL(url)) {
+            if (url && isValidImageURL(url)) {
                 backPreview.innerHTML = `<img src="${url}" alt="背影预览" onerror="this.parentElement.innerHTML='<div class=\\'no-preview\\'>图片加载失败</div>'">`;
             } else {
                 backPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
@@ -398,7 +418,7 @@
 
         frontImageInput.addEventListener('input', function() {
             const url = this.value.trim();
-            if (url && URLValidator.isValidImageURL(url)) {
+            if (url && isValidImageURL(url)) {
                 frontPreview.innerHTML = `<img src="${url}" alt="正面预览" onerror="this.parentElement.innerHTML='<div class=\\'no-preview\\'>图片加载失败</div>'">`;
             } else {
                 frontPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
@@ -416,12 +436,12 @@
             const frontImageUrl = frontImageInput.value.trim();
 
             // Validate URLs
-            if (!URLValidator.isValidImageURL(backImageUrl)) {
+            if (!isValidImageURL(backImageUrl)) {
                 showPointsNotification('❌ 背影图片链接格式不正确');
                 return;
             }
 
-            if (!URLValidator.isValidImageURL(frontImageUrl)) {
+            if (!isValidImageURL(frontImageUrl)) {
                 showPointsNotification('❌ 正面图片链接格式不正确');
                 return;
             }
