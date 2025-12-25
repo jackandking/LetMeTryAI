@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十大美女 - 男人宝</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        header .subtitle {
+            margin: 10px 0 0;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #ff6b6b;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        #loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            padding: 60px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .top10-gallery {
+            display: grid;
+            gap: 30px;
+            padding-bottom: 30px;
+        }
+
+        .top-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .top-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .ranking-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            z-index: 10;
+        }
+
+        .ranking-badge.top3 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.7);
+        }
+
+        .top-item .image-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .top-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .top-item .info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+            padding: 30px;
+            color: white;
+        }
+
+        .info-overlay .view-count {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .info-overlay .view-count .icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        #no-images {
+            text-align: center;
+            color: white;
+            font-size: 1.3em;
+            padding: 60px;
+            display: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-section h2 {
+            margin: 0 0 15px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2em;
+        }
+
+        .cta-section p {
+            margin: 0 0 25px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            color: white;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Modal for full image */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            max-width: 95%;
+            max-height: 95%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: zoomIn 0.3s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: translateY(-50%) scale(0.8); }
+            to { transform: translateY(-50%) scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #ff6b6b;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.98);
+            color: #666;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-back {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                display: block;
+                margin-bottom: 15px;
+            }
+
+            .top-item .image-container {
+                height: 350px;
+            }
+
+            .ranking-badge {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3em;
+                top: 15px;
+                left: 15px;
+            }
+
+            .info-overlay {
+                padding: 20px;
+            }
+
+            .info-overlay .view-count {
+                font-size: 1.1em;
+            }
+
+            .cta-section {
+                padding: 30px 20px;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5em;
+            }
+
+            .cta-button {
+                padding: 15px 40px;
+                font-size: 1.1em;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 15px;
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>🌟 十大美女 🌟</h1>
+        <p class="subtitle">最受欢迎的美女图片榜单</p>
+    </header>
+    
+    <div class="container">
+        <div id="loading">正在加载榜单...</div>
+        <div id="no-images">暂无榜单数据，敬请期待！</div>
+        <div id="top10Gallery" class="top10-gallery"></div>
+
+        <!-- Call to Action Section -->
+        <div class="cta-section" id="ctaSection" style="display: none;">
+            <h2>😍 想看更多美女？</h2>
+            <p>还有海量精选美女图片等你来欣赏！</p>
+            <a href="index.html" class="cta-button">🎯 立即前往主页</a>
+        </div>
+    </div>
+
+    <!-- Modal for full image -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 男人宝. 保留所有权利.</p>
+    </footer>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function showModal(imageUrl) {
+            modal.style.display = 'block';
+            modalImg.src = imageUrl;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        closeBtn.onclick = closeModal;
+        
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Load top 10 images from database
+        async function loadTop10Images() {
+            const loading = document.getElementById('loading');
+            const gallery = document.getElementById('top10Gallery');
+            const noImages = document.getElementById('no-images');
+            const ctaSection = document.getElementById('ctaSection');
+
+            try {
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC LIMIT 10',
+                        params: []
+                    })
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data && data.length > 0) {
+                    data.forEach((item, index) => {
+                        try {
+                            const div = document.createElement('div');
+                            div.className = 'top-item';
+                            
+                            const rankingBadge = document.createElement('div');
+                            rankingBadge.className = 'ranking-badge' + (index < 3 ? ' top3' : '');
+                            rankingBadge.textContent = index + 1;
+                            
+                            const imageContainer = document.createElement('div');
+                            imageContainer.className = 'image-container';
+                            
+                            const img = document.createElement('img');
+                            img.src = item.image_url;
+                            img.alt = `第${index + 1}名美女`;
+                            img.onerror = function() {
+                                div.style.display = 'none';
+                                console.log('图片加载失败，已隐藏:', item.image_url);
+                            };
+                            
+                            const infoOverlay = document.createElement('div');
+                            infoOverlay.className = 'info-overlay';
+                            
+                            const viewCount = item.view_count || 0;
+                            infoOverlay.innerHTML = `
+                                <div class="view-count">
+                                    <span class="icon">🔥</span>
+                                    ${viewCount} 人已欣赏
+                                </div>
+                            `;
+                            
+                            imageContainer.appendChild(img);
+                            imageContainer.appendChild(infoOverlay);
+                            
+                            div.appendChild(rankingBadge);
+                            div.appendChild(imageContainer);
+                            
+                            // Click to view full image
+                            div.onclick = function() {
+                                showModal(item.image_url);
+                            };
+                            
+                            gallery.appendChild(div);
+                        } catch (itemError) {
+                            console.error('创建图片项失败:', itemError, item);
+                        }
+                    });
+
+                    // Show CTA section after images
+                    ctaSection.style.display = 'block';
+                } else {
+                    noImages.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading top 10 images:', error);
+                loading.textContent = '加载失败，请稍后重试';
+            }
+        }
+
+        // Load images when page loads
+        window.addEventListener('DOMContentLoaded', loadTop10Images);
+    </script>
+    
+    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
