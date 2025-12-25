@@ -8,7 +8,8 @@ export const ALLOWED_DOMAINS = [
     '.myqcloud.com',
     '.byteimg.com',
     'letmetry.cloud',
-    '.qpic.cn'
+    '.qpic.cn',
+    '.klingai.com'
 ];
 
 /**
