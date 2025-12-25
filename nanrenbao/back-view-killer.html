@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背影杀 - 男人宝</title>
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script src="points-system.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2em;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            text-decoration: none;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .upload-btn {
+            position: absolute;
+            right: 120px;
+            top: 20px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .points-display .points-icon {
+            margin-right: 5px;
+        }
+
+        .points-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 2.5s;
+            display: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-box .title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .info-box .content {
+            font-size: 0.9em;
+            color: #1b5e20;
+            line-height: 1.6;
+        }
+
+        #loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding-bottom: 20px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .flip-card-front {
+            background: white;
+        }
+
+        .flip-card-back {
+            background: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+            padding: 20px;
+            color: white;
+        }
+
+        .click-hint {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .points-cost {
+            font-size: 0.9em;
+            color: #ffd700;
+        }
+
+        .popularity {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .locked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        #no-images {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+            display: none;
+        }
+
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0 10px;
+        }
+
+        .watch-ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .ad-buttons-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .flip-card {
+                height: 350px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .upload-btn {
+                position: relative;
+                right: auto;
+                top: auto;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+                font-size: 0.8em;
+            }
+
+            .points-display {
+                position: relative;
+                right: auto;
+                top: auto;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="nav-back">← 返回</a>
+        <h1>背影杀 💃</h1>
+        <a href="back-view-killer-upload.html" class="upload-btn">📤 上传</a>
+        <div class="points-display">
+            <span class="points-icon">💎</span>
+            <span id="pointsValue">0</span> 分
+        </div>
+    </header>
+
+    <div id="pointsNotification" class="points-notification"></div>
+    
+    <div class="container">
+        <div class="info-box">
+            <div class="title">💎 玩法说明</div>
+            <div class="content">
+                <strong>查看正面：</strong>点击背影消费1积分翻转看正面，3天内免费重看<br>
+                <strong>赚取积分：</strong>上传背影杀+20分 | 每日访问+5分 | 看广告+3~10分
+            </div>
+        </div>
+        
+        <div class="ad-buttons-container">
+            <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
+        </div>
+
+        <div id="loading">正在加载...</div>
+        <div id="no-images">暂无内容，快去上传吧！</div>
+        <div id="gallery" class="gallery"></div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 男人宝. 保留所有权利.</p>
+    </footer>
+
+    <script>
+        // Check URL parameters for ad completion
+        function handleAdReturn() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const finishedAd = urlParams.get('finishedAd');
+            
+            if (finishedAd !== null) {
+                let pointsToAdd = 0;
+                let message = '';
+                
+                if (finishedAd === 'true') {
+                    pointsToAdd = 10;
+                    message = '🎉 感谢观看完整广告！获得 10 积分';
+                } else {
+                    pointsToAdd = 3;
+                    message = '👍 感谢观看！获得 3 积分';
+                }
+                
+                PointsSystem.addPoints(pointsToAdd);
+                updatePointsDisplay();
+                showPointsNotification(message);
+                
+                const cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+
+        function showAdForPoints() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/back-view-killer",
+                });
+            } else {
+                console.log('Mini-program navigation not available');
+                showPointsNotification('⚠️ 广告功能仅在小程序中可用');
+            }
+        }
+
+        const pointsInfo = PointsSystem.initialize();
+        const pointsValueElement = document.getElementById('pointsValue');
+        const pointsNotification = document.getElementById('pointsNotification');
+
+        function updatePointsDisplay() {
+            pointsValueElement.textContent = PointsSystem.getPoints();
+        }
+
+        function showPointsNotification(message) {
+            pointsNotification.textContent = message;
+            pointsNotification.style.display = 'block';
+            
+            setTimeout(() => {
+                pointsNotification.style.display = 'none';
+            }, 3000);
+        }
+
+        updatePointsDisplay();
+
+        if (pointsInfo.isNewUser) {
+            showPointsNotification(`🎉 欢迎新用户！获得 ${PointsSystem.POINTS_CONFIG.NEW_USER} 积分`);
+        } else if (pointsInfo.dailyVisit.awarded) {
+            showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
+        }
+
+        // Track flipped cards using image pair IDs
+        const flippedCards = new Set();
+
+        async function flipCard(cardElement, imageId, backImageUrl) {
+            if (flippedCards.has(imageId)) {
+                // Already flipped, just toggle display
+                cardElement.classList.toggle('flipped');
+                return;
+            }
+
+            // Check if user can view (has points and not already unlocked)
+            const viewKey = `back_view_${imageId}`;
+            const viewStatus = PointsSystem.canViewImage(viewKey);
+            
+            if (!viewStatus.canView) {
+                showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看正面`);
+                setTimeout(() => {
+                    showPointsNotification(`💡 获取积分：看广告赚3~10分 | 上传背影杀+20分`);
+                }, 3500);
+                return;
+            }
+
+            // Process the view (deduct points if needed)
+            const result = await PointsSystem.viewImage(viewKey);
+            
+            if (!result.success) {
+                showPointsNotification(`❌ ${result.message}`);
+                return;
+            }
+
+            // Update points display
+            updatePointsDisplay();
+            
+            if (result.pointsSpent > 0) {
+                showPointsNotification(`💎 消费 ${result.pointsSpent} 积分查看正面`);
+            }
+
+            // Increment click count in database
+            try {
+                await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sql: 'UPDATE back_view_images SET click_count = click_count + 1 WHERE id = ?',
+                        params: [imageId]
+                    })
+                });
+            } catch (error) {
+                console.error('Failed to update click count:', error);
+            }
+
+            // Flip the card
+            cardElement.classList.add('flipped');
+            flippedCards.add(imageId);
+            
+            // Remove locked overlay if present
+            const lockedOverlay = cardElement.querySelector('.locked-overlay');
+            if (lockedOverlay) {
+                lockedOverlay.remove();
+            }
+        }
+
+        async function loadImages() {
+            const loading = document.getElementById('loading');
+            const gallery = document.getElementById('gallery');
+            const noImages = document.getElementById('no-images');
+
+            try {
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images ORDER BY click_count DESC, created_at DESC',
+                        params: []
+                    })
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        // Escape HTML attributes to prevent XSS
+                        const escapeHtml = (unsafe) => {
+                            return unsafe
+                                .replace(/&/g, "&amp;")
+                                .replace(/</g, "&lt;")
+                                .replace(/>/g, "&gt;")
+                                .replace(/"/g, "&quot;")
+                                .replace(/'/g, "&#039;");
+                        };
+
+                        const flipCard = document.createElement('div');
+                        flipCard.className = 'flip-card';
+                        
+                        const viewKey = `back_view_${item.id}`;
+                        const viewStatus = PointsSystem.canViewImage(viewKey);
+                        const isUnlocked = !viewStatus.needsPayment;
+
+                        // Use escaped URLs for security
+                        const safeBackUrl = escapeHtml(item.back_image_url);
+                        const safeFrontUrl = escapeHtml(item.front_image_url);
+                        const safeClickCount = parseInt(item.click_count) || 0;
+                        const safeDaysLeft = parseInt(viewStatus.daysLeft) || 0;
+
+                        flipCard.innerHTML = `
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="${safeBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
+                                    <div class="card-overlay">
+                                        <div class="click-hint">👆 点击翻转看正面</div>
+                                        ${!isUnlocked ? `<div class="points-cost">消费 1 积分</div>` : `<div class="points-cost" style="color: #4caf50;">已解锁 ${safeDaysLeft} 天</div>`}
+                                        ${safeClickCount > 0 ? `<div class="popularity">🔥 ${safeClickCount} 人已翻</div>` : ''}
+                                    </div>
+                                    ${!isUnlocked && PointsSystem.getPoints() < 1 ? '<div class="locked-overlay">🔒 积分不足</div>' : ''}
+                                </div>
+                                <div class="flip-card-back">
+                                    <img src="${safeFrontUrl}" alt="正面" class="card-image">
+                                    <div class="card-overlay">
+                                        <div class="click-hint">💝 正面照片</div>
+                                        <div class="popularity">再次点击可翻回背面</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        flipCard.onclick = function() {
+                            flipCard(this, item.id, item.back_image_url);
+                        };
+
+                        gallery.appendChild(flipCard);
+                    });
+                } else {
+                    noImages.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+                loading.textContent = '加载失败，请稍后重试';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            handleAdReturn();
+            loadImages();
+        });
+    </script>
+    
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
