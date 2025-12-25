@@ -109,11 +109,13 @@ async function main() {
 
 // Run in Node.js environment
 if (typeof module !== 'undefined' && require.main === module) {
-    // For Node.js, we need to use node-fetch
-    const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-    globalThis.fetch = fetch;
-    
-    main().catch(error => {
+    // Import node-fetch once at the top level
+    (async () => {
+        const { default: fetch } = await import('node-fetch');
+        globalThis.fetch = fetch;
+        
+        await main();
+    })().catch(error => {
         console.error('Fatal error:', error);
         process.exit(1);
     });

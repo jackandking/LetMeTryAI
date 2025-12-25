@@ -128,7 +128,8 @@ describe('Back View Killer Upload Page', () => {
     it('should check for duplicate images', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
-        expect(content).toContain('SELECT id FROM back_view_images WHERE');
+        expect(content).toContain('SELECT id, back_image_url, front_image_url FROM back_view_images WHERE');
+        expect(content).toContain('IN (?, ?)');
         expect(content).toContain('图片已存在');
     });
 
