@@ -437,37 +437,38 @@
             submitBtn.textContent = '正在上传...';
 
             try {
-                // Check if back image already exists
-                const checkBackResponse = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                // Check if either image already exists in the database
+                // We check if backImageUrl or frontImageUrl exists as either back_image_url or front_image_url
+                const checkResponse = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        sql: 'SELECT id FROM back_view_images WHERE back_image_url = ? OR front_image_url = ?',
-                        params: [backImageUrl, backImageUrl]
+                        sql: 'SELECT id, back_image_url, front_image_url FROM back_view_images WHERE back_image_url IN (?, ?) OR front_image_url IN (?, ?)',
+                        params: [backImageUrl, frontImageUrl, backImageUrl, frontImageUrl]
                     })
                 });
 
-                const existingBack = await checkBackResponse.json();
-                if (existingBack && existingBack.length > 0) {
-                    showPointsNotification('❌ 背影图片已存在，请上传其他图片');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '📤 提交上传（获得 20 积分）';
-                    return;
-                }
-
-                // Check if front image already exists
-                const checkFrontResponse = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        sql: 'SELECT id FROM back_view_images WHERE back_image_url = ? OR front_image_url = ?',
-                        params: [frontImageUrl, frontImageUrl]
-                    })
-                });
-
-                const existingFront = await checkFrontResponse.json();
-                if (existingFront && existingFront.length > 0) {
-                    showPointsNotification('❌ 正面图片已存在，请上传其他图片');
+                const existing = await checkResponse.json();
+                if (existing && existing.length > 0) {
+                    // Determine which image is duplicate
+                    const isDuplicateBack = existing.some(row => 
+                        row.back_image_url === backImageUrl || row.front_image_url === backImageUrl
+                    );
+                    const isDuplicateFront = existing.some(row => 
+                        row.back_image_url === frontImageUrl || row.front_image_url === frontImageUrl
+                    );
+                    
+                    let message = '❌ ';
+                    if (isDuplicateBack && isDuplicateFront) {
+                        message += '背影和正面图片都已存在';
+                    } else if (isDuplicateBack) {
+                        message += '背影图片已存在';
+                    } else {
+                        message += '正面图片已存在';
+                    }
+                    message += '，请上传其他图片';
+                    
+                    showPointsNotification(message);
                     submitBtn.disabled = false;
                     submitBtn.textContent = '📤 提交上传（获得 20 积分）';
                     return;
