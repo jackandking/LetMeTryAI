@@ -388,15 +388,25 @@
          * Shows advertisement for earning points
          */
         function showAdForPoints() {
-            if (typeof ks !== 'undefined' && ks.navigateTo) {
-                ks.navigateTo({
-                    url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/appreciate",
-                });
-            } else {
-                // Fallback for testing in browser
-                console.log('Mini-program navigation not available');
-                showPointsNotification('⚠️ 广告功能仅在小程序中可用');
-            }
+                const urlParams = new URLSearchParams(window.location.search);
+                const debugMode = urlParams.get('debug') === 'true';
+                if (debugMode) {
+                    // In non-miniapp debug mode, directly award full ad points
+                    PointsSystem.addPoints(PointsSystem.POINTS_CONFIG.AD_FULL);
+                    updatePointsDisplay();
+                    showPointsNotification(`🎉 Debug 模式：已获得 ${PointsSystem.POINTS_CONFIG.AD_FULL} 积分`);
+                    return;
+                }
+
+                if (typeof ks !== 'undefined' && ks.navigateTo) {
+                    ks.navigateTo({
+                        url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/appreciate",
+                    });
+                } else {
+                    // Fallback for testing in browser
+                    console.log('Mini-program navigation not available');
+                    showPointsNotification('⚠️ 广告功能仅在小程序中可用');
+                }
         }
 
         // Initialize points system (don't handle ad return yet)
