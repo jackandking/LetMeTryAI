@@ -321,6 +321,27 @@
         .delete-btn:hover {
             background: rgba(211, 47, 47, 0.08);
         }
+        .delete-x {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-x:hover {
+            background: rgba(0,0,0,0.7);
+        }
     </style>
 </head>
 <body>
@@ -463,20 +484,34 @@
         function updateBlurOverlay(imageUrl) {
             // Find the gallery item with this image URL
             const galleryItems = document.querySelectorAll('.gallery-item');
+            function normalize(u) {
+                try {
+                    const o = new URL(u, window.location.origin);
+                    o.search = '';
+                    return o.href.replace(/\/$/, '');
+                } catch (e) {
+                    return (u || '').split('?')[0].replace(/\/$/, '');
+                }
+            }
+
+            const target = normalize(imageUrl);
             galleryItems.forEach(item => {
                 const img = item.querySelector('img');
-                if (img && img.src === imageUrl) {
-                    const blurOverlay = item.querySelector('.blur-overlay');
-                    if (blurOverlay) {
-                        const viewStatus = PointsSystem.canViewImage(imageUrl);
-                        if (!viewStatus.needsPayment) {
-                            // Update to unlocked state
-                            blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>`;
-                            blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
-                            blurOverlay.style.backdropFilter = 'none';
-                            blurOverlay.style.webkitBackdropFilter = 'none';
-                        }
-                    }
+                if (!img) return;
+                const src = normalize(img.src);
+                // consider match if normalized URLs equal or one contains the other (handle truncated/params)
+                const matched = src === target || src.startsWith(target) || target.startsWith(src) || src.includes(target) || target.includes(src);
+                if (!matched) return;
+
+                const blurOverlay = item.querySelector('.blur-overlay');
+                if (!blurOverlay) return;
+                const viewStatus = PointsSystem.canViewImage(imageUrl);
+                if (!viewStatus.needsPayment) {
+                    // Update to unlocked state
+                    blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>`;
+                    blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
+                    blurOverlay.style.backdropFilter = 'none';
+                    blurOverlay.style.webkitBackdropFilter = 'none';
                 }
             });
         }
@@ -614,39 +649,28 @@
                                 imageWrapper.appendChild(img);
                                 div.appendChild(imageWrapper);
 
-                                // Info area (non-obtrusive controls)
-                                const info = document.createElement('div');
-                                info.className = 'info';
-
-                                // Small delete button (does not overlay image)
-                                const deleteBtn = document.createElement('button');
-                                deleteBtn.className = 'delete-btn';
-                                deleteBtn.textContent = '删除 (-' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 分)';
-                                deleteBtn.title = '标记为删除（逻辑删除，会消耗积分）';
-
-                                // Prevent gallery item click (open modal) when clicking delete
-                                deleteBtn.onclick = async function(e) {
+                                // Small top-right delete X (non-obtrusive)
+                                const deleteX = document.createElement('button');
+                                deleteX.className = 'delete-x';
+                                deleteX.textContent = '✕';
+                                deleteX.title = '标记删除（消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分）';
+                                deleteX.onclick = async function(e) {
                                     e.stopPropagation();
                                     const ok = window.confirm('确认消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分将该图片标记为删除吗？');
                                     if (!ok) return;
-
-                                    // Call deleteImage and handle response
                                     try {
                                         const res = await PointsSystem.deleteImage(item.image_url);
                                         updatePointsDisplay();
                                         showPointsNotification(res.message || (res.success ? '已标记为删除' : '删除失败'));
-                                        if (res.success) {
-                                            // Hide the item from gallery after logical delete
-                                            div.style.display = 'none';
-                                        }
+                                        if (res.success) div.style.display = 'none';
                                     } catch (err) {
                                         console.error('删除请求异常:', err);
                                         showPointsNotification('删除失败，请稍后重试');
                                     }
                                 };
 
-                                info.appendChild(deleteBtn);
-                                div.appendChild(info);
+                                // append delete X to image wrapper so it doesn't cover the image center
+                                imageWrapper.appendChild(deleteX);
 
                                 // Click to view full image
                                 div.onclick = function() {
