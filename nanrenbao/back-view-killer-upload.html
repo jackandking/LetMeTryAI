@@ -385,17 +385,17 @@
             if (!url || typeof url !== 'string') {
                 return false;
             }
-            
             try {
                 const urlObj = new URL(url);
-                // Check if it's HTTP or HTTPS
-                if (urlObj.protocol !== 'https:' && urlObj.protocol !== 'http:') {
+                // 只校验 https 协议
+                if (urlObj.protocol !== 'https:') {
                     return false;
                 }
-                // Check if it looks like an image (has common image extension)
-                const path = urlObj.pathname;
-                const hasImageExt = path.match(/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$)/i);
-                return hasImageExt !== null;
+                // 只要路径中包含常见图片扩展名即可（允许带参数）
+                if (!/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$|&)/i.test(urlObj.pathname + urlObj.search)) {
+                    return false;
+                }
+                return true;
             } catch (e) {
                 return false;
             }
