@@ -8,6 +8,7 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
+        <script src="harem.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -456,40 +457,44 @@
         }
 
         async function showModal(imageUrl) {
+            // 后宫激活后，自动收录图片且无需再花积分
+            if (window.isHaremActivated && window.isHaremActivated()) {
+                if (window.addHaremImage) window.addHaremImage(imageUrl);
+                updateBlurOverlay(imageUrl);
+                modal.style.display = 'block';
+                modalImg.src = imageUrl;
+                document.body.style.overflow = 'hidden';
+                return;
+            }
+
             // Check if user can view the image
             const viewStatus = PointsSystem.canViewImage(imageUrl);
-            
             if (!viewStatus.canView) {
                 showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
-                // Show how to earn points with a delay
                 setTimeout(() => {
                     showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
                 }, 3500);
                 return;
             }
-
             // Process the view (deduct points if needed)
             const result = await PointsSystem.viewImage(imageUrl);
-            
             if (!result.success) {
                 showPointsNotification(`❌ ${result.message}`);
                 return;
             }
-
+            // 自动收录到后宫（如果已激活）
+            if (window.isHaremActivated && window.isHaremActivated()) {
+                if (window.addHaremImage) window.addHaremImage(imageUrl);
+            }
             // Update points display
             updatePointsDisplay();
-            
-            // Show notification about points spent
             if (result.pointsSpent > 0) {
                 showPointsNotification(`💎 ${result.message}`);
-                // Update the thumbnail to remove blur
                 updateBlurOverlay(imageUrl);
             }
-
-            // Show the modal
             modal.style.display = 'block';
             modalImg.src = imageUrl;
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
