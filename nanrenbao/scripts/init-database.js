@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs/promises';
+import path from 'path';
 
 async function initDatabase() {
   try {
     // 读取 SQL 文件
-    const sqlPath = path.join(__dirname, '../database-schema.sql');
-    const sql = fs.readFileSync(sqlPath, 'utf-8');
+    const sqlPath = path.join(process.cwd(), 'nanrenbao', 'database-schema.sql');
+    const sql = await fs.readFile(sqlPath, 'utf-8');
 
     console.log('📝 Executing database-schema.sql...');
     console.log('SQL Content:');
@@ -23,15 +23,15 @@ async function initDatabase() {
 
     const result = await response.json();
 
-    if (result.success) {
-      console.log('✅ Database initialized successfully!');
+    if (response.ok) {
+      console.log('✅ Database initialized (HTTP OK). Response:');
       console.log(JSON.stringify(result, null, 2));
     } else {
-      console.error('❌ Failed to initialize database:', result.error);
+      console.error('❌ Failed to initialize database (HTTP error):', result && result.error ? result.error : result);
       process.exit(1);
     }
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ Error:', error && error.message ? error.message : error);
     process.exit(1);
   }
 }

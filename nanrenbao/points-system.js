@@ -17,6 +17,7 @@ const PointsSystem = (function() {
         DAILY_VISIT: 5,        // Points for daily visit
         UPLOAD_IMAGE: 10,       // Points for uploading an image
         VIEW_IMAGE: 1,          // Points to view a full image
+        DELETE_IMAGE: 10,      // Points cost to mark an image as deleted
         AD_FULL: 10,            // Points for watching full ad
         AD_PARTIAL: 3           // Points for partially watching ad
     };
@@ -336,6 +337,131 @@ const PointsSystem = (function() {
     }
 
     /**
+     * Mark an image as deleted in the database (logical delete)
+     * @param {string} imageUrl - Image URL to mark deleted
+     * @returns {Promise<object>} DB response
+     */
+    async function markImageDeletedInDB(imageUrl) {
+        const API_ENDPOINTS = window.API_ENDPOINTS || {
+            MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+        };
+
+        // First try exact-match update
+        let response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sql: 'UPDATE beauty_images SET deleted = 1 WHERE image_url = ?',
+                params: [imageUrl]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to mark image deleted (HTTP ${response.status})`);
+        }
+
+        const data = await response.json();
+
+        // If update affected no rows, try a fallback: match by prefix (first 255 chars)
+        const affected = data && (data.affectedRows || data.changedRows || 0);
+        if (affected > 0) {
+            console.log(`Marked deleted in DB for ${imageUrl} (exact match)`);
+            return data;
+        }
+
+        // Fallback: try to find by prefix (handles long URLs/truncation)
+        const prefix = imageUrl.slice(0, 255);
+        response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sql: 'SELECT id, image_url FROM beauty_images WHERE image_url LIKE ? LIMIT 1',
+                params: [prefix + '%']
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to search image by prefix (HTTP ${response.status})`);
+        }
+
+        const rows = await response.json();
+        if (Array.isArray(rows) && rows.length > 0) {
+            const id = rows[0].id;
+            // Update by id
+            const updResp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sql: 'UPDATE beauty_images SET deleted = 1 WHERE id = ?',
+                    params: [id]
+                })
+            });
+
+            if (!updResp.ok) {
+                throw new Error(`Failed to mark image deleted by id (HTTP ${updResp.status})`);
+            }
+
+            const updResult = await updResp.json();
+            const updAffected = updResult && (updResult.affectedRows || updResult.changedRows || 0);
+            if (updAffected > 0) {
+                console.log(`Marked deleted in DB for ${imageUrl} (matched by prefix, id=${id})`);
+                return updResult;
+            }
+        }
+
+        throw new Error('No matching image found to mark deleted');
+    }
+
+    /**
+     * Request to logically delete an image by marking it deleted in DB and deducting points.
+     * Does not remove the image file or change front-end display by itself.
+     * @param {string} imageUrl - Image URL to delete
+     * @returns {object} {success: boolean, pointsSpent: number, newTotal: number, message: string}
+     */
+    async function deleteImage(imageUrl) {
+        const cost = POINTS_CONFIG.DELETE_IMAGE;
+
+        const currentPoints = getPoints();
+        if (currentPoints < cost) {
+            return {
+                success: false,
+                pointsSpent: 0,
+                newTotal: currentPoints,
+                message: '积分不足，无法删除图片'
+            };
+        }
+
+        // Deduct points first (optimistic)
+        const newTotal = addPoints(-cost);
+
+        try {
+            await markImageDeletedInDB(imageUrl);
+            return {
+                success: true,
+                pointsSpent: cost,
+                newTotal: newTotal,
+                message: `已消耗 ${cost} 积分，图片已标记为删除`
+            };
+        } catch (error) {
+            console.error('Failed to mark image deleted in DB:', error);
+            // refund points on failure
+            addPoints(cost);
+            return {
+                success: false,
+                pointsSpent: 0,
+                newTotal: getPoints(),
+                message: '删除失败，请稍后重试'
+            };
+        }
+    }
+
+    /**
      * Check if image has been viewed
      * @param {string} imageUrl - Image URL to check
      * @returns {boolean} True if viewed within 3 days
@@ -358,6 +484,7 @@ const PointsSystem = (function() {
         resetUser: resetUser,
         canViewImage: canViewImage,
         viewImage: viewImage,
+        deleteImage: deleteImage,
         hasViewedImage: hasViewedImage,
         POINTS_CONFIG: POINTS_CONFIG
     };
