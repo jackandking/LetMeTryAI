@@ -20,10 +20,33 @@ function getHaremImages() {
 // 添加图片到后宫
 function addHaremImage(url) {
   let imgs = getHaremImages();
-  if (!imgs.includes(url)) {
-    imgs.push(url);
-    localStorage.setItem('haremImages', JSON.stringify(imgs));
+  const cap = getHaremCapacity();
+  if (imgs.includes(url)) return true;
+  if (imgs.length >= cap) {
+    // Capacity full: do not add automatically
+    console.log('Harem full, not adding:', url);
+    return false;
   }
+  // add newest items to front so newcomers appear first
+  imgs.unshift(url);
+  localStorage.setItem('haremImages', JSON.stringify(imgs));
+  return true;
+}
+
+// Capacity helpers
+function getHaremCapacity() {
+  const v = localStorage.getItem('haremCapacity');
+  return v ? parseInt(v, 10) : 0;
+}
+
+function setHaremCapacity(n) {
+  localStorage.setItem('haremCapacity', String(n));
+}
+
+function increaseHaremCapacity(by) {
+  const inc = by || 1;
+  const current = getHaremCapacity();
+  setHaremCapacity(current + inc);
 }
 
 // 渲染图片列表
@@ -31,26 +54,47 @@ function renderHaremImages() {
   const list = document.getElementById('harem-images');
   const empty = document.getElementById('harem-empty');
   const imgs = getHaremImages();
+  const capEl = document.getElementById('harem-capacity');
+  const expandBtn = document.getElementById('harem-expand');
+  const cap = getHaremCapacity();
   list.innerHTML = '';
   if (imgs.length === 0) {
     empty.style.display = '';
+    if (capEl) capEl.textContent = `0 / ${cap}`;
     return;
   }
   empty.style.display = 'none';
   imgs.forEach(url => {
     const img = document.createElement('img');
     img.src = url;
+    img.className = 'harem-thumb';
+    img.onclick = function() { if (window.showFullImage) window.showFullImage(url); };
     list.appendChild(img);
   });
+  if (capEl) capEl.textContent = `${imgs.length} / ${cap}`;
+  if (expandBtn) {
+    expandBtn.onclick = function() {
+      if (typeof PointsSystem === 'undefined') { alert('积分系统未加载'); return; }
+      const pts = PointsSystem.getPoints();
+      if (pts < 1) { if (typeof showPointsNotification === 'function') showPointsNotification('积分不足，扩容需要 1 分'); else alert('积分不足，扩容需要 1 分'); return; }
+      // immediate apply (no confirmation)
+      PointsSystem.addPoints(-1);
+      increaseHaremCapacity(1);
+      renderHaremImages();
+      if (window.updatePointsDisplay) window.updatePointsDisplay();
+      if (typeof showPointsNotification === 'function') showPointsNotification('扩容成功！'); else alert('扩容成功！');
+    };
+  }
 }
 
 // 激活按钮逻辑
 function setupActivateBtn() {
   const btn = document.getElementById('activate-harem');
   if (isHaremActivated()) {
-    btn.textContent = '已激活';
-    btn.disabled = true;
-    document.getElementById('harem-desc').textContent = '已激活：您在本站看到的美女图片都会自动收录在这里。';
+    // hide activation UI when already activated
+    if (btn) btn.style.display = 'none';
+    const desc = document.getElementById('harem-desc');
+    if (desc) desc.style.display = 'none';
   } else {
     btn.disabled = false;
     btn.onclick = function() {
@@ -66,11 +110,15 @@ function setupActivateBtn() {
       if (confirm('确定花50积分激活“我的后宫”功能？')) {
         PointsSystem.addPoints(-50);
         activateHarem();
-        btn.textContent = '已激活';
-        btn.disabled = true;
-        document.getElementById('harem-desc').textContent = '已激活：您在本站看到的美女图片都会自动收录在这里。';
+        // set default capacity immediately
+        const cap = getHaremCapacity();
+        if (!cap || cap <= 0) setHaremCapacity(10);
+        // hide activation UI
+        if (btn) btn.style.display = 'none';
+        const desc = document.getElementById('harem-desc');
+        if (desc) desc.style.display = 'none';
         renderHaremImages();
-        alert('激活成功！已扣除50积分。');
+        if (typeof showPointsNotification === 'function') showPointsNotification('激活成功！已扣除50积分。'); else alert('激活成功！已扣除50积分。');
       }
     };
   }
@@ -78,6 +126,11 @@ function setupActivateBtn() {
 
 document.addEventListener('DOMContentLoaded', function() {
   setupActivateBtn();
+  // Ensure capacity default when activated
+  if (isHaremActivated()) {
+    const cap = getHaremCapacity();
+    if (!cap || cap <= 0) setHaremCapacity(10);
+  }
   renderHaremImages();
 });
 
