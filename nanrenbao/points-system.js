@@ -419,6 +419,57 @@ const PointsSystem = (function() {
     }
 
     /**
+     * Mark a back_view image as deleted by id in the database
+     * @param {number} id - back_view_images.id
+     * @returns {Promise<object>}
+     */
+    async function markBackViewDeletedById(id) {
+        const API_ENDPOINTS = window.API_ENDPOINTS || {
+            MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+        };
+
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sql: 'UPDATE back_view_images SET deleted = 1 WHERE id = ?', params: [id] })
+        });
+
+        if (!resp.ok) throw new Error(`Failed to mark back_view deleted (HTTP ${resp.status})`);
+        const json = await resp.json();
+        return json;
+    }
+
+    /**
+     * Delete a back-view-killer image (logical) by id and deduct points
+     * @param {number} id
+     */
+    async function deleteBackViewImage(id) {
+        const cost = POINTS_CONFIG.DELETE_IMAGE;
+        const currentPoints = getPoints();
+        if (currentPoints < cost) {
+            return { success: false, pointsSpent: 0, newTotal: currentPoints, message: '积分不足，无法删除图片' };
+        }
+
+        const newTotal = addPoints(-cost);
+        try {
+            const res = await markBackViewDeletedById(id);
+            // consider success when affectedRows or changedRows > 0
+            const affected = res && (res.affectedRows || res.changedRows || 0);
+            if (affected > 0) {
+                return { success: true, pointsSpent: cost, newTotal: newTotal, message: `已消耗 ${cost} 积分，图片已标记为删除` };
+            } else {
+                // refund
+                addPoints(cost);
+                return { success: false, pointsSpent: 0, newTotal: getPoints(), message: '删除失败，未找到目标' };
+            }
+        } catch (err) {
+            console.error('Failed to delete back view image:', err);
+            addPoints(cost);
+            return { success: false, pointsSpent: 0, newTotal: getPoints(), message: '删除失败，请稍后重试' };
+        }
+    }
+
+    /**
      * Request to logically delete an image by marking it deleted in DB and deducting points.
      * Does not remove the image file or change front-end display by itself.
      * @param {string} imageUrl - Image URL to delete
@@ -485,6 +536,7 @@ const PointsSystem = (function() {
         canViewImage: canViewImage,
         viewImage: viewImage,
         deleteImage: deleteImage,
+        deleteBackViewImage: deleteBackViewImage,
         hasViewedImage: hasViewedImage,
         POINTS_CONFIG: POINTS_CONFIG
     };

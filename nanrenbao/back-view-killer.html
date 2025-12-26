@@ -27,6 +27,28 @@
             min-height: 100vh;
         }
 
+        .delete-x {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-x:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
         header {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 20px;
@@ -593,7 +615,8 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images ORDER BY click_count DESC, created_at DESC',
+                        // Exclude logically deleted entries
+                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 ORDER BY click_count DESC, created_at DESC',
                         params: []
                     })
                 });
@@ -631,6 +654,7 @@
                             <div class="flip-card-inner">
                                 <div class="flip-card-front">
                                     <img src="${rawBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
+                                    <button class="delete-x" title="删除 (-${PointsSystem.POINTS_CONFIG.DELETE_IMAGE} 分)">✕</button>
                                     <div class="card-overlay">
                                         <div class="click-hint">👆 点击翻转看正面</div>
                                         ${!isUnlocked ? `<div class="points-cost">消费 1 积分</div>` : `<div class="points-cost" style="color: #4caf50;">已解锁 ${safeDaysLeft} 天</div>`}
@@ -653,6 +677,27 @@
                             }
                             flipCard(this, item.id, item.back_image_url, item.front_image_url);
                         };
+
+                        // Attach delete handler (small X), prevent propagation to flip
+                        const deleteBtn = cardEl.querySelector('.delete-x');
+                        if (deleteBtn) {
+                            deleteBtn.addEventListener('click', async function(e) {
+                                e.stopPropagation();
+                                const ok = confirm('确认消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分将该照片标记为删除吗？');
+                                if (!ok) return;
+                                try {
+                                    const res = await PointsSystem.deleteBackViewImage(item.id);
+                                    updatePointsDisplay();
+                                    showPointsNotification(res.message || (res.success ? '已标记为删除' : '删除失败'));
+                                    if (res.success) {
+                                        cardEl.style.display = 'none';
+                                    }
+                                } catch (err) {
+                                    console.error('删除异常:', err);
+                                    showPointsNotification('删除失败，请稍后重试');
+                                }
+                            });
+                        }
 
                         gallery.appendChild(cardEl);
                     });
