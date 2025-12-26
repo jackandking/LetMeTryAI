@@ -441,6 +441,16 @@
         }
 
         function showAdForPoints() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            if (debugMode) {
+                // In non-miniapp debug mode, directly award full ad points
+                PointsSystem.addPoints(PointsSystem.POINTS_CONFIG.AD_FULL);
+                updatePointsDisplay();
+                showPointsNotification(`🎉 Debug 模式：已获得 ${PointsSystem.POINTS_CONFIG.AD_FULL} 积分`);
+                return;
+            }
+
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
                     url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/back-view-killer",
