@@ -8,6 +8,7 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
+        <script src="harem.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -627,6 +628,12 @@
                         `;
 
                         cardEl.onclick = function() {
+                            // 后宫激活后自动收录且无需再花积分
+                            if (window.isHaremActivated && window.isHaremActivated()) {
+                                if (window.addHaremImage) window.addHaremImage(item.front_image_url);
+                                showFullImage(item.front_image_url);
+                                return;
+                            }
                             flipCard(this, item.id, item.back_image_url, item.front_image_url);
                         };
 
@@ -652,6 +659,21 @@
     <div id="fullImageModal" class="full-image-modal" onclick="hideFullImage()">
         <img id="fullImageModalImg" alt="全屏图片">
     </div>
+    <script>
+    // 支持后宫激活时直接全屏展示图片
+    function showFullImage(url) {
+        var modal = document.getElementById('fullImageModal');
+        var img = document.getElementById('fullImageModalImg');
+        img.src = url;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+    function hideFullImage() {
+        var modal = document.getElementById('fullImageModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    </script>
     <script>
         (function() {
             const urlParams = new URLSearchParams(window.location.search);

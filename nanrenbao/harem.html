@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>我的后宫 - 男人宝</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: #fff; }
+    .container { max-width: 600px; margin: 40px auto; background: #fafafa; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 24px; }
+    .title { font-size: 2em; font-weight: bold; margin-bottom: 16px; }
+    .desc { color: #666; margin-bottom: 24px; }
+    .activate-btn { background: #e91e63; color: #fff; border: none; border-radius: 6px; padding: 12px 32px; font-size: 1.1em; cursor: pointer; margin-bottom: 24px; }
+    .activate-btn[disabled] { background: #aaa; cursor: not-allowed; }
+    .image-list { display: flex; flex-wrap: wrap; gap: 12px; }
+    .image-list img { width: 120px; height: 160px; object-fit: cover; border-radius: 8px; box-shadow: 0 1px 4px #0002; }
+    .empty { color: #bbb; text-align: center; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">我的后宫</div>
+    <div class="desc" id="harem-desc">激活后，您在本站看到的美女图片都会自动收录在这里，无需再花积分查看。</div>
+    <button class="activate-btn" id="activate-harem">花 50 积分激活</button>
+    <div class="image-list" id="harem-images"></div>
+    <div class="empty" id="harem-empty" style="display:none;">还没有收录任何图片哦~</div>
+  </div>
+  <script src="../util.js"></script>
+  <script src="harem.js"></script>
+</body>
+</html>
