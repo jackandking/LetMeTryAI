@@ -342,6 +342,25 @@
         .delete-x:hover {
             background: rgba(0,0,0,0.7);
         }
+        /* Fullscreen modal for unobstructed viewing */
+        .full-image-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+
+        .full-image-modal img {
+            max-width: 98vw;
+            max-height: 98vh;
+            object-fit: contain;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
@@ -375,10 +394,15 @@
         <div id="gallery" class="gallery"></div>
     </div>
 
-    <!-- Modal for full image -->
-    <div id="imageModal" class="modal">
+    <!-- Modal for full image (legacy modal kept for fallback) -->
+    <div id="imageModal" class="modal" style="display:none;">
         <span class="modal-close">&times;</span>
         <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Fullscreen modal (used for large-view experience) -->
+    <div id="fullImageModal" class="full-image-modal" onclick="hideFullImage()">
+        <img id="fullImageModalImg" alt="全屏图片">
     </div>
     
     <footer>
@@ -476,9 +500,8 @@
         }
 
         // Modal functionality
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImage');
-        const closeBtn = document.querySelector('.modal-close');
+        const fullModal = document.getElementById('fullImageModal');
+        const fullImg = document.getElementById('fullImageModalImg');
 
         // Update blur overlay for unlocked image
         function updateBlurOverlay(imageUrl) {
@@ -520,10 +543,12 @@
             // 后宫激活后，自动收录图片且无需再花积分
             if (window.isHaremActivated && window.isHaremActivated()) {
                 if (window.addHaremImage) window.addHaremImage(imageUrl);
+                if (PointsSystem && typeof PointsSystem.markImageViewed === 'function') {
+                    await PointsSystem.markImageViewed(imageUrl);
+                }
                 updateBlurOverlay(imageUrl);
-                modal.style.display = 'block';
-                modalImg.src = imageUrl;
-                document.body.style.overflow = 'hidden';
+                // Show fullscreen image for better viewing experience
+                showFullImage(imageUrl);
                 return;
             }
 
@@ -552,29 +577,28 @@
                 showPointsNotification(`💎 ${result.message}`);
                 updateBlurOverlay(imageUrl);
             }
-            modal.style.display = 'block';
-            modalImg.src = imageUrl;
+            showFullImage(imageUrl);
+        }
+
+        // Fullscreen modal helpers
+        function showFullImage(url) {
+            if (!fullModal || !fullImg) return;
+            fullImg.src = url;
+            fullModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        function hideFullImage() {
+            if (!fullModal || !fullImg) return;
+            fullModal.style.display = 'none';
+            fullImg.src = '';
+            document.body.style.overflow = '';
         }
 
-        closeBtn.onclick = closeModal;
-        
-        // Close modal when clicking outside the image
-        modal.onclick = function(event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        };
-
-        // Close modal with Escape key
+        // Close fullscreen modal with Escape key
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && modal.style.display === 'block') {
-                closeModal();
+            if (event.key === 'Escape' && fullModal && fullModal.style.display && fullModal.style.display !== 'none') {
+                hideFullImage();
             }
         });
 
