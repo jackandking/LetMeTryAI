@@ -337,6 +337,27 @@ const PointsSystem = (function() {
     }
 
     /**
+     * Mark a beauty image as viewed without charging points (used for harem auto-collect)
+     * @param {string} imageUrl
+     */
+    async function markImageViewed(imageUrl) {
+        const viewedImages = getViewedImages();
+        viewedImages[imageUrl] = {
+            timestamp: new Date().toISOString(),
+            viewCount: (viewedImages[imageUrl]?.viewCount || 0) + 1
+        };
+        setViewedImages(viewedImages);
+
+        try {
+            await incrementViewCount(imageUrl);
+        } catch (err) {
+            console.error('Failed to increment beauty image view count:', err);
+        }
+
+        return { success: true };
+    }
+
+    /**
      * Mark an image as deleted in the database (logical delete)
      * @param {string} imageUrl - Image URL to mark deleted
      * @returns {Promise<object>} DB response
@@ -440,6 +461,33 @@ const PointsSystem = (function() {
     }
 
     /**
+     * Mark a back-view image as viewed (no points charged). Updates local view record and DB click_count.
+     * @param {number} id
+     */
+    async function markBackViewViewedById(id) {
+        const key = `back_view_${id}`;
+        const viewedImages = getViewedImages();
+        viewedImages[key] = {
+            timestamp: new Date().toISOString(),
+            viewCount: (viewedImages[key]?.viewCount || 0) + 1
+        };
+        setViewedImages(viewedImages);
+
+        try {
+            const API_ENDPOINTS = window.API_ENDPOINTS || { MYSQL_QUERY: 'https://letmetry.cloud/mysql/query' };
+            await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql: 'UPDATE back_view_images SET click_count = click_count + 1 WHERE id = ?', params: [id] })
+            });
+        } catch (err) {
+            console.error('Failed to increment back_view click count:', err);
+        }
+
+        return { success: true };
+    }
+
+    /**
      * Delete a back-view-killer image (logical) by id and deduct points
      * @param {number} id
      */
@@ -535,8 +583,10 @@ const PointsSystem = (function() {
         resetUser: resetUser,
         canViewImage: canViewImage,
         viewImage: viewImage,
+        markImageViewed: markImageViewed,
         deleteImage: deleteImage,
         deleteBackViewImage: deleteBackViewImage,
+        markBackViewViewedById: markBackViewViewedById,
         hasViewedImage: hasViewedImage,
         POINTS_CONFIG: POINTS_CONFIG
     };
