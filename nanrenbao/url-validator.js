@@ -4,7 +4,7 @@
  * Allowed domains for image uploads
  */
 export const ALLOWED_DOMAINS = [
-    'eb118-file.cdn.bcebos.com',
+    '.bcebos.com',
     '.myqcloud.com',
     '.byteimg.com',
     'letmetry.cloud',
