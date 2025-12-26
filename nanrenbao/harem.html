@@ -7,6 +7,14 @@
   <link rel="stylesheet" href="../styles.css">
   <style>
     body { background: #fff; }
+    .nav-back {
+      position: absolute;
+      left: 16px;
+      top: 18px;
+      text-decoration: none;
+      color: #333;
+      font-size: 1em;
+    }
     .container { max-width: 600px; margin: 40px auto; background: #fafafa; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 24px; }
     .title { font-size: 2em; font-weight: bold; margin-bottom: 16px; }
     .desc { color: #666; margin-bottom: 24px; }
@@ -19,6 +27,7 @@
 </head>
 <body>
   <div class="container">
+    <a href="index.html" class="nav-back">← 返回</a>
     <div class="title">我的后宫</div>
     <div class="desc" id="harem-desc">激活后，您在本站看到的美女图片都会自动收录在这里，无需再花积分查看。</div>
     <button class="activate-btn" id="activate-harem">花 50 积分激活</button>
