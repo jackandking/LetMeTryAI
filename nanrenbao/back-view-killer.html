@@ -515,8 +515,8 @@
                                 .replace(/'/g, "&#039;");
                         };
 
-                        const flipCard = document.createElement('div');
-                        flipCard.className = 'flip-card';
+                            const cardEl = document.createElement('div');
+                            cardEl.className = 'flip-card';
                         
                         const viewKey = `back_view_${item.id}`;
                         const viewStatus = PointsSystem.canViewImage(viewKey);
@@ -529,7 +529,7 @@
                         const safeClickCount = parseInt(item.click_count) || 0;
                         const safeDaysLeft = parseInt(viewStatus.daysLeft) || 0;
 
-                        flipCard.innerHTML = `
+                        cardEl.innerHTML = `
                             <div class="flip-card-inner">
                                 <div class="flip-card-front">
                                     <img src="${rawBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
@@ -550,11 +550,11 @@
                             </div>
                         `;
 
-                        flipCard.onclick = function() {
+                        cardEl.onclick = function() {
                             flipCard(this, item.id, item.back_image_url);
                         };
 
-                        gallery.appendChild(flipCard);
+                        gallery.appendChild(cardEl);
                     });
                 } else {
                     noImages.style.display = 'block';
