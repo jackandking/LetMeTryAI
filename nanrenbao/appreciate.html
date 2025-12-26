@@ -306,6 +306,21 @@
                 font-size: 1.5em;
             }
         }
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #d32f2f;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            transition: background 0.15s;
+            font-size: 0.9em;
+        }
+
+        .delete-btn:hover {
+            background: rgba(211, 47, 47, 0.08);
+        }
     </style>
 </head>
 <body>
@@ -595,15 +610,49 @@
                                 imageWrapper.appendChild(blurOverlay);
                             }
                             
-                            imageWrapper.appendChild(img);
-                            div.appendChild(imageWrapper);
-                            
-                            // Click to view full image
-                            div.onclick = function() {
-                                showModal(item.image_url);
-                            };
-                            
-                            gallery.appendChild(div);
+                                imageWrapper.appendChild(img);
+                                div.appendChild(imageWrapper);
+
+                                // Info area (non-obtrusive controls)
+                                const info = document.createElement('div');
+                                info.className = 'info';
+
+                                // Small delete button (does not overlay image)
+                                const deleteBtn = document.createElement('button');
+                                deleteBtn.className = 'delete-btn';
+                                deleteBtn.textContent = '删除 (-' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 分)';
+                                deleteBtn.title = '标记为删除（逻辑删除，会消耗积分）';
+
+                                // Prevent gallery item click (open modal) when clicking delete
+                                deleteBtn.onclick = async function(e) {
+                                    e.stopPropagation();
+                                    const ok = window.confirm('确认消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分将该图片标记为删除吗？');
+                                    if (!ok) return;
+
+                                    // Call deleteImage and handle response
+                                    try {
+                                        const res = await PointsSystem.deleteImage(item.image_url);
+                                        updatePointsDisplay();
+                                        showPointsNotification(res.message || (res.success ? '已标记为删除' : '删除失败'));
+                                        if (res.success) {
+                                            // Hide the item from gallery after logical delete
+                                            div.style.display = 'none';
+                                        }
+                                    } catch (err) {
+                                        console.error('删除请求异常:', err);
+                                        showPointsNotification('删除失败，请稍后重试');
+                                    }
+                                };
+
+                                info.appendChild(deleteBtn);
+                                div.appendChild(info);
+
+                                // Click to view full image
+                                div.onclick = function() {
+                                    showModal(item.image_url);
+                                };
+
+                                gallery.appendChild(div);
                         } catch (itemError) {
                             console.error('创建图片项失败:', itemError, item);
                         }

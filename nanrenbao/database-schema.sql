@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS beauty_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     image_url VARCHAR(2048) NOT NULL,
     view_count INT DEFAULT 0 NOT NULL COMMENT 'Number of times this image has been unlocked/viewed',
+    deleted TINYINT(1) DEFAULT 0 NOT NULL COMMENT 'Logical delete flag: 0=visible,1=deleted',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_created_at (created_at),
