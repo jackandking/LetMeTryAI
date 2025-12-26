@@ -2,6 +2,174 @@
 import { API_ENDPOINTS } from '../util/config.js';
 import { validateImageUrl } from './url-validator.js';
 
+// Management state
+const manageState = {
+    page: 1,
+    perPage: 20,
+    totalPages: 1,
+    filter: 'all',
+    query: ''
+};
+
+/**
+ * Fetch images for management table
+ */
+async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', query = '') {
+    // Build SQL with basic filtering and pagination
+    let where = 'WHERE 1=1';
+    if (filter === 'visible') where = 'WHERE deleted = 0';
+    if (filter === 'deleted') where = 'WHERE deleted = 1';
+
+    if (query && query.trim()) {
+        const q = query.trim();
+        if (/^\d+$/.test(q)) {
+            where += ` AND id = ${parseInt(q, 10)}`;
+        } else {
+            // escape single quotes
+            const safe = q.replace(/'/g, "\\'");
+            where += ` AND image_url LIKE '%${safe}%'`;
+        }
+    }
+
+    const offset = (page - 1) * perPage;
+    const sql = `SELECT SQL_CALC_FOUND_ROWS id, image_url, view_count, created_at, deleted FROM beauty_images ${where} ORDER BY created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
+
+    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql, params: [] })
+    });
+
+    if (!resp.ok) throw new Error('Failed to fetch images');
+    const rows = await resp.json();
+
+    // Get total count
+    const countResp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql: 'SELECT FOUND_ROWS() as total', params: [] })
+    });
+    const countJson = await countResp.json();
+    const total = Array.isArray(countJson) && countJson[0] && countJson[0].total ? parseInt(countJson[0].total, 10) : 0;
+
+    return { rows, total };
+}
+
+function renderManageTable(rows, page, perPage, total) {
+    const tbody = document.getElementById('imagesTbody');
+    tbody.innerHTML = '';
+
+    rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="padding:8px; vertical-align:middle;">${row.id}</td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
+            <td style="padding:8px;">${row.view_count || 0}</td>
+            <td style="padding:8px;">${row.deleted ? '<span style="color:#f44336; font-weight:bold;">已删除</span>' : '<span style="color:#4caf50;">可见</span>'}</td>
+            <td style="padding:8px;">
+                <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${row.image_url}">查看</button>
+                <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}" data-url="${row.image_url}">${row.deleted ? '取消删除' : '标记删除'}</button>
+                <button class="btn-secondary" data-action="permadelete" data-id="${row.id}">永久删除</button>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+
+    // update stats
+    document.getElementById('manageStats').textContent = `共 ${total} 条，当前第 ${page} 页`;
+    const totalPages = Math.max(1, Math.ceil(total / perPage));
+    manageState.totalPages = totalPages;
+    document.getElementById('pageInfo').textContent = `${page} / ${totalPages}`;
+}
+
+async function loadManagePage() {
+    try {
+        const rowsResult = await fetchImagesForManage(manageState.page, manageState.perPage, manageState.filter, manageState.query);
+        renderManageTable(rowsResult.rows, manageState.page, manageState.perPage, rowsResult.total);
+    } catch (err) {
+        console.error('加载图片列表失败:', err);
+        addLog('加载图片列表失败: ' + (err.message || err), 'error');
+    }
+}
+
+async function performAction(action, id, imageUrl) {
+    try {
+        if (action === 'view') {
+            window.open(imageUrl, '_blank');
+            return;
+        }
+
+        if (action === 'delete' || action === 'undelete') {
+            const setVal = action === 'delete' ? 1 : 0;
+            const sql = 'UPDATE beauty_images SET deleted = ? WHERE id = ?';
+            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql, params: [setVal, id] })
+            });
+            const json = await resp.json();
+            addLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
+            await loadManagePage();
+            return;
+        }
+
+        if (action === 'permadelete') {
+            if (!confirm('确认永久删除？操作不可恢复')) return;
+            const sql = 'DELETE FROM beauty_images WHERE id = ?';
+            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql, params: [id] })
+            });
+            const json = await resp.json();
+            addLog(`permadelete id=${id} result: ${JSON.stringify(json)}`, 'info');
+            await loadManagePage();
+            return;
+        }
+    } catch (err) {
+        console.error('Action failed:', err);
+        addLog('操作失败: ' + (err.message || err), 'error');
+    }
+}
+
+function attachManageHandlers() {
+    document.getElementById('refreshBtn').onclick = () => { manageState.page = 1; manageState.query = document.getElementById('searchInput').value; manageState.filter = document.getElementById('filterSelect').value; loadManagePage(); };
+    document.getElementById('prevPageBtn').onclick = () => { if (manageState.page > 1) { manageState.page--; loadManagePage(); } };
+    document.getElementById('nextPageBtn').onclick = () => { if (manageState.page < manageState.totalPages) { manageState.page++; loadManagePage(); } };
+    document.getElementById('imagesTable').addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const id = btn.getAttribute('data-id');
+        const url = btn.getAttribute('data-url');
+        performAction(action, id, url);
+    });
+    document.getElementById('bulkUndeleteBtn').onclick = async () => {
+        if (!confirm('确认批量取消删除（将 deleted=0）吗？')) return;
+        const sql = 'UPDATE beauty_images SET deleted = 0 WHERE deleted = 1';
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
+        const json = await resp.json();
+        addLog('批量取消删除: ' + JSON.stringify(json), 'info');
+        loadManagePage();
+    };
+    document.getElementById('bulkDeleteBtn').onclick = async () => {
+        if (!confirm('确认批量永久删除页面上所有已选/已标记的数据？')) return;
+        const sql = 'DELETE FROM beauty_images WHERE deleted = 1';
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
+        const json = await resp.json();
+        addLog('批量永久删除: ' + JSON.stringify(json), 'info');
+        loadManagePage();
+    };
+}
+
+// Initialize management UI handlers on load
+window.addEventListener('DOMContentLoaded', () => {
+    attachManageHandlers();
+    // initial load
+    loadManagePage();
+});
+
 // State management
 const state = {
     isUploading: false,

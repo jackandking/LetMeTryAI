@@ -556,7 +556,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC',
+                        // Only return images that are not marked deleted
+                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 ORDER BY view_count DESC, created_at DESC',
                         params: []
                     })
                 });
