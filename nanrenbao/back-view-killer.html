@@ -201,10 +201,62 @@
             transform: rotateY(180deg);
         }
 
+        /* Fullscreen modal for displaying front image unobstructed */
+        .full-image-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+
+        .full-image-modal img {
+            max-width: 98vw;
+            max-height: 98vh;
+            object-fit: contain;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border-radius: 6px;
+        }
+
+        /* Display front image unobstructed and centered for full-image experience */
+        .flip-card-back {
+            background: #000; /* darker background to emphasize photo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .flip-card-back .front-image-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flip-card-back .card-image {
+            width: auto;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 0; /* remove rounded corners for immersive view */
+        }
+
         .card-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        /* Show the full front image without cropping and without overlay text */
+        .flip-card-back .card-image {
+            object-fit: contain;
+            background-color: #000;
         }
 
         .card-overlay {
@@ -415,6 +467,25 @@
             }, 3000);
         }
 
+        // Fullscreen modal helpers
+        function showFullImage(url) {
+            const modal = document.getElementById('fullImageModal');
+            const img = document.getElementById('fullImageModalImg');
+            if (!modal || !img) return;
+            img.src = url;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideFullImage() {
+            const modal = document.getElementById('fullImageModal');
+            const img = document.getElementById('fullImageModalImg');
+            if (!modal || !img) return;
+            modal.style.display = 'none';
+            img.src = '';
+            document.body.style.overflow = '';
+        }
+
         updatePointsDisplay();
 
         if (pointsInfo.isNewUser) {
@@ -426,10 +497,14 @@
         // Track flipped cards using image pair IDs
         const flippedCards = new Set();
 
-        async function flipCard(cardElement, imageId, backImageUrl) {
+        async function flipCard(cardElement, imageId, backImageUrl, frontImageUrl) {
             if (flippedCards.has(imageId)) {
-                // Already flipped, just toggle display
+                // Already flipped, just toggle display; hide fullscreen if closing
                 cardElement.classList.toggle('flipped');
+                if (!cardElement.classList.contains('flipped')) {
+                    flippedCards.delete(imageId);
+                    hideFullImage();
+                }
                 return;
             }
 
@@ -477,11 +552,16 @@
             // Flip the card
             cardElement.classList.add('flipped');
             flippedCards.add(imageId);
-            
+
             // Remove locked overlay if present
             const lockedOverlay = cardElement.querySelector('.locked-overlay');
             if (lockedOverlay) {
                 lockedOverlay.remove();
+            }
+
+            // Show full unobstructed front image in modal for better experience
+            if (frontImageUrl) {
+                showFullImage(frontImageUrl);
             }
         }
 
@@ -542,16 +622,12 @@
                                 </div>
                                 <div class="flip-card-back">
                                     <img src="${rawFrontUrl}" alt="正面" class="card-image">
-                                    <div class="card-overlay">
-                                        <div class="click-hint">💝 正面照片</div>
-                                        <div class="popularity">再次点击可翻回背面</div>
-                                    </div>
                                 </div>
                             </div>
                         `;
 
                         cardEl.onclick = function() {
-                            flipCard(this, item.id, item.back_image_url);
+                            flipCard(this, item.id, item.back_image_url, item.front_image_url);
                         };
 
                         gallery.appendChild(cardEl);
@@ -572,6 +648,10 @@
     </script>
     
     <!-- VConsole for mobile debugging -->
+    <!-- Fullscreen image modal -->
+    <div id="fullImageModal" class="full-image-modal" onclick="hideFullImage()">
+        <img id="fullImageModalImg" alt="全屏图片">
+    </div>
     <script>
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
