@@ -8,6 +8,7 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
+        <script src="url-validator.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -330,54 +331,7 @@
             showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
         }
 
-        // NOTE: This validation logic is duplicated from url-validator.js for simplicity
-        // since this HTML page uses inline JavaScript without a module bundler.
-        // If you update these domains, also update url-validator.js to maintain consistency.
-        
-        // Allowed domains pattern
-        const allowedDomains = [
-            '.bcebos.com',
-            '.myqcloud.com',
-            '.byteimg.com',
-            'letmetry.cloud',
-            '.qpic.cn',
-            '.klingai.com'
-        ];
-
-        // Validate URL
-        function isValidImageUrl(url) {
-            try {
-                const urlObj = new URL(url);
-                
-                // Check if it's HTTPS
-                if (urlObj.protocol !== 'https:') {
-                    return { valid: false, error: '仅支持HTTPS链接' };
-                }
-
-                // Check if domain is allowed
-                const hostname = urlObj.hostname;
-                const isAllowed = allowedDomains.some(domain => {
-                    if (domain.startsWith('.')) {
-                        return hostname.endsWith(domain.slice(1)) || hostname === domain.slice(1);
-                    }
-                    return hostname === domain;
-                });
-
-                if (!isAllowed) {
-                    const supportedDomains = allowedDomains.map(domain => 
-                        domain.startsWith('.') ? `*${domain}` : domain
-                    ).join('、');
-                    return { 
-                        valid: false, 
-                        error: `不支持的图片来源。支持的域名：${supportedDomains}` 
-                    };
-                }
-
-                return { valid: true };
-            } catch (e) {
-                return { valid: false, error: '无效的URL格式' };
-            }
-        }
+        // 现在直接使用 window.isValidImageUrl(url)
 
         // Show message
         function showMessage(text, type) {

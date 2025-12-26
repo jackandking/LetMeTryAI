@@ -8,6 +8,7 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
+        <script src="url-validator.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -381,25 +382,6 @@
         }
 
         // Simple URL validator
-        function isValidImageURL(url) {
-            if (!url || typeof url !== 'string') {
-                return false;
-            }
-            try {
-                const urlObj = new URL(url);
-                // 只校验 https 协议
-                if (urlObj.protocol !== 'https:') {
-                    return false;
-                }
-                // 只要路径中包含常见图片扩展名即可（允许带参数）
-                if (!/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$|&)/i.test(urlObj.pathname + urlObj.search)) {
-                    return false;
-                }
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
 
         // Preview images as user types
         const backImageInput = document.getElementById('backImageUrl');
@@ -420,9 +402,14 @@
 
         backImageInput.addEventListener('input', function() {
             const url = this.value.trim();
-            if (url && isValidImageURL(url)) {
-                backPreview.innerHTML = '';
-                backPreview.appendChild(createImagePreview(url));
+            if (url) {
+                const validation = window.isValidImageUrl(url);
+                if (validation.valid) {
+                    backPreview.innerHTML = '';
+                    backPreview.appendChild(createImagePreview(url));
+                } else {
+                    backPreview.innerHTML = `<div class="no-preview">${validation.error}</div>`;
+                }
             } else {
                 backPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
             }
@@ -430,9 +417,14 @@
 
         frontImageInput.addEventListener('input', function() {
             const url = this.value.trim();
-            if (url && isValidImageURL(url)) {
-                frontPreview.innerHTML = '';
-                frontPreview.appendChild(createImagePreview(url));
+            if (url) {
+                const validation = window.isValidImageUrl(url);
+                if (validation.valid) {
+                    frontPreview.innerHTML = '';
+                    frontPreview.appendChild(createImagePreview(url));
+                } else {
+                    frontPreview.innerHTML = `<div class="no-preview">${validation.error}</div>`;
+                }
             } else {
                 frontPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
             }
@@ -449,13 +441,14 @@
             const frontImageUrl = frontImageInput.value.trim();
 
             // Validate URLs
-            if (!isValidImageURL(backImageUrl)) {
-                showPointsNotification('❌ 背影图片链接格式不正确');
+            const backValidation = window.isValidImageUrl(backImageUrl);
+            if (!backValidation.valid) {
+                showPointsNotification('❌ 背影图片链接格式不正确：' + backValidation.error);
                 return;
             }
-
-            if (!isValidImageURL(frontImageUrl)) {
-                showPointsNotification('❌ 正面图片链接格式不正确');
+            const frontValidation = window.isValidImageUrl(frontImageUrl);
+            if (!frontValidation.valid) {
+                showPointsNotification('❌ 正面图片链接格式不正确：' + frontValidation.error);
                 return;
             }
 
