@@ -1,3 +1,33 @@
+# Local/test/backup artifacts
+*.local.js
+*.bak
+*.backup
+*.tmp
+*.log
+*.testoutput
+*.sqlite
+*.db
+*.db-journal
+*.csv
+*.jsonl
+*.out
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+
+# Ignore nanrenbao/image/data/test/backup files
+nanrenbao/backup_*.json
+nanrenbao/*.test.js
+nanrenbao/*.testoutput
+nanrenbao/*.bak
+nanrenbao/*.local.js
+
+# Ignore util/test/backup files
+util/*.test.js
+util/*.bak
+util/*.local.js
 # Dependencies
 node_modules/
 npm-debug.log*
