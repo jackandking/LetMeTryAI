@@ -523,15 +523,16 @@
                         const isUnlocked = !viewStatus.needsPayment;
 
                         // Use escaped URLs for security
-                        const safeBackUrl = escapeHtml(item.back_image_url);
-                        const safeFrontUrl = escapeHtml(item.front_image_url);
+                        // 不再 escapeHtml，直接用原始 URL，避免带参数的图片无法预览
+                        const rawBackUrl = item.back_image_url;
+                        const rawFrontUrl = item.front_image_url;
                         const safeClickCount = parseInt(item.click_count) || 0;
                         const safeDaysLeft = parseInt(viewStatus.daysLeft) || 0;
 
                         flipCard.innerHTML = `
                             <div class="flip-card-inner">
                                 <div class="flip-card-front">
-                                    <img src="${safeBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
+                                    <img src="${rawBackUrl}" alt="背影" class="card-image" onerror="this.parentElement.parentElement.parentElement.style.display='none'">
                                     <div class="card-overlay">
                                         <div class="click-hint">👆 点击翻转看正面</div>
                                         ${!isUnlocked ? `<div class="points-cost">消费 1 积分</div>` : `<div class="points-cost" style="color: #4caf50;">已解锁 ${safeDaysLeft} 天</div>`}
@@ -540,7 +541,7 @@
                                     ${!isUnlocked && PointsSystem.getPoints() < 1 ? '<div class="locked-overlay">🔒 积分不足</div>' : ''}
                                 </div>
                                 <div class="flip-card-back">
-                                    <img src="${safeFrontUrl}" alt="正面" class="card-image">
+                                    <img src="${rawFrontUrl}" alt="正面" class="card-image">
                                     <div class="card-overlay">
                                         <div class="click-hint">💝 正面照片</div>
                                         <div class="popularity">再次点击可翻回背面</div>
