@@ -254,6 +254,13 @@
             object-fit: cover;
         }
 
+        /* Improve portrait (9:16) back-view display: avoid heavy cropping for tall images */
+        .flip-card-front .card-image {
+            object-fit: contain;
+            object-position: center center;
+            background-color: #000; /* letterbox background */
+        }
+
         /* Show the full front image without cropping and without overlay text */
         .flip-card-back .card-image {
             object-fit: contain;
