@@ -7,7 +7,7 @@
  * Configuration object for question and options
  */
 const questionConfig = {
-    title: "中国历史上最伟大的皇帝是谁？",
+    title: "中国最伟大的皇帝是谁？",
     question: "在中国历史上，你认为谁是最伟大的皇帝？",
     options: [
         { value: "1", label: "秦始皇嬴政" },
