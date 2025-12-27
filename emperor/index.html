@@ -55,7 +55,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, text-decoration-color 0.3s;
-            tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             text-decoration: underline;
             text-decoration-color: #007bff;
         }
@@ -88,6 +88,34 @@
             display: block;
             margin: 5px 0;
         }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .button-group .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            padding: 8px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+        }
+        .button-group .option img {
+            width: 88px;
+            height: 88px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+        .button-group .option input[type="radio"] {
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
@@ -97,6 +125,31 @@
         <div class="question" id="question1">
             <p id="questionText"></p>
             <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="emperor" value="秦始皇嬴政">
+                    <img src="https://eb118-file.cdn.bcebos.com/upload/82785d2e0b2a43a9b814d4790632aa17_1289683295.png" alt="秦始皇" loading="lazy">
+                    <span>秦始皇嬴政</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="emperor" value="明太祖朱元璋">
+                    <img src="https://eb118-file.cdn.bcebos.com/upload/c8532e06789f4dee97eb8501757cf032_1289683687.png" alt="朱元璋" loading="lazy">
+                    <span>明太祖朱元璋</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="emperor" value="汉武帝刘彻">
+                    <img src="https://eb118-file.cdn.bcebos.com/upload/14327aec7fc24d6bad19af28aecd6a14_1289683736.png" alt="汉武帝" loading="lazy">
+                    <span>汉武帝刘彻</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="emperor" value="汉高祖刘邦">
+                    <img src="https://eb118-file.cdn.bcebos.com/upload/1065a479c1b2404dae9bf25b39e29ab9_1289683658.png" alt="刘邦" loading="lazy">
+                    <span>汉高祖刘邦</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="emperor" value="唐太宗李世民">
+                    <img src="https://eb118-file.cdn.bcebos.com/upload/961a4042bf9548aeac2f37b53e50ff70_1289683702.png" alt="李世民" loading="lazy">
+                    <span>唐太宗李世民</span>
+                </label>
             </div>
         </div>
     </form>
