@@ -85,6 +85,7 @@ function setupPageContent() {
     const optionsContainer = document.getElementById('optionsContainer');
     if (optionsContainer) {
         generateOptionButtons(optionsContainer);
+        attachRadioHandlers();
     }
 }
 
@@ -93,12 +94,50 @@ function setupPageContent() {
  * @param {HTMLElement} container - The container element for buttons
  */
 function generateOptionButtons(container) {
+    // If the container already contains radio inputs or custom option elements,
+    // don't generate the default buttons to avoid duplicate UI.
+    if (container.querySelector('input[type="radio"]') || container.querySelector('.option')) {
+        return;
+    }
+
     questionConfig.options.forEach(option => {
         const button = document.createElement('button');
         button.type = 'button';
         button.onclick = () => nextQuestion(option.value);
         button.textContent = option.label;
         container.appendChild(button);
+    });
+}
+
+/**
+ * Attach change handlers to radio inputs so a selection records the vote
+ * and immediately proceeds to show the ad flow (no extra click required).
+ */
+function attachRadioHandlers() {
+    const radios = document.querySelectorAll('input[name="emperor"]');
+    if (!radios || radios.length === 0) return;
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const selectedValueOrLabel = e.target.value;
+
+            // Try to find matching option by exact label first
+            let matched = questionConfig.options.find(o => o.label === selectedValueOrLabel);
+
+            // If not exact match, try contains matching (handles slight label differences)
+            if (!matched) {
+                matched = questionConfig.options.find(o => selectedValueOrLabel.includes(o.label) || o.label.includes(selectedValueOrLabel));
+            }
+
+            const selectedValue = matched ? matched.value : null;
+            if (selectedValue) {
+                nextQuestion(selectedValue);
+                // Immediately start ad flow
+                showAd();
+            } else {
+                console.warn('Selected radio did not match configured options:', selectedValueOrLabel);
+            }
+        });
     });
 }
 
@@ -194,9 +233,62 @@ function showAd() {
         ks.navigateTo({
             url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=emperor",
         });
-    } else {
-        console.warn('Mini-program navigation not available');
+        return;
     }
+
+    // Fallback for web environment: simulate an ad, then show results.
+    displayAdFallback().catch(err => console.error('Ad fallback error:', err));
+}
+
+/**
+ * Web fallback to simulate an ad: shows a temporary overlay, then reveals results.
+ * Returns a Promise that resolves after results are shown.
+ */
+function displayAdFallback() {
+    return new Promise((resolve) => {
+        // Create overlay
+        let overlay = document.getElementById('adOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'adOverlay';
+            overlay.style.position = 'fixed';
+            overlay.style.left = 0;
+            overlay.style.top = 0;
+            overlay.style.right = 0;
+            overlay.style.bottom = 0;
+            overlay.style.background = 'rgba(0,0,0,0.6)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = 9999;
+            overlay.innerHTML = '<div style="background:#fff;padding:18px 24px;border-radius:8px;text-align:center;font-size:16px;color:#333;">正在为您准备广告...<br><small style="color:#666;margin-top:8px;display:block">若长时间未跳转请刷新页面</small></div>';
+            document.body.appendChild(overlay);
+        } else {
+            overlay.style.display = 'flex';
+        }
+
+        // Wait briefly to simulate ad playback, then hide overlay and show results
+        const AD_SIM_MS = 1500;
+        setTimeout(() => {
+            overlay.style.display = 'none';
+
+            // Hide questionnaire, show result and load data
+            const questionnaire = document.getElementById('questionnaire');
+            const result = document.getElementById('result');
+            if (questionnaire) questionnaire.style.display = 'none';
+            if (result) result.style.display = 'block';
+
+            getConfig(questionConfig.storageKey, (data) => {
+                if (data) {
+                    showResult(data);
+                } else {
+                    // If no remote data, use local voteData
+                    showResult(voteData);
+                }
+                resolve();
+            });
+        }, AD_SIM_MS);
+    });
 }
 
 /**
