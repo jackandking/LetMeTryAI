@@ -668,7 +668,7 @@
                             </div>
                         `;
 
-                        cardEl.onclick = function() {
+                        cardEl.onclick = async function() {
                             // 后宫激活后自动收录且无需再花积分
                             if (window.isHaremActivated && window.isHaremActivated()) {
                                 if (window.addHaremImage) window.addHaremImage(item.front_image_url);
