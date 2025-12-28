@@ -2,6 +2,14 @@
 // Centralized configuration for API and resource URLs
 
 // Base URL for API and image resources
+
+// API endpoints
+
+// Helper function to get image URL
+// Application configuration
+// Centralized configuration for API and resource URLs
+
+// Base URL for API and image resources
 export const BASE_URL = 'https://letmetry.cloud';
 
 // API endpoints
