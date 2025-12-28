@@ -399,6 +399,8 @@
                 <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                     <div id="manageStats">加载中...</div>
                     <div>
+                        <button class="btn-secondary" id="bulkHideBtn">批量隐藏</button>
+                        <button class="btn-secondary" id="bulkShowBtn">批量展示</button>
                         <button class="btn-secondary" id="bulkUndeleteBtn">批量取消删除</button>
                         <button class="btn-secondary" id="bulkDeleteBtn">批量永久删除</button>
                     </div>
@@ -406,13 +408,14 @@
                 <div style="overflow:auto; max-height:420px; background:white; border-radius:8px; padding:10px;">
                     <table id="imagesTable" style="width:100%; border-collapse:collapse; font-size:0.9em;">
                         <thead>
-                            <tr style="text-align:left; border-bottom:1px solid #eee;">
-                                <th style="padding:8px; width:60px;">ID</th>
-                                <th style="padding:8px;">缩略图 / URL</th>
-                                <th style="padding:8px; width:120px;">查看数</th>
-                                <th style="padding:8px; width:120px;">状态</th>
-                                <th style="padding:8px; width:240px;">操作</th>
-                            </tr>
+                                    <tr style="text-align:left; border-bottom:1px solid #eee;">
+                                        <th style="padding:8px; width:40px;"><input type="checkbox" id="selectAllCheckbox" title="全选" /></th>
+                                        <th style="padding:8px; width:60px;">ID</th>
+                                        <th style="padding:8px;">缩略图 / URL</th>
+                                        <th style="padding:8px; width:120px;">查看数</th>
+                                        <th style="padding:8px; width:120px;">状态</th>
+                                        <th style="padding:8px; width:240px;">操作</th>
+                                    </tr>
                         </thead>
                         <tbody id="imagesTbody"></tbody>
                     </table>
@@ -427,5 +430,27 @@
     </div>
 
     <script type="module" src="admin.js"></script>
+
+    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
 </body>
 </html>

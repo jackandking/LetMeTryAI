@@ -40,7 +40,10 @@ async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', quer
         body: JSON.stringify({ sql, params: [] })
     });
 
-    if (!resp.ok) throw new Error('Failed to fetch images');
+    if (!resp.ok) {
+        const txt = await resp.text().catch(() => '');
+        throw new Error(`Failed to fetch images: ${resp.status} ${resp.statusText} ${txt}`);
+    }
     const rows = await resp.json();
 
     // Get total count
@@ -49,6 +52,10 @@ async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', quer
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sql: 'SELECT FOUND_ROWS() as total', params: [] })
     });
+    if (!countResp.ok) {
+        const txt = await countResp.text().catch(() => '');
+        throw new Error(`Failed to fetch total count: ${countResp.status} ${countResp.statusText} ${txt}`);
+    }
     const countJson = await countResp.json();
     const total = Array.isArray(countJson) && countJson[0] && countJson[0].total ? parseInt(countJson[0].total, 10) : 0;
 
@@ -62,6 +69,7 @@ function renderManageTable(rows, page, perPage, total) {
     rows.forEach(row => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
+            <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="row-checkbox" data-id="${row.id}" /></td>
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
             <td style="padding:8px;">${row.view_count || 0}</td>
@@ -84,12 +92,19 @@ function renderManageTable(rows, page, perPage, total) {
 }
 
 async function loadManagePage() {
+    // show loading state
     try {
+        document.getElementById('manageStats').textContent = '加载中...';
+        const tbody = document.getElementById('imagesTbody');
+        if (tbody) tbody.innerHTML = '';
+
         const rowsResult = await fetchImagesForManage(manageState.page, manageState.perPage, manageState.filter, manageState.query);
         renderManageTable(rowsResult.rows, manageState.page, manageState.perPage, rowsResult.total);
     } catch (err) {
         console.error('加载图片列表失败:', err);
         addLog('加载图片列表失败: ' + (err.message || err), 'error');
+        try { document.getElementById('manageStats').textContent = '加载失败'; } catch (e) {}
+        showAlert('加载图片列表失败: ' + (err.message || err), 'error');
     }
 }
 
@@ -145,6 +160,50 @@ function attachManageHandlers() {
         const url = btn.getAttribute('data-url');
         performAction(action, id, url);
     });
+    // select all checkbox
+    const selectAll = document.getElementById('selectAllCheckbox');
+    if (selectAll) {
+        selectAll.addEventListener('change', (e) => {
+            const checked = e.target.checked;
+            document.querySelectorAll('#imagesTbody .row-checkbox').forEach(cb => cb.checked = checked);
+        });
+    }
+
+    // helper to collect selected ids
+    function getSelectedIds() {
+        const ids = [];
+        document.querySelectorAll('#imagesTbody .row-checkbox:checked').forEach(cb => {
+            const id = parseInt(cb.getAttribute('data-id'), 10);
+            if (!Number.isNaN(id)) ids.push(id);
+        });
+        return ids;
+    }
+
+    document.getElementById('bulkHideBtn').onclick = async () => {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        if (!confirm(`确认将 ${ids.length} 项标记为隐藏（deleted=1）？`)) return;
+        const placeholders = ids.map(() => '?').join(',');
+        const sql = `UPDATE beauty_images SET deleted = 1 WHERE id IN (${placeholders})`;
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
+        const json = await resp.json();
+        addLog('批量隐藏: ' + JSON.stringify(json), 'info');
+        document.getElementById('selectAllCheckbox').checked = false;
+        loadManagePage();
+    };
+
+    document.getElementById('bulkShowBtn').onclick = async () => {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        if (!confirm(`确认将 ${ids.length} 项标记为展示（deleted=0）？`)) return;
+        const placeholders = ids.map(() => '?').join(',');
+        const sql = `UPDATE beauty_images SET deleted = 0 WHERE id IN (${placeholders})`;
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
+        const json = await resp.json();
+        addLog('批量展示: ' + JSON.stringify(json), 'info');
+        document.getElementById('selectAllCheckbox').checked = false;
+        loadManagePage();
+    };
     document.getElementById('bulkUndeleteBtn').onclick = async () => {
         if (!confirm('确认批量取消删除（将 deleted=0）吗？')) return;
         const sql = 'UPDATE beauty_images SET deleted = 0 WHERE deleted = 1';
