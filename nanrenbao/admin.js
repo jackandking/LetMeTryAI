@@ -1,6 +1,6 @@
 // admin.js - Batch upload functionality for nanrenbao admin panel
 import { API_ENDPOINTS } from '../util/config.js';
-import { validateImageUrl } from './url-validator.js';
+import { validateImageUrl } from './url-validator.esm.js';
 
 // Management state
 const manageState = {
