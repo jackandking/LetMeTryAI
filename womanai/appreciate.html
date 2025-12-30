@@ -263,9 +263,21 @@
                 img.alt = '帅哥图片';
                 img.loading = 'lazy';
                 
-                // Handle image load error
+                // Handle image load error: hide the whole gallery item when image cannot be loaded
                 img.onerror = function() {
-                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="280" height="300"%3E%3Crect fill="%23ddd" width="280" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23999"%3E图片加载失败%3C/text%3E%3C/svg%3E';
+                    try {
+                        if (item && item.style) {
+                            item.style.display = 'none';
+                        } else if (this.closest) {
+                            const parent = this.closest('.gallery-item');
+                            if (parent) parent.style.display = 'none';
+                            else this.style.display = 'none';
+                        } else {
+                            this.style.display = 'none';
+                        }
+                    } catch (e) {
+                        this.style.display = 'none';
+                    }
                 };
                 
                 const info = document.createElement('div');
@@ -304,6 +316,60 @@
                 };
                 document.head.appendChild(script);
             }
+        })();
+
+        // Robust handler: hide gallery items if their images fail to load
+        (function() {
+            function attachHideHandler(img) {
+                if (!img || img.__hideHandlerAttached) return;
+                img.__hideHandlerAttached = true;
+                img.addEventListener('error', function () {
+                    try {
+                        const parent = img.closest && img.closest('.gallery-item');
+                        if (parent) parent.style.display = 'none';
+                        else img.style.display = 'none';
+                    } catch (e) {
+                        img.style.display = 'none';
+                    }
+                });
+
+                // If image was already attempted and failed
+                try {
+                    if (img.complete && img.naturalWidth === 0) {
+                        const parent = img.closest && img.closest('.gallery-item');
+                        if (parent) parent.style.display = 'none';
+                        else img.style.display = 'none';
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            }
+
+            function attachToExisting() {
+                document.querySelectorAll('#gallery img').forEach(attachHideHandler);
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                attachToExisting();
+
+                // Observe gallery for future images
+                try {
+                    const gallery = document.getElementById('gallery');
+                    if (!gallery || !window.MutationObserver) return;
+                    const mo = new MutationObserver(function (mutations) {
+                        mutations.forEach(function (m) {
+                            m.addedNodes.forEach(function (node) {
+                                if (!node) return;
+                                if (node.tagName === 'IMG') attachHideHandler(node);
+                                else if (node.querySelectorAll) node.querySelectorAll('img').forEach(attachHideHandler);
+                            });
+                        });
+                    });
+                    mo.observe(gallery, { childList: true, subtree: true });
+                } catch (e) {
+                    // ignore observer errors
+                }
+            });
         })();
     </script>
 </body>
