@@ -103,8 +103,8 @@ function selectDance(index) {
     containers.forEach(c => c.classList.remove('selected'));
     containers[index].classList.add('selected');
     selectedDanceIndex = index;
-    const showResultBtn = document.getElementById('showResultBtn');
-    if (showResultBtn) showResultBtn.style.display = 'block';
+    // Immediately open the ad (which will save the vote and show results)
+    showAd();
 }
 
 function showAd() {
