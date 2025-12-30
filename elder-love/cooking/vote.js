@@ -150,12 +150,8 @@ function selectDish(index) {
     
     containers[index].classList.add('selected');
     selectedDishIndex = index;
-    
-    // Show result button
-    const showResultBtn = document.getElementById('showResultBtn');
-    if (showResultBtn) {
-        showResultBtn.style.display = 'block';
-    }
+    // Immediately open the ad (which will save the vote and show results)
+    showAd();
 }
 
 /**
