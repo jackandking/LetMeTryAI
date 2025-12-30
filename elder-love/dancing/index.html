@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <title>爱跳舞 - 老人爱</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script src="../../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💃 爱跳舞 💃</h1>
+            <p class="subtitle">分享舞蹈视频，记录动人瞬间</p>
+            <p class="description">晒晒您的舞蹈片段，分享教学或表演，一起交流舞技！</p>
+        </header>
+
+        <div class="section dances-section">
+            <h2>🎵 大家的舞蹈作品</h2>
+            <div id="loadingMessage" class="loading-message">正在加载...</div>
+            <div id="dancesList" class="dishes-list">
+                <!-- Dances will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <div class="section vote-section">
+            <h2>🗳️ 投票十大家常舞</h2>
+            <p>参与投票，选出您心目中的十大家常舞！</p>
+            <a href="vote.html" class="vote-btn">去投票</a>
+        </div>
+
+        <div class="section upload-section">
+            <h2>📤 分享您的舞蹈</h2>
+            <form id="uploadForm" class="upload-form">
+                <div class="form-group">
+                    <label for="danceName">舞名：</label>
+                    <input type="text" id="danceName" name="danceName" placeholder="例如：广场舞、太极舞" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoLink">快手视频链接：</label>
+                    <input type="url" id="videoLink" name="videoLink" placeholder="粘贴快手视频链接" required>
+                    <small style="color: #7f8c8d; font-size: 0.9em;">支持粘贴完整内容，会自动提取链接</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">简单描述（可选）：</label>
+                    <textarea id="description" name="description" placeholder="说说这支舞的风格或编排要点" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">提交分享</button>
+            </form>
+        </div>
+
+        <div class="back-link">
+            <a href="../">← 返回老人爱主页</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the page when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+    
+    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+/* Same styles as cooking vote styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #ff7675 100%);
+    color: #2d3436;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#loadingMessage {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.5em;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.dish-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dish-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dish-container.selected { border: 4px solid #e74c3c; }
+.dish-name { font-size: 1.8em; font-weight: bold; color: #e74c3c; text-align: center; margin-bottom: 10px; }
+.dish-description { font-size: 1em; color: #555; text-align: center; line-height: 1.6; }
+
+.show-result-btn { display: block; margin: 30px auto; padding: 15px 40px; font-size: 1.3em; color: white; background: linear-gradient(135deg, #00b894 0%, #00a080 100%); border: none; border-radius: 10px; cursor: pointer; }
+
+.results-section { background: white; padding: 30px; border-radius: 15px; }
+.winner-section { text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; }
+
+.result-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 20px; background: linear-gradient(135deg, #fff5e6 0%, #ffe6e6 100%); border-radius: 10px; border: 2px solid #fdcb6e; }
+
+.result-rank { font-size: 1.8em; font-weight: bold; color: #e74c3c; margin-right: 20px; }
+.result-name { font-size: 1.3em; font-weight: bold; color: #2d3436; }
+.result-votes { font-size: 1.2em; font-weight: bold; color: #e74c3c; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.8em; }
+    .dish-gallery { grid-template-columns: 1fr; }
+}
