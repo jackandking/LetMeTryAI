@@ -310,8 +310,8 @@
         <form class="upload-form" id="uploadForm">
             <div class="form-group">
                 <label>上传模式</label>
-                <label style="font-weight:normal; margin-right:10px;"><input type="radio" name="uploadMode" value="two" checked> 两张9:16图片（分别输入背影和正面URL）</label>
-                <label style="font-weight:normal;"><input type="radio" name="uploadMode" value="split"> 一张18:16图片（只输入一张URL，预览时切两半并分别作为背面/正面上传）</label>
+                <label style="font-weight:normal; margin-right:10px;"><input type="radio" name="uploadMode" value="two"> 两张9:16图片（分别输入背影和正面URL）</label>
+                <label style="font-weight:normal;"><input type="radio" name="uploadMode" value="split" checked> 一张18:16图片（只输入一张URL，预览时切两半并分别作为背面/正面上传）</label>
             </div>
             <div class="form-group">
                 <label for="backImageUrl">背影照片链接 *</label>
@@ -348,6 +348,9 @@
                     <div id="frontPreview" class="no-preview">在上方输入正面图片链接后，这里将显示预览</div>
                     <canvas id="frontCanvas" style="display:none; width:100%; height:auto; border-radius:8px;"></canvas>
                 </div>
+            </div>
+            <div style="text-align:center; margin:12px 0;">
+                <button type="button" id="swapBtn" class="submit-btn" style="width:auto; padding:8px 14px;">↔ 互换左右</button>
             </div>
 
             <div class="form-group" style="margin-top: 30px;">
@@ -423,6 +426,40 @@
         setModeUI(getUploadMode());
         uploadModeRadios.forEach(r => r.addEventListener('change', () => setModeUI(getUploadMode())));
 
+        // Swap state for split-mode (when user wants left/right reversed)
+        let splitSwapped = false;
+
+        function swapPreviews() {
+            const mode = getUploadMode();
+            if (mode === 'split') {
+                // swap canvas elements between preview boxes
+                const backBox = document.getElementById('backPreview').parentElement;
+                const frontBox = document.getElementById('frontPreview').parentElement;
+                const backCan = document.getElementById('backCanvas');
+                const frontCan = document.getElementById('frontCanvas');
+                // move nodes
+                if (backCan && frontCan) {
+                    backBox.appendChild(frontCan);
+                    frontBox.appendChild(backCan);
+                    // ensure canvases are displayed in correct boxes
+                    backCan.style.display = '';
+                    frontCan.style.display = '';
+                    splitSwapped = !splitSwapped;
+                }
+            } else {
+                // two-image mode: swap input values and re-trigger previews
+                const backVal = backImageInput.value;
+                const frontVal = frontImageInput.value;
+                backImageInput.value = frontVal;
+                frontImageInput.value = backVal;
+                // trigger input handlers to refresh previews
+                backImageInput.dispatchEvent(new Event('input'));
+                frontImageInput.dispatchEvent(new Event('input'));
+            }
+        }
+
+        document.getElementById('swapBtn').addEventListener('click', swapPreviews);
+
         // simple image preview helper
         function createImagePreview(url) {
             const img = document.createElement('img');
@@ -452,16 +489,26 @@
             // draw left half into backCanvas
             backCanvas.width = half;
             backCanvas.height = h;
+            backCanvas.style.width = '';
+            backCanvas.style.height = '';
             const bctx = backCanvas.getContext('2d');
             bctx.clearRect(0, 0, backCanvas.width, backCanvas.height);
+            // fill white to avoid transparent edges turning black when exporting to JPEG
+            bctx.fillStyle = '#ffffff';
+            bctx.fillRect(0, 0, backCanvas.width, backCanvas.height);
             bctx.drawImage(img, 0, 0, half, h, 0, 0, half, h);
 
             // draw right half into frontCanvas
             const rightW = w - half;
             frontCanvas.width = rightW;
             frontCanvas.height = h;
+            frontCanvas.style.width = '';
+            frontCanvas.style.height = '';
             const fctx = frontCanvas.getContext('2d');
             fctx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
+            // fill white to avoid transparent edges turning black when exporting to JPEG
+            fctx.fillStyle = '#ffffff';
+            fctx.fillRect(0, 0, frontCanvas.width, frontCanvas.height);
             fctx.drawImage(img, half, 0, rightW, h, 0, 0, rightW, h);
 
             // show canvases
@@ -481,12 +528,68 @@
             });
         }
 
+        // Export a canvas using its displayed size so upload matches preview.
+        async function exportCanvasToFile(canvas, name, quality = 0.92) {
+            const dpr = window.devicePixelRatio || 1;
+            // Use the displayed size (clientWidth/Height) to match preview rendering
+            const displayW = Math.max(1, Math.round((canvas.clientWidth || canvas.width) * dpr));
+            const displayH = Math.max(1, Math.round((canvas.clientHeight || canvas.height) * dpr));
+            const exportCanvas = document.createElement('canvas');
+            exportCanvas.width = displayW;
+            exportCanvas.height = displayH;
+            const ctx = exportCanvas.getContext('2d');
+            // white background to avoid transparent -> black when JPEG
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+            // draw source canvas scaled to export size
+            ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, exportCanvas.width, exportCanvas.height);
+            return new Promise((resolve, reject) => {
+                exportCanvas.toBlob(blob => {
+                    if (!blob) return reject(new Error('Export canvas 转 Blob 失败'));
+                    const file = new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
+                    resolve(file);
+                }, 'image/jpeg', quality);
+            });
+        }
+
+        // Compute SHA-1 hex of a string (uses SubtleCrypto when available)
+        async function sha1Hex(str) {
+            if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+                const data = new TextEncoder().encode(str);
+                const digest = await window.crypto.subtle.digest('SHA-1', data);
+                const bytes = Array.from(new Uint8Array(digest));
+                return bytes.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+            // Fallback: simple non-cryptographic hash
+            let h = 0;
+            for (let i = 0; i < str.length; i++) {
+                h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+            }
+            return (h >>> 0).toString(16).padStart(8, '0');
+        }
+
         async function uploadFileToImageApi(file) {
             const formData = new FormData();
             formData.append('file', file);
-            const resp = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, { method: 'POST', body: formData });
-            if (!resp.ok) throw new Error('图片上传失败');
-            return await resp.json();
+            let resp;
+            try {
+                resp = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, { method: 'POST', body: formData });
+            } catch (err) {
+                throw new Error('上传请求失败：' + (err.message || '网络错误'));
+            }
+            if (!resp.ok) {
+                // try to extract server error message
+                let bodyText = '';
+                try { bodyText = await resp.text(); } catch (e) { bodyText = ''; }
+                const msg = bodyText ? `图片上传失败：${bodyText}` : `图片上传失败：HTTP ${resp.status}`;
+                throw new Error(msg);
+            }
+            // try parse JSON but fall back to text
+            try {
+                return await resp.json();
+            } catch (err) {
+                try { return { url: await resp.text() }; } catch (e) { throw new Error('图片上传后解析响应失败'); }
+            }
         }
 
         function extractImageUrlFromResponse(json) {
@@ -503,7 +606,13 @@
         }
 
         backImageInput.addEventListener('input', async function() {
-            const url = this.value.trim();
+            let url = this.value.trim();
+            if (url && /^http:\/\//i.test(url)) {
+                // auto-upgrade to HTTPS for upload page convenience
+                const httpsUrl = url.replace(/^http:/i, 'https:');
+                this.value = httpsUrl;
+                url = httpsUrl;
+            }
             const mode = getUploadMode();
             if (!url) {
                 backPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
@@ -538,7 +647,12 @@
         });
 
         frontImageInput.addEventListener('input', function() {
-            const url = this.value.trim();
+            let url = this.value.trim();
+            if (url && /^http:\/\//i.test(url)) {
+                const httpsUrl = url.replace(/^http:/i, 'https:');
+                this.value = httpsUrl;
+                url = httpsUrl;
+            }
             if (getUploadMode() === 'split') return;
             if (url) {
                 const validation = window.isValidImageUrl(url);
@@ -591,18 +705,28 @@
             try {
                 // If split mode, generate two files and upload them to IMAGE_UPLOAD first
                 if (mode === 'split') {
-                    // create File objects from canvases
-                    const backFile = await canvasToFile(backCanvas, 'split-back.jpg');
-                    const frontFile = await canvasToFile(frontCanvas, 'split-front.jpg');
+                    // create File objects from canvases with deterministic hash-based names
+                    const sourceUrl = backImageInput.value.trim();
+                    const hash = await sha1Hex(sourceUrl);
+                    const backName = `split-back-${hash}.jpg`;
+                    const frontName = `split-front-${hash}.jpg`;
+                    // Export from the preview-rendered appearance so upload matches preview
+                    const backFile = splitSwapped ? await exportCanvasToFile(frontCanvas, backName) : await exportCanvasToFile(backCanvas, backName);
+                    const frontFile = splitSwapped ? await exportCanvasToFile(backCanvas, frontName) : await exportCanvasToFile(frontCanvas, frontName);
 
-                    const [backResp, frontResp] = await Promise.all([
-                        uploadFileToImageApi(backFile),
-                        uploadFileToImageApi(frontFile)
-                    ]);
+                    let backResp, frontResp;
+                    try {
+                        [backResp, frontResp] = await Promise.all([
+                            uploadFileToImageApi(backFile),
+                            uploadFileToImageApi(frontFile)
+                        ]);
+                    } catch (err) {
+                        throw new Error('图片上传失败：' + (err.message || '请稍后重试'));
+                    }
 
                     const backUrl = extractImageUrlFromResponse(backResp);
                     const frontUrl = extractImageUrlFromResponse(frontResp);
-                    if (!backUrl || !frontUrl) throw new Error('未能从上传接口获得图片URL');
+                    if (!backUrl || !frontUrl) throw new Error('未能从上传接口获得图片URL，返回数据：' + JSON.stringify(backResp) + ' / ' + JSON.stringify(frontResp));
 
                     backImageUrl = backUrl;
                     frontImageUrl = frontUrl;
@@ -617,6 +741,12 @@
                         params: [backImageUrl, frontImageUrl, backImageUrl, frontImageUrl]
                     })
                 });
+
+                if (!checkResponse.ok) {
+                    let txt = '';
+                    try { txt = await checkResponse.text(); } catch (e) {}
+                    throw new Error('数据库查询失败：' + (txt || ('HTTP ' + checkResponse.status)));
+                }
 
                 const existing = await checkResponse.json();
                 if (existing && existing.length > 0) {
@@ -652,9 +782,10 @@
                         params: [backImageUrl, frontImageUrl]
                     })
                 });
-
                 if (!insertResponse.ok) {
-                    throw new Error('上传失败');
+                    let txt = '';
+                    try { txt = await insertResponse.text(); } catch (e) {}
+                    throw new Error('数据库插入失败：' + (txt || ('HTTP ' + insertResponse.status)));
                 }
 
                 const BACK_VIEW_UPLOAD_POINTS = 20;
@@ -674,7 +805,7 @@
 
             } catch (error) {
                 console.error('Upload error:', error);
-                showPointsNotification('❌ 上传失败，请稍后重试');
+                showPointsNotification('❌ 上传失败：' + (error && error.message ? error.message : '请稍后重试'));
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = '📤 提交上传（获得 20 积分）';
