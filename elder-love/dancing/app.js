@@ -145,12 +145,7 @@ function createDanceCard(dance) {
     const card = document.createElement('div');
     card.className = 'dish-card';
 
-    // Thumbnail (use provided default if none supplied)
-    const img = document.createElement('img');
-    img.className = 'card-thumb';
-    img.alt = dance.name || '舞蹈缩略图';
-    img.src = dance.thumbnail || 'http://eb118-file.cdn.bcebos.com/upload/db8c95db3c044e1f8f4b44b3e85241f8_1289981251.png?x-bce-process=image/format,f_auto/resize,m_lfit,limit_1,w_500,h_500/quality,q_85&';
-    card.appendChild(img);
+    // Thumbnail removed per request
 
     const title = document.createElement('h3');
     title.textContent = dance.name;
