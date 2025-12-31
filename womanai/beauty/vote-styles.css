@@ -1,0 +1,21 @@
+/* Vote styles adapted from elder-love dancing */
+* { margin:0; padding:0; box-sizing:border-box }
+body { font-family: "Microsoft YaHei", Arial, sans-serif; background: linear-gradient(135deg, #fffaf0 0%, #fff0f5 100%); color:#2d3436; min-height:100vh; padding:20px }
+h1 { text-align:center; color:#c0392b; font-size:2.2em; margin-bottom:18px }
+#loadingMessage { text-align:center; padding:30px; font-size:1.2em; color:#888; background:rgba(255,255,255,0.9); border-radius:12px; max-width:600px; margin:10px auto }
+.dish-gallery, .dish-gallery { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; max-width:1100px; margin:0 auto }
+.dish-container { background:white; border-radius:12px; padding:16px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.08) }
+.dish-container.selected { border:4px solid #e74c3c }
+.dish-name { font-size:1.4em; font-weight:bold; color:#e74c3c; text-align:center; margin-bottom:8px }
+.dish-description { color:#555; text-align:center }
+.show-result-btn { display:block; margin:20px auto; padding:12px 30px; background: linear-gradient(135deg,#00b894 0%,#00a080 100%); color:#fff; border:none; border-radius:8px; font-size:1em }
+.results-section { background:white; padding:20px; border-radius:12px }
+.winner-section { text-align:center; margin-bottom:20px; padding:20px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:12px; color:white }
+.result-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:12px; background:linear-gradient(135deg,#fff5e6 0%,#ffe6e6 100%); border-radius:8px }
+.result-rank { font-size:1.4em; color:#e74c3c; margin-right:12px }
+.result-name { font-weight:bold }
+.result-votes { color:#e74c3c; font-weight:bold }
+.retry-button { display:block; margin:16px auto; padding:10px 20px; border-radius:8px; background:#f1f1f1; border:none }
+.back-link { text-align:center; margin-top:12px }
+.back-link a { text-decoration:none; color:#333; padding:8px 12px; background:rgba(0,0,0,0.04); border-radius:8px }
+@media (max-width:768px) { h1 { font-size:1.6em } .dish-gallery { grid-template-columns:1fr } }
