@@ -4,6 +4,14 @@
 // Base URL for API and image resources
 window.BASE_URL = 'https://letmetry.cloud';
 
+/**
+ * TESTING MODE: Enable MySQL API mocking for testing when connection fails
+ * Set to true to use mock data when ERR_CONNECTION_RESET or network errors occur
+ * Also can be enabled via URL parameter: ?mock=true
+ * This is useful for development and testing without requiring a live database connection
+ */
+window.ENABLE_MYSQL_MOCK = false; // Set to true to enable mock mode
+
 // API endpoints
 window.API_ENDPOINTS = {
   AI_CHAT: `${window.BASE_URL}/ai/chat`,

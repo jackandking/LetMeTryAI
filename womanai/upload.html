@@ -16,7 +16,31 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
+    <script src="points-system.js"></script>
     <style>
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 12px;
+            color: #f5576c;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .points-notice {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            background: rgba(255,255,255,0.95);
+            color: #f5576c;
+            padding: 10px 14px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            display: none;
+            z-index: 10;
+        }
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
             margin: 0;
@@ -190,6 +214,7 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>上传帅哥</h1>
+        <div class="points-display">💎 <span id="pointsValue">0</span> 分</div>
     </header>
     
     <div class="container">
@@ -219,6 +244,7 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+    <div id="pointsNotification" class="points-notice"></div>
     
     <footer>
         <p>&copy; 2025 女人爱. 保留所有权利.</p>
@@ -232,6 +258,34 @@
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
+        const pointsValue = document.getElementById('pointsValue');
+        const pointsNotification = document.getElementById('pointsNotification');
+
+        function updatePointsDisplay() {
+            if (pointsValue && window.PointsSystem) {
+                pointsValue.textContent = PointsSystem.getPoints();
+            }
+        }
+
+        function showPointsNotification(text) {
+            if (!pointsNotification) return;
+            pointsNotification.textContent = text;
+            pointsNotification.style.display = 'block';
+            setTimeout(() => { pointsNotification.style.display = 'none'; }, 2600);
+        }
+
+        function initPoints() {
+            if (!window.PointsSystem) return;
+            const info = PointsSystem.initialize();
+            updatePointsDisplay();
+            if (info.isNewUser) {
+                showPointsNotification(`欢迎新用户！+${PointsSystem.POINTS_CONFIG.NEW_USER} 分`);
+            }
+            if (info.dailyVisit && info.dailyVisit.awarded) {
+                showPointsNotification(`每日签到 +${info.dailyVisit.points} 分`);
+                updatePointsDisplay();
+            }
+        }
 
         // Preview image when URL is entered
         imageUrlInput.addEventListener('input', function() {
@@ -291,6 +345,15 @@
                 
                 if (result.success || result.data) {
                     showMessage('上传成功！感谢分享 😊', 'success');
+                    try {
+                        if (window.PointsSystem) {
+                            const newTotal = PointsSystem.awardUploadPoints();
+                            updatePointsDisplay();
+                            showPointsNotification(`上传奖励 +${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE} 分，当前 ${newTotal} 分`);
+                        }
+                    } catch (err) {
+                        console.warn('points award failed', err);
+                    }
                     imageUrlInput.value = '';
                     previewSection.style.display = 'none';
                     
@@ -352,6 +415,9 @@
                 document.head.appendChild(script);
             }
         })();
+
+        // Init points after scripts loaded
+        initPoints();
     </script>
 </body>
 </html>
