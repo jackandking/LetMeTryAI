@@ -7,6 +7,124 @@
 const TIMESTAMP_2124 = 4866674732;
 
 /**
+ * MySQL API Mock Handler
+ * Provides fallback mock responses when the real MySQL API is unavailable (e.g., ERR_CONNECTION_RESET)
+ * Enable by setting window.ENABLE_MYSQL_MOCK = true or via URL parameter ?mock=true
+ */
+const MySQLMock = (function() {
+    // Mock database storage
+    const mockData = {
+        handsome_images: [
+            { id: 1, image_url: 'https://eb118-file.cdn.bcebos.com/upload/9964eb0b8c3948dcb33d2f74a7f6d0fe_1290242714.png', created_at: new Date().toISOString(), view_count: 0 },
+            { id: 2, image_url: 'https://eb118-file.cdn.bcebos.com/upload/9964eb0b8c3948dcb33d2f74a7f6d0fe_1290242714.png', created_at: new Date().toISOString(), view_count: 0 }
+        ],
+        beauty_images: [
+            { id: 1, image_url: 'https://eb118-file.cdn.bcebos.com/upload/9964eb0b8c3948dcb33d2f74a7f6d0fe_1290242714.png', created_at: new Date().toISOString(), view_count: 0 },
+            { id: 2, image_url: 'https://eb118-file.cdn.bcebos.com/upload/9964eb0b8c3948dcb33d2f74a7f6d0fe_1290242714.png', created_at: new Date().toISOString(), view_count: 0 }
+        ]
+    };
+
+    function isEnabled() {
+        if (typeof window === 'undefined') return false;
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mock') === 'true') return true;
+        return window.ENABLE_MYSQL_MOCK === true;
+    }
+
+    function parseSelectQuery(sql) {
+        const match = sql.match(/SELECT\s+.+?\s+FROM\s+(\w+)/i);
+        if (!match) return null;
+        const table = match[1];
+        const limitMatch = sql.match(/LIMIT\s+(\d+)/i);
+        const offsetMatch = sql.match(/OFFSET\s+(\d+)/i);
+        return {
+            table,
+            limit: limitMatch ? parseInt(limitMatch[1]) : 100,
+            offset: offsetMatch ? parseInt(offsetMatch[1]) : 0
+        };
+    }
+
+    function handleSelect(sql) {
+        const query = parseSelectQuery(sql);
+        if (!query || !mockData[query.table]) return [];
+        const data = mockData[query.table];
+        return data.slice(query.offset, query.offset + query.limit);
+    }
+
+    function handleUpdate(sql) {
+        return { affectedRows: 1, changedRows: 1 };
+    }
+
+    function handleInsert(sql) {
+        return { insertId: 1, affectedRows: 1 };
+    }
+
+    function handleDelete(sql) {
+        return { affectedRows: 1 };
+    }
+
+    async function execute(sql, params) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (sql.match(/SELECT/i)) return handleSelect(sql);
+        if (sql.match(/UPDATE/i)) return handleUpdate(sql);
+        if (sql.match(/INSERT/i)) return handleInsert(sql);
+        if (sql.match(/DELETE/i)) return handleDelete(sql);
+        return [];
+    }
+
+    return {
+        isEnabled,
+        execute
+    };
+})();
+
+/**
+ * Wrapped fetch for MySQL API with fallback to mock on connection errors
+ * @param {string} url - API endpoint URL
+ * @param {Object} options - Fetch options including body with sql and params
+ * @returns {Promise<Response>} Fetch response
+ */
+async function fetchMySQLWithMock(url, options) {
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response;
+    } catch (error) {
+        // Check if it's a connection reset or network error
+        if (error.message.includes('ERR_CONNECTION_RESET') || 
+            error.message.includes('Failed to fetch') ||
+            error.message.includes('Network error') ||
+            error instanceof TypeError) {
+            
+            console.warn(`MySQL API connection error: ${error.message}. Using mock data for testing.`);
+            
+            if (!MySQLMock.isEnabled()) {
+                throw error;
+            }
+
+            let sql = '';
+            let params = [];
+            try {
+                const body = JSON.parse(options.body);
+                sql = body.sql || '';
+                params = body.params || [];
+            } catch (e) {
+                console.warn('Could not parse request body', e);
+            }
+
+            const mockResult = await MySQLMock.execute(sql, params);
+            return new Response(JSON.stringify(mockResult), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        throw error;
+    }
+}
+
+/**
  * Logs a message to the console
  * @param {string|Object} message - The message to log
  */

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分中心 - 女人爱</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../config.js"></script>
+    <script src="points-system.js"></script>
+    <style>
+        body { font-family: 'Arial','Helvetica',sans-serif; margin:0; padding:0; background: linear-gradient(135deg,#f093fb 0%,#f5576c 100%); color:#333; min-height:100vh; }
+        header { background: rgba(255,255,255,0.95); padding:20px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:relative; }
+        .nav-back { position:absolute; left:20px; top:22px; color:#f5576c; text-decoration:none; font-weight:bold; }
+        h1 { margin:0; color:#f5576c; }
+        .points-display { position:absolute; right:20px; top:20px; background: rgba(255,255,255,0.9); padding:8px 12px; border-radius:12px; color:#f5576c; font-weight:bold; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width:900px; margin:20px auto; padding:20px; }
+        .card { background:#fff; border-radius:14px; padding:20px; box-shadow:0 6px 18px rgba(0,0,0,0.1); margin-bottom:16px; }
+        .card h2 { margin:0 0 8px; color:#f5576c; }
+        .rule-list { list-style: none; padding-left:0; margin:0; }
+        .rule-list li { margin-bottom:8px; }
+        .highlight { color:#f5576c; font-weight:bold; }
+        footer { text-align:center; color:#666; padding:20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="nav-back" href="index.html">← 返回</a>
+        <h1>积分中心</h1>
+        <div class="points-display">💎 <span id="pointsValue">0</span> 分</div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>基础规则</h2>
+            <ul class="rule-list">
+                <li>新用户：<span class="highlight">+3 分</span>（首次访问自动获得）</li>
+                <li>每日签到：<span class="highlight">+5 分</span>（每天首次访问任意页面）</li>
+                <li>上传帅哥：<span class="highlight">+10 分</span>（上传成功后奖励）</li>
+                <li>观看广告：<span class="highlight">+10 / +3 分</span>（完整/部分观看）</li>
+                <li>查看图片：消耗 <span class="highlight">1 分</span>（3 天内再次查看免费）</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>常见问题</h2>
+            <ul class="rule-list">
+                <li>积分存储在浏览器本地；清除浏览器数据会重置。</li>
+                <li>同一设备独立计分，暂不跨设备同步。</li>
+                <li>可在欣赏页、上传页看到积分并获得每日奖励。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>操作</h2>
+            <button id="resetBtn" style="padding:10px 16px; border:none; border-radius:10px; background:#f5576c; color:#fff; cursor:pointer;">重置积分（仅测试）</button>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 女人爱</footer>
+
+    <script>
+        function updatePointsDisplay() {
+            const el = document.getElementById('pointsValue');
+            if (el && window.PointsSystem) {
+                el.textContent = PointsSystem.getPoints();
+            }
+        }
+
+        function initPoints() {
+            if (!window.PointsSystem) return;
+            const info = PointsSystem.initialize();
+            updatePointsDisplay();
+            if (info.isNewUser && window.alert) {
+                alert(`欢迎新用户！+${PointsSystem.POINTS_CONFIG.NEW_USER} 分`);
+            }
+            if (info.dailyVisit && info.dailyVisit.awarded && window.alert) {
+                alert(`每日签到 +${info.dailyVisit.points} 分`);
+                updatePointsDisplay();
+            }
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (window.PointsSystem) {
+                PointsSystem.resetUser();
+                PointsSystem.initialize();
+                updatePointsDisplay();
+            }
+        });
+
+        initPoints();
+    </script>
+</body>
+</html>

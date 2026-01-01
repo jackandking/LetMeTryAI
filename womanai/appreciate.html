@@ -7,6 +7,7 @@
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
+    <script src="../util.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -16,7 +17,50 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
+    <script src="points-system.js"></script>
     <style>
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 12px;
+            color: #f5576c;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .points-notice {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            background: rgba(255,255,255,0.95);
+            color: #f5576c;
+            padding: 10px 14px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            display: none;
+            z-index: 10;
+        }
+        .ad-buttons-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .watch-ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
             margin: 0;
@@ -166,14 +210,36 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>欣赏帅哥</h1>
+        <div class="points-display">💎 <span id="pointsValue">0</span> 分</div>
     </header>
     
     <div class="container">
+        <div style="background: linear-gradient(135deg, #ffe6f0 0%, #ffd6e8 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-size: 1.1em; font-weight: bold; color: #c0392b; margin-bottom: 8px;">💎 积分说明</div>
+            <div style="font-size: 0.9em; color: #8b4789; line-height: 1.6;">
+                <strong>获取积分：</strong>新用户+3分 | 每日访问+5分 | 上传图片+10分/张 | 看广告+3~10分<br>
+                <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
+            </div>
+        </div>
+        
+        <!-- Watch Ad Button -->
+        <div class="ad-buttons-container">
+            <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
+        </div>
+        
         <div id="loading">正在加载帅哥图片...</div>
         <div id="gallery" class="gallery"></div>
         <div id="error" class="error" style="display: none;"></div>
         <div class="load-more" id="loadMoreSection" style="display: none;">
             <button id="loadMoreBtn">加载更多</button>
+        </div>
+    </div>
+    <div id="pointsNotification" class="points-notice"></div>
+    <!-- Full-view modal -->
+    <div id="fullViewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div style="max-width:95%; max-height:90%; position:relative;">
+            <img id="fullViewImage" src="" alt="" style="max-width:100%; max-height:100%; display:block; margin:0 auto; border-radius:8px;">
+            <button id="closeFullView" style="position:absolute; right:8px; top:8px; background:rgba(255,255,255,0.9); border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">关闭</button>
         </div>
     </div>
     
@@ -186,6 +252,127 @@
         const imagesPerPage = 20;
         let isLoading = false;
         let hasMoreImages = true;
+
+        function updatePointsDisplay() {
+            const pointsVal = document.getElementById('pointsValue');
+            if (pointsVal && window.PointsSystem) {
+                pointsVal.textContent = PointsSystem.getPoints();
+            }
+        }
+
+        function showPointsNotification(text) {
+            const el = document.getElementById('pointsNotification');
+            if (!el) return;
+            el.textContent = text;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 2600);
+        }
+
+        function initPoints() {
+            if (!window.PointsSystem) return;
+            const info = PointsSystem.initialize();
+            updatePointsDisplay();
+            
+            // Handle ad return first
+            handleAdReturn();
+            
+            if (info.isNewUser) {
+                showPointsNotification(`欢迎新用户！+${PointsSystem.POINTS_CONFIG.NEW_USER} 分`);
+            }
+            if (info.dailyVisit && info.dailyVisit.awarded) {
+                showPointsNotification(`每日签到 +${info.dailyVisit.points} 分`);
+                updatePointsDisplay();
+            }
+        }
+
+        // Handle ad return from mini-program
+        function handleAdReturn() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const finishedAd = urlParams.get('finishedAd');
+            
+            if (finishedAd !== null) {
+                let pointsToAdd = 0;
+                let message = '';
+                
+                if (finishedAd === 'true') {
+                    pointsToAdd = 10;
+                    message = '🎉 感谢观看完整广告！获得 10 积分';
+                } else {
+                    pointsToAdd = 3;
+                    message = '👍 感谢观看！获得 3 积分';
+                }
+                
+                PointsSystem.addPoints(pointsToAdd);
+                updatePointsDisplay();
+                showPointsNotification(message);
+                
+                // Clean URL
+                const cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+
+        // Show ad for points
+        function showAdForPoints() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                // Debug mode: directly award points
+                PointsSystem.addPoints(PointsSystem.POINTS_CONFIG.AD_FULL);
+                updatePointsDisplay();
+                showPointsNotification(`🎉 Debug 模式：已获得 ${PointsSystem.POINTS_CONFIG.AD_FULL} 积分`);
+                return;
+            }
+
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=womanai/appreciate",
+                });
+            } else {
+                console.log('Mini-program navigation not available');
+                showPointsNotification('⚠️ 广告功能仅在小程序中可用');
+            }
+        }
+
+        // Handle viewing an image (may deduct points)
+        async function viewImageHandler(imageUrl) {
+            if (!imageUrl) return;
+            if (!window.PointsSystem) {
+                // fallback: just open image in new tab
+                window.open(imageUrl, '_blank');
+                return;
+            }
+
+            try {
+                const result = await PointsSystem.viewItem(imageUrl);
+                if (result && result.success) {
+                    updatePointsDisplay();
+                    showPointsNotification(result.message || `已消耗 ${result.pointsSpent || 0} 分`);
+                    showFullViewModal(imageUrl);
+                } else {
+                    // not enough points or other failure
+                    showPointsNotification(result && result.message ? result.message : '无法查看，可能积分不足');
+                }
+            } catch (err) {
+                console.error('viewItem error', err);
+                showPointsNotification('查看失败，请稍后重试');
+            }
+        }
+
+        function showFullViewModal(imageUrl) {
+            const modal = document.getElementById('fullViewModal');
+            const img = document.getElementById('fullViewImage');
+            if (!modal || !img) {
+                window.open(imageUrl, '_blank');
+                return;
+            }
+            img.src = imageUrl;
+            modal.style.display = 'flex';
+            // attach close
+            const closeBtn = document.getElementById('closeFullView');
+            if (closeBtn) closeBtn.onclick = () => { modal.style.display = 'none'; };
+        }
 
         async function loadImages() {
             if (isLoading || !hasMoreImages) return;
@@ -203,7 +390,7 @@
                 // Query handsome men images from database
                 const sql = `SELECT id, image_url, created_at FROM handsome_images ORDER BY created_at DESC LIMIT ${imagesPerPage} OFFSET ${(currentPage - 1) * imagesPerPage}`;
                 
-                const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                const response = await fetchMySQLWithMock(API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -288,8 +475,24 @@
                 
                 info.innerHTML = `<p>上传时间: ${dateStr}</p>`;
                 
+                // make image clickable to view (may cost points)
                 item.appendChild(img);
                 item.appendChild(info);
+
+                // overlay / click handler
+                const clickArea = document.createElement('div');
+                clickArea.style.position = 'absolute';
+                clickArea.style.inset = '0';
+                clickArea.style.cursor = 'pointer';
+                clickArea.title = '点击查看大图（可能消耗积分）';
+                clickArea.onclick = function (e) {
+                    e.stopPropagation();
+                    viewImageHandler(image.image_url);
+                };
+
+                // ensure gallery item is positioned for overlay
+                item.style.position = 'relative';
+                item.appendChild(clickArea);
                 gallery.appendChild(item);
             });
         }
@@ -298,6 +501,7 @@
         document.getElementById('loadMoreBtn').addEventListener('click', loadImages);
 
         // Initial load
+        initPoints();
         loadImages();
 
         // VConsole for debugging
