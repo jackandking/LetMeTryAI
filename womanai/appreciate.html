@@ -7,7 +7,8 @@
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
-    <script src="../util.js"></script>
+    <script src="points-system.js"></script>
+        <script src="harem.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -17,55 +18,12 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
-    <script src="points-system.js"></script>
     <style>
-        .points-display {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px 12px;
-            border-radius: 12px;
-            color: #f5576c;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .points-notice {
-            position: fixed;
-            top: 80px;
-            right: 16px;
-            background: rgba(255,255,255,0.95);
-            color: #f5576c;
-            padding: 10px 14px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-            display: none;
-            z-index: 10;
-        }
-        .ad-buttons-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .watch-ad-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1.1em;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-            transition: transform 0.3s ease;
-        }
-        .watch-ad-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
-        }
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
             min-height: 100vh;
         }
 
@@ -91,6 +49,57 @@
             font-size: 1.2em;
         }
 
+        .points-display {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .points-display .points-icon {
+            margin-right: 5px;
+        }
+
+        .points-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 2.5s;
+            display: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 20px auto;
@@ -108,7 +117,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
         }
 
         .gallery-item {
@@ -117,10 +126,18 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .gallery-item:hover {
             transform: translateY(-5px);
+        }
+
+        .gallery-item .image-wrapper {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
         }
 
         .gallery-item img {
@@ -128,6 +145,73 @@
             height: 300px;
             object-fit: cover;
             display: block;
+        }
+
+        .gallery-item .blur-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        /* Modal for full image */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: zoomIn 0.3s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: translateY(-50%) scale(0.8); }
+            to { transform: translateY(-50%) scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
         }
 
         .gallery-item .info {
@@ -143,40 +227,40 @@
             text-overflow: ellipsis;
         }
 
-        .load-more {
+        #no-images {
             text-align: center;
-            margin: 40px 0;
-            padding-bottom: 40px;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+            display: none;
         }
 
-        .load-more button {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
             border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0 10px;
         }
 
-        .load-more button:hover {
+        .watch-ad-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
         }
 
-        .load-more button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
+        .watch-ad-btn:active {
+            transform: translateY(0);
         }
 
-        .error {
+        .ad-buttons-container {
             text-align: center;
-            color: white;
-            padding: 40px;
-            font-size: 1.1em;
+            margin-bottom: 20px;
         }
 
         footer {
@@ -184,9 +268,7 @@
             color: #666;
             text-align: center;
             padding: 20px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            margin-top: 40px;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -196,13 +278,88 @@
                 gap: 10px;
             }
 
+            .gallery-item .image-wrapper {
+                height: 200px;
+            }
+
             .gallery-item img {
                 height: 200px;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+            }
+
+            .points-display {
+                position: relative;
+                right: auto;
+                top: auto;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+                font-size: 0.9em;
             }
 
             header h1 {
                 font-size: 1.5em;
             }
+        }
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #d32f2f;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            transition: background 0.15s;
+            font-size: 0.9em;
+        }
+
+        .delete-btn:hover {
+            background: rgba(211, 47, 47, 0.08);
+        }
+        .delete-x {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-x:hover {
+            background: rgba(0,0,0,0.7);
+        }
+        /* Fullscreen modal for unobstructed viewing */
+        .full-image-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+
+        .full-image-modal img {
+            max-width: 98vw;
+            max-height: 98vh;
+            object-fit: contain;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border-radius: 6px;
         }
     </style>
 </head>
@@ -210,14 +367,20 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>欣赏帅哥</h1>
-        <div class="points-display">💎 <span id="pointsValue">0</span> 分</div>
+        <div class="points-display">
+            <span class="points-icon">💎</span>
+            <span id="pointsValue">0</span> 分
+        </div>
     </header>
+
+    <!-- Points notification -->
+    <div id="pointsNotification" class="points-notification"></div>
     
     <div class="container">
         <div style="background: linear-gradient(135deg, #ffe6f0 0%, #ffd6e8 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <div style="font-size: 1.1em; font-weight: bold; color: #c0392b; margin-bottom: 8px;">💎 积分说明</div>
             <div style="font-size: 0.9em; color: #8b4789; line-height: 1.6;">
-                <strong>获取积分：</strong>新用户+3分 | 每日访问+5分 | 上传图片+10分/张 | 看广告+3~10分<br>
+                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张 | 看广告+3~10分<br>
                 <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
             </div>
         </div>
@@ -226,21 +389,20 @@
         <div class="ad-buttons-container">
             <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
-        
-        <div id="loading">正在加载帅哥图片...</div>
+        <div id="loading">正在加载图片...</div>
+        <div id="no-images">暂无图片，快去上传吧！</div>
         <div id="gallery" class="gallery"></div>
-        <div id="error" class="error" style="display: none;"></div>
-        <div class="load-more" id="loadMoreSection" style="display: none;">
-            <button id="loadMoreBtn">加载更多</button>
-        </div>
     </div>
-    <div id="pointsNotification" class="points-notice"></div>
-    <!-- Full-view modal -->
-    <div id="fullViewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
-        <div style="max-width:95%; max-height:90%; position:relative;">
-            <img id="fullViewImage" src="" alt="" style="max-width:100%; max-height:100%; display:block; margin:0 auto; border-radius:8px;">
-            <button id="closeFullView" style="position:absolute; right:8px; top:8px; background:rgba(255,255,255,0.9); border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">关闭</button>
-        </div>
+
+    <!-- Modal for full image (legacy modal kept for fallback) -->
+    <div id="imageModal" class="modal" style="display:none;">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Fullscreen modal (used for large-view experience) -->
+    <div id="fullImageModal" class="full-image-modal" onclick="hideFullImage()">
+        <img id="fullImageModalImg" alt="全屏图片">
     </div>
     
     <footer>
@@ -248,44 +410,7 @@
     </footer>
 
     <script>
-        let currentPage = 1;
-        const imagesPerPage = 20;
-        let isLoading = false;
-        let hasMoreImages = true;
-
-        function updatePointsDisplay() {
-            const pointsVal = document.getElementById('pointsValue');
-            if (pointsVal && window.PointsSystem) {
-                pointsVal.textContent = PointsSystem.getPoints();
-            }
-        }
-
-        function showPointsNotification(text) {
-            const el = document.getElementById('pointsNotification');
-            if (!el) return;
-            el.textContent = text;
-            el.style.display = 'block';
-            setTimeout(() => { el.style.display = 'none'; }, 2600);
-        }
-
-        function initPoints() {
-            if (!window.PointsSystem) return;
-            const info = PointsSystem.initialize();
-            updatePointsDisplay();
-            
-            // Handle ad return first
-            handleAdReturn();
-            
-            if (info.isNewUser) {
-                showPointsNotification(`欢迎新用户！+${PointsSystem.POINTS_CONFIG.NEW_USER} 分`);
-            }
-            if (info.dailyVisit && info.dailyVisit.awarded) {
-                showPointsNotification(`每日签到 +${info.dailyVisit.points} 分`);
-                updatePointsDisplay();
-            }
-        }
-
-        // Handle ad return from mini-program
+        // Check URL parameters for ad completion
         function handleAdReturn() {
             const urlParams = new URLSearchParams(window.location.search);
             const finishedAd = urlParams.get('finishedAd');
@@ -295,221 +420,320 @@
                 let message = '';
                 
                 if (finishedAd === 'true') {
+                    // User watched full ad
                     pointsToAdd = 10;
                     message = '🎉 感谢观看完整广告！获得 10 积分';
                 } else {
+                    // User didn't finish ad
                     pointsToAdd = 3;
                     message = '👍 感谢观看！获得 3 积分';
                 }
                 
+                // Award points
                 PointsSystem.addPoints(pointsToAdd);
+                
+                // Update display
                 updatePointsDisplay();
+                
+                // Show notification
                 showPointsNotification(message);
                 
-                // Clean URL
+                // Clean URL without page reload
                 const cleanUrl = window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
             }
         }
 
-        // Show ad for points
+        /**
+         * Shows advertisement for earning points
+         */
         function showAdForPoints() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const debugMode = urlParams.get('debug') === 'true';
-            
-            if (debugMode) {
-                // Debug mode: directly award points
-                PointsSystem.addPoints(PointsSystem.POINTS_CONFIG.AD_FULL);
-                updatePointsDisplay();
-                showPointsNotification(`🎉 Debug 模式：已获得 ${PointsSystem.POINTS_CONFIG.AD_FULL} 积分`);
-                return;
-            }
-
-            if (typeof ks !== 'undefined' && ks.navigateTo) {
-                ks.navigateTo({
-                    url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=womanai/appreciate",
-                });
-            } else {
-                console.log('Mini-program navigation not available');
-                showPointsNotification('⚠️ 广告功能仅在小程序中可用');
-            }
-        }
-
-        // Handle viewing an image (may deduct points)
-        async function viewImageHandler(imageUrl) {
-            if (!imageUrl) return;
-            if (!window.PointsSystem) {
-                // fallback: just open image in new tab
-                window.open(imageUrl, '_blank');
-                return;
-            }
-
-            try {
-                const result = await PointsSystem.viewItem(imageUrl);
-                if (result && result.success) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const debugMode = urlParams.get('debug') === 'true';
+                if (debugMode) {
+                    // In non-miniapp debug mode, directly award full ad points
+                    PointsSystem.addPoints(PointsSystem.POINTS_CONFIG.AD_FULL);
                     updatePointsDisplay();
-                    showPointsNotification(result.message || `已消耗 ${result.pointsSpent || 0} 分`);
-                    showFullViewModal(imageUrl);
-                } else {
-                    // not enough points or other failure
-                    showPointsNotification(result && result.message ? result.message : '无法查看，可能积分不足');
+                    showPointsNotification(`🎉 Debug 模式：已获得 ${PointsSystem.POINTS_CONFIG.AD_FULL} 积分`);
+                    return;
                 }
-            } catch (err) {
-                console.error('viewItem error', err);
-                showPointsNotification('查看失败，请稍后重试');
-            }
+
+                if (typeof ks !== 'undefined' && ks.navigateTo) {
+                    ks.navigateTo({
+                        url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=womanai/appreciate",
+                    });
+                } else {
+                    // Fallback for testing in browser
+                    console.log('Mini-program navigation not available');
+                    showPointsNotification('⚠️ 广告功能仅在小程序中可用');
+                }
         }
 
-        function showFullViewModal(imageUrl) {
-            const modal = document.getElementById('fullViewModal');
-            const img = document.getElementById('fullViewImage');
-            if (!modal || !img) {
-                window.open(imageUrl, '_blank');
-                return;
-            }
-            img.src = imageUrl;
-            modal.style.display = 'flex';
-            // attach close
-            const closeBtn = document.getElementById('closeFullView');
-            if (closeBtn) closeBtn.onclick = () => { modal.style.display = 'none'; };
+        // Initialize points system (don't handle ad return yet)
+        const pointsInfo = PointsSystem.initialize();
+        const pointsValueElement = document.getElementById('pointsValue');
+        const pointsNotification = document.getElementById('pointsNotification');
+
+        // Update points display
+        function updatePointsDisplay() {
+            pointsValueElement.textContent = PointsSystem.getPoints();
         }
 
-        async function loadImages() {
-            if (isLoading || !hasMoreImages) return;
+        // Show points notification
+        function showPointsNotification(message) {
+            pointsNotification.textContent = message;
+            pointsNotification.style.display = 'block';
             
-            isLoading = true;
-            const loadingDiv = document.getElementById('loading');
-            const errorDiv = document.getElementById('error');
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            
-            loadingDiv.style.display = 'block';
-            errorDiv.style.display = 'none';
-            if (loadMoreBtn) loadMoreBtn.disabled = true;
-
-            try {
-                // Query handsome men images from database
-                const sql = `SELECT id, image_url, created_at FROM handsome_images ORDER BY created_at DESC LIMIT ${imagesPerPage} OFFSET ${(currentPage - 1) * imagesPerPage}`;
-                
-                const response = await fetchMySQLWithMock(API_ENDPOINTS.MYSQL_QUERY, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ sql })
-                });
-
-                if (!response.ok) {
-                    throw new Error('加载图片失败');
-                }
-
-                const images = await response.json();
-
-                if (!Array.isArray(images) || images.length === 0) {
-                    hasMoreImages = false;
-                    if (currentPage === 1) {
-                        errorDiv.textContent = '还没有帅哥图片，快去上传吧！';
-                        errorDiv.style.display = 'block';
-                    }
-                } else {
-                    displayImages(images);
-                    currentPage++;
-                    
-                    if (images.length < imagesPerPage) {
-                        hasMoreImages = false;
-                    }
-                }
-
-                // Show/hide load more button
-                const loadMoreSection = document.getElementById('loadMoreSection');
-                if (hasMoreImages && images.length > 0) {
-                    loadMoreSection.style.display = 'block';
-                } else {
-                    loadMoreSection.style.display = 'none';
-                }
-
-            } catch (error) {
-                console.error('Error loading images:', error);
-                errorDiv.textContent = '加载图片时出错，请稍后再试';
-                errorDiv.style.display = 'block';
-            } finally {
-                loadingDiv.style.display = 'none';
-                isLoading = false;
-                if (loadMoreBtn) loadMoreBtn.disabled = false;
-            }
+            setTimeout(() => {
+                pointsNotification.style.display = 'none';
+            }, 3000);
         }
 
-        function displayImages(images) {
-            const gallery = document.getElementById('gallery');
-            
-            images.forEach(image => {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                
-                const img = document.createElement('img');
-                img.src = image.image_url;
-                img.alt = '帅哥图片';
-                img.loading = 'lazy';
-                
-                // Handle image load error: hide the whole gallery item when image cannot be loaded
-                img.onerror = function() {
-                    try {
-                        if (item && item.style) {
-                            item.style.display = 'none';
-                        } else if (this.closest) {
-                            const parent = this.closest('.gallery-item');
-                            if (parent) parent.style.display = 'none';
-                            else this.style.display = 'none';
-                        } else {
-                            this.style.display = 'none';
-                        }
-                    } catch (e) {
-                        this.style.display = 'none';
-                    }
-                };
-                
-                const info = document.createElement('div');
-                info.className = 'info';
-                
-                const date = new Date(image.created_at);
-                const dateStr = date.toLocaleDateString('zh-CN');
-                
-                info.innerHTML = `<p>上传时间: ${dateStr}</p>`;
-                
-                // make image clickable to view (may cost points)
-                item.appendChild(img);
-                item.appendChild(info);
+        // Initialize display
+        updatePointsDisplay();
 
-                // overlay / click handler
-                const clickArea = document.createElement('div');
-                clickArea.style.position = 'absolute';
-                clickArea.style.inset = '0';
-                clickArea.style.cursor = 'pointer';
-                clickArea.title = '点击查看大图（可能消耗积分）';
-                clickArea.onclick = function (e) {
-                    e.stopPropagation();
-                    viewImageHandler(image.image_url);
-                };
+        // Show notifications for new user or daily visit
+        if (pointsInfo.isNewUser) {
+            showPointsNotification(`🎉 欢迎新用户！获得 ${PointsSystem.POINTS_CONFIG.NEW_USER} 积分`);
+        } else if (pointsInfo.dailyVisit.awarded) {
+            showPointsNotification(`✨ 每日签到奖励！+${pointsInfo.dailyVisit.points} 积分`);
+        }
 
-                // ensure gallery item is positioned for overlay
-                item.style.position = 'relative';
-                item.appendChild(clickArea);
-                gallery.appendChild(item);
+        // Modal functionality
+        const fullModal = document.getElementById('fullImageModal');
+        const fullImg = document.getElementById('fullImageModalImg');
+
+        // Update blur overlay for unlocked image
+        function updateBlurOverlay(imageUrl) {
+            // Find the gallery item with this image URL
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            function normalize(u) {
+                try {
+                    const o = new URL(u, window.location.origin);
+                    o.search = '';
+                    return o.href.replace(/\/$/, '');
+                } catch (e) {
+                    return (u || '').split('?')[0].replace(/\/$/, '');
+                }
+            }
+
+            const target = normalize(imageUrl);
+            galleryItems.forEach(item => {
+                const img = item.querySelector('img');
+                if (!img) return;
+                const src = normalize(img.src);
+                // consider match if normalized URLs equal or one contains the other (handle truncated/params)
+                const matched = src === target || src.startsWith(target) || target.startsWith(src) || src.includes(target) || target.includes(src);
+                if (!matched) return;
+
+                const blurOverlay = item.querySelector('.blur-overlay');
+                if (!blurOverlay) return;
+                const viewStatus = PointsSystem.canViewImage(imageUrl);
+                if (!viewStatus.needsPayment) {
+                    // Update to unlocked state
+                    blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>`;
+                    blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
+                    blurOverlay.style.backdropFilter = 'none';
+                    blurOverlay.style.webkitBackdropFilter = 'none';
+                }
             });
         }
 
-        // Load more button event
-        document.getElementById('loadMoreBtn').addEventListener('click', loadImages);
+        async function showModal(imageUrl) {
+            // 后宫激活后，自动收录图片且无需再花积分
+            if (window.isHaremActivated && window.isHaremActivated()) {
+                if (window.addHaremImage) window.addHaremImage(imageUrl);
+                if (PointsSystem && typeof PointsSystem.markImageViewed === 'function') {
+                    await PointsSystem.markImageViewed(imageUrl);
+                }
+                updateBlurOverlay(imageUrl);
+                // Show fullscreen image for better viewing experience
+                showFullImage(imageUrl);
+                return;
+            }
 
-        // Initial load
-        initPoints();
-        loadImages();
+            // Check if user can view the image
+            const viewStatus = PointsSystem.canViewImage(imageUrl);
+            if (!viewStatus.canView) {
+                showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
+                setTimeout(() => {
+                    showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
+                }, 3500);
+                return;
+            }
+            // Process the view (deduct points if needed)
+            const result = await PointsSystem.viewImage(imageUrl);
+            if (!result.success) {
+                showPointsNotification(`❌ ${result.message}`);
+                return;
+            }
+            // 自动收录到后宫（如果已激活）
+            if (window.isHaremActivated && window.isHaremActivated()) {
+                if (window.addHaremImage) window.addHaremImage(imageUrl);
+            }
+            // Update points display
+            updatePointsDisplay();
+            if (result.pointsSpent > 0) {
+                showPointsNotification(`💎 ${result.message}`);
+                updateBlurOverlay(imageUrl);
+            }
+            showFullImage(imageUrl);
+        }
 
-        // VConsole for debugging
+        // Fullscreen modal helpers
+        function showFullImage(url) {
+            if (!fullModal || !fullImg) return;
+            fullImg.src = url;
+            fullModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideFullImage() {
+            if (!fullModal || !fullImg) return;
+            fullModal.style.display = 'none';
+            fullImg.src = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close fullscreen modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && fullModal && fullModal.style.display && fullModal.style.display !== 'none') {
+                hideFullImage();
+            }
+        });
+
+        // Load images from database
+        async function loadImages() {
+            const loading = document.getElementById('loading');
+            const gallery = document.getElementById('gallery');
+            const noImages = document.getElementById('no-images');
+
+            try {
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        // Only return images that are not marked deleted
+                        sql: 'SELECT id, image_url, view_count, created_at FROM handsome_images WHERE deleted = 0 ORDER BY view_count DESC, created_at DESC',
+                        params: []
+                    })
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        try {
+                            const div = document.createElement('div');
+                            div.className = 'gallery-item';
+                            
+                            const imageWrapper = document.createElement('div');
+                            imageWrapper.className = 'image-wrapper';
+                            
+                            const img = document.createElement('img');
+                            img.src = item.image_url;
+                            img.alt = '帅哥图片';
+                            img.onerror = function() {
+                                // 图片加载失败时隐藏整个图片容器
+                                div.style.display = 'none';
+                                console.log('图片加载失败，已隐藏:', item.image_url);
+                            };
+                            
+                            const blurOverlay = document.createElement('div');
+                            blurOverlay.className = 'blur-overlay';
+                            
+                            // Check if image has been viewed
+                            try {
+                                const viewStatus = PointsSystem.canViewImage(item.image_url);
+                                const viewCount = item.view_count || 0;
+                                const viewCountText = viewCount > 0 ? `<div style="font-size: 0.7em; margin-top: 3px; opacity: 0.8;">🔥 ${viewCount}人已看</div>` : '';
+                                
+                                if (viewStatus.needsPayment) {
+                                    // Not viewed or expired - show cost with blur
+                                    blurOverlay.innerHTML = `<div>点击查看</div><div style="font-size: 0.8em; margin-top: 5px;">消费 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分</div>${viewCountText}`;
+                                    imageWrapper.appendChild(blurOverlay);
+                                } else {
+                                    // Already viewed - no blur, just show small indicator
+                                    blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>${viewCountText}`;
+                                    blurOverlay.style.background = 'linear-gradient(to bottom, transparent 70%, rgba(76, 175, 80, 0.9))';
+                                    blurOverlay.style.backdropFilter = 'none';
+                                    blurOverlay.style.webkitBackdropFilter = 'none';
+                                    imageWrapper.appendChild(blurOverlay);
+                                }
+                            } catch (err) {
+                                // Fallback to default display if check fails
+                                console.warn('查看状态检查失败:', err);
+                                blurOverlay.innerHTML = `<div>点击查看</div><div style="font-size: 0.8em; margin-top: 5px;">消费 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分</div>`;
+                                imageWrapper.appendChild(blurOverlay);
+                            }
+                            
+                                imageWrapper.appendChild(img);
+                                div.appendChild(imageWrapper);
+
+                                // Small top-right delete X (non-obtrusive)
+                                const deleteX = document.createElement('button');
+                                deleteX.className = 'delete-x';
+                                deleteX.textContent = '✕';
+                                deleteX.title = '标记删除（消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分）';
+                                deleteX.onclick = async function(e) {
+                                    e.stopPropagation();
+                                    const ok = window.confirm('确认消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分将该图片标记为删除吗？');
+                                    if (!ok) return;
+                                    try {
+                                        const res = await PointsSystem.deleteImage(item.image_url);
+                                        updatePointsDisplay();
+                                        showPointsNotification(res.message || (res.success ? '已标记为删除' : '删除失败'));
+                                        if (res.success) div.style.display = 'none';
+                                    } catch (err) {
+                                        console.error('删除请求异常:', err);
+                                        showPointsNotification('删除失败，请稍后重试');
+                                    }
+                                };
+
+                                // append delete X to image wrapper so it doesn't cover the image center
+                                imageWrapper.appendChild(deleteX);
+
+                                // Click to view full image
+                                div.onclick = function() {
+                                    showModal(item.image_url);
+                                };
+
+                                gallery.appendChild(div);
+                        } catch (itemError) {
+                            console.error('创建图片项失败:', itemError, item);
+                        }
+                    });
+                } else {
+                    noImages.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+                loading.textContent = '加载失败，请稍后重试';
+            }
+        }
+
+        // Load images and handle ad return when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            // First, handle ad return to update points
+            handleAdReturn();
+            
+            // Then load images
+            loadImages();
+        });
+    </script>
+    
+    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+    <script>
+        // Load and initialize VConsole only if debug parameter is present
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const debugMode = urlParams.get('debug') === 'true';
             
             if (debugMode) {
+                // Dynamically load VConsole script only when needed
                 const script = document.createElement('script');
                 script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
                 script.onload = function() {
@@ -518,62 +742,11 @@
                         console.log('VConsole initialized for debugging');
                     }
                 };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
                 document.head.appendChild(script);
             }
-        })();
-
-        // Robust handler: hide gallery items if their images fail to load
-        (function() {
-            function attachHideHandler(img) {
-                if (!img || img.__hideHandlerAttached) return;
-                img.__hideHandlerAttached = true;
-                img.addEventListener('error', function () {
-                    try {
-                        const parent = img.closest && img.closest('.gallery-item');
-                        if (parent) parent.style.display = 'none';
-                        else img.style.display = 'none';
-                    } catch (e) {
-                        img.style.display = 'none';
-                    }
-                });
-
-                // If image was already attempted and failed
-                try {
-                    if (img.complete && img.naturalWidth === 0) {
-                        const parent = img.closest && img.closest('.gallery-item');
-                        if (parent) parent.style.display = 'none';
-                        else img.style.display = 'none';
-                    }
-                } catch (e) {
-                    // ignore
-                }
-            }
-
-            function attachToExisting() {
-                document.querySelectorAll('#gallery img').forEach(attachHideHandler);
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                attachToExisting();
-
-                // Observe gallery for future images
-                try {
-                    const gallery = document.getElementById('gallery');
-                    if (!gallery || !window.MutationObserver) return;
-                    const mo = new MutationObserver(function (mutations) {
-                        mutations.forEach(function (m) {
-                            m.addedNodes.forEach(function (node) {
-                                if (!node) return;
-                                if (node.tagName === 'IMG') attachHideHandler(node);
-                                else if (node.querySelectorAll) node.querySelectorAll('img').forEach(attachHideHandler);
-                            });
-                        });
-                    });
-                    mo.observe(gallery, { childList: true, subtree: true });
-                } catch (e) {
-                    // ignore observer errors
-                }
-            });
         })();
     </script>
 </body>
