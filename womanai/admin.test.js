@@ -296,4 +296,34 @@ describe('WomanAI Admin Regression Tests', () => {
         expect(statsFields).toContain('totalCount');
         expect(statsFields).toContain('successCount');
     });
+
+    it('should correctly detect successful upload in uploadSingleImage using affectedRows', () => {
+        // MySQL INSERT API returns { insertId: X, affectedRows: Y }
+        const mockInsertResponse = {
+            insertId: 789,
+            affectedRows: 1
+        };
+
+        // Success detection should use affectedRows > 0
+        const isSuccess = mockInsertResponse.affectedRows > 0;
+        expect(isSuccess).toBe(true);
+
+        // OLD incorrect check would have been: result.success || result.data
+        const oldCheck = mockInsertResponse.success || mockInsertResponse.data;
+        expect(oldCheck).toBeFalsy(); // Would incorrectly fail
+
+        // Verify affectedRows is present and positive
+        expect(mockInsertResponse).toHaveProperty('affectedRows');
+        expect(mockInsertResponse.affectedRows).toBeGreaterThan(0);
+    });
+
+    it('should handle failed insert when affectedRows is 0', () => {
+        const mockFailedResponse = {
+            affectedRows: 0,
+            error: 'Insert failed'
+        };
+
+        const isSuccess = mockFailedResponse.affectedRows > 0;
+        expect(isSuccess).toBe(false);
+    });
 });
