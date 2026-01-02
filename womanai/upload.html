@@ -343,7 +343,7 @@
 
                 const result = await response.json();
                 
-                if (result.success || result.data) {
+                if (result.affectedRows > 0) {
                     showMessage('上传成功！感谢分享 😊', 'success');
                     try {
                         if (window.PointsSystem) {
