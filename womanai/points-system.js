@@ -392,16 +392,16 @@ const PointsSystem = (function() {
             return data;
         }
 
-        // Fallback: try to find by prefix (handles long URLs/truncation)
-        const prefix = imageUrl.slice(0, 255);
+        // Fallback: try to find by prefix using SUBSTRING for security
+        // This avoids SQL injection risks from wildcards in the URL
         response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sql: 'SELECT id, image_url FROM handsome_images WHERE image_url LIKE ? LIMIT 1',
-                params: [prefix + '%']
+                sql: 'SELECT id, image_url FROM handsome_images WHERE SUBSTRING(image_url, 1, 255) = SUBSTRING(?, 1, 255) LIMIT 1',
+                params: [imageUrl]
             })
         });
 

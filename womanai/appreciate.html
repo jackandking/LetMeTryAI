@@ -481,6 +481,7 @@
 
         // Show points notification
         const NOTIFICATION_DURATION = 3000; // Duration in milliseconds
+        const NOTIFICATION_BUFFER = 500; // Buffer between sequential notifications
         function showPointsNotification(message) {
             pointsNotification.textContent = message;
             pointsNotification.style.display = 'block';
@@ -559,7 +560,7 @@
                 showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
                 setTimeout(() => {
                     showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
-                }, NOTIFICATION_DURATION + 500); // Wait for first notification to complete, plus 500ms buffer
+                }, NOTIFICATION_DURATION + NOTIFICATION_BUFFER);
                 return;
             }
             // Process the view (deduct points if needed)
@@ -640,7 +641,11 @@
                             img.onerror = function() {
                                 // 图片加载失败时隐藏整个图片容器
                                 div.style.display = 'none';
-                                console.log('图片加载失败，已隐藏:', item.image_url);
+                                // Only log in debug mode to avoid exposing URLs in production
+                                const urlParams = new URLSearchParams(window.location.search);
+                                if (urlParams.get('debug') === 'true') {
+                                    console.log('图片加载失败，已隐藏:', item.image_url);
+                                }
                             };
                             
                             const blurOverlay = document.createElement('div');
