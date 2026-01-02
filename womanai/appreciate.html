@@ -380,7 +380,7 @@
         <div style="background: linear-gradient(135deg, #ffe6f0 0%, #ffd6e8 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <div style="font-size: 1.1em; font-weight: bold; color: #c0392b; margin-bottom: 8px;">💎 积分说明</div>
             <div style="font-size: 0.9em; color: #8b4789; line-height: 1.6;">
-                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张 | 看广告+3~10分<br>
+                <strong>获取积分：</strong>新用户+3分 | 每日访问+5分 | 上传图片+10分/张 | 看广告+3~10分<br>
                 <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
             </div>
         </div>
@@ -480,13 +480,14 @@
         }
 
         // Show points notification
+        const NOTIFICATION_DURATION = 3000; // Duration in milliseconds
         function showPointsNotification(message) {
             pointsNotification.textContent = message;
             pointsNotification.style.display = 'block';
             
             setTimeout(() => {
                 pointsNotification.style.display = 'none';
-            }, 3000);
+            }, NOTIFICATION_DURATION);
         }
 
         // Initialize display
@@ -558,7 +559,7 @@
                 showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
                 setTimeout(() => {
                     showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
-                }, 3500);
+                }, NOTIFICATION_DURATION + 500); // Wait for first notification to complete, plus 500ms buffer
                 return;
             }
             // Process the view (deduct points if needed)
