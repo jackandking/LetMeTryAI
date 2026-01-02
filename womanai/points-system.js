@@ -574,4 +574,6 @@ const PointsSystem = (function() {
 // Export for use in Node.js tests
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = PointsSystem;
+} else if (typeof window !== 'undefined') {
+    window.PointsSystem = PointsSystem;
 }
