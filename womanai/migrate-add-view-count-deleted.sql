@@ -13,9 +13,29 @@ ADD COLUMN IF NOT EXISTS deleted TINYINT(1) DEFAULT 0 NOT NULL COMMENT 'Logical 
 ALTER TABLE handsome_images 
 ADD INDEX IF NOT EXISTS idx_view_count (view_count);
 
--- Ensure unique index exists on image_url
--- Note: This may fail if the index already exists, which is fine
--- ALTER TABLE handsome_images ADD UNIQUE INDEX idx_image_url (image_url(255));
+-- Add unique index on image_url if it doesn't exist
+-- Using a procedure to handle the case where the index already exists
+DELIMITER $$
+
+CREATE PROCEDURE add_unique_index_if_not_exists()
+BEGIN
+    DECLARE index_exists INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO index_exists 
+    FROM INFORMATION_SCHEMA.STATISTICS 
+    WHERE TABLE_SCHEMA = DATABASE() 
+        AND TABLE_NAME = 'handsome_images' 
+        AND INDEX_NAME = 'idx_image_url';
+    
+    IF index_exists = 0 THEN
+        ALTER TABLE handsome_images ADD UNIQUE INDEX idx_image_url (image_url(255));
+    END IF;
+END$$
+
+DELIMITER ;
+
+CALL add_unique_index_if_not_exists();
+DROP PROCEDURE IF EXISTS add_unique_index_if_not_exists;
 
 -- Set default values for existing records
 UPDATE handsome_images SET view_count = 0 WHERE view_count IS NULL;
