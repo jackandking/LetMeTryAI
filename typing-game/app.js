@@ -1376,6 +1376,7 @@ function initSnakeGame(container) {
     canvas.height = 400;
     canvas.style.border = '2px solid #667eea';
     canvas.style.borderRadius = '10px';
+    canvas.style.touchAction = 'none'; // Prevent default touch behaviors
     const ctx = canvas.getContext('2d');
     
     const gridSize = 20;
@@ -1388,6 +1389,19 @@ function initSnakeGame(container) {
     scoreDisplay.style.cssText = 'font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #667eea;';
     scoreDisplay.textContent = `得分: ${score}`;
     
+    // Add instructions for touch controls
+    const instructionsDisplay = document.createElement('div');
+    instructionsDisplay.style.cssText = 'font-size: 16px; margin-bottom: 10px; color: #fff; text-align: center;';
+    instructionsDisplay.textContent = '🎮 滑动屏幕控制方向 | 键盘方向键';
+    
+    // Touch swipe detection variables
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const minSwipeDistance = 30; // Minimum distance for a swipe to be registered
+    
+    // Keyboard controls
     document.addEventListener('keydown', (e) => {
         if (!miniGameState.currentGame) return;
         
@@ -1398,6 +1412,63 @@ function initSnakeGame(container) {
             case 'ArrowRight': if (direction.x === 0) direction = {x: 1, y: 0}; break;
         }
     });
+    
+    // Touch controls for mobile
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent page scrolling
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    }, { passive: false });
+    
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // Prevent page scrolling during swipe
+    }, { passive: false });
+    
+    canvas.addEventListener('touchend', (e) => {
+        e.preventDefault(); // Prevent page scrolling
+        if (!miniGameState.currentGame) return;
+        
+        const touch = e.changedTouches[0];
+        touchEndX = touch.clientX;
+        touchEndY = touch.clientY;
+        
+        handleSwipe();
+    }, { passive: false });
+    
+    // Handle swipe gesture
+    function handleSwipe() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        const absDeltaX = Math.abs(deltaX);
+        const absDeltaY = Math.abs(deltaY);
+        
+        // Check if swipe distance is significant enough
+        if (Math.max(absDeltaX, absDeltaY) < minSwipeDistance) {
+            return; // Swipe too short, ignore
+        }
+        
+        // Determine swipe direction based on the larger delta
+        if (absDeltaX > absDeltaY) {
+            // Horizontal swipe
+            if (deltaX > 0 && direction.x === 0) {
+                // Swipe right
+                direction = {x: 1, y: 0};
+            } else if (deltaX < 0 && direction.x === 0) {
+                // Swipe left
+                direction = {x: -1, y: 0};
+            }
+        } else {
+            // Vertical swipe
+            if (deltaY > 0 && direction.y === 0) {
+                // Swipe down
+                direction = {x: 0, y: 1};
+            } else if (deltaY < 0 && direction.y === 0) {
+                // Swipe up
+                direction = {x: 0, y: -1};
+            }
+        }
+    }
     
     function gameLoop() {
         if (miniGameState.timeRemaining <= 0 || !miniGameState.currentGame) return;
@@ -1448,6 +1519,7 @@ function initSnakeGame(container) {
     }
     
     container.appendChild(scoreDisplay);
+    container.appendChild(instructionsDisplay);
     container.appendChild(canvas);
     gameLoop();
 }
