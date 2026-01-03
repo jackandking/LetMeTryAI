@@ -1392,7 +1392,7 @@ function initSnakeGame(container) {
     // Add instructions for touch controls
     const instructionsDisplay = document.createElement('div');
     instructionsDisplay.style.cssText = 'font-size: 16px; margin-bottom: 10px; color: #fff; text-align: center;';
-    instructionsDisplay.innerHTML = '🎮 滑动屏幕控制方向 | 键盘方向键';
+    instructionsDisplay.textContent = '🎮 滑动屏幕控制方向 | 键盘方向键';
     
     // Touch swipe detection variables
     let touchStartX = 0;
