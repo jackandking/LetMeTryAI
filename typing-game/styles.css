@@ -1270,6 +1270,8 @@ h1 {
     align-items: center;
     justify-content: center;
     animation: fadeIn 0.3s ease;
+    touch-action: none; /* Prevent default touch behaviors like scrolling */
+    overflow: hidden; /* Prevent any scrolling within the container */
 }
 
 .mini-game-container.hidden {
