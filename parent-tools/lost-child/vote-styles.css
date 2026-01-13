@@ -1,0 +1,44 @@
+/* Vote styles for lost-child */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif; background: linear-gradient(135deg, #ffb347 0%, #ff6b6b 50%, #ee5a6f 100%); color: #2d3436; line-height: 1.6; min-height: 100vh; padding: 20px; }
+h1 { text-align: center; color: white; font-size: 2.5em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+#loadingMessage { text-align: center; padding: 50px; font-size: 1.5em; color: white; background: rgba(255,255,255,0.2); border-radius: 15px; margin: 20px auto; max-width: 500px; }
+.instruction { text-align: center; font-size: 1.3em; color: white; margin-bottom: 30px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
+.case-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.case-container { background: white; border-radius: 15px; padding: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; }
+.case-container:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+.case-container.selected { border: 4px solid #ff6b6b; background: linear-gradient(135deg, #fff5f0 0%, #ffe6e6 100%); }
+.case-category-badge { position: absolute; top: 15px; right: 15px; background: #ff6b6b; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8em; font-weight: bold; }
+.case-title { font-size: 1.5em; font-weight: bold; color: #ee5a6f; margin-bottom: 15px; padding-right: 80px; }
+.case-description { font-size: 1em; color: #555; line-height: 1.6; }
+.show-result-btn { display: block; margin: 30px auto; padding: 15px 40px; font-size: 1.3em; color: white; background: linear-gradient(135deg, #00b894 0%, #00a080 100%); border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3); transition: all 0.3s ease; }
+.show-result-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 184, 148, 0.4); }
+#resultsContainer { max-width: 1000px; margin: 0 auto; }
+.results-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); }
+.results-section h2 { color: #ff6b6b; margin-bottom: 25px; font-size: 2em; text-align: center; }
+.winner-section { text-align: center; margin-bottom: 40px; padding: 40px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); border-radius: 15px; color: white; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+.winner-section h2 { color: white; margin-bottom: 20px; font-size: 2.2em; }
+.winner-case { font-size: 1.8em; font-weight: bold; margin-bottom: 15px; }
+.winner-votes { font-size: 1.4em; opacity: 0.9; }
+.result-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 20px; background: linear-gradient(135deg, #fff5f0 0%, #ffe6e6 100%); border-radius: 10px; border: 2px solid #ffb347; transition: all 0.3s ease; }
+.result-item:hover { transform: translateX(5px); box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2); }
+.result-info { display: flex; align-items: center; flex: 1; }
+.result-rank { font-size: 1.8em; font-weight: bold; color: #ff6b6b; margin-right: 20px; min-width: 40px; }
+.result-name { font-size: 1.3em; font-weight: bold; color: #2d3436; }
+.result-votes { font-size: 1.2em; font-weight: bold; color: #ff6b6b; }
+.retry-button { display: block; margin: 30px auto; padding: 15px 40px; font-size: 1.2em; color: white; background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3); transition: all 0.3s ease; }
+.retry-button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4); }
+.back-link { text-align: center; padding: 20px; margin-top: 30px; }
+.back-link a { color: white; text-decoration: none; font-size: 1.1em; padding: 10px 20px; background: rgba(0, 0, 0, 0.2); border-radius: 10px; transition: all 0.3s ease; }
+.back-link a:hover { background: rgba(0, 0, 0, 0.3); }
+@media (max-width: 768px) { 
+    h1 { font-size: 1.8em; } 
+    .case-gallery { grid-template-columns: 1fr; }
+    .case-title { font-size: 1.3em; padding-right: 0; margin-top: 35px; }
+    .result-item { flex-direction: column; text-align: center; }
+    .result-info { flex-direction: column; margin-bottom: 10px; }
+    .result-rank { margin-right: 0; margin-bottom: 10px; }
+    .winner-section { padding: 25px; }
+    .winner-section h2 { font-size: 1.8em; }
+    .winner-case { font-size: 1.4em; }
+}
