@@ -85,8 +85,8 @@ describe('Lost Child Application', () => {
         });
 
         it('should generate unique IDs', () => {
-            const id1 = `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            const id2 = `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const id1 = `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+            const id2 = `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
             
             // IDs should follow the pattern
             expect(id1).toMatch(/^case-\d+-[a-z0-9]+$/);
