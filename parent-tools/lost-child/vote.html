@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <title>投票 - 孩子丢了怎么办</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script src="../../util.js"></script>
+    <script src="vote.js"></script>
+    <link rel="stylesheet" href="vote-styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">投票 - 孩子丢了怎么办</h1>
+
+    <div id="loadingMessage">正在加载案例...</div>
+
+    <div id="votingSection" style="display: none;">
+        <p class="instruction">请选择您认为最有帮助的一个案例：</p>
+        <div id="caseGallery" class="case-gallery">
+            <!-- Cases will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">看完广告显示结果</button>
+
+    <div id="resultsContainer" style="display: none;">
+        <div id="winnerSection" class="winner-section" style="display: none;">
+            <h2>🏆 最受欢迎案例</h2>
+            <div class="winner-case" id="winnerCase"></div>
+            <div class="winner-votes" id="winnerVotes"></div>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2>所有案例投票结果</h2>
+            <div id="resultsList"></div>
+            
+            <div style="text-align: center; margin-top: 20px; color: #888; font-size: 14px;">
+                <p id="totalVotes"></p>
+                <p id="timestamp"></p>
+            </div>
+        </div>
+
+        <button class="retry-button" onclick="retryVote()">再来一次</button>
+    </div>
+
+    <div class="back-link">
+        <a href="index.html">← 返回孩子丢了怎么办主页</a>
+    </div>
+
+    <script>
+        // Initialize the page when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeVoting);
+    </script>
+    
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) {
+                        const vConsole = new window.VConsole();
+                        console.log('VConsole initialized for debugging');
+                    }
+                };
+                script.onerror = function() {
+                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+
+</body>
+</html>
