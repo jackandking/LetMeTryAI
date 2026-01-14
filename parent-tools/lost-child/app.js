@@ -62,8 +62,9 @@ async function handleFormSubmit(event) {
 
     videoLink = extractUrl(videoLink);
 
-    if (!caseTitle || !videoLink) {
-        alert('请填写标题和视频链接！');
+    // Validate URL format for security
+    if (!caseTitle || !videoLink || !(videoLink.startsWith('http://') || videoLink.startsWith('https://'))) {
+        alert('请填写标题和有效的视频链接（http:// 或 https://）！');
         return;
     }
 
@@ -71,10 +72,14 @@ async function handleFormSubmit(event) {
         id: `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
         title: caseTitle,
         videoLink: videoLink,
-        description: description,
         timestamp: Date.now(),
         votes: 0
     };
+    
+    // Only include description if it's not empty
+    if (description) {
+        caseItem.description = description;
+    }
 
     cases.push(caseItem);
 
