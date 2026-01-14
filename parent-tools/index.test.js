@@ -166,4 +166,20 @@ describe('Parent Love Section - parent-tools', () => {
       expect(htmlContent).toContain('亲子');
     });
   });
+
+  describe('Activity Links', () => {
+    it('should have teach-dad activity link', () => {
+      expect(htmlContent).toContain('教爸爸带男娃');
+      expect(htmlContent).toContain('teach-dad/index.html');
+    });
+
+    it('should have lost-child activity link', () => {
+      expect(htmlContent).toContain('孩子丢了怎么办');
+      expect(htmlContent).toContain('lost-child/index.html');
+      expect(htmlContent).toContain('安全防护');
+      expect(htmlContent).toContain('防丢知识库');
+      expect(htmlContent).toContain('应急措施指南');
+      expect(htmlContent).toContain('经验案例分享');
+    });
+  });
 });
