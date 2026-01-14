@@ -12,7 +12,7 @@ A modern, responsive web application featuring interactive content and games.
 - **🆕 MCP Server Integration**: GitHub Copilot MySQL operations without API keys
 
 ## 📋 Project Structure
-
+outdated
 ```
 LetMeTryAI/
 ├── mcp-servers/            # MCP Server for GitHub Copilot
