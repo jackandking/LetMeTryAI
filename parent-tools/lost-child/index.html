@@ -115,44 +115,40 @@
             </div>
         </div>
 
-        <!-- 经验案例展示 -->
+        <!-- 经验视频展示 -->
         <div class="section cases-section">
-            <h2>💡 大家的经验案例</h2>
+            <h2>💡 大家的经验视频</h2>
             <div id="loadingMessage" class="loading-message">正在加载...</div>
             <div id="casesList" class="cases-list">
-                <!-- Cases will be dynamically loaded here -->
+                <!-- Videos will be dynamically loaded here -->
             </div>
         </div>
 
         <!-- 投票入口 -->
         <div class="section vote-section">
-            <h2>🗳️ 案例投票</h2>
-            <p>参与投票，选出最有帮助的经验案例！</p>
+            <h2>🗳️ 视频投票</h2>
+            <p>参与投票，选出最有帮助的经验视频！</p>
             <a href="vote.html" class="vote-btn">去投票</a>
         </div>
 
         <!-- 分享表单 -->
         <div class="section upload-section">
-            <h2>📝 分享您的经验</h2>
+            <h2>📤 分享您的视频</h2>
             <form id="uploadForm" class="upload-form">
                 <div class="form-group">
-                    <label for="caseTitle">案例标题：</label>
+                    <label for="caseTitle">标题：</label>
                     <input type="text" id="caseTitle" name="caseTitle" placeholder="例如：商场走失后1小时找回" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="caseCategory">案例类别：</label>
-                    <select id="caseCategory" name="caseCategory" required>
-                        <option value="">请选择类别</option>
-                        <option value="预防经验">预防经验</option>
-                        <option value="应急措施">应急措施</option>
-                        <option value="成功案例">成功案例</option>
-                    </select>
+                    <label for="videoLink">视频链接：</label>
+                    <input type="url" id="videoLink" name="videoLink" placeholder="粘贴视频链接" required>
+                    <small style="color: #7f8c8d; font-size: 0.9em;">支持粘贴完整内容，会自动提取链接</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="description">详细描述：</label>
-                    <textarea id="description" name="description" placeholder="详细描述您的经验或案例，包括时间、地点、情况、处理方法、结果等" rows="5" required></textarea>
+                    <label for="description">简单描述（可选）：</label>
+                    <textarea id="description" name="description" placeholder="说说您的经验或应急措施" rows="3"></textarea>
                 </div>
                 
                 <button type="submit" class="submit-btn">提交分享</button>
