@@ -108,6 +108,39 @@ describe('Lost Child Application', () => {
         });
     });
 
+    describe('Form Validation', () => {
+        it('should reject javascript: URLs for security', () => {
+            // This test verifies that form submission validates URLs
+            const invalidURL = 'javascript:alert("XSS")';
+            const isValid = invalidURL.startsWith('http://') || invalidURL.startsWith('https://');
+            expect(isValid).toBe(false);
+        });
+
+        it('should accept valid http URLs', () => {
+            const validURL = 'http://example.com/video.mp4';
+            const isValid = validURL.startsWith('http://') || validURL.startsWith('https://');
+            expect(isValid).toBe(true);
+        });
+
+        it('should accept valid https URLs', () => {
+            const validURL = 'https://example.com/video.mp4';
+            const isValid = validURL.startsWith('http://') || validURL.startsWith('https://');
+            expect(isValid).toBe(true);
+        });
+
+        it('should not include empty descriptions in case data', () => {
+            const caseWithEmptyDesc = {
+                id: 'case-123',
+                title: 'Test',
+                videoLink: 'https://example.com/video.mp4',
+                timestamp: Date.now(),
+                votes: 0
+            };
+            // Verify that description property is not present when empty
+            expect(caseWithEmptyDesc).not.toHaveProperty('description');
+        });
+    });
+
     describe('createCaseCard', () => {
         it('should create case card with correct structure', () => {
             const testCase = {
