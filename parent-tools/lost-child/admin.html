@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孩子丢了怎么办 管理页面</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script src="../../util.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif; background: #f5f5f5; color: #2d3436; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        h1 { color: #ff6b6b; margin-bottom: 30px; text-align: center; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: linear-gradient(135deg, #fff5f0 0%, #ffe6e6 100%); padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-card h3 { color: #ff6b6b; margin-bottom: 10px; }
+        .stat-card .number { font-size: 2.5em; font-weight: bold; color: #ee5a6f; }
+        .cases-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .cases-table th, .cases-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        .cases-table th { background-color: #ff6b6b; color: white; }
+        .cases-table .category-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; background: #ee5a6f; color: white; }
+        .action-btn { padding: 6px 12px; margin: 0 5px; border: none; border-radius: 5px; cursor: pointer; }
+        .delete-btn { background-color: #e74c3c; color: white; }
+        .delete-btn:hover { background-color: #c0392b; }
+        .loading { text-align: center; padding: 40px; font-size: 1.2em; color: #7f8c8d; }
+        .back-link { text-align: center; margin-top: 30px; }
+        .back-link a { color: #ff6b6b; text-decoration: none; font-size: 1.1em; }
+        .back-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>孩子丢了怎么办 管理页面</h1>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>总案例数</h3>
+                <div class="number" id="totalCases">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>总投票数</h3>
+                <div class="number" id="totalVotes">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>预防经验</h3>
+                <div class="number" id="preventionCases">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>应急措施</h3>
+                <div class="number" id="emergencyCases">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>成功案例</h3>
+                <div class="number" id="successCases">0</div>
+            </div>
+        </div>
+
+        <div id="loadingMessage" class="loading">正在加载数据...</div>
+
+        <table class="cases-table" id="casesTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>标题</th>
+                    <th>类别</th>
+                    <th>描述</th>
+                    <th>投票数</th>
+                    <th>添加时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="casesTableBody"></tbody>
+        </table>
+
+        <div class="back-link">
+            <a href="index.html">← 返回孩子丢了怎么办主页</a>
+        </div>
+    </div>
+
+    <script>
+        const lostChildConfig = { casesKey: "parent-tools-lost-child-cases" };
+        let cases = [];
+        document.addEventListener('DOMContentLoaded', loadCases);
+
+        function loadCases() {
+            readKeyValueStore(lostChildConfig.casesKey, (data) => {
+                document.getElementById('loadingMessage').style.display = 'none';
+                if (data) {
+                    try { 
+                        cases = JSON.parse(data); 
+                        displayStats(); 
+                        displayCases(); 
+                    }
+                    catch (e) { 
+                        console.error(e); 
+                        alert('数据加载失败'); 
+                    }
+                } else { 
+                    cases = []; 
+                    displayStats(); 
+                }
+            });
+        }
+
+        function displayStats() {
+            document.getElementById('totalCases').textContent = cases.length;
+            const totalVotes = cases.reduce((s, c) => s + (c.votes || 0), 0);
+            document.getElementById('totalVotes').textContent = totalVotes;
+            
+            const preventionCount = cases.filter(c => c.category === '预防经验').length;
+            const emergencyCount = cases.filter(c => c.category === '应急措施').length;
+            const successCount = cases.filter(c => c.category === '成功案例').length;
+            
+            document.getElementById('preventionCases').textContent = preventionCount;
+            document.getElementById('emergencyCases').textContent = emergencyCount;
+            document.getElementById('successCases').textContent = successCount;
+        }
+
+        function displayCases() {
+            const tableBody = document.getElementById('casesTableBody');
+            const table = document.getElementById('casesTable');
+            tableBody.innerHTML = '';
+            if (cases.length === 0) return;
+            table.style.display = 'table';
+            const sorted = [...cases].sort((a, b) => b.timestamp - a.timestamp);
+            sorted.forEach(caseItem => {
+                const row = document.createElement('tr');
+                const dateStr = new Date(caseItem.timestamp).toLocaleDateString('zh-CN');
+                const truncatedDesc = caseItem.description.length > 50 
+                    ? caseItem.description.substring(0, 50) + '...' 
+                    : caseItem.description;
+                row.innerHTML = `
+                    <td style="max-width: 200px;">${caseItem.title}</td>
+                    <td><span class="category-badge">${caseItem.category}</span></td>
+                    <td style="max-width: 300px;">${truncatedDesc}</td>
+                    <td>${caseItem.votes || 0}</td>
+                    <td>${dateStr}</td>
+                    <td>
+                        <button class="action-btn delete-btn" onclick="deleteCase('${caseItem.id}')">删除</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function deleteCase(id) {
+            if (!confirm('确定要删除这个案例吗？')) return;
+            cases = cases.filter(c => c.id !== id);
+            try { 
+                await updateKeyValueStore(lostChildConfig.casesKey, JSON.stringify(cases)); 
+                alert('删除成功'); 
+                displayStats(); 
+                displayCases(); 
+            }
+            catch (e) { 
+                console.error(e); 
+                alert('删除失败'); 
+            }
+        }
+    </script>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') === 'true';
+            if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() { if (window.VConsole) { new window.VConsole(); } };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+
+</body>
+</html>
