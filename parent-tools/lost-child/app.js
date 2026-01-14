@@ -68,7 +68,7 @@ async function handleFormSubmit(event) {
     }
 
     const caseItem = {
-        id: `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+        id: `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         title: caseTitle,
         videoLink: videoLink,
         description: description,
