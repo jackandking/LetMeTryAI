@@ -21,7 +21,7 @@ let cases = [];
  */
 function extractUrl(text) {
     if (!text) return '';
-    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    const urlPattern = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g;
     const matches = text.match(urlPattern);
     if (matches && matches.length > 0) {
         return matches[0].replace(/[.,;:!?]+$/, '');
@@ -68,7 +68,7 @@ async function handleFormSubmit(event) {
     }
 
     const caseItem = {
-        id: `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
         title: caseTitle,
         videoLink: videoLink,
         description: description,
