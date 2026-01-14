@@ -140,6 +140,32 @@ describe('Lost Child Application', () => {
             expect(card.querySelector('.description')).toBeNull();
         });
 
+        it('should not create video link for invalid URLs (XSS protection)', () => {
+            const testCase = {
+                id: 'case-123',
+                title: '测试案例',
+                videoLink: 'javascript:alert("XSS")',
+                description: '描述',
+                votes: 0
+            };
+
+            const card = createCaseCard(testCase);
+            expect(card.querySelector('.video-link')).toBeNull();
+        });
+
+        it('should create video link only for http/https URLs', () => {
+            const testCase = {
+                id: 'case-123',
+                title: '测试案例',
+                videoLink: 'https://example.com/video.mp4',
+                votes: 0
+            };
+
+            const card = createCaseCard(testCase);
+            expect(card.querySelector('.video-link')).not.toBeNull();
+            expect(card.querySelector('.video-link').href).toBe('https://example.com/video.mp4');
+        });
+
         it('should handle case without votes', () => {
             const testCase = {
                 id: 'case-123',

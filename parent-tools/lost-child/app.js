@@ -153,11 +153,14 @@ function createCaseCard(caseItem) {
 
     // Video Link
     const videoLink = document.createElement('a');
-    videoLink.href = caseItem.videoLink;
-    videoLink.target = '_blank';
-    videoLink.className = 'video-link';
-    videoLink.textContent = '观看视频 →';
-    card.appendChild(videoLink);
+    // Validate URL to prevent XSS
+    if (caseItem.videoLink && (caseItem.videoLink.startsWith('http://') || caseItem.videoLink.startsWith('https://'))) {
+        videoLink.href = caseItem.videoLink;
+        videoLink.target = '_blank';
+        videoLink.className = 'video-link';
+        videoLink.textContent = '观看视频 →';
+        card.appendChild(videoLink);
+    }
 
     // Description (if exists)
     if (caseItem.description) {
