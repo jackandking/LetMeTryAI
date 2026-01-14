@@ -26,7 +26,7 @@ document.body.innerHTML = `
     <div id="casesList"></div>
     <form id="uploadForm">
         <input type="text" id="caseTitle" />
-        <select id="caseCategory"></select>
+        <input type="url" id="videoLink" />
         <textarea id="description"></textarea>
         <button type="submit">Submit</button>
     </form>
@@ -59,29 +59,18 @@ describe('Lost Child Application', () => {
             const mockCase = {
                 id: 'case-123-abc',
                 title: '商场走失案例',
+                videoLink: 'https://example.com/video.mp4',
                 description: '在商场走失后通过广播找回',
-                category: '成功案例',
                 timestamp: Date.now(),
                 votes: 0
             };
 
             expect(mockCase).toHaveProperty('id');
             expect(mockCase).toHaveProperty('title');
+            expect(mockCase).toHaveProperty('videoLink');
             expect(mockCase).toHaveProperty('description');
-            expect(mockCase).toHaveProperty('category');
             expect(mockCase).toHaveProperty('timestamp');
             expect(mockCase).toHaveProperty('votes');
-        });
-
-        it('should validate category values', () => {
-            const validCategories = ['预防经验', '应急措施', '成功案例'];
-            
-            validCategories.forEach(category => {
-                const mockCase = {
-                    category: category
-                };
-                expect(validCategories).toContain(mockCase.category);
-            });
         });
 
         it('should generate unique IDs', () => {
@@ -94,13 +83,38 @@ describe('Lost Child Application', () => {
         });
     });
 
+    describe('extractUrl', () => {
+        it('should extract URL from text with URL', () => {
+            const text = '这是一个视频链接 https://example.com/video.mp4 请看';
+            const result = extractUrl(text);
+            expect(result).toBe('https://example.com/video.mp4');
+        });
+
+        it('should return trimmed text if no URL found', () => {
+            const text = '  这是纯文本  ';
+            const result = extractUrl(text);
+            expect(result).toBe('这是纯文本');
+        });
+
+        it('should handle empty string', () => {
+            const result = extractUrl('');
+            expect(result).toBe('');
+        });
+
+        it('should remove trailing punctuation from URL', () => {
+            const text = 'https://example.com/video.mp4,';
+            const result = extractUrl(text);
+            expect(result).toBe('https://example.com/video.mp4');
+        });
+    });
+
     describe('createCaseCard', () => {
         it('should create case card with correct structure', () => {
             const testCase = {
                 id: 'case-123',
                 title: '测试案例',
+                videoLink: 'https://example.com/video.mp4',
                 description: '这是一个测试描述',
-                category: '预防经验',
                 votes: 5
             };
 
@@ -109,17 +123,29 @@ describe('Lost Child Application', () => {
             expect(card).toBeDefined();
             expect(card.className).toBe('case-card');
             expect(card.querySelector('h3').textContent).toBe('测试案例');
+            expect(card.querySelector('.video-link').href).toBe('https://example.com/video.mp4');
             expect(card.querySelector('.description').textContent).toBe('这是一个测试描述');
-            expect(card.querySelector('.case-category').textContent).toBe('预防经验');
             expect(card.querySelector('.votes').textContent).toContain('5');
+        });
+
+        it('should handle case without description', () => {
+            const testCase = {
+                id: 'case-123',
+                title: '测试案例',
+                videoLink: 'https://example.com/video.mp4',
+                votes: 0
+            };
+
+            const card = createCaseCard(testCase);
+            expect(card.querySelector('.description')).toBeNull();
         });
 
         it('should handle case without votes', () => {
             const testCase = {
                 id: 'case-123',
                 title: '测试案例',
+                videoLink: 'https://example.com/video.mp4',
                 description: '描述',
-                category: '应急措施',
                 votes: 0
             };
 
@@ -132,14 +158,14 @@ describe('Lost Child Application', () => {
         it('should display message when no cases', () => {
             displayCases([]);
             const casesList = document.getElementById('casesList');
-            expect(casesList.innerHTML).toContain('还没有人分享案例');
+            expect(casesList.innerHTML).toContain('还没有人分享视频');
         });
 
         it('should display cases in correct order', () => {
             const cases = [
-                { id: '1', title: 'Case 1', description: 'Desc 1', category: '预防经验', votes: 5, timestamp: 1000 },
-                { id: '2', title: 'Case 2', description: 'Desc 2', category: '应急措施', votes: 10, timestamp: 2000 },
-                { id: '3', title: 'Case 3', description: 'Desc 3', category: '成功案例', votes: 5, timestamp: 3000 }
+                { id: '1', title: 'Case 1', videoLink: 'https://example.com/1.mp4', description: 'Desc 1', votes: 5, timestamp: 1000 },
+                { id: '2', title: 'Case 2', videoLink: 'https://example.com/2.mp4', description: 'Desc 2', votes: 10, timestamp: 2000 },
+                { id: '3', title: 'Case 3', videoLink: 'https://example.com/3.mp4', description: 'Desc 3', votes: 5, timestamp: 3000 }
             ];
 
             displayCases(cases);
@@ -179,7 +205,7 @@ describe('Lost Child Application', () => {
 
         it('should load and display cases from storage', (done) => {
             const mockCases = [
-                { id: '1', title: 'Case 1', description: 'Desc 1', category: '预防经验', votes: 0, timestamp: 1000 }
+                { id: '1', title: 'Case 1', videoLink: 'https://example.com/1.mp4', description: 'Desc 1', votes: 0, timestamp: 1000 }
             ];
 
             global.readKeyValueStore.mockImplementation((key, callback) => {
@@ -204,7 +230,7 @@ describe('Lost Child Application', () => {
 
             setTimeout(() => {
                 const casesList = document.getElementById('casesList');
-                expect(casesList.innerHTML).toContain('还没有人分享案例');
+                expect(casesList.innerHTML).toContain('还没有人分享视频');
                 done();
             }, 100);
         });
@@ -227,7 +253,7 @@ describe('Lost Child Application', () => {
     describe('saveCases', () => {
         it('should save cases to storage', async () => {
             global.cases = [
-                { id: '1', title: 'Test Case', description: 'Description', category: '预防经验' }
+                { id: '1', title: 'Test Case', videoLink: 'https://example.com/video.mp4', description: 'Description' }
             ];
 
             global.updateKeyValueStore.mockResolvedValue(undefined);
@@ -293,14 +319,14 @@ describe('Lost Child HTML Structure', () => {
     });
 
     it('should have case sharing form', () => {
-        expect(htmlContent).toContain('分享您的经验');
+        expect(htmlContent).toContain('分享您的视频');
         expect(htmlContent).toContain('id="caseTitle"');
-        expect(htmlContent).toContain('id="caseCategory"');
+        expect(htmlContent).toContain('id="videoLink"');
         expect(htmlContent).toContain('id="description"');
     });
 
     it('should have vote link', () => {
-        expect(htmlContent).toContain('案例投票');
+        expect(htmlContent).toContain('视频投票');
         expect(htmlContent).toContain('vote.html');
     });
 

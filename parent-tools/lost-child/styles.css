@@ -27,11 +27,12 @@ header .description { color: #7f8c8d; font-size: 1.1em; line-height: 1.6; }
 
 /* Cases Section */
 .cases-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-.case-card { background: linear-gradient(135deg, #fff5f0 0%, #ffe6e6 100%); padding: 20px; border-radius: 15px; border: 2px solid #ffb347; transition: all 0.3s ease; position: relative; }
+.case-card { background: linear-gradient(135deg, #fff5f0 0%, #ffe6e6 100%); padding: 20px; border-radius: 15px; border: 2px solid #ffb347; transition: all 0.3s ease; }
 .case-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3); }
-.case-category { position: absolute; top: 15px; right: 15px; background: #ff6b6b; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.85em; font-weight: bold; }
-.case-card h3 { color: #ee5a6f; font-size: 1.4em; margin-bottom: 15px; padding-right: 100px; }
-.case-card .description { color: #555; font-size: 0.95em; line-height: 1.6; margin-bottom: 15px; }
+.case-card h3 { color: #ee5a6f; font-size: 1.4em; margin-bottom: 15px; }
+.case-card .video-link { display: inline-block; margin: 10px 0; padding: 8px 15px; background: #ff6b6b; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em; }
+.case-card .video-link:hover { background: #ee5a6f; }
+.case-card .description { color: #555; font-size: 0.95em; line-height: 1.6; margin-top: 10px; }
 .case-card .votes { margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; color: #ff6b6b; font-weight: bold; font-size: 1.1em; }
 
 /* Upload Form */
@@ -66,6 +67,4 @@ header .description { color: #7f8c8d; font-size: 1.1em; line-height: 1.6; }
     .cases-list { grid-template-columns: 1fr; }
     .emergency-step { flex-direction: column; align-items: center; text-align: center; }
     .step-number { margin-right: 0; margin-bottom: 15px; }
-    .case-card h3 { padding-right: 0; margin-top: 35px; }
-    .case-category { top: 10px; right: 10px; }
 }
