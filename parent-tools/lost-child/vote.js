@@ -46,7 +46,7 @@ function loadCasesAndSetupVoting() {
             try {
                 allCases = JSON.parse(data);
                 if (allCases.length < voteConfig.numberOfCases) {
-                    showError(`案例数量不足，至少需要${voteConfig.numberOfCases}个`);
+                    showError(`视频数量不足，至少需要${voteConfig.numberOfCases}条`);
                     return;
                 }
                 selectedCases = getRandomCases(allCases, voteConfig.numberOfCases);
@@ -55,10 +55,10 @@ function loadCasesAndSetupVoting() {
                 document.getElementById('votingSection').style.display = 'block';
             } catch (error) {
                 console.error('Error processing cases:', error);
-                showError('加载案例失败，请刷新页面重试');
+                showError('加载视频失败，请刷新页面重试');
             }
         } else {
-            showError('暂无案例数据，请先在孩子丢了怎么办页面添加案例');
+            showError('暂无视频数据，请先在孩子丢了怎么办页面添加视频');
         }
     });
 }
@@ -85,12 +85,6 @@ function createCaseContainer(caseItem, index) {
     const container = document.createElement('div');
     container.className = 'case-container';
     container.onclick = () => selectCase(index);
-    
-    // Category badge
-    const category = document.createElement('div');
-    category.className = 'case-category-badge';
-    category.textContent = caseItem.category;
-    container.appendChild(category);
     
     // Title
     const title = document.createElement('div');
@@ -122,7 +116,7 @@ function selectCase(index) {
 }
 
 function showAd() {
-    if (selectedCaseIndex === null) { alert('请先选择一个案例！'); return; }
+    if (selectedCaseIndex === null) { alert('请先选择一条视频！'); return; }
     saveVote();
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({

@@ -1,6 +1,6 @@
 /**
  * Lost Child Application
- * Allows users to share experiences and emergency measures
+ * Allows users to share video experiences and emergency measures
  */
 
 /**
@@ -17,6 +17,19 @@ const lostChildConfig = {
 let cases = [];
 
 /**
+ * Extract URL from pasted content
+ */
+function extractUrl(text) {
+    if (!text) return '';
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    const matches = text.match(urlPattern);
+    if (matches && matches.length > 0) {
+        return matches[0].replace(/[.,;:!?]+$/, '');
+    }
+    return text.trim();
+}
+
+/**
  * Initialize the page
  */
 function initializePage() {
@@ -26,8 +39,17 @@ function initializePage() {
 
 function setupFormSubmission() {
     const form = document.getElementById('uploadForm');
+    const videoLinkInput = document.getElementById('videoLink');
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
+    }
+    if (videoLinkInput) {
+        videoLinkInput.addEventListener('blur', function() {
+            const extractedUrl = extractUrl(this.value);
+            if (extractedUrl !== this.value) {
+                this.value = extractedUrl;
+            }
+        });
     }
 }
 
@@ -35,19 +57,21 @@ async function handleFormSubmit(event) {
     event.preventDefault();
 
     const caseTitle = document.getElementById('caseTitle').value.trim();
-    const caseCategory = document.getElementById('caseCategory').value.trim();
+    let videoLink = document.getElementById('videoLink').value.trim();
     const description = document.getElementById('description').value.trim();
 
-    if (!caseTitle || !caseCategory || !description) {
-        alert('请填写所有必填项！');
+    videoLink = extractUrl(videoLink);
+
+    if (!caseTitle || !videoLink) {
+        alert('请填写标题和视频链接！');
         return;
     }
 
     const caseItem = {
         id: `case-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
         title: caseTitle,
+        videoLink: videoLink,
         description: description,
-        category: caseCategory,
         timestamp: Date.now(),
         votes: 0
     };
@@ -93,7 +117,7 @@ function loadCases() {
             }
         } else {
             cases = [];
-            casesList.innerHTML = '<p style="text-align: center; color: #888;">还没有人分享案例，快来做第一个吧！</p>';
+            casesList.innerHTML = '<p style="text-align: center; color: #888;">还没有人分享视频，快来做第一个吧！</p>';
         }
     });
 }
@@ -101,7 +125,7 @@ function loadCases() {
 function displayCases(casesArray) {
     const casesList = document.getElementById('casesList');
     if (!casesArray || casesArray.length === 0) {
-        casesList.innerHTML = '<p style="text-align: center; color: #888;">还没有人分享案例，快来做第一个吧！</p>';
+        casesList.innerHTML = '<p style="text-align: center; color: #888;">还没有人分享视频，快来做第一个吧！</p>';
         return;
     }
 
@@ -122,22 +146,26 @@ function createCaseCard(caseItem) {
     const card = document.createElement('div');
     card.className = 'case-card';
 
-    // Category badge
-    const category = document.createElement('div');
-    category.className = 'case-category';
-    category.textContent = caseItem.category;
-    card.appendChild(category);
-
     // Title
     const title = document.createElement('h3');
     title.textContent = caseItem.title;
     card.appendChild(title);
 
-    // Description
-    const description = document.createElement('p');
-    description.className = 'description';
-    description.textContent = caseItem.description;
-    card.appendChild(description);
+    // Video Link
+    const videoLink = document.createElement('a');
+    videoLink.href = caseItem.videoLink;
+    videoLink.target = '_blank';
+    videoLink.className = 'video-link';
+    videoLink.textContent = '观看视频 →';
+    card.appendChild(videoLink);
+
+    // Description (if exists)
+    if (caseItem.description) {
+        const description = document.createElement('p');
+        description.className = 'description';
+        description.textContent = caseItem.description;
+        card.appendChild(description);
+    }
 
     // Votes
     if (caseItem.votes !== undefined && caseItem.votes > 0) {
@@ -156,4 +184,5 @@ function getCasesForVoting() {
 
 if (typeof window !== 'undefined') {
     window.getCasesForVoting = getCasesForVoting;
+    window.extractUrl = extractUrl;
 }
