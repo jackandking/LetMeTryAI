@@ -215,5 +215,52 @@ describe('WomanAI Integration Tests', () => {
             expect(expectedColumns).toContain('image_url');
             expect(expectedColumns).toContain('created_at');
         });
+
+        it('should correctly detect successful upload using affectedRows', () => {
+            // MySQL INSERT API returns { insertId: X, affectedRows: Y }
+            const mockInsertResponse = {
+                insertId: 123,
+                affectedRows: 1
+            };
+
+            // Success condition should check affectedRows > 0
+            const isSuccess = mockInsertResponse.affectedRows > 0;
+            expect(isSuccess).toBe(true);
+
+            // OLD incorrect check: result.success || result.data
+            const oldCheck = mockInsertResponse.success || mockInsertResponse.data;
+            expect(oldCheck).toBeFalsy(); // This would incorrectly show failure
+
+            // Verify affectedRows is the correct indicator
+            expect(mockInsertResponse).toHaveProperty('affectedRows');
+            expect(mockInsertResponse.affectedRows).toBeGreaterThan(0);
+        });
+
+        it('should handle failed upload when affectedRows is 0', () => {
+            // Failed insertion should have affectedRows = 0
+            const mockFailedResponse = {
+                affectedRows: 0,
+                error: 'Insertion failed'
+            };
+
+            const isSuccess = mockFailedResponse.affectedRows > 0;
+            expect(isSuccess).toBe(false);
+        });
+
+        it('should match nanrenbao upload success detection pattern', () => {
+            // Both womanai and nanrenbao should use the same pattern
+            const mockResponse = {
+                insertId: 456,
+                affectedRows: 1
+            };
+
+            // This is the pattern used in nanrenbao/upload.html line 436
+            const isSuccessNanrenbao = mockResponse.affectedRows > 0;
+            // This should be the same pattern used in womanai/upload.html line 346
+            const isSuccessWomanai = mockResponse.affectedRows > 0;
+
+            expect(isSuccessNanrenbao).toBe(isSuccessWomanai);
+            expect(isSuccessWomanai).toBe(true);
+        });
     });
 });

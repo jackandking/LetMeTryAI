@@ -130,7 +130,7 @@ async function uploadSingleImage(url) {
         
         const result = await response.json();
         
-        if (result.success || result.data) {
+        if (result.affectedRows > 0) {
             return { success: true };
         } else {
             throw new Error(result.error || '上传失败');
