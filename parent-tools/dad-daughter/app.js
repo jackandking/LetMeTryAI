@@ -30,6 +30,32 @@ function extractUrl(text) {
 }
 
 /**
+ * Sanitize URL to allow only safe schemes (http/https)
+ */
+function sanitizeUrl(rawUrl) {
+    if (!rawUrl) return '';
+    const trimmed = rawUrl.trim();
+    if (!trimmed) return '';
+
+    try {
+        // Use current origin as base to support relative URLs safely
+        const base = (typeof window !== 'undefined' && window.location && window.location.origin)
+            ? window.location.origin
+            : 'https://example.com';
+        const url = new URL(trimmed, base);
+        const protocol = url.protocol.toLowerCase();
+        if (protocol === 'http:' || protocol === 'https:') {
+            return url.toString();
+        }
+    } catch (e) {
+        // Fall through to return empty string
+    }
+
+    // Unsafe or invalid URL
+    return '';
+}
+
+/**
  * Initialize the page
  */
 function initializePage() {
@@ -60,7 +86,7 @@ async function handleFormSubmit(event) {
     let videoLink = document.getElementById('videoLink').value.trim();
     const description = document.getElementById('description').value.trim();
 
-    videoLink = extractUrl(videoLink);
+    videoLink = sanitizeUrl(extractUrl(videoLink));
 
     if (!activityName || !videoLink) {
         alert('请填写活动标题和视频/文章链接！');
@@ -149,12 +175,15 @@ function createActivityCard(activity) {
     title.textContent = activity.name;
     card.appendChild(title);
 
-    const videoLink = document.createElement('a');
-    videoLink.href = activity.videoLink;
-    videoLink.target = '_blank';
-    videoLink.className = 'video-link';
-    videoLink.textContent = '查看内容 →';
-    card.appendChild(videoLink);
+    const safeVideoLink = sanitizeUrl(activity.videoLink);
+    if (safeVideoLink) {
+        const videoLink = document.createElement('a');
+        videoLink.href = safeVideoLink;
+        videoLink.target = '_blank';
+        videoLink.className = 'video-link';
+        videoLink.textContent = '查看内容 →';
+        card.appendChild(videoLink);
+    }
 
     if (activity.description) {
         const description = document.createElement('p');
