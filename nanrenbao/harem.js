@@ -1,6 +1,9 @@
 // nanrenbao/harem.js
 // 我的后宫功能脚本
 
+// KV store constants
+const HAREM_COUNTER_KEY = 'nanrenbao.harem.activations';
+
 // 获取激活状态
 function isHaremActivated() {
   return localStorage.getItem('haremActivated') === '1';
@@ -9,6 +12,53 @@ function isHaremActivated() {
 // 激活后宫功能
 function activateHarem() {
   localStorage.setItem('haremActivated', '1');
+  // Increment global counter in KV store
+  incrementHaremCounter();
+}
+
+// 从KV store获取激活用户计数
+function getHaremActivationCount(callback) {
+  if (typeof getConfig !== 'function') {
+    console.error('getConfig function not available');
+    if (callback) callback(0);
+    return;
+  }
+  
+  getConfig(HAREM_COUNTER_KEY, function(data) {
+    let count = 0;
+    if (data && typeof data === 'number') {
+      count = data;
+    } else if (data && typeof data === 'object' && data.count !== undefined) {
+      count = data.count;
+    }
+    if (callback) callback(count);
+  });
+}
+
+// 增加KV store中的激活用户计数
+function incrementHaremCounter() {
+  if (typeof getConfig !== 'function' || typeof updateConfig !== 'function') {
+    console.error('getConfig or updateConfig function not available');
+    return;
+  }
+  
+  getConfig(HAREM_COUNTER_KEY, function(data) {
+    let currentCount = 0;
+    if (data && typeof data === 'number') {
+      currentCount = data;
+    } else if (data && typeof data === 'object' && data.count !== undefined) {
+      currentCount = data.count;
+    }
+    
+    const newCount = currentCount + 1;
+    updateConfig(HAREM_COUNTER_KEY, newCount);
+    console.log('Harem activation counter incremented to:', newCount);
+    
+    // Update display if function exists
+    if (typeof updateHaremCountDisplay === 'function') {
+      updateHaremCountDisplay(newCount);
+    }
+  });
 }
 
 // 获取后宫图片列表
@@ -124,6 +174,21 @@ function setupActivateBtn() {
   }
 }
 
+// 更新激活计数显示
+function updateHaremCountDisplay(count) {
+  const countEl = document.getElementById('harem-activation-count');
+  if (countEl) {
+    countEl.textContent = count;
+  }
+}
+
+// 加载并显示激活计数
+function loadHaremActivationCount() {
+  getHaremActivationCount(function(count) {
+    updateHaremCountDisplay(count);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   setupActivateBtn();
   // Ensure capacity default when activated
@@ -132,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!cap || cap <= 0) setHaremCapacity(10);
   }
   renderHaremImages();
+  // Load and display activation count
+  loadHaremActivationCount();
 });
 
 // 导出方法供主站调用
