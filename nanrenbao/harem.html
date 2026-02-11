@@ -58,6 +58,15 @@
     .container { max-width: 1200px; margin: 20px auto; padding: 20px; background: rgba(255,255,255,0.95); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
     .title { font-size: 2em; font-weight: bold; margin-bottom: 16px; }
     .desc { color: #666; margin-bottom: 24px; }
+    .activation-stats {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 16px;
+    }
+    .activation-stats .count {
+      color: #e91e63;
+      font-weight: bold;
+    }
     .activate-btn { background: #e91e63; color: #fff; border: none; border-radius: 6px; padding: 12px 32px; font-size: 1.1em; cursor: pointer; margin-bottom: 24px; }
     .activate-btn[disabled] { background: #aaa; cursor: not-allowed; }
     .image-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding-bottom: 20px; }
@@ -72,8 +81,8 @@
     <a href="index.html" class="nav-back">← 返回</a>
     <div class="title">我的后宫</div>
     <div class="desc" id="harem-desc">激活后，您在本站看到的美女图片都会自动收录在这里，无需再花积分查看。</div>
-    <div style="color:#666; font-size:0.9em; margin-bottom:16px;">
-      目前有 <span id="harem-activation-count" style="color:#e91e63; font-weight:bold;">0</span> 个用户开通了此功能
+    <div class="activation-stats">
+      目前有 <span id="harem-activation-count" class="count">0</span> 个用户开通了此功能
     </div>
     <button class="activate-btn" id="activate-harem">花 50 积分激活</button>
 
