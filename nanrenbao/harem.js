@@ -3,17 +3,33 @@
 
 // KV store constants
 const HAREM_COUNTER_KEY = 'nanrenbao.harem.activations';
+const HAREM_COUNTED_KEY = 'haremCountedForUser'; // Track if user was already counted
 
 // 获取激活状态
 function isHaremActivated() {
   return localStorage.getItem('haremActivated') === '1';
 }
 
+// Helper: Parse counter data from KV store (handles both number and object formats)
+function parseCounterData(data) {
+  if (data && typeof data === 'number') {
+    return data;
+  } else if (data && typeof data === 'object' && data.count !== undefined) {
+    return data.count;
+  }
+  return 0;
+}
+
 // 激活后宫功能
 function activateHarem() {
+  const wasActivated = isHaremActivated();
   localStorage.setItem('haremActivated', '1');
-  // Increment global counter in KV store
-  incrementHaremCounter();
+  
+  // Only increment counter if this is the first activation (not already counted)
+  if (!wasActivated && !localStorage.getItem(HAREM_COUNTED_KEY)) {
+    localStorage.setItem(HAREM_COUNTED_KEY, '1');
+    incrementHaremCounter();
+  }
 }
 
 // 从KV store获取激活用户计数
@@ -25,12 +41,7 @@ function getHaremActivationCount(callback) {
   }
   
   getConfig(HAREM_COUNTER_KEY, function(data) {
-    let count = 0;
-    if (data && typeof data === 'number') {
-      count = data;
-    } else if (data && typeof data === 'object' && data.count !== undefined) {
-      count = data.count;
-    }
+    const count = parseCounterData(data);
     if (callback) callback(count);
   });
 }
@@ -43,14 +54,9 @@ function incrementHaremCounter() {
   }
   
   getConfig(HAREM_COUNTER_KEY, function(data) {
-    let currentCount = 0;
-    if (data && typeof data === 'number') {
-      currentCount = data;
-    } else if (data && typeof data === 'object' && data.count !== undefined) {
-      currentCount = data.count;
-    }
-    
+    const currentCount = parseCounterData(data);
     const newCount = currentCount + 1;
+    
     updateConfig(HAREM_COUNTER_KEY, newCount);
     console.log('Harem activation counter incremented to:', newCount);
     
