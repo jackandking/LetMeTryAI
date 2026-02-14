@@ -1,0 +1,146 @@
+{
+  "apps": [
+    {
+      "id": "fireworks",
+      "name": "爱烟花",
+      "description": "创意烟花动画展示",
+      "category": "娱乐",
+      "directory": "firework",
+      "url": "https://museumcheck.cn/fireworks-wall.html",
+      "external": true,
+      "image": "images/game1.jpg",
+      "tags": ["动画", "烟花", "视觉"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "magic",
+      "name": "爱魔术",
+      "description": "神奇的魔术效果展示",
+      "category": "娱乐",
+      "directory": "webview3",
+      "url": "webview3",
+      "image": "images/game2.png",
+      "tags": ["魔术", "互动", "娱乐"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "study",
+      "name": "爱学习",
+      "description": "有趣的学习工具",
+      "category": "教育",
+      "directory": "webview11",
+      "url": "webview11",
+      "image": "images/sample1.png",
+      "tags": ["学习", "教育"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "zuowen",
+      "name": "爱语文",
+      "description": "语文学习和作文游戏",
+      "category": "教育",
+      "directory": "zuowen-game",
+      "url": "zuowen-game",
+      "image": "images/game1.jpg",
+      "tags": ["语文", "作文", "学习"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "typing",
+      "name": "爱打字",
+      "description": "提升打字速度的游戏",
+      "category": "教育",
+      "directory": "typing-game",
+      "url": "typing-game",
+      "image": "images/game2.png",
+      "tags": ["打字", "游戏", "技能"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "parent-tools",
+      "name": "家长爱",
+      "description": "家长教育工具集",
+      "category": "工具",
+      "directory": "parent-tools",
+      "url": "parent-tools",
+      "image": "images/1621725673908_.pic.jpg",
+      "tags": ["家长", "教育", "工具"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "elder-love",
+      "name": "爱老人",
+      "description": "老人关怀和娱乐应用",
+      "category": "生活",
+      "directory": "elder-love",
+      "url": "elder-love",
+      "image": "images/1621725673908_.pic.jpg",
+      "tags": ["老人", "关怀", "生活"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "lure-fishing",
+      "name": "爱钓鱼",
+      "description": "钓鱼爱好者的工具",
+      "category": "娱乐",
+      "directory": "lure-fishing",
+      "url": "lure-fishing",
+      "image": "images/game2.png",
+      "tags": ["钓鱼", "户外", "娱乐"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "eraser",
+      "name": "爱橡皮",
+      "description": "创意橡皮擦工具",
+      "category": "工具",
+      "directory": "eraser",
+      "url": "eraser",
+      "image": "images/game1.jpg",
+      "tags": ["工具", "创意"],
+      "featured": true,
+      "status": "active"
+    },
+    {
+      "id": "nanrenbao",
+      "name": "男人宝",
+      "description": "男性专属娱乐应用",
+      "category": "娱乐",
+      "directory": "nanrenbao",
+      "url": "nanrenbao",
+      "image": "images/game2.png",
+      "tags": ["娱乐", "图片"],
+      "status": "active"
+    },
+    {
+      "id": "womanai",
+      "name": "女人爱",
+      "description": "女性专属娱乐应用",
+      "category": "娱乐",
+      "directory": "womanai",
+      "url": "womanai",
+      "image": "images/game1.jpg",
+      "tags": ["娱乐", "图片"],
+      "status": "active"
+    },
+    {
+      "id": "guesscupsize",
+      "name": "猜杯子",
+      "description": "趣味猜谜游戏",
+      "category": "娱乐",
+      "directory": "guesscupsize",
+      "url": "guesscupsize",
+      "image": "images/game2.png",
+      "tags": ["游戏", "娱乐"],
+      "status": "active"
+    }
+  ]
+}
