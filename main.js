@@ -521,6 +521,11 @@ function showError(message) {
 }
 
 /**
+ * Scroll animation duration constant (in milliseconds)
+ */
+const SCROLL_ANIMATION_DURATION = 500;
+
+/**
  * Scroll to submit form
  */
 function scrollToSubmitForm() {
@@ -528,13 +533,13 @@ function scrollToSubmitForm() {
     if (submitSection) {
         submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         
-        // Focus on first input
+        // Focus on first input after scroll animation completes
         setTimeout(() => {
             const titleInput = document.getElementById('idea-title');
             if (titleInput) {
                 titleInput.focus();
             }
-        }, 500);
+        }, SCROLL_ANIMATION_DURATION);
     }
 }
 
@@ -572,13 +577,13 @@ function handleQuickInput() {
     if (submitSection) {
         submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         
-        // Focus on description after scroll
+        // Focus on description after scroll animation completes
         setTimeout(() => {
             const descriptionInput = document.getElementById('idea-description');
             if (descriptionInput) {
                 descriptionInput.focus();
             }
-        }, 500);
+        }, SCROLL_ANIMATION_DURATION);
     }
 }
 
