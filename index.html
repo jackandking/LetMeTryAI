@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人人爱 - letmetryai.cn</title>
+    <title>把创意变成小应用 - LetMeTryAI</title>
+    <meta name="description" content="将您的创意快速转化为实用的小应用。提交想法，我们帮您实现！">
+    <meta name="keywords" content="创意,小应用,AI,工具,教育,娱乐">
     <link rel="stylesheet" href="styles.css">
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="config.js"></script>  
-    <script src="main.js"></script>  
+    <script src="main.js" type="module"></script>  
     <script>
 	    var _hmt = _hmt || [];
 	    (function() {
@@ -21,73 +23,113 @@
 </head>
 <body>
     <header>
-        <h1>人人爱 <small>(letmetryai.cn)</small></h1>
-        <!-- 导航菜单可以保持不变或调整为适合移动设备的样式 -->
+        <div class="header-content">
+            <h1>把创意变成小应用 ✨</h1>
+            <p class="tagline">快速将您的想法转化为现实</p>
+        </div>
     </header>
     
-    <main>
-        <section class="section">
-            <a href="https://museumcheck.cn/fireworks-wall.html" target="_blank">
-                <img id="fireworks-img" alt="爱烟花" class="responsive-img">
-                <h2>爱烟花</h2>
-            </a>
-        </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>有创意？让我们帮您实现！</h2>
+            <p>提交您的想法，AI 自动生成应用并发布到这个平台</p>
+            <button class="cta-button" onclick="scrollToSubmitForm()">💡 提交创意</button>
+        </div>
+    </section>
 
-        <section class="section">
-            <a href="webview3">
-                <img id="magic-img" alt="爱魔术" class="responsive-img">
-                <h2>爱魔术</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="webview11">
-                <img id="study-img" alt="爱学习" class="responsive-img">
-                <h2>爱学习</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="zuowen-game">
-                <img id="zuowen-img" alt="爱语文" class="responsive-img">
-                <h2>爱语文</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="typing-game">
-                <img id="typing-game-img" alt="爱打字" class="responsive-img">
-                <h2>爱打字</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="parent-tools">
-                <img id="parent-love-img" alt="家长爱" class="responsive-img">
-                <h2>家长爱</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="elder-love">
-                <img id="elder-love-img" alt="爱老人" class="responsive-img">
-                <h2>爱老人</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="lure-fishing">
-                <img id="lure-fishing-img" alt="爱钓鱼" class="responsive-img">
-                <h2>爱钓鱼</h2>
-            </a>
-        </section>
-        <section class="section">
-            <a href="eraser">
-                <img id="eraser-img" alt="爱橡皮" class="responsive-img">
-                <h2>爱橡皮</h2>
-            </a>
-        </section>
-       
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="搜索应用...">
+            <div class="filter-controls">
+                <select id="category-filter" class="filter-select">
+                    <option value="all">全部分类</option>
+                    <option value="教育">教育</option>
+                    <option value="娱乐">娱乐</option>
+                    <option value="工具">工具</option>
+                    <option value="生活">生活</option>
+                </select>
+                <select id="sort-select" class="filter-select">
+                    <option value="featured">推荐</option>
+                    <option value="name">名称</option>
+                    <option value="category">分类</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apps Grid -->
+    <main id="apps-container">
+    <!-- Apps Grid -->
+    <main id="apps-container">
+        <!-- Apps will be dynamically loaded here -->
     </main>
+
+    <!-- Idea Submission Form -->
+    <section class="submit-section" id="submit-form">
+        <div class="submit-container">
+            <h2>💡 提交您的创意</h2>
+            <p class="submit-description">告诉我们您的想法，我们将自动创建项目并开始开发！</p>
+            
+            <form id="idea-form" class="idea-form">
+                <div class="form-group">
+                    <label for="idea-title">创意标题 *</label>
+                    <input 
+                        type="text" 
+                        id="idea-title" 
+                        name="title" 
+                        class="form-input" 
+                        placeholder="例如：智能诗词生成器"
+                        maxlength="100"
+                        required
+                    >
+                    <span class="char-count" id="title-count">0/100</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="idea-description">创意描述 *</label>
+                    <textarea 
+                        id="idea-description" 
+                        name="description" 
+                        class="form-textarea" 
+                        placeholder="详细描述您的创意想法，包括功能、目标用户等..."
+                        maxlength="2000"
+                        rows="6"
+                        required
+                    ></textarea>
+                    <span class="char-count" id="description-count">0/2000</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="idea-category">分类（可选）</label>
+                    <select id="idea-category" name="category" class="form-select">
+                        <option value="">选择分类</option>
+                        <option value="教育">教育</option>
+                        <option value="娱乐">娱乐</option>
+                        <option value="工具">工具</option>
+                        <option value="生活">生活</option>
+                        <option value="游戏">游戏</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-button" id="submit-button">
+                        🚀 提交创意
+                    </button>
+                </div>
+
+                <div id="form-message" class="form-message"></div>
+            </form>
+        </div>
+    </section>
     
     <footer>
-        <p>&copy; 2025 人人爱. 保留所有权利.</p>
-        <a href=" " target="_blank">您的备案号</a >
-<a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024092319号-1</a >
+        <p>&copy; 2025 把创意变成小应用 - LetMeTryAI. 保留所有权利.</p>
+        <a href=" " target="_blank">您的备案号</a>
+        <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024092319号-1</a>
+    </footer>
     </footer>
     
     <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
