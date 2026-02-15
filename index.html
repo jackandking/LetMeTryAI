@@ -34,7 +34,20 @@
         <div class="hero-content">
             <h2>有创意？让我们帮您实现！</h2>
             <p>提交您的想法，AI 自动生成应用并发布到这个平台</p>
-            <button class="cta-button" onclick="scrollToSubmitForm()">💡 提交创意</button>
+            
+            <!-- Quick Idea Input -->
+            <div class="quick-idea-input">
+                <input 
+                    type="text" 
+                    id="quick-idea-input" 
+                    class="quick-input" 
+                    placeholder="💡 在这里输入您的创意..."
+                    maxlength="100"
+                />
+                <button class="quick-submit-button" onclick="handleQuickInput()">开始创建</button>
+            </div>
+            
+            <button class="cta-button-secondary" onclick="scrollToSubmitForm()">或查看详细表单</button>
         </div>
     </section>
 
@@ -59,8 +72,6 @@
         </div>
     </section>
 
-    <!-- Apps Grid -->
-    <main id="apps-container">
     <!-- Apps Grid -->
     <main id="apps-container">
         <!-- Apps will be dynamically loaded here -->
@@ -127,9 +138,7 @@
     
     <footer>
         <p>&copy; 2025 把创意变成小应用 - LetMeTryAI. 保留所有权利.</p>
-        <a href=" " target="_blank">您的备案号</a>
         <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024092319号-1</a>
-    </footer>
     </footer>
     
     <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->

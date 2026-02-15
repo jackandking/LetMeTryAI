@@ -103,6 +103,78 @@ header {
     transform: translateY(-1px);
 }
 
+.cta-button-secondary {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 0.6em 2em;
+    font-size: 0.95em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 1em;
+}
+
+.cta-button-secondary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Quick Idea Input */
+.quick-idea-input {
+    display: flex;
+    gap: 1em;
+    max-width: 600px;
+    margin: 2em auto 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.quick-input {
+    flex: 1;
+    min-width: 250px;
+    padding: 1em 1.5em;
+    font-size: 1.1em;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.quick-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.quick-input::placeholder {
+    color: #999;
+}
+
+.quick-submit-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1em 2.5em;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.quick-submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.quick-submit-button:active {
+    transform: translateY(0);
+}
+
 /* ==========================================================================
    Search Section
    ========================================================================== */
@@ -509,6 +581,26 @@ footer a:hover {
         padding: 0.8em 2em;
         font-size: 1em;
     }
+    
+    .cta-button-secondary {
+        padding: 0.5em 1.5em;
+        font-size: 0.9em;
+    }
+    
+    .quick-idea-input {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .quick-input {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .quick-submit-button {
+        width: 100%;
+    }
 
     .search-section {
         margin: 1em;
@@ -583,12 +675,15 @@ footer a:hover {
 /* Focus styles for keyboard navigation */
 .section a:focus,
 .cta-button:focus,
+.cta-button-secondary:focus,
 .submit-button:focus,
 .search-input:focus,
 .filter-select:focus,
 .form-input:focus,
 .form-textarea:focus,
-.form-select:focus {
+.form-select:focus,
+.quick-input:focus,
+.quick-submit-button:focus {
     outline: 3px solid #667eea;
     outline-offset: 2px;
 }

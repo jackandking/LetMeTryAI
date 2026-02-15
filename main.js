@@ -245,6 +245,17 @@ function setupEventListeners() {
     if (sortSelect) {
         sortSelect.addEventListener('change', handleSort);
     }
+    
+    // Quick idea input - handle Enter key
+    const quickInput = document.getElementById('quick-idea-input');
+    if (quickInput) {
+        quickInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleQuickInput();
+            }
+        });
+    }
 }
 
 /**
@@ -510,6 +521,11 @@ function showError(message) {
 }
 
 /**
+ * Scroll animation duration constant (in milliseconds)
+ */
+const SCROLL_ANIMATION_DURATION = 500;
+
+/**
  * Scroll to submit form
  */
 function scrollToSubmitForm() {
@@ -517,18 +533,63 @@ function scrollToSubmitForm() {
     if (submitSection) {
         submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         
-        // Focus on first input
+        // Focus on first input after scroll animation completes
         setTimeout(() => {
             const titleInput = document.getElementById('idea-title');
             if (titleInput) {
                 titleInput.focus();
             }
-        }, 500);
+        }, SCROLL_ANIMATION_DURATION);
     }
 }
 
-// Make scrollToSubmitForm available globally for onclick handler
+/**
+ * Handle quick input submission
+ */
+function handleQuickInput() {
+    const quickInput = document.getElementById('quick-idea-input');
+    
+    if (!quickInput) {
+        console.error('Quick input element not found');
+        return;
+    }
+    
+    const quickIdea = quickInput.value.trim();
+    
+    // If empty, just scroll to the form
+    if (!quickIdea) {
+        scrollToSubmitForm();
+        return;
+    }
+    
+    // Pre-fill the title field and scroll to the form
+    const titleInput = document.getElementById('idea-title');
+    if (titleInput) {
+        titleInput.value = quickIdea;
+        updateCharCount('idea-title', 'title-count', 100);
+    }
+    
+    // Clear quick input
+    quickInput.value = '';
+    
+    // Scroll to the form and focus on description
+    const submitSection = document.getElementById('submit-form');
+    if (submitSection) {
+        submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Focus on description after scroll animation completes
+        setTimeout(() => {
+            const descriptionInput = document.getElementById('idea-description');
+            if (descriptionInput) {
+                descriptionInput.focus();
+            }
+        }, SCROLL_ANIMATION_DURATION);
+    }
+}
+
+// Make functions available globally
 window.scrollToSubmitForm = scrollToSubmitForm;
+window.handleQuickInput = handleQuickInput;
 
 /**
  * Initialize when DOM is loaded
