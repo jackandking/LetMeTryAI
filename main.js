@@ -387,6 +387,18 @@ function updateCharCount(inputId, countId, maxLength) {
 
 /**
  * Handle form submission
+ * 
+ * Current Implementation (v1.0):
+ * - Validates user input
+ * - Shows mock success response
+ * - Does NOT create GitHub issue (backend endpoint not implemented)
+ * 
+ * Future Implementation:
+ * - Will call createIssueFromIdea() from util/github-util.js
+ * - Will create GitHub issue via /github/create-issue endpoint
+ * - Issue will be auto-assigned to @copilot for AI processing
+ * 
+ * See IDEA-SUBMISSION-WORKFLOW.md for complete workflow documentation
  */
 async function handleFormSubmit(event) {
     event.preventDefault();
@@ -416,13 +428,21 @@ async function handleFormSubmit(event) {
     }
     
     try {
-        // For now, show a mock success message since we don't have backend yet
-        // In production, this would call: await createIssueFromIdea(idea);
+        // ⚠️ TEMPORARY IMPLEMENTATION - MOCK MODE
+        // The backend endpoint /github/create-issue does not exist yet
+        // This simulates successful submission without actually creating a GitHub issue
+        // 
+        // To enable real GitHub issue creation:
+        // 1. Implement backend endpoint: POST /github/create-issue
+        // 2. Uncomment the following line:
+        //    const result = await createIssueFromIdea(idea);
+        // 3. Remove the mock implementation below
         
-        // Simulate API call
+        // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Mock success response
+        // In production, this would come from createIssueFromIdea()
         const result = {
             success: true,
             message: '创意提交成功！我们已经记录了您的想法。'

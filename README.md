@@ -10,6 +10,7 @@ A modern, responsive web application featuring interactive content and games.
 - **Centralized Configuration**: Unified API and resource management
 - **Modular Architecture**: Well-organized, maintainable codebase
 - **🆕 MCP Server Integration**: GitHub Copilot MySQL operations without API keys
+- **💡 Idea Submission**: Submit your creative ideas directly from homepage (see [FAQ](docs/IDEA-SUBMISSION-FAQ.md))
 
 ## 📋 Project Structure
 outdated
@@ -286,3 +287,5 @@ MIT License - see LICENSE file for details
 - [Live Demo](https://letmetryai.cn)
 - [Documentation](./TESTING.md)
 - [Contributing Guidelines](./.github/copilot-instructions.md)
+- [Idea Submission FAQ](./docs/IDEA-SUBMISSION-FAQ.md) - Learn what happens after submitting ideas
+- [Idea Submission Workflow](./IDEA-SUBMISSION-WORKFLOW.md) - Technical documentation for developers

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意提交说明 - LetMeTryAI</title>
+    <meta name="description" content="了解提交创意后会发生什么，以及如何跟踪您的创意。">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .docs-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .docs-header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .docs-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .faq-section {
+            margin: 2rem 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .faq-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .faq-answer ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .faq-answer li {
+            margin: 0.5rem 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+        
+        .status-complete {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 2rem;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #45a049;
+        }
+        
+        .info-box {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            border-left: 4px solid #2196F3;
+            background: #e3f2fd;
+        }
+        
+        .warning-box {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            border-left: 4px solid #ff9800;
+            background: #fff3e0;
+        }
+        
+        @media (max-width: 768px) {
+            .docs-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .faq-question {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="docs-container">
+        <div class="docs-header">
+            <h1>💡 创意提交说明</h1>
+            <p>了解您的创意提交后会发生什么</p>
+        </div>
+        
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question">❓ 提交创意后会发生什么？</div>
+                <div class="faq-answer">
+                    <p>提交创意后，系统会立即：</p>
+                    <ul>
+                        <li>✅ 验证您输入的内容（标题和描述）</li>
+                        <li>✅ 显示成功提示消息</li>
+                        <li>✅ 自动重置表单，方便您继续提交</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>💡 未来功能（开发中）：</strong>
+                        <ul>
+                            <li>🔄 自动创建GitHub Issue</li>
+                            <li>🔄 AI助手评估创意可行性</li>
+                            <li>🔄 自动生成应用原型</li>
+                            <li>🔄 通知您创意的处理进度</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">🎯 当前系统状态</div>
+                <div class="faq-answer">
+                    <p><strong>已完成的功能：</strong></p>
+                    <span class="status-badge status-complete">✅ 创意提交表单</span>
+                    <span class="status-badge status-complete">✅ 输入验证</span>
+                    <span class="status-badge status-complete">✅ 快速输入</span>
+                    <span class="status-badge status-complete">✅ 用户反馈</span>
+                    
+                    <p style="margin-top: 1rem;"><strong>开发中的功能：</strong></p>
+                    <span class="status-badge status-progress">🔄 GitHub集成</span>
+                    <span class="status-badge status-progress">🔄 AI评估</span>
+                    <span class="status-badge status-progress">🔄 自动生成</span>
+                    <span class="status-badge status-progress">🔄 进度跟踪</span>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">📝 如何写好创意描述？</div>
+                <div class="faq-answer">
+                    <p><strong>好的创意应该包含：</strong></p>
+                    <ul>
+                        <li><strong>标题</strong>：简洁明了（3-100字符）</li>
+                        <li><strong>描述</strong>：详细说明（10-2000字符）
+                            <ul>
+                                <li>想要解决什么问题？</li>
+                                <li>主要功能是什么？</li>
+                                <li>目标用户是谁？</li>
+                                <li>有什么特色之处？</li>
+                            </ul>
+                        </li>
+                        <li><strong>分类</strong>：选择合适的类别（可选）</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>💡 示例：</strong><br>
+                        <strong>标题：</strong>智能诗词生成器<br>
+                        <strong>描述：</strong>一个帮助用户创作中国古典诗词的AI工具。用户输入主题或关键词，AI生成符合格律的诗词（五言、七言、绝句、律诗），并提供诗词解释和意境分析。目标用户包括诗词爱好者、学生和需要创意文案的用户。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">🔍 如何跟踪我的创意？</div>
+                <div class="faq-answer">
+                    <div class="warning-box">
+                        <strong>⚠️ 当前限制：</strong><br>
+                        目前提交的创意暂时无法在线跟踪。我们正在开发创意跟踪系统。
+                    </div>
+                    
+                    <p><strong>临时解决方案：</strong></p>
+                    <ol>
+                        <li>访问GitHub仓库：<a href="https://github.com/jackandking/LetMeTryAI" target="_blank">jackandking/LetMeTryAI</a></li>
+                        <li>查看标签为"user-idea"的Issues</li>
+                        <li>关注仓库获取更新通知</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">🎨 我的创意会被实现吗？</div>
+                <div class="faq-answer">
+                    <p>创意会根据以下标准评估：</p>
+                    <ul>
+                        <li>✅ <strong>可行性</strong>：技术上能否实现</li>
+                        <li>✅ <strong>价值</strong>：对用户是否有用</li>
+                        <li>✅ <strong>创新性</strong>：是否有独特之处</li>
+                        <li>✅ <strong>复杂度</strong>：开发工作量是否合理</li>
+                    </ul>
+                    
+                    <p><strong>实现优先级：</strong></p>
+                    <ul>
+                        <li>🔥 <strong>高优先级</strong>：创新且实用的小应用</li>
+                        <li>⭐ <strong>中优先级</strong>：有趣的互动功能</li>
+                        <li>💡 <strong>低优先级</strong>：复杂或小众的功能</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">🛠️ 技术限制</div>
+                <div class="faq-answer">
+                    <p><strong>支持的应用类型：</strong></p>
+                    <ul>
+                        <li>✅ 网页小应用</li>
+                        <li>✅ 简单游戏</li>
+                        <li>✅ 工具类应用</li>
+                        <li>✅ 互动娱乐</li>
+                        <li>✅ 教育学习</li>
+                    </ul>
+                    
+                    <p><strong>暂不支持：</strong></p>
+                    <ul>
+                        <li>❌ 需要大量后端逻辑的应用</li>
+                        <li>❌ 需要复杂数据库的系统</li>
+                        <li>❌ 需要外部API集成（除非已有）</li>
+                        <li>❌ 涉及支付或敏感信息的功能</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">← 返回主页提交创意</a>
+            <a href="https://github.com/jackandking/LetMeTryAI" class="back-button" style="background: #2196F3; margin-left: 1rem;">
+                查看GitHub仓库 →
+            </a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem; color: #999; font-size: 0.9rem;">
+            <p>更多技术细节请查看：</p>
+            <p>
+                <a href="https://github.com/jackandking/LetMeTryAI/blob/main/IDEA-SUBMISSION-WORKFLOW.md" target="_blank">开发者文档</a> | 
+                <a href="https://github.com/jackandking/LetMeTryAI/blob/main/docs/IDEA-SUBMISSION-FAQ.md" target="_blank">完整FAQ</a>
+            </p>
+            <p style="margin-top: 1rem;">最后更新：2026-02-15 | 版本：1.0</p>
+        </div>
+    </div>
+</body>
+</html>
