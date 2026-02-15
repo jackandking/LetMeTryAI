@@ -1,6 +1,7 @@
 /**
  * Main Application Styles
  * Responsive design for the LetMeTryAI home page
+ * Theme: Turn Ideas into Mini Apps
  */
 
 /* ==========================================================================
@@ -8,10 +9,11 @@
    ========================================================================== */
 
 body {
-    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-family: 'Arial', 'Helvetica', 'Microsoft YaHei', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
     line-height: 1.6;
     color: #333;
 }
@@ -25,22 +27,137 @@ body {
    ========================================================================== */
 
 header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 1em 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    color: #333;
+    padding: 2em 1em;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-header h1 {
+.header-content h1 {
     margin: 0;
-    font-size: 2em;
+    font-size: 2.5em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tagline {
+    margin: 0.5em 0 0 0;
+    font-size: 1.1em;
+    color: #666;
     font-weight: 300;
 }
 
-header h1 small {
-    font-size: 0.6em;
-    opacity: 0.8;
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
+.hero {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 4em 2em;
+    text-align: center;
+    margin: 2em auto;
+    max-width: 1200px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.hero-content h2 {
+    font-size: 2.2em;
+    margin: 0 0 0.5em 0;
+    color: #333;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 2em;
+}
+
+.cta-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1em 3em;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.cta-button:active {
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Search Section
+   ========================================================================== */
+
+.search-section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2em;
+    margin: 2em auto;
+    max-width: 1200px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1em 1.5em;
+    font-size: 1.1em;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-controls {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    flex: 1;
+    min-width: 150px;
+    padding: 0.8em 1em;
+    font-size: 1em;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    border-color: #667eea;
 }
 
 /* ==========================================================================
@@ -48,28 +165,26 @@ header h1 small {
    ========================================================================== */
 
 main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 2em 1em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2em;
+    padding: 2em;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 2em auto;
 }
 
 /* ==========================================================================
-   Section Components
+   Section Components (App Cards)
    ========================================================================== */
 
 .section {
-    text-align: center;
-    width: 100%;
-    margin: 1em 0;
-    background-color: white;
-    border-radius: 12px;
+    background: white;
+    border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .section::before {
@@ -79,7 +194,7 @@ main {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.5s;
 }
 
@@ -88,20 +203,47 @@ main {
 }
 
 .section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
 }
 
 .section a {
     text-decoration: none;
     color: #333;
     display: block;
-    padding: 1.5em;
     transition: color 0.3s ease;
 }
 
 .section a:hover {
-    color: #4CAF50;
+    color: #667eea;
+}
+
+.app-category {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.3em 0.8em;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    z-index: 10;
+}
+
+.app-tags {
+    padding: 0 1em 1em 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+}
+
+.app-tag {
+    background: #f0f0f0;
+    color: #666;
+    padding: 0.2em 0.6em;
+    border-radius: 10px;
+    font-size: 0.8em;
 }
 
 /* ==========================================================================
@@ -110,14 +252,13 @@ main {
 
 .responsive-img {
     width: 100%;
-    height: 200px;
+    height: 180px;
     object-fit: cover;
-    border-radius: 8px 8px 0 0;
     transition: transform 0.3s ease;
 }
 
 .section:hover .responsive-img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 /* ==========================================================================
@@ -125,10 +266,158 @@ main {
    ========================================================================== */
 
 .section h2 {
-    margin: 0.5em 0;
+    margin: 1em;
     font-size: 1.4em;
-    font-weight: 500;
+    font-weight: 600;
     color: #333;
+}
+
+.section p {
+    margin: 0 1em 1em 1em;
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* ==========================================================================
+   Submit Form Section
+   ========================================================================== */
+
+.submit-section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3em 2em;
+    margin: 3em auto;
+    max-width: 800px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.submit-container h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 0.5em;
+    color: #333;
+}
+
+.submit-description {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2em;
+    font-size: 1.1em;
+}
+
+.idea-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    color: #333;
+    font-size: 1em;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    padding: 0.8em 1em;
+    font-size: 1em;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.char-count {
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+    font-size: 0.85em;
+    color: #999;
+}
+
+.form-actions {
+    margin-top: 1em;
+}
+
+.submit-button {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    font-size: 1.1em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.submit-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.form-message {
+    margin-top: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+}
+
+.form-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.form-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+/* Empty state */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3em;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
 }
 
 /* ==========================================================================
@@ -138,9 +427,10 @@ main {
 footer {
     text-align: center;
     padding: 2em 1em;
-    background-color: #4CAF50;
-    color: white;
-    margin-top: 2em;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    margin-top: 3em;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 footer p {
@@ -148,7 +438,7 @@ footer p {
 }
 
 footer a {
-    color: white;
+    color: #667eea;
     text-decoration: none;
     margin: 0 0.5em;
     opacity: 0.9;
@@ -166,57 +456,82 @@ footer a:hover {
 
 /* Tablet and larger screens */
 @media (min-width: 768px) {
-    .section {
-        width: calc(50% - 1em);
+    .search-container {
+        flex-direction: row;
+        align-items: center;
     }
-    
-    .responsive-img {
-        height: 180px;
+
+    .search-input {
+        flex: 2;
+    }
+
+    .filter-controls {
+        flex: 1;
     }
 }
 
 /* Desktop screens */
 @media (min-width: 1024px) {
-    .section {
-        width: calc(33.333% - 1em);
-    }
-    
-    .responsive-img {
-        height: 160px;
-    }
-    
     main {
-        padding: 3em 2em;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5em;
     }
-}
 
-/* Large desktop screens */
-@media (min-width: 1200px) {
-    .section {
-        width: calc(25% - 1em);
+    .hero-content h2 {
+        font-size: 2.5em;
     }
 }
 
 /* Mobile optimization */
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.5em;
+@media (max-width: 767px) {
+    .header-content h1 {
+        font-size: 1.8em;
     }
-    
-    main {
-        padding: 1em 0.5em;
+
+    .tagline {
+        font-size: 1em;
     }
-    
-    .section {
-        margin: 0.5em 0;
+
+    .hero {
+        padding: 2em 1em;
+        margin: 1em;
     }
-    
-    .section a {
+
+    .hero-content h2 {
+        font-size: 1.6em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    .cta-button {
+        padding: 0.8em 2em;
+        font-size: 1em;
+    }
+
+    .search-section {
+        margin: 1em;
         padding: 1em;
     }
-    
-    .responsive-img {
-        height: 150px;
+
+    main {
+        padding: 1em;
+        gap: 1em;
+        margin: 1em auto;
+    }
+
+    .submit-section {
+        margin: 1em;
+        padding: 2em 1em;
+    }
+
+    .submit-container h2 {
+        font-size: 1.5em;
+    }
+
+    .filter-select {
+        min-width: 100%;
     }
 }
 
@@ -229,15 +544,27 @@ footer a:hover {
     .section,
     .section::before,
     .section a,
-    .responsive-img {
+    .responsive-img,
+    .cta-button,
+    .submit-button,
+    .search-input,
+    .filter-select,
+    .form-input,
+    .form-textarea,
+    .form-select {
         transition: none;
     }
-    
+
     .section:hover {
         transform: none;
     }
-    
+
     .section:hover .responsive-img {
+        transform: none;
+    }
+
+    .cta-button:hover,
+    .submit-button:hover {
         transform: none;
     }
 }
@@ -247,14 +574,45 @@ footer a:hover {
     .section {
         border: 2px solid #333;
     }
-    
+
     .section:hover {
-        border-color: #4CAF50;
+        border-color: #667eea;
     }
 }
 
 /* Focus styles for keyboard navigation */
-.section a:focus {
-    outline: 3px solid #4CAF50;
+.section a:focus,
+.cta-button:focus,
+.submit-button:focus,
+.search-input:focus,
+.filter-select:focus,
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: 3px solid #667eea;
     outline-offset: 2px;
+}
+
+/* Loading state */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3em;
+    grid-column: 1 / -1;
+}
+
+.loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
