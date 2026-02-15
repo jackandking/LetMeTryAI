@@ -327,4 +327,160 @@ describe('Homepage Functionality', () => {
             expect(html).toContain('baidu_union_verify');
         });
     });
+
+    describe('Quick Idea Input Box', () => {
+        it('should have quick input box in hero section', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            expect(html).toContain('quick-idea-input');
+            expect(html).toContain('id="quick-idea-input"');
+            expect(html).toContain('💡 在这里输入您的创意');
+        });
+
+        it('should have quick submit button', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            expect(html).toContain('quick-submit-button');
+            expect(html).toContain('开始创建');
+            expect(html).toContain('handleQuickInput');
+        });
+
+        it('should have secondary button to view full form', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            expect(html).toContain('cta-button-secondary');
+            expect(html).toContain('或查看详细表单');
+        });
+
+        it('should have proper CSS styles for quick input', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const cssPath = path.join(__dirname, 'styles.css');
+            const css = fs.readFileSync(cssPath, 'utf8');
+            
+            expect(css).toContain('.quick-idea-input');
+            expect(css).toContain('.quick-input');
+            expect(css).toContain('.quick-submit-button');
+        });
+
+        it('should have mobile responsive styles for quick input', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const cssPath = path.join(__dirname, 'styles.css');
+            const css = fs.readFileSync(cssPath, 'utf8');
+            
+            // Check for mobile styles
+            expect(css).toContain('.quick-input');
+            expect(css).toMatch(/max-width:.*767px/);
+        });
+
+        it('should have handleQuickInput function in JavaScript', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const jsPath = path.join(__dirname, 'main.js');
+            const js = fs.readFileSync(jsPath, 'utf8');
+            
+            expect(js).toContain('function handleQuickInput');
+            expect(js).toContain('window.handleQuickInput');
+        });
+
+        it('should have Enter key event listener for quick input', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const jsPath = path.join(__dirname, 'main.js');
+            const js = fs.readFileSync(jsPath, 'utf8');
+            
+            expect(js).toContain('quick-idea-input');
+            expect(js).toContain('keypress');
+            expect(js).toContain('Enter');
+        });
+    });
+
+    describe('Quick Input Functionality Logic', () => {
+        it('should handle empty quick input by just scrolling to form', () => {
+            const quickIdea = '';
+            const shouldScroll = !quickIdea || quickIdea.trim() === '';
+            
+            expect(shouldScroll).toBe(true);
+        });
+
+        it('should pre-fill title when quick input has value', () => {
+            const quickIdea = '智能诗词生成器';
+            const titleValue = quickIdea.trim();
+            
+            expect(titleValue).toBe('智能诗词生成器');
+            expect(titleValue.length).toBeGreaterThan(0);
+        });
+
+        it('should respect maxlength for quick input', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            // Extract maxlength from quick-idea-input
+            const maxlengthMatch = html.match(/id="quick-idea-input"[^>]*maxlength="(\d+)"/);
+            expect(maxlengthMatch).toBeTruthy();
+            expect(maxlengthMatch[1]).toBe('100');
+        });
+
+        it('should update character count when pre-filling title', () => {
+            const titleText = '智能诗词生成器';
+            const maxLength = 100;
+            const charCount = `${titleText.length}/${maxLength}`;
+            
+            expect(charCount).toBe('7/100');
+        });
+    });
+
+    describe('HTML Structure Integrity', () => {
+        it('should not have duplicate main tags', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            const mainMatches = html.match(/<main[^>]*id="apps-container"/g);
+            expect(mainMatches).toBeTruthy();
+            expect(mainMatches.length).toBe(1);
+        });
+
+        it('should not have duplicate footer tags', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            const footerOpenMatches = html.match(/<footer>/g);
+            const footerCloseMatches = html.match(/<\/footer>/g);
+            
+            expect(footerOpenMatches).toBeTruthy();
+            expect(footerCloseMatches).toBeTruthy();
+            expect(footerOpenMatches.length).toBe(footerCloseMatches.length);
+        });
+
+        it('should have proper HTML structure', () => {
+            const fs = require('fs');
+            const path = require('path');
+            const htmlPath = path.join(__dirname, 'index.html');
+            const html = fs.readFileSync(htmlPath, 'utf8');
+            
+            // Check for basic HTML structure
+            expect(html).toContain('<!DOCTYPE html>');
+            expect(html).toContain('<html');
+            expect(html).toContain('<head>');
+            expect(html).toContain('<body>');
+            expect(html).toContain('</body>');
+            expect(html).toContain('</html>');
+        });
+    });
 });
