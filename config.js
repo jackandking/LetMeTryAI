@@ -25,7 +25,8 @@ window.API_ENDPOINTS = {
   MYSQL_GET_BY_ID: `${window.BASE_URL}/mysql/getById`,
   MYSQL_INSERT: `${window.BASE_URL}/mysql/insert`,
   MYSQL_UPDATE: `${window.BASE_URL}/mysql/update`,
-  MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`
+  MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`,
+  GITHUB_CREATE_ISSUE: `${window.BASE_URL}/github/create-issue`
 };
 
 // Helper function to get image URL

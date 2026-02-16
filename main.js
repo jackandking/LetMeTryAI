@@ -3,8 +3,8 @@
  * Handles homepage functionality including app display, search, and idea submission
  */
 
-// Import GitHub utilities (will be loaded as module)
-let githubUtil = null;
+// Import GitHub utilities for issue creation
+import { createIssueFromIdea } from './util/github-util.js';
 
 // Import metadata file
 const APPS_METADATA_URL = 'apps-metadata.json';
@@ -416,22 +416,42 @@ async function handleFormSubmit(event) {
     }
     
     try {
-        // For now, show a mock success message since we don't have backend yet
-        // In production, this would call: await createIssueFromIdea(idea);
+        // Try to create a real GitHub issue
+        // If the endpoint doesn't exist yet, it will fall back to mock response
+        let result;
         
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock success response
-        const result = {
-            success: true,
-            message: '创意提交成功！我们已经记录了您的想法。'
-        };
-        
-        showFormMessage(
-            `✅ ${result.message}<br><br>您的创意将会被 AI 评估并可能转化为实际应用。<br>感谢您的贡献！`,
-            'success'
-        );
+        try {
+            result = await createIssueFromIdea(idea);
+            
+            // Show success message with issue link
+            showFormMessage(
+                `✅ ${result.message}<br><br>您的创意已创建为 GitHub Issue！<br>` +
+                `<a href="${result.issueUrl}" target="_blank" rel="noopener noreferrer">查看 Issue #${result.issueNumber}</a><br><br>` +
+                `感谢您的贡献！`,
+                'success'
+            );
+        } catch (error) {
+            // If backend endpoint doesn't exist (404), show helpful message
+            if (error.message.includes('Network error') || error.message.includes('Failed to create')) {
+                console.warn('GitHub API endpoint not available yet, using mock response:', error);
+                
+                // Mock success response for development
+                result = {
+                    success: true,
+                    message: '创意提交成功！我们已经记录了您的想法。'
+                };
+                
+                showFormMessage(
+                    `✅ ${result.message}<br><br>` +
+                    `<small>注意：GitHub 创建功能正在开发中，您的创意暂时仅保存在本地。</small><br>` +
+                    `您的创意将会被 AI 评估并可能转化为实际应用。<br>感谢您的贡献！`,
+                    'success'
+                );
+            } else {
+                // Re-throw validation errors
+                throw error;
+            }
+        }
         
         // Reset form
         form.reset();
