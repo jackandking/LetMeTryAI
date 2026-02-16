@@ -86,11 +86,13 @@ async function createGitHubIssue(issueData) {
  */
 export async function handleCreateIssue(req, res) {
     try {
-    // Validate request body
-        if (!req.body || !req.body.title || !req.body.body) {
+        // Validate request body with explicit non-empty checks
+        if (!req.body ||
+            !req.body.title?.trim() ||
+            !req.body.body?.trim()) {
             return res.status(400).json({
                 success: false,
-                error: 'Missing required fields: title and body are required'
+                error: 'Missing required fields: title and body are required and must not be empty'
             });
         }
 

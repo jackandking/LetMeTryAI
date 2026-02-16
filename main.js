@@ -4,7 +4,7 @@
  */
 
 // Import GitHub utilities for issue creation
-import { createIssueFromIdea } from './util/github-util.js';
+import { createIssueFromIdea, ERROR_MESSAGES } from './util/github-util.js';
 
 // Import metadata file
 const APPS_METADATA_URL = 'apps-metadata.json';
@@ -20,20 +20,20 @@ let currentSort = 'featured';
  */
 async function initializeApp() {
     console.log('Initializing main application');
-    
+
     try {
         // Load apps metadata
         await loadAppsMetadata();
-        
+
         // Render initial apps
         renderApps(appsData);
-        
+
         // Set up event listeners
         setupEventListeners();
-        
+
         // Initialize form handlers
         setupFormHandlers();
-        
+
         console.log('Main application initialized successfully');
     } catch (error) {
         console.error('Error initializing main application:', error);
@@ -50,11 +50,11 @@ async function loadAppsMetadata() {
         if (!response.ok) {
             throw new Error('Failed to load apps metadata');
         }
-        
+
         const data = await response.json();
         appsData = data.apps || [];
         filteredApps = [...appsData];
-        
+
         console.log(`Loaded ${appsData.length} apps`);
     } catch (error) {
         console.error('Error loading apps metadata:', error);
@@ -108,15 +108,15 @@ function getDefaultApps() {
  */
 function renderApps(apps) {
     const container = document.getElementById('apps-container');
-    
+
     if (!container) {
         console.error('Apps container not found');
         return;
     }
-    
+
     // Clear existing content
     container.innerHTML = '';
-    
+
     // Show loading state
     if (apps.length === 0) {
         container.innerHTML = `
@@ -127,7 +127,7 @@ function renderApps(apps) {
         `;
         return;
     }
-    
+
     // Render each app
     apps.forEach(app => {
         const appCard = createAppCard(app);
@@ -143,57 +143,57 @@ function createAppCard(app) {
     section.className = 'section';
     section.dataset.appId = app.id;
     section.dataset.category = app.category;
-    
+
     const link = document.createElement('a');
     link.href = app.url;
     if (app.external) {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
     }
-    
+
     // Category badge
     const categoryBadge = `<span class="app-category">${app.category}</span>`;
-    
+
     // Image
     const img = document.createElement('img');
     img.className = 'responsive-img';
     img.alt = app.name;
     img.loading = 'lazy';
-    
+
     // Set image with fallback
     setImageWithFallback(img, app.image);
-    
+
     // Title
     const title = document.createElement('h2');
     title.textContent = app.name;
-    
+
     // Description (if available)
     let descriptionHTML = '';
     if (app.description) {
         descriptionHTML = `<p>${app.description}</p>`;
     }
-    
+
     // Tags (if available)
     let tagsHTML = '';
     if (app.tags && app.tags.length > 0) {
-        const tagElements = app.tags.map(tag => 
+        const tagElements = app.tags.map(tag =>
             `<span class="app-tag">${tag}</span>`
         ).join('');
         tagsHTML = `<div class="app-tags">${tagElements}</div>`;
     }
-    
+
     link.appendChild(img);
     link.appendChild(title);
-    
+
     section.innerHTML = categoryBadge;
     section.appendChild(link);
-    
+
     if (descriptionHTML) {
         const desc = document.createElement('p');
         desc.textContent = app.description;
         section.appendChild(desc);
     }
-    
+
     if (tagsHTML) {
         const tagsDiv = document.createElement('div');
         tagsDiv.className = 'app-tags';
@@ -205,7 +205,7 @@ function createAppCard(app) {
         });
         section.appendChild(tagsDiv);
     }
-    
+
     return section;
 }
 
@@ -214,13 +214,13 @@ function createAppCard(app) {
  */
 function setImageWithFallback(imgElement, imagePath) {
     const fallbackImage = 'images/game1.jpg';
-    
+
     imgElement.onerror = function() {
         console.warn(`Image failed to load: ${imagePath}, using fallback`);
         this.src = fallbackImage;
         this.onerror = null; // Prevent infinite loop
     };
-    
+
     imgElement.src = imagePath;
 }
 
@@ -233,19 +233,19 @@ function setupEventListeners() {
     if (searchInput) {
         searchInput.addEventListener('input', debounce(handleSearch, 300));
     }
-    
+
     // Category filter
     const categoryFilter = document.getElementById('category-filter');
     if (categoryFilter) {
         categoryFilter.addEventListener('change', handleCategoryFilter);
     }
-    
+
     // Sort select
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', handleSort);
     }
-    
+
     // Quick idea input - handle Enter key
     const quickInput = document.getElementById('quick-idea-input');
     if (quickInput) {
@@ -263,18 +263,18 @@ function setupEventListeners() {
  */
 function handleSearch(event) {
     const searchTerm = event.target.value.toLowerCase().trim();
-    
+
     filteredApps = appsData.filter(app => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch = !searchTerm ||
             app.name.toLowerCase().includes(searchTerm) ||
             (app.description && app.description.toLowerCase().includes(searchTerm)) ||
             (app.tags && app.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
-        
+
         const matchesCategory = currentCategory === 'all' || app.category === currentCategory;
-        
+
         return matchesSearch && matchesCategory;
     });
-    
+
     sortApps(currentSort);
     renderApps(filteredApps);
 }
@@ -284,13 +284,13 @@ function handleSearch(event) {
  */
 function handleCategoryFilter(event) {
     currentCategory = event.target.value;
-    
+
     // Trigger search to apply both filters
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         handleSearch({ target: searchInput });
     } else {
-        filteredApps = currentCategory === 'all' 
+        filteredApps = currentCategory === 'all'
             ? [...appsData]
             : appsData.filter(app => app.category === currentCategory);
         sortApps(currentSort);
@@ -321,8 +321,8 @@ function sortApps(criteria) {
         case 'featured':
         default:
             filteredApps.sort((a, b) => {
-                if (a.featured && !b.featured) return -1;
-                if (!a.featured && b.featured) return 1;
+                if (a.featured && !b.featured) {return -1;}
+                if (!a.featured && b.featured) {return 1;}
                 return 0;
             });
             break;
@@ -351,16 +351,16 @@ function setupFormHandlers() {
     const form = document.getElementById('idea-form');
     const titleInput = document.getElementById('idea-title');
     const descriptionInput = document.getElementById('idea-description');
-    
+
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
     }
-    
+
     // Character counters
     if (titleInput) {
         titleInput.addEventListener('input', () => updateCharCount('idea-title', 'title-count', 100));
     }
-    
+
     if (descriptionInput) {
         descriptionInput.addEventListener('input', () => updateCharCount('idea-description', 'description-count', 2000));
     }
@@ -372,11 +372,11 @@ function setupFormHandlers() {
 function updateCharCount(inputId, countId, maxLength) {
     const input = document.getElementById(inputId);
     const counter = document.getElementById(countId);
-    
+
     if (input && counter) {
         const length = input.value.length;
         counter.textContent = `${length}/${maxLength}`;
-        
+
         if (length > maxLength * 0.9) {
             counter.style.color = '#e74c3c';
         } else {
@@ -390,39 +390,39 @@ function updateCharCount(inputId, countId, maxLength) {
  */
 async function handleFormSubmit(event) {
     event.preventDefault();
-    
+
     const form = event.target;
     const submitButton = document.getElementById('submit-button');
     const messageDiv = document.getElementById('form-message');
-    
+
     // Get form data
     const idea = {
         title: document.getElementById('idea-title').value.trim(),
         description: document.getElementById('idea-description').value.trim(),
         category: document.getElementById('idea-category').value
     };
-    
+
     // Validate
     const validation = validateIdeaLocal(idea);
     if (!validation.isValid) {
         showFormMessage(validation.errors.join('<br>'), 'error');
         return;
     }
-    
+
     // Disable submit button
     if (submitButton) {
         submitButton.disabled = true;
         submitButton.textContent = '提交中...';
     }
-    
+
     try {
         // Try to create a real GitHub issue
         // If the endpoint doesn't exist yet, it will fall back to mock response
         let result;
-        
+
         try {
             result = await createIssueFromIdea(idea);
-            
+
             // Show success message with issue link
             showFormMessage(
                 `✅ ${result.message}<br><br>您的创意已创建为 GitHub Issue！<br>` +
@@ -431,16 +431,21 @@ async function handleFormSubmit(event) {
                 'success'
             );
         } catch (error) {
-            // If backend endpoint doesn't exist (404), show helpful message
-            if (error.message.includes('Network error') || error.message.includes('Failed to create')) {
+            // Check if this is a network/API unavailability error
+            const isEndpointUnavailable =
+                error.message === ERROR_MESSAGES.NETWORK_ERROR ||
+                error.message === ERROR_MESSAGES.REQUEST_FAILED ||
+                (error instanceof TypeError && error.message.includes('fetch'));
+
+            if (isEndpointUnavailable) {
                 console.warn('GitHub API endpoint not available yet, using mock response:', error);
-                
+
                 // Mock success response for development
                 result = {
                     success: true,
                     message: '创意提交成功！我们已经记录了您的想法。'
                 };
-                
+
                 showFormMessage(
                     `✅ ${result.message}<br><br>` +
                     `<small>注意：GitHub 创建功能正在开发中，您的创意暂时仅保存在本地。</small><br>` +
@@ -448,21 +453,21 @@ async function handleFormSubmit(event) {
                     'success'
                 );
             } else {
-                // Re-throw validation errors
+                // Re-throw validation errors or other errors
                 throw error;
             }
         }
-        
+
         // Reset form
         form.reset();
         updateCharCount('idea-title', 'title-count', 100);
         updateCharCount('idea-description', 'description-count', 2000);
-        
+
         // Scroll to message
         if (messageDiv) {
             messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
-        
+
     } catch (error) {
         console.error('Error submitting idea:', error);
         showFormMessage(
@@ -483,7 +488,7 @@ async function handleFormSubmit(event) {
  */
 function validateIdeaLocal(idea) {
     const errors = [];
-    
+
     if (!idea.title || idea.title.length === 0) {
         errors.push('请输入创意标题');
     } else if (idea.title.length < 3) {
@@ -491,7 +496,7 @@ function validateIdeaLocal(idea) {
     } else if (idea.title.length > 100) {
         errors.push('创意标题不能超过100个字符');
     }
-    
+
     if (!idea.description || idea.description.length === 0) {
         errors.push('请输入创意描述');
     } else if (idea.description.length < 10) {
@@ -499,7 +504,7 @@ function validateIdeaLocal(idea) {
     } else if (idea.description.length > 2000) {
         errors.push('创意描述不能超过2000个字符');
     }
-    
+
     return {
         isValid: errors.length === 0,
         errors
@@ -515,7 +520,7 @@ function showFormMessage(message, type) {
         messageDiv.className = `form-message ${type}`;
         messageDiv.innerHTML = message;
         messageDiv.style.display = 'block';
-        
+
         // Auto-hide success messages after 10 seconds
         if (type === 'success') {
             setTimeout(() => {
@@ -552,7 +557,7 @@ function scrollToSubmitForm() {
     const submitSection = document.getElementById('submit-form');
     if (submitSection) {
         submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
+
         // Focus on first input after scroll animation completes
         setTimeout(() => {
             const titleInput = document.getElementById('idea-title');
@@ -568,35 +573,35 @@ function scrollToSubmitForm() {
  */
 function handleQuickInput() {
     const quickInput = document.getElementById('quick-idea-input');
-    
+
     if (!quickInput) {
         console.error('Quick input element not found');
         return;
     }
-    
+
     const quickIdea = quickInput.value.trim();
-    
+
     // If empty, just scroll to the form
     if (!quickIdea) {
         scrollToSubmitForm();
         return;
     }
-    
+
     // Pre-fill the title field and scroll to the form
     const titleInput = document.getElementById('idea-title');
     if (titleInput) {
         titleInput.value = quickIdea;
         updateCharCount('idea-title', 'title-count', 100);
     }
-    
+
     // Clear quick input
     quickInput.value = '';
-    
+
     // Scroll to the form and focus on description
     const submitSection = document.getElementById('submit-form');
     if (submitSection) {
         submitSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
+
         // Focus on description after scroll animation completes
         setTimeout(() => {
             const descriptionInput = document.getElementById('idea-description');
