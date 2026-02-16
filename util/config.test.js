@@ -35,7 +35,8 @@ describe('Configuration Module', () => {
         'MYSQL_GET_BY_ID',
         'MYSQL_INSERT',
         'MYSQL_UPDATE',
-        'MYSQL_DELETE'
+        'MYSQL_DELETE',
+        'GITHUB_CREATE_ISSUE'
       ];
 
       requiredEndpoints.forEach(endpoint => {
@@ -57,6 +58,7 @@ describe('Configuration Module', () => {
       expect(API_ENDPOINTS.FILE_DELETE).toBe(`${BASE_URL}/file/delete`);
       expect(API_ENDPOINTS.IMAGE_UPLOAD).toBe(`${BASE_URL}/image/upload`);
       expect(API_ENDPOINTS.MYSQL_QUERY).toBe(`${BASE_URL}/mysql/query`);
+      expect(API_ENDPOINTS.GITHUB_CREATE_ISSUE).toBe(`${BASE_URL}/github/create-issue`);
     });
   });
 
