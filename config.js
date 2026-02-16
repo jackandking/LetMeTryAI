@@ -14,24 +14,24 @@ window.ENABLE_MYSQL_MOCK = false; // Set to true to enable mock mode
 
 // API endpoints
 window.API_ENDPOINTS = {
-  AI_CHAT: `${window.BASE_URL}/ai/chat`,
-  FILE_UPLOAD: `${window.BASE_URL}/file/upload`,
-  FILE_DELETE: `${window.BASE_URL}/file/delete`,
-  FILE_INFO: `${window.BASE_URL}/file/info`,
-  FILE_LIST: `${window.BASE_URL}/file/list`,
-  FILE_DOWNLOAD: `${window.BASE_URL}/file/download`,
-  IMAGE_UPLOAD: `${window.BASE_URL}/image/upload`,
-  MYSQL_QUERY: `${window.BASE_URL}/mysql/query`,
-  MYSQL_GET_BY_ID: `${window.BASE_URL}/mysql/getById`,
-  MYSQL_INSERT: `${window.BASE_URL}/mysql/insert`,
-  MYSQL_UPDATE: `${window.BASE_URL}/mysql/update`,
-  MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`,
-  GITHUB_CREATE_ISSUE: `${window.BASE_URL}/github/create-issue`
+    AI_CHAT: `${window.BASE_URL}/ai/chat`,
+    FILE_UPLOAD: `${window.BASE_URL}/file/upload`,
+    FILE_DELETE: `${window.BASE_URL}/file/delete`,
+    FILE_INFO: `${window.BASE_URL}/file/info`,
+    FILE_LIST: `${window.BASE_URL}/file/list`,
+    FILE_DOWNLOAD: `${window.BASE_URL}/file/download`,
+    IMAGE_UPLOAD: `${window.BASE_URL}/image/upload`,
+    MYSQL_QUERY: `${window.BASE_URL}/mysql/query`,
+    MYSQL_GET_BY_ID: `${window.BASE_URL}/mysql/getById`,
+    MYSQL_INSERT: `${window.BASE_URL}/mysql/insert`,
+    MYSQL_UPDATE: `${window.BASE_URL}/mysql/update`,
+    MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`,
+    GITHUB_CREATE_ISSUE: `${window.BASE_URL}/github/create-issue`
 };
 
 // Helper function to get image URL
 window.getImageUrl = function(imagePath) {
-  // Remove leading slash if present to avoid double slashes
-  const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-  return `${window.BASE_URL}/${cleanPath}`;
+    // Remove leading slash if present to avoid double slashes
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `${window.BASE_URL}/${cleanPath}`;
 };
