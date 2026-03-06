@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>全球战力：谁是现代空战之王？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">全球战力：谁是现代空战之王？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">在现代空战体系中，你认为哪款战机是当之无愧的空中霸主？</p>
+            <div class="button-group" id="optionsContainer">
+                <!-- F-22 Raptor -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="f22">
+                    <img src="https://via.placeholder.com/120x80/2c3e50/ffffff?text=F-22+Raptor" alt="F-22 猛禽" loading="lazy">
+                    <span>F-22 猛禽</span>
+                </label>
+                
+                <!-- J-20 Mighty Dragon -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="j20">
+                    <img src="https://via.placeholder.com/120x80/c0392b/ffffff?text=J-20+Dragon" alt="J-20 威龙" loading="lazy">
+                    <span>J-20 威龙</span>
+                </label>
+                
+                <!-- Su-57 Felon -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="su57">
+                    <img src="https://via.placeholder.com/120x80/2980b9/ffffff?text=Su-57+Felon" alt="Su-57 恶棍" loading="lazy">
+                    <span>Su-57 恶棍</span>
+                </label>
+                
+                <!-- F-35 Lightning II -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="f35">
+                    <img src="https://via.placeholder.com/120x80/7f8c8d/ffffff?text=F-35+Lightning" alt="F-35 闪电II" loading="lazy">
+                    <span>F-35 闪电II</span>
+                </label>
+                
+                <!-- Rafale -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="rafale">
+                    <img src="https://via.placeholder.com/120x80/16a085/ffffff?text=Rafale" alt="阵风" loading="lazy">
+                    <span>阵风战机</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取最新战力统计...</p>
+    </div>
+    
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看全球战力榜</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
