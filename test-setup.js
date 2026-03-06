@@ -1,5 +1,9 @@
 // test-setup.js - Jest setup file for global test configuration
 import { jest, beforeEach, afterAll, expect } from '@jest/globals';
+import { TextEncoder, TextDecoder } from 'util';
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 // Add custom matchers
 expect.extend({

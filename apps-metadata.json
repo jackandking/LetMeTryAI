@@ -141,6 +141,17 @@
       "image": "images/game2.png",
       "tags": ["游戏", "娱乐"],
       "status": "active"
+    },
+    {
+      "id": "fighter-jets",
+      "name": "空战之王",
+      "description": "全球现代战机战力排行投票",
+      "category": "军事",
+      "directory": "fighter-jets",
+      "url": "fighter-jets",
+      "image": "images/game1.jpg",
+      "tags": ["军事", "战机", "投票", "排名"],
+      "status": "active"
     }
   ]
 }
