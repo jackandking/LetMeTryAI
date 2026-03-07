@@ -152,6 +152,17 @@
       "image": "images/game1.jpg",
       "tags": ["军事", "战机", "投票", "排名"],
       "status": "active"
+    },
+    {
+      "id": "rockets-king",
+      "name": "火箭之王",
+      "description": "全球重型火箭运力排行投票",
+      "category": "科技",
+      "directory": "rockets-king",
+      "url": "rockets-king",
+      "image": "images/game2.png",
+      "tags": ["航天", "火箭", "投票", "科技"],
+      "status": "active"
     }
   ]
 }
