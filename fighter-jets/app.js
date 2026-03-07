@@ -207,7 +207,15 @@ function displayResults() {
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    if (urlParams.get('finishedAd') === 'true') {
+    // Check for finishedAd parameter (handle both string 'true' and boolean true)
+    const finishedAd = urlParams.get('finishedAd');
+    if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
+        // Immediately show loading state/hide questions to give feedback
+        const questionnaire = document.getElementById('questionnaire');
+        const result = document.getElementById('result');
+        if (questionnaire) questionnaire.style.display = 'none';
+        if (result) result.style.display = 'block';
+        
         displayResults();
     }
 }
@@ -252,8 +260,13 @@ function createBarChart(voteData) {
 
         const bar = document.createElement("div");
         bar.className = "bar";
-        // Animate height
-        setTimeout(() => { bar.style.height = `${Math.max(count * scale, 2)}px`; }, 100);
+        // Animate height - use requestAnimationFrame for better reliability than setTimeout
+        // Set initial height to 2px to ensure visibility
+        bar.style.height = "2px";
+        
+        requestAnimationFrame(() => {
+            bar.style.height = `${Math.max(count * scale, 2)}px`; 
+        });
         
         // Color variation for top rank
         if (count === maxCount && count > 0) {
