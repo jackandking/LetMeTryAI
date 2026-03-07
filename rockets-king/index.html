@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>全球火箭大PK：谁是你的太空坐骑？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">全球火箭大PK：谁是你的太空坐骑？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">在这些现役主力火箭中，你最信赖哪一款送你上太空？</p>
+            <div class="button-group" id="optionsContainer">
+                <!-- Falcon 9 -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="falcon9">
+                    <img src="images/falcon9.jpg" alt="SpaceX Falcon 9" loading="lazy">
+                    <span>SpaceX Falcon 9</span>
+                </label>
+                
+                <!-- Delta IV Heavy -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="delta_iv">
+                    <img src="images/delta_iv.jpg" alt="Delta IV Heavy" loading="lazy">
+                    <span>Delta IV Heavy</span>
+                </label>
+                
+                <!-- Ariane 5 -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="ariane5">
+                    <img src="images/ariane5.jpg" alt="ESA Ariane 5" loading="lazy">
+                    <span>ESA Ariane 5</span>
+                </label>
+                
+                <!-- Atlas V -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="atlas_v">
+                    <img src="images/atlas_v.jpg" alt="Atlas V" loading="lazy">
+                    <span>Atlas V</span>
+                </label>
+                
+                <!-- Soyuz -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="soyuz">
+                    <img src="images/soyuz.jpg" alt="Soyuz" loading="lazy">
+                    <span>Soyuz</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取最新战力统计...</p>
+    </div>
+    
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看全球战力榜</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
