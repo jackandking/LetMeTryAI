@@ -13,7 +13,7 @@ const APPS_METADATA_URL = 'apps-metadata.json';
 let appsData = [];
 let filteredApps = [];
 let currentCategory = 'all';
-let currentSort = 'featured';
+let currentSort = 'visits';
 
 /**
  * Initialize the application
@@ -24,9 +24,15 @@ async function initializeApp() {
     try {
         // Load apps metadata
         await loadAppsMetadata();
+
+        // Load app visit stats
+        await loadAppStats();
+        
+        // Initial sort by visits
+        sortApps('visits');
         
         // Render initial apps
-        renderApps(appsData);
+        renderApps(filteredApps);
         
         // Set up event listeners
         setupEventListeners();
@@ -61,6 +67,90 @@ async function loadAppsMetadata() {
         // Fallback to hardcoded data if JSON fails
         appsData = getDefaultApps();
         filteredApps = [...appsData];
+    }
+}
+
+/**
+ * Load app visit stats from database
+ */
+async function loadAppStats() {
+    try {
+        // Use the window.API_ENDPOINTS.MYSQL_QUERY if available, otherwise fallback
+        const endpoint = window.API_ENDPOINTS?.MYSQL_QUERY;
+        if (!endpoint) {
+            console.warn('MySQL API endpoint not found, skipping stats load');
+            return;
+        }
+
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sql: "SELECT app_id, visit_count FROM app_visits"
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch app stats');
+        }
+
+        const result = await response.json();
+        
+        // Check if result is an array (direct rows) or has a specific structure
+        // Assuming the API returns an array of rows or { data: [...] }
+        const rows = Array.isArray(result) ? result : (result.data || []);
+        
+        // Create a map of app_id -> visit_count
+        const statsMap = {};
+        rows.forEach(row => {
+            statsMap[row.app_id] = row.visit_count;
+        });
+
+        // Merge stats into appsData
+        appsData.forEach(app => {
+            app.visit_count = statsMap[app.id] || 0;
+        });
+        
+        // Update filteredApps
+        filteredApps = [...appsData];
+        
+        console.log('App stats loaded successfully');
+    } catch (error) {
+        console.error('Error loading app stats:', error);
+        // Initialize visit_count to 0 if fetch fails
+        appsData.forEach(app => {
+            if (typeof app.visit_count === 'undefined') {
+                app.visit_count = 0;
+            }
+        });
+    }
+}
+
+/**
+ * Track app visit
+ */
+async function trackAppVisit(appId) {
+    console.log(`Tracking visit for app: ${appId}`);
+    try {
+        const endpoint = window.API_ENDPOINTS?.MYSQL_QUERY;
+        if (!endpoint) return;
+
+        // Use INSERT ... ON DUPLICATE KEY UPDATE to increment count
+        await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            keepalive: true, // Ensure request completes even if page unloads
+            body: JSON.stringify({
+                sql: "INSERT INTO app_visits (app_id, visit_count) VALUES (?, 1) ON DUPLICATE KEY UPDATE visit_count = visit_count + 1",
+                params: [appId]
+            })
+        });
+    } catch (error) {
+        console.error('Error tracking app visit:', error);
     }
 }
 
@@ -146,6 +236,10 @@ function createAppCard(app) {
     
     const link = document.createElement('a');
     link.href = app.url;
+    
+    // Add click tracking
+    link.addEventListener('click', () => trackAppVisit(app.id));
+
     if (app.external) {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
@@ -167,10 +261,28 @@ function createAppCard(app) {
     const title = document.createElement('h2');
     title.textContent = app.name;
     
+    // Visit count badge (optional, but helpful for verification)
+    if (app.visit_count > 0) {
+        const statsBadge = document.createElement('span');
+        statsBadge.className = 'app-stats';
+        statsBadge.innerHTML = `<small>🔥 ${app.visit_count}</small>`;
+        statsBadge.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px;';
+        // Only append if section is relative positioned, or just append to link
+        // Actually, let's just append it to the section or link
+        // To make it look good, we might need CSS. For now, let's skip visual badge to keep it clean unless requested.
+        // The user asked to "show in front", not necessarily show the number.
+        // But showing the number helps understanding why it's in front.
+        // Let's add it to the description or near title.
+    }
+
     // Description (if available)
     let descriptionHTML = '';
     if (app.description) {
-        descriptionHTML = `<p>${app.description}</p>`;
+        // Add visit count to description if > 0
+        const visitInfo = app.visit_count > 0 ? ` <span style="color: #666; font-size: 0.8em;">(🔥 ${app.visit_count})</span>` : '';
+        descriptionHTML = `<p>${app.description}${visitInfo}</p>`;
+    } else if (app.visit_count > 0) {
+        descriptionHTML = `<p><span style="color: #666; font-size: 0.8em;">🔥 ${app.visit_count} 次访问</span></p>`;
     }
     
     // Tags (if available)
@@ -312,6 +424,9 @@ function handleSort(event) {
  */
 function sortApps(criteria) {
     switch (criteria) {
+        case 'visits':
+            filteredApps.sort((a, b) => (b.visit_count || 0) - (a.visit_count || 0));
+            break;
         case 'name':
             filteredApps.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
             break;
