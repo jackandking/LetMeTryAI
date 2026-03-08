@@ -75,12 +75,16 @@ async function loadAppsMetadata() {
  */
 async function loadAppStats() {
     try {
+        console.log('Loading app stats...');
+        
         // Use the window.API_ENDPOINTS.MYSQL_QUERY if available, otherwise fallback
         const endpoint = window.API_ENDPOINTS?.MYSQL_QUERY;
         if (!endpoint) {
             console.warn('MySQL API endpoint not found, skipping stats load');
             return;
         }
+        
+        console.log(`Fetching stats from: ${endpoint}`);
 
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -93,10 +97,11 @@ async function loadAppStats() {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch app stats');
+            throw new Error(`Failed to fetch app stats: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
+        console.log('Stats loaded:', result);
         
         // Check if result is an array (direct rows) or has a specific structure
         // Assuming the API returns an array of rows or { data: [...] }
@@ -109,9 +114,14 @@ async function loadAppStats() {
         });
 
         // Merge stats into appsData
+        let totalVisits = 0;
         appsData.forEach(app => {
-            app.visit_count = statsMap[app.id] || 0;
+            const count = statsMap[app.id] || 0;
+            app.visit_count = count;
+            totalVisits += count;
         });
+        
+        console.log(`Merged stats: Total visits tracked across all apps: ${totalVisits}`);
         
         // Update filteredApps
         filteredApps = [...appsData];
@@ -135,10 +145,15 @@ async function trackAppVisit(appId) {
     console.log(`Tracking visit for app: ${appId}`);
     try {
         const endpoint = window.API_ENDPOINTS?.MYSQL_QUERY;
-        if (!endpoint) return;
+        if (!endpoint) {
+             console.error('MySQL API endpoint not defined');
+             return;
+        }
+
+        console.log(`Sending visit tracking request to ${endpoint}`);
 
         // Use INSERT ... ON DUPLICATE KEY UPDATE to increment count
-        await fetch(endpoint, {
+        const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -149,6 +164,12 @@ async function trackAppVisit(appId) {
                 params: [appId]
             })
         });
+        
+        if (!response.ok) {
+             console.error(`Tracking failed: ${response.status} ${response.statusText}`);
+        } else {
+             console.log('Tracking request sent successfully');
+        }
     } catch (error) {
         console.error('Error tracking app visit:', error);
     }
@@ -238,7 +259,11 @@ function createAppCard(app) {
     link.href = app.url;
     
     // Add click tracking
-    link.addEventListener('click', () => trackAppVisit(app.id));
+    link.addEventListener('click', (e) => {
+        // Don't prevent default, but ensure tracking fires
+        console.log(`Click detected on app: ${app.id}`);
+        trackAppVisit(app.id);
+    });
 
     if (app.external) {
         link.target = '_blank';
