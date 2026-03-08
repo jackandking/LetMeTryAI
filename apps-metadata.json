@@ -143,6 +143,17 @@
       "status": "active"
     },
     {
+      "id": "drone-kings",
+      "name": "无人机之王",
+      "description": "全球顶尖军用无人机战力投票",
+      "category": "军事",
+      "directory": "drone-kings",
+      "url": "drone-kings",
+      "image": "images/game1.jpg",
+      "tags": ["军事", "无人机", "投票", "科技"],
+      "status": "active"
+    },
+    {
       "id": "fighter-jets",
       "name": "空战之王",
       "description": "全球现代战机战力排行投票",

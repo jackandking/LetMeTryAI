@@ -16,12 +16,13 @@ To go from a raw idea to a published Kuaishou task, follow this complete workflo
 > 3. Register it in `apps-metadata.json`.
 > 4. Create a cover image using the `text-to-image` tool (or ask me to provide one)."
 
-## Phase 2: Local Verification
+## Phase 2: Local Verification & Deployment
 **Prompt:**
 > "Verify the new `[new-app-id]` app:
 > 1. Run the server and check if the voting logic works.
 > 2. Ensure `util.js` KV store keys are unique to this app.
-> 3. Check mobile responsiveness."
+> 3. Check mobile responsiveness.
+> 4. **CRITICAL: Commit and Push the code to GitHub.** The app MUST be live (or at least committed) before Kuaishou can verify the URL."
 
 ## Phase 3: Kuaishou Publication (The Automation Agent)
 **Prompt:**
@@ -38,5 +39,6 @@ To go from a raw idea to a published Kuaishou task, follow this complete workflo
 ## One-Shot "Mega Prompt" (Try this next time)
 > "I want to launch a new voting app about **[Topic]**.
 > 1. **Code**: Clone `fighter-jets` to `[app-id]`, update content for [Topic], and register in metadata.
-> 2. **Publish**: Once code is ready, run the `publish-kuaishou-task.js` script to upload it to Kuaishou.
+> 2. **Deploy**: Commit and push the changes to GitHub so the new URL is accessible.
+> 3. **Publish**: Once code is live, run the `publish-kuaishou-task.js` script to upload it to Kuaishou.
 > Note: The script is already updated to handle the 5-year date selection and hidden URL fields automatically."
