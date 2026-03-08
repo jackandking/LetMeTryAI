@@ -7,6 +7,55 @@
       ],
       "description": "LetMeTry MySQL MCP Server - Execute MySQL queries without API key",
       "disabled": false
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/weiping/LetMeTryAI"
+      ],
+      "description": "File system access for the current repository",
+      "disabled": false
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "description": "Sequential thinking tool for complex problem solving",
+      "disabled": false
+    },
+    "time": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "time-mcp"
+      ],
+      "description": "Time and timezone utilities",
+      "disabled": false
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp-server"
+      ],
+      "description": "Browser automation and testing via Playwright",
+      "disabled": false
+    },
+    "agentmail": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "agentmail-mcp"
+      ],
+      "env": {
+        "AGENTMAIL_API_KEY": "am_us_8ad8e7f3b27ce401a22901ee8ab1108e290efe027f80b66b0ab434f6f9b2b5b4"
+      },
+      "description": "AgentMail capabilities - send and receive emails via API",
+      "disabled": false
     }
   }
 }

@@ -163,6 +163,18 @@
       "image": "images/game2.png",
       "tags": ["航天", "火箭", "投票", "科技"],
       "status": "active"
+    },
+    {
+      "id": "future-warfare",
+      "name": "未来战争",
+      "description": "2026年顶尖军事黑科技投票",
+      "category": "军事",
+      "directory": "future-warfare",
+      "url": "future-warfare",
+      "image": "images/game1.jpg",
+      "tags": ["军事", "科技", "投票", "未来"],
+      "featured": true,
+      "status": "active"
     }
   ]
 }

@@ -142,3 +142,7 @@ mcp-servers/**/*.js
 mcp-servers/**/*.js.map
 mcp-servers/**/*.d.ts
 mcp-servers/**/*.d.ts.map
+
+# Playwright
+/blob-report/
+/playwright/.auth/

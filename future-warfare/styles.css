@@ -1,0 +1,225 @@
+/**
+ * Future Warfare Styles
+ * Cyberpunk/Military Tech Theme
+ */
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 20px;
+    background-color: #050505; /* Deep black background */
+    color: #e0e0e0;
+    background-image: 
+        linear-gradient(rgba(0, 20, 0, 0.9), rgba(0, 20, 0, 0.9)),
+        repeating-linear-gradient(0deg, transparent, transparent 1px, #001100 1px, #001100 2px);
+}
+
+h1 {
+    text-align: center;
+    color: #0f0; /* Matrix Green */
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: #0a0a0a;
+    border: 1px solid #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+}
+
+#questionText {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.result {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #0f0;
+    background-color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* Button Group Layout */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button-group .option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140px;
+    padding: 10px;
+    background: #111;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.button-group .option:hover {
+    border-color: #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    transform: scale(1.02);
+}
+
+/* Tech Images (SVG Placeholders) */
+.button-group .option img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+    background: #000;
+}
+
+.button-group .option input[type="radio"] {
+    margin-bottom: 8px;
+    accent-color: #0f0;
+}
+
+.button-group .option span {
+    font-weight: bold;
+    color: #ccc;
+    font-size: 12px;
+    text-align: center;
+}
+
+.button-group .option:hover span {
+    color: #0f0;
+}
+
+/* Bar Chart Styles */
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 15px;
+    height: 300px;
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar {
+    width: 30px;
+    background: linear-gradient(to top, #004400, #0f0);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    transition: height 0.5s ease-out;
+    position: relative;
+}
+
+.bar:hover {
+    background: linear-gradient(to top, #006600, #5f5);
+}
+
+.bar-label {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #0f0;
+}
+
+.tech-label {
+    margin-top: 4px;
+    font-size: 10px;
+    color: #888;
+    text-align: center;
+    line-height: 1.2;
+    transform: rotate(-30deg); /* Angled text for style */
+    transform-origin: center top;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+
+/* Show Result Button */
+.show-result-btn {
+    margin-top: 30px;
+    padding: 15px 30px;
+    background-color: transparent;
+    color: #0f0;
+    border: 2px solid #0f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    max-width: 240px;
+    margin: 30px auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 10px rgba(0,255,0,0.2);
+}
+
+.show-result-btn:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0,255,0,0.5);
+}
+
+/* More Section */
+.more {
+    display: block;
+    margin-top: 50px;
+    padding: 15px;
+    border: 1px dashed #333;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.more a {
+    color: #666;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.more:hover {
+    border-color: #0f0;
+}
+
+.more:hover a {
+    color: #0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .button-group .option {
+        width: 45%; 
+    }
+    
+    .bar-chart {
+        gap: 8px;
+        height: 220px;
+    }
+    
+    .bar {
+        width: 20px;
+    }
+    
+    .bar-label, .tech-label {
+        font-size: 9px;
+    }
+}

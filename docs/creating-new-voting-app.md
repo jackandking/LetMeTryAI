@@ -74,6 +74,15 @@
     *   **指令示例**：
         > "注册这个新应用，然后 git push 上线。"
 
+### 第五步：发布到快手 (Step 5: Publishing to Kuaishou - Automated)
+可以使用自动化脚本将应用发布为快手任务，这一步通常在应用部署上线后进行。
+
+*   **脚本位置**: `scripts/publish-kuaishou-task.js`
+*   **详细指南**: 请参阅 `docs/MCP-KUAISHOU-PUBLISH.md` 获取完整参数说明和操作流程。
+
+**操作指令：**
+> "帮我运行 scripts/publish-kuaishou-task.js 发布 [应用ID] 到快手。"
+
 ## 预期耗时
 从有想法到上线，熟练后仅需 **5-10 分钟**。
 

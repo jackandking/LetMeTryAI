@@ -113,6 +113,9 @@ npm run quality
 
 # Start local development server
 npm run serve
+
+# Start local development server (helper script)
+./start_server.sh
 ```
 
 ### Code Quality Standards
