@@ -198,6 +198,18 @@
       "tags": ["科技", "未来", "投票", "硬核"],
       "featured": true,
       "status": "active"
+    },
+    {
+      "id": "ai-watermark",
+      "name": "AI水印公投",
+      "description": "是否应强制为 AI 生成的图片/视频添加明显水印？",
+      "category": "科技",
+      "directory": "ai-watermark",
+      "url": "ai-watermark",
+      "image": "https://picsum.photos/seed/aiwatermark/600/400",
+      "tags": ["科技","AI","投票","伦理"],
+      "featured": false,
+      "status": "active"
     }
   ]
 }

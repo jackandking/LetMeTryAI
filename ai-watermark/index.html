@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI水印公投 — 是否应为 AI 生成内容强制加水印？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">AI水印公投</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">是否应强制为 AI 生成的图片/视频添加明显的识别水印？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="vote" value="mandate">
+                    <span>强制添加明显水印（支持）</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="vote" value="optin">
+                    <span>应由平台/作者自主选择（非强制）</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="vote" value="no">
+                    <span>不应强制，会限制创作自由</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="vote" value="unsure">
+                    <span>不确定/需要更多讨论</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="displayResults()">查看投票结果</button>
+    <div class="more" id="more"><a href="/">返回主页</a></div>
+</body>
+</html>
