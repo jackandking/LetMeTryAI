@@ -46,7 +46,7 @@ async function initializeApp() {
  */
 async function loadAppsMetadata() {
     try {
-        const response = await fetch(APPS_METADATA_URL);
+        const response = await fetch(APPS_METADATA_URL + '?t=' + Date.now());
         if (!response.ok) {
             throw new Error('Failed to load apps metadata');
         }
