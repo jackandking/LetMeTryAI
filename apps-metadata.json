@@ -132,6 +132,17 @@
       "status": "active"
     },
     {
+      "id": "tank-kings",
+      "name": "陆战之王",
+      "description": "全球主战坦克战力排行投票",
+      "category": "军事",
+      "directory": "tank-kings",
+      "url": "tank-kings",
+      "image": "tank-kings/images/type99a.jpg",
+      "tags": ["军事", "坦克", "投票", "科技"],
+      "status": "active"
+    },
+    {
       "id": "drone-kings",
       "name": "无人机之王",
       "description": "全球顶尖军用无人机战力投票",
