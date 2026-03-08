@@ -175,6 +175,18 @@
       "tags": ["军事", "科技", "投票", "未来"],
       "featured": true,
       "status": "active"
+    },
+    {
+      "id": "hardcore-tech",
+      "name": "硬核科技",
+      "description": "2026年改变世界的5大硬核科技投票",
+      "category": "科技",
+      "directory": "hardcore-tech",
+      "url": "hardcore-tech",
+      "image": "images/game2.png",
+      "tags": ["科技", "未来", "投票", "硬核"],
+      "featured": true,
+      "status": "active"
     }
   ]
 }
