@@ -200,6 +200,18 @@
       "status": "active"
     },
     {
+      "id": "human-vs-ai",
+      "name": "人机空战",
+      "description": "未来空战谁主沉浮？人类飞行员 vs AI无人机",
+      "category": "科技",
+      "directory": "human-vs-ai",
+      "url": "human-vs-ai",
+      "image": "human-vs-ai/images/ai_drone.svg",
+      "tags": ["军事", "AI", "投票", "科技"],
+      "featured": true,
+      "status": "active"
+    },
+    {
       "id": "ai-watermark",
       "name": "AI水印公投",
       "description": "是否应强制为 AI 生成的图片/视频添加明显水印？",

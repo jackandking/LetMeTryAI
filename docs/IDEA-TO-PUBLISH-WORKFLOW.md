@@ -21,8 +21,8 @@ To go from a raw idea to a published Kuaishou task, follow this complete workflo
 > "Verify the new `[new-app-id]` app:
 > 1. Run the server and check if the voting logic works.
 > 2. Ensure `util.js` KV store keys are unique to this app.
-> 3. Check mobile responsiveness.
-> 4. **CRITICAL: Commit and Push the code to GitHub.** The app MUST be live (or at least committed) before Kuaishou can verify the URL."
+> 3. **CRITICAL: Commit and Push the code to GitHub.**
+> 4. **Verify Deployment:** Use `curl -I https://letmetryai.cn/[new-app-id]/` to confirm the page is live (200 OK). Do NOT use `letmetry.cloud` for frontend."
 
 ## Phase 3: Kuaishou Publication (The Automation Agent)
 **Prompt:**
