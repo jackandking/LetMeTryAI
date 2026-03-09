@@ -185,16 +185,38 @@ async function main() {
             // CRITICAL FIX: Trigger "blur" and wait to enable AI button
             // User feedback: "Click whitespace near AI button, wait a few seconds"
             console.log('Triggering input blur to activate AI button...');
-            // Click a label or the dialog background
-            await dialog.click({ position: { x: 20, y: 20 } }); 
-            // Also try clicking the label for "Resource Cover" if it exists
-            const coverLabel = dialog.locator('label', { hasText: /封面|图片/ }).first();
-            if (await coverLabel.isVisible()) {
-                await coverLabel.click();
-            }
             
-            console.log('⏳ Waiting 5 seconds for AI button activation...');
-            await activePage.waitForTimeout(5000);
+            const aiBtn = dialog.locator('button', { hasText: /AI.*生成|智能.*生成/ }).first();
+            if (await aiBtn.isVisible()) {
+                 // Try to click to the right of the button
+                 const btnBox = await aiBtn.boundingBox();
+                 if (btnBox) {
+                     // Click 100px to the right of the button (likely empty space)
+                     console.log('Clicking whitespace to the right of AI button...');
+                     await activePage.mouse.click(btnBox.x + btnBox.width + 100, btnBox.y + btnBox.height / 2);
+                 } else {
+                     // Fallback: Click top-rightish of dialog
+                     await dialog.click({ position: { x: 400, y: 50 } }); 
+                 }
+                 
+                 console.log('⏳ Waiting 8 seconds for AI button activation...');
+                 await activePage.waitForTimeout(8000);
+                 
+                 // Retry loop to enable button
+                 for (let attempt = 1; attempt <= 3; attempt++) {
+                     const isEnabled = await aiBtn.isEnabled().catch(() => false);
+                     if (isEnabled) {
+                         console.log('✨ AI button is now ENABLED!');
+                         break;
+                     }
+                     console.log(`⚠️ Attempt ${attempt}: AI button still disabled. Clicking dialog body...`);
+                     // Click elsewhere in dialog to trigger blur
+                     await dialog.click({ position: { x: 50, y: 150 } });
+                     await activePage.waitForTimeout(3000);
+                 }
+            } else {
+                 console.log('⚠️ AI button locator found nothing initially.');
+            }
         }
         
         // 6. Cover Image (AI Generate) inside Dialog
@@ -206,24 +228,18 @@ async function main() {
                  // Check if it's disabled via class (common in Vue/React apps)
                  const isClassDisabled = await aiBtn.evaluate(btn => btn.classList.contains('is-disabled') || btn.disabled);
                  if (isClassDisabled) {
-                     console.log('⚠️ AI Button still appears disabled. Trying one more click on whitespace...');
-                     await dialog.click({ position: { x: 50, y: 50 } });
-                     await activePage.waitForTimeout(2000);
+                     console.log('⚠️ AI Button still appears disabled. Skipping click to avoid error.');
+                 } else {
+                     await aiBtn.click({ timeout: 5000 });
+                     console.log('✅ Clicked "AI Generate" button.');
+                     
+                     // Wait for generation result
+                     // Extended wait to 15s as generation might take time
+                     console.log('Waiting 15s for AI generation...');
+                     await activePage.waitForTimeout(15000); 
                  }
-                 
-                 await aiBtn.click({ timeout: 5000 });
-                 console.log('✅ Clicked "AI Generate" button.');
-                 
-                 // Wait for generation result
-                 // Extended wait to 10s as generation might take time
-                 console.log('Waiting 10s for AI generation...');
-                 await activePage.waitForTimeout(10000); 
-                 
-                 // Try to find a "Use" button if the AI generator opens a sub-dialog
-                 // Often just clicking generate updates the image, or there is a "Select"
-                 // For now we assume it auto-selects or updates.
             } catch(err) {
-                 console.log('❌ Failed to click AI button (might still be disabled):', err.message);
+                 console.log('❌ Failed to click AI button:', err.message);
             }
         } else {
             console.log('⚠️ "AI Generate" button not found in dialog.');
@@ -236,6 +252,16 @@ async function main() {
         if (await confirmBtn.isVisible()) {
              await confirmBtn.click();
              console.log('✅ Confirmed resource dialog.');
+             
+             // IMPORTANT: Wait for dialog/overlay to disappear
+             console.log('Waiting for dialog to close...');
+             try {
+                await expect(dialog).toBeHidden({ timeout: 5000 });
+             } catch(e) {
+                // Manual wait if expect is not available (we didn't import expect)
+                await activePage.waitForTimeout(2000);
+                await activePage.locator('.ks-overlay').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
+             }
              await activePage.waitForTimeout(2000);
         } else {
              console.log('⚠️ Could not find Confirm button in dialog.');
