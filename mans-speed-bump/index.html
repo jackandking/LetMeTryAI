@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>男人减速带：哪个最让你挪不动步？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">男人减速带：哪个最让你挪不动步？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">除了钓鱼和充电头，以下哪种画面能让你瞬间驻足，一看就是半小时？</p>
+            <div class="button-group" id="optionsContainer">
+                <!-- Excavator -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="excavator">
+                    <img src="https://picsum.photos/seed/excavator/300/200" alt="挖掘机" loading="lazy">
+                    <span>挖掘机</span>
+                </label>
+                
+                <!-- Forging -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="forging">
+                    <img src="https://picsum.photos/seed/blacksmith/300/200" alt="古法锻刀" loading="lazy">
+                    <span>古法锻刀</span>
+                </label>
+                
+                <!-- CNC -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="cnc">
+                    <img src="https://picsum.photos/seed/machining/300/200" alt="数控机床" loading="lazy">
+                    <span>数控机床</span>
+                </label>
+                
+                <!-- Dam -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="dam">
+                    <img src="https://picsum.photos/seed/dam/300/200" alt="大坝泄洪" loading="lazy">
+                    <span>大坝泄洪</span>
+                </label>
+                
+                <!-- Welding -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="welding">
+                    <img src="https://picsum.photos/seed/welding/300/200" alt="鱼鳞焊" loading="lazy">
+                    <span>鱼鳞焊</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取最新猛男统计...</p>
+    </div>
+    
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看减速带榜单</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
