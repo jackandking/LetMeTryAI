@@ -1,0 +1,202 @@
+/**
+ * Fighter Jets Survey Application Styles
+ * Styling for the "King of Modern Air Combat" survey interface and result display
+ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background-color: #f5f6fa; /* Light grey background */
+    color: #2c3e50; /* Dark slate grey text */
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50; /* Dark slate grey for title */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d1d9e6;
+}
+
+.result {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ced6e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Group Layout */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button-group .option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #e1e8ed;
+    transition: all 0.3s ease;
+}
+
+.button-group .option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    border-color: #3498db;
+}
+
+.button-group .option img {
+    width: 120px;
+    height: 80px; /* Rectangular for jets */
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background-color: #ecf0f1;
+}
+
+.button-group .option input[type="radio"] {
+    margin-bottom: 8px;
+    accent-color: #3498db;
+}
+
+.button-group .option span {
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* Bar Chart Styles */
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    height: 300px;
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(to top, #f39c12, #f1c40f); /* Industrial yellow/orange gradient */
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.bar:hover {
+    background: linear-gradient(to top, #e67e22, #f39c12);
+}
+
+.bar-label {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.jet-label {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Show Result Button */
+.show-result-btn {
+    margin-top: 30px;
+    padding: 12px 24px;
+    background-color: #2980b9; /* Stronger blue */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    max-width: 240px;
+    margin: 30px auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.show-result-btn:hover {
+    background-color: #1a5276;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* More Section */
+.more {
+    display: block;
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid #d1d9e6;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.more a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.more:hover {
+    background-color: #ecf0f1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .button-group .option {
+        width: 45%; /* 2 per row on mobile */
+    }
+    
+    .bar-chart {
+        gap: 10px;
+        height: 220px;
+    }
+    
+    .bar {
+        width: 30px;
+    }
+    
+    .bar-label, .jet-label {
+        font-size: 11px;
+    }
+}
