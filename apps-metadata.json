@@ -222,6 +222,17 @@
       "tags": ["科技","AI","投票","伦理"],
       "featured": false,
       "status": "active"
+    },
+    {
+      "id": "ai-generals",
+      "name": "AI指挥官",
+      "description": "未来战争指挥权投票：人类直觉 vs AI精准",
+      "category": "科技",
+      "directory": "ai-generals",
+      "url": "ai-generals",
+      "image": "https://picsum.photos/seed/aigenerals/600/400",
+      "tags": ["科技", "AI", "军事", "投票"],
+      "status": "active"
     }
   ]
 }
