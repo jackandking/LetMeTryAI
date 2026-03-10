@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>机器狗参军：未来战场机器狗战力大比拼</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 机器狗参军</h1>
+            <p class="subtitle">未来战场机器狗战力大比拼 - 选出最强四足战士</p>
+        </header>
+
+        <div class="intro">
+            <p>机器狗正在改变现代战争形态！从侦察巡逻到火力支援，这些四足机器人展现出惊人潜力。你认为哪款机器狗最具实战价值？</p>
+        </div>
+
+        <div id="candidates-container" class="candidates-grid">
+            <!-- Candidates will be loaded by JavaScript -->
+        </div>
+
+        <div id="vote-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modal-title">投票</h2>
+                <div id="modal-body">
+                    <p>你选择了: <span id="selected-candidate"></span></p>
+                    <p class="vote-question">你认为这款机器狗最大的优势是什么？</p>
+                    <div class="vote-options">
+                        <button class="vote-option" data-reason="火力强大">🔥 火力强大</button>
+                        <button class="vote-option" data-reason="机动灵活">⚡ 机动灵活</button>
+                        <button class="vote-option" data-reason="续航持久">🔋 续航持久</button>
+                        <button class="vote-option" data-reason="智能程度高">🧠 智能程度高</button>
+                        <button class="vote-option" data-reason="成本低">💰 成本低</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-section" class="results-section">
+            <h2>📊 实时投票结果</h2>
+            <div id="results-container"></div>
+        </div>
+
+        <footer>
+            <p>数据来源于网络公开资料 | 仅供娱乐参考</p>
+            <p>&copy; 2026 机器狗参军投票</p>
+        </footer>
+    </div>
+</body>
+</html>
