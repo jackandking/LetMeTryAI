@@ -1,6 +1,18 @@
 {
   "apps": [
     {
+      "id": "power-armor",
+      "name": "动力装甲",
+      "description": "未来单兵装备：哪种外骨骼才是战场王者？",
+      "category": "军事",
+      "directory": "power-armor",
+      "url": "power-armor",
+      "image": "https://picsum.photos/seed/heavy/600/400",
+      "tags": ["军事", "科技", "投票", "外骨骼"],
+      "featured": true,
+      "status": "active"
+    },
+    {
       "id": "mans-speed-bump",
       "name": "男人减速带",
       "description": "除了钓鱼，还有什么能让你驻足半小时？",
