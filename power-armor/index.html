@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>动力装甲：未来单兵战神</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">动力装甲：未来单兵战神</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">哪种动力装甲设计将主宰未来战场？</p>
+            <div class="button-group" id="optionsContainer">
+                <!-- Heavy Assault -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="heavy">
+                    <img src="https://picsum.photos/seed/heavy/300/200" alt="重型突击" loading="lazy">
+                    <span>重型突击 (Heavy)</span>
+                </label>
+                
+                <!-- Scout -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="scout">
+                    <img src="https://picsum.photos/seed/scout/300/200" alt="敏捷侦察" loading="lazy">
+                    <span>敏捷侦察 (Scout)</span>
+                </label>
+                
+                <!-- Support -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="support">
+                    <img src="https://picsum.photos/seed/support/300/200" alt="后勤支援" loading="lazy">
+                    <span>后勤支援 (Support)</span>
+                </label>
+                
+                <!-- Stealth -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="stealth">
+                    <img src="https://picsum.photos/seed/stealth/300/200" alt="隐身特战" loading="lazy">
+                    <span>隐身特战 (Stealth)</span>
+                </label>
+                
+                <!-- Commander -->
+                <label class="option">
+                    <input type="radio" name="fighter" value="commander">
+                    <img src="https://picsum.photos/seed/commander/300/200" alt="指挥中枢" loading="lazy">
+                    <span>指挥中枢 (Command)</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取最新战力统计...</p>
+    </div>
+    
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看全球战力榜</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
