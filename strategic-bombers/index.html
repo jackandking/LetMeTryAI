@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>全球战略威慑：谁是轰炸机之王？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">全球战略威慑：谁是轰炸机之王？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">在未来战略打击体系中，你认为哪款轰炸机最具威慑力？</p>
+            <div class="button-group" id="optionsContainer">
+                <!-- H-20 -->
+                <label class="option">
+                    <input type="radio" name="bomber" value="h20">
+                    <img src="https://picsum.photos/seed/h20/300/200" alt="H-20 红色幽灵" loading="lazy">
+                    <span>H-20 红色幽灵</span>
+                </label>
+                
+                <!-- B-21 -->
+                <label class="option">
+                    <input type="radio" name="bomber" value="b21">
+                    <img src="https://picsum.photos/seed/b21/300/200" alt="B-21 突袭者" loading="lazy">
+                    <span>B-21 突袭者</span>
+                </label>
+                
+                <!-- Tu-160 -->
+                <label class="option">
+                    <input type="radio" name="bomber" value="tu160">
+                    <img src="https://picsum.photos/seed/tu160/300/200" alt="Tu-160M 白天鹅" loading="lazy">
+                    <span>Tu-160M 白天鹅</span>
+                </label>
+                
+                <!-- B-2 -->
+                <label class="option">
+                    <input type="radio" name="bomber" value="b2">
+                    <img src="https://picsum.photos/seed/b2/300/200" alt="B-2 幽灵" loading="lazy">
+                    <span>B-2 幽灵</span>
+                </label>
+                
+                <!-- H-6N -->
+                <label class="option">
+                    <input type="radio" name="bomber" value="h6n">
+                    <img src="https://picsum.photos/seed/h6n/300/200" alt="H-6N 战神" loading="lazy">
+                    <span>H-6N 战神</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在获取最新威慑力统计...</p>
+    </div>
+    
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看排行榜</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <!-- VConsole for mobile debugging -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

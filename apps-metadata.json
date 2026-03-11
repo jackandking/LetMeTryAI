@@ -268,6 +268,18 @@
       "image": "https://picsum.photos/seed/aigenerals/600/400",
       "tags": ["科技", "AI", "军事", "投票"],
       "status": "active"
+    },
+    {
+      "id": "strategic-bombers",
+      "name": "轰炸机之王",
+      "description": "全球战略轰炸机威慑力排行投票",
+      "category": "军事",
+      "directory": "strategic-bombers",
+      "url": "strategic-bombers",
+      "image": "https://picsum.photos/seed/b21/600/400",
+      "tags": ["军事", "轰炸机", "投票", "科技"],
+      "featured": true,
+      "status": "active"
     }
   ]
 }
