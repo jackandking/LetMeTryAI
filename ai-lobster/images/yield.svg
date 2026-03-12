@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" width="120" height="80">
+  <defs>
+    <linearGradient id="bgYield" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1f8a70"/>
+      <stop offset="100%" stop-color="#95d5b2"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="80" rx="10" fill="url(#bgYield)"/>
+  <ellipse cx="35" cy="54" rx="18" ry="9" fill="#ff8c42"/>
+  <circle cx="50" cy="33" r="11" fill="#e0fbfc" opacity="0.95"/>
+  <path d="M50 19 L50 47 M36 33 L64 33" stroke="#1d3557" stroke-width="4" stroke-linecap="round"/>
+  <text x="60" y="68" font-size="12" text-anchor="middle" fill="#ffffff" font-family="Arial">AI增产</text>
+</svg>

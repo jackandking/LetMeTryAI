@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" width="120" height="80">
+  <rect width="120" height="80" rx="10" fill="#edf6f9"/>
+  <ellipse cx="38" cy="50" rx="18" ry="9" fill="#ff7f50"/>
+  <circle cx="78" cy="34" r="15" fill="#ffb703"/>
+  <text x="78" y="39" font-size="14" text-anchor="middle" fill="#264653" font-family="Arial" font-weight="bold">¥</text>
+  <text x="60" y="68" font-size="12" text-anchor="middle" fill="#264653" font-family="Arial">便宜就冲</text>
+</svg>
