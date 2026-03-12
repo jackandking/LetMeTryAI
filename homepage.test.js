@@ -1,3 +1,10 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 /**
  * Homepage functionality tests
  * Tests for the redesigned homepage with search, filter, and form submission
@@ -34,8 +41,6 @@ describe('Homepage Functionality', () => {
 
     describe('Apps Metadata', () => {
         it('should have valid apps-metadata.json structure', () => {
-            const fs = require('fs');
-            const path = require('path');
             const metadataPath = path.join(__dirname, 'apps-metadata.json');
             
             expect(fs.existsSync(metadataPath)).toBe(true);
@@ -47,8 +52,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have required fields for each app', () => {
-            const fs = require('fs');
-            const path = require('path');
             const metadataPath = path.join(__dirname, 'apps-metadata.json');
             const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
             
@@ -64,12 +67,10 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have valid categories', () => {
-            const fs = require('fs');
-            const path = require('path');
             const metadataPath = path.join(__dirname, 'apps-metadata.json');
             const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
             
-            const validCategories = ['教育', '娱乐', '工具', '生活', '游戏', '其他'];
+            const validCategories = ['教育', '娱乐', '工具', '生活', '科技', '军事', '游戏', '其他'];
             
             metadata.apps.forEach(app => {
                 expect(validCategories).toContain(app.category);
@@ -177,8 +178,7 @@ describe('Homepage Functionality', () => {
                 a.category.localeCompare(b.category, 'zh-CN')
             );
             
-            expect(sorted[0].category).toBe('娱乐');
-            expect(sorted[1].category).toBe('教育');
+            expect(sorted.map(app => app.category)).toEqual(['教育', '娱乐']);
         });
     });
 
@@ -269,8 +269,6 @@ describe('Homepage Functionality', () => {
 
     describe('Responsive Design', () => {
         it('should have mobile-friendly viewport meta tag', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -279,8 +277,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should include responsive CSS classes', () => {
-            const fs = require('fs');
-            const path = require('path');
             const cssPath = path.join(__dirname, 'styles.css');
             const css = fs.readFileSync(cssPath, 'utf8');
             
@@ -291,8 +287,6 @@ describe('Homepage Functionality', () => {
 
     describe('SEO and Meta Tags', () => {
         it('should have proper title', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -301,8 +295,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have meta description', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -310,8 +302,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have meta keywords', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -319,8 +309,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have Baidu verification tag', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -330,8 +318,6 @@ describe('Homepage Functionality', () => {
 
     describe('Quick Idea Input Box', () => {
         it('should have quick input box in hero section', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -341,8 +327,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have quick submit button', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -352,8 +336,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have secondary button to view full form', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -362,8 +344,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have proper CSS styles for quick input', () => {
-            const fs = require('fs');
-            const path = require('path');
             const cssPath = path.join(__dirname, 'styles.css');
             const css = fs.readFileSync(cssPath, 'utf8');
             
@@ -373,8 +353,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have mobile responsive styles for quick input', () => {
-            const fs = require('fs');
-            const path = require('path');
             const cssPath = path.join(__dirname, 'styles.css');
             const css = fs.readFileSync(cssPath, 'utf8');
             
@@ -384,8 +362,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have handleQuickInput function in JavaScript', () => {
-            const fs = require('fs');
-            const path = require('path');
             const jsPath = path.join(__dirname, 'main.js');
             const js = fs.readFileSync(jsPath, 'utf8');
             
@@ -394,8 +370,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have Enter key event listener for quick input', () => {
-            const fs = require('fs');
-            const path = require('path');
             const jsPath = path.join(__dirname, 'main.js');
             const js = fs.readFileSync(jsPath, 'utf8');
             
@@ -422,8 +396,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should respect maxlength for quick input', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -444,8 +416,6 @@ describe('Homepage Functionality', () => {
 
     describe('HTML Structure Integrity', () => {
         it('should not have duplicate main tags', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -455,8 +425,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should not have duplicate footer tags', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             
@@ -469,8 +437,6 @@ describe('Homepage Functionality', () => {
         });
 
         it('should have proper HTML structure', () => {
-            const fs = require('fs');
-            const path = require('path');
             const htmlPath = path.join(__dirname, 'index.html');
             const html = fs.readFileSync(htmlPath, 'utf8');
             

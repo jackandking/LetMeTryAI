@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" width="120" height="80">
+  <rect width="120" height="80" rx="10" fill="#264653"/>
+  <ellipse cx="34" cy="50" rx="18" ry="9" fill="#e76f51"/>
+  <polygon points="80,20 98,52 62,52" fill="#f4a261"/>
+  <text x="80" y="45" font-size="18" text-anchor="middle" fill="#264653" font-family="Arial" font-weight="bold">!</text>
+  <text x="60" y="68" font-size="12" text-anchor="middle" fill="#ffffff" font-family="Arial">先别吹</text>
+</svg>
