@@ -293,5 +293,18 @@
       "featured": true,
       "status": "active"
     }
+  ,
+    {
+      "id": "tech-trends-poll",
+      "name": "科技热点投票",
+      "description": "今天你最看好哪项科技突破？（植入式脑机接口 / 北斗在轨升级 / 工业机器人自动化）",
+      "category": "科技",
+      "directory": "tech-trends",
+      "url": "tech-trends",
+      "image": "https://picsum.photos/seed/techtrends/600/400",
+      "tags": ["科技", "投票", "AI", "机器人", "航天"],
+      "featured": true,
+      "status": "active"
+    }
   ]
 }
