@@ -1,14 +1,45 @@
 #!/bin/bash
 set -euo pipefail
 
-export PATH="$PATH:/Users/weiping/.nvm/versions/node/v22.22.0/bin"
-
-PROJECT_DIR="${PROJECT_DIR:-/Users/weiping/LetMeTryAI}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
 SOURCE_PROJECT_DIR="$PROJECT_DIR"
-export COPILOT_BIN="${COPILOT_BIN:-/Users/weiping/.nvm/versions/node/v22.22.0/bin/copilot}"
+
+find_latest_nvm_bin() {
+    local nvm_root="$HOME/.nvm/versions/node"
+    if [[ ! -d "$nvm_root" ]]; then
+        return 1
+    fi
+
+    local latest_version
+    latest_version="$(find "$nvm_root" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -V | tail -n 1)"
+    if [[ -z "$latest_version" ]]; then
+        return 1
+    fi
+
+    printf '%s/bin\n' "$nvm_root/$latest_version"
+}
+
+ensure_runtime_path() {
+    if command -v node >/dev/null 2>&1 && command -v copilot >/dev/null 2>&1; then
+        return
+    fi
+
+    local nvm_bin
+    if nvm_bin="$(find_latest_nvm_bin)" && [[ -d "$nvm_bin" ]]; then
+        export PATH="$PATH:$nvm_bin"
+    fi
+}
+
+ensure_runtime_path
+
+if [[ -z "${COPILOT_BIN:-}" ]] && command -v copilot >/dev/null 2>&1; then
+    export COPILOT_BIN="$(command -v copilot)"
+fi
+
 export DAILY_COPILOT_MODEL="${DAILY_COPILOT_MODEL:-gpt-5-mini}"
 export DAILY_PROFILE_ID="${DAILY_PROFILE_ID:-nanrenbao}"
-export DAILY_PYTHON_BIN="${DAILY_PYTHON_BIN:-/usr/local/bin/python3}"
+export DAILY_PYTHON_BIN="${DAILY_PYTHON_BIN:-$(command -v python3 || echo /usr/bin/python3)}"
 
 setup_temp_worktree_if_needed() {
     if [[ "${DAILY_ALLOW_DIRTY_WORKTREE:-false}" == "true" || "${DAILY_TEMP_WORKTREE:-false}" == "true" ]]; then
