@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "sports-player-of-the-week",
+      "name": "球星排行",
+      "description": "根据本周赛场高光表现，比拼谁更值得男人宝用户为他投票。",
+      "category": "体育",
+      "directory": "sports-player-of-the-week",
+      "url": "sports-player-of-the-week",
+      "image": "sports-player-of-the-week/images/super-scorer-a.svg",
+      "tags": [
+        "投票",
+        "体育",
+        "球星",
+        "关键表现",
+        "得分",
+        "组织",
+        "防守",
+        "球星",
+        "关键表现",
+        "得分",
+        "组织",
+        "防守"
+      ],
+      "status": "active"
+    },
+    {
       "id": "power-armor",
       "name": "动力装甲",
       "description": "未来单兵装备：哪种外骨骼才是战场王者？",
@@ -8,7 +32,12 @@
       "directory": "power-armor",
       "url": "power-armor",
       "image": "https://picsum.photos/seed/heavy/600/400",
-      "tags": ["军事", "科技", "投票", "外骨骼"],
+      "tags": [
+        "军事",
+        "科技",
+        "投票",
+        "外骨骼"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -20,7 +49,12 @@
       "directory": "mans-speed-bump",
       "url": "mans-speed-bump",
       "image": "https://picsum.photos/seed/excavator/600/400",
-      "tags": ["娱乐", "投票", "减速带", "男人的快乐"],
+      "tags": [
+        "娱乐",
+        "投票",
+        "减速带",
+        "男人的快乐"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -33,7 +67,11 @@
       "url": "https://museumcheck.cn/fireworks-wall.html",
       "external": true,
       "image": "https://picsum.photos/seed/fireworks/600/400",
-      "tags": ["动画", "烟花", "视觉"],
+      "tags": [
+        "动画",
+        "烟花",
+        "视觉"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -45,7 +83,11 @@
       "directory": "webview3",
       "url": "webview3",
       "image": "https://picsum.photos/seed/magic/600/400",
-      "tags": ["魔术", "互动", "娱乐"],
+      "tags": [
+        "魔术",
+        "互动",
+        "娱乐"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -57,7 +99,10 @@
       "directory": "webview11",
       "url": "webview11",
       "image": "https://picsum.photos/seed/study/600/400",
-      "tags": ["学习", "教育"],
+      "tags": [
+        "学习",
+        "教育"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -69,7 +114,11 @@
       "directory": "zuowen-game",
       "url": "zuowen-game",
       "image": "https://picsum.photos/seed/book/600/400",
-      "tags": ["语文", "作文", "学习"],
+      "tags": [
+        "语文",
+        "作文",
+        "学习"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -81,7 +130,11 @@
       "directory": "typing-game",
       "url": "typing-game",
       "image": "https://picsum.photos/seed/typing/600/400",
-      "tags": ["打字", "游戏", "技能"],
+      "tags": [
+        "打字",
+        "游戏",
+        "技能"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -93,7 +146,11 @@
       "directory": "parent-tools",
       "url": "parent-tools",
       "image": "images/1621725673908_.pic.jpg",
-      "tags": ["家长", "教育", "工具"],
+      "tags": [
+        "家长",
+        "教育",
+        "工具"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -105,7 +162,11 @@
       "directory": "elder-love",
       "url": "elder-love",
       "image": "images/1621725673908_.pic.jpg",
-      "tags": ["老人", "关怀", "生活"],
+      "tags": [
+        "老人",
+        "关怀",
+        "生活"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -117,7 +178,11 @@
       "directory": "lure-fishing",
       "url": "lure-fishing",
       "image": "https://picsum.photos/seed/fishing/600/400",
-      "tags": ["钓鱼", "户外", "娱乐"],
+      "tags": [
+        "钓鱼",
+        "户外",
+        "娱乐"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -129,7 +194,10 @@
       "directory": "eraser",
       "url": "eraser",
       "image": "https://picsum.photos/seed/eraser/600/400",
-      "tags": ["工具", "创意"],
+      "tags": [
+        "工具",
+        "创意"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -141,7 +209,10 @@
       "directory": "nanrenbao",
       "url": "nanrenbao",
       "image": "https://picsum.photos/seed/men/600/400",
-      "tags": ["娱乐", "图片"],
+      "tags": [
+        "娱乐",
+        "图片"
+      ],
       "status": "active"
     },
     {
@@ -152,7 +223,10 @@
       "directory": "womanai",
       "url": "womanai",
       "image": "https://picsum.photos/seed/women/600/400",
-      "tags": ["娱乐", "图片"],
+      "tags": [
+        "娱乐",
+        "图片"
+      ],
       "status": "active"
     },
     {
@@ -163,7 +237,12 @@
       "directory": "tank-kings",
       "url": "tank-kings",
       "image": "tank-kings/images/type99a.jpg",
-      "tags": ["军事", "坦克", "投票", "科技"],
+      "tags": [
+        "军事",
+        "坦克",
+        "投票",
+        "科技"
+      ],
       "status": "active"
     },
     {
@@ -174,7 +253,12 @@
       "directory": "drone-kings",
       "url": "drone-kings",
       "image": "drone-kings/images/gj11.jpg",
-      "tags": ["军事", "无人机", "投票", "科技"],
+      "tags": [
+        "军事",
+        "无人机",
+        "投票",
+        "科技"
+      ],
       "status": "active"
     },
     {
@@ -185,7 +269,12 @@
       "directory": "fighter-jets",
       "url": "fighter-jets",
       "image": "fighter-jets/images/j20.jpg",
-      "tags": ["军事", "战机", "投票", "排名"],
+      "tags": [
+        "军事",
+        "战机",
+        "投票",
+        "排名"
+      ],
       "status": "active"
     },
     {
@@ -196,7 +285,12 @@
       "directory": "rockets-king",
       "url": "rockets-king",
       "image": "rockets-king/images/falcon9.jpg",
-      "tags": ["航天", "火箭", "投票", "科技"],
+      "tags": [
+        "航天",
+        "火箭",
+        "投票",
+        "科技"
+      ],
       "status": "active"
     },
     {
@@ -207,7 +301,12 @@
       "directory": "future-warfare",
       "url": "future-warfare",
       "image": "fighter-jets/images/f35.jpg",
-      "tags": ["军事", "科技", "投票", "未来"],
+      "tags": [
+        "军事",
+        "科技",
+        "投票",
+        "未来"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -219,7 +318,12 @@
       "directory": "hardcore-tech",
       "url": "hardcore-tech",
       "image": "drone-kings/images/mq28.jpg",
-      "tags": ["科技", "未来", "投票", "硬核"],
+      "tags": [
+        "科技",
+        "未来",
+        "投票",
+        "硬核"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -231,7 +335,12 @@
       "directory": "human-vs-ai",
       "url": "human-vs-ai",
       "image": "human-vs-ai/images/ai_drone.svg",
-      "tags": ["军事", "AI", "投票", "科技"],
+      "tags": [
+        "军事",
+        "AI",
+        "投票",
+        "科技"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -243,7 +352,12 @@
       "directory": "ai-lobster",
       "url": "ai-lobster",
       "image": "ai-lobster/images/yield.svg",
-      "tags": ["科技", "AI", "龙虾", "投票"],
+      "tags": [
+        "科技",
+        "AI",
+        "龙虾",
+        "投票"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -255,7 +369,12 @@
       "directory": "ai-watermark",
       "url": "ai-watermark",
       "image": "https://picsum.photos/seed/aiwatermark/600/400",
-      "tags": ["科技","AI","投票","伦理"],
+      "tags": [
+        "科技",
+        "AI",
+        "投票",
+        "伦理"
+      ],
       "featured": false,
       "status": "active"
     },
@@ -267,7 +386,12 @@
       "directory": "robot-dogs",
       "url": "robot-dogs",
       "image": "https://picsum.photos/seed/robotdogs/600/400",
-      "tags": ["军事", "机器狗", "科技", "投票"],
+      "tags": [
+        "军事",
+        "机器狗",
+        "科技",
+        "投票"
+      ],
       "status": "active"
     },
     {
@@ -278,7 +402,12 @@
       "directory": "ai-generals",
       "url": "ai-generals",
       "image": "https://picsum.photos/seed/aigenerals/600/400",
-      "tags": ["科技", "AI", "军事", "投票"],
+      "tags": [
+        "科技",
+        "AI",
+        "军事",
+        "投票"
+      ],
       "status": "active"
     },
     {
@@ -289,11 +418,15 @@
       "directory": "strategic-bombers",
       "url": "strategic-bombers",
       "image": "https://picsum.photos/seed/b21/600/400",
-      "tags": ["军事", "轰炸机", "投票", "科技"],
+      "tags": [
+        "军事",
+        "轰炸机",
+        "投票",
+        "科技"
+      ],
       "featured": true,
       "status": "active"
-    }
-  ,
+    },
     {
       "id": "tech-trends-poll",
       "name": "科技热点投票",
@@ -302,7 +435,13 @@
       "directory": "tech-trends",
       "url": "tech-trends",
       "image": "https://picsum.photos/seed/techtrends/600/400",
-      "tags": ["科技", "投票", "AI", "机器人", "航天"],
+      "tags": [
+        "科技",
+        "投票",
+        "AI",
+        "机器人",
+        "航天"
+      ],
       "featured": true,
       "status": "active"
     },
@@ -314,7 +453,12 @@
       "directory": "drone-delivery-vote",
       "url": "drone-delivery-vote",
       "image": "drone-delivery-vote/images/placeholder.jpg",
-      "tags": ["科技", "无人机", "投票", "城市"],
+      "tags": [
+        "科技",
+        "无人机",
+        "投票",
+        "城市"
+      ],
       "featured": true,
       "status": "active"
     }
