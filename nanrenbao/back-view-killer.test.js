@@ -99,8 +99,8 @@ describe('Back View Killer Upload Page', () => {
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
         expect(content).toContain('backImageUrl');
         expect(content).toContain('frontImageUrl');
-        expect(content).toContain('背影照片链接');
-        expect(content).toContain('正面照片链接');
+        expect(content).toContain('背影照片');
+        expect(content).toContain('正面照片');
     });
 
     it('should show 20 points reward', () => {
@@ -121,8 +121,61 @@ describe('Back View Killer Upload Page', () => {
     it('should have inline URL validation', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
-        expect(content).toContain('function isValidImageURL');
-        expect(content).toContain('isValidImageURL(url)');
+        expect(content).toContain('window.isValidImageUrl');
+        expect(content).toContain('isValidImageUrl(');
+    });
+
+    it('should have local file upload support', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        expect(content).toContain('backFileInput');
+        expect(content).toContain('frontFileInput');
+        expect(content).toContain('选择本地文件');
+        expect(content).toContain('accept="image/*"');
+    });
+
+    it('should use UUID for filenames', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        expect(content).toContain('generateUUID');
+        expect(content).toContain('crypto.randomUUID');
+        expect(content).not.toContain('sha1Hex');
+    });
+
+    it('should have image compression function', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        expect(content).toContain('compressImageFile');
+        expect(content).toContain('maxWidth');
+        expect(content).toContain('maxHeight');
+    });
+
+    it('should enforce 500KB file size limit in compressImageFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        expect(content).toContain('MAX_FILE_SIZE');
+        expect(content).toContain('500 * 1024');
+        expect(content).toContain('MIN_QUALITY');
+        expect(content).toContain('QUALITY_STEP');
+        // Iterative quality reduction logic
+        expect(content).toContain('blob.size > MAX_FILE_SIZE');
+        expect(content).toContain('attempt');
+    });
+
+    it('should use reduced default dimensions in compressImageFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        // Default maxWidth/maxHeight should be 800/1440 (reduced from 1080/1920)
+        expect(content).toContain('maxWidth = 800');
+        expect(content).toContain('maxHeight = 1440');
+    });
+
+    it('should enforce 500KB file size limit in exportCanvasToFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        // exportCanvasToFile should also have iterative compression with shared constants
+        expect(content).toContain('QUALITY_STEP');
+        expect(content).toContain('MAX_DIM');
     });
 
     it('should check for duplicate images', () => {
