@@ -146,3 +146,5 @@ mcp-servers/**/*.d.ts.map
 # Playwright
 /blob-report/
 /playwright/.auth/
+
+.agent_history
