@@ -4,7 +4,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { getBrandProfile } from '../.agents/skills/brand-profiles/scripts/profile-loader.js';
 import {
     buildTopicBrief,
@@ -24,6 +24,10 @@ const DEFAULT_DAILY_LOG_DIR = path.join(REPO_DIR, 'logs', 'daily-orchestrator');
 const DEFAULT_MODEL = 'gpt-5-mini';
 const DEFAULT_PROFILE_ID = 'nanrenbao';
 const COMMIT_TRAILER = 'Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>';
+const DEFAULT_HEARTBEAT_INTERVAL_MS = Math.max(
+    5000,
+    Number.parseInt(process.env.DAILY_HEARTBEAT_INTERVAL_MS || '15000', 10) || 15000
+);
 
 function normalizeKebabId(value, fallback = 'daily-vote') {
     if (typeof value !== 'string') {
@@ -37,6 +41,26 @@ function normalizeKebabId(value, fallback = 'daily-vote') {
         .replace(/^-+|-+$/g, '');
 
     return normalized || fallback;
+}
+
+function logProgress(message, level = 'INFO') {
+    const timestamp = new Date().toISOString();
+    console.log(`[daily-run][${timestamp}][${level}] ${message}`);
+}
+
+function logStage(stage, message) {
+    logProgress(`${stage}: ${message}`);
+}
+
+function formatCommand(command, args = [], shell = false) {
+    const parts = [command, ...args].filter(Boolean);
+    const rendered = parts.join(' ').trim();
+    return shell ? `(shell) ${rendered}` : rendered;
+}
+
+export function formatProgressHeartbeat(label, elapsedMs) {
+    const elapsedSeconds = Math.max(0, Math.round(elapsedMs / 1000));
+    return `${label} still running (${elapsedSeconds}s elapsed)`;
 }
 
 function normalizeOption(option, index) {
@@ -338,22 +362,99 @@ function runChecked(command, args, options = {}) {
     return result;
 }
 
-function runCopilotJsonPrompt({ model, copilotBin, prompt }) {
-    const result = runChecked(
+async function runStreamingProcess(command, args, options = {}) {
+    const cwd = options.cwd || REPO_DIR;
+    const env = options.env ? { ...process.env, ...options.env } : process.env;
+    const label = options.label || command;
+    const shell = options.shell === true;
+    const heartbeatIntervalMs = Math.max(0, options.heartbeatIntervalMs || DEFAULT_HEARTBEAT_INTERVAL_MS);
+
+    logProgress(`Starting ${label}: ${formatCommand(command, args, shell)}`);
+
+    return await new Promise((resolve, reject) => {
+        const child = spawn(command, args, {
+            cwd,
+            env,
+            shell,
+            stdio: ['ignore', 'pipe', 'pipe']
+        });
+        let stdout = '';
+        let stderr = '';
+        const startedAt = Date.now();
+        const heartbeatTimer = heartbeatIntervalMs > 0
+            ? setInterval(() => {
+                logProgress(formatProgressHeartbeat(label, Date.now() - startedAt));
+            }, heartbeatIntervalMs)
+            : null;
+
+        child.stdout?.on('data', chunk => {
+            const text = chunk.toString();
+            stdout += text;
+            if (options.passthroughStdout) {
+                process.stdout.write(text);
+            }
+        });
+
+        child.stderr?.on('data', chunk => {
+            const text = chunk.toString();
+            stderr += text;
+            if (options.passthroughStderr) {
+                process.stderr.write(text);
+            }
+        });
+
+        child.on('error', error => {
+            if (heartbeatTimer) {
+                clearInterval(heartbeatTimer);
+            }
+            reject(error);
+        });
+
+        child.on('close', code => {
+            if (heartbeatTimer) {
+                clearInterval(heartbeatTimer);
+            }
+            logProgress(`Finished ${label} with exit code ${code ?? 1}`);
+            resolve({
+                status: code ?? 1,
+                stdout,
+                stderr,
+                error: null
+            });
+        });
+    });
+}
+
+async function runStreamingChecked(command, args, options = {}) {
+    const result = await runStreamingProcess(command, args, options);
+    if (result.status !== 0) {
+        const output = [result.stdout, result.stderr].filter(Boolean).join('\n').trim();
+        throw new Error(output || `${command} exited with code ${result.status}`);
+    }
+    return result;
+}
+
+async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
+    const result = await runStreamingChecked(
         copilotBin,
         ['--model', model, '--allow-all-tools', '--output-format', 'json', '--yolo', '-p', prompt],
-        { cwd: REPO_DIR }
+        {
+            cwd: REPO_DIR,
+            label: `Copilot topic selection (${mode})`
+        }
     );
     const rawOutput = [result.stdout, result.stderr].filter(Boolean).join('\n');
+    const rawLogPath = writeDebugLog('copilot-topic-response', rawOutput);
+    logStage('topics', `Saved raw Copilot response to ${rawLogPath}`);
 
     return {
         rawOutput,
-        rawLogPath: writeDebugLog('copilot-topic-response', rawOutput),
+        rawLogPath,
         messageContent: parseCopilotEventStream(rawOutput)
     };
 }
 
-function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
+async function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
     const attempts = [
         { mode: 'primary', prompt: buildTopicSelectionPrompt({ profile, currentDate }) },
         { mode: 'fallback', prompt: buildFallbackTopicSelectionPrompt({ profile, currentDate }) }
@@ -362,10 +463,12 @@ function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
 
     for (const attempt of attempts) {
         try {
-            const response = runCopilotJsonPrompt({
+            logStage('topics', `Requesting structured candidates via ${attempt.mode} prompt`);
+            const response = await runCopilotJsonPrompt({
                 model,
                 copilotBin,
-                prompt: attempt.prompt
+                prompt: attempt.prompt,
+                mode: attempt.mode
             });
             const parsed = parseTopicSelectionResponse(response.messageContent);
 
@@ -376,6 +479,7 @@ function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
             };
         } catch (error) {
             failures.push(`${attempt.mode}: ${error instanceof Error ? error.message : String(error)}`);
+            logStage('topics', `Attempt ${attempt.mode} failed: ${error instanceof Error ? error.message : String(error)}`);
         }
     }
 
@@ -484,11 +588,14 @@ async function wait(ms) {
 
 async function verifyDeployedUrl(url, retries, delayMs) {
     for (let attempt = 1; attempt <= retries; attempt += 1) {
+        logStage('deploy', `Checking ${url} (attempt ${attempt}/${retries})`);
         const result = runProcess('curl', ['-fsSLI', url], { cwd: REPO_DIR });
         if (result.status === 0) {
+            logStage('deploy', `Deployment reachable on attempt ${attempt}`);
             return { success: true, attempts: attempt, output: result.stdout };
         }
         if (attempt < retries) {
+            logStage('deploy', `Not reachable yet; waiting ${Math.round(delayMs / 1000)}s before retry`);
             await wait(delayMs);
         }
     }
@@ -501,6 +608,7 @@ async function verifyDeployedUrl(url, retries, delayMs) {
 }
 
 function commitAndPush({ repoDir, appDirRelative, appId, appName }) {
+    logStage('git', `Staging ${appDirRelative} and apps-metadata.json`);
     runChecked('git', ['add', '--', appDirRelative, 'apps-metadata.json'], { cwd: repoDir });
 
     const diffResult = runProcess('git', ['diff', '--cached', '--quiet'], { cwd: repoDir });
@@ -509,6 +617,7 @@ function commitAndPush({ repoDir, appDirRelative, appId, appName }) {
     }
 
     const message = `Add daily app: ${appName || appId}\n\n${COMMIT_TRAILER}`;
+    logStage('git', `Creating commit for ${appName || appId}`);
     runChecked('git', ['commit', '-m', message], { cwd: repoDir });
 
     const pushTarget = resolveGitPushTarget({
@@ -516,6 +625,7 @@ function commitAndPush({ repoDir, appDirRelative, appId, appName }) {
         pushBranch: process.env.DAILY_GIT_PUSH_BRANCH,
         pushRemote: process.env.DAILY_GIT_PUSH_REMOTE
     });
+    logStage('git', `Pushing HEAD to ${pushTarget.remote} ${pushTarget.refspec}`);
     runChecked('git', ['push', pushTarget.remote, pushTarget.refspec], { cwd: repoDir });
 }
 
@@ -611,21 +721,28 @@ export async function runDailyOrchestrator(options = {}) {
     };
 
     try {
+        logProgress(
+            `Starting orchestrator (profile=${profileId}, model=${model}, repo=${repoDir}, logs=${getDailyLogDir()})`
+        );
         if (!allowDirty) {
+            logStage('preflight', 'Checking worktree cleanliness');
             ensureCleanWorktree(repoDir);
         }
 
         const profile = getBrandProfile(profileId);
         const currentDate = new Date().toISOString().slice(0, 10);
-        const modelResponse = options.topicResponse || requestStructuredTopics({
+        logStage('topics', `Loaded brand profile ${profile.id}`);
+        const modelResponse = options.topicResponse || await requestStructuredTopics({
             model,
             profile,
             currentDate,
             copilotBin
         });
         const selected = chooseBestTopicCandidate(modelResponse.topicCandidates, profile);
+        logStage('topics', `Selected candidate "${selected.candidate.title}" (score=${selected.scoring.score})`);
         const scaffoldSpec = buildScaffoldSpec(selected, profile);
         const scaffoldPlan = buildScaffoldPlan(scaffoldSpec);
+        logStage('scaffold', `Materializing app ${scaffoldPlan.metadataEntry.id}`);
         const materialized = materializeScaffoldPlan({
             scaffoldPlan,
             repoDir
@@ -638,12 +755,14 @@ export async function runDailyOrchestrator(options = {}) {
         state.rawResponsePath = modelResponse.rawResponsePath || '';
         state.responseMode = modelResponse.responseMode || '';
 
+        logStage('validation', `Running validator for ${scaffoldPlan.outputDir}`);
         runChecked('node', ['scripts/validate-voting-app.js', scaffoldPlan.outputDir], { cwd: repoDir });
         const validationResult = validateVotingAppDirectory(materialized.outputDir);
         if (!validationResult.valid) {
             throw new Error(`Validator rejected generated app: ${validationResult.errors.join('; ')}`);
         }
         state.validationPassed = true;
+        logStage('validation', 'Validator passed');
 
         if (!skipGit) {
             commitAndPush({
@@ -659,6 +778,8 @@ export async function runDailyOrchestrator(options = {}) {
                 throw new Error(`Deployment verification failed for ${state.deployedUrl}`);
             }
             state.deployVerified = true;
+        } else {
+            logStage('git', 'Skipping git/deploy because DAILY_SKIP_GIT=true');
         }
 
         if (!skipPublish) {
@@ -670,29 +791,40 @@ export async function runDailyOrchestrator(options = {}) {
                 profileId,
                 sourceTaskId: selected.candidate.sourceTaskId || undefined
             });
-            runChecked(publishPlan.command, [], {
+            logStage('publish', `Starting Kuaishou publish for ${scaffoldPlan.metadataEntry.id}`);
+            await runStreamingChecked(publishPlan.command, [], {
                 cwd: repoDir,
-                shell: true
+                shell: true,
+                label: `Kuaishou publish (${scaffoldPlan.metadataEntry.id})`,
+                passthroughStdout: true,
+                passthroughStderr: true
             });
             state.publishSucceeded = true;
+            logStage('publish', 'Kuaishou publish command completed');
+        } else {
+            logStage('publish', 'Skipping publish because DAILY_SKIP_PUBLISH=true');
         }
 
         state.status = 'success';
     } catch (error) {
         state.errorMessage = error instanceof Error ? error.message : String(error);
+        logProgress(state.errorMessage, 'ERROR');
     }
 
     const summaryLines = formatSummary(state);
+    logStage('summary', `Writing email draft to ${emailDraftPath}`);
     writeEmailDraft(emailDraftPath, summaryLines);
 
     if (!skipEmail) {
         try {
+            logStage('email', `Sending report to ${toEmail}`);
             sendEmail({
                 emailDraftPath,
                 subject: emailSubject,
                 toEmail,
                 pythonBin
             });
+            logStage('email', 'Report sent');
         } catch (emailError) {
             if (!state.errorMessage) {
                 state.errorMessage = emailError instanceof Error ? emailError.message : String(emailError);
@@ -700,6 +832,8 @@ export async function runDailyOrchestrator(options = {}) {
             state.status = 'failed';
             throw emailError;
         }
+    } else {
+        logStage('email', 'Skipping email because DAILY_SKIP_EMAIL=true');
     }
 
     if (state.status !== 'success') {
