@@ -1,0 +1,801 @@
+{
+  "summary": {
+    "totalTasks": 41,
+    "withData": 9,
+    "totalExposure": 41526,
+    "totalClicks": 153,
+    "totalDaren": 63,
+    "totalWorks": 72,
+    "clickRate": "0.37%"
+  },
+  "topByExposure": [
+    {
+      "page": 1,
+      "rowIndex": 0,
+      "planId": "175253",
+      "name": "动力装甲",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 1,
+      "planId": "172708",
+      "name": "男人减速带",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 0,
+      "planId": "166083",
+      "name": "火箭之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 1,
+      "planId": "165960",
+      "name": "修改分销计划标题",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "已暂停",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 0,
+      "planId": "52198",
+      "name": "轻松带孩子游故宫",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 1,
+      "planId": "51530",
+      "name": "老人爱跳舞",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 0,
+      "planId": "40685",
+      "name": "这是什么鱼白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 1,
+      "planId": "40656",
+      "name": "古装美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 5,
+      "rowIndex": 0,
+      "planId": "28736",
+      "name": "帮你路亚白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    }
+  ],
+  "topByDaren": [
+    {
+      "page": 1,
+      "rowIndex": 0,
+      "planId": "175253",
+      "name": "动力装甲",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 1,
+      "planId": "172708",
+      "name": "男人减速带",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 0,
+      "planId": "166083",
+      "name": "火箭之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 1,
+      "planId": "165960",
+      "name": "修改分销计划标题",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "已暂停",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 0,
+      "planId": "52198",
+      "name": "轻松带孩子游故宫",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 1,
+      "planId": "51530",
+      "name": "老人爱跳舞",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 0,
+      "planId": "40685",
+      "name": "这是什么鱼白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 1,
+      "planId": "40656",
+      "name": "古装美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 5,
+      "rowIndex": 0,
+      "planId": "28736",
+      "name": "帮你路亚白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    }
+  ],
+  "allTasks": [
+    {
+      "page": 1,
+      "rowIndex": 0,
+      "planId": "175253",
+      "name": "动力装甲",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 1,
+      "planId": "172708",
+      "name": "男人减速带",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 2,
+      "planId": "172624",
+      "name": "机器狗参军",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 3,
+      "planId": "172562",
+      "name": "AI指挥官",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 4,
+      "planId": "172487",
+      "name": "人机空战",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 5,
+      "planId": "167291",
+      "name": "AI水印公投",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 6,
+      "planId": "166910",
+      "name": "陆战之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 7,
+      "planId": "166812",
+      "name": "无人机之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 8,
+      "planId": "166810",
+      "name": "硬核科技",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 1,
+      "rowIndex": 9,
+      "planId": "166798",
+      "name": "未来战争",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 0,
+      "planId": "166083",
+      "name": "火箭之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 1,
+      "planId": "165960",
+      "name": "修改分销计划标题",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "已暂停",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 2,
+      "planId": "165805",
+      "name": "空战之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 3,
+      "planId": "64508",
+      "name": "爸爸带女儿和孩子丢了怎么办",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 4,
+      "planId": "54709",
+      "name": "轻松带孩子逛国家和南京，军事博物馆",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 5,
+      "planId": "53766",
+      "name": "轻松带孩子逛中国地质博物馆",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 6,
+      "planId": "53359",
+      "name": "美容视频排行榜",
+      "source": "小程序 - 人人爱女人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 7,
+      "planId": "53273",
+      "name": "十大骗老人陷阱",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 8,
+      "planId": "53272",
+      "name": "家长爱什么",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 2,
+      "rowIndex": 9,
+      "planId": "52247",
+      "name": "家长爱什么",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 0,
+      "planId": "52198",
+      "name": "轻松带孩子游故宫",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 1,
+      "planId": "51530",
+      "name": "老人爱跳舞",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 2,
+      "planId": "49988",
+      "name": "美人背影杀",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 3,
+      "planId": "48916",
+      "name": "美人背影杀",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 4,
+      "planId": "48463",
+      "name": "十大美人",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 5,
+      "planId": "46987",
+      "name": "教老人赚钱",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 6,
+      "planId": "46986",
+      "name": "十大家常菜",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 7,
+      "planId": "46719",
+      "name": "考古博物馆的镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 8,
+      "planId": "45256",
+      "name": "故宫的镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 3,
+      "rowIndex": 9,
+      "planId": "41375",
+      "name": "中国十大国宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 0,
+      "planId": "40685",
+      "name": "这是什么鱼白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 1,
+      "planId": "40656",
+      "name": "古装美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 2,
+      "planId": "38507",
+      "name": "VIP包间看美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 3,
+      "planId": "38397",
+      "name": "美人半遮面",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 4,
+      "planId": "38393",
+      "name": "博物馆大门",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 5,
+      "planId": "33317",
+      "name": "首都博物馆镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 6,
+      "planId": "33211",
+      "name": "这是什么鱼鲫鱼",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 7,
+      "planId": "32732",
+      "name": "哪个皇帝最牛",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 8,
+      "planId": "32423",
+      "name": "博物馆知多少",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 4,
+      "rowIndex": 9,
+      "planId": "31480",
+      "name": "多少彩礼娶她",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "error": "Not enough buttons"
+      }
+    },
+    {
+      "page": 5,
+      "rowIndex": 0,
+      "planId": "28736",
+      "name": "帮你路亚白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "stats": {
+        "组件曝光数": "4614",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "7",
+        "已发布作品数": "8",
+        "已结算金额": null
+      }
+    }
+  ]
+}

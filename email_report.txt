@@ -1,0 +1,24 @@
+Subject: [Copilot Report] Daily Run - Power Armor App
+To: jackandking@163.com
+
+Hi Boss,
+
+I have completed the daily run tasks:
+
+1. **New App Created**: "Power Armor" (动力装甲) - ID: power-armor.
+   - Based on the "Fighter Jets" template.
+   - Features 5 exoskeleton types for voting.
+   - Placeholder images used.
+
+2. **Deployment**:
+   - Code committed and pushed to GitHub main branch.
+   - Metadata registered in `apps-metadata.json`.
+
+3. **Publication**:
+   - Kuaishou Spark Plan task created/updated via automation script.
+   - Status: Pending manual verification (or script success).
+
+Let me know if you need any adjustments.
+
+Best,
+Copilot

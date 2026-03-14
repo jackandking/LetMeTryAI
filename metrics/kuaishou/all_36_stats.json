@@ -1,0 +1,830 @@
+{
+  "fetchTime": "2026-03-10T00:10:36.339Z",
+  "totalTasks": 36,
+  "expectedTasks": 36,
+  "successRate": "100%",
+  "tasks": [
+    {
+      "globalIndex": 1,
+      "planId": "167291",
+      "taskName": "AI水印公投",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": "63",
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": "5",
+        "已发布作品数": "5",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_1_167291_AI水印公投.png",
+      "fetchTime": "2026-03-10T00:08:13.868Z"
+    },
+    {
+      "globalIndex": 2,
+      "planId": "166910",
+      "taskName": "陆战之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": null,
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": null,
+        "已发布作品数": null,
+        "已结算金额": "--"
+      },
+      "screenshot": "task_2_166910_陆战之王.png",
+      "fetchTime": "2026-03-10T00:08:19.039Z"
+    },
+    {
+      "globalIndex": 3,
+      "planId": "166812",
+      "taskName": "无人机之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": null,
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": null,
+        "已发布作品数": null,
+        "已结算金额": "--"
+      },
+      "screenshot": "task_3_166812_无人机之王.png",
+      "fetchTime": "2026-03-10T00:08:24.339Z"
+    },
+    {
+      "globalIndex": 4,
+      "planId": "166810",
+      "taskName": "硬核科技",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": null,
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": null,
+        "已发布作品数": null,
+        "已结算金额": "--"
+      },
+      "screenshot": "task_4_166810_硬核科技.png",
+      "fetchTime": "2026-03-10T00:08:28.624Z"
+    },
+    {
+      "globalIndex": 5,
+      "planId": "166798",
+      "taskName": "未来战争",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": "331",
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": "6",
+        "已发布作品数": "6",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_5_166798_未来战争.png",
+      "fetchTime": "2026-03-10T00:08:32.908Z"
+    },
+    {
+      "globalIndex": 6,
+      "planId": "166083",
+      "taskName": "火箭之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": "36",
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": "2",
+        "已发布作品数": "2",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_6_166083_火箭之王.png",
+      "fetchTime": "2026-03-10T00:08:36.673Z"
+    },
+    {
+      "globalIndex": 7,
+      "planId": "165960",
+      "taskName": "修改分销计划标题",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "已暂停",
+      "page": 1,
+      "stats": {
+        "组件曝光数": null,
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": null,
+        "已发布作品数": null,
+        "已结算金额": "--"
+      },
+      "screenshot": "task_7_165960_修改分销计划标题.png",
+      "fetchTime": "2026-03-10T00:08:41.358Z"
+    },
+    {
+      "globalIndex": 8,
+      "planId": "165805",
+      "taskName": "空战之王",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": null,
+        "组件点击数": null,
+        "任务下发人数": null,
+        "已履单达人数量": null,
+        "已发布作品数": null,
+        "已结算金额": "--"
+      },
+      "screenshot": "task_8_165805_空战之王.png",
+      "fetchTime": "2026-03-10T00:08:45.983Z"
+    },
+    {
+      "globalIndex": 9,
+      "planId": "64508",
+      "taskName": "爸爸带女儿和孩子丢了怎么办",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": "3",
+        "组件点击数": "107",
+        "任务下发人数": null,
+        "已履单达人数量": "92",
+        "已发布作品数": "122",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_9_64508_爸爸带女儿和孩子丢了怎么办.png",
+      "fetchTime": "2026-03-10T00:08:50.465Z"
+    },
+    {
+      "globalIndex": 10,
+      "planId": "54709",
+      "taskName": "轻松带孩子逛国家和南京，军事博物馆",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 1,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "23",
+        "任务下发人数": null,
+        "已履单达人数量": "33",
+        "已发布作品数": "52",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_10_54709_轻松带孩子逛国家和南京_军事博.png",
+      "fetchTime": "2026-03-10T00:08:54.538Z"
+    },
+    {
+      "globalIndex": 11,
+      "planId": "53766",
+      "taskName": "轻松带孩子逛中国地质博物馆",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "8",
+        "组件点击数": "315",
+        "任务下发人数": null,
+        "已履单达人数量": "240",
+        "已发布作品数": "247",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_11_53766_轻松带孩子逛中国地质博物馆.png",
+      "fetchTime": "2026-03-10T00:09:01.858Z"
+    },
+    {
+      "globalIndex": 12,
+      "planId": "53359",
+      "taskName": "美容视频排行榜",
+      "source": "小程序 - 人人爱女人宝",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "34",
+        "任务下发人数": null,
+        "已履单达人数量": "30",
+        "已发布作品数": "40",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_12_53359_美容视频排行榜.png",
+      "fetchTime": "2026-03-10T00:09:05.417Z"
+    },
+    {
+      "globalIndex": 13,
+      "planId": "53273",
+      "taskName": "十大骗老人陷阱",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "2",
+        "组件点击数": "34",
+        "任务下发人数": null,
+        "已履单达人数量": "24",
+        "已发布作品数": "34",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_13_53273_十大骗老人陷阱.png",
+      "fetchTime": "2026-03-10T00:09:10.133Z"
+    },
+    {
+      "globalIndex": 14,
+      "planId": "53272",
+      "taskName": "家长爱什么",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "451",
+        "任务下发人数": null,
+        "已履单达人数量": "52",
+        "已发布作品数": "71",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_14_53272_家长爱什么.png",
+      "fetchTime": "2026-03-10T00:09:13.964Z"
+    },
+    {
+      "globalIndex": 15,
+      "planId": "52247",
+      "taskName": "家长爱什么",
+      "source": "小程序 - 家长爱",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "7744",
+        "组件点击数": "11",
+        "任务下发人数": null,
+        "已履单达人数量": "9",
+        "已发布作品数": "14",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_15_52247_家长爱什么.png",
+      "fetchTime": "2026-03-10T00:09:17.690Z"
+    },
+    {
+      "globalIndex": 16,
+      "planId": "52198",
+      "taskName": "轻松带孩子游故宫",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "29",
+        "任务下发人数": null,
+        "已履单达人数量": "51",
+        "已发布作品数": "82",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_16_52198_轻松带孩子游故宫.png",
+      "fetchTime": "2026-03-10T00:09:22.490Z"
+    },
+    {
+      "globalIndex": 17,
+      "planId": "51530",
+      "taskName": "老人爱跳舞",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "15",
+        "组件点击数": "369",
+        "任务下发人数": null,
+        "已履单达人数量": "359",
+        "已发布作品数": "636",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_17_51530_老人爱跳舞.png",
+      "fetchTime": "2026-03-10T00:09:26.177Z"
+    },
+    {
+      "globalIndex": 18,
+      "planId": "49988",
+      "taskName": "美人背影杀",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "4995",
+        "组件点击数": "317",
+        "任务下发人数": null,
+        "已履单达人数量": "33",
+        "已发布作品数": "34",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_18_49988_美人背影杀.png",
+      "fetchTime": "2026-03-10T00:09:29.619Z"
+    },
+    {
+      "globalIndex": 19,
+      "planId": "48916",
+      "taskName": "美人背影杀",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "5759",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "29",
+        "已发布作品数": "30",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_19_48916_美人背影杀.png",
+      "fetchTime": "2026-03-10T00:09:33.073Z"
+    },
+    {
+      "globalIndex": 20,
+      "planId": "48463",
+      "taskName": "十大美人",
+      "source": "小程序 - 人人爱男人宝",
+      "status": "进行中",
+      "page": 2,
+      "stats": {
+        "组件曝光数": "5457",
+        "组件点击数": "30",
+        "任务下发人数": null,
+        "已履单达人数量": "33",
+        "已发布作品数": "35",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_20_48463_十大美人.png",
+      "fetchTime": "2026-03-10T00:09:36.372Z"
+    },
+    {
+      "globalIndex": 21,
+      "planId": "46987",
+      "taskName": "教老人赚钱",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "9805",
+        "组件点击数": "28",
+        "任务下发人数": null,
+        "已履单达人数量": "42",
+        "已发布作品数": "55",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_21_46987_教老人赚钱.png",
+      "fetchTime": "2026-03-10T00:09:43.157Z"
+    },
+    {
+      "globalIndex": 22,
+      "planId": "46986",
+      "taskName": "十大家常菜",
+      "source": "小程序 - 老人爱",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "4",
+        "组件点击数": "204",
+        "任务下发人数": null,
+        "已履单达人数量": "127",
+        "已发布作品数": "200",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_22_46986_十大家常菜.png",
+      "fetchTime": "2026-03-10T00:09:46.356Z"
+    },
+    {
+      "globalIndex": 23,
+      "planId": "46719",
+      "taskName": "考古博物馆的镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "4",
+        "组件点击数": "1804",
+        "任务下发人数": null,
+        "已履单达人数量": "197",
+        "已发布作品数": "242",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_23_46719_考古博物馆的镇馆之宝.png",
+      "fetchTime": "2026-03-10T00:09:49.664Z"
+    },
+    {
+      "globalIndex": 24,
+      "planId": "45256",
+      "taskName": "故宫的镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "2347",
+        "组件点击数": "17",
+        "任务下发人数": null,
+        "已履单达人数量": "19",
+        "已发布作品数": "19",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_24_45256_故宫的镇馆之宝.png",
+      "fetchTime": "2026-03-10T00:09:52.823Z"
+    },
+    {
+      "globalIndex": 25,
+      "planId": "41375",
+      "taskName": "中国十大国宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "3898",
+        "组件点击数": "22",
+        "任务下发人数": null,
+        "已履单达人数量": "30",
+        "已发布作品数": "32",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_25_41375_中国十大国宝.png",
+      "fetchTime": "2026-03-10T00:09:55.932Z"
+    },
+    {
+      "globalIndex": 26,
+      "planId": "40685",
+      "taskName": "这是什么鱼白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "9888",
+        "组件点击数": "41",
+        "任务下发人数": null,
+        "已履单达人数量": "45",
+        "已发布作品数": "46",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_26_40685_这是什么鱼白条.png",
+      "fetchTime": "2026-03-10T00:09:59.105Z"
+    },
+    {
+      "globalIndex": 27,
+      "planId": "40656",
+      "taskName": "古装美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "3",
+        "组件点击数": "76",
+        "任务下发人数": null,
+        "已履单达人数量": "127",
+        "已发布作品数": "173",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_27_40656_古装美女.png",
+      "fetchTime": "2026-03-10T00:10:02.259Z"
+    },
+    {
+      "globalIndex": 28,
+      "planId": "38507",
+      "taskName": "VIP包间看美女",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "65",
+        "任务下发人数": null,
+        "已履单达人数量": "40",
+        "已发布作品数": "52",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_28_38507_VIP包间看美女.png",
+      "fetchTime": "2026-03-10T00:10:05.466Z"
+    },
+    {
+      "globalIndex": 29,
+      "planId": "38397",
+      "taskName": "美人半遮面",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "1158",
+        "组件点击数": "8",
+        "任务下发人数": null,
+        "已履单达人数量": "9",
+        "已发布作品数": "10",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_29_38397_美人半遮面.png",
+      "fetchTime": "2026-03-10T00:10:08.733Z"
+    },
+    {
+      "globalIndex": 30,
+      "planId": "38393",
+      "taskName": "博物馆大门",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 3,
+      "stats": {
+        "组件曝光数": "7435",
+        "组件点击数": "21",
+        "任务下发人数": null,
+        "已履单达人数量": "32",
+        "已发布作品数": "34",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_30_38393_博物馆大门.png",
+      "fetchTime": "2026-03-10T00:10:12.335Z"
+    },
+    {
+      "globalIndex": 31,
+      "planId": "33317",
+      "taskName": "首都博物馆镇馆之宝",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "230",
+        "组件点击数": "1",
+        "任务下发人数": null,
+        "已履单达人数量": "4",
+        "已发布作品数": "5",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_31_33317_首都博物馆镇馆之宝.png",
+      "fetchTime": "2026-03-10T00:10:19.232Z"
+    },
+    {
+      "globalIndex": 32,
+      "planId": "33211",
+      "taskName": "这是什么鱼鲫鱼",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "1",
+        "组件点击数": "13",
+        "任务下发人数": null,
+        "已履单达人数量": "25",
+        "已发布作品数": "25",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_32_33211_这是什么鱼鲫鱼.png",
+      "fetchTime": "2026-03-10T00:10:22.362Z"
+    },
+    {
+      "globalIndex": 33,
+      "planId": "32732",
+      "taskName": "哪个皇帝最牛",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "74",
+        "组件点击数": "3559",
+        "任务下发人数": null,
+        "已履单达人数量": "682",
+        "已发布作品数": "1037",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_33_32732_哪个皇帝最牛.png",
+      "fetchTime": "2026-03-10T00:10:25.473Z"
+    },
+    {
+      "globalIndex": 34,
+      "planId": "32423",
+      "taskName": "博物馆知多少",
+      "source": "小程序 - 让孩子爱上博物馆",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "4267",
+        "组件点击数": "12",
+        "任务下发人数": null,
+        "已履单达人数量": "28",
+        "已发布作品数": "33",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_34_32423_博物馆知多少.png",
+      "fetchTime": "2026-03-10T00:10:28.855Z"
+    },
+    {
+      "globalIndex": 35,
+      "planId": "31480",
+      "taskName": "多少彩礼娶她",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "5",
+        "组件点击数": "89",
+        "任务下发人数": null,
+        "已履单达人数量": "21",
+        "已发布作品数": "34",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_35_31480_多少彩礼娶她.png",
+      "fetchTime": "2026-03-10T00:10:32.385Z"
+    },
+    {
+      "globalIndex": 36,
+      "planId": "28736",
+      "taskName": "帮你路亚白条",
+      "source": "小程序 - 男人宝",
+      "status": "进行中",
+      "page": 4,
+      "stats": {
+        "组件曝光数": "4548",
+        "组件点击数": "16",
+        "任务下发人数": null,
+        "已履单达人数量": "6",
+        "已发布作品数": "7",
+        "已结算金额": "--"
+      },
+      "screenshot": "task_36_28736_帮你路亚白条.png",
+      "fetchTime": "2026-03-10T00:10:35.475Z"
+    }
+  ],
+  "errors": [
+    {
+      "task": "23",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "2",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "9",
+      "error": "No action cell"
+    },
+    {
+      "task": "16",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "30",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "6",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "13",
+      "error": "No action cell"
+    },
+    {
+      "task": "20",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "27",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "4",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "4374730",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "23",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "2",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "9",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "16",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "30",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "6",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "13",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "20",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "27",
+      "error": "Row out of range"
+    },
+    {
+      "task": "4",
+      "error": "Row out of range"
+    },
+    {
+      "task": "4296895",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "23",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "2",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "9",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "16",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "30",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "6",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "13",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "20",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "27",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "4",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "4220160",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "23",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "2",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "9",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "16",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "30",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "6",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "13",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "20",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "27",
+      "error": "Not enough buttons"
+    },
+    {
+      "task": "4",
+      "error": "Not enough buttons"
+    }
+  ]
+}

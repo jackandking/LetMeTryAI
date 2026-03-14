@@ -1,0 +1,6 @@
+body{font-family:Arial,Helvetica,sans-serif;padding:16px}
+h1{font-size:20px;margin-bottom:12px}
+.button-group{display:flex;flex-direction:column;gap:10px}
+.option{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid #eee;border-radius:6px}
+.result{margin-top:12px;padding:8px;background:#f9f9f9;border-radius:6px}
+.more{margin-top:14px}

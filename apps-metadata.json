@@ -305,6 +305,18 @@
       "tags": ["科技", "投票", "AI", "机器人", "航天"],
       "featured": true,
       "status": "active"
+    },
+    {
+      "id": "drone-delivery-vote",
+      "name": "无人机送货公投",
+      "description": "城市普及无人机送货，你支持吗？（提高效率 vs 隐私安全）",
+      "category": "科技",
+      "directory": "drone-delivery-vote",
+      "url": "drone-delivery-vote",
+      "image": "drone-delivery-vote/images/placeholder.jpg",
+      "tags": ["科技", "无人机", "投票", "城市"],
+      "featured": true,
+      "status": "active"
     }
   ]
 }

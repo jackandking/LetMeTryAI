@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市送货无人机：你支持吗？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">城市送货无人机：你支持吗？</h1>
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果你所在的城市普及无人机送货，你会支持吗？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="vote" value="support">
+                    <span>支持（提高效率、减少交通）</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="vote" value="oppose">
+                    <span>反对（隐私与安全担忧）</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="vote" value="neutral">
+                    <span>中立（需看监管政策）</span>
+                </label>
+            </div>
+        </div>
+    </form>
+    <div class="result" id="result">
+        <p>投票结果会在统计后显示。</p>
+    </div>
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+</body>
+</html>
