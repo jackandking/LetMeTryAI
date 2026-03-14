@@ -148,3 +148,5 @@ mcp-servers/**/*.d.ts.map
 /playwright/.auth/
 
 .agent_history
+metrics
+kuaishou_auth.json
