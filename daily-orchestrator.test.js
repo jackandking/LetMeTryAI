@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import {
     extractJsonObject,
+    formatProgressHeartbeat,
     materializeScaffoldPlan,
     parseCopilotEventStream,
     parseTopicSelectionResponse,
@@ -43,6 +44,12 @@ describe('daily-orchestrator', () => {
 
         const content = parseCopilotEventStream(eventStream);
         expect(content).toContain('"profileId":"nanrenbao"');
+    });
+
+    it('formats heartbeat messages for long-running stages', () => {
+        expect(formatProgressHeartbeat('Kuaishou publish', 31234)).toBe(
+            'Kuaishou publish still running (31s elapsed)'
+        );
     });
 
     it('creates app directory, assets, and metadata deterministically', () => {
