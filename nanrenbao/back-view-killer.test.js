@@ -150,6 +150,34 @@ describe('Back View Killer Upload Page', () => {
         expect(content).toContain('maxHeight');
     });
 
+    it('should enforce 500KB file size limit in compressImageFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        expect(content).toContain('MAX_FILE_SIZE');
+        expect(content).toContain('500 * 1024');
+        expect(content).toContain('MIN_QUALITY');
+        expect(content).toContain('QUALITY_STEP');
+        // Iterative quality reduction logic
+        expect(content).toContain('blob.size > MAX_FILE_SIZE');
+        expect(content).toContain('attempt');
+    });
+
+    it('should use reduced default dimensions in compressImageFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        // Default maxWidth/maxHeight should be 800/1440 (reduced from 1080/1920)
+        expect(content).toContain('maxWidth = 800');
+        expect(content).toContain('maxHeight = 1440');
+    });
+
+    it('should enforce 500KB file size limit in exportCanvasToFile', () => {
+        const fs = require('fs');
+        const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
+        // exportCanvasToFile should also have iterative compression with shared constants
+        expect(content).toContain('QUALITY_STEP');
+        expect(content).toContain('MAX_DIM');
+    });
+
     it('should check for duplicate images', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
