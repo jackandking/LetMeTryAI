@@ -24,8 +24,10 @@
 crontab -e
 
 # 添加以下行（每天早上6点执行）
-0 6 * * * cd /Users/weiping/LetMeTryAI && KUAISHOU_EMAIL_TO=jackandking@163.com /usr/local/bin/node scripts/daily_kuaishou_report.js >> logs/daily_report.log 2>&1
+0 6 * * * cd /Users/weiping/prod/LetMeTryAI && git pull --ff-only && KUAISHOU_EMAIL_TO=jackandking@163.com "$(command -v node)" scripts/daily_kuaishou_report.js >> logs/daily_report.log 2>&1
 ```
+
+如果你是在别的 clone 里手动运行，把 `cd /Users/weiping/prod/LetMeTryAI` 替换成当前仓库路径即可。
 
 #### 使用 launchd (macOS 推荐)
 
@@ -40,11 +42,12 @@ crontab -e
     <string>com.kuaishou.dailyreport</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/node</string>
-        <string>/Users/weiping/LetMeTryAI/scripts/daily_kuaishou_report.js</string>
+        <string>/bin/bash</string>
+        <string>-lc</string>
+        <string>cd /Users/weiping/prod/LetMeTryAI && git pull --ff-only && "$(command -v node)" scripts/daily_kuaishou_report.js</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/weiping/LetMeTryAI</string>
+    <string>/Users/weiping/prod/LetMeTryAI</string>
     <key>EnvironmentVariables</key>
     <dict>
         <key>KUAISHOU_EMAIL_TO</key>
@@ -58,9 +61,9 @@ crontab -e
         <integer>0</integer>
     </dict>
     <key>StandardOutPath</key>
-    <string>/Users/weiping/LetMeTryAI/logs/daily_report.log</string>
+    <string>/Users/weiping/prod/LetMeTryAI/logs/daily_report.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/weiping/LetMeTryAI/logs/daily_report_error.log</string>
+    <string>/Users/weiping/prod/LetMeTryAI/logs/daily_report_error.log</string>
 </dict>
 </plist>
 ```
@@ -86,6 +89,7 @@ launchctl load ~/Library/LaunchAgents/com.kuaishou.dailyreport.plist
 
 ```bash
 # 手动模式运行一次，完成登录
+cd /Users/weiping/prod/LetMeTryAI
 HEADLESS=false node scripts/daily_kuaishou_report.js
 ```
 
@@ -115,6 +119,7 @@ crontab -e
 ### 查看运行日志
 ```bash
 # 实时查看
+cd /Users/weiping/prod/LetMeTryAI
 tail -f logs/daily_report.log
 
 # 查看最近100行
@@ -125,16 +130,19 @@ tail -n 100 logs/daily_report.log
 
 ### 立即运行一次
 ```bash
+cd /Users/weiping/prod/LetMeTryAI
 node scripts/daily_kuaishou_report.js
 ```
 
 ### 指定邮箱运行
 ```bash
+cd /Users/weiping/prod/LetMeTryAI
 KUAISHOU_EMAIL_TO=other@example.com node scripts/daily_kuaishou_report.js
 ```
 
 ### 调试模式（显示浏览器窗口）
 ```bash
+cd /Users/weiping/prod/LetMeTryAI
 HEADLESS=false node scripts/daily_kuaishou_report.js
 ```
 
@@ -250,6 +258,7 @@ rm ~/Library/LaunchAgents/com.kuaishou.dailyreport.plist
 1. **不要提交 `kuaishou_auth.json`** - 包含登录凭证，已添加到 `.gitignore`
 2. **保护 API Key** - 如需更换，修改脚本中的 `CONFIG.apiKey` 或使用环境变量
 3. **日志文件** - 定期清理 `logs/` 目录避免占用过多磁盘空间
+4. **生产运行目录** - 建议 cron 固定使用 `/Users/weiping/prod/LetMeTryAI`，开发 clone 保持独立
 
 ## 支持
 
