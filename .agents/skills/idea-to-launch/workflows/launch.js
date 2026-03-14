@@ -90,6 +90,15 @@ export function buildLaunchWorkflow(spec) {
             output: scaffoldPlan
         },
         {
+            id: 'validate-app',
+            skill: 'validation-script',
+            title: 'Validate the generated app before deploy',
+            output: {
+                command: `node scripts/validate-voting-app.js ${scaffoldPlan.outputDir}`,
+                validation: scaffoldPlan.validation
+            }
+        },
+        {
             id: 'verify-deploy',
             skill: 'manual-check',
             title: 'Verify deployment before Kuaishou publication',

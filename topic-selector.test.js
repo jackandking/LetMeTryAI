@@ -87,4 +87,33 @@ describe('Topic selector skills', () => {
         expect(brief.title).toContain('退休后最想重拾的兴趣爱好');
         expect(brief.question).toContain('退休后最想重拾的兴趣爱好');
     });
+
+    it('should prefer elder-love topics with nostalgia and practical life signals', () => {
+        const profile = getBrandProfile('elder-love');
+        const ranked = rankTopicCandidates(
+            [
+                {
+                    title: '你最喜欢的经典电视剧',
+                    category: '怀旧',
+                    format: '投票',
+                    keywords: ['经典老剧', '回忆'],
+                    signals: ['怀旧', '易理解', '可转发', '代际共鸣'],
+                    qualities: ['易理解', '实用']
+                },
+                {
+                    title: '新一代显卡参数谁更强',
+                    category: '科技',
+                    format: '投票',
+                    keywords: ['显卡', '参数'],
+                    signals: ['参数党', '硬核科技'],
+                    qualities: ['适合投票']
+                }
+            ],
+            profile,
+            { limit: 2, includeRejected: true }
+        );
+
+        expect(ranked[0].candidate.title).toBe('你最喜欢的经典电视剧');
+        expect(ranked[0].score).toBeGreaterThan(ranked[1].score);
+    });
 });

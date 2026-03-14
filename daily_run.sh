@@ -1,38 +1,73 @@
 #!/bin/bash
-export PATH=$PATH:/Users/weiping/.nvm/versions/node/v22.22.0/bin
+set -euo pipefail
 
-PROJECT_DIR="/Users/weiping/LetMeTryAI"
-COPILOT_BIN="/Users/weiping/.nvm/versions/node/v22.22.0/bin/copilot"
-EMAIL_DRAFT_PATH="$PROJECT_DIR/email_draft.txt"
-DEFAULT_MODEL="gpt-5-mini"
-COPILOT_MODEL="${DAILY_COPILOT_MODEL:-$DEFAULT_MODEL}"
+export PATH="$PATH:/Users/weiping/.nvm/versions/node/v22.22.0/bin"
+
+PROJECT_DIR="${PROJECT_DIR:-/Users/weiping/LetMeTryAI}"
+SOURCE_PROJECT_DIR="$PROJECT_DIR"
+export COPILOT_BIN="${COPILOT_BIN:-/Users/weiping/.nvm/versions/node/v22.22.0/bin/copilot}"
+export DAILY_COPILOT_MODEL="${DAILY_COPILOT_MODEL:-gpt-5-mini}"
+export DAILY_PROFILE_ID="${DAILY_PROFILE_ID:-nanrenbao}"
+export DAILY_PYTHON_BIN="${DAILY_PYTHON_BIN:-/usr/local/bin/python3}"
+
+setup_temp_worktree_if_needed() {
+    if [[ "${DAILY_ALLOW_DIRTY_WORKTREE:-false}" == "true" || "${DAILY_TEMP_WORKTREE:-false}" == "true" ]]; then
+        return
+    fi
+
+    cd "$SOURCE_PROJECT_DIR"
+
+    local dirty_output
+    dirty_output="$(git --no-pager status --short)"
+    if [[ -z "$dirty_output" ]]; then
+        return
+    fi
+
+    local current_branch
+    current_branch="$(git rev-parse --abbrev-ref HEAD)"
+    if [[ "$current_branch" == "HEAD" ]]; then
+        echo "Failure reason: Working tree is dirty and current checkout is detached; set DAILY_ALLOW_DIRTY_WORKTREE=true or switch to a branch" >&2
+        exit 1
+    fi
+
+    DAILY_TEMP_WORKTREE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/letmetry-daily-worktree.XXXXXX")"
+    DAILY_TEMP_ARTIFACT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/letmetry-daily-artifacts.XXXXXX")"
+
+    cleanup_daily_temp() {
+        git -C "$SOURCE_PROJECT_DIR" worktree remove --force "$DAILY_TEMP_WORKTREE_DIR" >/dev/null 2>&1 || true
+        rm -rf "$DAILY_TEMP_ARTIFACT_DIR"
+    }
+
+    trap cleanup_daily_temp EXIT
+
+    echo "Main worktree is dirty; running daily pipeline in temporary clean worktree: $DAILY_TEMP_WORKTREE_DIR"
+    git -C "$SOURCE_PROJECT_DIR" worktree add --detach "$DAILY_TEMP_WORKTREE_DIR" HEAD >/dev/null
+    rsync -a --delete \
+        --exclude='.git' \
+        --exclude='node_modules' \
+        --exclude='.agent_history' \
+        --exclude='.minimax' \
+        "$SOURCE_PROJECT_DIR/" "$DAILY_TEMP_WORKTREE_DIR/" >/dev/null
+    if [[ -d "$SOURCE_PROJECT_DIR/node_modules" && ! -e "$DAILY_TEMP_WORKTREE_DIR/node_modules" ]]; then
+        ln -s "$SOURCE_PROJECT_DIR/node_modules" "$DAILY_TEMP_WORKTREE_DIR/node_modules"
+    fi
+
+    export PROJECT_DIR="$DAILY_TEMP_WORKTREE_DIR"
+    export DAILY_ALLOW_DIRTY_WORKTREE="true"
+    export DAILY_TEMP_WORKTREE="true"
+    export DAILY_GIT_PUSH_BRANCH="${DAILY_GIT_PUSH_BRANCH:-$current_branch}"
+    export EMAIL_DRAFT_PATH="${EMAIL_DRAFT_PATH:-$DAILY_TEMP_ARTIFACT_DIR/email_draft.txt}"
+    export DAILY_LOG_DIR="${DAILY_LOG_DIR:-$DAILY_TEMP_ARTIFACT_DIR/logs}"
+    export KUAISHOU_AUTH_FILE="${KUAISHOU_AUTH_FILE:-$SOURCE_PROJECT_DIR/kuaishou_auth.json}"
+}
+
+setup_temp_worktree_if_needed
 
 cd "$PROJECT_DIR"
+export EMAIL_DRAFT_PATH="${EMAIL_DRAFT_PATH:-$PROJECT_DIR/email_draft.txt}"
 
-# Daily run skill mapping:
-# - idea-to-launch: primary orchestration for topic -> scaffold -> deploy -> publish -> report
-# - brand-profiles/topic-selector: audience-aware topic selection
-# - voting-app-scaffold: fighter-jets-style app generation
-# - kuaishou-publisher: Kuaishou Spark Plan publication
-# - report-sender: daily summary delivery
-# - kuaishou-crawler: optional reference data collection
-PROMPT=$(cat <<EOF
-帮我搜一下今天的 [科技/军事/体育] 热点，挑一个适合做投票的话题（例如：男人减速带）。
-
-请显式复用项目里现有的 skills：
-- 整体流程优先使用 idea-to-launch，把“选题、生成、部署检查、快手发布、发报告”串成一条链。
-- 选题时优先使用 brand-profiles + topic-selector，按不同小程序的人群策略做筛选，不要把女人爱、爱老人、家长爱硬套成男人宝逻辑。
-- 生成投票页时优先使用 voting-app-scaffold，按 fighter-jets 模式产出 app 配置、HTML 选项和 metadata。
-- 发布到快手星火计划时，优先使用 kuaishou-publisher；如需页面级排障或补充自动化细节，可复用 kuaishou-scraper。
-- 发送日报总结时，优先使用 report-sender。
-- 如果需要抓取快手现有任务/数据做参考，可复用 kuaishou-crawler。
-
-执行要求：
-1. 开发：按 fighter-jets 模式做出来，并注册 metadata。
-2. 部署：务必先提交并推送到 GitHub，确保线上链接可访问。
-3. 发布：最后运行 publish-kuaishou-task.js 脚本自动发布到快手星火计划。
-4. 总结：将总结保存为 $EMAIL_DRAFT_PATH，并运行 /usr/local/bin/python3 $PROJECT_DIR/send_email.py '[Copilot Report] Daily Update' jackandking@163.com $EMAIL_DRAFT_PATH 发送邮件。
-EOF
-)
-
-"$COPILOT_BIN" --model "$COPILOT_MODEL" --yolo -p "$PROMPT"
+# Deterministic daily pipeline:
+# 1. Copilot only returns structured topic JSON.
+# 2. Local orchestrator creates directories/files, updates metadata, validates.
+# 3. Only after validation passes do git/deploy/publish/report continue.
+node scripts/daily-orchestrator.js

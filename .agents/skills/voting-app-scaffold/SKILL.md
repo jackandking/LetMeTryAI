@@ -16,7 +16,9 @@ It is designed around the actual workflow used in this repo:
 1. Copy the `fighter-jets` template.
 2. Replace `questionConfig` in `app.js`.
 3. Replace the option blocks in `index.html`.
-4. Register the app in `apps-metadata.json`.
+4. Ensure every option has a local image asset.
+5. Validate the generated app before deploy.
+6. Register the app in `apps-metadata.json`.
 
 ## Inputs
 
@@ -94,6 +96,10 @@ Returns the app record for `apps-metadata.json`.
 
 Returns a full scaffold package with template path, generated snippets, metadata, and checklist.
 
+### `validateScaffoldPlan(plan)`
+
+Checks that the generated app bundle has local images, result flow hooks, and generated placeholder assets.
+
 ## Composition Pattern
 
 ```javascript
@@ -118,6 +124,9 @@ const scaffold = buildScaffoldPlan({
 
 - `app.js` question config
 - `index.html` option markup
+- full `index.html` output
+- full `app.js` output
+- generated placeholder SVG assets
 - `apps-metadata.json` entry
 - scaffold checklist for copy/edit/register/deploy
 

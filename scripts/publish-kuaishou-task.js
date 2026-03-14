@@ -2,12 +2,73 @@ import { chromium } from 'playwright';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import {
+  resolveAuthFilePath,
+  isSubmissionErrorSignal,
+  isSubmissionSuccessSignal
+} from './publish-kuaishou-task-utils.js';
 
 // Configuration
-const SOURCE_TASK_ID = '165805'; // The ID of 'fighter-jets' task to copy
+const SOURCE_TASK_ID = process.env.SOURCE_TASK_ID || '165805'; // The ID of the template task to copy
 // Direct URL to recreate the task - bypasses the list view and menu clicks!
 const BASE_URL = `https://daren.kuaishou.com/distribution-plan-create/recreate/${SOURCE_TASK_ID}`;
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveAuthFilePath();
+const WAIT_AFTER_FINISH_MS = Math.max(0, Number.parseInt(process.env.PUBLISH_WAIT_FOR_MANUAL_MS || '0', 10) || 0);
+const SUBMISSION_CONFIRM_TIMEOUT_MS = Math.max(3000, Number.parseInt(process.env.PUBLISH_CONFIRM_TIMEOUT_MS || '15000', 10) || 15000);
+const HEADLESS = process.env.HEADLESS !== 'false';
+
+async function readFirstVisibleText(locator) {
+  const count = await locator.count().catch(() => 0);
+  if (count === 0) {
+    return '';
+  }
+
+  for (let index = 0; index < count; index += 1) {
+    const candidate = locator.nth(index);
+    const visible = await candidate.isVisible().catch(() => false);
+    if (!visible) {
+      continue;
+    }
+
+    return (await candidate.textContent().catch(() => ''))?.trim() || '';
+  }
+
+  return '';
+}
+
+async function waitForSubmissionOutcome(activePage, baseUrl, timeoutMs = SUBMISSION_CONFIRM_TIMEOUT_MS) {
+  const startedAt = Date.now();
+  const feedbackLocator = activePage.locator('.el-message__content, .ks-message__content, .ks-notification, .el-message');
+
+  while (Date.now() - startedAt < timeoutMs) {
+    const currentUrl = activePage.url();
+    const messageText = await readFirstVisibleText(feedbackLocator);
+
+    if (isSubmissionSuccessSignal({ currentUrl, baseUrl, messageText })) {
+      return {
+        success: true,
+        currentUrl,
+        messageText
+      };
+    }
+
+    if (isSubmissionErrorSignal(messageText)) {
+      return {
+        success: false,
+        currentUrl,
+        messageText
+      };
+    }
+
+    await activePage.waitForTimeout(1000);
+  }
+
+  return {
+    success: false,
+    currentUrl: activePage.url(),
+    messageText: await readFirstVisibleText(feedbackLocator)
+  };
+}
 
 async function main() {
   // Argument parsing
@@ -21,9 +82,10 @@ async function main() {
 
   console.log(`Starting Kuaishou Task Publisher for app: ${appId}`);
   console.log(`Source Task: ${SOURCE_TASK_ID}`);
+  console.log(`Headless Mode: ${HEADLESS}`);
 
   // Launch browser with persistent context for login
-  const browser = await chromium.launch({ headless: true }); // Headless: false to see what's happening
+  const browser = await chromium.launch({ headless: HEADLESS });
   const context = await browser.newContext({
     // Load auth state if exists
     storageState: fs.existsSync(AUTH_FILE) ? JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8')) : undefined
@@ -359,6 +421,8 @@ async function main() {
         console.log('❌ Error selecting dates:', e.message);
     }
 
+    let submissionSucceeded = false;
+
     // 10. Final Submit on Main Page
     console.log('🚀 Attempting to Submit Task...');
     
@@ -373,21 +437,17 @@ async function main() {
     if (await submitBtn.isVisible()) {
         console.log('Found Submit button (specific selector), clicking...');
         await submitBtn.click();
-        
-        // Check for success or validation error
-        await activePage.waitForTimeout(3000);
-        
-        // If we are redirected, success!
-        if (activePage.url() !== BASE_URL) {
-            console.log('✅ Task Submitted Successfully! (URL changed)');
+
+        const outcome = await waitForSubmissionOutcome(activePage, BASE_URL);
+        if (outcome.success) {
+            console.log(`✅ Task Submitted Successfully! ${outcome.messageText || '(detected by URL/message)'}`);
+            submissionSucceeded = true;
         } else {
             console.log('⚠️ Task might not have submitted. Checking for errors...');
-            // Check for error messages
-            const errorMsg = await activePage.locator('.el-message__content, .ks-message__content').first();
-            if (await errorMsg.isVisible()) {
-                console.log('❌ Submission Error:', await errorMsg.textContent());
+            if (outcome.messageText) {
+                console.log('❌ Submission Error:', outcome.messageText);
             } else {
-                 console.log('❓ Unknown status. Please check browser.');
+                 console.log(`❓ Unknown status. Current URL: ${outcome.currentUrl}`);
             }
         }
     } else {
@@ -396,15 +456,30 @@ async function main() {
         const genericSubmit = activePage.locator('button', { hasText: /提交|发布|确认/ }).last();
         if (await genericSubmit.isVisible()) {
             await genericSubmit.click();
+            const outcome = await waitForSubmissionOutcome(activePage, BASE_URL);
+            if (outcome.success) {
+                console.log(`✅ Task Submitted Successfully! ${outcome.messageText || '(detected after generic submit)'}`);
+                submissionSucceeded = true;
+            } else if (outcome.messageText) {
+                console.log('❌ Submission Error:', outcome.messageText);
+            } else {
+                console.log(`❓ Unknown status after generic submit. Current URL: ${outcome.currentUrl}`);
+            }
         } else {
             console.log('❌ Could not find any Submit button.');
         }
     }
 
-    console.log('✅ Automation sequence finished.');
-    // Short wait to allow user to see result, then close or exit
-    await activePage.waitForTimeout(300000); // Wait 5 mins for manual submit
-    // await browser.close(); // Uncomment to auto-close 
+    if (!submissionSucceeded) {
+        console.log('❌ Automation sequence finished without a confirmed submission.');
+        process.exitCode = 1;
+    } else {
+        console.log('✅ Automation sequence finished with confirmed submission.');
+    }
+
+    if (WAIT_AFTER_FINISH_MS > 0) {
+        await activePage.waitForTimeout(WAIT_AFTER_FINISH_MS);
+    }
 
   } catch (error) {
     console.error('❌ Error during automation:', error);
@@ -412,10 +487,17 @@ async function main() {
         await page.screenshot({ path: 'automation-error.png' });
         console.log('📸 Error screenshot saved to automation-error.png');
     } catch (e) {}
-    // Keep browser open to debug if needed
-    await page.pause();
+    process.exitCode = 1;
+    if (process.env.PUBLISH_DEBUG === 'true') {
+      await page.pause();
+    }
   } finally {
-    // await browser.close(); 
+    try {
+      await browser.close();
+      console.log('🧹 Browser closed.');
+    } catch (closeError) {
+      console.log('⚠️ Failed to close browser cleanly:', closeError.message);
+    }
   }
 }
 

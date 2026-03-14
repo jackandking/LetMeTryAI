@@ -17,6 +17,7 @@ It does **not** replace `scripts/publish-kuaishou-task.js`. Instead, it:
 - prepares the command to run
 - reminds callers about preflight checks
 - maps the workflow to the related Kuaishou skills
+- surfaces template task id / wait / exit-code behavior as deterministic inputs
 
 ## Source of Truth
 
@@ -94,7 +95,8 @@ const publishPlan = buildPublishPlan({
 1. Deploy first.
 2. Reuse `kuaishou_auth.json` if available.
 3. The browser automation is handled by `scripts/publish-kuaishou-task.js`.
-4. If selectors drift, update the script rather than forking publisher logic here.
+4. The script now supports `SOURCE_TASK_ID` and exits non-zero when submission is not confirmed.
+5. If selectors drift, update the script rather than forking publisher logic here.
 
 ## When To Use
 

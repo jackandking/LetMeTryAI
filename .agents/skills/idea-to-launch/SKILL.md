@@ -24,9 +24,10 @@ It is the skill form of the daily workflow previously expressed only as a large 
 1. Pick the right audience profile
 2. Rank topic candidates
 3. Build the app scaffold plan
-4. Verify deploy and public URL
-5. Build the Kuaishou publish plan
-6. Build the reporting plan
+4. Validate the generated app bundle
+5. Verify deploy and public URL
+6. Build the Kuaishou publish plan
+7. Build the reporting plan
 
 ## Quick Start
 

@@ -147,15 +147,15 @@
       "localStorage": [
         {
           "name": "LOAD_DEVICE_INCREASE_ID",
-          "value": "{\"_ts\":1773357830677}"
+          "value": "{\"_ts\":1773475552843}"
         },
         {
           "name": "OTHER_DEVICE_INCREASE_ID",
-          "value": "{\"_ts\":1773357830679}"
+          "value": "{\"_ts\":1773475552844}"
         },
         {
           "name": "WEBLOGGER_CUSTOM_INCREAMENT_ID_KEY",
-          "value": "69"
+          "value": "87"
         },
         {
           "name": "WEBLOGGER_INCREAMENT_ID_KEY",

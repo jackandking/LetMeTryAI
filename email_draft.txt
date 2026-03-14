@@ -1,14 +1,14 @@
-[Copilot Report] Daily Update - 2026-03-13
-
-git 
-git diff
-#git diff
-git diff
-git diff
-#git diff
- / / echo
-git diff  fighter-jets   tech-trends/index.html, app.js, styles.css apps-metadata.json -------- 
-git ai.cn/tech-trends 
-git 
-
-Copilot .agents .eslintrc.js .git .github .gitignore .prettierrc.js 404.html 50x.html AGENTS.md CNAME DAILY_REPORT_SETUP.md MYSQL-MOCK-HANDLER.md MYSQL-MOCK-QUICK-START.md README.md TESTING.md UOuianwPYR.txt VCONSOLE.md admin ai-generals ai-lobster ai-lobster.test.js ai-watermark apps-metadata.json audio automation-error.png baidu-analytics.test.js beauty.html beautyVote caili common-head.html config.js config.test.js copilot_agent.log copilot_agent_v2.log copilot_agent_v2.py copilot_email_agent.py cron_test.log cron_test.sh daily_run.log daily_run.sh daily_run_with_report.sh docs drone-kings elder-love email_draft.txt email_report.txt emperor eraser fighter-jets fighter-jets.test.js file-1743328560910-531082764.png file-1743329464234-904320116.png file-1743330168874-391692900.png file-1743330185423-89218666.png file-1743330521035-150907781.png file-1743330710195-184592402.png file-1743330749319-463512804.png file-1743332137976-599831984.png file-1743332170536-854425898.png file-1743332617383-575365808.png file-1743332744636-376910044.png file-1743333112312-282827607.png file-1743333314550-737801580.png file-1743334103429-309141380.png file-1743334510705-913813170.png file-1743336227022-573147196.input firework firework.js future-warfare gamegen guessPartnerCount guesscupsize guzhuangmeinv hardcore-tech homepage.test.js howlong human-vs-ai icons images index.html integration.test.js iqtax kuaishou_all_tasks.csv kuaishou_all_tasks.json kuaishou_all_tasks_dedup.csv kuaishou_all_tasks_dedup.json kuaishou_auth.json kuaishou_tasks.csv kuaishou_tasks.json logs lovestyle lure-fishing main-page.test.js main.js mans-speed-bump mcp-integration.test.js mcp-servers metrics mysql-api-mock.test.js nanrenbao nginx-logo.png node_modules package-lock.json package.json pagination-check.png parent-tools playwright.config.js power-armor poweredby.png processed_ids.txt regression.test.js robot-dogs rockets-king run-tests.js scripts send_all_tasks_report.py send_email.py send_final_report.py send_kuaishou_full_report.py send_kuaishou_report.py start_server.sh strategic-bombers stripurls.html styles.css system_noindex_logo.png tank-kings tech-trends tencent16934761222458769588.txt test test-setup.js test_email.js tests trywomanadmin typing-game urls.html util util.js v6fVkUBgBF.txt vconsole-integration.test.js videoguide viproom votejinling12 webview webview0 webview1.html webview10 webview11 webview12 webview13 webview14 webview15 webview16 webview1_safe.html webview2 webview3 webview4 webview5 webview6 webview7 webview8 webview9 whatfish whatfish2 woman womanai zuowen-
+Daily run status: failed
+Profile: nanrenbao
+Selected topic: 未选出
+App ID: N/A
+Model: gpt-5-mini
+Validation: not passed
+Git push: not done
+Deploy URL: N/A
+Deployment check: not verified
+Kuaishou publish: failed or skipped
+Report summary: N/A
+Response mode: N/A
+Raw response log: N/A
+Failure reason: Working tree is not clean; aborting unattended daily run

@@ -41,10 +41,12 @@ describe('Idea to launch orchestration skill', () => {
         expect(workflow.steps.map(step => step.skill)).toEqual([
             'topic-selector',
             'voting-app-scaffold',
+            'validation-script',
             'manual-check',
             'kuaishou-publisher',
             'report-sender'
         ]);
+        expect(workflow.steps[2].output.command).toBe('node scripts/validate-voting-app.js spring-lipstick');
     });
 
     it('should fail when no topic candidates are provided', () => {
@@ -58,5 +60,39 @@ describe('Idea to launch orchestration skill', () => {
                 options: []
             })
         ).toThrow('topicCandidates are required');
+    });
+
+    it('should use the elder-love publish template for elder-love workflows', () => {
+        const workflow = buildLaunchWorkflow({
+            profileId: 'elder-love',
+            topicCandidates: [
+                {
+                    title: '你最喜欢的经典电视剧',
+                    category: '怀旧',
+                    format: '投票',
+                    keywords: ['经典老剧', '回忆'],
+                    signals: ['怀旧', '易理解', '可转发'],
+                    qualities: ['易理解', '实用']
+                },
+                {
+                    title: '极限运动最刺激的一项',
+                    category: '娱乐',
+                    format: '投票',
+                    keywords: ['极限挑战'],
+                    signals: ['高刺激'],
+                    qualities: ['适合投票']
+                }
+            ],
+            appId: 'elder-love',
+            appName: '爱老人',
+            category: '生活',
+            options: [
+                { value: 'journey-west', label: '西游记', image: 'journey-west.jpg' },
+                { value: 'dream-red', label: '红楼梦', image: 'dream-red.jpg' }
+            ]
+        });
+
+        expect(workflow.summary.profileId).toBe('elder-love');
+        expect(workflow.publishPlan.spec.sourceTaskId).toBe('183044');
     });
 });
