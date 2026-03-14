@@ -138,6 +138,12 @@ console.log(scaffold.files.appJsQuestionConfig);
 console.log(scaffold.metadataEntry);
 ```
 
+生成后建议立刻执行：
+
+```bash
+node scripts/validate-voting-app.js <app-directory>
+```
+
 ### 场景 7：部署后发布到快手
 
 ```javascript
@@ -204,6 +210,7 @@ kuaishou-publisher (发布编排)
 idea-to-launch (总控编排)
     ├── 组合 brand-profiles / topic-selector
     ├── 组合 voting-app-scaffold
+    ├── 先运行 validate-voting-app.js 做完整性校验
     ├── 组合 kuaishou-publisher
     └── 组合 report-sender
 ```

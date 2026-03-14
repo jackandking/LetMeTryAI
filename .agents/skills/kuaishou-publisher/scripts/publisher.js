@@ -1,6 +1,31 @@
 const DEFAULT_SOURCE_TASK_ID = '165805';
 const DEFAULT_AUTH_FILE = 'kuaishou_auth.json';
 const DEFAULT_SCRIPT_PATH = 'scripts/publish-kuaishou-task.js';
+const BRAND_SOURCE_TASK_IDS = {
+    'elder-love': '183044'
+};
+
+/**
+ * Resolve the best template task id for a publish spec.
+ *
+ * @param {object} source Raw publish input.
+ * @returns {string} Template task id.
+ */
+function resolveSourceTaskId(source) {
+    if (typeof source.sourceTaskId === 'string' && source.sourceTaskId.trim()) {
+        return source.sourceTaskId.trim();
+    }
+
+    if (typeof source.profileId === 'string' && BRAND_SOURCE_TASK_IDS[source.profileId]) {
+        return BRAND_SOURCE_TASK_IDS[source.profileId];
+    }
+
+    if (typeof source.appId === 'string' && source.appId.trim() === 'elder-love') {
+        return BRAND_SOURCE_TASK_IDS['elder-love'];
+    }
+
+    return DEFAULT_SOURCE_TASK_ID;
+}
 
 /**
  * Escape a shell argument using simple single-quote wrapping.
@@ -32,13 +57,17 @@ export function normalizePublishSpec(spec) {
         appId,
         appName,
         description,
-        sourceTaskId: typeof source.sourceTaskId === 'string' && source.sourceTaskId.trim()
-            ? source.sourceTaskId.trim()
-            : DEFAULT_SOURCE_TASK_ID,
+        profileId: typeof source.profileId === 'string' && source.profileId.trim()
+            ? source.profileId.trim()
+            : null,
+        sourceTaskId: resolveSourceTaskId(source),
         authFile: typeof source.authFile === 'string' && source.authFile.trim()
             ? source.authFile.trim()
             : DEFAULT_AUTH_FILE,
         headless: source.headless !== false,
+        waitAfterFinishMs: Number.isInteger(source.waitAfterFinishMs) && source.waitAfterFinishMs >= 0
+            ? source.waitAfterFinishMs
+            : 0,
         deployedUrl: typeof source.deployedUrl === 'string' && source.deployedUrl.trim()
             ? source.deployedUrl.trim()
             : `https://letmetryai.cn/${appId}/`,
@@ -56,9 +85,13 @@ export function normalizePublishSpec(spec) {
  */
 export function buildPublishCommand(spec) {
     const normalized = normalizePublishSpec(spec);
-    const envPrefix = normalized.headless ? 'HEADLESS=true ' : 'HEADLESS=false ';
+    const envParts = [
+        normalized.headless ? 'HEADLESS=true' : 'HEADLESS=false',
+        `SOURCE_TASK_ID=${quoteShellArg(normalized.sourceTaskId)}`,
+        `PUBLISH_WAIT_FOR_MANUAL_MS=${normalized.waitAfterFinishMs}`
+    ];
 
-    return `${envPrefix}node ${quoteShellArg(normalized.scriptPath)} ${quoteShellArg(normalized.appId)} ${quoteShellArg(normalized.appName)} ${quoteShellArg(normalized.description)}`;
+    return `${envParts.join(' ')} node ${quoteShellArg(normalized.scriptPath)} ${quoteShellArg(normalized.appId)} ${quoteShellArg(normalized.appName)} ${quoteShellArg(normalized.description)}`;
 }
 
 /**
@@ -96,7 +129,8 @@ export function buildPublishPlan(spec) {
         dependencies: {
             primaryScript: normalized.scriptPath,
             authFile: normalized.authFile,
-            relatedSkills: ['kuaishou-scraper', 'anti-blocking', 'web-scraper-playwright']
+            relatedSkills: ['kuaishou-scraper', 'anti-blocking', 'web-scraper-playwright'],
+            templateTaskId: normalized.sourceTaskId
         },
         notes: [
             `默认模板任务 ID: ${normalized.sourceTaskId}`,

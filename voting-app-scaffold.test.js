@@ -4,9 +4,13 @@ import { getBrandProfile } from './.agents/skills/brand-profiles/scripts/profile
 import { buildTopicBrief } from './.agents/skills/topic-selector/scripts/topic-selector.js';
 import {
     buildScaffoldPlan,
+    buildPlaceholderAssets,
     createMetadataEntry,
     createQuestionConfig,
-    renderOptionMarkup
+    renderFullAppJs,
+    renderFullIndexHtml,
+    renderOptionMarkup,
+    validateScaffoldPlan
 } from './.agents/skills/voting-app-scaffold/scripts/scaffold.js';
 
 describe('Voting app scaffold skill', () => {
@@ -87,7 +91,61 @@ describe('Voting app scaffold skill', () => {
         expect(plan.profileId).toBe('womanai');
         expect(plan.files.appJsQuestionConfig).toContain('storageKey: "spring_lipstick_v1.data"');
         expect(plan.files.indexOptionsMarkup).toContain('name="lipstick"');
+        expect(plan.files.indexHtml).toContain('id="showResultBtn"');
+        expect(plan.files.appJs).toContain('function displayResults()');
+        expect(plan.validation.valid).toBe(true);
         expect(plan.metadataEntry.tags).toEqual(expect.arrayContaining(['投票', '美妆', '春季']));
         expect(plan.checklist.length).toBeGreaterThan(3);
+    });
+
+    it('should generate placeholder assets and complete file outputs', () => {
+        const assets = buildPlaceholderAssets([
+            { value: 'rose', label: '玫瑰豆沙' },
+            { value: 'berry', label: '莓果红棕' }
+        ]);
+        const indexHtml = renderFullIndexHtml({
+            title: '春季口红新色大 PK',
+            question: '你会把这一票投给哪个显白色号？',
+            options: [
+                { value: 'rose', label: '玫瑰豆沙' },
+                { value: 'berry', label: '莓果红棕' }
+            ],
+            inputName: 'lipstick'
+        });
+        const appJs = renderFullAppJs({
+            appId: 'spring-lipstick',
+            appName: '春季显白色号',
+            title: '春季口红新色大 PK',
+            question: '你会把这一票投给哪个显白色号？',
+            options: [
+                { value: 'rose', label: '玫瑰豆沙' },
+                { value: 'berry', label: '莓果红棕' }
+            ],
+            inputName: 'lipstick'
+        });
+
+        expect(Object.keys(assets)).toEqual(expect.arrayContaining(['images/rose.svg', 'images/berry.svg']));
+        expect(indexHtml).toContain('images/rose.svg');
+        expect(appJs).toContain("document.addEventListener('DOMContentLoaded', initializeApp)");
+    });
+
+    it('should fail validation for incomplete scaffold bundles', () => {
+        const result = validateScaffoldPlan({
+            questionConfig: { options: [{ value: 'a', label: 'A' }] },
+            files: {
+                indexHtml: '<input type="radio" name="vote" value="a">',
+                appJs: 'const questionConfig = { storageKey: "demo_v1.data" };',
+                generatedAssets: {}
+            }
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toEqual(
+            expect.arrayContaining([
+                expect.stringContaining('local image'),
+                expect.stringContaining('displayResults'),
+                expect.stringContaining('result button')
+            ])
+        );
     });
 });

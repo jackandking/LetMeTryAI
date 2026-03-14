@@ -21,6 +21,17 @@ describe('Kuaishou publisher skill', () => {
         expect(spec.headless).toBe(true);
     });
 
+    it('should use the elder-love template task when publishing elder-love', () => {
+        const spec = normalizePublishSpec({
+            appId: 'elder-love',
+            profileId: 'elder-love',
+            appName: '爱老人',
+            description: '老人关怀和娱乐应用'
+        });
+
+        expect(spec.sourceTaskId).toBe('183044');
+    });
+
     it('should build the publish command from normalized input', () => {
         const command = buildPublishCommand({
             appId: 'spring-lipstick',
@@ -29,6 +40,8 @@ describe('Kuaishou publisher skill', () => {
         });
 
         expect(command).toContain('HEADLESS=true');
+        expect(command).toContain("SOURCE_TASK_ID='165805'");
+        expect(command).toContain('PUBLISH_WAIT_FOR_MANUAL_MS=0');
         expect(command).toContain("node 'scripts/publish-kuaishou-task.js'");
         expect(command).toContain("'spring-lipstick'");
         expect(command).toContain("'春季显白色号'");
@@ -63,5 +76,17 @@ describe('Kuaishou publisher skill', () => {
             expect.arrayContaining(['kuaishou-scraper', 'anti-blocking', 'web-scraper-playwright'])
         );
         expect(plan.notes[0]).toContain('165805');
+    });
+
+    it('should include brand-specific template task id in dependencies', () => {
+        const plan = buildPublishPlan({
+            appId: 'elder-love',
+            profileId: 'elder-love',
+            appName: '爱老人',
+            description: '老人关怀和娱乐应用'
+        });
+
+        expect(plan.dependencies.templateTaskId).toBe('183044');
+        expect(plan.notes[0]).toContain('183044');
     });
 });
