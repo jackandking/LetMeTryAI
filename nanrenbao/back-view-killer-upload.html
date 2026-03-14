@@ -339,7 +339,7 @@
             <div class="content">
                 • 需要上传两张图片：一张背影照片和一张正面照片<br>
                 • 支持直接输入图片链接（URL）或选择本地文件上传<br>
-                • 本地文件上传时会自动压缩至适合手机浏览的尺寸<br>
+                • 本地文件上传时会自动压缩至500KB以内（400–500KB），适合手机浏览<br>
                 • 上传成功后立即获得 20 积分奖励
             </div>
         </div>
@@ -659,11 +659,22 @@
         }
 
         // Export a canvas using its displayed size so upload matches preview.
-        async function exportCanvasToFile(canvas, name, quality = 0.92) {
+        // Iteratively lowers quality until the file is ≤500 KB.
+        async function exportCanvasToFile(canvas, name, quality = 0.85) {
+            const MAX_FILE_SIZE = 500 * 1024; // 500 KB hard limit
+            const MIN_QUALITY = 0.3;
+            const QUALITY_STEP = 0.1;
+            const MAX_DIM = 800; // cap exported dimension to stay within size target
             const dpr = window.devicePixelRatio || 1;
             // Use the displayed size (clientWidth/Height) to match preview rendering
-            const displayW = Math.max(1, Math.round((canvas.clientWidth || canvas.width) * dpr));
-            const displayH = Math.max(1, Math.round((canvas.clientHeight || canvas.height) * dpr));
+            let displayW = Math.max(1, Math.round((canvas.clientWidth || canvas.width) * dpr));
+            let displayH = Math.max(1, Math.round((canvas.clientHeight || canvas.height) * dpr));
+            // Scale down if either dimension exceeds MAX_DIM
+            if (displayW > MAX_DIM || displayH > MAX_DIM) {
+                const ratio = Math.min(MAX_DIM / displayW, MAX_DIM / displayH);
+                displayW = Math.round(displayW * ratio);
+                displayH = Math.round(displayH * ratio);
+            }
             const exportCanvas = document.createElement('canvas');
             exportCanvas.width = displayW;
             exportCanvas.height = displayH;
@@ -673,12 +684,20 @@
             ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
             // draw source canvas scaled to export size
             ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, exportCanvas.width, exportCanvas.height);
+            let currentQuality = quality;
             return new Promise((resolve, reject) => {
-                exportCanvas.toBlob(blob => {
-                    if (!blob) return reject(new Error('Export canvas 转 Blob 失败'));
-                    const file = new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
-                    resolve(file);
-                }, 'image/jpeg', quality);
+                function attempt() {
+                    exportCanvas.toBlob(blob => {
+                        if (!blob) return reject(new Error('Export canvas 转 Blob 失败'));
+                        if (blob.size > MAX_FILE_SIZE && currentQuality > MIN_QUALITY) {
+                            currentQuality = Math.max(Math.round((currentQuality - QUALITY_STEP) * 10) / 10, MIN_QUALITY);
+                            attempt();
+                        } else {
+                            resolve(new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() }));
+                        }
+                    }, 'image/jpeg', currentQuality);
+                }
+                attempt();
             });
         }
 
@@ -695,8 +714,13 @@
             });
         }
 
-        // Compress a local image File to mobile-friendly size (max 1080px wide/1920px tall, JPEG 0.85)
-        async function compressImageFile(file, maxWidth = 1080, maxHeight = 1920, quality = 0.85) {
+        // Compress a local image File to ≤500 KB (target 400–500 KB range)
+        // Reduces dimensions to at most 800×1440 then iteratively lowers JPEG quality until
+        // the file fits within MAX_FILE_SIZE bytes.
+        async function compressImageFile(file, maxWidth = 800, maxHeight = 1440, quality = 0.85) {
+            const MAX_FILE_SIZE = 500 * 1024; // 500 KB hard limit
+            const MIN_QUALITY = 0.3;
+            const QUALITY_STEP = 0.1;
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 const objectUrl = URL.createObjectURL(file);
@@ -716,12 +740,20 @@
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, w, h);
                     ctx.drawImage(img, 0, 0, w, h);
-                    canvas.toBlob(blob => {
-                        if (!blob) return reject(new Error('图片压缩失败'));
-                        const uuid = generateUUID();
-                        const compressed = new File([blob], `${uuid}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
-                        resolve(compressed);
-                    }, 'image/jpeg', quality);
+                    let currentQuality = quality;
+                    function attempt() {
+                        canvas.toBlob(blob => {
+                            if (!blob) return reject(new Error('图片压缩失败'));
+                            if (blob.size > MAX_FILE_SIZE && currentQuality > MIN_QUALITY) {
+                                currentQuality = Math.max(Math.round((currentQuality - QUALITY_STEP) * 10) / 10, MIN_QUALITY);
+                                attempt();
+                            } else {
+                                const uuid = generateUUID();
+                                resolve(new File([blob], `${uuid}.jpg`, { type: 'image/jpeg', lastModified: Date.now() }));
+                            }
+                        }, 'image/jpeg', currentQuality);
+                    }
+                    attempt();
                 };
                 img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('图片加载失败')); };
                 img.src = objectUrl;
