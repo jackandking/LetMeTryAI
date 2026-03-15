@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "top-active-football-stars",
+      "name": "球星对决",
+      "description": "四位当红球星正面比拼，适合投票与社交传播。",
+      "category": "体育",
+      "directory": "top-active-football-stars",
+      "url": "top-active-football-stars",
+      "image": "top-active-football-stars/images/lionel-messi.svg",
+      "tags": [
+        "投票",
+        "体育",
+        "球星",
+        "进球",
+        "全能",
+        "现役",
+        "球星",
+        "进球",
+        "全能",
+        "现役"
+      ],
+      "status": "active"
+    },
+    {
       "id": "homework-independence-vote",
       "name": "独立作业投票",
       "description": "调查家长对孩子独立完成作业起始年龄与陪伴方式的偏好。",

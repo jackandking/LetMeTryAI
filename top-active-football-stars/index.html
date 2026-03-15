@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>男人宝热榜：谁是当下最具统治力的现役球星？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">男人宝热榜：谁是当下最具统治力的现役球星？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在男人宝用户视角，你更想把票投给谁：谁是当下最具统治力的现役球星？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="lionel-messi">
+                    <img src="images/lionel-messi.svg" alt="梅西进球瞬间" loading="lazy">
+                    <span>盘带与创意的代表，关键球命中率高</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="kylian-mbappe">
+                    <img src="images/kylian-mbappe.svg" alt="姆巴佩冲刺射门" loading="lazy">
+                    <span>速度与终结力并存，单刀致命</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="erling-haaland">
+                    <img src="images/erling-haaland.svg" alt="哈兰德争顶破门" loading="lazy">
+                    <span>身体与效率兼备，禁区统治力强</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="kevin-de-bruyne">
+                    <img src="images/kevin-de-bruyne.svg" alt="德布劳内精准传球" loading="lazy">
+                    <span>视野与组织大师，助攻数据惊人</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
