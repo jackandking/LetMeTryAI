@@ -93,7 +93,7 @@ cd /Users/weiping/prod/LetMeTryAI
 HEADLESS=false node scripts/daily_kuaishou_report.js
 ```
 
-登录成功后，session 会保存到 `kuaishou_auth.json`，之后的定时任务就会自动运行了。
+登录成功后，session 会保存到 `.runtime/kuaishou_auth.json`，之后的定时任务就会自动运行了。
 
 ## 管理定时任务
 
@@ -159,6 +159,12 @@ metrics/kuaishou/daily/
 logs/
 ├── daily_report.log                    # 运行日志
 └── daily_report_error.log              # 错误日志（如果使用 launchd）
+
+.runtime/
+├── kuaishou_auth.json                  # 快手登录态
+└── email-drafts/
+    ├── latest.txt                      # 最新一份邮件草稿
+    └── email-draft-时间戳.txt           # 历史草稿归档
 ```
 
 ## 邮件内容示例
@@ -255,7 +261,7 @@ rm ~/Library/LaunchAgents/com.kuaishou.dailyreport.plist
 
 ## 安全提示
 
-1. **不要提交 `kuaishou_auth.json`** - 包含登录凭证，已添加到 `.gitignore`
+1. **不要提交 `.runtime/`** - 其中包含 `kuaishou_auth.json` 等运行态文件，已添加到 `.gitignore`
 2. **保护 API Key** - 如需更换，修改脚本中的 `CONFIG.apiKey` 或使用环境变量
 3. **日志文件** - 定期清理 `logs/` 目录避免占用过多磁盘空间
 4. **生产运行目录** - 建议 cron 固定使用 `/Users/weiping/prod/LetMeTryAI`，开发 clone 保持独立
@@ -265,4 +271,4 @@ rm ~/Library/LaunchAgents/com.kuaishou.dailyreport.plist
 如有问题，检查：
 1. 日志文件 `logs/daily_report.log`
 2. 截图文件 `metrics/kuaishou/daily/`
-3. Session 文件 `kuaishou_auth.json` 是否存在
+3. Session 文件 `.runtime/kuaishou_auth.json` 是否存在

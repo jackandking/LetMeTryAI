@@ -15,14 +15,17 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {
+    ensureParentDirectory,
+    resolveKuaishouAuthFile,
+    resolveProjectRoot
+} from './runtime-paths.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = path.join(__dirname, '..');
+const PROJECT_ROOT = resolveProjectRoot(import.meta.url);
 
 // Configuration
 const CONFIG = {
-    authFile: path.join(PROJECT_ROOT, 'kuaishou_auth.json'),
+    authFile: resolveKuaishouAuthFile(import.meta.url),
     outputDir: path.join(PROJECT_ROOT, 'metrics', 'kuaishou', 'daily'),
     headless: process.env.HEADLESS !== 'false', // Default true for cron
     emailTo: process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com',
@@ -427,6 +430,7 @@ async function main() {
             }
             log('INFO', 'Waiting for manual login...');
             await page.waitForURL(u => !u.toString().includes('login'), { timeout: 120000 });
+            ensureParentDirectory(CONFIG.authFile);
             await context.storageState({ path: CONFIG.authFile });
             log('INFO', 'Login saved');
         }

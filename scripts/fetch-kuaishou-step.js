@@ -1,9 +1,10 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { resolveKuaishouAuthFile } from './runtime-paths.js';
 
 // Configuration
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const OUTPUT_DIR = 'metrics/kuaishou_debug';
 
 if (!fs.existsSync(OUTPUT_DIR)) {

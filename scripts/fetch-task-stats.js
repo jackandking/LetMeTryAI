@@ -14,13 +14,14 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { ensureParentDirectory, resolveKuaishouAuthFile } from './runtime-paths.js';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
 const START_INDEX = parseInt(args[0]) || 0;  // 默认从第 1 个开始
 const MAX_TASKS = parseInt(args[1]) || 10;   // 默认获取 10 个
 
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const LIST_URL = 'https://daren.kuaishou.com/distribution-plan-list';
 const OUTPUT_DIR = 'metrics/kuaishou';
 
@@ -89,6 +90,7 @@ async function fetchTaskStats() {
         if (page.url().includes('login')) {
             console.log('⚠️  请扫码登录...');
             await page.waitForURL((u) => !u.toString().includes('login'), { timeout: 120000 });
+            ensureParentDirectory(AUTH_FILE);
             await context.storageState({ path: AUTH_FILE });
             console.log('✅ 登录成功，session 已保存\n');
         } else {
