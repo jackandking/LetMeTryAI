@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "homework-independence-vote",
+      "name": "独立作业投票",
+      "description": "调查家长对孩子独立完成作业起始年龄与陪伴方式的偏好。",
+      "category": "教育",
+      "directory": "homework-independence-vote",
+      "url": "homework-independence-vote",
+      "image": "homework-independence-vote/images/homework-grad1-2.svg",
+      "tags": [
+        "投票",
+        "教育",
+        "作业独立",
+        "家庭教育",
+        "陪伴策略",
+        "学习习惯",
+        "作业独立",
+        "家庭教育",
+        "陪伴策略",
+        "学习习惯"
+      ],
+      "status": "active"
+    },
+    {
       "id": "retirement-lifestyle-choice",
       "name": "退休生活投票",
       "description": "投票看大家退休后最想做什么：旅行、园艺、志愿或学习。",
