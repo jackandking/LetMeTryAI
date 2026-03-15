@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爱老人关注：退休后你最想重拾的兴趣？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">爱老人关注：退休后你最想重拾的兴趣？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="elder-love" value="reading-books">
+                    <img src="images/reading-books.svg" alt="老人手捧书本阅读" loading="lazy">
+                    <span>安静读书、看报、学习新知识</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="gardening">
+                    <img src="images/gardening.svg" alt="老人浇花园艺场景" loading="lazy">
+                    <span>打理花草、阳台种菜，亲近自然</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="local-travel">
+                    <img src="images/local-travel.svg" alt="老年人旅行观光合影" loading="lazy">
+                    <span>跟团或自驾游，看看周边风景</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="handicraft">
+                    <img src="images/handicraft.svg" alt="老人做手工的特写" loading="lazy">
+                    <span>刺绣、编织、木工等手作活动</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
