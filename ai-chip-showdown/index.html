@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>AI芯片对决：国产芯片能否撼动进口王者？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">AI芯片对决：国产芯片能否撼动进口王者？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在男人宝用户视角，你更想把票投给谁：AI芯片国产vs进口对决？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="domestic-ai-chip">
+                    <img src="images/domestic-ai-chip.svg" alt="国产AI芯片实物图" loading="lazy">
+                    <span>支持国产自研，注重可控与生态自主</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="import-ai-chip">
+                    <img src="images/import-ai-chip.svg" alt="进口AI芯片实物图" loading="lazy">
+                    <span>性能与兼容性更强、生态成熟</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="hybrid-ai-chip">
+                    <img src="images/hybrid-ai-chip.svg" alt="混合芯片方案图" loading="lazy">
+                    <span>两者结合，兼顾算力与可控性</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

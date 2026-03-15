@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "ai-chip-showdown",
+      "name": "AI芯片对决",
+      "description": "AI芯片在算力、生态与可控性上的国产与进口对比投票。",
+      "category": "科技",
+      "directory": "ai-chip-showdown",
+      "url": "ai-chip-showdown",
+      "image": "ai-chip-showdown/images/domestic-ai-chip.svg",
+      "tags": [
+        "投票",
+        "科技",
+        "AI芯片",
+        "国产芯片",
+        "算力",
+        "大模型",
+        "ai芯片",
+        "国产芯片",
+        "算力",
+        "大模型"
+      ],
+      "status": "active"
+    },
+    {
       "id": "ai-safety-showdown",
       "name": "AI防线PK",
       "description": "对比四种可视化的AI安全/鉴别技术，侧重硬核科技与效果直观性。",
