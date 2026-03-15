@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>硬核AI防线｜AI安全技术PK</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">硬核AI防线｜AI安全技术PK</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在男人宝用户视角，你更想把票投给谁：硬核AI防线——哪种技术更靠谱？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="deepfake-detection">
+                    <img src="images/deepfake-detection.svg" alt="深度假脸检测示意" loading="lazy">
+                    <span>专门识别伪造人像/视频的检测器</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="model-audit">
+                    <img src="images/model-audit.svg" alt="模型审计示意" loading="lazy">
+                    <span>揭示模型内因果与决策逻辑的审计工具</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="edge-local-ai">
+                    <img src="images/edge-local-ai.svg" alt="边缘AI设备示意" loading="lazy">
+                    <span>把AI运算放到本地/设备以降低数据泄露风险</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="provenance-watermark">
+                    <img src="images/provenance-watermark.svg" alt="内容水印示意" loading="lazy">
+                    <span>在生成内容里嵌入可溯源水印与签名</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
