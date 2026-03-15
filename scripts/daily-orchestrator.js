@@ -280,11 +280,38 @@ function chooseBestTopicCandidate(topicCandidates, profile) {
     return scored[0];
 }
 
+function buildPreferredCategoriesPrompt(profile) {
+    const categories = Array.isArray(profile?.preferredCategories)
+        ? profile.preferredCategories.filter(item => typeof item === 'string' && item.trim())
+        : [];
+
+    return categories.length > 0
+        ? categories.join('、')
+        : '娱乐、生活、教育、工具、科技、体育、军事';
+}
+
+function buildProfilePromptNotes(profile) {
+    const notes = [];
+
+    if (Array.isArray(profile?.topicGuidelines?.doMore) && profile.topicGuidelines.doMore.length > 0) {
+        notes.push(`优先方向：${profile.topicGuidelines.doMore.join('；')}`);
+    }
+
+    if (Array.isArray(profile?.topicGuidelines?.avoid) && profile.topicGuidelines.avoid.length > 0) {
+        notes.push(`避免方向：${profile.topicGuidelines.avoid.join('；')}`);
+    }
+
+    return notes;
+}
+
 export function buildTopicSelectionPrompt({ profile, currentDate }) {
+    const preferredCategories = buildPreferredCategoriesPrompt(profile);
+    const profileNotes = buildProfilePromptNotes(profile);
+
     return [
         `今天是 ${currentDate}。`,
         '你要为 LetMeTryAI 的日更投票页挑选热点话题。',
-        '先自己检索今天的科技/军事/体育热点，再生成候选方案。',
+        `先自己检索今天与该品牌最相关的热点或常青高传播话题，优先关注：${preferredCategories}。`,
         '你只需要返回 JSON，不要写代码，不要创建文件，不要给解释，不要使用 Markdown 代码块。',
         '必须返回一个 JSON object，结构如下：',
         '{',
@@ -299,7 +326,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate }) {
         '      "summary": "为何适合做投票",',
         '      "description": "metadata 用的一句话描述",',
         '      "question": "投票问题句子",',
-        '      "category": "科技|军事|体育|娱乐|生活|教育|工具 之一",',
+        `      "category": "${preferredCategories} 等品牌相关分类之一",`,
         '      "format": "vote",',
         '      "keywords": ["关键词"],',
         '      "signals": ["正向信号"],',
@@ -316,23 +343,28 @@ export function buildTopicSelectionPrompt({ profile, currentDate }) {
         '- 提供 3 个 topicCandidates。',
         '- 每个候选必须有 2-4 个 options。',
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
-        '- 问题、标题、选项要适合做 fighter-jets 风格的图文投票页。',
+        '- 问题、标题、选项要适合做清晰直观、易于配图、适合手机阅读的图文投票页。',
         '- 避免低俗、侵权、血腥、政治敏感、医疗误导。',
+        ...profileNotes,
         `品牌画像如下：${JSON.stringify(profile)}`
     ].join('\n');
 }
 
 export function buildFallbackTopicSelectionPrompt({ profile, currentDate }) {
+    const preferredCategories = buildPreferredCategoriesPrompt(profile);
+    const profileNotes = buildProfilePromptNotes(profile);
+
     return [
         `今天是 ${currentDate}。`,
         '请只返回一个 JSON object。',
         '不要解释，不要 Markdown，不要代码块，不要任何额外文本。',
-        '生成 3 个来自今天科技/军事/体育热点的投票候选。',
+        `生成 3 个与该品牌相关、适合在 ${preferredCategories} 中传播的投票候选。`,
         `profileId 固定为 ${profile.id}。`,
         '返回字段只能有：profileId, reportSummary, topicCandidates。',
         '每个 topicCandidates 元素必须包含：appId, title, pageTitle, appName, summary, description, question, category, format, keywords, signals, qualities, riskFlags, options。',
         '每个 options 元素必须包含：label, value, caption, alt, image。',
         'appId、value、image 只能用 ASCII 字母数字和连字符。',
+        ...profileNotes,
         `品牌画像：${JSON.stringify(profile)}`
     ].join('\n');
 }
@@ -490,12 +522,59 @@ async function requestStructuredTopics({ model, profile, currentDate, copilotBin
     throw new Error(`Failed to get structured topic JSON. ${failures.join(' | ')}`);
 }
 
-function buildScaffoldSpec(selected, profile) {
+export function resolveUniqueDailyAppId({
+    baseAppId,
+    currentDate,
+    repoDir = REPO_DIR,
+    appsMetadataPath = path.join(repoDir, 'apps-metadata.json')
+}) {
+    const normalizedBaseAppId = normalizeKebabId(baseAppId);
+    const normalizedDate = normalizeKebabId(currentDate || new Date().toISOString().slice(0, 10), 'daily');
+    const knownAppIds = new Set();
+
+    if (fs.existsSync(appsMetadataPath)) {
+        const parsed = loadAppsMetadata(appsMetadataPath);
+        parsed.apps.forEach(app => {
+            if (app && typeof app.id === 'string' && app.id.trim()) {
+                knownAppIds.add(app.id.trim());
+            }
+        });
+    }
+
+    const collidesWithExistingOutput = candidateAppId => {
+        const candidateDir = path.join(repoDir, candidateAppId);
+        return fs.existsSync(candidateDir) && fs.readdirSync(candidateDir).length > 0;
+    };
+
+    if (!knownAppIds.has(normalizedBaseAppId) && !collidesWithExistingOutput(normalizedBaseAppId)) {
+        return normalizedBaseAppId;
+    }
+
+    const datedBase = `${normalizedBaseAppId}-${normalizedDate}`;
+    let suffix = 1;
+    let candidateAppId = datedBase;
+
+    while (knownAppIds.has(candidateAppId) || collidesWithExistingOutput(candidateAppId)) {
+        suffix += 1;
+        candidateAppId = `${datedBase}-${suffix}`;
+    }
+
+    return candidateAppId;
+}
+
+function buildScaffoldSpec(selected, profile, options = {}) {
     const candidate = selected.candidate;
-    const options = candidate.options;
+    const candidateOptions = candidate.options;
     const topicBrief = buildTopicBrief(candidate, profile);
-    const appId = normalizeKebabId(candidate.appId || candidate.title);
-    const coverImage = options[0] ? `${appId}/images/${options[0].image}` : `${appId}/images/cover.svg`;
+    const appId = resolveUniqueDailyAppId({
+        baseAppId: candidate.appId || candidate.title,
+        currentDate: options.currentDate,
+        repoDir: options.repoDir,
+        appsMetadataPath: options.appsMetadataPath
+    });
+    const coverImage = candidateOptions[0]
+        ? `${appId}/images/${candidateOptions[0].image}`
+        : `${appId}/images/cover.svg`;
 
     return {
         appId,
@@ -506,7 +585,7 @@ function buildScaffoldSpec(selected, profile) {
         title: candidate.pageTitle || candidate.title,
         topicBrief,
         brandProfile: profile,
-        options,
+        options: candidateOptions,
         tags: Array.from(
             new Set(['投票', candidate.category, ...candidate.keywords.filter(item => typeof item === 'string')])
         ),
@@ -761,12 +840,20 @@ export async function runDailyOrchestrator(options = {}) {
         });
         const selected = chooseBestTopicCandidate(modelResponse.topicCandidates, profile);
         logStage('topics', `Selected candidate "${selected.candidate.title}" (score=${selected.scoring.score})`);
-        const scaffoldSpec = buildScaffoldSpec(selected, profile);
+        const appsMetadataPath = path.join(repoDir, 'apps-metadata.json');
+        const stylesTemplatePath = path.join(repoDir, 'fighter-jets', 'styles.css');
+        const scaffoldSpec = buildScaffoldSpec(selected, profile, {
+            currentDate,
+            repoDir,
+            appsMetadataPath
+        });
         const scaffoldPlan = buildScaffoldPlan(scaffoldSpec);
         logStage('scaffold', `Materializing app ${scaffoldPlan.metadataEntry.id}`);
         const materialized = materializeScaffoldPlan({
             scaffoldPlan,
-            repoDir
+            repoDir,
+            appsMetadataPath,
+            stylesTemplatePath
         });
 
         state.selectedCandidate = selected.candidate;
