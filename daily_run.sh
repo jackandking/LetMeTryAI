@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
 SOURCE_PROJECT_DIR="$PROJECT_DIR"
+export LETMETRY_RUNTIME_DIR="${LETMETRY_RUNTIME_DIR:-$SOURCE_PROJECT_DIR/.runtime}"
 
 find_latest_nvm_bin() {
     local nvm_root="$HOME/.nvm/versions/node"
@@ -87,15 +88,15 @@ setup_temp_worktree_if_needed() {
     export DAILY_ALLOW_DIRTY_WORKTREE="true"
     export DAILY_TEMP_WORKTREE="true"
     export DAILY_GIT_PUSH_BRANCH="${DAILY_GIT_PUSH_BRANCH:-$current_branch}"
-    export EMAIL_DRAFT_PATH="${EMAIL_DRAFT_PATH:-$DAILY_TEMP_ARTIFACT_DIR/email_draft.txt}"
     export DAILY_LOG_DIR="${DAILY_LOG_DIR:-$DAILY_TEMP_ARTIFACT_DIR/logs}"
-    export KUAISHOU_AUTH_FILE="${KUAISHOU_AUTH_FILE:-$SOURCE_PROJECT_DIR/kuaishou_auth.json}"
 }
 
 setup_temp_worktree_if_needed
 
 cd "$PROJECT_DIR"
-export EMAIL_DRAFT_PATH="${EMAIL_DRAFT_PATH:-$PROJECT_DIR/email_draft.txt}"
+mkdir -p "$LETMETRY_RUNTIME_DIR/email-drafts"
+export EMAIL_DRAFT_PATH="${EMAIL_DRAFT_PATH:-$LETMETRY_RUNTIME_DIR/email-drafts/latest.txt}"
+export KUAISHOU_AUTH_FILE="${KUAISHOU_AUTH_FILE:-$LETMETRY_RUNTIME_DIR/kuaishou_auth.json}"
 
 # Deterministic daily pipeline:
 # 1. Copilot only returns structured topic JSON.

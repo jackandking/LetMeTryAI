@@ -1,5 +1,5 @@
 const DEFAULT_SOURCE_TASK_ID = '165805';
-const DEFAULT_AUTH_FILE = 'kuaishou_auth.json';
+const DEFAULT_AUTH_FILE = '.runtime/kuaishou_auth.json';
 const DEFAULT_SCRIPT_PATH = 'scripts/publish-kuaishou-task.js';
 const BRAND_SOURCE_TASK_IDS = {
     'elder-love': '183044'

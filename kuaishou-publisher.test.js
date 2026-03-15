@@ -16,7 +16,7 @@ describe('Kuaishou publisher skill', () => {
         });
 
         expect(spec.sourceTaskId).toBe('165805');
-        expect(spec.authFile).toBe('kuaishou_auth.json');
+        expect(spec.authFile).toBe('.runtime/kuaishou_auth.json');
         expect(spec.deployedUrl).toBe('https://letmetryai.cn/spring-lipstick/');
         expect(spec.headless).toBe(true);
     });
@@ -58,7 +58,7 @@ describe('Kuaishou publisher skill', () => {
         expect(checklist).toEqual(
             expect.arrayContaining([
                 expect.stringContaining('提交并推送'),
-                expect.stringContaining('kuaishou_auth.json')
+                expect.stringContaining('.runtime/kuaishou_auth.json')
             ])
         );
     });
