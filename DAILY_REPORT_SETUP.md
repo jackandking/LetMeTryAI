@@ -1,6 +1,55 @@
-# 快手日报自动发送设置指南
+# 快手日报与多品牌日更设置指南
 
-每天早上6点自动抓取快手数据并发送邮件报告。
+每天早上 6 点自动抓取快手数据并发送邮件报告；每天早上 7 点后按品牌分别运行日更页面流水线。
+
+## 多品牌日更（男人宝 / 老人爱 / 后续品牌）
+
+### 推荐方式
+
+保持 `daily_run.sh` 单次只跑一个品牌，通过 `scripts/run-daily-profile.sh` 给 cron 传入品牌 ID。
+
+这样每个品牌都有独立的：
+- `DAILY_PROFILE_ID`
+- `logs/daily-orchestrator/<brand>/`
+- `.runtime/email-drafts/<brand>-latest.txt`
+
+默认继续共享：
+- `.runtime/kuaishou_auth.json`
+
+### 手动运行
+
+```bash
+cd /Users/weiping/prod/LetMeTryAI
+
+# 男人宝
+scripts/run-daily-profile.sh nanrenbao
+
+# 老人爱
+scripts/run-daily-profile.sh elder-love
+```
+
+### 推荐 cron 配置
+
+```bash
+# 快手日报 - 每天 06:00
+0 6 * * * cd /Users/weiping/prod/LetMeTryAI && git pull --ff-only && KUAISHOU_EMAIL_TO=jackandking@163.com node scripts/daily_kuaishou_report.js >> logs/daily_report.log 2>&1
+
+# 男人宝日更 - 每天 07:00
+0 7 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh nanrenbao >> logs/daily-run-nanrenbao.log 2>&1
+
+# 老人爱日更 - 每天 08:00
+0 8 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh elder-love >> logs/daily-run-elder-love.log 2>&1
+```
+
+后续新品牌继续按这个模式错峰添加，例如 09:00、10:00。
+
+### 为什么不混
+
+不会和男人宝混，前提是每条 cron 都显式传品牌 ID：
+- 男人宝：`scripts/run-daily-profile.sh nanrenbao`
+- 老人爱：`scripts/run-daily-profile.sh elder-love`
+
+wrapper 会自动导出各自的 `DAILY_PROFILE_ID`、日志目录和邮件草稿路径。
 
 ## 快速设置
 
@@ -12,8 +61,9 @@
 
 按照提示输入邮箱地址，脚本会自动：
 1. 检测系统类型（macOS/Linux）
-2. 安装定时任务（每天6:00 AM）
-3. 可选择立即运行测试
+2. 安装快手日报定时任务（每天 6:00 AM）
+3. 安装男人宝 / 老人爱日更定时任务
+4. 可选择立即运行测试
 
 ### 方式2：手动设置
 
@@ -23,8 +73,10 @@
 # 编辑 crontab
 crontab -e
 
-# 添加以下行（每天早上6点执行）
+# 添加以下行
 0 6 * * * cd /Users/weiping/prod/LetMeTryAI && git pull --ff-only && KUAISHOU_EMAIL_TO=jackandking@163.com "$(command -v node)" scripts/daily_kuaishou_report.js >> logs/daily_report.log 2>&1
+0 7 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh nanrenbao >> logs/daily-run-nanrenbao.log 2>&1
+0 8 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh elder-love >> logs/daily-run-elder-love.log 2>&1
 ```
 
 如果你是在别的 clone 里手动运行，把 `cd /Users/weiping/prod/LetMeTryAI` 替换成当前仓库路径即可。
@@ -82,6 +134,9 @@ launchctl load ~/Library/LaunchAgents/com.kuaishou.dailyreport.plist
 | `KUAISHOU_EMAIL_TO` | 收件人邮箱 | jackandking@163.com |
 | `AGENTMAIL_API_KEY` | AgentMail API 密钥 | 已内置 |
 | `HEADLESS` | 是否无头模式（后台运行） | true |
+| `DAILY_PROFILE_ID` | 目标品牌 ID | `nanrenbao` |
+| `DAILY_LOG_DIR` | orchestrator 日志目录 | `logs/daily-orchestrator/<brand>` |
+| `EMAIL_DRAFT_PATH` | 最新邮件草稿路径 | `.runtime/email-drafts/<brand>-latest.txt` |
 
 ### 首次运行
 
@@ -124,6 +179,12 @@ tail -f logs/daily_report.log
 
 # 查看最近100行
 tail -n 100 logs/daily_report.log
+
+# 查看男人宝日更日志
+tail -n 100 logs/daily-run-nanrenbao.log
+
+# 查看老人爱日更日志
+tail -n 100 logs/daily-run-elder-love.log
 ```
 
 ## 手动运行测试
@@ -132,6 +193,12 @@ tail -n 100 logs/daily_report.log
 ```bash
 cd /Users/weiping/prod/LetMeTryAI
 node scripts/daily_kuaishou_report.js
+
+# 运行男人宝日更
+scripts/run-daily-profile.sh nanrenbao
+
+# 运行老人爱日更
+scripts/run-daily-profile.sh elder-love
 ```
 
 ### 指定邮箱运行
@@ -157,13 +224,16 @@ metrics/kuaishou/daily/
 └── ...
 
 logs/
-├── daily_report.log                    # 运行日志
+├── daily_report.log                    # 快手日报日志
+├── daily-run-nanrenbao.log             # 男人宝日更日志
+├── daily-run-elder-love.log            # 老人爱日更日志
 └── daily_report_error.log              # 错误日志（如果使用 launchd）
 
 .runtime/
 ├── kuaishou_auth.json                  # 快手登录态
 └── email-drafts/
-    ├── latest.txt                      # 最新一份邮件草稿
+    ├── nanrenbao-latest.txt            # 男人宝最新草稿
+    ├── elder-love-latest.txt           # 老人爱最新草稿
     └── email-draft-时间戳.txt           # 历史草稿归档
 ```
 
