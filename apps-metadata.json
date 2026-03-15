@@ -1,6 +1,29 @@
 {
   "apps": [
     {
+      "id": "retirement-rekindle-hobby",
+      "name": "重拾兴趣投票",
+      "description": "请选择退休后最想重拾或开始的兴趣爱好。",
+      "category": "生活",
+      "directory": "retirement-rekindle-hobby",
+      "url": "retirement-rekindle-hobby",
+      "image": "retirement-rekindle-hobby/images/reading-books.svg",
+      "tags": [
+        "投票",
+        "生活",
+        "退休",
+        "兴趣",
+        "养生",
+        "陪伴",
+        "退休",
+        "兴趣",
+        "生活",
+        "养生",
+        "陪伴"
+      ],
+      "status": "active"
+    },
+    {
       "id": "retirement-lifestyle-choice",
       "name": "退休生活投票",
       "description": "投票看大家退休后最想做什么：旅行、园艺、志愿或学习。",
