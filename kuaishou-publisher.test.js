@@ -32,6 +32,17 @@ describe('Kuaishou publisher skill', () => {
         expect(spec.sourceTaskId).toBe('183044');
     });
 
+    it('should use the parent-tools template task when publishing parent-tools', () => {
+        const spec = normalizePublishSpec({
+            appId: 'parent-tools',
+            profileId: 'parent-tools',
+            appName: '家长爱',
+            description: '家长教育工具集'
+        });
+
+        expect(spec.sourceTaskId).toBe('186229');
+    });
+
     it('should build the publish command from normalized input', () => {
         const command = buildPublishCommand({
             appId: 'spring-lipstick',
@@ -88,5 +99,17 @@ describe('Kuaishou publisher skill', () => {
 
         expect(plan.dependencies.templateTaskId).toBe('183044');
         expect(plan.notes[0]).toContain('183044');
+    });
+
+    it('should include parent-tools template task id in dependencies', () => {
+        const plan = buildPublishPlan({
+            appId: 'parent-tools',
+            profileId: 'parent-tools',
+            appName: '家长爱',
+            description: '家长教育工具集'
+        });
+
+        expect(plan.dependencies.templateTaskId).toBe('186229');
+        expect(plan.notes[0]).toContain('186229');
     });
 });

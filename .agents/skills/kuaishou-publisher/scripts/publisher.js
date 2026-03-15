@@ -2,7 +2,8 @@ const DEFAULT_SOURCE_TASK_ID = '165805';
 const DEFAULT_AUTH_FILE = '.runtime/kuaishou_auth.json';
 const DEFAULT_SCRIPT_PATH = 'scripts/publish-kuaishou-task.js';
 const BRAND_SOURCE_TASK_IDS = {
-    'elder-love': '183044'
+    'elder-love': '183044',
+    'parent-tools': '186229'
 };
 
 /**
@@ -20,8 +21,8 @@ function resolveSourceTaskId(source) {
         return BRAND_SOURCE_TASK_IDS[source.profileId];
     }
 
-    if (typeof source.appId === 'string' && source.appId.trim() === 'elder-love') {
-        return BRAND_SOURCE_TASK_IDS['elder-love'];
+    if (typeof source.appId === 'string' && BRAND_SOURCE_TASK_IDS[source.appId.trim()]) {
+        return BRAND_SOURCE_TASK_IDS[source.appId.trim()];
     }
 
     return DEFAULT_SOURCE_TASK_ID;

@@ -95,4 +95,38 @@ describe('Idea to launch orchestration skill', () => {
         expect(workflow.summary.profileId).toBe('elder-love');
         expect(workflow.publishPlan.spec.sourceTaskId).toBe('183044');
     });
+
+    it('should use the parent-tools publish template for parent-tools workflows', () => {
+        const workflow = buildLaunchWorkflow({
+            profileId: 'parent-tools',
+            topicCandidates: [
+                {
+                    title: '孩子写作业更适合先做哪一科',
+                    category: '教育',
+                    format: '投票',
+                    keywords: ['写作业', '学习习惯'],
+                    signals: ['家长关注', '实用', '家庭教育'],
+                    qualities: ['易理解', '可执行']
+                },
+                {
+                    title: '最刺激的极限运动挑战',
+                    category: '娱乐',
+                    format: '投票',
+                    keywords: ['挑战'],
+                    signals: ['高刺激'],
+                    qualities: ['适合投票']
+                }
+            ],
+            appId: 'parent-homework-choice',
+            appName: '作业顺序投票',
+            category: '教育',
+            options: [
+                { value: 'math-first', label: '先数学', image: 'math-first.jpg' },
+                { value: 'language-first', label: '先语文', image: 'language-first.jpg' }
+            ]
+        });
+
+        expect(workflow.summary.profileId).toBe('parent-tools');
+        expect(workflow.publishPlan.spec.sourceTaskId).toBe('186229');
+    });
 });
