@@ -13,6 +13,7 @@ PROFILE_RUNNER="$PROJECT_DIR/scripts/run-daily-profile.sh"
 REPORT_LOG_FILE="$PROJECT_DIR/logs/daily_report.log"
 NANRENBAO_LOG_FILE="$PROJECT_DIR/logs/daily-run-nanrenbao.log"
 ELDER_LOVE_LOG_FILE="$PROJECT_DIR/logs/daily-run-elder-love.log"
+PARENT_TOOLS_LOG_FILE="$PROJECT_DIR/logs/daily-run-parent-tools.log"
 
 # Colors
 RED='\033[0;31m'
@@ -63,12 +64,14 @@ echo "Email: $email"
 REPORT_CRON_CMD="0 6 * * * cd \"$PROJECT_DIR\" && git pull --ff-only && KUAISHOU_EMAIL_TO=\"$email\" \"$NODE_PATH\" \"$REPORT_SCRIPT\" >> \"$REPORT_LOG_FILE\" 2>&1"
 NANRENBAO_CRON_CMD="0 7 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" nanrenbao >> \"$NANRENBAO_LOG_FILE\" 2>&1"
 ELDER_LOVE_CRON_CMD="0 8 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" elder-love >> \"$ELDER_LOVE_LOG_FILE\" 2>&1"
+PARENT_TOOLS_CRON_CMD="0 9 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" parent-tools >> \"$PARENT_TOOLS_LOG_FILE\" 2>&1"
 
 echo ""
 echo "Cron commands:"
 echo "$REPORT_CRON_CMD"
 echo "$NANRENBAO_CRON_CMD"
 echo "$ELDER_LOVE_CRON_CMD"
+echo "$PARENT_TOOLS_CRON_CMD"
 echo ""
 
 # Check existing crontab
@@ -95,6 +98,8 @@ $REPORT_CRON_CMD
 $NANRENBAO_CRON_CMD
 # Daily App Run - elder-love
 $ELDER_LOVE_CRON_CMD
+# Daily App Run - parent-tools
+$PARENT_TOOLS_CRON_CMD
 "
 
 echo "$new_crontab" | crontab -
@@ -105,10 +110,12 @@ echo "Schedules:"
 echo "  - Kuaishou report: every day at 6:00 AM"
 echo "  - Nanrenbao daily run: every day at 7:00 AM"
 echo "  - Elder Love daily run: every day at 8:00 AM"
+echo "  - Parent Tools daily run: every day at 9:00 AM"
 echo "Recipient: $email"
 echo "Report log file: $REPORT_LOG_FILE"
 echo "Nanrenbao log file: $NANRENBAO_LOG_FILE"
 echo "Elder Love log file: $ELDER_LOVE_LOG_FILE"
+echo "Parent Tools log file: $PARENT_TOOLS_LOG_FILE"
 echo ""
 
 # Test run option
@@ -131,4 +138,5 @@ echo "To check logs:"
 echo "  tail -f $REPORT_LOG_FILE"
 echo "  tail -f $NANRENBAO_LOG_FILE"
 echo "  tail -f $ELDER_LOVE_LOG_FILE"
+echo "  tail -f $PARENT_TOOLS_LOG_FILE"
 echo "=========================================="
