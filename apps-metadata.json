@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "ai-chip-king",
+      "name": "AI芯片王者",
+      "description": "以算力/能效/生态为维度对比AI芯片阵营，图文并茂展现硬件参数差异。",
+      "category": "科技",
+      "directory": "ai-chip-king",
+      "url": "ai-chip-king",
+      "image": "ai-chip-king/images/domestic-ai-chip.svg",
+      "tags": [
+        "投票",
+        "科技",
+        "AI芯片",
+        "算力",
+        "能耗",
+        "国产芯片",
+        "ai芯片",
+        "算力",
+        "能耗",
+        "国产芯片"
+      ],
+      "status": "active"
+    },
+    {
       "id": "ai-chip-showdown",
       "name": "AI芯片对决",
       "description": "AI芯片在算力、生态与可控性上的国产与进口对比投票。",
