@@ -6,8 +6,9 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { ensureParentDirectory, resolveKuaishouAuthFile } from './runtime-paths.js';
 
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const LIST_URL = 'https://daren.kuaishou.com/distribution-plan-list';
 const OUTPUT_DIR = 'metrics/kuaishou';
 
@@ -36,6 +37,7 @@ async function fetchAllStats() {
         if (page.url().includes('login')) {
             console.log('⚠️  请扫码登录...');
             await page.waitForURL((u) => !u.toString().includes('login'), { timeout: 120000 });
+            ensureParentDirectory(AUTH_FILE);
             await context.storageState({ path: AUTH_FILE });
         }
         console.log('✅ 已登录\n');

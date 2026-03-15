@@ -1,8 +1,9 @@
 
 import { chromium } from 'playwright';
 import fs from 'fs';
+import { resolveKuaishouAuthFile } from './runtime-paths.js';
 
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const DETAIL_URL = 'https://daren.kuaishou.com/distribution-plan-create/check/167291?distributionStatusValue=2&status=false';
 
 async function main() {

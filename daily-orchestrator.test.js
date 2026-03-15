@@ -8,6 +8,7 @@ import {
     parseCopilotEventStream,
     parseTopicSelectionResponse,
     resolveGitPushTarget,
+    writeEmailDrafts,
     upsertAppsMetadata
 } from './scripts/daily-orchestrator.js';
 import { buildScaffoldPlan } from './.agents/skills/voting-app-scaffold/scripts/scaffold.js';
@@ -119,5 +120,18 @@ describe('daily-orchestrator', () => {
             branch: 'main',
             refspec: 'HEAD:main'
         });
+    });
+
+    it('writes timestamped and latest email drafts outside tracked files', () => {
+        const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'daily-email-draft-'));
+        const latestPath = path.join(tempRoot, '.runtime', 'email-drafts', 'latest.txt');
+        const fixedDate = new Date('2026-03-15T00:20:59.000Z');
+
+        const result = writeEmailDrafts(latestPath, ['line1', 'line2'], fixedDate);
+
+        expect(result.latestPath).toBe(latestPath);
+        expect(result.historyPath).toContain('.runtime/email-drafts/email-draft-2026-03-15T00-20-59-000Z.txt');
+        expect(fs.readFileSync(latestPath, 'utf-8')).toContain('line1');
+        expect(fs.readFileSync(result.historyPath, 'utf-8')).toContain('line2');
     });
 });

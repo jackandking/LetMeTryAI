@@ -1,10 +1,11 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { ensureParentDirectory, resolveKuaishouAuthFile } from './runtime-paths.js';
 
 // Configuration
 const APP_ID = 'ks655273748878573030'; // Nanrenbao AppID
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const OUTPUT_DIR = 'metrics/kuaishou';
 
 // URLs
@@ -310,7 +311,8 @@ async function main() {
 
 
         
-        await context.storageState({ path: AUTH_FILE });
+        ensureParentDirectory(AUTH_FILE);
+            await context.storageState({ path: AUTH_FILE });
         console.log(`\n✅ Sequence completed.`);
   
     } catch (error) {

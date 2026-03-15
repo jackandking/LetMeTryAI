@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { ensureParentDirectory } from './runtime-paths.js';
 import {
   resolveAuthFilePath,
   isSubmissionErrorSignal,
@@ -133,6 +134,7 @@ async function main() {
       console.log('✅ Login detected and form loaded.');
       
       // Save auth state for next time
+      ensureParentDirectory(AUTH_FILE);
       await context.storageState({ path: AUTH_FILE });
       console.log(`💾 Login state saved to ${AUTH_FILE}`);
     }

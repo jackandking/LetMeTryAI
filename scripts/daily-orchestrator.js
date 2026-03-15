@@ -12,6 +12,11 @@ import {
 } from '../.agents/skills/topic-selector/scripts/topic-selector.js';
 import { buildScaffoldPlan } from '../.agents/skills/voting-app-scaffold/scripts/scaffold.js';
 import { buildPublishPlan } from '../.agents/skills/kuaishou-publisher/scripts/publisher.js';
+import {
+    buildTimestampedEmailDraftPath,
+    ensureDirectory,
+    resolveEmailDraftLatestPath
+} from './runtime-paths.js';
 import { validateVotingAppDirectory } from './validate-voting-app.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +24,6 @@ const __dirname = path.dirname(__filename);
 const REPO_DIR = path.resolve(__dirname, '..');
 const APPS_METADATA_PATH = path.join(REPO_DIR, 'apps-metadata.json');
 const FIGHTER_JETS_STYLES_PATH = path.join(REPO_DIR, 'fighter-jets', 'styles.css');
-const EMAIL_DRAFT_PATH = path.join(REPO_DIR, 'email_draft.txt');
 const DEFAULT_DAILY_LOG_DIR = path.join(REPO_DIR, 'logs', 'daily-orchestrator');
 const DEFAULT_MODEL = 'gpt-5-mini';
 const DEFAULT_PROFILE_ID = 'nanrenbao';
@@ -658,8 +662,21 @@ export function resolveGitPushTarget({ repoDir = REPO_DIR, pushBranch, pushRemot
     };
 }
 
-function writeEmailDraft(emailDraftPath, summaryLines) {
-    fs.writeFileSync(emailDraftPath, `${summaryLines.join(os.EOL)}${os.EOL}`, 'utf-8');
+export function writeEmailDrafts(
+    emailDraftPath,
+    summaryLines,
+    date = new Date(),
+    historyPath = buildTimestampedEmailDraftPath(emailDraftPath, date)
+) {
+    const content = `${summaryLines.join(os.EOL)}${os.EOL}`;
+    ensureDirectory(path.dirname(emailDraftPath));
+    fs.writeFileSync(historyPath, content, 'utf-8');
+    fs.writeFileSync(emailDraftPath, content, 'utf-8');
+
+    return {
+        latestPath: emailDraftPath,
+        historyPath
+    };
 }
 
 function sendEmail({ emailDraftPath, subject, toEmail, pythonBin }) {
@@ -686,6 +703,8 @@ function formatSummary(state) {
         `Report summary: ${state.reportSummary || 'N/A'}`,
         `Response mode: ${state.responseMode || 'N/A'}`,
         `Raw response log: ${state.rawResponsePath || 'N/A'}`,
+        `Email draft latest: ${state.emailDraftPath || 'N/A'}`,
+        `Email draft history: ${state.emailDraftHistoryPath || 'N/A'}`,
         state.errorMessage ? `Failure reason: ${state.errorMessage}` : 'Failure reason: none'
     ];
 }
@@ -695,7 +714,7 @@ export async function runDailyOrchestrator(options = {}) {
     const model = options.model || process.env.DAILY_COPILOT_MODEL || DEFAULT_MODEL;
     const profileId = options.profileId || process.env.DAILY_PROFILE_ID || DEFAULT_PROFILE_ID;
     const copilotBin = options.copilotBin || process.env.COPILOT_BIN || 'copilot';
-    const emailDraftPath = options.emailDraftPath || process.env.EMAIL_DRAFT_PATH || EMAIL_DRAFT_PATH;
+    const emailDraftPath = options.emailDraftPath || process.env.EMAIL_DRAFT_PATH || resolveEmailDraftLatestPath(import.meta.url);
     const pythonBin = options.pythonBin || process.env.DAILY_PYTHON_BIN || '/usr/local/bin/python3';
     const toEmail = options.toEmail || process.env.DAILY_REPORT_TO || 'jackandking@163.com';
     const emailSubject = options.emailSubject || process.env.DAILY_REPORT_SUBJECT || '[Copilot Report] Daily Update';
@@ -717,7 +736,9 @@ export async function runDailyOrchestrator(options = {}) {
         reportSummary: '',
         errorMessage: '',
         rawResponsePath: '',
-        responseMode: ''
+        responseMode: '',
+        emailDraftPath: '',
+        emailDraftHistoryPath: ''
     };
 
     try {
@@ -811,9 +832,12 @@ export async function runDailyOrchestrator(options = {}) {
         logProgress(state.errorMessage, 'ERROR');
     }
 
+    const emailDraftDate = new Date();
+    state.emailDraftPath = emailDraftPath;
+    state.emailDraftHistoryPath = buildTimestampedEmailDraftPath(emailDraftPath, emailDraftDate);
     const summaryLines = formatSummary(state);
     logStage('summary', `Writing email draft to ${emailDraftPath}`);
-    writeEmailDraft(emailDraftPath, summaryLines);
+    writeEmailDrafts(emailDraftPath, summaryLines, emailDraftDate, state.emailDraftHistoryPath);
 
     if (!skipEmail) {
         try {

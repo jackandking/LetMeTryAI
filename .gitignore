@@ -150,3 +150,4 @@ mcp-servers/**/*.d.ts.map
 .agent_history
 metrics
 kuaishou_auth.json
+.runtime/
