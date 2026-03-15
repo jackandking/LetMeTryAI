@@ -45,6 +45,6 @@ describe('publish-kuaishou-task success detection', () => {
 
     it('allows auth state to be stored outside the temporary worktree', () => {
         expect(resolveAuthFilePath('/tmp/shared-kuaishou-auth.json')).toBe('/tmp/shared-kuaishou-auth.json');
-        expect(resolveAuthFilePath('')).toBe('kuaishou_auth.json');
+        expect(resolveAuthFilePath('')).toBe(expect.stringContaining('.runtime/kuaishou_auth.json'));
     });
 });

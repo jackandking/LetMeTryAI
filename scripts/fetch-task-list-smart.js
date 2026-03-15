@@ -5,8 +5,9 @@
 
 import { chromium } from 'playwright';
 import fs from 'fs';
+import { ensureParentDirectory, resolveKuaishouAuthFile } from './runtime-paths.js';
 
-const AUTH_FILE = 'kuaishou_auth.json';
+const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const LIST_URL = 'https://daren.kuaishou.com/distribution-plan-list';
 
 async function fetchTaskList() {
@@ -35,6 +36,7 @@ async function fetchTaskList() {
             await page.waitForURL((u) => !u.toString().includes('login'), { timeout: 120000 });
             console.log('✅ 登录成功');
             // 保存新 session
+            ensureParentDirectory(AUTH_FILE);
             await context.storageState({ path: AUTH_FILE });
             console.log('💾 Session 已保存\n');
         } else {
