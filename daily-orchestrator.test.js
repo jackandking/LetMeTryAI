@@ -2,15 +2,19 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import {
+    buildFallbackTopicSelectionPrompt,
+    buildTopicSelectionPrompt,
     extractJsonObject,
     formatProgressHeartbeat,
     materializeScaffoldPlan,
     parseCopilotEventStream,
     parseTopicSelectionResponse,
+    resolveUniqueDailyAppId,
     resolveGitPushTarget,
     writeEmailDrafts,
     upsertAppsMetadata
 } from './scripts/daily-orchestrator.js';
+import { elderLoveProfile } from './.agents/skills/brand-profiles/profiles/elder-love.js';
 import { buildScaffoldPlan } from './.agents/skills/voting-app-scaffold/scripts/scaffold.js';
 import { validateVotingAppDirectory } from './scripts/validate-voting-app.js';
 
@@ -51,6 +55,56 @@ describe('daily-orchestrator', () => {
         expect(formatProgressHeartbeat('Kuaishou publish', 31234)).toBe(
             'Kuaishou publish still running (31s elapsed)'
         );
+    });
+
+    it('builds elder-love prompts from the brand profile instead of fighter-jets defaults', () => {
+        const prompt = buildTopicSelectionPrompt({
+            profile: elderLoveProfile,
+            currentDate: '2026-03-15'
+        });
+        const fallbackPrompt = buildFallbackTopicSelectionPrompt({
+            profile: elderLoveProfile,
+            currentDate: '2026-03-15'
+        });
+
+        expect(prompt).toContain('生活、健康、怀旧、家庭、实用、养生、文娱');
+        expect(prompt).toContain('经典影视/戏曲/老歌回忆向选题');
+        expect(prompt).not.toContain('fighter-jets 风格');
+        expect(fallbackPrompt).toContain('生活、健康、怀旧、家庭、实用、养生、文娱');
+        expect(fallbackPrompt).not.toContain('科技/军事/体育热点');
+    });
+
+    it('adds a date suffix when the base app id already exists', () => {
+        const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'daily-app-id-'));
+        const appsMetadataPath = path.join(tempRoot, 'apps-metadata.json');
+        fs.writeFileSync(appsMetadataPath, JSON.stringify({ apps: [{ id: 'elder-love', name: '爱老人' }] }, null, 2));
+
+        expect(
+            resolveUniqueDailyAppId({
+                baseAppId: 'elder-love',
+                currentDate: '2026-03-15',
+                repoDir: tempRoot,
+                appsMetadataPath
+            })
+        ).toBe('elder-love-2026-03-15');
+    });
+
+    it('increments the generated app id when the dated slug is already taken', () => {
+        const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'daily-app-id-increment-'));
+        const appsMetadataPath = path.join(tempRoot, 'apps-metadata.json');
+        fs.writeFileSync(
+            appsMetadataPath,
+            JSON.stringify({ apps: [{ id: 'elder-love', name: '爱老人' }, { id: 'elder-love-2026-03-15', name: '旧条目' }] }, null, 2)
+        );
+
+        expect(
+            resolveUniqueDailyAppId({
+                baseAppId: 'elder-love',
+                currentDate: '2026-03-15',
+                repoDir: tempRoot,
+                appsMetadataPath
+            })
+        ).toBe('elder-love-2026-03-15-2');
     });
 
     it('creates app directory, assets, and metadata deterministically', () => {
