@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "ai-safety-showdown",
+      "name": "AI防线PK",
+      "description": "对比四种可视化的AI安全/鉴别技术，侧重硬核科技与效果直观性。",
+      "category": "科技",
+      "directory": "ai-safety-showdown",
+      "url": "ai-safety-showdown",
+      "image": "ai-safety-showdown/images/deepfake-detection.svg",
+      "tags": [
+        "投票",
+        "科技",
+        "AI安全",
+        "深度假脸",
+        "可解释AI",
+        "边缘AI",
+        "ai安全",
+        "深度假脸",
+        "可解释ai",
+        "边缘ai"
+      ],
+      "status": "active"
+    },
+    {
       "id": "mvp-carry-war",
       "name": "球星Carry对决",
       "description": "让用户在三位当下表现出众的球星中投票，评选谁最能在关键时刻扛起球队。",
