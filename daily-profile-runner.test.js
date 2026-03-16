@@ -24,8 +24,10 @@ describe('run-daily-profile wrapper', () => {
         expect(docsContent).toContain('scripts/run-daily-profile.sh nanrenbao');
         expect(docsContent).toContain('scripts/run-daily-profile.sh elder-love');
         expect(docsContent).toContain('scripts/run-daily-profile.sh parent-tools');
+        expect(docsContent).toContain('scripts/run-daily-profile.sh womanai');
         expect(docsContent).toContain('logs/daily-run-nanrenbao.log');
         expect(docsContent).toContain('logs/daily-run-elder-love.log');
         expect(docsContent).toContain('logs/daily-run-parent-tools.log');
+        expect(docsContent).toContain('logs/daily-run-womanai.log');
     });
 });
