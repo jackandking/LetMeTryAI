@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爱老人关注：你更推荐哪种早餐给爸妈/长辈？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">爱老人关注：你更推荐哪种早餐给爸妈/长辈？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是爱老人用户，你最支持哪个选项：最适合老年人的早餐首选？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="elder-love" value="congee-and-side-dishes">
+                    <img src="images/congee-and-side-dishes.svg" alt="一碗热粥和小菜" loading="lazy">
+                    <span>稀饭或糊类，搭配小菜，暖胃易消化</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="soy-milk-and-snack">
+                    <img src="images/soy-milk-and-snack.svg" alt="豆浆和传统中式点心" loading="lazy">
+                    <span>豆浆配包子或蒸饼，蛋白与碳水均衡</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="milk-and-whole-grain">
+                    <img src="images/milk-and-whole-grain.svg" alt="牛奶和全麦面包早餐" loading="lazy">
+                    <span>牛奶或酸奶配全麦面包，方便快捷营养好吸收</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="fruit-and-nuts">
+                    <img src="images/fruit-and-nuts.svg" alt="水果盘和少量坚果" loading="lazy">
+                    <span>水果切盘加少量坚果，清爽轻盈又补充维生素</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
