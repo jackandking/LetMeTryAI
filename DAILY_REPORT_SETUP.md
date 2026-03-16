@@ -2,7 +2,7 @@
 
 每天早上 6 点自动抓取快手数据并发送邮件报告；每天早上 7 点后按品牌分别运行日更页面流水线。
 
-## 多品牌日更（男人宝 / 老人爱 / 家长爱 / 后续品牌）
+## 多品牌日更（男人宝 / 女人宝 / 老人爱 / 家长爱 / 后续品牌）
 
 ### 推荐方式
 
@@ -29,6 +29,9 @@ scripts/run-daily-profile.sh elder-love
 
 # 家长爱
 scripts/run-daily-profile.sh parent-tools
+
+# 女人宝
+scripts/run-daily-profile.sh womanai
 ```
 
 ### 推荐 cron 配置
@@ -45,14 +48,18 @@ scripts/run-daily-profile.sh parent-tools
 
 # 家长爱日更 - 每天 09:00
 0 9 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh parent-tools >> logs/daily-run-parent-tools.log 2>&1
+
+# 女人宝日更 - 每天 10:00
+0 10 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh womanai >> logs/daily-run-womanai.log 2>&1
 ```
 
-后续新品牌继续按这个模式错峰添加，例如 10:00、11:00。
+后续新品牌继续按这个模式错峰添加，例如 11:00、12:00。
 
 ### 为什么不混
 
 不会和男人宝混，前提是每条 cron 都显式传品牌 ID：
 - 男人宝：`scripts/run-daily-profile.sh nanrenbao`
+- 女人宝：`scripts/run-daily-profile.sh womanai`
 - 老人爱：`scripts/run-daily-profile.sh elder-love`
 - 家长爱：`scripts/run-daily-profile.sh parent-tools`
 
@@ -69,7 +76,7 @@ wrapper 会自动导出各自的 `DAILY_PROFILE_ID`、日志目录和邮件草�
 按照提示输入邮箱地址，脚本会自动：
 1. 检测系统类型（macOS/Linux）
 2. 安装快手日报定时任务（每天 6:00 AM）
-3. 安装男人宝 / 老人爱 / 家长爱日更定时任务
+3. 安装男人宝 / 女人宝 / 老人爱 / 家长爱日更定时任务
 4. 可选择立即运行测试
 
 ### 方式2：手动设置
@@ -85,6 +92,7 @@ crontab -e
 0 7 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh nanrenbao >> logs/daily-run-nanrenbao.log 2>&1
 0 8 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh elder-love >> logs/daily-run-elder-love.log 2>&1
 0 9 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh parent-tools >> logs/daily-run-parent-tools.log 2>&1
+0 10 * * * cd /Users/weiping/prod/LetMeTryAI && scripts/run-daily-profile.sh womanai >> logs/daily-run-womanai.log 2>&1
 ```
 
 如果你是在别的 clone 里手动运行，把 `cd /Users/weiping/prod/LetMeTryAI` 替换成当前仓库路径即可。
@@ -193,6 +201,9 @@ tail -n 100 logs/daily-run-nanrenbao.log
 
 # 查看老人爱日更日志
 tail -n 100 logs/daily-run-elder-love.log
+
+# 查看女人宝日更日志
+tail -n 100 logs/daily-run-womanai.log
 ```
 
 ## 手动运行测试
@@ -210,6 +221,9 @@ scripts/run-daily-profile.sh elder-love
 
 # 运行家长爱日更
 scripts/run-daily-profile.sh parent-tools
+
+# 运行女人宝日更
+scripts/run-daily-profile.sh womanai
 ```
 
 ### 指定邮箱运行
@@ -239,12 +253,14 @@ logs/
 ├── daily-run-nanrenbao.log             # 男人宝日更日志
 ├── daily-run-elder-love.log            # 老人爱日更日志
 ├── daily-run-parent-tools.log          # 家长爱日更日志
+├── daily-run-womanai.log               # 女人宝日更日志
 └── daily_report_error.log              # 错误日志（如果使用 launchd）
 
 .runtime/
 ├── kuaishou_auth.json                  # 快手登录态
 └── email-drafts/
     ├── nanrenbao-latest.txt            # 男人宝最新草稿
+    ├── womanai-latest.txt              # 女人宝最新草稿
     ├── elder-love-latest.txt           # 老人爱最新草稿
     ├── parent-tools-latest.txt         # 家长爱最新草稿
     └── email-draft-时间戳.txt           # 历史草稿归档
