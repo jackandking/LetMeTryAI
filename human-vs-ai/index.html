@@ -20,45 +20,69 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">未来空战：人类飞行员 vs AI无人机</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">未来空战：人类飞行员 vs AI无人机</h1>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">在未来的空战中，你认为谁将主宰天空？</p>
-            <div class="button-group" id="optionsContainer">
-                <!-- Human Pilots -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="human">
-                    <img src="images/human.svg" alt="人类王牌" loading="lazy">
-                    <span>人类王牌</span>
-                </label>
-                
-                <!-- AI Drones -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="ai_drone">
-                    <img src="images/ai_drone.svg" alt="AI无人机" loading="lazy">
-                    <span>AI无人机</span>
-                </label>
-                
-                <!-- Human-AI Teaming -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="human_ai">
-                    <img src="images/human_ai.svg" alt="人机共生" loading="lazy">
-                    <span>人机共生</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在未来的空战中，你认为谁将主宰天空？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="human">
+                            <div class="card-image">
+                                <img src="images/human.svg" alt="人类王牌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">人类王牌</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="ai_drone">
+                            <div class="card-image">
+                                <img src="images/ai_drone.svg" alt="AI无人机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">AI无人机</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="human_ai">
+                            <div class="card-image">
+                                <img src="images/human_ai.svg" alt="人机共生" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">人机共生</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在获取最新战力统计...</p>
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-    
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看全球战力榜</button>
 
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
-
-    <!-- VConsole for mobile debugging -->
     <script>
         (function() {
             const urlParams = new URLSearchParams(window.location.search);

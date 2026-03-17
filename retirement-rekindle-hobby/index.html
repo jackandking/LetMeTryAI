@@ -8,9 +8,9 @@
     <script>
         var _hmt = _hmt || [];
         (function() {
-            var hm = document.createElement('script');
-            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
-            var s = document.getElementsByTagName('script')[0];
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
@@ -20,46 +20,78 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">爱老人关注：退休后你最想重拾的兴趣？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">爱老人关注：退休后你最想重拾的兴趣？</h1>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="elder-love" value="reading-books">
-                    <img src="images/reading-books.svg" alt="老人手捧书本阅读" loading="lazy">
-                    <span>安静读书、看报、学习新知识</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="reading-books">
+                            <div class="card-image">
+                                <img src="images/reading-books.svg" alt="老人手捧书本阅读" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安静读书、看报、学习新知识</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="gardening">
+                            <div class="card-image">
+                                <img src="images/gardening.svg" alt="老人浇花园艺场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">打理花草、阳台种菜，亲近自然</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="local-travel">
+                            <div class="card-image">
+                                <img src="images/local-travel.svg" alt="老年人旅行观光合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">跟团或自驾游，看看周边风景</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="handicraft">
+                            <div class="card-image">
+                                <img src="images/handicraft.svg" alt="老人做手工的特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">刺绣、编织、木工等手作活动</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
 
-                <label class="option">
-                    <input type="radio" name="elder-love" value="gardening">
-                    <img src="images/gardening.svg" alt="老人浇花园艺场景" loading="lazy">
-                    <span>打理花草、阳台种菜，亲近自然</span>
-                </label>
-
-                <label class="option">
-                    <input type="radio" name="elder-love" value="local-travel">
-                    <img src="images/local-travel.svg" alt="老年人旅行观光合影" loading="lazy">
-                    <span>跟团或自驾游，看看周边风景</span>
-                </label>
-
-                <label class="option">
-                    <input type="radio" name="elder-love" value="handicraft">
-                    <img src="images/handicraft.svg" alt="老人做手工的特写" loading="lazy">
-                    <span>刺绣、编织、木工等手作活动</span>
-                </label>
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {

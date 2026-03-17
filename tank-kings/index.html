@@ -20,59 +20,89 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">陆战之王：谁是地表最强坦克？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">陆战之王：谁是地表最强坦克？</h1>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">在现代陆战体系中，你认为哪款坦克是当之无愧的陆战之王？</p>
-            <div class="button-group" id="optionsContainer">
-                <!-- Type 99A -->
-                <label class="option">
-                    <input type="radio" name="tank" value="type99a">
-                    <img src="images/type99a.jpg" alt="99A式主战坦克" loading="lazy">
-                    <span>99A式 (中国)</span>
-                </label>
-                
-                <!-- M1A2 Abrams -->
-                <label class="option">
-                    <input type="radio" name="tank" value="m1a2">
-                    <img src="images/m1a2.jpg" alt="M1A2 SEPv3 (美国)" loading="lazy">
-                    <span>M1A2 艾布拉姆斯</span>
-                </label>
-                
-                <!-- Leopard 2A8 -->
-                <label class="option">
-                    <input type="radio" name="tank" value="leopard2">
-                    <img src="images/leopard2.jpg" alt="豹2A8 (德国)" loading="lazy">
-                    <span>豹2A8 (德国)</span>
-                </label>
-                
-                <!-- T-14 Armata -->
-                <label class="option">
-                    <input type="radio" name="tank" value="t14">
-                    <img src="images/t14.jpg" alt="T-14 阿玛塔 (俄罗斯)" loading="lazy">
-                    <span>T-14 阿玛塔</span>
-                </label>
-                
-                <!-- K2 Black Panther -->
-                <label class="option">
-                    <input type="radio" name="tank" value="k2">
-                    <img src="images/k2.jpg" alt="K2 黑豹 (韩国)" loading="lazy">
-                    <span>K2 黑豹 (韩国)</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在现代陆战体系中，你认为哪款坦克是当之无愧的陆战之王？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="type99a">
+                            <div class="card-image">
+                                <img src="images/type99a.jpg" alt="99A式主战坦克" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">99A式 (中国)</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="m1a2">
+                            <div class="card-image">
+                                <img src="images/m1a2.jpg" alt="M1A2 SEPv3 (美国)" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">M1A2 艾布拉姆斯</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="leopard2">
+                            <div class="card-image">
+                                <img src="images/leopard2.jpg" alt="豹2A8 (德国)" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">豹2A8 (德国)</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="t14">
+                            <div class="card-image">
+                                <img src="images/t14.jpg" alt="T-14 阿玛塔 (俄罗斯)" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">T-14 阿玛塔</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="k2">
+                            <div class="card-image">
+                                <img src="images/k2.jpg" alt="K2 黑豹 (韩国)" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">K2 黑豹 (韩国)</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在获取最新战力统计...</p>
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-    
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看全球战力榜</button>
 
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
-
-    <!-- VConsole for mobile debugging -->
     <script>
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
