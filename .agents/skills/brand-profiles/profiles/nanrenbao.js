@@ -2,13 +2,153 @@ export const nanrenbaoProfile = {
     id: 'nanrenbao',
     name: '男人宝',
     audience: '男性娱乐兴趣人群',
-    preferredCategories: ['娱乐', '体育', '科技', '军事', '汽车'],
-    preferredFormats: ['投票', 'pk', '排行'],
-    positiveSignals: ['硬核科技', '对比强', '适合投票', '热血', '球星', '汽车', '装备'],
+    
+    // 扩展分类，确保多样性
+    preferredCategories: [
+        '军事装备',    // 坦克、战机、航母、军舰、导弹
+        '科技数码',    // AI、芯片、手机、电脑、耳机
+        '汽车机械',    // 豪车、跑车、改装车、越野车
+        '体育竞技',    // ⚠️ 限制频率，避免过度球星主题
+        '户外探险',    // 钓鱼、露营、登山、骑行
+        '历史军事',    // 古代名将、经典战役、历史装备
+        '游戏电竞',    // 游戏角色、电竞选手、主机
+        '收藏爱好'     // 手表、球鞋、模型、潮玩
+    ],
+    
+    // 格式偏好
+    preferredFormats: ['投票', 'pk', '排行', '知识问答'],
+    
+    // 正面信号
+    positiveSignals: [
+        '硬核科技', '对比强', '适合投票', 
+        '热血', '装备', '机械美感', 
+        '收藏价值', '历史意义', '性能参数'
+    ],
+    
+    // 必须质量
     requiredQualities: ['适合投票', '对比强'],
-    avoidSignals: ['教程', '种草', '过度情绪化'],
-    hardBlocks: ['母婴', '育儿', '护肤教程'],
-    titlePatterns: ['男人宝热榜：{title}'],
-    questionPatterns: ['站在男人宝用户视角，你更想把票投给谁：{title}？'],
-    assetHints: ['强视觉冲突', '高清实物图', '运动/装备/科技风']
+    
+    // 避免信号
+    avoidSignals: ['教程', '种草', '过度情绪化', '重复主题'],
+    
+    // 严格禁止
+    hardBlocks: ['母婴', '育儿', '护肤教程', '女性专属'],
+    
+    // 主题约束 - 防止重复的关键配置
+    topicConstraints: {
+        // 体育竞技类限制
+        '体育竞技': {
+            maxPerWeek: 2,
+            cooldownDays: 3,
+            avoidKeywords: ['球星', '带队', 'Carry', '统治力', '排行'],
+            alternatives: ['球队', '装备', '经典比赛', '战术']
+        },
+        // 同类主题冷却期
+        '相似主题冷却': {
+            cooldownDays: 7,
+            similarityThreshold: 0.7
+        }
+    },
+    
+    // 轮换优先级（确保多样性）
+    rotationPriority: [
+        '军事装备',
+        '科技数码', 
+        '汽车机械',
+        '户外探险',
+        '历史军事',
+        '游戏电竞',
+        '收藏爱好',
+        '体育竞技'  // 排最后，限制频率
+    ],
+    
+    // 标题模板
+    titlePatterns: [
+        '男人宝热榜：{title}',
+        '硬核对比：{title}',
+        '装备党首选：{title}'
+    ],
+    
+    // 问题模板
+    questionPatterns: [
+        '站在男人宝用户视角，你更想把票投给谁：{title}？',
+        '作为硬核玩家，你更认可：{title}？',
+        '男人宝热议：{title}，你的选择是？'
+    ],
+    
+    // 资源提示
+    assetHints: ['强视觉冲突', '高清实物图', '运动/装备/科技风', '参数对比图'],
+    
+    // 主题创意库（当选题困难时使用）
+    topicIdeas: {
+        '军事装备': [
+            '二战最强坦克', '现代战机对比', '航母战斗力排行',
+            '狙击枪精度PK', '军用无人机对决', '潜艇隐蔽性对比'
+        ],
+        '科技数码': [
+            '旗舰手机拍照PK', '机械键盘轴体选择', '游戏显卡性能对比',
+            '降噪耳机排行', '智能手表功能PK', '折叠屏耐用性测试'
+        ],
+        '汽车机械': [
+            '百万豪车内饰对比', '跑车声浪排行', '越野车通过性PK',
+            '电动车续航对决', '改装车风格选择', '经典老车情怀'
+        ],
+        '户外探险': [
+            '钓鱼竿性价比排行', '露营帐篷选择', '登山鞋舒适度PK',
+            '骑行装备必备', '户外刀具对比', '冲锋衣防水性'
+        ],
+        '历史军事': [
+            '三国最强武将', '二战名将指挥力', '古代冷兵器对比',
+            '经典战役复盘', '历史战甲防御力', '帝王军事才能'
+        ],
+        '游戏电竞': [
+            '3A游戏男主排行', '电竞选手操作秀', '游戏主机性能PK',
+            '经典游戏角色', 'FPS枪械手感', 'MOBA英雄人气'
+        ],
+        '收藏爱好': [
+            '机械表品牌认知', '限量球鞋排行', '手办模型精致度',
+            '潮玩收藏价值', '复古相机对比', '文玩手串材质'
+        ]
+    }
 };
+
+// 检查主题是否重复
+export function checkTopicDuplicate(newTopic, recentTopics, days = 7) {
+    const keywords = newTopic.toLowerCase();
+    
+    for (const topic of recentTopics) {
+        const similarity = calculateSimilarity(keywords, topic.toLowerCase());
+        if (similarity > 0.7) {
+            return {
+                isDuplicate: true,
+                similarTo: topic,
+                similarity: similarity
+            };
+        }
+    }
+    
+    return { isDuplicate: false };
+}
+
+// 简单相似度计算
+function calculateSimilarity(str1, str2) {
+    const set1 = new Set(str1.split(''));
+    const set2 = new Set(str2.split(''));
+    const intersection = new Set([...set1].filter(x => set2.has(x)));
+    const union = new Set([...set1, ...set2]);
+    return intersection.size / union.size;
+}
+
+// 获取推荐的选题类别（轮换）
+export function getRecommendedCategory(recentCategories) {
+    const { rotationPriority } = nanrenbaoProfile;
+    
+    // 找到最近使用最少的类别
+    const categoryCount = {};
+    for (const cat of rotationPriority) {
+        categoryCount[cat] = recentCategories.filter(c => c === cat).length;
+    }
+    
+    // 返回使用次数最少的类别
+    return rotationPriority.sort((a, b) => categoryCount[a] - categoryCount[b])[0];
+}

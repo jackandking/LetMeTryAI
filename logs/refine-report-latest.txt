@@ -1,0 +1,26 @@
+VoteApp 每日优化报告
+===================
+
+报告时间: 2026-03-17 19:41:15
+项目目录: /Users/weiping/LetMeTryAI
+
+优化概况
+--------
+总检测应用: 10
+优化成功: 0
+优化失败: 10
+
+应用列表
+--------
+\n- baller-leader-showdown\n- homework-routine\n- retirement-hobby-pick\n- coral-pink\n- edu-blue\n- sport-blue\n- warm-gold\n- season-top-player-2026\n- spring-brightening-lipstick-pick\n- spring-whitening-lipstick
+
+错误信息
+--------
+\n- baller-leader-showdown: 优化失败\n- homework-routine: 优化失败\n- retirement-hobby-pick: 优化失败\n- coral-pink: 优化失败\n- edu-blue: 优化失败\n- sport-blue: 优化失败\n- warm-gold: 优化失败\n- season-top-player-2026: 优化失败\n- spring-brightening-lipstick-pick: 优化失败\n- spring-whitening-lipstick: 优化失败
+
+详细日志
+--------
+请查看服务器日志文件: /Users/weiping/LetMeTryAI/logs/refine-vote-apps.log
+
+---
+此邮件由 LetMeTryAI 自动发送
