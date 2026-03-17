@@ -1,0 +1,17 @@
+# Apps to refine - Batch 1 (Iteration 1)
+# Format: directory brand
+
+# nanrenbao Military Apps (7 apps)
+fighter-jets nanrenbao
+tank-kings nanrenbao
+drone-kings nanrenbao
+strategic-bombers nanrenbao
+power-armor nanrenbao
+rockets-king nanrenbao
+human-vs-ai nanrenbao
+
+# Other Brands (4 apps)
+homework-independence-vote parent-tools
+retirement-lifestyle-choice elder-love
+retirement-rekindle-hobby elder-love
+spring-brightening-lipstick-pick womanai
