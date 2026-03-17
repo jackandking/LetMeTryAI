@@ -2,7 +2,13 @@
  * Vote Application
  */
 
-CONFIG_PLACEHOLDER
+const questionConfig = {
+    title: '爱老人关注：退休后你最想尝试的生活方式',
+    question: '如果是爱老人用户，你最支持哪个选项：退休后最想尝试的生活方式？',
+    options: [
+    ],
+    storageKey: 'retirement_lifestyle_choice_v1.data'
+};
 
 let currentQuestion = 1;
 let voteData = {};
