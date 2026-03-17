@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "retirement-hobby-pick",
+      "name": "退休爱好投票",
+      "description": "选择退休后最想重拾或尝试的兴趣爱好，适合分享给同龄朋友。",
+      "category": "生活",
+      "directory": "retirement-hobby-pick",
+      "url": "retirement-hobby-pick",
+      "image": "retirement-hobby-pick/images/gardening.svg",
+      "tags": [
+        "投票",
+        "生活",
+        "退休",
+        "兴趣",
+        "生活方式",
+        "养生",
+        "退休",
+        "兴趣",
+        "生活方式",
+        "养生"
+      ],
+      "status": "active"
+    },
+    {
       "id": "season-top-player-2026",
       "name": "最强球星PK",
       "description": "本赛季球星统治力比拼，适合男性用户投票与讨论。",

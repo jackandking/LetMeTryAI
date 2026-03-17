@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爱老人关注：退休后想重拾的兴趣爱好</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">爱老人关注：退休后想重拾的兴趣爱好</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣爱好？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="elder-love" value="gardening">
+                    <img src="images/gardening.svg" alt="老人园艺种花的场景" loading="lazy">
+                    <span>在家阳台或小花园种花种菜，身心放松</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="calligraphy-painting">
+                    <img src="images/calligraphy-painting.svg" alt="老人练习书法的手部特写" loading="lazy">
+                    <span>练字作画，安静又有成就感</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="light-travel">
+                    <img src="images/light-travel.svg" alt="老年人短途旅行拍照场景" loading="lazy">
+                    <span>周边短途走走，看风景、拍照留念</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="community-volunteer">
+                    <img src="images/community-volunteer.svg" alt="老人参与社区志愿服务的画面" loading="lazy">
+                    <span>参加志愿服务，结交邻里新朋友</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
