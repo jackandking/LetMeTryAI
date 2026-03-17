@@ -1,35 +1,38 @@
 /**
- * 独立作业投票 Survey Application
- * Logic for the "孩子何时开始独立做作业？" survey
+ * Homework Routine Survey Application
+ * Logic for the "作业先做还是先休息？" voting page
  */
 
 const questionConfig = {
-    "title": "孩子何时开始独立做作业？",
-    "question": "站在家长爱用户视角，你会怎么选：孩子何时开始独立做作业？",
-    "options": [
+    title: '作业先做还是先休息？',
+    question: '站在家长爱用户视角，你会怎么选：孩子放学后是先写作业还是先休息？',
+    options: [
         {
-            "value": "grad1-2-progress",
-            "label": "小学低年级逐步培养（1-2年级）"
+            value: 'complete-homework-first',
+            label: '先完成作业'
         },
         {
-            "value": "grad3-6-official",
-            "label": "小学中高年级正式独立（3-6年级）"
+            value: 'play-then-homework',
+            label: '先玩一会'
         },
         {
-            "value": "start-junior-high",
-            "label": "初中开始全面独立"
+            value: 'scheduled-breaks',
+            label: '分时段安排'
         },
         {
-            "value": "always-accompany",
-            "label": "一直陪伴与分层辅导（家长长期参与）"
+            value: 'flexible-by-mood',
+            label: '灵活安排'
         }
     ],
-    "storageKey": "homework_independence_vote_v1.data"
+    storageKey: 'homework_routine_v1.data'
 };
 
 let currentQuestion = 1;
 let voteData = {};
 
+/**
+ * Initialize the application
+ */
 function initializeApp() {
     try {
         checkUrlParameters();
@@ -41,6 +44,9 @@ function initializeApp() {
     }
 }
 
+/**
+ * Check and handle URL parameters
+ */
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -51,12 +57,18 @@ function checkUrlParameters() {
     }
 }
 
+/**
+ * Initialize vote data structure
+ */
 function initializeVoteData() {
-    questionConfig.options.forEach(option => {
+    questionConfig.options.forEach((option) => {
         voteData[option.label] = 0;
     });
 }
 
+/**
+ * Setup page content from config
+ */
 function setupPageContent() {
     const titleElement = document.getElementById('pageTitle');
     if (titleElement) {
@@ -71,16 +83,21 @@ function setupPageContent() {
     attachRadioHandlers();
 }
 
+/**
+ * Attach change handlers to radio buttons
+ */
 function attachRadioHandlers() {
     const radios = document.querySelectorAll('input[name="parent-tools"]');
     if (!radios || radios.length === 0) {
         return;
     }
 
-    radios.forEach(radio => {
+    radios.forEach((radio) => {
         radio.addEventListener('change', (event) => {
             const selectedValue = event.target.value;
-            const matched = questionConfig.options.find(option => option.value === selectedValue);
+            const matched = questionConfig.options.find(
+                (option) => option.value === selectedValue
+            );
 
             if (matched) {
                 processVote(matched.label);
@@ -90,6 +107,10 @@ function attachRadioHandlers() {
     });
 }
 
+/**
+ * Process a vote selection
+ * @param {string} selectedLabel - The label of the selected option
+ */
 function processVote(selectedLabel) {
     getConfig(questionConfig.storageKey, (data) => {
         try {
@@ -115,25 +136,36 @@ function processVote(selectedLabel) {
     });
 }
 
+/**
+ * Show advertisement or fallback
+ */
 function showAd() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=homework-independence-vote'
+            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=homework-routine'
         });
         return;
     }
 
-    displayAdFallback().catch(error => console.error('Ad fallback error:', error));
+    displayAdFallback().catch((error) => console.error('Ad fallback error:', error));
 }
 
+/**
+ * Display fallback ad overlay
+ * @returns {Promise<void>}
+ */
 function displayAdFallback() {
     return new Promise((resolve) => {
         let overlay = document.getElementById('adOverlay');
         if (!overlay) {
             overlay = document.createElement('div');
             overlay.id = 'adOverlay';
-            overlay.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;color:#fff;flex-direction:column;';
-            overlay.innerHTML = '<div style="background:#2f4858;padding:30px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);"><h3>正在分析“孩子何时开始独立做作业？”的投票趋势...</h3><div style="margin-top:15px;width:40px;height:40px;border:4px solid #ff7f50;border-top:4px solid transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div><style>@keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}</style></div>';
+            overlay.innerHTML = `
+                <div class="ad-content">
+                    <h3>正在分析"作业先做还是先休息？"的投票趋势...</h3>
+                    <div class="ad-spinner"></div>
+                </div>
+            `;
             document.body.appendChild(overlay);
         } else {
             overlay.style.display = 'flex';
@@ -147,6 +179,9 @@ function displayAdFallback() {
     });
 }
 
+/**
+ * Display voting results
+ */
 function displayResults() {
     const questionnaire = document.getElementById('questionnaire');
     const result = document.getElementById('result');
@@ -171,6 +206,9 @@ function displayResults() {
     });
 }
 
+/**
+ * Handle result display from URL parameter
+ */
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
     const finishedAd = urlParams.get('finishedAd');
@@ -188,6 +226,10 @@ function handleResultDisplay() {
     }
 }
 
+/**
+ * Render the result view with bar chart
+ * @param {Object} latestVoteData - The vote data to display
+ */
 function showResult(latestVoteData) {
     if (!latestVoteData || typeof latestVoteData !== 'object') {
         return;
@@ -198,8 +240,11 @@ function showResult(latestVoteData) {
         return;
     }
 
-    resultDiv.innerHTML = "<h2 style='text-align:center;color:#2f4858;'>独立作业投票投票结果</h2>";
-    resultDiv.innerHTML += "<p style='text-align:center;color:#7f8c8d;margin-bottom:20px;font-size:14px;'>看看大家对“孩子何时开始独立做作业？”的最新态度</p>";
+    // Clear and build result content
+    resultDiv.innerHTML = `
+        <h2>作业安排投票结果</h2>
+        <p class="result-subtitle">看看大家对"作业先做还是先休息？"的最新态度</p>
+    `;
 
     const barChart = createBarChart(latestVoteData);
     resultDiv.appendChild(barChart);
@@ -207,6 +252,11 @@ function showResult(latestVoteData) {
     addSummaryStatistics(resultDiv, latestVoteData);
 }
 
+/**
+ * Create the bar chart element
+ * @param {Object} latestVoteData - Vote data
+ * @returns {HTMLElement} Bar chart container
+ */
 function createBarChart(latestVoteData) {
     const barChart = document.createElement('div');
     barChart.className = 'bar-chart';
@@ -221,23 +271,23 @@ function createBarChart(latestVoteData) {
 
         const bar = document.createElement('div');
         bar.className = 'bar';
+        if (count === maxCount && count > 0) {
+            bar.classList.add('top-vote');
+        }
         bar.style.height = '2px';
 
+        // Animate bar height
         requestAnimationFrame(() => {
             bar.style.height = `${Math.max(count * scale, 2)}px`;
         });
 
-        if (count === maxCount && count > 0) {
-            bar.style.background = 'linear-gradient(to top, #ff6b35, #ffb199)';
-        }
-
         const barLabel = document.createElement('div');
         barLabel.className = 'bar-label';
-        barLabel.innerText = `${count}`;
+        barLabel.textContent = `${count}`;
 
         const optionLabel = document.createElement('div');
-        optionLabel.className = 'jet-label';
-        optionLabel.innerText = option.split(' ')[0];
+        optionLabel.className = 'option-label';
+        optionLabel.textContent = option;
 
         barContainer.appendChild(bar);
         barContainer.appendChild(barLabel);
@@ -248,25 +298,33 @@ function createBarChart(latestVoteData) {
     return barChart;
 }
 
+/**
+ * Add summary statistics to result
+ * @param {HTMLElement} container - Container element
+ * @param {Object} latestVoteData - Vote data
+ */
 function addSummaryStatistics(container, latestVoteData) {
     const total = Object.values(latestVoteData).reduce((sum, count) => sum + count, 0);
 
     const statsDiv = document.createElement('div');
-    statsDiv.style.cssText = 'text-align:center; margin-top:20px; padding-top:15px; border-top:1px dashed #bdc3c7;';
+    statsDiv.className = 'stats-container';
 
     const totalVotes = document.createElement('p');
-    totalVotes.style.fontWeight = 'bold';
-    totalVotes.innerText = `总参与人数: ${total}`;
+    totalVotes.className = 'total-votes';
+    totalVotes.innerHTML = `总参与人数: <span>${total}</span>`;
 
     const timestamp = document.createElement('p');
-    timestamp.style.cssText = 'font-size: 12px; color: #95a5a6; margin-top: 5px;';
-    timestamp.innerText = `最后更新: ${new Date().toLocaleString()}`;
+    timestamp.className = 'timestamp';
+    timestamp.textContent = `最后更新: ${new Date().toLocaleString('zh-CN')}`;
 
     statsDiv.appendChild(totalVotes);
     statsDiv.appendChild(timestamp);
     container.appendChild(statsDiv);
 }
 
+/**
+ * Navigate back to index
+ */
 function jumpToIndex() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({ url: '/pages/index/index' });
@@ -275,4 +333,5 @@ function jumpToIndex() {
     }
 }
 
+// Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeApp);
