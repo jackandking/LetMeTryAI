@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "baller-leader-showdown",
+      "name": "球星带队PK",
+      "description": "比较当红球星的领袖气质与关键时刻表现，适合粉丝投票与社交传播。",
+      "category": "体育",
+      "directory": "baller-leader-showdown",
+      "url": "baller-leader-showdown",
+      "image": "baller-leader-showdown/images/kylian-mbappe.svg",
+      "tags": [
+        "投票",
+        "体育",
+        "球星",
+        "带队",
+        "领袖",
+        "足球",
+        "热血",
+        "球星",
+        "带队",
+        "领袖",
+        "足球",
+        "热血"
+      ],
+      "status": "active"
+    },
+    {
       "id": "retirement-hobby-pick",
       "name": "退休爱好投票",
       "description": "选择退休后最想重拾或尝试的兴趣爱好，适合分享给同龄朋友。",
