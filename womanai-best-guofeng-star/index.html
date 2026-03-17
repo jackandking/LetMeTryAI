@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>谁把国风穿出最高级感？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">谁把国风穿出最高级感？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是女人爱用户，你会把这一票投给谁：谁把国风穿出最高级感？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="womanai" value="zhao-liying">
+                    <img src="images/zhao-liying.svg" alt="赵丽颖国风造型" loading="lazy">
+                    <span>古典妆造＋精致发饰，气质温婉</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="dili-reba">
+                    <img src="images/dili-reba.svg" alt="迪丽热巴国风造型" loading="lazy">
+                    <span>大胆混搭现代元素，特色鲜明</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="zhou-dongyu">
+                    <img src="images/zhou-dongyu.svg" alt="周冬雨国风造型" loading="lazy">
+                    <span>文艺清冷路线，年轻又有态度</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="yang-mi">
+                    <img src="images/yang-mi.svg" alt="杨幂国风造型" loading="lazy">
+                    <span>造型多变，带感舞台表现力强</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
