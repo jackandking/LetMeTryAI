@@ -179,7 +179,7 @@ export class KuaishouLogin {
     /**
      * Perform phone + SMS login
      */
-    async login(defaultPhone = DEFAULT_PHONE) {
+    async login(defaultPhone = DEFAULT_PHONE, autoMode = false) {
         await this.init();
         
         try {
@@ -205,9 +205,18 @@ export class KuaishouLogin {
             // Wait for phone login form to appear
             await this.page.waitForTimeout(2000);
             
-            // Prompt for phone number (with default)
+            // Use default phone or prompt
             log('\n─────────────────────────────────', 'cyan');
-            const phoneNumber = await prompt('📱 Enter your phone number', defaultPhone);
+            let phoneNumber = defaultPhone;
+            
+            if (autoMode) {
+                // Auto mode: use default without prompting
+                log(`📱 Auto mode: Using phone number: ${defaultPhone}`, 'cyan');
+            } else {
+                // Interactive mode: prompt for phone
+                const input = await prompt('📱 Enter your phone number', defaultPhone);
+                phoneNumber = input || defaultPhone;
+            }
             log('─────────────────────────────────\n', 'cyan');
             
             if (!phoneNumber || phoneNumber.length < 11) {
@@ -230,17 +239,22 @@ export class KuaishouLogin {
             const smsBtn = await this.clickGetSMSButton();
             
             if (smsBtn) {
-                log('✅ Clicked "获取验证码" button', 'green');
+                log('✅ Clicked "获取验证码" button automatically', 'green');
                 log('⏳ Waiting 3 seconds for SMS to be sent...', 'cyan');
                 await this.page.waitForTimeout(3000);
             } else {
-                log('⚠️ Could not auto-click SMS button, please click manually', 'yellow');
+                log('\n⚠️ Could not auto-click SMS button', 'yellow');
+                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
+                log('👉 请在浏览器中手动点击"获取验证码"按钮', 'yellow');
+                log('👉 Please manually click "获取验证码" button in browser', 'yellow');
+                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
+                await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
             }
             
             // Prompt for SMS code
             log('\n─────────────────────────────────', 'cyan');
-            log('📲 Please check your phone for SMS', 'yellow');
-            const smsCode = await prompt('🔢 Enter verification code');
+            log('📲 请查看手机短信 / Please check your phone SMS', 'yellow');
+            const smsCode = await prompt('🔢 请输入验证码 / Enter verification code');
             log('─────────────────────────────────\n', 'cyan');
             
             if (!smsCode || smsCode.length < 4) {
@@ -264,10 +278,14 @@ export class KuaishouLogin {
             
             if (submitBtn) {
                 await submitBtn.click();
-                log('✅ Clicked login button', 'green');
+                log('✅ Clicked login button automatically', 'green');
             } else {
-                log('⚠️ Could not find login button, please click manually', 'yellow');
-                await prompt('\n⏸️ Press Enter after clicking login button...');
+                log('\n⚠️ Could not find login button automatically', 'yellow');
+                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
+                log('👉 请在浏览器中手动点击"登录"按钮', 'yellow');
+                log('👉 Please manually click "登录" button in browser', 'yellow');
+                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
+                await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
             }
             
             // Wait for login to complete
@@ -309,54 +327,62 @@ export class KuaishouLogin {
     }
 
     /**
-     * Switch to phone login method if not already on it
+     * Switch to phone/SMS login method if not already on it
      */
     async switchToPhoneLogin() {
         log('\n📱 Checking current login method...', 'cyan');
         
-        // Check if already on phone login by looking for phone input
-        const phoneInputSelectors = [
-            'input[placeholder*="手机号"]',
-            'input[type="tel"]',
-            'input[name*="phone"]',
-            'input[name*="mobile"]',
-            'input[class*="phone"]',
-            'input[maxlength="11"]'
-        ];
-        
-        for (const selector of phoneInputSelectors) {
-            try {
-                const input = this.page.locator(selector).first();
-                if (await input.isVisible({ timeout: 3000 })) {
-                    log('✅ Already on phone login page', 'green');
-                    return;
-                }
-            } catch (e) {
-                // Continue
+        // First, check if we can find the "获取验证码" button - this is the definitive SMS login indicator
+        try {
+            const smsBtn = this.page.locator('button:has-text("获取验证码")').first();
+            if (await smsBtn.isVisible({ timeout: 2000 })) {
+                log('✅ Already on SMS login page (found 获取验证码 button)', 'green');
+                return;
             }
+        } catch (e) {
+            // Not on SMS login yet
         }
         
-        // Try to find and click phone login tab/button
-        log('🔍 Looking for phone login option...', 'cyan');
+        // Try to find and click "验证码登录" tab
+        log('🔍 Looking for "验证码登录" tab...', 'cyan');
         
-        const phoneLoginSelectors = [
-            'button:has-text("手机号登录")',
-            'a:has-text("手机号登录")',
-            'div:has-text("手机号登录")',
-            '[class*="tab"]:has-text("手机")',
-            '[class*="login-tab"]:has-text("手机")',
-            '[role="tab"]:has-text("手机")',
-            'button:has-text("手机")',
-            'a:has-text("手机")'
+        // Get all tabs first to understand the structure
+        try {
+            const allTabs = await this.page.locator('div[class*="tab"], [role="tab"], button[class*="tab"], a[class*="tab"]').all();
+            log(`  Found ${allTabs.length} tab elements`, 'blue');
+            
+            for (const tab of allTabs) {
+                const text = await tab.textContent().catch(() => '');
+                log(`  Tab text: "${text.trim()}"`, 'blue');
+                
+                if (text.includes('验证码登录') || text === '验证码') {
+                    await tab.click();
+                    log('✅ Clicked "验证码登录" tab', 'green');
+                    await this.page.waitForTimeout(2500);
+                    return;
+                }
+            }
+        } catch (e) {
+            log(`  Error finding tabs: ${e.message}`, 'yellow');
+        }
+        
+        // Try specific selectors
+        const smsLoginSelectors = [
+            'div:has-text("验证码登录"):not(:has(div))',
+            'span:has-text("验证码登录")',
+            'text="验证码登录"',
+            'div[class*="tab"]:has-text("验证码")',
+            'button:has-text("验证码")',
+            'a:has-text("验证码")'
         ];
         
-        for (const selector of phoneLoginSelectors) {
+        for (const selector of smsLoginSelectors) {
             try {
                 const btn = this.page.locator(selector).first();
                 if (await btn.isVisible({ timeout: 2000 })) {
                     await btn.click();
-                    log('✅ Clicked phone login option', 'green');
-                    await this.page.waitForTimeout(2000);
+                    log(`✅ Clicked SMS tab with selector: ${selector}`, 'green');
+                    await this.page.waitForTimeout(2500);
                     return;
                 }
             } catch (e) {
@@ -364,23 +390,31 @@ export class KuaishouLogin {
             }
         }
         
-        // Try to find by partial text
+        // Try to find by evaluating all clickable elements
+        log('🔍 Searching all clickable elements...', 'cyan');
         try {
-            const allTabs = await this.page.locator('button, a, div[role="tab"], .tab').all();
-            for (const tab of allTabs) {
-                const text = await tab.textContent().catch(() => '');
-                if (text.includes('手机') || text.includes('短信') || text.includes('验证码')) {
-                    await tab.click();
-                    log('✅ Clicked phone login tab (found by text)', 'green');
-                    await this.page.waitForTimeout(2000);
-                    return;
+            const result = await this.page.evaluate(() => {
+                const allElements = document.querySelectorAll('div, span, button, a, [class*="tab"]');
+                for (const el of allElements) {
+                    if (el.textContent && (el.textContent.includes('验证码登录') || el.textContent === '验证码')) {
+                        el.click();
+                        return `Clicked element: ${el.tagName} with text "${el.textContent.trim()}"`;
+                    }
                 }
+                return 'No SMS login tab found';
+            });
+            log(`  ${result}`, result.includes('Clicked') ? 'green' : 'yellow');
+            if (result.includes('Clicked')) {
+                await this.page.waitForTimeout(2500);
+                return;
             }
         } catch (e) {
-            // Continue
+            log(`  Error in evaluate: ${e.message}`, 'yellow');
         }
         
-        log('⚠️ Could not find phone login option, assuming already on phone login or will use default', 'yellow');
+        log('⚠️ Could not auto-click SMS login tab', 'yellow');
+        log('📝 Please manually click "验证码登录" tab in the browser', 'yellow');
+        await prompt('\n⏸️ Press Enter after clicking "验证码登录" tab...');
     }
 
     /**
@@ -639,6 +673,7 @@ async function main() {
     let phoneNumber = DEFAULT_PHONE;
     let checkOnly = false;
     let headless = false;
+    let autoMode = false;
     
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--auth-file' && args[i + 1]) {
@@ -651,6 +686,8 @@ async function main() {
             checkOnly = true;
         } else if (args[i] === '--headless') {
             headless = true;
+        } else if (args[i] === '--auto') {
+            autoMode = true;
         } else if (args[i] === '--help' || args[i] === '-h') {
             showHelp();
             process.exit(0);
@@ -672,7 +709,7 @@ async function main() {
             process.exit(isValid ? 0 : 1);
         } else {
             // Perform login with default phone
-            await login.login(phoneNumber);
+            await login.login(phoneNumber, autoMode);
             
             log('\n─────────────────────────────────', 'green');
             log('✅ Kuaishou Login Complete!', 'green');
@@ -698,6 +735,7 @@ Usage:
 Options:
   --auth-file <path>   Custom auth file path (default: .runtime/kuaishou_auth.json)
   --phone <number>     Phone number (default: ${DEFAULT_PHONE})
+  --auto               Auto mode: use default phone, prompt only for SMS code
   --check              Check if existing session is valid
   --headless           Run in headless mode (no browser window)
   --help, -h           Show this help message
@@ -708,6 +746,9 @@ Examples:
 
   # Use different phone number
   node login.js --phone 139****8888
+
+  # Auto mode (for remote/SSH): auto-fill phone, only prompt SMS code
+  node login.js --auto
 
   # Check session validity
   node login.js --check
