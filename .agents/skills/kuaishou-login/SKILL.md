@@ -25,8 +25,8 @@ node .agents/skills/kuaishou-login/scripts/login.js
 ```
 
 按提示操作：
-1. 输入手机号
-2. 点击浏览器中的"获取验证码"
+1. 手机号（默认 13810417594，直接回车使用默认）
+2. 脚本会自动点击"获取验证码"
 3. 输入收到的短信验证码
 4. 如有滑块验证码，手动完成后按回车
 5. 登录成功，session 自动保存
@@ -40,8 +40,11 @@ node .agents/skills/kuaishou-login/scripts/login.js --check
 ## CLI Usage
 
 ```bash
-# 交互式登录（默认）
+# 交互式登录（默认手机号 13810417594）
 node scripts/login.js
+
+# 使用其他手机号
+node scripts/login.js --phone 139****8888
 
 # 检查现有 session 是否有效
 node scripts/login.js --check
@@ -63,8 +66,11 @@ node scripts/login.js --help
 快手 session 有效期约 7 天，建议每周手动运行一次：
 
 ```bash
-# 每周运行一次，保持 session 新鲜
+# 每周运行一次，保持 session 新鲜（使用默认手机号）
 node .agents/skills/kuaishou-login/scripts/login.js
+
+# 或使用指定手机号
+node .agents/skills/kuaishou-login/scripts/login.js --phone 13810417594
 ```
 
 ### 2. Cron Job 失败时
@@ -133,6 +139,8 @@ const context = await browser.newContext({
 | "操作频繁"提示 | 等待 5 分钟后重试 |
 | Session 很快过期 | 快手 session 通常 7 天过期，属于正常情况 |
 | 找不到登录按钮 | 脚本会自动检测多种选择器，如仍失败请检查页面是否加载完整 |
+| 没有自动点击"获取验证码" | 手动点击浏览器中的按钮，然后继续输入验证码 |
+| 默认手机号不对 | 使用 `--phone` 参数指定其他号码 |
 
 ## Technical Details
 
