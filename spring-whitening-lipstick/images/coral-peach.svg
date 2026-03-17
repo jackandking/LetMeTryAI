@@ -1,13 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1f4e79"/>
-      <stop offset="100%" stop-color="#4f8fba"/>
+    <!-- Coral Peach Gradient -->
+    <linearGradient id="coralBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff8a7a"/>
+      <stop offset="50%" stop-color="#ff9a8a"/>
+      <stop offset="100%" stop-color="#ff7a6a"/>
     </linearGradient>
+    <linearGradient id="coralTip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb4a2"/>
+      <stop offset="100%" stop-color="#ff8a7a"/>
+    </linearGradient>
+    <!-- Gold casing gradient -->
+    <linearGradient id="goldCase" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="30%" stop-color="#f4d03f"/>
+      <stop offset="50%" stop-color="#fff8dc"/>
+      <stop offset="70%" stop-color="#f4d03f"/>
+      <stop offset="100%" stop-color="#d4af37"/>
+    </linearGradient>
+    <!-- Shadow -->
+    <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">珊瑚蜜桃</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#fff5f3"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="320" cy="80" r="40" fill="#ffd4cc" opacity="0.5"/>
+  <circle cx="80" cy="320" r="60" fill="#ffd4cc" opacity="0.3"/>
+  
+  <!-- Shadow under lipstick -->
+  <ellipse cx="200" cy="330" rx="60" ry="15" fill="url(#shadow)"/>
+  
+  <!-- Lipstick casing (bottom) -->
+  <rect x="160" y="220" width="80" height="100" rx="4" fill="url(#goldCase)"/>
+  <rect x="165" y="220" width="70" height="100" rx="2" fill="none" stroke="#b8860b" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Lipstick base ring -->
+  <rect x="155" y="210" width="90" height="15" rx="3" fill="#c9a227"/>
+  
+  <!-- Lipstick bullet (main body) -->
+  <path d="M170 210 L170 140 Q170 120 190 115 Q210 110 230 115 Q230 140 230 140 L230 210 Z" fill="url(#coralBody)"/>
+  
+  <!-- Lipstick tip (slanted) -->
+  <path d="M170 140 Q170 120 190 115 Q210 110 230 115 L225 135 Q210 130 190 135 Q175 140 170 140 Z" fill="url(#coralTip)"/>
+  
+  <!-- Highlight on lipstick -->
+  <ellipse cx="190" cy="160" rx="8" ry="25" fill="#fff" opacity="0.3"/>
+  
+  <!-- Label -->
+  <text x="200" y="360" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="18" fill="#e86a5a" font-weight="600">珊瑚蜜桃</text>
 </svg>
