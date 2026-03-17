@@ -304,14 +304,98 @@ function buildProfilePromptNotes(profile) {
     return notes;
 }
 
-export function buildTopicSelectionPrompt({ profile, currentDate }) {
+function getRecentTopicsSummary(profileId, days = 7) {
+    try {
+        const result = spawnSync('git', [
+            'log',
+            `--since=${days} days ago`,
+            '--name-status',
+            '--diff-filter=A',
+            '--',
+            '*/app.js'
+        ], { cwd: REPO_DIR, encoding: 'utf-8' });
+
+        if (result.status !== 0 || !result.stdout) {
+            return null;
+        }
+
+        const apps = result.stdout
+            .split('\n')
+            .filter(line => line.startsWith('A\t') && line.endsWith('/app.js'))
+            .map(line => line.replace(/^A\t/, '').replace(/\/app\.js$/, ''))
+            .filter(dir => !dir.includes('templates') && !dir.includes('node_modules'));
+
+        // Get titles from index.html
+        const topics = apps.slice(0, 10).map(appDir => {
+            try {
+                const indexPath = path.join(REPO_DIR, appDir, 'index.html');
+                if (fs.existsSync(indexPath)) {
+                    const content = fs.readFileSync(indexPath, 'utf-8');
+                    const titleMatch = content.match(/<title>([^<]*)<\/title>/);
+                    return titleMatch ? titleMatch[1] : appDir;
+                }
+            } catch (e) {
+                // ignore
+            }
+            return appDir;
+        });
+
+        return topics;
+    } catch (e) {
+        return null;
+    }
+}
+
+function buildTopicConstraintsPrompt(profile) {
+    const constraints = [];
+    
+    if (profile?.topicConstraints) {
+        const tc = profile.topicConstraints;
+        
+        if (tc['体育竞技']) {
+            constraints.push(`体育类主题限制：每周最多${tc['体育竞技'].maxPerWeek}个，冷却${tc['体育竞技'].cooldownDays}天`);
+            if (tc['体育竞技'].avoidKeywords) {
+                constraints.push(`近期避免关键词：${tc['体育竞技'].avoidKeywords.join('、')}`);
+            }
+        }
+        
+        if (tc['相似主题冷却']) {
+            constraints.push(`相似主题冷却期：${tc['相似主题冷却'].cooldownDays}天`);
+        }
+    }
+    
+    if (profile?.rotationPriority) {
+        constraints.push(`推荐类别优先级（按使用频率从低到高）：${profile.rotationPriority.join(' > ')}`);
+    }
+    
+    if (profile?.topicIdeas) {
+        const ideas = Object.entries(profile.topicIdeas)
+            .slice(0, 3)
+            .map(([cat, topics]) => `${cat}：${topics.slice(0, 2).join('、')}`)
+            .join('；');
+        constraints.push(`选题示例：${ideas}`);
+    }
+    
+    return constraints.length > 0 ? constraints.join('\n') : '';
+}
+
+export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics }) {
     const preferredCategories = buildPreferredCategoriesPrompt(profile);
     const profileNotes = buildProfilePromptNotes(profile);
+    const constraints = buildTopicConstraintsPrompt(profile);
+    
+    // Build recent topics note
+    let recentTopicsNote = '';
+    if (recentTopics && recentTopics.length > 0) {
+        recentTopicsNote = `\n最近7天已发布的主题（避免重复）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
+    }
 
     return [
         `今天是 ${currentDate}。`,
         '你要为 LetMeTryAI 的日更投票页挑选热点话题。',
         `先自己检索今天与该品牌最相关的热点或常青高传播话题，优先关注：${preferredCategories}。`,
+        recentTopicsNote,
+        constraints ? `\n选题约束（重要）：\n${constraints}\n` : '',
         '你只需要返回 JSON，不要写代码，不要创建文件，不要给解释，不要使用 Markdown 代码块。',
         '必须返回一个 JSON object，结构如下：',
         '{',
@@ -350,9 +434,16 @@ export function buildTopicSelectionPrompt({ profile, currentDate }) {
     ].join('\n');
 }
 
-export function buildFallbackTopicSelectionPrompt({ profile, currentDate }) {
+export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics }) {
     const preferredCategories = buildPreferredCategoriesPrompt(profile);
     const profileNotes = buildProfilePromptNotes(profile);
+    const constraints = buildTopicConstraintsPrompt(profile);
+    
+    // Build recent topics note
+    let recentTopicsNote = '';
+    if (recentTopics && recentTopics.length > 0) {
+        recentTopicsNote = `\n最近7天已发布的主题（避免重复）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
+    }
 
     return [
         `今天是 ${currentDate}。`,
@@ -491,9 +582,15 @@ async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
 }
 
 async function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
+    // Get recent topics for deduplication
+    const recentTopics = getRecentTopicsSummary(profile.id, 7);
+    if (recentTopics && recentTopics.length > 0) {
+        logStage('topics', `Found ${recentTopics.length} recent topics for deduplication check`);
+    }
+    
     const attempts = [
-        { mode: 'primary', prompt: buildTopicSelectionPrompt({ profile, currentDate }) },
-        { mode: 'fallback', prompt: buildFallbackTopicSelectionPrompt({ profile, currentDate }) }
+        { mode: 'primary', prompt: buildTopicSelectionPrompt({ profile, currentDate, recentTopics }) },
+        { mode: 'fallback', prompt: buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics }) }
     ];
     const failures = [];
 
