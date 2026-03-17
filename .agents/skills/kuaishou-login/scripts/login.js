@@ -492,93 +492,84 @@ export class KuaishouLogin {
      * Click get SMS code button with multiple strategies
      */
     async clickGetSMSButton() {
-        // Strategy 1: Try CSS selectors
-        const smsButtonSelectors = [
-            'button:has-text("获取验证码")',
-            'button:has-text("发送验证码")',
-            'button:has-text("获取")',
-            'div:has-text("获取验证码")',
+        // Strategy 1: Try text-based selectors (span, div, button, a)
+        const smsTextSelectors = [
+            'text="获取验证码"',
             'span:has-text("获取验证码")',
-            '[class*="code-btn"]',
-            '[class*="verify-btn"]',
-            '[class*="send-code"]',
-            'button[class*="sms"]',
-            'button[class*="code"]',
-            'div[class*="code"]',
-            'span[class*="code"]'
+            'div:has-text("获取验证码")',
+            'a:has-text("获取验证码")',
+            'button:has-text("获取验证码")'
         ];
         
-        for (const selector of smsButtonSelectors) {
+        for (const selector of smsTextSelectors) {
             try {
                 const btn = this.page.locator(selector).first();
                 if (await btn.isVisible({ timeout: 2000 })) {
-                    // Check if button is enabled
-                    const disabled = await btn.isDisabled().catch(() => false);
-                    if (!disabled) {
-                        await btn.click();
-                        log(`  Clicked SMS button: ${selector}`, 'blue');
-                        return btn;
-                    }
+                    await btn.click();
+                    log(`  Clicked SMS button: ${selector}`, 'blue');
+                    return btn;
                 }
             } catch (e) {
                 // Try next selector
             }
         }
         
-        // Strategy 2: Try to find by text content using evaluate
-        log('  Trying to find SMS button by text content...', 'blue');
-        try {
-            const clicked = await this.page.evaluate(() => {
-                // Find all buttons and clickable elements
-                const elements = document.querySelectorAll('button, div, span, a');
-                for (const el of elements) {
-                    const text = el.textContent?.trim() || '';
-                    // Look for "获取验证码" or just "获取"
-                    if (text === '获取验证码' || text === '获取' || text.includes('验证码')) {
-                        if (el.offsetParent !== null) { // Check if visible
-                            el.click();
-                            return `Clicked element with text: "${text}"`;
-                        }
+        // Strategy 2: Try class-based selectors
+        const classSelectors = [
+            '[class*="code-btn"]',
+            '[class*="verify-btn"]',
+            '[class*="send-code"]',
+            '[class*="get-code"]'
+        ];
+        
+        for (const selector of classSelectors) {
+            try {
+                const btn = this.page.locator(selector).first();
+                if (await btn.isVisible({ timeout: 2000 })) {
+                    const text = await btn.textContent().catch(() => '');
+                    if (text.includes('获取') || text.includes('验证码')) {
+                        await btn.click();
+                        log(`  Clicked SMS button by class: ${selector}`, 'blue');
+                        return btn;
                     }
                 }
-                return 'SMS button not found by text';
+            } catch (e) {
+                // Try next
+            }
+        }
+        
+        // Strategy 3: Use JavaScript to find and click by exact text
+        log('  Trying JavaScript click...', 'blue');
+        try {
+            const clicked = await this.page.evaluate(() => {
+                // Find element with exact text "获取验证码"
+                const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
+                let node;
+                while (node = walker.nextNode()) {
+                    if (node.textContent?.trim() === '获取验证码' && node.offsetParent !== null) {
+                        node.click();
+                        return `Clicked: ${node.tagName} with exact text "获取验证码"`;
+                    }
+                }
+                
+                // Fallback: find any clickable element containing the text
+                const elements = document.querySelectorAll('span, div, a, button');
+                for (const el of elements) {
+                    if (el.textContent?.trim() === '获取验证码' && el.offsetParent !== null) {
+                        el.click();
+                        return `Clicked: ${el.tagName}`;
+                    }
+                }
+                
+                return '获取验证码 button not found';
             });
             
+            log(`  ${clicked}`, clicked.includes('Clicked') ? 'blue' : 'yellow');
             if (clicked.includes('Clicked')) {
-                log(`  ${clicked}`, 'blue');
                 return true;
             }
         } catch (e) {
             log(`  Error in evaluate: ${e.message}`, 'yellow');
-        }
-        
-        // Strategy 3: Try to find button near phone input
-        log('  Trying to find SMS button near phone input...', 'blue');
-        try {
-            const phoneInput = await this.findPhoneInput();
-            if (phoneInput) {
-                // Get the parent form/container
-                const parent = await phoneInput.evaluate(el => {
-                    let parent = el.parentElement;
-                    // Look up to 3 levels up
-                    for (let i = 0; i < 3 && parent; i++) {
-                        const btn = parent.querySelector('button');
-                        if (btn) {
-                            btn.click();
-                            return 'Found button in parent container';
-                        }
-                        parent = parent.parentElement;
-                    }
-                    return 'No button found in parent containers';
-                });
-                
-                if (parent.includes('Found')) {
-                    log(`  ${parent}`, 'blue');
-                    return true;
-                }
-            }
-        } catch (e) {
-            log(`  Error finding button near input: ${e.message}`, 'yellow');
         }
         
         return null;
