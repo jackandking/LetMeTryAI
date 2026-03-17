@@ -1,13 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4a5759"/>
-      <stop offset="100%" stop-color="#b0c4b1"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">水果坚果组</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#fdf8e8"/>
+  
+  <!-- 水果盘 -->
+  <ellipse cx="100" cy="105" rx="60" ry="18" fill="#ffffff" stroke="#d4a574" stroke-width="2"/>
+  <ellipse cx="100" cy="102" rx="55" ry="14" fill="#f8f4e8"/>
+  
+  <!-- 苹果 -->
+  <circle cx="75" cy="95" r="12" fill="#e8927c"/>
+  <path d="M75 83 Q78 78 82 80" stroke="#8b6914" stroke-width="2" fill="none"/>
+  <ellipse cx="77" cy="82" rx="4" ry="2" fill="#7a9a4a"/>
+  
+  <!-- 橙子 -->
+  <circle cx="100" cy="98" r="11" fill="#f5b971"/>
+  <circle cx="100" cy="98" r="9" fill="#f5c98a"/>
+  
+  <!-- 香蕉 -->
+  <path d="M115 85 Q130 80 140 90 Q145 95 140 100 Q130 95 115 100 Q110 95 115 85" fill="#f5e6a3"/>
+  <path d="M115 85 Q118 82 120 85" stroke="#8b6914" stroke-width="2" fill="none"/>
+  
+  <!-- 葡萄 -->
+  <circle cx="125" cy="95" r="5" fill="#a080c0"/>
+  <circle cx="132" cy="92" r="5" fill="#9070b0"/>
+  <circle cx="128" cy="100" r="5" fill="#8060a0"/>
+  <circle cx="135" cy="98" r="5" fill="#a080c0"/>
+  
+  <!-- 坚果组 -->
+  <!-- 核桃 -->
+  <ellipse cx="55" cy="115" rx="8" ry="6" fill="#a08060"/>
+  <path d="M52 113 Q55 110 58 113" stroke="#6b510f" stroke-width="1" fill="none"/>
+  
+  <!-- 杏仁 -->
+  <ellipse cx="75" cy="118" rx="6" ry="4" fill="#d4a574"/>
+  
+  <!-- 花生 -->
+  <ellipse cx="130" cy="118" rx="7" ry="5" fill="#e8c9a0"/>
+  <path d="M127 116 Q130 114 133 116" stroke="#c4a35a" stroke-width="1" fill="none"/>
+  
+  <!-- 腰果 -->
+  <path d="M150 115 Q155 110 158 115 Q160 120 155 122 Q150 120 148 115" fill="#f5d4a0"/>
+  
+  <!-- 装饰性叶子 -->
+  <ellipse cx="45" cy="45" rx="8" ry="4" fill="#7a9a4a" transform="rotate(-30 45 45)"/>
+  <ellipse cx="160" cy="40" rx="6" ry="3" fill="#8baa5a" transform="rotate(20 160 40)"/>
+  
+  <!-- 小装饰 -->
+  <circle cx="35" cy="100" r="4" fill="#c4a35a" opacity="0.3"/>
+  <circle cx="170" cy="110" r="5" fill="#c4a35a" opacity="0.2"/>
 </svg>

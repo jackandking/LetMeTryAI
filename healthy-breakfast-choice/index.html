@@ -20,46 +20,75 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">爱老人关注：你更推荐哪种早餐给爸妈/长辈？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">爱老人关注：你更推荐哪种早餐给爸妈/长辈？</h1>
+            <p class="subtitle">为长辈选择一份健康营养的早餐</p>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">如果是爱老人用户，你最支持哪个选项：最适合老年人的早餐首选？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="elder-love" value="congee-and-side-dishes">
-                    <img src="images/congee-and-side-dishes.svg" alt="一碗热粥和小菜" loading="lazy">
-                    <span>稀饭或糊类，搭配小菜，暖胃易消化</span>
-                </label>
+        <form id="questionnaire">
+            <div class="question" id="questionArea">
+                <p id="questionText">如果是爱老人用户，你最支持哪个选项：最适合老年人的早餐首选？</p>
+                <div class="options-grid" id="optionsContainer">
+                    <label class="option-card">
+                        <input type="radio" name="elder-love" value="congee-and-side-dishes">
+                        <div class="card-image">
+                            <img src="images/congee-and-side-dishes.svg" alt="一碗热粥和小菜" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">稀饭糊类配小菜</h3>
+                            <p class="card-desc">暖胃易消化，传统中式早餐</p>
+                        </div>
+                        <div class="card-check"></div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="elder-love" value="soy-milk-and-snack">
-                    <img src="images/soy-milk-and-snack.svg" alt="豆浆和传统中式点心" loading="lazy">
-                    <span>豆浆配包子或蒸饼，蛋白与碳水均衡</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="elder-love" value="milk-and-whole-grain">
+                        <div class="card-image">
+                            <img src="images/milk-and-whole-grain.svg" alt="牛奶和全麦面包早餐" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">牛奶酸奶配全麦</h3>
+                            <p class="card-desc">方便快捷，营养好吸收</p>
+                        </div>
+                        <div class="card-check"></div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="elder-love" value="milk-and-whole-grain">
-                    <img src="images/milk-and-whole-grain.svg" alt="牛奶和全麦面包早餐" loading="lazy">
-                    <span>牛奶或酸奶配全麦面包，方便快捷营养好吸收</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="elder-love" value="soy-milk-and-snack">
+                        <div class="card-image">
+                            <img src="images/soy-milk-and-snack.svg" alt="豆浆和传统中式点心" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">豆浆配包子蒸饼</h3>
+                            <p class="card-desc">蛋白与碳水均衡搭配</p>
+                        </div>
+                        <div class="card-check"></div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="elder-love" value="fruit-and-nuts">
-                    <img src="images/fruit-and-nuts.svg" alt="水果盘和少量坚果" loading="lazy">
-                    <span>水果切盘加少量坚果，清爽轻盈又补充维生素</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="elder-love" value="fruit-and-nuts">
+                        <div class="card-image">
+                            <img src="images/fruit-and-nuts.svg" alt="水果盘和少量坚果" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">水果切盘加坚果</h3>
+                            <p class="card-desc">清爽轻盈，补充维生素</p>
+                        </div>
+                        <div class="card-check"></div>
+                    </label>
+                </div>
             </div>
+        </form>
+
+        <div class="result" id="result">
+            <p>正在汇总实时投票结果...</p>
         </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+        <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {

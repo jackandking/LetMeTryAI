@@ -1,13 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7f5539"/>
-      <stop offset="100%" stop-color="#ddb892"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">字母哥（Giannis Antetokounmpo）</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#2c5aa0" opacity="0.1"/>
+  
+  <!-- Basketball Player Silhouette - Giannis (Greek Freak) -->
+  <g fill="#2c5aa0">
+    <!-- Head -->
+    <ellipse cx="60" cy="26" rx="13" ry="15"/>
+    
+    <!-- Curly Hair hint -->
+    <circle cx="50" cy="18" r="4"/>
+    <circle cx="56" cy="15" r="4"/>
+    <circle cx="64" cy="15" r="4"/>
+    <circle cx="70" cy="18" r="4"/>
+    
+    <!-- Neck -->
+    <rect x="55" y="40" width="10" height="10"/>
+    
+    <!-- Torso/Jersey (Long arms reaching) -->
+    <path d="M38 50 L82 50 L78 85 L42 85 Z"/>
+    
+    <!-- Jersey Number 34 -->
+    <text x="60" y="75" font-family="Arial Black, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle" font-weight="900">34</text>
+    
+    <!-- Left Arm (Long reach - Giannis signature) -->
+    <path d="M38 52 Q15 55 10 45 L8 52 Q18 62 40 58 Z"/>
+    
+    <!-- Right Arm (Extended upward for dunk) -->
+    <path d="M82 52 Q105 40 112 25 L118 28 Q110 48 86 58 Z"/>
+    
+    <!-- Basketball in right hand -->
+    <circle cx="115" cy="22" r="11" fill="#ff6b35"/>
+    <path d="M106 22 Q115 22 124 22" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    <path d="M115 11 Q115 22 115 33" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    
+    <!-- Left Leg (Power stance) -->
+    <path d="M45 83 L35 105 L45 108 L52 85 Z"/>
+    
+    <!-- Right Leg -->
+    <path d="M75 83 L85 105 L75 108 L68 85 Z"/>
+    
+    <!-- Wingspan accent lines -->
+    <path d="M10 48 L30 50" stroke="#4a7ab8" stroke-width="2" opacity="0.6"/>
+    <path d="M90 50 L110 30" stroke="#4a7ab8" stroke-width="2" opacity="0.6"/>
+  </g>
+  
+  <!-- Greek Pattern accent -->
+  <rect x="45" y="95" width="30" height="4" fill="#4a7ab8" opacity="0.5"/>
 </svg>

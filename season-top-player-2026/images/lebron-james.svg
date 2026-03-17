@@ -1,13 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1f4e79"/>
-      <stop offset="100%" stop-color="#4f8fba"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">詹姆斯（LeBron James）</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#2c5aa0" opacity="0.1"/>
+  
+  <!-- Basketball Player Silhouette - LeBron James -->
+  <g fill="#2c5aa0">
+    <!-- Head -->
+    <ellipse cx="60" cy="28" rx="14" ry="16"/>
+    
+    <!-- Headband -->
+    <rect x="46" y="22" width="28" height="6" rx="2" fill="#1e4a80"/>
+    
+    <!-- Neck -->
+    <rect x="54" y="42" width="12" height="10"/>
+    
+    <!-- Torso/Jersey -->
+    <path d="M40 52 L80 52 L75 90 L45 90 Z"/>
+    
+    <!-- Jersey Number 23 -->
+    <text x="60" y="78" font-family="Arial Black, sans-serif" font-size="24" fill="#ffffff" text-anchor="middle" font-weight="900">23</text>
+    
+    <!-- Left Arm (Dribbling pose) -->
+    <path d="M40 55 Q25 65 30 80 L38 78 Q35 68 45 60 Z"/>
+    
+    <!-- Right Arm (Extended) -->
+    <path d="M80 55 Q95 50 100 40 L92 36 Q88 45 78 50 Z"/>
+    
+    <!-- Basketball -->
+    <circle cx="95" cy="32" r="12" fill="#ff6b35"/>
+    <path d="M85 32 Q95 32 105 32" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    <path d="M95 20 Q95 32 95 44" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    
+    <!-- Left Leg -->
+    <path d="M48 88 L45 108 L55 110 L58 88 Z"/>
+    
+    <!-- Right Leg -->
+    <path d="M72 88 L75 108 L65 110 L62 88 Z"/>
+    
+    <!-- Crown symbol above head (King James) -->
+    <path d="M52 8 L56 14 L60 8 L64 14 L68 8 L68 16 L52 16 Z" fill="#ff6b35"/>
+  </g>
+  
+  <!-- Accent Lines -->
+  <path d="M20 100 Q60 110 100 100" stroke="#4a7ab8" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
 </svg>

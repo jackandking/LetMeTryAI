@@ -1,13 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2f4858"/>
-      <stop offset="100%" stop-color="#86bbd8"/>
+    <linearGradient id="fieldGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a3a6a"/>
+      <stop offset="100%" stop-color="#0d2340"/>
+    </linearGradient>
+    <linearGradient id="dynamicGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c5aa0"/>
+      <stop offset="100%" stop-color="#4a7ab8"/>
     </linearGradient>
   </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">维尼修斯</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+  
+  <!-- Background field -->
+  <rect width="200" height="160" fill="url(#fieldGrad3)" rx="8"/>
+  
+  <!-- Dribbling trail effect -->
+  <g opacity="0.15">
+    <ellipse cx="60" cy="125" rx="25" ry="8" fill="#4a7ab8"/>
+    <ellipse cx="85" cy="125" rx="20" ry="6" fill="#4a7ab8"/>
+  </g>
+  
+  <!-- Dynamic curved lines -->
+  <g fill="none" stroke="#4a7ab8" stroke-width="2" opacity="0.3" stroke-linecap="round">
+    <path d="M30 100 Q60 85 50 60"/>
+    <path d="M170 100 Q140 85 150 60"/>
+    <path d="M40 120 Q70 105 100 115"/>
+  </g>
+  
+  <!-- Player silhouette - Dribbling/Creative pose with ball control -->
+  <g fill="url(#dynamicGrad)">
+    <!-- Leaned torso -->
+    <ellipse cx="100" cy="72" rx="20" ry="28" transform="rotate(10, 100, 72)"/>
+    <!-- Head looking at ball -->
+    <circle cx="95" cy="42" r="14"/>
+    <!-- Flowing hair -->
+    <path d="M85 35 Q70 32 65 42 Q62 50 72 48 L85 42 Z" fill="#1e4a80"/>
+  </g>
+  
+  <!-- Arms in dribbling position -->
+  <g fill="#2c5aa0">
+    <!-- Left arm (low, balancing) -->
+    <path d="M82 60 L65 85 L58 100 L68 88 L85 65 Z"/>
+    <ellipse cx="55" cy="103" rx="6" ry="5" transform="rotate(20, 55, 103)"/>
+    <!-- Right arm (controlling) -->
+    <path d="M118 65 L135 85 L145 95 L135 80 L120 68 Z"/>
+    <ellipse cx="148" cy="98" rx="6" ry="5" transform="rotate(-15, 148, 98)"/>
+  </g>
+  
+  <!-- Legs in motion -->
+  <g fill="#2c5aa0">
+    <!-- Left leg (support) -->
+    <ellipse cx="90" cy="105" rx="11" ry="22"/>
+    <ellipse cx="88" cy="135" rx="9" ry="5" transform="rotate(-5, 88, 135)"/>
+    <!-- Right leg (dribbling position) -->
+    <ellipse cx="115" cy="102" rx="10" ry="18" transform="rotate(-25, 115, 102)"/>
+    <ellipse cx="130" cy="120" rx="8" ry="5" transform="rotate(-35, 130, 120)"/>
+  </g>
+  
+  <!-- Ball being dribbled -->
+  <circle cx="135" cy="128" r="11" fill="url(#dynamicGrad)"/>
+  <g stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.8">
+    <path d="M128 123 L135 128 L142 123"/>
+    <path d="M128 133 L135 128 L142 133"/>
+    <path d="M135 117 L135 128 L135 139"/>
+  </g>
+  
+  <!-- Spark/creativity effects -->
+  <g fill="#4a7ab8" opacity="0.5">
+    <circle cx="160" cy="50" r="2"/>
+    <circle cx="170" cy="40" r="1.5"/>
+    <circle cx="155" cy="35" r="1"/>
+    <circle cx="40" cy="45" r="2"/>
+    <circle cx="30" cy="55" r="1.5"/>
+  </g>
+  
+  <!-- Wing/feather accent for agility -->
+  <g fill="none" stroke="#4a7ab8" stroke-width="1.5" opacity="0.25">
+    <path d="M150 70 Q165 65 170 55"/>
+    <path d="M152 78 Q168 72 175 62"/>
+    <path d="M150 86 Q165 82 170 74"/>
+  </g>
+  
+  <!-- Shadow under player -->
+  <ellipse cx="100" cy="145" rx="40" ry="5" fill="#0d2340" opacity="0.3"/>
+  
+  <!-- Accent dots pattern -->
+  <g fill="#4a7ab8" opacity="0.2">
+    <circle cx="25" cy="140" r="2"/>
+    <circle cx="35" cy="145" r="1.5"/>
+    <circle cx="180" cy="130" r="2"/>
+    <circle cx="175" cy="140" r="1.5"/>
+  </g>
+  
+  <!-- Energy swoosh -->
+  <path d="M50 110 Q80 95 100 105 Q130 120 145 100" 
+        fill="none" stroke="#3a6aa8" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
 </svg>

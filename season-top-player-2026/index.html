@@ -20,46 +20,71 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">本赛季谁最统治？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">本赛季谁最统治？</h1>
+            <p class="subtitle">NBA 2025-26赛季最具统治力球星票选</p>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">站在男人宝用户视角，你更想把票投给谁：本赛季最具统治力球星？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="lebron-james">
-                    <img src="images/lebron-james.svg" alt="LeBron James 赛场图" loading="lazy">
-                    <span>老将统治力与经验兼具</span>
-                </label>
+        <form id="questionnaire">
+            <div class="question" id="questionArea">
+                <p id="questionText">站在男人宝用户视角，你更想把票投给谁：本赛季最具统治力球星？</p>
+                <div class="options-grid" id="optionsContainer">
+                    <label class="option-card">
+                        <input type="radio" name="nanrenbao" value="lebron-james">
+                        <div class="card-image">
+                            <img src="images/lebron-james.svg" alt="LeBron James 赛场图" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="player-name">勒布朗·詹姆斯</h3>
+                            <p class="player-desc">老将统治力与经验兼具</p>
+                        </div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="giannis-antetokounmpo">
-                    <img src="images/giannis-antetokounmpo.svg" alt="Giannis 进攻图" loading="lazy">
-                    <span>强力内线与冲击篮筐的统治力</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="nanrenbao" value="giannis-antetokounmpo">
+                        <div class="card-image">
+                            <img src="images/giannis-antetokounmpo.svg" alt="Giannis 进攻图" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="player-name">字母哥</h3>
+                            <p class="player-desc">强力内线与冲击篮筐的统治力</p>
+                        </div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="kevin-durant">
-                    <img src="images/kevin-durant.svg" alt="Kevin Durant 投篮图" loading="lazy">
-                    <span>得分如探囊取物的明星得分手</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="nanrenbao" value="kevin-durant">
+                        <div class="card-image">
+                            <img src="images/kevin-durant.svg" alt="Kevin Durant 投篮图" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="player-name">凯文·杜兰特</h3>
+                            <p class="player-desc">得分如探囊取物的明星得分手</p>
+                        </div>
+                    </label>
 
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="luka-doncic">
-                    <img src="images/luka-doncic.svg" alt="Luka Doncic 运球图" loading="lazy">
-                    <span>全面组织与关键时刻得分能力</span>
-                </label>
+                    <label class="option-card">
+                        <input type="radio" name="nanrenbao" value="luka-doncic">
+                        <div class="card-image">
+                            <img src="images/luka-doncic.svg" alt="Luka Doncic 运球图" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="player-name">卢卡·东契奇</h3>
+                            <p class="player-desc">全面组织与关键时刻得分能力</p>
+                        </div>
+                    </label>
+                </div>
             </div>
+        </form>
+
+        <div class="result" id="result">
+            <p>正在汇总实时投票结果...</p>
         </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+        <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+        <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {

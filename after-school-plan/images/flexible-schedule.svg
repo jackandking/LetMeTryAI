@@ -1,13 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2f4858"/>
-      <stop offset="100%" stop-color="#86bbd8"/>
+    <!-- Flexible Blue/Purple Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0e8f8"/>
+      <stop offset="100%" stop-color="#e0d4f0"/>
+    </linearGradient>
+    <linearGradient id="calGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a90d9"/>
+      <stop offset="100%" stop-color="#6a5acd"/>
     </linearGradient>
   </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">灵活安排</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="320" cy="80" r="50" fill="#d8c8e8" opacity="0.5"/>
+  <circle cx="60" cy="320" r="70" fill="#d8c8e8" opacity="0.3"/>
+  
+  <!-- Calendar -->
+  <rect x="120" y="80" width="160" height="180" fill="white" stroke="url(#calGrad)" stroke-width="4" rx="8"/>
+  <!-- Calendar header -->
+  <rect x="120" y="80" width="160" height="40" fill="url(#calGrad)" rx="8"/>
+  <text x="200" y="108" text-anchor="middle" font-size="18" fill="white" font-weight="bold">日程安排</text>
+  <!-- Calendar rings -->
+  <circle cx="150" cy="75" r="8" fill="#666"/>
+  <circle cx="250" cy="75" r="8" fill="#666"/>
+  <line x1="150" y1="75" x2="150" y2="80" stroke="#666" stroke-width="3"/>
+  <line x1="250" y1="75" x2="250" y2="80" stroke="#666" stroke-width="3"/>
+  
+  <!-- Calendar grid -->
+  <line x1="120" y1="140" x2="280" y2="140" stroke="#eee" stroke-width="1"/>
+  <line x1="120" y1="170" x2="280" y2="170" stroke="#eee" stroke-width="1"/>
+  <line x1="120" y1="200" x2="280" y2="200" stroke="#eee" stroke-width="1"/>
+  <line x1="120" y1="230" x2="280" y2="230" stroke="#eee" stroke-width="1"/>
+  <line x1="160" y1="120" x2="160" y2="260" stroke="#eee" stroke-width="1"/>
+  <line x1="200" y1="120" x2="200" y2="260" stroke="#eee" stroke-width="1"/>
+  <line x1="240" y1="120" x2="240" y2="260" stroke="#eee" stroke-width="1"/>
+  
+  <!-- Activity indicators on calendar -->
+  <rect x="130" y="150" width="22" height="15" fill="#52c41a" rx="3" opacity="0.8"/>
+  <rect x="170" y="180" width="22" height="15" fill="#ff9f43" rx="3" opacity="0.8"/>
+  <rect x="210" y="210" width="22" height="15" fill="#52c41a" rx="3" opacity="0.8"/>
+  <rect x="250" y="155" width="22" height="15" fill="#ff9f43" rx="3" opacity="0.8"/>
+  
+  <!-- Swap arrows -->
+  <path d="M200 280 Q240 300 280 280" fill="none" stroke="#6a5acd" stroke-width="3" stroke-dasharray="6,3"/>
+  <polygon points="275,275 285,280 275,285" fill="#6a5acd"/>
+  <path d="M280 300 Q240 320 200 300" fill="none" stroke="#4a90d9" stroke-width="3" stroke-dasharray="6,3"/>
+  <polygon points="205,305 195,300 205,295" fill="#4a90d9"/>
+  
+  <!-- Balance scale symbol -->
+  <g transform="translate(150, 290)">
+    <line x1="50" y1="0" x2="50" y2="25" stroke="#666" stroke-width="2"/>
+    <line x1="20" y1="0" x2="80" y2="0" stroke="#666" stroke-width="2"/>
+    <line x1="20" y1="0" x2="10" y2="20" stroke="#666" stroke-width="2"/>
+    <line x1="80" y1="0" x2="90" y2="20" stroke="#666" stroke-width="2"/>
+    <rect x="5" y="20" width="15" height="12" fill="#ff9f43" rx="2"/>
+    <rect x="80" y="20" width="15" height="12" fill="#52c41a" rx="2"/>
+  </g>
+  
+  <!-- Flexibility indicator -->
+  <circle cx="340" cy="150" r="25" fill="#4a90d9" opacity="0.2"/>
+  <text x="340" y="158" text-anchor="middle" font-size="20" fill="#4a90d9">↻</text>
+  
+  <!-- Label -->
+  <text x="200" y="360" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="18" fill="#6a5acd" font-weight="600">灵活安排</text>
 </svg>
