@@ -50,4 +50,55 @@ echo "[run-daily-profile] log_dir=$DAILY_LOG_DIR"
 echo "[run-daily-profile] email_draft=$EMAIL_DRAFT_PATH"
 
 git pull --ff-only
+
+# Topic Deduplication Check for nanrenbao
+if [[ "$PROFILE_ID" == "nanrenbao" ]]; then
+    echo ""
+    echo "[run-daily-profile] Checking recent topics for nanrenbao..."
+    
+    # Get recent topics (last 3 days)
+    recent_apps=$(git log --since="3 days ago" --name-status --diff-filter=A -- "*/app.js" 2>/dev/null | \
+        grep "^A" | \
+        awk '{print $2}' | \
+        xargs -I {} dirname {} | \
+        sort -u | \
+        grep -v "^\.$" | \
+        grep -v "node_modules" | \
+        grep -v "templates" || true)
+    
+    if [[ -n "$recent_apps" ]]; then
+        echo "[run-daily-profile] Recent nanrenbao apps (3 days):"
+        echo "$recent_apps" | while read -r app; do
+            if [[ -f "$app/index.html" ]]; then
+                title=$(grep -o '<title>[^<]*</title>' "$app/index.html" 2>/dev/null | sed 's/<title>//;s/<\/title>//' | head -1)
+                echo "  - $app: ${title:-"N/A"}"
+            fi
+        done
+        
+        # Check for duplicate keywords
+        sports_count=$(echo "$recent_apps" | grep -c -E "(球星|球员|足球|篮球|NBA|sport|baller)" || true)
+        military_count=$(echo "$recent_apps" | grep -c -E "(战机|坦克|军事|装备|fighter|jet|tank)" || true)
+        
+        echo ""
+        if [[ "$sports_count" -ge 2 ]]; then
+            echo "⚠️  WARNING: $sports_count sports-related apps in last 3 days"
+            echo "    Consider choosing a different category (military, tech, car, outdoor)"
+        fi
+        if [[ "$military_count" -ge 2 ]]; then
+            echo "⚠️  WARNING: $military_count military-related apps in last 3 days"
+            echo "    Consider choosing a different category"
+        fi
+        
+        # Export for daily-orchestrator.js to use
+        export NANRENBAO_RECENT_APPS="$recent_apps"
+        export NANRENBAO_SPORTS_COUNT="$sports_count"
+        export NANRENBAO_MILITARY_COUNT="$military_count"
+    fi
+    
+    echo ""
+    echo "[run-daily-profile] Topic diversity hint:"
+    echo "  Rotating categories: 军事装备 → 科技数码 → 汽车机械 → 户外探险 → 历史军事 → 游戏电竞 → 收藏爱好"
+    echo ""
+fi
+
 exec ./daily_run.sh
