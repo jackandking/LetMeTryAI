@@ -2,7 +2,13 @@
  * Vote Application
  */
 
-CONFIG_PLACEHOLDER
+const questionConfig = {
+    title: '爱老人关注：退休后你最想重拾的兴趣？',
+    question: '如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣？',
+    options: [
+    ],
+    storageKey: 'retirement_rekindle_hobby_v1.data'
+};
 
 let currentQuestion = 1;
 let voteData = {};

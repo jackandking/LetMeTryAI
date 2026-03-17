@@ -2,7 +2,13 @@
  * Vote Application
  */
 
-CONFIG_PLACEHOLDER
+const questionConfig = {
+    title: '孩子何时开始独立做作业？',
+    question: '站在家长爱用户视角，你会怎么选：孩子何时开始独立做作业？',
+    options: [
+    ],
+    storageKey: 'homework_independence_vote_v1.data'
+};
 
 let currentQuestion = 1;
 let voteData = {};
