@@ -10,6 +10,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 TEMPLATES_DIR="$SCRIPT_DIR/templates"
 LOG_FILE="$PROJECT_DIR/logs/refine-vote-apps.log"
+REPORT_FILE="$PROJECT_DIR/logs/refine-report-latest.txt"
+
+# Email configuration
+EMAIL_TO="${REFINE_EMAIL_TO:-jackandking@163.com}"
+EMAIL_SUBJECT_PREFIX="[VoteApp优化]"
 
 # Colors for output
 RED='\033[0;31m'
@@ -37,6 +42,74 @@ log_info() {
 # Ensure log directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
 
+# Send email report
+send_email_report() {
+    local date_str
+    date_str=$(date '+%Y-%m-%d')
+    
+    if [[ ! -f "$REPORT_FILE" ]]; then
+        log_error "Report file not found: $REPORT_FILE"
+        return 1
+    fi
+    
+    # Check if Python and send_email.py exist
+    if [[ -f "$PROJECT_DIR/send_email.py" ]] && command -v python3 >/dev/null 2>&1; then
+        log_info "Sending email report to $EMAIL_TO..."
+        local subject="$EMAIL_SUBJECT_PREFIX 每日优化报告 $date_str"
+        if python3 "$PROJECT_DIR/send_email.py" "$subject" "$EMAIL_TO" "$REPORT_FILE" >> "$LOG_FILE" 2>&1; then
+            log_success "Email sent successfully"
+            return 0
+        else
+            log_error "Failed to send email"
+            return 1
+        fi
+    else
+        log_info "Email sending skipped (send_email.py not available)"
+        return 0
+    fi
+}
+
+# Build email report
+build_report() {
+    local total_apps="$1"
+    local success_count="$2"
+    local fail_count="$3"
+    local apps_list="$4"
+    local errors="$5"
+    
+    local date_str
+    date_str=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    cat > "$REPORT_FILE" << EOF
+VoteApp 每日优化报告
+===================
+
+报告时间: $date_str
+项目目录: $PROJECT_DIR
+
+优化概况
+--------
+总检测应用: $total_apps
+优化成功: $success_count
+优化失败: $fail_count
+
+应用列表
+--------
+$apps_list
+
+错误信息
+--------
+$errors
+
+详细日志
+--------
+请查看服务器日志文件: $LOG_FILE
+
+---
+此邮件由 LetMeTryAI 自动发送
+EOF
+}
+
 cd "$PROJECT_DIR"
 
 log "=========================================="
@@ -55,36 +128,50 @@ detect_brand() {
     local app_id
     app_id=$(basename "$app_dir")
     
-    # Try to find app in metadata
+    # Try to find app in metadata and check tags
     if [[ -f "$PROJECT_DIR/apps-metadata.json" ]]; then
-        local brand
-        brand=$(jq -r --arg id "$app_id" '.apps[] | select(.id == $id) | .tags[0]' "$PROJECT_DIR/apps-metadata.json" 2>/dev/null || echo "")
+        # Extract all tags for this app
+        local tags
+        tags=$(grep -A 30 '"id": "'$app_id'"' "$PROJECT_DIR/apps-metadata.json" | grep -A 20 '"tags":' | grep -o '"[^"]*"' | tr '\n' ' ')
         
-        if [[ -n "$brand" && "$brand" != "null" ]]; then
-            echo "$brand"
+        # Check for brand indicators in tags
+        if echo "$tags" | grep -qi "nanrenbao\|男人宝\|男性\|体育\|足球\|球星"; then
+            echo "nanrenbao"
+            return
+        elif echo "$tags" | grep -qi "parent-tools\|家长爱\|教育\|作业\|孩子"; then
+            echo "parent-tools"
+            return
+        elif echo "$tags" | grep -qi "elder-love\|爱老人\|老人\|退休\|养生"; then
+            echo "elder-love"
+            return
+        elif echo "$tags" | grep -qi "womanai\|女人爱\|女性\|美妆\|口红"; then
+            echo "womanai"
             return
         fi
         
-        # Try by directory name
-        brand=$(jq -r --arg dir "$app_id" '.apps[] | select(.directory == $dir) | .tags[0]' "$PROJECT_DIR/apps-metadata.json" 2>/dev/null || echo "")
-        if [[ -n "$brand" && "$brand" != "null" ]]; then
-            echo "$brand"
-            return
-        fi
-    fi
-    
-    # Fallback: detect from index.html content
-    if [[ -f "$app_dir/index.html" ]]; then
-        local radio_name
-        radio_name=$(grep -o 'name="[^"]*"' "$app_dir/index.html" | head -1 | sed 's/name="//;s/"$//')
-        case "$radio_name" in
-            "nanrenbao") echo "nanrenbao" ;;
-            "parent-tools") echo "parent-tools" ;;
-            "elder-love") echo "elder-love" ;;
-            "womanai") echo "womanai" ;;
-            *) echo "" ;;
+        # Try by directory name matching
+        case "$app_id" in
+            *nanrenbao*|*man*|*sport*|*football*|*ball*|*nba*) echo "nanrenbao" ;;
+            *parent*|*child*|*homework*|*school*) echo "parent-tools" ;;
+            *elder*|*retire*|*old*|*breakfast*) echo "elder-love" ;;
+            *woman*|*female*|*lipstick*|*beauty*) echo "womanai" ;;
+            *)
+                # Fallback: detect from index.html content
+                if [[ -f "$app_dir/index.html" ]]; then
+                    local radio_name
+                    radio_name=$(grep -o 'name="[^"]*"' "$app_dir/index.html" | head -1 | sed 's/name="//;s/"$//')
+                    case "$radio_name" in
+                        "nanrenbao") echo "nanrenbao" ;;
+                        "parent-tools") echo "parent-tools" ;;
+                        "elder-love") echo "elder-love" ;;
+                        "womanai") echo "womanai" ;;
+                        *) echo "" ;;
+                    esac
+                    return
+                fi
+                echo ""
+                ;;
         esac
-        return
     fi
     
     echo ""
@@ -147,16 +234,8 @@ refine_app() {
     
     # Copy JS (will need to preserve config)
     if [[ -f "$theme_dir/app.js" ]]; then
-        # Extract config from original app.js
-        local original_config
-        original_config=$(grep -A 30 "questionConfig =" "$backup_dir/app.js" 2>/dev/null || grep -A 30 "questionConfig=" "$app_dir/app.js" 2>/dev/null || echo "")
-        
         # Copy template JS
         cp "$theme_dir/app.js" "$app_dir/app.js"
-        
-        # TODO: Replace config in new JS with original config
-        # For now, the new JS will have template config which will be partially overwritten
-        # In a real implementation, we'd do proper config merging
         log_info "  ✓ Updated app.js"
     fi
     
@@ -203,11 +282,19 @@ main() {
     
     if [[ -z "$new_apps" ]]; then
         log_info "No new vote apps detected in the last 24 hours"
+        
+        # Send "no new apps" report
+        build_report "0" "0" "0" "无新应用" "N/A"
+        send_email_report
+        
         log "=========================================="
         exit 0
     fi
     
-    log_info "Found $(echo "$new_apps" | wc -l | tr -d ' ') new app(s):"
+    local app_count
+    app_count=$(echo "$new_apps" | wc -l | tr -d ' ')
+    
+    log_info "Found $app_count new app(s):"
     echo "$new_apps" | while read -r app; do
         log_info "  - $app"
     done
@@ -215,13 +302,20 @@ main() {
     # Process each app
     local success_count=0
     local fail_count=0
+    local apps_list=""
+    local errors=""
     
     while IFS= read -r app_dir; do
         if [[ -n "$app_dir" && -d "$app_dir" ]]; then
+            local app_name
+            app_name=$(basename "$app_dir")
+            apps_list="$apps_list\n- $app_name"
+            
             if refine_app "$app_dir"; then
                 ((success_count++)) || true
             else
                 ((fail_count++)) || true
+                errors="$errors\n- $app_name: 优化失败"
             fi
         fi
     done <<< "$new_apps"
@@ -233,8 +327,13 @@ main() {
             log_success "✓ Changes pushed successfully"
         else
             log_error "✗ Failed to push changes"
+            errors="$errors\n- Git push failed"
         fi
     fi
+    
+    # Build and send report
+    build_report "$app_count" "$success_count" "$fail_count" "$apps_list" "$errors"
+    send_email_report
     
     log "=========================================="
     log "Refinement Complete: $success_count succeeded, $fail_count failed"
