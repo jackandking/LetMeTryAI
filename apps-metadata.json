@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "ww2-best-tank",
+      "name": "坦克对决",
+      "description": "比较二战代表性坦克的火力、装甲与战场表现，适合图文参数投票。",
+      "category": "军事装备",
+      "directory": "ww2-best-tank",
+      "url": "ww2-best-tank",
+      "image": "ww2-best-tank/images/tiger-i.svg",
+      "tags": [
+        "投票",
+        "军事装备",
+        "二战",
+        "坦克",
+        "装甲",
+        "火力",
+        "历史",
+        "二战",
+        "坦克",
+        "装甲",
+        "火力",
+        "历史"
+      ],
+      "status": "active"
+    },
+    {
       "id": "womanai-best-guofeng-star",
       "name": "女人爱",
       "description": "选出你心目中把国风穿得最有味道的女星，明星+妆造利于传播。",
