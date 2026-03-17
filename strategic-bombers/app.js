@@ -1,31 +1,26 @@
 /**
- * Strategic Bombers Survey Application
- * Logic for "King of Strategic Bombers" survey
+ * Baller Leader Showdown - Survey Application
+ * Logic for the "男人宝热榜：谁是最能带队的球星？" voting app
  */
 
-/**
- * Configuration object for question and options
- */
-const questionConfig = {
-    title: "全球战略威慑：谁是轰炸机之王？",
-    question: "在未来战略打击体系中，你认为哪款轰炸机最具威慑力？",
+// Configuration
+const CONFIG = {
+    title: '男人宝热榜：谁是最能带队的球星？',
+    question: '站在男人宝用户视角，你更想把票投给谁：谁是当下最能带队的球星？',
     options: [
-        { value: "h20", label: "H-20 红色幽灵 (China)" },
-        { value: "b21", label: "B-21 突袭者 (USA)" },
-        { value: "tu160", label: "Tu-160M 白天鹅 (Russia)" },
-        { value: "b2", label: "B-2 幽灵 (USA)" },
-        { value: "h6n", label: "H-6N 战神 (China)" }
+        { value: 'kylian-mbappe', label: '姆巴佩', fullLabel: '基利安·姆巴佩' },
+        { value: 'erling-haaland', label: '哈兰德', fullLabel: '厄林·哈兰德' },
+        { value: 'vinicius-jr', label: '维尼修斯', fullLabel: '维尼修斯·儒尼奥尔' }
     ],
-    storageKey: "strategic_bombers_v1.data"
+    storageKey: 'baller_leader_showdown_v1.data',
+    adPageId: 'baller-leader-showdown'
 };
 
-/**
- * Application state
- */
+// State
 let voteData = {};
 
 /**
- * Initializes the application
+ * Initialize the application
  */
 function initializeApp() {
     try {
@@ -39,11 +34,11 @@ function initializeApp() {
 }
 
 /**
- * Checks URL parameters for navigation control
+ * Check URL parameters for special handling
  */
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     if (urlParams.get('finishedAd') === 'false') {
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
@@ -52,74 +47,76 @@ function checkUrlParameters() {
 }
 
 /**
- * Initializes vote data structure
+ * Initialize vote data structure
  */
 function initializeVoteData() {
-    questionConfig.options.forEach(option => {
-        voteData[option.label] = 0;
+    voteData = {};
+    CONFIG.options.forEach(option => {
+        voteData[option.fullLabel] = 0;
     });
 }
 
 /**
- * Sets up the page content dynamically
+ * Setup page content from config
  */
 function setupPageContent() {
     const titleElement = document.getElementById('pageTitle');
     if (titleElement) {
-        titleElement.textContent = questionConfig.title;
+        titleElement.textContent = CONFIG.title;
     }
 
     const questionElement = document.getElementById('questionText');
     if (questionElement) {
-        questionElement.textContent = questionConfig.question;
+        questionElement.textContent = CONFIG.question;
     }
-    
+
     attachRadioHandlers();
 }
 
 /**
- * Attach change handlers to radio inputs
+ * Attach event handlers to radio inputs
  */
 function attachRadioHandlers() {
-    const radios = document.querySelectorAll('input[name="bomber"]');
-    if (!radios || radios.length === 0) return;
+    const radios = document.querySelectorAll('input[name="nanrenbao"]');
+    if (!radios || radios.length === 0) {
+        return;
+    }
 
     radios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const selectedValue = e.target.value;
-            const matched = questionConfig.options.find(o => o.value === selectedValue);
-            
-            if (matched) {
-                processVote(matched.label);
-                showAd();
-            }
-        });
+        radio.addEventListener('change', handleVoteSelection);
     });
 }
 
 /**
- * Processes the user's vote
+ * Handle vote selection
+ * @param {Event} event - Change event
+ */
+function handleVoteSelection(event) {
+    const selectedValue = event.target.value;
+    const matched = CONFIG.options.find(option => option.value === selectedValue);
+
+    if (matched) {
+        processVote(matched.fullLabel);
+        showAd();
+    }
+}
+
+/**
+ * Process the vote and update storage
+ * @param {string} selectedLabel - The selected option label
  */
 function processVote(selectedLabel) {
-    getConfig(questionConfig.storageKey, (data) => {
+    getConfig(CONFIG.storageKey, (data) => {
         try {
             if (data !== null && typeof data === 'object') {
                 voteData = { ...data };
             }
-            
+
             voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
-            updateConfig(questionConfig.storageKey, voteData);
-            
-            const questionArea = document.getElementById('questionArea');
-            if (questionArea) {
-                questionArea.style.display = 'none';
-            }
-            
-            const showResultBtn = document.getElementById('showResultBtn');
-            if (showResultBtn) {
-                showResultBtn.style.display = 'block';
-            }
-            
+            updateConfig(CONFIG.storageKey, voteData);
+
+            hideQuestionArea();
+            showResultButton();
         } catch (error) {
             console.error('Error processing vote:', error);
         }
@@ -127,30 +124,48 @@ function processVote(selectedLabel) {
 }
 
 /**
- * Shows advertisement before displaying results
+ * Hide the question area
+ */
+function hideQuestionArea() {
+    const questionArea = document.getElementById('questionArea');
+    if (questionArea) {
+        questionArea.style.display = 'none';
+    }
+}
+
+/**
+ * Show the result button
+ */
+function showResultButton() {
+    const showResultBtn = document.getElementById('showResultBtn');
+    if (showResultBtn) {
+        showResultBtn.style.display = 'block';
+    }
+}
+
+/**
+ * Show advertisement and then display results
  */
 function showAd() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=strategic-bombers",
+            url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=${CONFIG.adPageId}`
         });
         return;
     }
 
-    displayAdFallback().catch(err => console.error('Ad fallback error:', err));
+    displayAdFallback().catch(error => console.error('Ad fallback error:', error));
 }
 
 /**
- * Web fallback to simulate an ad
+ * Display fallback ad overlay
+ * @returns {Promise<void>}
  */
 function displayAdFallback() {
     return new Promise((resolve) => {
         let overlay = document.getElementById('adOverlay');
         if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'adOverlay';
-            overlay.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;color:#fff;flex-direction:column;';
-            overlay.innerHTML = '<div style="background:#2c3e50;padding:30px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);"><h3>正在分析战略数据...</h3><div style="margin-top:15px;width:40px;height:40px;border:4px solid #e74c3c;border-top:4px solid transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div><style>@keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}</style></div>';
+            overlay = createAdOverlay();
             document.body.appendChild(overlay);
         } else {
             overlay.style.display = 'flex';
@@ -165,18 +180,70 @@ function displayAdFallback() {
 }
 
 /**
- * Display results logic
+ * Create ad overlay element
+ * @returns {HTMLElement} The overlay element
+ */
+function createAdOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'adOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: #fff;
+        flex-direction: column;
+    `;
+    overlay.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #2c5aa0 0%, #4a7ab8 100%);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 320px;
+        ">
+            <h3 style="margin: 0 0 16px 0; font-size: 18px;">正在分析投票趋势...</h3>
+            <div style="
+                width: 48px;
+                height: 48px;
+                border: 4px solid rgba(255, 255, 255, 0.3);
+                border-top: 4px solid #ffffff;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            "></div>
+            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+        </div>
+    `;
+    return overlay;
+}
+
+/**
+ * Display voting results
  */
 function displayResults() {
     const questionnaire = document.getElementById('questionnaire');
     const result = document.getElementById('result');
     const showResultBtn = document.getElementById('showResultBtn');
-    
-    if (questionnaire) questionnaire.style.display = 'none';
-    if (showResultBtn) showResultBtn.style.display = 'none';
-    if (result) result.style.display = 'block';
 
-    getConfig(questionConfig.storageKey, (data) => {
+    if (questionnaire) {
+        questionnaire.style.display = 'none';
+    }
+    if (showResultBtn) {
+        showResultBtn.style.display = 'none';
+    }
+    if (result) {
+        result.style.display = 'block';
+    }
+
+    getConfig(CONFIG.storageKey, (data) => {
         if (data) {
             showResult(data);
         } else {
@@ -186,118 +253,144 @@ function displayResults() {
 }
 
 /**
- * Handles URL parameters for result display
+ * Handle result display from URL parameter
  */
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
     const finishedAd = urlParams.get('finishedAd');
+
     if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
         const questionnaire = document.getElementById('questionnaire');
         const result = document.getElementById('result');
-        if (questionnaire) questionnaire.style.display = 'none';
-        if (result) result.style.display = 'block';
-        
+
+        if (questionnaire) {
+            questionnaire.style.display = 'none';
+        }
+        if (result) {
+            result.style.display = 'block';
+        }
+
         displayResults();
     }
 }
 
 /**
- * Displays voting results as a bar chart
+ * Render result content
+ * @param {Object} latestVoteData - The vote data to display
  */
-function showResult(voteData) {
-    if (!voteData || typeof voteData !== 'object') return;
+function showResult(latestVoteData) {
+    if (!latestVoteData || typeof latestVoteData !== 'object') {
+        return;
+    }
 
-    const resultDiv = document.getElementById("result");
-    if (!resultDiv) return;
+    const resultDiv = document.getElementById('result');
+    if (!resultDiv) {
+        return;
+    }
 
-    resultDiv.innerHTML = "<h2 style='text-align:center;color:#2c3e50;'>全球轰炸机威慑力排行</h2>";
-    resultDiv.innerHTML += "<p style='text-align:center;color:#7f8c8d;margin-bottom:20px;font-size:14px;'>基于实时军迷投票统计</p>";
+    resultDiv.innerHTML = `
+        <h2>球星带队PK投票结果</h2>
+        <p>看看大家对"男人宝热榜：谁是最能带队的球星？"的最新态度</p>
+    `;
 
-    const barChart = createBarChart(voteData);
+    const barChart = createBarChart(latestVoteData);
     resultDiv.appendChild(barChart);
-    
-    addSummaryStatistics(resultDiv, voteData);
+
+    addSummaryStatistics(resultDiv, latestVoteData);
 }
 
 /**
- * Creates bar chart
+ * Create bar chart for results
+ * @param {Object} latestVoteData - The vote data
+ * @returns {HTMLElement} The bar chart element
  */
-function createBarChart(voteData) {
-    const barChart = document.createElement("div");
-    barChart.className = "bar-chart";
+function createBarChart(latestVoteData) {
+    const barChart = document.createElement('div');
+    barChart.className = 'bar-chart';
 
-    const maxCount = Math.max(...Object.values(voteData));
+    const maxCount = Math.max(...Object.values(latestVoteData));
     const scale = maxCount > 0 ? 200 / maxCount : 1;
-    const total = Object.values(voteData).reduce((a, b) => a + b, 0);
+    const sortedEntries = Object.entries(latestVoteData).sort((a, b) => b[1] - a[1]);
 
-    const sortedEntries = Object.entries(voteData).sort((a, b) => b[1] - a[1]);
+    sortedEntries.forEach(([option, count], index) => {
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
 
-    for (const [option, count] of sortedEntries) {
-        const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
-        
-        const barContainer = document.createElement("div");
-        barContainer.className = "bar-container";
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = '2px';
 
-        const bar = document.createElement("div");
-        bar.className = "bar";
-        bar.style.height = "2px";
-        
-        requestAnimationFrame(() => {
-            bar.style.height = `${Math.max(count * scale, 2)}px`; 
-        });
-        
+        // Highlight winner
         if (count === maxCount && count > 0) {
-            bar.style.background = "linear-gradient(to top, #c0392b, #e74c3c)";
+            bar.classList.add('winner');
         }
 
-        const barLabel = document.createElement("div");
-        barLabel.className = "bar-label";
-        barLabel.innerText = `${count}`;
+        // Animate height
+        requestAnimationFrame(() => {
+            bar.style.height = `${Math.max(count * scale, 2)}px`;
+        });
 
-        const optionLabel = document.createElement("div");
-        optionLabel.className = "jet-label";
-        optionLabel.innerText = option.split(' ')[0];
+        const barLabel = document.createElement('div');
+        barLabel.className = 'bar-label';
+        barLabel.textContent = count;
+
+        const optionLabel = document.createElement('div');
+        optionLabel.className = 'option-label';
+        optionLabel.textContent = getShortLabel(option);
 
         barContainer.appendChild(bar);
         barContainer.appendChild(barLabel);
         barContainer.appendChild(optionLabel);
         barChart.appendChild(barContainer);
-    }
+    });
 
     return barChart;
 }
 
 /**
- * Adds summary statistics
+ * Get short label for display
+ * @param {string} fullLabel - The full label
+ * @returns {string} Short label
  */
-function addSummaryStatistics(container, voteData) {
-    const total = Object.values(voteData).reduce((a, b) => a + b, 0);
-    
-    const statsDiv = document.createElement("div");
-    statsDiv.style.cssText = "text-align:center; margin-top:20px; padding-top:15px; border-top:1px dashed #bdc3c7;";
-    
-    const totalVotes = document.createElement("p");
-    totalVotes.style.fontWeight = "bold";
-    totalVotes.innerText = `总参战人数: ${total}`;
-    
-    const timestamp = document.createElement("p");
-    timestamp.style.cssText = "font-size: 12px; color: #95a5a6; margin-top: 5px;";
-    timestamp.innerText = `最后更新: ${new Date().toLocaleString()}`;
-    
+function getShortLabel(fullLabel) {
+    const option = CONFIG.options.find(opt => opt.fullLabel === fullLabel);
+    return option ? option.label : fullLabel.split('·')[0];
+}
+
+/**
+ * Add summary statistics to result
+ * @param {HTMLElement} container - The container element
+ * @param {Object} latestVoteData - The vote data
+ */
+function addSummaryStatistics(container, latestVoteData) {
+    const total = Object.values(latestVoteData).reduce((sum, count) => sum + count, 0);
+
+    const statsDiv = document.createElement('div');
+    statsDiv.className = 'stats-section';
+
+    const totalVotes = document.createElement('p');
+    totalVotes.className = 'total-votes';
+    totalVotes.textContent = `总参与人数: ${total}`;
+
+    const timestamp = document.createElement('p');
+    timestamp.className = 'timestamp';
+    timestamp.textContent = `最后更新: ${new Date().toLocaleString()}`;
+
     statsDiv.appendChild(totalVotes);
     statsDiv.appendChild(timestamp);
     container.appendChild(statsDiv);
 }
 
 /**
- * Navigation to index
+ * Navigate to index page
  */
 function jumpToIndex() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
-        ks.navigateTo({ url: "/pages/index/index" });
+        ks.navigateTo({ url: '/pages/index/index' });
     } else {
-        window.location.href = "/";
+        window.location.href = '/';
     }
 }
 
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', initializeApp);
