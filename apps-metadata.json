@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "womanai-best-guofeng-star",
+      "name": "女人爱",
+      "description": "选出你心目中把国风穿得最有味道的女星，明星+妆造利于传播。",
+      "category": "明星",
+      "directory": "womanai-best-guofeng-star",
+      "url": "womanai-best-guofeng-star",
+      "image": "womanai-best-guofeng-star/images/zhao-liying.svg",
+      "tags": [
+        "投票",
+        "明星",
+        "国风",
+        "穿搭",
+        "女星",
+        "妆造",
+        "种草",
+        "国风",
+        "穿搭",
+        "女星",
+        "妆造",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "extracurricular-priority",
       "name": "家长爱话题：课外班选择",
       "description": "孩子参加课外班时，家长在“兴趣培养”和“成绩提升”之间如何取舍？",
