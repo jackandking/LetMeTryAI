@@ -341,6 +341,9 @@ export class KuaishouLogin {
     async switchToPhoneLogin() {
         log('\n📱 Checking current login method...', 'cyan');
         
+        // Wait for page to fully load
+        await this.page.waitForTimeout(2000);
+        
         // First, check if we can find the "获取验证码" button - this is the definitive SMS login indicator
         try {
             const smsBtn = this.page.locator('button:has-text("获取验证码")').first();
@@ -355,75 +358,87 @@ export class KuaishouLogin {
         // Try to find and click "验证码登录" tab
         log('🔍 Looking for "验证码登录" tab...', 'cyan');
         
-        // Get all tabs first to understand the structure
+        // Strategy 1: Find the li element containing "验证码登录" span
         try {
-            const allTabs = await this.page.locator('div[class*="tab"], [role="tab"], button[class*="tab"], a[class*="tab"]').all();
-            log(`  Found ${allTabs.length} tab elements`, 'blue');
-            
-            for (const tab of allTabs) {
-                const text = await tab.textContent().catch(() => '');
-                log(`  Tab text: "${text.trim()}"`, 'blue');
+            const smsTab = this.page.locator('li:has(span:has-text("验证码登录"))').first();
+            if (await smsTab.isVisible({ timeout: 3000 })) {
+                await smsTab.click();
+                log('✅ Clicked "验证码登录" tab (li element)', 'green');
+                await this.page.waitForTimeout(3000);
                 
-                if (text.includes('验证码登录') || text === '验证码') {
-                    await tab.click();
-                    log('✅ Clicked "验证码登录" tab', 'green');
-                    await this.page.waitForTimeout(2500);
+                // Verify we switched
+                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
+                if (hasSmsBtn) {
+                    log('✅ Successfully switched to SMS login', 'green');
                     return;
                 }
             }
         } catch (e) {
-            log(`  Error finding tabs: ${e.message}`, 'yellow');
+            log(`  Strategy 1 failed: ${e.message}`, 'blue');
         }
         
-        // Try specific selectors
-        const smsLoginSelectors = [
-            'div:has-text("验证码登录"):not(:has(div))',
-            'span:has-text("验证码登录")',
-            'text="验证码登录"',
-            'div[class*="tab"]:has-text("验证码")',
-            'button:has-text("验证码")',
-            'a:has-text("验证码")'
-        ];
-        
-        for (const selector of smsLoginSelectors) {
-            try {
-                const btn = this.page.locator(selector).first();
-                if (await btn.isVisible({ timeout: 2000 })) {
-                    await btn.click();
-                    log(`✅ Clicked SMS tab with selector: ${selector}`, 'green');
-                    await this.page.waitForTimeout(2500);
+        // Strategy 2: Click the span directly
+        try {
+            const smsSpan = this.page.locator('span:has-text("验证码登录")').first();
+            if (await smsSpan.isVisible({ timeout: 3000 })) {
+                await smsSpan.click();
+                log('✅ Clicked "验证码登录" span', 'green');
+                await this.page.waitForTimeout(3000);
+                
+                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
+                if (hasSmsBtn) {
+                    log('✅ Successfully switched to SMS login', 'green');
                     return;
                 }
-            } catch (e) {
-                // Try next selector
             }
+        } catch (e) {
+            log(`  Strategy 2 failed: ${e.message}`, 'blue');
         }
         
-        // Try to find by evaluating all clickable elements
-        log('🔍 Searching all clickable elements...', 'cyan');
+        // Strategy 3: Use JavaScript to find and click
+        log('🔍 Trying JavaScript click...', 'cyan');
         try {
             const result = await this.page.evaluate(() => {
-                const allElements = document.querySelectorAll('div, span, button, a, [class*="tab"]');
-                for (const el of allElements) {
-                    if (el.textContent && (el.textContent.includes('验证码登录') || el.textContent === '验证码')) {
-                        el.click();
-                        return `Clicked element: ${el.tagName} with text "${el.textContent.trim()}"`;
+                // Find the span with exact text "验证码登录"
+                const spans = document.querySelectorAll('span');
+                for (const span of spans) {
+                    if (span.textContent?.trim() === '验证码登录') {
+                        // Click the parent li or the span itself
+                        const clickTarget = span.closest('li') || span;
+                        clickTarget.click();
+                        return `Clicked: ${clickTarget.tagName} with span text "验证码登录"`;
                     }
                 }
-                return 'No SMS login tab found';
+                
+                // Fallback: find any element containing the text
+                const allElements = document.querySelectorAll('li, div, button, a, span');
+                for (const el of allElements) {
+                    if (el.textContent?.trim() === '验证码登录') {
+                        el.click();
+                        return `Clicked: ${el.tagName} with text "验证码登录"`;
+                    }
+                }
+                
+                return '验证码登录 tab not found';
             });
-            log(`  ${result}`, result.includes('Clicked') ? 'green' : 'yellow');
+            log(`  ${result}`, 'blue');
+            
             if (result.includes('Clicked')) {
-                await this.page.waitForTimeout(2500);
-                return;
+                await this.page.waitForTimeout(3000);
+                
+                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
+                if (hasSmsBtn) {
+                    log('✅ Successfully switched to SMS login', 'green');
+                    return;
+                }
             }
         } catch (e) {
-            log(`  Error in evaluate: ${e.message}`, 'yellow');
+            log(`  Strategy 3 failed: ${e.message}`, 'blue');
         }
         
-        log('⚠️ Could not auto-click SMS login tab', 'yellow');
+        log('⚠️ Could not auto-switch to SMS login', 'yellow');
         log('📝 Please manually click "验证码登录" tab in the browser', 'yellow');
-        await prompt('\n⏸️ Press Enter after clicking "验证码登录" tab...');
+        await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
     }
 
     /**
