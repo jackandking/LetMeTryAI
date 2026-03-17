@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "supercar-exhaust-pk",
+      "name": "跑车声浪PK",
+      "description": "法拉利、兰博基尼、保时捷等经典动力声浪对比，直观易投票",
+      "category": "汽车机械",
+      "directory": "supercar-exhaust-pk",
+      "url": "supercar-exhaust-pk",
+      "image": "supercar-exhaust-pk/images/ferrari-v8.svg",
+      "tags": [
+        "投票",
+        "汽车机械",
+        "跑车",
+        "声浪",
+        "发动机",
+        "V8",
+        "跑车",
+        "声浪",
+        "发动机",
+        "v8"
+      ],
+      "status": "active"
+    },
+    {
       "id": "modern-stealth-fighter-pk",
       "name": "现代战机对决",
       "description": "第五代隐身战机在隐身、机动与传感器上的对比投票，适合硬核装备爱好者。",
