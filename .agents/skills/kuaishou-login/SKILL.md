@@ -46,6 +46,9 @@ node scripts/login.js
 # 使用其他手机号
 node scripts/login.js --phone 139****8888
 
+# 自动模式（适合远程 SSH）：自动填充手机号，只提示验证码
+node scripts/login.js --auto
+
 # 检查现有 session 是否有效
 node scripts/login.js --check
 
