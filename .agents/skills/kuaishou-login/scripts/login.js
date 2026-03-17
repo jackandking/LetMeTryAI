@@ -235,7 +235,8 @@ export class KuaishouLogin {
             log('✅ Entered phone number', 'green');
             
             // Click get SMS code button
-            await this.page.waitForTimeout(1000);
+            await this.page.waitForTimeout(1500);
+            log('\n📲 Attempting to click "获取验证码" button...', 'cyan');
             const smsBtn = await this.clickGetSMSButton();
             
             if (smsBtn) {
@@ -243,12 +244,20 @@ export class KuaishouLogin {
                 log('⏳ Waiting 3 seconds for SMS to be sent...', 'cyan');
                 await this.page.waitForTimeout(3000);
             } else {
-                log('\n⚠️ Could not auto-click SMS button', 'yellow');
-                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
-                log('👉 请在浏览器中手动点击"获取验证码"按钮', 'yellow');
-                log('👉 Please manually click "获取验证码" button in browser', 'yellow');
-                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
-                await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
+                log('\n⚠️ Could not auto-click SMS button automatically', 'yellow');
+                log('等待 5 秒后重试... / Retrying in 5 seconds...', 'cyan');
+                await this.page.waitForTimeout(5000);
+                
+                // Retry once
+                const retryBtn = await this.clickGetSMSButton();
+                if (retryBtn) {
+                    log('✅ Clicked "获取验证码" button on retry', 'green');
+                    await this.page.waitForTimeout(3000);
+                } else {
+                    log('⚠️ Still could not click SMS button', 'yellow');
+                    log('页面可能加载中，继续等待 3 秒...', 'cyan');
+                    await this.page.waitForTimeout(3000);
+                }
             }
             
             // Prompt for SMS code
@@ -465,36 +474,96 @@ export class KuaishouLogin {
     }
 
     /**
-     * Click get SMS code button
+     * Click get SMS code button with multiple strategies
      */
     async clickGetSMSButton() {
+        // Strategy 1: Try CSS selectors
         const smsButtonSelectors = [
             'button:has-text("获取验证码")',
             'button:has-text("发送验证码")',
             'button:has-text("获取")',
+            'div:has-text("获取验证码")',
+            'span:has-text("获取验证码")',
             '[class*="code-btn"]',
             '[class*="verify-btn"]',
+            '[class*="send-code"]',
             'button[class*="sms"]',
-            'button[class*="code"]'
+            'button[class*="code"]',
+            'div[class*="code"]',
+            'span[class*="code"]'
         ];
         
         for (const selector of smsButtonSelectors) {
             try {
                 const btn = this.page.locator(selector).first();
-                if (await btn.isVisible({ timeout: 3000 })) {
+                if (await btn.isVisible({ timeout: 2000 })) {
                     // Check if button is enabled
                     const disabled = await btn.isDisabled().catch(() => false);
                     if (!disabled) {
                         await btn.click();
                         log(`  Clicked SMS button: ${selector}`, 'blue');
                         return btn;
-                    } else {
-                        log(`  SMS button disabled: ${selector}`, 'yellow');
                     }
                 }
             } catch (e) {
                 // Try next selector
             }
+        }
+        
+        // Strategy 2: Try to find by text content using evaluate
+        log('  Trying to find SMS button by text content...', 'blue');
+        try {
+            const clicked = await this.page.evaluate(() => {
+                // Find all buttons and clickable elements
+                const elements = document.querySelectorAll('button, div, span, a');
+                for (const el of elements) {
+                    const text = el.textContent?.trim() || '';
+                    // Look for "获取验证码" or just "获取"
+                    if (text === '获取验证码' || text === '获取' || text.includes('验证码')) {
+                        if (el.offsetParent !== null) { // Check if visible
+                            el.click();
+                            return `Clicked element with text: "${text}"`;
+                        }
+                    }
+                }
+                return 'SMS button not found by text';
+            });
+            
+            if (clicked.includes('Clicked')) {
+                log(`  ${clicked}`, 'blue');
+                return true;
+            }
+        } catch (e) {
+            log(`  Error in evaluate: ${e.message}`, 'yellow');
+        }
+        
+        // Strategy 3: Try to find button near phone input
+        log('  Trying to find SMS button near phone input...', 'blue');
+        try {
+            const phoneInput = await this.findPhoneInput();
+            if (phoneInput) {
+                // Get the parent form/container
+                const parent = await phoneInput.evaluate(el => {
+                    let parent = el.parentElement;
+                    // Look up to 3 levels up
+                    for (let i = 0; i < 3 && parent; i++) {
+                        const btn = parent.querySelector('button');
+                        if (btn) {
+                            btn.click();
+                            return 'Found button in parent container';
+                        }
+                        parent = parent.parentElement;
+                    }
+                    return 'No button found in parent containers';
+                });
+                
+                if (parent.includes('Found')) {
+                    log(`  ${parent}`, 'blue');
+                    return true;
+                }
+            }
+        } catch (e) {
+            log(`  Error finding button near input: ${e.message}`, 'yellow');
         }
         
         return null;
