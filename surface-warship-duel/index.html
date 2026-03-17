@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>近海驱逐舰对决 — 火力、雷达、防空谁更强？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">近海驱逐舰对决 — 火力、雷达、防空谁更强？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在男人宝用户视角，你更看好哪艘驱逐舰承担远洋护航任务？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="type-055">
+                    <img src="images/type-055.svg" alt="Type 055 驱逐舰侧视图" loading="lazy">
+                    <span>垂直发射单元密集，综合作战火力强</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="arleigh-burke-flight-iii">
+                    <img src="images/arleigh-burke-flight-iii.svg" alt="Arleigh Burke 驱逐舰甲板照" loading="lazy">
+                    <span>雷达与防空能力升级，平台成熟可靠</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="daring-class">
+                    <img src="images/daring-class.svg" alt="Daring-class 驱逐舰舰首特写" loading="lazy">
+                    <span>对空防御与电子战能力均衡，适合护航编队</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
