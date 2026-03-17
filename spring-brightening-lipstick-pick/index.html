@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>女人爱热议：春季显白口红色号大盘点</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">女人爱热议：春季显白口红色号大盘点</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是女人爱用户，你会把这一票投给哪个春季显白口红色号？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="womanai" value="coral-orange">
+                    <img src="images/coral-orange.svg" alt="珊瑚橘口红色板" loading="lazy">
+                    <span>气色感满分，日常显活力</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="creamy-rose">
+                    <img src="images/creamy-rose.svg" alt="奶油玫瑰口红色板" loading="lazy">
+                    <span>柔和温柔，显白不突兀</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="dusty-mauve">
+                    <img src="images/dusty-mauve.svg" alt="复古豆沙口红色板" loading="lazy">
+                    <span>成熟复古，气质款首选</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="vivid-red">
+                    <img src="images/vivid-red.svg" alt="鲜活正红口红色板" loading="lazy">
+                    <span>明艳提气色，拍照超显白</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

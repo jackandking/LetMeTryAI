@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "spring-brightening-lipstick-pick",
+      "name": "显白口红PK",
+      "description": "四款春季显白口红色号对比，测哪款最适合你。",
+      "category": "美妆",
+      "directory": "spring-brightening-lipstick-pick",
+      "url": "spring-brightening-lipstick-pick",
+      "image": "spring-brightening-lipstick-pick/images/coral-orange.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "显白",
+        "口红色号",
+        "春季妆容",
+        "种草",
+        "显白",
+        "口红色号",
+        "春季妆容",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "homework-routine",
       "name": "作业安排投票",
       "description": "调查家长在孩子放学后是先完成作业还是先让孩子休息/玩耍，以便制定更平衡的日常安排。",
