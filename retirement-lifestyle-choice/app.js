@@ -1,31 +1,8 @@
 /**
- * 退休爱好投票 Survey Application
- * Logic for the "爱老人关注：退休后想重拾的兴趣爱好" survey
+ * Vote Application
  */
 
-const questionConfig = {
-    "title": "爱老人关注：退休后想重拾的兴趣爱好",
-    "question": "如果是爱老人用户，你最支持哪个选项：退休后最想重拾的兴趣爱好？",
-    "options": [
-        {
-            "value": "gardening",
-            "label": "园艺种花"
-        },
-        {
-            "value": "calligraphy-painting",
-            "label": "书法国画"
-        },
-        {
-            "value": "light-travel",
-            "label": "轻松短途游"
-        },
-        {
-            "value": "community-volunteer",
-            "label": "社区志愿"
-        }
-    ],
-    "storageKey": "retirement_hobby_pick_v1.data"
-};
+CONFIG_PLACEHOLDER
 
 let currentQuestion = 1;
 let voteData = {};
@@ -43,7 +20,6 @@ function initializeApp() {
 
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-
     if (urlParams.get('finishedAd') === 'false') {
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
@@ -72,10 +48,8 @@ function setupPageContent() {
 }
 
 function attachRadioHandlers() {
-    const radios = document.querySelectorAll('input[name="elder-love"]');
-    if (!radios || radios.length === 0) {
-        return;
-    }
+    const radios = document.querySelectorAll('input[name="' + document.querySelector('input[type="radio"]')?.name + '"]');
+    if (!radios || radios.length === 0) return;
 
     radios.forEach(radio => {
         radio.addEventListener('change', (event) => {
@@ -118,7 +92,7 @@ function processVote(selectedLabel) {
 function showAd() {
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=retirement-hobby-pick'
+            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=' + window.location.pathname.split('/').filter(Boolean).pop()
         });
         return;
     }
@@ -132,8 +106,12 @@ function displayAdFallback() {
         if (!overlay) {
             overlay = document.createElement('div');
             overlay.id = 'adOverlay';
-            overlay.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;color:#fff;flex-direction:column;';
-            overlay.innerHTML = '<div style="background:linear-gradient(135deg, #8b6914 0%, #a08020 100%);padding:30px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);"><h3>正在分析"爱老人关注：退休后想重拾的兴趣爱好"的投票趋势...</h3><div style="margin-top:15px;width:40px;height:40px;border:4px solid #c4a35a;border-top:4px solid transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div><style>@keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}</style></div>';
+            overlay.innerHTML = `
+                <div class="ad-content">
+                    <h3>正在分析投票趋势...</h3>
+                    <div class="ad-spinner"></div>
+                </div>
+            `;
             document.body.appendChild(overlay);
         } else {
             overlay.style.display = 'flex';
@@ -152,15 +130,9 @@ function displayResults() {
     const result = document.getElementById('result');
     const showResultBtn = document.getElementById('showResultBtn');
 
-    if (questionnaire) {
-        questionnaire.style.display = 'none';
-    }
-    if (showResultBtn) {
-        showResultBtn.style.display = 'none';
-    }
-    if (result) {
-        result.style.display = 'block';
-    }
+    if (questionnaire) questionnaire.style.display = 'none';
+    if (showResultBtn) showResultBtn.style.display = 'none';
+    if (result) result.style.display = 'block';
 
     getConfig(questionConfig.storageKey, (data) => {
         if (data) {
@@ -177,29 +149,21 @@ function handleResultDisplay() {
     if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
         const questionnaire = document.getElementById('questionnaire');
         const result = document.getElementById('result');
-        if (questionnaire) {
-            questionnaire.style.display = 'none';
-        }
-        if (result) {
-            result.style.display = 'block';
-        }
+        if (questionnaire) questionnaire.style.display = 'none';
+        if (result) result.style.display = 'block';
 
         displayResults();
     }
 }
 
 function showResult(latestVoteData) {
-    if (!latestVoteData || typeof latestVoteData !== 'object') {
-        return;
-    }
+    if (!latestVoteData || typeof latestVoteData !== 'object') return;
 
     const resultDiv = document.getElementById('result');
-    if (!resultDiv) {
-        return;
-    }
+    if (!resultDiv) return;
 
-    resultDiv.innerHTML = "<h2 style='text-align:center;color:#8b6914;'>退休爱好投票投票结果</h2>";
-    resultDiv.innerHTML += "<p style='text-align:center;color:#7a6a4a;margin-bottom:20px;font-size:14px;'>看看大家对"爱老人关注：退休后想重拾的兴趣爱好"的最新态度</p>";
+    resultDiv.innerHTML = '<h2>投票结果</h2>';
+    resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);
     resultDiv.appendChild(barChart);
@@ -221,23 +185,22 @@ function createBarChart(latestVoteData) {
 
         const bar = document.createElement('div');
         bar.className = 'bar';
+        if (count === maxCount && count > 0) {
+            bar.classList.add('top-vote');
+        }
         bar.style.height = '2px';
 
         requestAnimationFrame(() => {
             bar.style.height = `${Math.max(count * scale, 2)}px`;
         });
 
-        if (count === maxCount && count > 0) {
-            bar.style.background = 'linear-gradient(to top, #d4a84b, #f0c96c)';
-        }
-
         const barLabel = document.createElement('div');
         barLabel.className = 'bar-label';
-        barLabel.innerText = `${count}`;
+        barLabel.textContent = `${count}`;
 
         const optionLabel = document.createElement('div');
         optionLabel.className = 'option-label';
-        optionLabel.innerText = option.split(' ')[0];
+        optionLabel.textContent = option;
 
         barContainer.appendChild(bar);
         barContainer.appendChild(barLabel);
@@ -252,15 +215,15 @@ function addSummaryStatistics(container, latestVoteData) {
     const total = Object.values(latestVoteData).reduce((sum, count) => sum + count, 0);
 
     const statsDiv = document.createElement('div');
-    statsDiv.style.cssText = 'text-align:center; margin-top:20px; padding-top:15px; border-top:1px dashed #e8dcc0;';
+    statsDiv.className = 'stats-container';
 
     const totalVotes = document.createElement('p');
-    totalVotes.style.cssText = 'font-weight: bold; color: #8b6914;';
-    totalVotes.innerText = `总参与人数: ${total}`;
+    totalVotes.className = 'total-votes';
+    totalVotes.innerHTML = `总参与人数: <span>${total}</span>`;
 
     const timestamp = document.createElement('p');
-    timestamp.style.cssText = 'font-size: 12px; color: #7a6a4a; margin-top: 5px;';
-    timestamp.innerText = `最后更新: ${new Date().toLocaleString()}`;
+    timestamp.className = 'timestamp';
+    timestamp.textContent = `最后更新: ${new Date().toLocaleString('zh-CN')}`;
 
     statsDiv.appendChild(totalVotes);
     statsDiv.appendChild(timestamp);
