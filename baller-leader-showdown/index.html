@@ -20,40 +20,58 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">男人宝热榜：谁是最能带队的球星？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">男人宝热榜：谁是最能带队的球星？</h1>
+            <p class="subtitle">为你心中的领袖投上一票</p>
+        </header>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在男人宝用户视角，你更想把票投给谁：谁是当下最能带队的球星？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="kylian-mbappe">
+                            <div class="card-image"><img src="images/kylian-mbappe.svg" alt="姆巴佩赛场冲刺"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">姆巴佩</h3>
+                                <p class="option-desc">速度＋关键进球，年轻领袖</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">站在男人宝用户视角，你更想把票投给谁：谁是当下最能带队的球星？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="kylian-mbappe">
-                    <img src="images/kylian-mbappe.svg" alt="姆巴佩赛场冲刺" loading="lazy">
-                    <span>速度＋关键进球，年轻领袖</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="erling-haaland">
+                            <div class="card-image"><img src="images/erling-haaland.svg" alt="哈兰德破门瞬间"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">哈兰德</h3>
+                                <p class="option-desc">强力中锋，终结能力爆表</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="erling-haaland">
-                    <img src="images/erling-haaland.svg" alt="哈兰德破门瞬间" loading="lazy">
-                    <span>强力中锋，终结能力爆表</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="vinicius-jr">
+                            <div class="card-image"><img src="images/vinicius-jr.svg" alt="维尼修斯庆祝进球"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">维尼修斯</h3>
+                                <p class="option-desc">突破与创造力，关键时刻改变比赛</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
 
-                <label class="option">
-                    <input type="radio" name="nanrenbao" value="vinicius-jr">
-                    <img src="images/vinicius-jr.svg" alt="维尼修斯庆祝进球" loading="lazy">
-                    <span>突破与创造力，关键时刻改变比赛</span>
-                </label>
+            <div class="result" id="result">
+                <p>正在汇总实时投票结果...</p>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+            <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+        </main>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {

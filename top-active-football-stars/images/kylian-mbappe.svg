@@ -1,13 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7f5539"/>
-      <stop offset="100%" stop-color="#ddb892"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">Kylian Mbappé</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="none">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#f0f4f8"/>
+  
+  <!-- 姆巴佩剪影 - 冲刺姿态 -->
+  <g fill="#2c5aa0">
+    <!-- 头部 -->
+    <ellipse cx="140" cy="38" rx="13" ry="14"/>
+    
+    <!-- 身体（前倾冲刺） -->
+    <path d="M128 52 L152 48 L158 80 L132 85 Z"/>
+    
+    <!-- 左臂（后摆） -->
+    <path d="M128 58 L100 65 L85 75 L88 85 L105 75 L125 68 Z"/>
+    
+    <!-- 右臂（前摆） -->
+    <path d="M152 52 L175 45 L190 35 L188 48 L175 55 L158 62 Z"/>
+    
+    <!-- 左腿（后蹬） -->
+    <path d="M135 85 L115 100 L95 125 L105 132 L125 108 L140 92 Z"/>
+    
+    <!-- 右腿（前跨大步） -->
+    <path d="M152 82 L175 90 L195 100 L190 112 L170 102 L155 92 Z"/>
+    
+    <!-- 足球（在后方暗示高速带球） -->
+    <circle cx="70" cy="125" r="10"/>
+    <path d="M64 120 L70 115 L76 120 L73 127 L67 127 Z" fill="#4a7ab8"/>
+  </g>
+  
+  <!-- 速度线（体现速度感） -->
+  <g stroke="#2c5aa0" stroke-width="2" stroke-linecap="round" opacity="0.4">
+    <path d="M40 60 L80 55"/>
+    <path d="M35 75 L75 70"/>
+    <path d="M30 90 L70 85"/>
+    <path d="M45 105 L70 102"/>
+    <path d="M50 120 L65 118"/>
+  </g>
+  
+  <!-- 动感线条 -->
+  <g stroke="#4a7ab8" stroke-width="1.5" stroke-linecap="round" opacity="0.3">
+    <path d="M20 50 L50 47"/>
+    <path d="M15 65 L45 62"/>
+    <path d="M25 80 L55 77"/>
+  </g>
 </svg>

@@ -1,13 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7f5539"/>
-      <stop offset="100%" stop-color="#ddb892"/>
+    <linearGradient id="fieldGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a3a6a"/>
+      <stop offset="100%" stop-color="#0d2340"/>
+    </linearGradient>
+    <linearGradient id="powerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c5aa0"/>
+      <stop offset="50%" stop-color="#3a6aa8"/>
+      <stop offset="100%" stop-color="#4a7ab8"/>
     </linearGradient>
   </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">厄林·哈兰德</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+  
+  <!-- Background field -->
+  <rect width="200" height="160" fill="url(#fieldGrad2)" rx="8"/>
+  
+  <!-- Goal line hint -->
+  <line x1="20" y1="140" x2="180" y2="140" stroke="#3a6aa8" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Power burst lines -->
+  <g opacity="0.2" stroke="#4a7ab8" stroke-width="2">
+    <line x1="100" y1="20" x2="100" y2="5"/>
+    <line x1="70" y1="30" x2="60" y2="18"/>
+    <line x1="130" y1="30" x2="140" y2="18"/>
+    <line x1="50" y1="50" x2="38" y2="42"/>
+    <line x1="150" y1="50" x2="162" y2="42"/>
+  </g>
+  
+  <!-- Player silhouette - Powerful striker pose -->
+  <g fill="url(#powerGrad)">
+    <!-- Broad shoulders/torso -->
+    <ellipse cx="100" cy="75" rx="32" ry="35"/>
+    <!-- Muscular shoulders -->
+    <ellipse cx="70" cy="55" rx="15" ry="12"/>
+    <ellipse cx="130" cy="55" rx="15" ry="12"/>
+    <!-- Head -->
+    <circle cx="100" cy="38" r="16"/>
+    <!-- Hair flowing back -->
+    <path d="M110 28 Q125 25 130 35 Q135 45 125 42" fill="#1e4a80"/>
+  </g>
+  
+  <!-- Arms flexed -->
+  <g fill="#2c5aa0">
+    <!-- Left arm -->
+    <ellipse cx="55" cy="70" rx="12" ry="20" transform="rotate(-20, 55, 70)"/>
+    <ellipse cx="42" cy="88" rx="8" ry="12" transform="rotate(-10, 42, 88)"/>
+    <circle cx="38" cy="100" r="7"/>
+    <!-- Right arm -->
+    <ellipse cx="145" cy="70" rx="12" ry="20" transform="rotate(20, 145, 70)"/>
+    <ellipse cx="158" cy="88" rx="8" ry="12" transform="rotate(10, 158, 88)"/>
+    <circle cx="162" cy="100" r="7"/>
+  </g>
+  
+  <!-- Strong legs -->
+  <g fill="#2c5aa0">
+    <!-- Left leg planted -->
+    <ellipse cx="85" cy="110" rx="14" ry="25"/>
+    <ellipse cx="85" cy="140" rx="10" ry="6"/>
+    <!-- Right leg (slightly bent) -->
+    <ellipse cx="115" cy="108" rx="13" ry="22"/>
+    <ellipse cx="115" cy="138" rx="10" ry="6"/>
+  </g>
+  
+  <!-- Ball at feet -->
+  <circle cx="100" cy="145" r="12" fill="url(#powerGrad)"/>
+  <g stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.9">
+    <circle cx="100" cy="145" r="6"/>
+    <line x1="100" y1="139" x2="100" y2="151"/>
+    <line x1="94" y1="145" x2="106" y2="145"/>
+  </g>
+  
+  <!-- Impact lines -->
+  <g opacity="0.3" stroke="#4a7ab8" stroke-width="1.5">
+    <line x1="60" y1="145" x2="40" y2="145"/>
+    <line x1="140" y1="145" x2="160" y2="145"/>
+    <line x1="70" y1="135" x2="55" y2="125"/>
+    <line x1="130" y1="135" x2="145" y2="125"/>
+  </g>
+  
+  <!-- Ground shadow -->
+  <ellipse cx="100" cy="152" rx="45" ry="6" fill="#0d2340" opacity="0.4"/>
+  
+  <!-- Accent stars -->
+  <g fill="#4a7ab8" opacity="0.4">
+    <polygon points="170,25 172,30 177,30 173,33 175,38 170,35 165,38 167,33 163,30 168,30"/>
+    <polygon points="25,35 26,38 29,38 27,40 28,43 25,41 22,43 23,40 21,38 24,38"/>
+  </g>
 </svg>

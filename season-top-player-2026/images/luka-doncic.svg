@@ -1,13 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4a5759"/>
-      <stop offset="100%" stop-color="#b0c4b1"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">东契奇（Luka Doncic）</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#2c5aa0" opacity="0.1"/>
+  
+  <!-- Basketball Player Silhouette - Luka Doncic (Maestro) -->
+  <g fill="#2c5aa0">
+    <!-- Head -->
+    <ellipse cx="60" cy="28" rx="13" ry="15"/>
+    
+    <!-- Hair hint (slight wave) -->
+    <path d="M47 18 Q60 12 73 18" stroke="#1e4a80" stroke-width="3" fill="none"/>
+    
+    <!-- Neck -->
+    <rect x="55" y="42" width="10" height="10"/>
+    
+    <!-- Torso/Jersey -->
+    <path d="M40 52 L80 52 L76 88 L44 88 Z"/>
+    
+    <!-- Jersey Number 77 -->
+    <text x="60" y="76" font-family="Arial Black, sans-serif" font-size="20" fill="#ffffff" text-anchor="middle" font-weight="900">77</text>
+    
+    <!-- Left Arm (Dribbling/handling) -->
+    <path d="M40 55 Q28 65 25 75 L20 73 Q26 60 40 52 Z"/>
+    
+    <!-- Basketball in left hand -->
+    <circle cx="22" cy="72" r="10" fill="#ff6b35"/>
+    <path d="M14 72 Q22 72 30 72" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    <path d="M22 62 Q22 72 22 82" stroke="#1e4a80" stroke-width="2" fill="none"/>
+    
+    <!-- Right Arm (Passing/directing) -->
+    <path d="M80 55 Q95 50 105 55 L108 50 Q96 42 80 48 Z"/>
+    
+    <!-- Dribble motion lines -->
+    <path d="M15 85 Q22 95 29 85" stroke="#4a7ab8" stroke-width="2" fill="none" opacity="0.5"/>
+    <circle cx="22" cy="90" r="3" fill="#4a7ab8" opacity="0.3"/>
+    
+    <!-- Left Leg -->
+    <path d="M48 86 L42 108 L52 110 L56 88 Z"/>
+    
+    <!-- Right Leg -->
+    <path d="M72 86 L78 108 L68 110 L64 88 Z"/>
+    
+    <!-- Vision/Pass lines (Playmaker signature) -->
+    <path d="M85 52 L100 45" stroke="#4a7ab8" stroke-width="2" stroke-dasharray="3,2" opacity="0.5"/>
+    <path d="M85 58 L102 58" stroke="#4a7ab8" stroke-width="2" stroke-dasharray="3,2" opacity="0.5"/>
+    <path d="M85 64 L100 72" stroke="#4a7ab8" stroke-width="2" stroke-dasharray="3,2" opacity="0.5"/>
+  </g>
+  
+  <!-- Court floor accent -->
+  <rect x="25" y="102" width="70" height="3" fill="#4a7ab8" opacity="0.3"/>
 </svg>

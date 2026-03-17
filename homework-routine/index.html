@@ -20,46 +20,86 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">作业先做还是先休息？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">作业先做还是先休息？</h1>
+            <p class="subtitle">合理安排时间，养成良好习惯 📚</p>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">站在家长爱用户视角，你会怎么选：孩子放学后是先写作业还是先休息？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="parent-tools" value="complete-homework-first">
-                    <img src="images/complete-homework-first.svg" alt="孩子做作业的场景" loading="lazy">
-                    <span>固定先写完，完成任务再放松。</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长爱用户视角，你会怎么选：孩子放学后是先写作业还是先休息？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="complete-homework-first">
+                            <div class="card-image">
+                                <img src="images/complete-homework-first.svg" alt="孩子完成作业的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先完成作业</h3>
+                                <p class="option-desc">固定先写完，完成任务再放松</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="parent-tools" value="play-then-homework">
-                    <img src="images/play-then-homework.svg" alt="孩子休息玩耍的场景" loading="lazy">
-                    <span>放松后更专注，先休息再学习。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="play-then-homework">
+                            <div class="card-image">
+                                <img src="images/play-then-homework.svg" alt="孩子休息玩耍的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先玩一会</h3>
+                                <p class="option-desc">放松后更专注，先休息再学习</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="parent-tools" value="scheduled-breaks">
-                    <img src="images/scheduled-breaks.svg" alt="时间表与定时器图示" loading="lazy">
-                    <span>定好时段，兼顾放松与效率。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="scheduled-breaks">
+                            <div class="card-image">
+                                <img src="images/scheduled-breaks.svg" alt="时间表与定时器图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">分时段安排</h3>
+                                <p class="option-desc">定好时段，兼顾放松与效率</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="parent-tools" value="flexible-by-mood">
-                    <img src="images/flexible-by-mood.svg" alt="家长观察孩子状态的场景" loading="lazy">
-                    <span>根据孩子当天状态调整顺序。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="flexible-by-mood">
+                            <div class="card-image">
+                                <img src="images/flexible-by-mood.svg" alt="家长观察孩子状态的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">灵活安排</h3>
+                                <p class="option-desc">根据孩子当天状态调整顺序</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看实时票选结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {

@@ -1,13 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7f5539"/>
-      <stop offset="100%" stop-color="#ddb892"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">豆浆与点心</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#fdf8e8"/>
+  
+  <!-- 豆浆杯 -->
+  <rect x="55" y="55" width="35" height="60" rx="3" fill="#ffffff" stroke="#d4a574" stroke-width="2"/>
+  <ellipse cx="72.5" cy="55" rx="17.5" ry="5" fill="#f5e6c8" stroke="#d4a574" stroke-width="1"/>
+  
+  <!-- 豆浆液体 -->
+  <ellipse cx="72.5" cy="58" rx="15" ry="4" fill="#f5e6c8"/>
+  <rect x="60" y="58" width="25" height="52" fill="#f5e6c8"/>
+  <ellipse cx="72.5" cy="110" rx="12.5" ry="3" fill="#f5e6c8"/>
+  
+  <!-- 吸管 -->
+  <rect x="78" y="35" width="4" height="25" fill="#c4a35a" transform="rotate(10 78 60)"/>
+  
+  <!-- 包子 -->
+  <circle cx="145" cy="85" r="28" fill="#ffffff" stroke="#e8dcc0" stroke-width="1"/>
+  <ellipse cx="145" cy="85" rx="25" ry="12" fill="#ffffff"/>
+  
+  <!-- 包子褶皱 -->
+  <path d="M130 78 Q135 75 140 78" stroke="#d4a574" stroke-width="1" fill="none"/>
+  <path d="M138 75 Q143 72 148 75" stroke="#d4a574" stroke-width="1" fill="none"/>
+  <path d="M150 78 Q155 82 160 85" stroke="#d4a574" stroke-width="1" fill="none"/>
+  <path d="M132 90 Q137 93 142 90" stroke="#d4a574" stroke-width="1" fill="none"/>
+  
+  <!-- 蒸笼垫 -->
+  <ellipse cx="145" cy="115" rx="32" ry="8" fill="#d4a574"/>
+  
+  <!-- 大豆装饰 -->
+  <ellipse cx="45" cy="40" rx="4" ry="5" fill="#c4a35a"/>
+  <ellipse cx="52" cy="38" rx="3" ry="4" fill="#a08020"/>
+  <ellipse cx="48" cy="45" rx="3.5" ry="4.5" fill="#8b6914"/>
+  
+  <!-- 小装饰 -->
+  <circle cx="170" cy="45" r="6" fill="#c4a35a" opacity="0.3"/>
+  <circle cx="35" cy="120" r="5" fill="#c4a35a" opacity="0.2"/>
 </svg>

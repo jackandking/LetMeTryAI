@@ -1,13 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1f4e79"/>
-      <stop offset="100%" stop-color="#4f8fba"/>
+    <linearGradient id="fieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a3a6a"/>
+      <stop offset="100%" stop-color="#0d2340"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c5aa0"/>
+      <stop offset="100%" stop-color="#4a7ab8"/>
     </linearGradient>
   </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">基利安·姆巴佩</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+  
+  <!-- Background field -->
+  <rect width="200" height="160" fill="url(#fieldGrad)" rx="8"/>
+  
+  <!-- Field lines -->
+  <line x1="20" y1="140" x2="180" y2="140" stroke="#3a6aa8" stroke-width="2" opacity="0.5"/>
+  <line x1="100" y1="140" x2="100" y2="130" stroke="#3a6aa8" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Speed lines -->
+  <g opacity="0.3">
+    <line x1="30" y1="80" x2="60" y2="75" stroke="#4a7ab8" stroke-width="3" stroke-linecap="round"/>
+    <line x1="25" y1="95" x2="55" y2="90" stroke="#4a7ab8" stroke-width="2" stroke-linecap="round"/>
+    <line x1="35" y1="65" x2="55" y2="62" stroke="#4a7ab8" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Player silhouette - Running/Sprinting pose -->
+  <g fill="#2c5aa0">
+    <!-- Body -->
+    <ellipse cx="95" cy="70" rx="22" ry="28" transform="rotate(-15, 95, 70)"/>
+    <!-- Head -->
+    <circle cx="105" cy="42" r="14"/>
+    <!-- Left arm (forward) -->
+    <path d="M78 58 L55 50 L50 45 L58 52 L80 62 Z"/>
+    <ellipse cx="52" cy="46" rx="6" ry="5" transform="rotate(-30, 52, 46)"/>
+    <!-- Right arm (back) -->
+    <path d="M112 62 L130 75 L138 82 L128 72 L110 60 Z"/>
+    <ellipse cx="140" cy="84" rx="6" ry="5" transform="rotate(45, 140, 84)"/>
+    <!-- Left leg (forward running) -->
+    <path d="M85 95 L70 115 L55 130 L65 118 L88 100 Z"/>
+    <ellipse cx="52" cy="133" rx="8" ry="5" transform="rotate(-20, 52, 133)"/>
+    <!-- Right leg (back) -->
+    <path d="M105 95 L115 115 L125 135 L118 118 L108 98 Z"/>
+    <ellipse cx="128" cy="138" rx="8" ry="5" transform="rotate(10, 128, 138)"/>
+  </g>
+  
+  <!-- Ball -->
+  <circle cx="52" cy="133" r="10" fill="url(#accentGrad)"/>
+  <g stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.8">
+    <path d="M46 128 L52 133 L58 128"/>
+    <path d="M46 138 L52 133 L58 138"/>
+    <path d="M52 123 L52 133 L52 143"/>
+  </g>
+  
+  <!-- Motion blur effect -->
+  <ellipse cx="85" cy="95" rx="35" ry="8" fill="#4a7ab8" opacity="0.2"/>
+  
+  <!-- Accent details -->
+  <circle cx="170" cy="30" r="3" fill="#4a7ab8" opacity="0.5"/>
+  <circle cx="180" cy="45" r="2" fill="#4a7ab8" opacity="0.3"/>
 </svg>

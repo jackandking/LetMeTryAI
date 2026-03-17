@@ -1,13 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1f4e79"/>
-      <stop offset="100%" stop-color="#4f8fba"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">Lionel Messi</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="none">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#f0f4f8"/>
+  
+  <!-- 梅西剪影 - 盘带姿态 -->
+  <g fill="#2c5aa0">
+    <!-- 头部 -->
+    <circle cx="85" cy="35" r="14"/>
+    
+    <!-- 身体/躯干 -->
+    <path d="M75 50 L95 50 L100 85 L70 85 Z"/>
+    
+    <!-- 左臂（带球姿态） -->
+    <path d="M75 55 L55 70 L50 85 L60 90 L70 75 L78 65 Z"/>
+    
+    <!-- 右臂 -->
+    <path d="M95 55 L115 65 L120 80 L110 85 L100 70 L92 65 Z"/>
+    
+    <!-- 左腿（支撑） -->
+    <path d="M75 85 L70 110 L65 135 L78 138 L82 110 L88 85 Z"/>
+    
+    <!-- 右腿（盘带动作） -->
+    <path d="M92 85 L105 105 L120 125 L130 120 L115 100 L102 80 Z"/>
+    
+    <!-- 足球 -->
+    <circle cx="135" cy="130" r="12"/>
+    <path d="M128 124 L135 118 L142 124 L139 132 L131 132 Z" fill="#4a7ab8"/>
+    
+    <!-- 速度线 -->
+    <path d="M140 100 L160 95" stroke="#2c5aa0" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <path d="M145 110 L165 108" stroke="#2c5aa0" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+    <path d="M142 120 L155 118" stroke="#2c5aa0" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  </g>
+  
+  <!-- 装饰元素 - 阿根廷配色暗示 -->
+  <circle cx="170" cy="30" r="3" fill="#4a7ab8" opacity="0.3"/>
+  <circle cx="180" cy="45" r="2" fill="#4a7ab8" opacity="0.2"/>
 </svg>

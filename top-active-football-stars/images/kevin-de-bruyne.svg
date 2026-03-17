@@ -1,13 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4a5759"/>
-      <stop offset="100%" stop-color="#b0c4b1"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">Kevin De Bruyne</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="none">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#f0f4f8"/>
+  
+  <!-- 德布劳内剪影 - 传球/组织姿态 -->
+  <g fill="#2c5aa0">
+    <!-- 头部 -->
+    <circle cx="100" cy="38" r="13"/>
+    
+    <!-- 躯干（微微侧转准备传球） -->
+    <path d="M88 53 L112 50 L115 88 L85 90 Z"/>
+    
+    <!-- 左臂（自然摆动） -->
+    <path d="M88 60 L70 70 L60 85 L68 90 L78 75 L85 65 Z"/>
+    
+    <!-- 右臂（传球动作 - 关键） -->
+    <path d="M112 55 L135 50 L155 45 L165 50 L160 62 L140 58 L118 65 Z"/>
+    
+    <!-- 手/触球点 -->
+    <circle cx="168" cy="48" r="5"/>
+    
+    <!-- 左腿（支撑脚） -->
+    <path d="M90 90 L85 115 L80 138 L93 140 L98 115 L102 90 Z"/>
+    
+    <!-- 右腿（跨步） -->
+    <path d="M108 88 L120 105 L135 120 L145 115 L130 100 L118 85 Z"/>
+    
+    <!-- 足球（在前方，即将传出） -->
+    <circle cx="175" cy="75" r="10"/>
+    <path d="M169 70 L175 65 L181 70 L178 77 L172 77 Z" fill="#4a7ab8"/>
+  </g>
+  
+  <!-- 传球轨迹线（体现视野和精准） -->
+  <g stroke="#2c5aa0" stroke-width="2" stroke-linecap="round" opacity="0.4" fill="none">
+    <!-- 弧线传球轨迹 -->
+    <path d="M180 75 Q 160 55 140 50"/>
+    <path d="M180 75 Q 165 60 150 55"/>
+  </g>
+  
+  <!-- 传球方向箭头 -->
+  <g fill="#2c5aa0" opacity="0.5">
+    <polygon points="140,45 135,52 145,52"/>
+  </g>
+  
+  <!-- 视野/战术线条（体现大局观） -->
+  <g stroke="#4a7ab8" stroke-width="1" stroke-dasharray="4,4" opacity="0.25">
+    <line x1="100" y1="38" x2="50" y2="25"/>
+    <line x1="100" y1="38" x2="30" y2="75"/>
+    <line x1="100" y1="38" x2="60" y2="120"/>
+  </g>
+  
+  <!-- 战术点 -->
+  <circle cx="50" cy="25" r="2" fill="#4a7ab8" opacity="0.3"/>
+  <circle cx="30" cy="75" r="2" fill="#4a7ab8" opacity="0.3"/>
+  <circle cx="60" cy="120" r="2" fill="#4a7ab8" opacity="0.3"/>
 </svg>

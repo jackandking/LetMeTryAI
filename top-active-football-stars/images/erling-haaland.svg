@@ -1,13 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2f4858"/>
-      <stop offset="100%" stop-color="#86bbd8"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">Erling Haaland</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" fill="none">
+  <!-- 背景 -->
+  <rect width="200" height="150" fill="#f0f4f8"/>
+  
+  <!-- 哈兰德剪影 - 头球/身体对抗姿态 -->
+  <g fill="#2c5aa0">
+    <!-- 头部（金发暗示 - 椭圆略大） -->
+    <ellipse cx="95" cy="32" rx="15" ry="14"/>
+    
+    <!-- 强壮的躯干 -->
+    <path d="M78 48 L112 48 L118 88 L72 88 Z"/>
+    
+    <!-- 左臂（张开卡位） -->
+    <path d="M78 55 L50 50 L35 55 L38 68 L55 62 L75 65 Z"/>
+    
+    <!-- 右臂（张开卡位） -->
+    <path d="M112 55 L140 50 L155 55 L152 68 L135 62 L115 65 Z"/>
+    
+    <!-- 左腿（蹬地发力） -->
+    <path d="M82 88 L75 115 L68 140 L82 142 L88 115 L95 88 Z"/>
+    
+    <!-- 右腿（蹬地发力） -->
+    <path d="M108 88 L115 115 L122 140 L108 142 L102 115 L95 88 Z"/>
+    
+    <!-- 足球（在头顶，头球争顶） -->
+    <circle cx="95" cy="15" r="11"/>
+    <path d="M89 10 L95 5 L101 10 L98 17 L92 17 Z" fill="#4a7ab8"/>
+  </g>
+  
+  <!-- 力量感装饰 - 冲击波 -->
+  <g stroke="#2c5aa0" stroke-width="1.5" fill="none" opacity="0.3">
+    <ellipse cx="95" cy="100" rx="60" ry="15"/>
+    <ellipse cx="95" cy="100" rx="50" ry="12"/>
+    <ellipse cx="95" cy="100" rx="40" ry="9"/>
+  </g>
+  
+  <!-- 地面线条 -->
+  <line x1="30" y1="142" x2="170" y2="142" stroke="#2c5aa0" stroke-width="2" opacity="0.2"/>
+  
+  <!-- 速度/力量点 -->
+  <circle cx="45" cy="40" r="2" fill="#4a7ab8" opacity="0.4"/>
+  <circle cx="35" cy="75" r="1.5" fill="#4a7ab8" opacity="0.3"/>
+  <circle cx="155" cy="40" r="2" fill="#4a7ab8" opacity="0.4"/>
+  <circle cx="165" cy="75" r="1.5" fill="#4a7ab8" opacity="0.3"/>
 </svg>

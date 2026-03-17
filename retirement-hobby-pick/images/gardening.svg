@@ -1,13 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1f4e79"/>
-      <stop offset="100%" stop-color="#4f8fba"/>
-    </linearGradient>
-  </defs>
-  <rect width="720" height="480" rx="32" fill="url(#grad)"/>
-  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
-  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
-  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">园艺种花</text>
-  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Background -->
+  <rect width="120" height="120" fill="#fdf8e8" rx="8"/>
+  
+  <!-- Sun -->
+  <circle cx="95" cy="25" r="12" fill="#f5d76e"/>
+  <g stroke="#f5d76e" stroke-width="2" stroke-linecap="round">
+    <line x1="95" y1="7" x2="95" y2="11"/>
+    <line x1="95" y1="39" x2="95" y2="43"/>
+    <line x1="77" y1="25" x2="81" y2="25"/>
+    <line x1="109" y1="25" x2="113" y2="25"/>
+    <line x1="82" y1="12" x2="85" y2="15"/>
+    <line x1="105" y1="35" x2="108" y2="38"/>
+    <line x1="108" y1="12" x2="105" y2="15"/>
+    <line x1="85" y1="35" x2="82" y2="38"/>
+  </g>
+  
+  <!-- Large Plant Pot -->
+  <path d="M30 70 L90 70 L85 100 L35 100 Z" fill="#c4a35a" stroke="#8b6914" stroke-width="2"/>
+  <ellipse cx="60" cy="70" rx="30" ry="6" fill="#a08020" stroke="#8b6914" stroke-width="2"/>
+  
+  <!-- Plant Stem 1 -->
+  <path d="M45 68 Q42 50 35 40" stroke="#5a9a5a" stroke-width="3" fill="none"/>
+  <!-- Leaf 1 -->
+  <ellipse cx="32" cy="38" rx="10" ry="6" fill="#7bc47b" transform="rotate(-30 32 38)"/>
+  <ellipse cx="38" cy="35" rx="8" ry="5" fill="#8fd48f" transform="rotate(20 38 35)"/>
+  
+  <!-- Plant Stem 2 (main) -->
+  <path d="M60 68 Q60 45 60 25" stroke="#5a9a5a" stroke-width="4" fill="none"/>
+  <!-- Leaves on main stem -->
+  <ellipse cx="50" cy="45" rx="12" ry="7" fill="#7bc47b" transform="rotate(-20 50 45)"/>
+  <ellipse cx="70" cy="40" rx="11" ry="6" fill="#8fd48f" transform="rotate(25 70 40)"/>
+  <ellipse cx="55" cy="30" rx="10" ry="5" fill="#6eb46e" transform="rotate(-15 55 30)"/>
+  
+  <!-- Flower on top -->
+  <circle cx="60" cy="22" r="8" fill="#f5a0a0"/>
+  <circle cx="52" cy="18" r="6" fill="#f5b8b8"/>
+  <circle cx="68" cy="18" r="6" fill="#f5b8b8"/>
+  <circle cx="52" cy="26" r="6" fill="#f5b8b8"/>
+  <circle cx="68" cy="26" r="6" fill="#f5b8b8"/>
+  <circle cx="60" cy="22" r="4" fill="#f5d76e"/>
+  
+  <!-- Plant Stem 3 -->
+  <path d="M75 68 Q78 55 85 48" stroke="#5a9a5a" stroke-width="3" fill="none"/>
+  <ellipse cx="87" cy="46" rx="9" ry="5" fill="#7bc47b" transform="rotate(30 87 46)"/>
+  <ellipse cx="82" cy="52" rx="7" ry="4" fill="#8fd48f" transform="rotate(-10 82 52)"/>
+  
+  <!-- Watering Can -->
+  <g transform="translate(75, 75)">
+    <!-- Can body -->
+    <path d="M0 10 Q0 0 10 0 L25 0 Q35 0 35 10 L32 28 Q32 32 28 32 L7 32 Q3 32 3 28 Z" fill="#8b9dc3" stroke="#5a6a8a" stroke-width="1.5"/>
+    <!-- Handle -->
+    <path d="M3 5 Q-8 5 -8 18 Q-8 28 3 28" fill="none" stroke="#5a6a8a" stroke-width="2.5"/>
+    <!-- Spout -->
+    <path d="M32 8 L42 3 L44 6 L34 12 Z" fill="#8b9dc3" stroke="#5a6a8a" stroke-width="1.5"/>
+    <ellipse cx="44" cy="4.5" rx="3" ry="2" fill="#a0b0d0"/>
+    <!-- Water drops -->
+    <ellipse cx="48" cy="8" rx="2" ry="3" fill="#87ceeb"/>
+    <ellipse cx="52" cy="12" rx="1.5" ry="2.5" fill="#87ceeb"/>
+    <ellipse cx="46" cy="15" rx="1.8" ry="2.8" fill="#87ceeb"/>
+  </g>
+  
+  <!-- Small decorative elements -->
+  <circle cx="20" cy="85" r="3" fill="#d4a84b" opacity="0.6"/>
+  <circle cx="105" cy="90" r="4" fill="#d4a84b" opacity="0.4"/>
+  <circle cx="15" cy="50" r="2" fill="#a08020" opacity="0.5"/>
 </svg>
