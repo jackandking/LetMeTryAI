@@ -1,0 +1,337 @@
+/**
+ * Homework Routine Survey Application
+ * Logic for the "作业先做还是先休息？" voting page
+ */
+
+const questionConfig = {
+    title: '作业先做还是先休息？',
+    question: '站在家长爱用户视角，你会怎么选：孩子放学后是先写作业还是先休息？',
+    options: [
+        {
+            value: 'complete-homework-first',
+            label: '先完成作业'
+        },
+        {
+            value: 'play-then-homework',
+            label: '先玩一会'
+        },
+        {
+            value: 'scheduled-breaks',
+            label: '分时段安排'
+        },
+        {
+            value: 'flexible-by-mood',
+            label: '灵活安排'
+        }
+    ],
+    storageKey: 'homework_routine_v1.data'
+};
+
+let currentQuestion = 1;
+let voteData = {};
+
+/**
+ * Initialize the application
+ */
+function initializeApp() {
+    try {
+        checkUrlParameters();
+        initializeVoteData();
+        setupPageContent();
+        handleResultDisplay();
+    } catch (error) {
+        console.error('Error initializing app:', error);
+    }
+}
+
+/**
+ * Check and handle URL parameters
+ */
+function checkUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get('finishedAd') === 'false') {
+        if (typeof ks !== 'undefined' && ks.navigateBack) {
+            ks.navigateBack();
+        }
+    }
+}
+
+/**
+ * Initialize vote data structure
+ */
+function initializeVoteData() {
+    questionConfig.options.forEach((option) => {
+        voteData[option.label] = 0;
+    });
+}
+
+/**
+ * Setup page content from config
+ */
+function setupPageContent() {
+    const titleElement = document.getElementById('pageTitle');
+    if (titleElement) {
+        titleElement.textContent = questionConfig.title;
+    }
+
+    const questionElement = document.getElementById('questionText');
+    if (questionElement) {
+        questionElement.textContent = questionConfig.question;
+    }
+
+    attachRadioHandlers();
+}
+
+/**
+ * Attach change handlers to radio buttons
+ */
+function attachRadioHandlers() {
+    const radios = document.querySelectorAll('input[name="parent-tools"]');
+    if (!radios || radios.length === 0) {
+        return;
+    }
+
+    radios.forEach((radio) => {
+        radio.addEventListener('change', (event) => {
+            const selectedValue = event.target.value;
+            const matched = questionConfig.options.find(
+                (option) => option.value === selectedValue
+            );
+
+            if (matched) {
+                processVote(matched.label);
+                showAd();
+            }
+        });
+    });
+}
+
+/**
+ * Process a vote selection
+ * @param {string} selectedLabel - The label of the selected option
+ */
+function processVote(selectedLabel) {
+    getConfig(questionConfig.storageKey, (data) => {
+        try {
+            if (data !== null && typeof data === 'object') {
+                voteData = { ...data };
+            }
+
+            voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
+            updateConfig(questionConfig.storageKey, voteData);
+
+            const questionArea = document.getElementById('questionArea');
+            if (questionArea) {
+                questionArea.style.display = 'none';
+            }
+
+            const showResultBtn = document.getElementById('showResultBtn');
+            if (showResultBtn) {
+                showResultBtn.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error processing vote:', error);
+        }
+    });
+}
+
+/**
+ * Show advertisement or fallback
+ */
+function showAd() {
+    if (typeof ks !== 'undefined' && ks.navigateTo) {
+        ks.navigateTo({
+            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=homework-routine'
+        });
+        return;
+    }
+
+    displayAdFallback().catch((error) => console.error('Ad fallback error:', error));
+}
+
+/**
+ * Display fallback ad overlay
+ * @returns {Promise<void>}
+ */
+function displayAdFallback() {
+    return new Promise((resolve) => {
+        let overlay = document.getElementById('adOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'adOverlay';
+            overlay.innerHTML = `
+                <div class="ad-content">
+                    <h3>正在分析"作业先做还是先休息？"的投票趋势...</h3>
+                    <div class="ad-spinner"></div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        } else {
+            overlay.style.display = 'flex';
+        }
+
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            displayResults();
+            resolve();
+        }, 1500);
+    });
+}
+
+/**
+ * Display voting results
+ */
+function displayResults() {
+    const questionnaire = document.getElementById('questionnaire');
+    const result = document.getElementById('result');
+    const showResultBtn = document.getElementById('showResultBtn');
+
+    if (questionnaire) {
+        questionnaire.style.display = 'none';
+    }
+    if (showResultBtn) {
+        showResultBtn.style.display = 'none';
+    }
+    if (result) {
+        result.style.display = 'block';
+    }
+
+    getConfig(questionConfig.storageKey, (data) => {
+        if (data) {
+            showResult(data);
+        } else {
+            showResult(voteData);
+        }
+    });
+}
+
+/**
+ * Handle result display from URL parameter
+ */
+function handleResultDisplay() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const finishedAd = urlParams.get('finishedAd');
+    if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
+        const questionnaire = document.getElementById('questionnaire');
+        const result = document.getElementById('result');
+        if (questionnaire) {
+            questionnaire.style.display = 'none';
+        }
+        if (result) {
+            result.style.display = 'block';
+        }
+
+        displayResults();
+    }
+}
+
+/**
+ * Render the result view with bar chart
+ * @param {Object} latestVoteData - The vote data to display
+ */
+function showResult(latestVoteData) {
+    if (!latestVoteData || typeof latestVoteData !== 'object') {
+        return;
+    }
+
+    const resultDiv = document.getElementById('result');
+    if (!resultDiv) {
+        return;
+    }
+
+    // Clear and build result content
+    resultDiv.innerHTML = `
+        <h2>作业安排投票结果</h2>
+        <p class="result-subtitle">看看大家对"作业先做还是先休息？"的最新态度</p>
+    `;
+
+    const barChart = createBarChart(latestVoteData);
+    resultDiv.appendChild(barChart);
+
+    addSummaryStatistics(resultDiv, latestVoteData);
+}
+
+/**
+ * Create the bar chart element
+ * @param {Object} latestVoteData - Vote data
+ * @returns {HTMLElement} Bar chart container
+ */
+function createBarChart(latestVoteData) {
+    const barChart = document.createElement('div');
+    barChart.className = 'bar-chart';
+
+    const maxCount = Math.max(...Object.values(latestVoteData));
+    const scale = maxCount > 0 ? 200 / maxCount : 1;
+    const sortedEntries = Object.entries(latestVoteData).sort((a, b) => b[1] - a[1]);
+
+    for (const [option, count] of sortedEntries) {
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        if (count === maxCount && count > 0) {
+            bar.classList.add('top-vote');
+        }
+        bar.style.height = '2px';
+
+        // Animate bar height
+        requestAnimationFrame(() => {
+            bar.style.height = `${Math.max(count * scale, 2)}px`;
+        });
+
+        const barLabel = document.createElement('div');
+        barLabel.className = 'bar-label';
+        barLabel.textContent = `${count}`;
+
+        const optionLabel = document.createElement('div');
+        optionLabel.className = 'option-label';
+        optionLabel.textContent = option;
+
+        barContainer.appendChild(bar);
+        barContainer.appendChild(barLabel);
+        barContainer.appendChild(optionLabel);
+        barChart.appendChild(barContainer);
+    }
+
+    return barChart;
+}
+
+/**
+ * Add summary statistics to result
+ * @param {HTMLElement} container - Container element
+ * @param {Object} latestVoteData - Vote data
+ */
+function addSummaryStatistics(container, latestVoteData) {
+    const total = Object.values(latestVoteData).reduce((sum, count) => sum + count, 0);
+
+    const statsDiv = document.createElement('div');
+    statsDiv.className = 'stats-container';
+
+    const totalVotes = document.createElement('p');
+    totalVotes.className = 'total-votes';
+    totalVotes.innerHTML = `总参与人数: <span>${total}</span>`;
+
+    const timestamp = document.createElement('p');
+    timestamp.className = 'timestamp';
+    timestamp.textContent = `最后更新: ${new Date().toLocaleString('zh-CN')}`;
+
+    statsDiv.appendChild(totalVotes);
+    statsDiv.appendChild(timestamp);
+    container.appendChild(statsDiv);
+}
+
+/**
+ * Navigate back to index
+ */
+function jumpToIndex() {
+    if (typeof ks !== 'undefined' && ks.navigateTo) {
+        ks.navigateTo({ url: '/pages/index/index' });
+    } else {
+        window.location.href = '/';
+    }
+}
+
+// Initialize app when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
