@@ -20,59 +20,89 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">全球无人机：谁是天空新霸主？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">全球无人机：谁是天空新霸主？</h1>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">在未来战争中，哪款无人机将成为战场主宰？</p>
-            <div class="button-group" id="optionsContainer">
-                <!-- GJ-11 Sharp Sword -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="gj11">
-                    <img src="images/gj11.jpg" alt="GJ-11 利剑" loading="lazy">
-                    <span>GJ-11 利剑</span>
-                </label>
-                
-                <!-- XQ-58A Valkyrie -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="xq58a">
-                    <img src="images/xq58a.jpg" alt="XQ-58A 女武神" loading="lazy">
-                    <span>XQ-58A 女武神</span>
-                </label>
-                
-                <!-- S-70 Okhotnik-B -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="s70">
-                    <img src="images/s70.jpg" alt="S-70 猎人" loading="lazy">
-                    <span>S-70 猎人</span>
-                </label>
-                
-                <!-- Bayraktar TB3 -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="tb3">
-                    <img src="images/tb3.jpg" alt="TB3 旗手" loading="lazy">
-                    <span>TB3 旗手</span>
-                </label>
-                
-                <!-- MQ-28 Ghost Bat -->
-                <label class="option">
-                    <input type="radio" name="fighter" value="mq28">
-                    <img src="images/mq28.jpg" alt="MQ-28 幽灵蝙蝠" loading="lazy">
-                    <span>MQ-28 幽灵蝙蝠</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在未来战争中，哪款无人机将成为战场主宰？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="gj11">
+                            <div class="card-image">
+                                <img src="images/gj11.jpg" alt="GJ-11 利剑" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">GJ-11 利剑</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="xq58a">
+                            <div class="card-image">
+                                <img src="images/xq58a.jpg" alt="XQ-58A 女武神" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">XQ-58A 女武神</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="s70">
+                            <div class="card-image">
+                                <img src="images/s70.jpg" alt="S-70 猎人" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">S-70 猎人</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="tb3">
+                            <div class="card-image">
+                                <img src="images/tb3.jpg" alt="TB3 旗手" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">TB3 旗手</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="viewport" value="mq28">
+                            <div class="card-image">
+                                <img src="images/mq28.jpg" alt="MQ-28 幽灵蝙蝠" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">MQ-28 幽灵蝙蝠</h3>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在获取全球无人机战力统计...</p>
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-    
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看战力榜</button>
 
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
-
-    <!-- VConsole for mobile debugging -->
     <script>
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
