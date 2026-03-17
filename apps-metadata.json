@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "modern-stealth-fighter-pk",
+      "name": "现代战机对决",
+      "description": "第五代隐身战机在隐身、机动与传感器上的对比投票，适合硬核装备爱好者。",
+      "category": "军事装备",
+      "directory": "modern-stealth-fighter-pk",
+      "url": "modern-stealth-fighter-pk",
+      "image": "modern-stealth-fighter-pk/images/f-22.svg",
+      "tags": [
+        "投票",
+        "军事装备",
+        "隐身战机",
+        "第五代",
+        "机动性",
+        "雷达隐蔽",
+        "航空性能",
+        "隐身战机",
+        "第五代",
+        "机动性",
+        "雷达隐蔽",
+        "航空性能"
+      ],
+      "status": "active"
+    },
+    {
       "id": "modern-stealth-fighters",
       "name": "隐身战机对决",
       "description": "以性能参数与作战定位对比，激发装备党讨论与投票互动。",
