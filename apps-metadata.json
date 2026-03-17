@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "morning-exercise-choice",
+      "name": "健康晨练投票",
+      "description": "比较适合中老年人的常见晨练方式（散步、太极、家中操、静养）。",
+      "category": "健康",
+      "directory": "morning-exercise-choice",
+      "url": "morning-exercise-choice",
+      "image": "morning-exercise-choice/images/park-walking.svg",
+      "tags": [
+        "投票",
+        "健康",
+        "晨练",
+        "太极",
+        "散步",
+        "养生",
+        "晨练",
+        "太极",
+        "散步",
+        "养生"
+      ],
+      "status": "active"
+    },
+    {
       "id": "surface-warship-duel",
       "name": "现代战舰对决",
       "description": "用火力、雷达与防空三要素对比三艘代表性驱逐舰，投票直观易懂。",
