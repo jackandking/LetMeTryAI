@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长爱话题：孩子上课外班，你更看重什么？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">家长爱话题：孩子上课外班，你更看重什么？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在家长爱用户视角，你会怎么选：孩子上课外班应以兴趣还是提分为主？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="focus-on-interest">
+                    <img src="images/focus-on-interest.svg" alt="孩子在学兴趣班的场景" loading="lazy">
+                    <span>把时间给孩子的兴趣与长远动力</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="focus-on-grades">
+                    <img src="images/focus-on-grades.svg" alt="家长与孩子讨论考试成绩" loading="lazy">
+                    <span>优先选择能明显提高成绩的课程</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="balance-interest-and-grades">
+                    <img src="images/balance-interest-and-grades.svg" alt="时间表显示兴趣与补习并行" loading="lazy">
+                    <span>安排兴趣与提分课程并重，分配时间</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="defer-and-observe">
+                    <img src="images/defer-and-observe.svg" alt="家长观察孩子学习状态的场景" loading="lazy">
+                    <span>先观察孩子状态，再决定是否报班</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
