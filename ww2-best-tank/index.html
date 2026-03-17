@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>二战最强坦克：你更看好谁？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">二战最强坦克：你更看好谁？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">男人宝热榜：二战最强坦克，你更投谁？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="tiger-i">
+                    <img src="images/tiger-i.svg" alt="虎式坦克侧面实物图" loading="lazy">
+                    <span>德国虎式：火力强、装甲厚，战场威慑力高。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="t-34">
+                    <img src="images/t-34.svg" alt="T-34 坦克行进照" loading="lazy">
+                    <span>苏联T-34：机动与可靠兼备，产量与影响力巨大。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="m4-sherman">
+                    <img src="images/m4-sherman.svg" alt="M4 Sherman 坦克近照" loading="lazy">
+                    <span>美军M4：移动率好、维修便捷，盟军主力坦克。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="panther">
+                    <img src="images/panther.svg" alt="豹式坦克正面照" loading="lazy">
+                    <span>德国豹式：射控与速度优异，设计影响后续坦克。</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
