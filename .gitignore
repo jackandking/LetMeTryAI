@@ -111,6 +111,12 @@ tmp/
 temp/
 .tmp/
 
+# Automation screenshots
+automation-error.png
+check_sms.png
+login_attempt_*.png
+debug-screenshot.png
+
 # OS generated files
 .DS_Store
 .DS_Store?
