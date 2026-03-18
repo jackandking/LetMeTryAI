@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子写作业：你的陪伴方式</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">孩子写作业：你的陪伴方式</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在家长爱用户视角，你会怎么选：孩子写作业时你更偏向哪种陪伴方式？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="sit-next-and-supervise">
+                    <img src="images/sit-next-and-supervise.svg" alt="陪在孩子身边督促写作业" loading="lazy">
+                    <span>在身边盯着完成并适时提醒</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="let-child-self-complete">
+                    <img src="images/let-child-self-complete.svg" alt="让孩子自主完成作业" loading="lazy">
+                    <span>让孩子独立完成，家长在旁支持但不干预</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="set-timer-and-check">
+                    <img src="images/set-timer-and-check.svg" alt="用定时和检查帮助孩子写作业" loading="lazy">
+                    <span>设定时间表，定时检查与反馈</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="do-together-no-interfere">
+                    <img src="images/do-together-no-interfere.svg" alt="和孩子一起但不过度干预" loading="lazy">
+                    <span>与孩子同处但让他独立思考、必要时给予提示</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
