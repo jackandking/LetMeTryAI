@@ -8,7 +8,8 @@ import { spawn, spawnSync } from 'child_process';
 import { getBrandProfile } from '../.agents/skills/brand-profiles/scripts/profile-loader.js';
 import {
     buildTopicBrief,
-    scoreTopicCandidate
+    scoreTopicCandidate,
+    selectNextTopic
 } from '../.agents/skills/topic-selector/scripts/topic-selector.js';
 import { buildScaffoldPlan } from '../.agents/skills/voting-app-scaffold/scripts/scaffold.js';
 import { buildPublishPlan } from '../.agents/skills/kuaishou-publisher/scripts/publisher.js';
@@ -929,14 +930,62 @@ export async function runDailyOrchestrator(options = {}) {
         const profile = getBrandProfile(profileId);
         const currentDate = new Date().toISOString().slice(0, 10);
         logStage('topics', `Loaded brand profile ${profile.id}`);
-        const modelResponse = options.topicResponse || await requestStructuredTopics({
-            model,
-            profile,
-            currentDate,
-            copilotBin
-        });
+        
+        // Check manual topic queue first (priority over AI generation)
+        let modelResponse = options.topicResponse;
+        let manualTopicUsed = false;
+        
+        if (!modelResponse) {
+            const manualTopic = selectNextTopic(profileId);
+            if (manualTopic) {
+                logStage('topics', `Using manual topic: "${manualTopic.title}"`);
+                // Construct a minimal modelResponse from manual topic
+                modelResponse = {
+                    profileId: profile.id,
+                    reportSummary: `Manual topic: ${manualTopic.title}`,
+                    topicCandidates: [{
+                        appId: `${profileId}-${Date.now()}`,
+                        title: manualTopic.title,
+                        pageTitle: manualTopic.title,
+                        appName: manualTopic.title,
+                        summary: manualTopic.title,
+                        description: manualTopic.title,
+                        question: `你认为：${manualTopic.title}？`,
+                        category: profile.preferredCategories?.[0] || 'general',
+                        format: 'voting',
+                        keywords: [profileId, 'manual'],
+                        signals: ['manual-topic'],
+                        qualities: ['human-curated'],
+                        riskFlags: [],
+                        options: [
+                            { id: 'opt1', name: '选项A', description: '第一个选项' },
+                            { id: 'opt2', name: '选项B', description: '第二个选项' }
+                        ]
+                    }],
+                    responseMode: 'manual'
+                };
+                manualTopicUsed = true;
+            } else {
+                logStage('topics', 'No manual topics found, requesting AI generation');
+            }
+        }
+        
+        // If no manual topic, use Copilot
+        if (!modelResponse) {
+            modelResponse = await requestStructuredTopics({
+                model,
+                profile,
+                currentDate,
+                copilotBin
+            });
+        }
+        
         const selected = chooseBestTopicCandidate(modelResponse.topicCandidates, profile);
-        logStage('topics', `Selected candidate "${selected.candidate.title}" (score=${selected.scoring.score})`);
+        if (manualTopicUsed) {
+            logStage('topics', `Selected manual candidate "${selected.candidate.title}"`);
+        } else {
+            logStage('topics', `Selected AI candidate "${selected.candidate.title}" (score=${selected.scoring.score})`);
+        }
         const appsMetadataPath = path.join(repoDir, 'apps-metadata.json');
         const stylesTemplatePath = path.join(repoDir, 'fighter-jets', 'styles.css');
         const scaffoldSpec = buildScaffoldSpec(selected, profile, {
