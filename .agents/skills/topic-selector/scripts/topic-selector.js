@@ -210,3 +210,114 @@ export function buildTopicBrief(candidate, profile) {
         keywords: normalizedCandidate.keywords
     };
 }
+
+// ==================== Manual Topic Priority Queue ====================
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Resolve topics directory relative to project root
+const PROJECT_ROOT = process.cwd();
+const TOPICS_DIR = path.join(PROJECT_ROOT, 'topics');
+
+/**
+ * Brand ID mapping for manual topic queue files.
+ */
+const BRAND_FILE_MAP = {
+    'man': 'man',
+    'nanrenbao': 'man',
+    'woman': 'woman',
+    'womanai': 'woman',
+    'parent': 'parent',
+    'elder': 'elder'
+};
+
+/**
+ * Get the queue file path for a brand.
+ * @param {string} brandId - Brand identifier.
+ * @returns {string} Full path to the queue file.
+ */
+function getQueueFilePath(brandId) {
+    const normalizedId = brandId.toLowerCase();
+    const fileKey = BRAND_FILE_MAP[normalizedId] || normalizedId;
+    return path.join(TOPICS_DIR, `${fileKey}-manual-topics.txt`);
+}
+
+/**
+ * Peek at manual topics without removing them.
+ * @param {string} brandId - Brand identifier.
+ * @returns {string[]} Array of topic titles.
+ */
+export function peekManualTopics(brandId) {
+    const filePath = getQueueFilePath(brandId);
+    
+    if (!fs.existsSync(filePath)) {
+        return [];
+    }
+    
+    const content = fs.readFileSync(filePath, 'utf8');
+    return content
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+}
+
+/**
+ * Pop the next manual topic (FIFO) and remove it from the queue.
+ * @param {string} brandId - Brand identifier.
+ * @returns {string|null} The topic title, or null if queue is empty.
+ */
+export function popManualTopic(brandId) {
+    const filePath = getQueueFilePath(brandId);
+    const topics = peekManualTopics(brandId);
+    
+    if (topics.length === 0) {
+        return null;
+    }
+    
+    const nextTopic = topics[0];
+    const remaining = topics.slice(1);
+    
+    // Write back remaining topics
+    if (remaining.length > 0) {
+        fs.writeFileSync(filePath, remaining.join('\n') + '\n');
+    } else {
+        fs.writeFileSync(filePath, '');
+    }
+    
+    return nextTopic;
+}
+
+/**
+ * Check if there are pending manual topics.
+ * @param {string} brandId - Brand identifier.
+ * @returns {boolean} True if manual topics exist.
+ */
+export function hasManualTopics(brandId) {
+    return peekManualTopics(brandId).length > 0;
+}
+
+/**
+ * Select the next topic for a brand, prioritizing manual submissions.
+ * 
+ * This is the main entry point for topic selection with priority:
+ * 1. Check manual topic queue first
+ * 2. If empty, return null (caller should fall back to AI generation)
+ * 
+ * @param {string} brandId - Brand identifier (e.g., 'man', 'woman', 'parent', 'elder').
+ * @returns {{title: string, source: 'manual', brandId: string}|null} Topic object or null.
+ */
+export function selectNextTopic(brandId) {
+    const manualTopic = popManualTopic(brandId);
+    
+    if (manualTopic) {
+        return {
+            title: manualTopic,
+            source: 'manual',
+            brandId: brandId
+        };
+    }
+    
+    return null;
+}
