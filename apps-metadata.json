@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "spring-lipstick-pick",
+      "name": "女人爱口红榜",
+      "description": "对比4款春季热推口红色号，选出你最想入手的那一支。",
+      "category": "美妆",
+      "directory": "spring-lipstick-pick",
+      "url": "spring-lipstick-pick",
+      "image": "spring-lipstick-pick/images/coral-orange.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "口红",
+        "春季",
+        "显白",
+        "种草",
+        "口红",
+        "春季",
+        "显白",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "children-homework-companion",
       "name": "作业陪伴投票",
       "description": "测一测家长在孩子写作业时更倾向的陪伴方式",
