@@ -1,6 +1,27 @@
 {
   "apps": [
     {
+      "id": "celebrity-airport-style",
+      "name": "明星穿搭PK",
+      "description": "用三种代表性机场穿搭风格做投票，图片友好、互动强。",
+      "category": "时尚",
+      "directory": "celebrity-airport-style",
+      "url": "celebrity-airport-style",
+      "image": "celebrity-airport-style/images/minimal-chic.svg",
+      "tags": [
+        "投票",
+        "时尚",
+        "明星穿搭",
+        "机场look",
+        "街拍",
+        "明星穿搭",
+        "机场look",
+        "时尚",
+        "街拍"
+      ],
+      "status": "active"
+    },
+    {
       "id": "child-screen-rules",
       "name": "孩子用手机管理",
       "description": "约定手机使用规则，帮助孩子养成自控与时间管理习惯。",
