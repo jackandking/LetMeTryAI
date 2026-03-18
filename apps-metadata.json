@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "child-screen-rules",
+      "name": "孩子用手机管理",
+      "description": "约定手机使用规则，帮助孩子养成自控与时间管理习惯。",
+      "category": "家庭",
+      "directory": "child-screen-rules",
+      "url": "child-screen-rules",
+      "image": "child-screen-rules/images/no-phone-during-study.svg",
+      "tags": [
+        "投票",
+        "家庭",
+        "屏幕时间",
+        "自控",
+        "家庭规则",
+        "陪伴",
+        "屏幕时间",
+        "自控",
+        "家庭规则",
+        "陪伴"
+      ],
+      "status": "active"
+    },
+    {
       "id": "retirement-hobby-pick-2026-03-18",
       "name": "兴趣重拾投票",
       "description": "了解退休人群最想重拾的兴趣爱好，便于制作配图和故事型文案。",
