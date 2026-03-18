@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "retirement-hobby-pick-2026-03-18",
+      "name": "兴趣重拾投票",
+      "description": "了解退休人群最想重拾的兴趣爱好，便于制作配图和故事型文案。",
+      "category": "生活",
+      "directory": "retirement-hobby-pick-2026-03-18",
+      "url": "retirement-hobby-pick-2026-03-18",
+      "image": "retirement-hobby-pick-2026-03-18/images/hobby-gardening.svg",
+      "tags": [
+        "投票",
+        "生活",
+        "退休",
+        "兴趣",
+        "生活方式",
+        "养生",
+        "银发",
+        "退休",
+        "兴趣",
+        "生活方式",
+        "养生",
+        "银发"
+      ],
+      "status": "active"
+    },
+    {
       "id": "modern-fighter-showdown",
       "name": "现代战机对决",
       "description": "用雷达、推重比、隐身能力等维度比较4款代表性现代战机，适合装备党投票。",
