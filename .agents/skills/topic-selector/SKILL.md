@@ -1,11 +1,56 @@
 ---
 name: topic-selector
-description: Select and rank topic ideas against brand-specific audience profiles. Use when topic strategy differs by product, such as 男人宝、女人爱、爱老人、家长爱.
+description: Select and rank topic ideas against brand-specific audience profiles. Use when topic strategy differs by product, such as 男人宝、女人爱、爱老人、家长爱. Supports manual topic priority queue.
 ---
 
 # Topic Selector
 
 Reusable topic scoring and ranking for LetMeTryAI products with different audience strategies.
+
+## Manual Topic Priority (NEW)
+
+人工提交的选题会被**优先于 AI 生成选题**处理。
+
+### 快速添加人工选题
+```bash
+# 添加到男人宝队列
+echo "坦克之王评选" >> topics/man-manual-topics.txt
+
+# 添加到女人爱队列
+echo "春季口红新色对比" >> topics/woman-manual-topics.txt
+
+# 批量添加
+cat >> topics/man-manual-topics.txt << EOF
+战斗机速度对比
+最强战舰投票
+EOF
+```
+
+### 在代码中使用
+```javascript
+import { selectNextTopic } from './scripts/topic-selector.js';
+
+// 优先检查人工队列，无则返回 null
+const topic = selectNextTopic('man');
+if (topic) {
+  console.log(`使用人工选题: ${topic.title}`);
+} else {
+  // 走 AI 生成逻辑
+  const aiTopic = await generateAITopic('man');
+}
+```
+
+### 处理机制
+1. **完全优先**: 只要有人工选题，就不使用 AI 生成
+2. **FIFO**: 按提交顺序处理（文件行顺序）
+3. **自动清理**: 处理完成后自动从队列删除
+4. **多品牌独立**: 各品牌有独立队列文件
+
+### 队列文件位置
+- `topics/man-manual-topics.txt` - 男人宝
+- `topics/woman-manual-topics.txt` - 女人爱
+- `topics/parent-manual-topics.txt` - 家长爱
+- `topics/elder-manual-topics.txt` - 爱老人
 
 ## Purpose
 

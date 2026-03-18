@@ -151,3 +151,7 @@ mcp-servers/**/*.d.ts.map
 metrics
 kuaishou_auth.json
 .runtime/
+
+# Manual topics - runtime data, not version controlled
+topics/*-manual-topics.txt
+topics/.cache/
