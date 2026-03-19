@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>旗舰拍照对决：哪款手机更能拍大片？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">旗舰拍照对决：哪款手机更能拍大片？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">作为硬核玩家，你更认可哪家旗舰手机的拍照能力？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="iphone-flagship">
+                    <img src="images/iphone-flagship.svg" alt="苹果旗舰手机摄影样张" loading="lazy">
+                    <span>稳定色彩与视频表现，影像生态强</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="samsung-flagship">
+                    <img src="images/samsung-flagship.svg" alt="三星旗舰手机摄影样张" loading="lazy">
+                    <span>高倍变焦与夜景实力派</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="google-pixel-flagship">
+                    <img src="images/google-pixel-flagship.svg" alt="谷歌Pixel手机摄影样张" loading="lazy">
+                    <span>算法优化出色，暗光表现受赞</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="nanrenbao" value="oneplus-flagship">
+                    <img src="images/oneplus-flagship.svg" alt="一加旗舰手机摄影样张" loading="lazy">
+                    <span>性价比与实战拍摄体验兼顾</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
