@@ -429,3 +429,38 @@ Key rules:
 - **Runtime data** (logs, auth, exports) goes in `.automation/.local/` (gitignored)
 - **Never write runtime artifacts to the repo root** — use `runtime-paths.js` helpers
 - Website code stays at the repo root; `scripts/` only contains website-dev tooling
+
+---
+
+## Automation Skills Catalog
+
+The project has 17 reusable agent skills in `.automation/skills/`. Each skill has a `SKILL.md` with full usage instructions. A Kimi-compatible symlink also exists at `.agents/skills/`.
+
+| Skill | Description | Path |
+|-------|-------------|------|
+| `ai-image-generator` | AI image generation via MiniMax image-01, OpenAI DALL-E, etc. | `.automation/skills/ai-image-generator/` |
+| `anti-blocking` | Handle blocking overlays, invisible elements, and automation detection | `.automation/skills/anti-blocking/` |
+| `batch-app-refiner` | Orchestrate batch refinement of multiple vote apps in parallel | `.automation/skills/batch-app-refiner/` |
+| `brand-profiles` | Centralized audience strategy for 男人宝、女人爱、爱老人、家长爱 | `.automation/skills/brand-profiles/` |
+| `data-deduplication` | Deduplicate data via exact match, fuzzy match, ID-based, or content similarity | `.automation/skills/data-deduplication/` |
+| `idea-to-launch` | End-to-end orchestration from topic selection to deploy, publish, and report | `.automation/skills/idea-to-launch/` |
+| `kuaishou-crawler` | Complete Kuaishou Creator Platform crawler with session, pagination, dedup | `.automation/skills/kuaishou-crawler/` |
+| `kuaishou-login` | Kuaishou login via mobile phone + SMS verification code | `.automation/skills/kuaishou-login/` |
+| `kuaishou-publisher` | Publish mini-apps to Kuaishou Spark Plan via existing publish workflow | `.automation/skills/kuaishou-publisher/` |
+| `kuaishou-scraper` | Scrape Kuaishou creator platform data (distribution plans, tasks, stats) | `.automation/skills/kuaishou-scraper/` |
+| `pagination-handler` | Handle paginated extraction: numbered pages, infinite scroll, load more | `.automation/skills/pagination-handler/` |
+| `report-sender` | Automated report generation and email delivery via AgentMail | `.automation/skills/report-sender/` |
+| `topic-selector` | Select and rank topics against brand-specific audience profiles | `.automation/skills/topic-selector/` |
+| `vote-app-image-gen` | Generate themed SVG images for vote app options using AI | `.automation/skills/vote-app-image-gen/` |
+| `vote-app-refiner` | Refactor vote app HTML/CSS/JS to card-based design with brand themes | `.automation/skills/vote-app-refiner/` |
+| `voting-app-scaffold` | Generate scaffold outputs for new voting apps (config, markup, metadata) | `.automation/skills/voting-app-scaffold/` |
+| `web-scraper-playwright` | Universal web scraping foundation with Playwright, session persistence, stealth | `.automation/skills/web-scraper-playwright/` |
+
+### Using Skills
+
+Each skill directory contains:
+- `SKILL.md` — frontmatter with name/description + full usage guide
+- `scripts/` — runnable code
+- `examples/` — usage examples
+
+To invoke a skill, read its `SKILL.md` for instructions. Skills can be composed together (e.g., `idea-to-launch` orchestrates `brand-profiles` → `topic-selector` → `voting-app-scaffold` → `kuaishou-publisher` → `report-sender`).

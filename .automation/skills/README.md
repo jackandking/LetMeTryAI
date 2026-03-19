@@ -218,7 +218,10 @@ idea-to-launch (总控编排)
 ## 目录结构
 
 ```
-.agents/skills/
+.automation/skills/           ← canonical path (single source of truth)
+.agents/skills/               ← symlink for Kimi CLI auto-discovery
+
+.automation/skills/
 ├── README.md (本文件)
 ├── web-scraper-playwright/
 │   ├── SKILL.md
@@ -288,7 +291,9 @@ idea-to-launch (总控编排)
 
 ## 在 Kimi CLI 中使用
 
-这些 skills 放在 `.agents/skills/` 目录下，Kimi CLI 会自动加载。
+这些 skills 的源文件在 `.automation/skills/` 目录下。为兼容 Kimi CLI 的自动发现机制，`.agents/skills/` 是一个指向 `.automation/skills/` 的 symlink。
+
+Kimi CLI 会自动扫描 `.agents/skills/` 并加载 SKILL.md frontmatter。
 
 使用时只需要说：
 
@@ -302,7 +307,7 @@ Kimi 会自动引用相关 skill 的知识。
 
 1. **Claude Desktop**: 复制 skills 目录到 `~/.claude/skills/`
 2. **Cursor**: 复制到项目 `.cursor/skills/`
-3. **VS Code Copilot**: 已在项目 `.agents/skills/` 中
+3. **VS Code Copilot**: 技能索引已添加到 `.github/copilot-instructions.md`
 4. **自定义 Agent**: 读取 SKILL.md 获取指导
 
 ## 最佳实践
