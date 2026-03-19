@@ -156,12 +156,25 @@ mcp-servers/**/*.d.ts.map
 .agent_history
 metrics
 kuaishou_auth.json
+
+# Legacy runtime directories (replaced by .automation/.local/)
 .runtime/
 
-# Automation local runtime files
-.automation-local/
-.automation-local/**
+# Root-level runtime artifacts (should land in .automation/.local/ going forward)
+email_draft.txt
+email_report.txt
+processed_ids.txt
+kuaishou_tasks.json
+kuaishou_all_tasks.json
+kuaishou_all_tasks_dedup.json
+
+# Automation local runtime files (keep .gitkeep skeleton tracked)
+.automation/.local/*
+!.automation/.local/.gitkeep
+!.automation/.local/*/
+.automation/.local/**/*
+!.automation/.local/**/.gitkeep
 
 # Manual topics - runtime data, not version controlled
-topics/*-manual-topics.txt
-topics/.cache/
+.automation/.local/state/topics/*-manual-topics.txt
+.automation/.local/tmp/topics-cache/

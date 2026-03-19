@@ -49,48 +49,52 @@ LetMeTryAI/
 │       ├── dist/           # Compiled JavaScript
 │       └── package.json    # Server dependencies
 │
-├── scripts/                # Utility scripts
+├── scripts/                # Website-dev tooling only
 │   ├── setup-mcp.sh        # MCP Server setup
-│   └── *.js                # Various automation scripts
+│   └── build-and-commit-mcp.sh  # MCP build script
+│
+├── .automation/            # All automation tooling (tracked)
+│   ├── scripts/            # Automation scripts (cron jobs, CLI)
+│   │   ├── daily-orchestrator.js
+│   │   ├── daily_run.sh
+│   │   ├── run-daily-profile.sh
+│   │   ├── setup-cron.sh
+│   │   ├── runtime-paths.js
+│   │   ├── send_email.py
+│   │   ├── publish-kuaishou-task.js
+│   │   ├── fetch-*.js
+│   │   ├── templates/          # Brand theme templates
+│   │   └── topics/             # Topic queue management
+│   ├── skills/             # Agent skills (16 skills)
+│   │   ├── brand-profiles/
+│   │   ├── topic-selector/
+│   │   ├── kuaishou-publisher/
+│   │   ├── voting-app-scaffold/
+│   │   └── ...
+│   ├── docs/               # Automation documentation
+│   ├── config/             # Automation config files
+│   └── .local/             # Runtime data (gitignored)
+│       ├── auth/           # Session/auth files
+│       ├── state/          # Email drafts, topics, processed IDs
+│       ├── exports/        # Metrics, task exports
+│       ├── logs/           # All automation logs
+│       ├── screenshots/    # Automation screenshots
+│       └── tmp/            # Temporary files
 │
 ├── .github/                # GitHub configuration
 │   ├── copilot-instructions.md  # Copilot coding guidelines
 │   ├── copilot-mcp.json    # MCP server configuration
 │   └── ISSUE_TEMPLATE/     # Issue templates
 │
-├── Component directories/  # Individual mini-apps
+├── Component directories/  # Individual mini-apps (100+)
 │   ├── firework/           # Fireworks animation app
 │   ├── nanrenbao/          # Entertainment app
-│   ├── womanai/            # Entertainment app
-│   ├── typing-game/        # Typing practice game
-│   ├── parent-tools/       # Parenting utilities
-│   ├── elder-love/         # Elder care app
-│   ├── tank-kings/         # Military ranking app
-│   ├── drone-kings/        # Military ranking app
-│   ├── fighter-jets/       # Military ranking app
-│   ├── rockets-king/       # Space ranking app
-│   ├── future-warfare/     # Military tech voting
-│   ├── hardcore-tech/      # Tech voting
-│   ├── human-vs-ai/        # AI vs human voting
-│   ├── ai-watermark/       # AI watermark voting
-│   ├── beautyVote/         # Beauty voting
-│   ├── zuowen-game/        # Chinese writing game
-│   ├── eraser/             # Eraser tool
-│   ├── lure-fishing/       # Fishing app
-│   ├── whatfish/           # Fish identification
-│   ├── howlong/            # Survey component
-│   ├── gamegen/            # Game generator
-│   ├── guessPartnerCount/  # Quiz game
-│   ├── guesscupsize/       # Quiz game
-│   ├── caili/              # Tool app
-│   ├── emperor/            # History app
-│   ├── iqtax/              # Tax calculator
-│   └── webview*/           # Various content pages
+│   └── ...
 │
 ├── tests/                  # Playwright E2E tests
 ├── images/                 # Static image assets
 ├── icons/                  # Favicon and icons
-├── docs/                   # Documentation
+├── docs/                   # Website documentation
 └── admin/                  # Admin tools
 ```
 
