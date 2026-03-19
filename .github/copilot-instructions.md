@@ -418,3 +418,14 @@ When creating GitHub Issues that require database operations:
 ---
 
 **Remember**: Tests are not optional - they protect the codebase and enable confident changes. Every commit should leave the project in a more tested state than before.
+
+## Automation Development
+
+All automation tooling lives in `.automation/` (not the repo root). See `.automation/CLAUDE.md` for the full convention guide.
+
+Key rules:
+- **Scripts** go in `.automation/scripts/`
+- **Agent skills** go in `.automation/skills/<skill-name>/`
+- **Runtime data** (logs, auth, exports) goes in `.automation/.local/` (gitignored)
+- **Never write runtime artifacts to the repo root** — use `runtime-paths.js` helpers
+- Website code stays at the repo root; `scripts/` only contains website-dev tooling
