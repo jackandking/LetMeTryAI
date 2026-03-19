@@ -1,6 +1,29 @@
 {
   "apps": [
     {
+      "id": "creamy-vs-coral-blush",
+      "name": "腮红之选",
+      "description": "两种春季热门腮红色系对比，看看哪种更显白、更温柔。",
+      "category": "美妆",
+      "directory": "creamy-vs-coral-blush",
+      "url": "creamy-vs-coral-blush",
+      "image": "creamy-vs-coral-blush/images/creamy-blush.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "腮红",
+        "显白",
+        "春季妆",
+        "种草",
+        "腮红",
+        "显白",
+        "春季妆",
+        "种草",
+        "美妆"
+      ],
+      "status": "active"
+    },
+    {
       "id": "supercar-exhaust-showdown",
       "name": "跑车声浪PK",
       "description": "自然吸气、涡轮、改装排气三类声浪对比，侧重声浪风格与听感偏好投票。",
