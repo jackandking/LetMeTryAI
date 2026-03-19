@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "celebrity-hair-color",
+      "name": "春季发色PK",
+      "description": "对比四种流行春季发色，轻松投票并查看示意妆造图。",
+      "category": "美妆",
+      "directory": "celebrity-hair-color",
+      "url": "celebrity-hair-color",
+      "image": "celebrity-hair-color/images/natural-black.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "发色",
+        "春季",
+        "明星",
+        "显白",
+        "种草",
+        "发色",
+        "春季",
+        "明星",
+        "显白",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "child-digital-first-language",
       "name": "数字启蒙选择",
       "description": "收集家长对孩子首选数字/编程学习路径的偏好（图文投票）。",
