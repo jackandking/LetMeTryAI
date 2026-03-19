@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "retirement-daily-choice",
+      "name": "退休生活选择器",
+      "description": "投票选出退休后最想坚持的日常活动，供同龄人交流参考。",
+      "category": "生活",
+      "directory": "retirement-daily-choice",
+      "url": "retirement-daily-choice",
+      "image": "retirement-daily-choice/images/learn-painting.svg",
+      "tags": [
+        "投票",
+        "生活",
+        "退休",
+        "日常",
+        "兴趣",
+        "银发生活",
+        "退休",
+        "日常",
+        "兴趣",
+        "银发生活"
+      ],
+      "status": "active"
+    },
+    {
       "id": "military-drones-duel",
       "name": "军用无人机对决",
       "description": "比较续航、载荷与隐蔽性等参数，硬核玩家快速投票判断优势。",
