@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>女人爱热议：明星春季发色你更pick哪种？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">女人爱热议：明星春季发色你更pick哪种？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是女人爱用户，你会把这一票投给谁：明星春季发色，你更pick哪种？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="womanai" value="natural-black">
+                    <img src="images/natural-black.svg" alt="自然黑发色示意" loading="lazy">
+                    <span>经典自然、显肤色亮</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="soft-brown">
+                    <img src="images/soft-brown.svg" alt="温柔棕发色示意" loading="lazy">
+                    <span>温柔气质、百搭亲和</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="milk-tea-blonde">
+                    <img src="images/milk-tea-blonde.svg" alt="奶茶色发色示意" loading="lazy">
+                    <span>时髦柔和、显白利器</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="copper-red">
+                    <img src="images/copper-red.svg" alt="铜红发色示意" loading="lazy">
+                    <span>活泼亮眼、拍照抢镜</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
