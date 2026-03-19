@@ -1,6 +1,30 @@
 {
   "apps": [
     {
+      "id": "beauty-retro-vs-nude",
+      "name": "复古或裸妆",
+      "description": "复古红唇与轻薄裸妆的显白与风格对比投票。",
+      "category": "美妆",
+      "directory": "beauty-retro-vs-nude",
+      "url": "beauty-retro-vs-nude",
+      "image": "beauty-retro-vs-nude/images/retro-red-lip.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "春妆",
+        "显白",
+        "红唇",
+        "裸妆",
+        "种草",
+        "春妆",
+        "显白",
+        "红唇",
+        "裸妆",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "celebrity-hair-color",
       "name": "春季发色PK",
       "description": "对比四种流行春季发色，轻松投票并查看示意妆造图。",
