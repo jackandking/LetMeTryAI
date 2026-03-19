@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "supercar-exhaust-showdown",
+      "name": "跑车声浪PK",
+      "description": "自然吸气、涡轮、改装排气三类声浪对比，侧重声浪风格与听感偏好投票。",
+      "category": "汽车机械",
+      "directory": "supercar-exhaust-showdown",
+      "url": "supercar-exhaust-showdown",
+      "image": "supercar-exhaust-showdown/images/naturally-aspirated.svg",
+      "tags": [
+        "投票",
+        "汽车机械",
+        "跑车",
+        "排气",
+        "声浪",
+        "机械美感",
+        "跑车",
+        "排气",
+        "声浪",
+        "机械美感"
+      ],
+      "status": "active"
+    },
+    {
       "id": "celebrity-hair-length",
       "name": "明星对决",
       "description": "短发与长发的气场对决，适合引发讨论与转发。",
