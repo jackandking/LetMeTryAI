@@ -78,6 +78,12 @@ PROJECT_DIR="$(dirname "$(dirname "$(dirname "$SCRIPT_DIR")")")"
 4. Use `.automation/.local/` for any runtime artifacts
 5. Reference sibling skills via `../other-skill/` (relative within skills/)
 
+## Skill Discovery Symlink
+
+`.agents/skills/` is a git-tracked **symlink** pointing to `.automation/skills/`. This exists so that Kimi CLI (which scans `.agents/skills/` by convention) auto-discovers all skills. The canonical location remains `.automation/skills/` — never place files directly in `.agents/skills/`.
+
+Copilot discovers skills via the catalog in `.github/copilot-instructions.md`.
+
 ## Cron Job Convention
 
 Cron entries follow this pattern:
