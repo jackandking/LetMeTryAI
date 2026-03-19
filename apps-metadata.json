@@ -1,6 +1,31 @@
 {
   "apps": [
     {
+      "id": "daily-wellness-habit",
+      "name": "养生习惯投票",
+      "description": "筛选常见可长期坚持的健康小习惯，适合中老年人群参考。",
+      "category": "养生",
+      "directory": "daily-wellness-habit",
+      "url": "daily-wellness-habit",
+      "image": "daily-wellness-habit/images/foot-soak-morning-evening.svg",
+      "tags": [
+        "投票",
+        "养生",
+        "日常习惯",
+        "泡脚",
+        "午睡",
+        "温开水",
+        "散步",
+        "养生",
+        "日常习惯",
+        "泡脚",
+        "午睡",
+        "温开水",
+        "散步"
+      ],
+      "status": "active"
+    },
+    {
       "id": "flagship-phone-camera-pk",
       "name": "旗舰拍照PK",
       "description": "比较主流旗舰手机在拍照、夜景、长焦和色彩上的表现，适合轻量投票与图文样张展示。",
