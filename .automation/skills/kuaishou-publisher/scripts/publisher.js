@@ -3,7 +3,8 @@ const DEFAULT_AUTH_FILE = '.automation/.local/auth/kuaishou_auth.json';
 const DEFAULT_SCRIPT_PATH = '.automation/scripts/publish-kuaishou-task.js';
 const BRAND_SOURCE_TASK_IDS = {
     'elder-love': '183044',
-    'parent-tools': '186229'
+    'parent-tools': '186229',
+    'womanai': '188816'
 };
 
 /**
