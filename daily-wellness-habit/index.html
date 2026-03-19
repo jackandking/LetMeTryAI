@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爱老人关注：日常养生习惯投票</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">爱老人关注：日常养生习惯投票</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">如果是爱老人用户，你最支持哪个日常养生习惯？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="elder-love" value="foot-soak-morning-evening">
+                    <img src="images/foot-soak-morning-evening.svg" alt="温水泡脚盆" loading="lazy">
+                    <span>温水泡脚，助眠助血液循环</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="daily-warm-water">
+                    <img src="images/daily-warm-water.svg" alt="杯子里的温开水" loading="lazy">
+                    <span>起床温水润肠，习惯简单易坚持</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="short-afternoon-nap">
+                    <img src="images/short-afternoon-nap.svg" alt="老人午睡靠椅小憩" loading="lazy">
+                    <span>短午休提神又不影响夜间睡眠</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="walk-30-minutes">
+                    <img src="images/walk-30-minutes.svg" alt="太阳下散步的老人" loading="lazy">
+                    <span>规律步行，心肺更舒服，易坚持</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
