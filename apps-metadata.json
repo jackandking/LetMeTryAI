@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "child-digital-first-language",
+      "name": "数字启蒙选择",
+      "description": "收集家长对孩子首选数字/编程学习路径的偏好（图文投票）。",
+      "category": "教育",
+      "directory": "child-digital-first-language",
+      "url": "child-digital-first-language",
+      "image": "child-digital-first-language/images/scratch-blocks.svg",
+      "tags": [
+        "投票",
+        "教育",
+        "编程",
+        "数字素养",
+        "教育选择",
+        "技能培养",
+        "编程",
+        "数字素养",
+        "教育选择",
+        "技能培养"
+      ],
+      "status": "active"
+    },
+    {
       "id": "retirement-daily-choice",
       "name": "退休生活选择器",
       "description": "投票选出退休后最想坚持的日常活动，供同龄人交流参考。",

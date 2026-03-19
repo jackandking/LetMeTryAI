@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子应该从哪门数字/编程课开始？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">孩子应该从哪门数字/编程课开始？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在家长爱用户视角，你会怎么选：孩子第一门数字课程选哪种？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="scratch-blocks">
+                    <img src="images/scratch-blocks.svg" alt="孩子用平板学scratch图形化编程" loading="lazy">
+                    <span>用拖拽积木培养逻辑思维，入门低门槛</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="python-basics">
+                    <img src="images/python-basics.svg" alt="适合孩子的python代码示例" loading="lazy">
+                    <span>文字编程更有成长空间，适合高年级或有兴趣孩子</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="robot-play-kits">
+                    <img src="images/robot-play-kits.svg" alt="孩子与拼装机器人互动" loading="lazy">
+                    <span>边玩边学，激发动手与工程思维</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="logic-and-math">
+                    <img src="images/logic-and-math.svg" alt="孩子做逻辑题或数学思维训练" loading="lazy">
+                    <span>夯实思维基础，为未来学习打底</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
