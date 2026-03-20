@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：周末亲子活动怎么安排？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">家长话题：周末亲子活动怎么安排？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在家长视角，你会怎么选：周末亲子活动你更喜欢哪种安排？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="park-hike">
+                    <img src="images/park-hike.svg" alt="公园徒步野餐" loading="lazy">
+                    <span>走走路、玩玩沙、带上野餐垫放松一整天</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="museum-explore">
+                    <img src="images/museum-explore.svg" alt="博物馆探索" loading="lazy">
+                    <span>带孩子增长见识，寓教于乐的室内方案</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="craft-workshop">
+                    <img src="images/craft-workshop.svg" alt="亲子手作" loading="lazy">
+                    <span>一起做手工或烘焙，提升亲子互动</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="family-cooking">
+                    <img src="images/family-cooking.svg" alt="家庭做饭" loading="lazy">
+                    <span>全家分工做饭，共享成果和乐趣</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
