@@ -149,12 +149,27 @@ check_keyword_overlap() {
     
     # Define keyword groups that indicate similarity
     local keyword_groups=(
+        # nanrenbao
         "球星:球员:足球:篮球:NBA:世界杯"
         "PK:对决:对战:VS:较量"
         "排行:排名:榜单:TOP"
         "坦克:战机:航母:军舰:武器:装备"
         "汽车:跑车:豪车:车辆"
         "手机:电脑:数码:科技"
+        # womanai
+        "口红:唇色:色号:唇膏:唇釉"
+        "美妆:化妆:粉底:眼影:腮红:护肤"
+        "穿搭:时尚:搭配:衣服:包包:鞋子"
+        "明星:艺人:偶像:综艺:影视"
+        # parent-tools
+        "作业:功课:学习:考试:成绩:补习"
+        "课外班:兴趣班:培训:辅导:早教"
+        "亲子:育儿:家长:陪伴:家庭教育"
+        # elder-love
+        "养生:保健:健康:长寿:体检:中医"
+        "晨练:太极:广场舞:散步:健身"
+        "退休:老年:银发:养老"
+        "怀旧:经典:老歌:戏曲:回忆"
     )
     
     for group in "${keyword_groups[@]}"; do

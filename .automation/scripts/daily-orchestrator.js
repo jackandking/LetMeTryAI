@@ -352,16 +352,19 @@ function buildTopicConstraintsPrompt(profile) {
     
     if (profile?.topicConstraints) {
         const tc = profile.topicConstraints;
-        
-        if (tc['体育竞技']) {
-            constraints.push(`体育类主题限制：每周最多${tc['体育竞技'].maxPerWeek}个，冷却${tc['体育竞技'].cooldownDays}天`);
-            if (tc['体育竞技'].avoidKeywords) {
-                constraints.push(`近期避免关键词：${tc['体育竞技'].avoidKeywords.join('、')}`);
+
+        for (const [category, rules] of Object.entries(tc)) {
+            if (category === '相似主题冷却') {
+                constraints.push(`相似主题冷却期：${rules.cooldownDays}天`);
+                continue;
             }
-        }
-        
-        if (tc['相似主题冷却']) {
-            constraints.push(`相似主题冷却期：${tc['相似主题冷却'].cooldownDays}天`);
+            constraints.push(`${category}类主题限制：每周最多${rules.maxPerWeek}个，冷却${rules.cooldownDays}天`);
+            if (rules.avoidKeywords) {
+                constraints.push(`  近期避免关键词：${rules.avoidKeywords.join('、')}`);
+            }
+            if (rules.alternatives) {
+                constraints.push(`  推荐替代方向：${rules.alternatives.join('、')}`);
+            }
         }
     }
     
