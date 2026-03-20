@@ -1,0 +1,15 @@
+{
+  "id": "eraser",
+  "name": "爱橡皮",
+  "description": "创意橡皮擦工具",
+  "category": "工具",
+  "directory": "eraser",
+  "url": "eraser",
+  "image": "https://picsum.photos/seed/eraser/600/400",
+  "tags": [
+    "工具",
+    "创意"
+  ],
+  "featured": true,
+  "status": "active"
+}

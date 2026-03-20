@@ -1,0 +1,24 @@
+{
+  "id": "surface-warship-duel",
+  "name": "现代战舰对决",
+  "description": "用火力、雷达与防空三要素对比三艘代表性驱逐舰，投票直观易懂。",
+  "category": "军事装备",
+  "directory": "surface-warship-duel",
+  "url": "surface-warship-duel",
+  "image": "surface-warship-duel/images/type-055.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "驱逐舰",
+    "远洋护航",
+    "火力",
+    "雷达",
+    "防空",
+    "驱逐舰",
+    "远洋护航",
+    "火力",
+    "雷达",
+    "防空"
+  ],
+  "status": "active"
+}

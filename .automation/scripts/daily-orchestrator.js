@@ -23,7 +23,6 @@ import { validateVotingAppDirectory } from './validate-voting-app.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_DIR = path.resolve(__dirname, '../..');
-const APPS_METADATA_PATH = path.join(REPO_DIR, 'apps-metadata.json');
 const FIGHTER_JETS_STYLES_PATH = path.join(REPO_DIR, 'fighter-jets', 'styles.css');
 const DEFAULT_DAILY_LOG_DIR = path.join(REPO_DIR, '.automation', '.local', 'logs', 'daily-orchestrator');
 const DEFAULT_MODEL = 'gpt-5-mini';
@@ -626,28 +625,17 @@ async function requestStructuredTopics({ model, profile, currentDate, copilotBin
 export function resolveUniqueDailyAppId({
     baseAppId,
     currentDate,
-    repoDir = REPO_DIR,
-    appsMetadataPath = path.join(repoDir, 'apps-metadata.json')
+    repoDir = REPO_DIR
 }) {
     const normalizedBaseAppId = normalizeKebabId(baseAppId);
     const normalizedDate = normalizeKebabId(currentDate || new Date().toISOString().slice(0, 10), 'daily');
-    const knownAppIds = new Set();
-
-    if (fs.existsSync(appsMetadataPath)) {
-        const parsed = loadAppsMetadata(appsMetadataPath);
-        parsed.apps.forEach(app => {
-            if (app && typeof app.id === 'string' && app.id.trim()) {
-                knownAppIds.add(app.id.trim());
-            }
-        });
-    }
 
     const collidesWithExistingOutput = candidateAppId => {
         const candidateDir = path.join(repoDir, candidateAppId);
         return fs.existsSync(candidateDir) && fs.readdirSync(candidateDir).length > 0;
     };
 
-    if (!knownAppIds.has(normalizedBaseAppId) && !collidesWithExistingOutput(normalizedBaseAppId)) {
+    if (!collidesWithExistingOutput(normalizedBaseAppId)) {
         return normalizedBaseAppId;
     }
 
@@ -655,7 +643,7 @@ export function resolveUniqueDailyAppId({
     let suffix = 1;
     let candidateAppId = datedBase;
 
-    while (knownAppIds.has(candidateAppId) || collidesWithExistingOutput(candidateAppId)) {
+    while (collidesWithExistingOutput(candidateAppId)) {
         suffix += 1;
         candidateAppId = `${datedBase}-${suffix}`;
     }
@@ -670,8 +658,7 @@ function buildScaffoldSpec(selected, profile, options = {}) {
     const appId = resolveUniqueDailyAppId({
         baseAppId: candidate.appId || candidate.title,
         currentDate: options.currentDate,
-        repoDir: options.repoDir,
-        appsMetadataPath: options.appsMetadataPath
+        repoDir: options.repoDir
     });
     const coverImage = candidateOptions[0]
         ? `${appId}/images/${candidateOptions[0].image}`
@@ -695,32 +682,9 @@ function buildScaffoldSpec(selected, profile, options = {}) {
     };
 }
 
-function loadAppsMetadata(appsMetadataPath) {
-    const parsed = JSON.parse(fs.readFileSync(appsMetadataPath, 'utf-8'));
-    const apps = Array.isArray(parsed?.apps) ? parsed.apps : [];
-    return {
-        ...parsed,
-        apps
-    };
-}
-
-export function upsertAppsMetadata(appsMetadataPath, entry) {
-    const parsed = loadAppsMetadata(appsMetadataPath);
-    const existingIndex = parsed.apps.findIndex(app => app && app.id === entry.id);
-
-    if (existingIndex >= 0) {
-        parsed.apps.splice(existingIndex, 1, entry);
-    } else {
-        parsed.apps.unshift(entry);
-    }
-
-    fs.writeFileSync(appsMetadataPath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
-}
-
 export function materializeScaffoldPlan({
     scaffoldPlan,
     repoDir = REPO_DIR,
-    appsMetadataPath = APPS_METADATA_PATH,
     stylesTemplatePath = FIGHTER_JETS_STYLES_PATH
 }) {
     if (!scaffoldPlan?.validation?.valid) {
@@ -743,7 +707,11 @@ export function materializeScaffoldPlan({
         fs.writeFileSync(assetPath, content, 'utf-8');
     });
 
-    upsertAppsMetadata(appsMetadataPath, scaffoldPlan.metadataEntry);
+    fs.writeFileSync(
+        path.join(outputDir, 'metadata.json'),
+        JSON.stringify(scaffoldPlan.metadataEntry, null, 2) + '\n',
+        'utf-8'
+    );
 
     return {
         outputDir,
@@ -792,8 +760,8 @@ async function verifyDeployedUrl(url, retries, delayMs) {
 }
 
 function commitAndPush({ repoDir, appDirRelative, appId, appName }) {
-    logStage('git', `Staging ${appDirRelative} and apps-metadata.json`);
-    runChecked('git', ['add', '--', appDirRelative, 'apps-metadata.json'], { cwd: repoDir });
+    logStage('git', `Staging ${appDirRelative}`);
+    runChecked('git', ['add', '--', appDirRelative], { cwd: repoDir });
 
     const diffResult = runProcess('git', ['diff', '--cached', '--quiet'], { cwd: repoDir });
     if (diffResult.status === 0) {
@@ -989,19 +957,16 @@ export async function runDailyOrchestrator(options = {}) {
         } else {
             logStage('topics', `Selected AI candidate "${selected.candidate.title}" (score=${selected.scoring.score})`);
         }
-        const appsMetadataPath = path.join(repoDir, 'apps-metadata.json');
         const stylesTemplatePath = path.join(repoDir, 'fighter-jets', 'styles.css');
         const scaffoldSpec = buildScaffoldSpec(selected, profile, {
             currentDate,
-            repoDir,
-            appsMetadataPath
+            repoDir
         });
         const scaffoldPlan = buildScaffoldPlan(scaffoldSpec);
         logStage('scaffold', `Materializing app ${scaffoldPlan.metadataEntry.id}`);
         const materialized = materializeScaffoldPlan({
             scaffoldPlan,
             repoDir,
-            appsMetadataPath,
             stylesTemplatePath
         });
 

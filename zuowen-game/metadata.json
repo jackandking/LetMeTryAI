@@ -1,0 +1,16 @@
+{
+  "id": "zuowen",
+  "name": "爱语文",
+  "description": "语文学习和作文游戏",
+  "category": "教育",
+  "directory": "zuowen-game",
+  "url": "zuowen-game",
+  "image": "https://picsum.photos/seed/book/600/400",
+  "tags": [
+    "语文",
+    "作文",
+    "学习"
+  ],
+  "featured": true,
+  "status": "active"
+}

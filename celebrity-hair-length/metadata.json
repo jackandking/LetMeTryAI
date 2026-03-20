@@ -1,0 +1,22 @@
+{
+  "id": "celebrity-hair-length",
+  "name": "明星对决",
+  "description": "短发与长发的气场对决，适合引发讨论与转发。",
+  "category": "明星",
+  "directory": "celebrity-hair-length",
+  "url": "celebrity-hair-length",
+  "image": "celebrity-hair-length/images/short-hair.svg",
+  "tags": [
+    "投票",
+    "明星",
+    "短发",
+    "长发",
+    "明星造型",
+    "气场",
+    "短发",
+    "长发",
+    "明星造型",
+    "气场"
+  ],
+  "status": "active"
+}

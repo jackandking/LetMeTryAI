@@ -1,0 +1,23 @@
+{
+  "id": "healthy-breakfast-choice",
+  "name": "早餐选择投票",
+  "description": "温和、营养、易消化的早餐类型投票，便于长辈与家庭成员参考与转发。",
+  "category": "健康",
+  "directory": "healthy-breakfast-choice",
+  "url": "healthy-breakfast-choice",
+  "image": "healthy-breakfast-choice/images/congee-and-side-dishes.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "早餐",
+    "养生",
+    "易消化",
+    "家庭关怀",
+    "早餐",
+    "健康",
+    "养生",
+    "易消化",
+    "家庭关怀"
+  ],
+  "status": "active"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "parent-tools",
+  "name": "家长爱",
+  "description": "家长教育工具集",
+  "category": "工具",
+  "directory": "parent-tools",
+  "url": "parent-tools",
+  "image": "images/1621725673908_.pic.jpg",
+  "tags": [
+    "家长",
+    "教育",
+    "工具"
+  ],
+  "featured": true,
+  "status": "active"
+}

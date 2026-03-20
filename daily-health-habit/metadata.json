@@ -1,0 +1,21 @@
+{
+  "id": "daily-health-habit",
+  "name": "健康养生投票",
+  "description": "调查用户愿意长期坚持的日常养生方式，便于后续内容延展。",
+  "category": "养生",
+  "directory": "daily-health-habit",
+  "url": "daily-health-habit",
+  "image": "daily-health-habit/images/morning-walk.svg",
+  "tags": [
+    "投票",
+    "养生",
+    "日常习惯",
+    "晨练",
+    "健康饮食",
+    "养生",
+    "日常习惯",
+    "晨练",
+    "健康饮食"
+  ],
+  "status": "active"
+}

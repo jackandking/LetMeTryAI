@@ -1,0 +1,17 @@
+{
+  "id": "fireworks",
+  "name": "爱烟花",
+  "description": "创意烟花动画展示",
+  "category": "娱乐",
+  "directory": "firework",
+  "url": "https://museumcheck.cn/fireworks-wall.html",
+  "external": true,
+  "image": "https://picsum.photos/seed/fireworks/600/400",
+  "tags": [
+    "动画",
+    "烟花",
+    "视觉"
+  ],
+  "featured": true,
+  "status": "active"
+}

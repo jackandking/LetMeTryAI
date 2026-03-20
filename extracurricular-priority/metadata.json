@@ -1,0 +1,24 @@
+{
+  "id": "extracurricular-priority",
+  "name": "家长爱话题：课外班选择",
+  "description": "孩子参加课外班时，家长在“兴趣培养”和“成绩提升”之间如何取舍？",
+  "category": "教育",
+  "directory": "extracurricular-priority",
+  "url": "extracurricular-priority",
+  "image": "extracurricular-priority/images/focus-on-interest.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "课外班",
+    "兴趣",
+    "提分",
+    "家庭教育",
+    "时间分配",
+    "课外班",
+    "兴趣",
+    "提分",
+    "家庭教育",
+    "时间分配"
+  ],
+  "status": "active"
+}

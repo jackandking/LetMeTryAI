@@ -1,0 +1,15 @@
+{
+  "id": "study",
+  "name": "爱学习",
+  "description": "有趣的学习工具",
+  "category": "教育",
+  "directory": "webview11",
+  "url": "webview11",
+  "image": "https://picsum.photos/seed/study/600/400",
+  "tags": [
+    "学习",
+    "教育"
+  ],
+  "featured": true,
+  "status": "active"
+}

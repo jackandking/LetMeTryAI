@@ -1,0 +1,24 @@
+{
+  "id": "modern-stealth-fighters",
+  "name": "隐身战机对决",
+  "description": "以性能参数与作战定位对比，激发装备党讨论与投票互动。",
+  "category": "军事装备",
+  "directory": "modern-stealth-fighters",
+  "url": "modern-stealth-fighters",
+  "image": "modern-stealth-fighters/images/f-22.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "隐身战机",
+    "机动性",
+    "传感器",
+    "隐形技术",
+    "空战",
+    "隐身战机",
+    "机动性",
+    "传感器",
+    "隐形技术",
+    "空战"
+  ],
+  "status": "active"
+}

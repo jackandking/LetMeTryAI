@@ -1,0 +1,14 @@
+{
+  "id": "nanrenbao",
+  "name": "男人宝",
+  "description": "男性专属娱乐应用",
+  "category": "娱乐",
+  "directory": "nanrenbao",
+  "url": "nanrenbao",
+  "image": "https://picsum.photos/seed/men/600/400",
+  "tags": [
+    "娱乐",
+    "图片"
+  ],
+  "status": "active"
+}

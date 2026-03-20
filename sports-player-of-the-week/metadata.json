@@ -1,0 +1,24 @@
+{
+  "id": "sports-player-of-the-week",
+  "name": "球星排行",
+  "description": "根据本周赛场高光表现，比拼谁更值得男人宝用户为他投票。",
+  "category": "体育",
+  "directory": "sports-player-of-the-week",
+  "url": "sports-player-of-the-week",
+  "image": "sports-player-of-the-week/images/super-scorer-a.svg",
+  "tags": [
+    "投票",
+    "体育",
+    "球星",
+    "关键表现",
+    "得分",
+    "组织",
+    "防守",
+    "球星",
+    "关键表现",
+    "得分",
+    "组织",
+    "防守"
+  ],
+  "status": "active"
+}

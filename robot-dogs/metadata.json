@@ -1,0 +1,16 @@
+{
+  "id": "robot-dogs",
+  "name": "机器狗参军",
+  "description": "未来战场机器狗战力大比拼",
+  "category": "军事",
+  "directory": "robot-dogs",
+  "url": "robot-dogs",
+  "image": "https://picsum.photos/seed/robotdogs/600/400",
+  "tags": [
+    "军事",
+    "机器狗",
+    "科技",
+    "投票"
+  ],
+  "status": "active"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "mvp-carry-war",
+  "name": "球星Carry对决",
+  "description": "让用户在三位当下表现出众的球星中投票，评选谁最能在关键时刻扛起球队。",
+  "category": "体育",
+  "directory": "mvp-carry-war",
+  "url": "mvp-carry-war",
+  "image": "mvp-carry-war/images/luka-doncic.svg",
+  "tags": [
+    "投票",
+    "体育",
+    "球星",
+    "carry",
+    "关键时刻",
+    "得分",
+    "领袖",
+    "球星",
+    "carry",
+    "关键时刻",
+    "得分",
+    "领袖"
+  ],
+  "status": "active"
+}

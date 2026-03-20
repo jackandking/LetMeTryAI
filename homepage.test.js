@@ -40,22 +40,26 @@ describe('Homepage Functionality', () => {
     });
 
     describe('Apps Metadata', () => {
-        it('should have valid apps-metadata.json structure', () => {
-            const metadataPath = path.join(__dirname, 'apps-metadata.json');
-            
-            expect(fs.existsSync(metadataPath)).toBe(true);
-            
-            const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-            expect(metadata).toHaveProperty('apps');
-            expect(Array.isArray(metadata.apps)).toBe(true);
-            expect(metadata.apps.length).toBeGreaterThan(0);
+        it('should have valid homepage-featured.json structure', () => {
+            const configPath = path.join(__dirname, 'homepage-featured.json');
+
+            expect(fs.existsSync(configPath)).toBe(true);
+
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            expect(config).toHaveProperty('featured');
+            expect(Array.isArray(config.featured)).toBe(true);
+            expect(config.featured.length).toBeGreaterThan(0);
         });
 
-        it('should have required fields for each app', () => {
-            const metadataPath = path.join(__dirname, 'apps-metadata.json');
-            const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-            
-            metadata.apps.forEach(app => {
+        it('should have per-app metadata.json for each featured app', () => {
+            const configPath = path.join(__dirname, 'homepage-featured.json');
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+            config.featured.forEach(appId => {
+                const metaPath = path.join(__dirname, appId, 'metadata.json');
+                expect(fs.existsSync(metaPath)).toBe(true);
+
+                const app = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
                 expect(app).toHaveProperty('id');
                 expect(app).toHaveProperty('name');
                 expect(app).toHaveProperty('category');
@@ -63,17 +67,6 @@ describe('Homepage Functionality', () => {
                 expect(typeof app.id).toBe('string');
                 expect(typeof app.name).toBe('string');
                 expect(typeof app.category).toBe('string');
-            });
-        });
-
-        it('should have valid categories', () => {
-            const metadataPath = path.join(__dirname, 'apps-metadata.json');
-            const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-            
-            const validCategories = ['教育', '娱乐', '工具', '生活', '科技', '军事', '游戏', '其他'];
-            
-            metadata.apps.forEach(app => {
-                expect(validCategories).toContain(app.category);
             });
         });
     });

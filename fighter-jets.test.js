@@ -49,10 +49,9 @@ describe('Fighter Jets Page', () => {
     });
     
     test('App metadata should include fighter-jets', () => {
-        const metadataPath = path.join(__dirname, 'apps-metadata.json');
-        const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-        const app = metadata.apps.find(a => a.id === 'fighter-jets');
-        
+        const metadataPath = path.join(__dirname, 'fighter-jets', 'metadata.json');
+        const app = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+
         expect(app).toBeDefined();
         expect(app.name).toBe('空战之王');
         expect(app.category).toBe('军事');
