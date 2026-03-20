@@ -1,0 +1,24 @@
+{
+  "id": "modern-tank-faceoff",
+  "name": "坦克对决",
+  "description": "现代主战坦克三方对比，火力／防护／机动性一目了然的投票页。",
+  "category": "军事装备",
+  "directory": "modern-tank-faceoff",
+  "url": "modern-tank-faceoff",
+  "image": "modern-tank-faceoff/images/t14-armata.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "坦克",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "防护",
+    "坦克",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "防护"
+  ],
+  "status": "active"
+}
