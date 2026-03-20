@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "summer-lip-color-poll",
+      "name": "口红色号投票",
+      "description": "奶茶棕、枫叶红还是桃花粉？投一票告诉大家你的显白首选。",
+      "category": "美妆",
+      "directory": "summer-lip-color-poll",
+      "url": "summer-lip-color-poll",
+      "image": "summer-lip-color-poll/images/milk-tea-brown.svg",
+      "tags": [
+        "投票",
+        "美妆",
+        "口红色号",
+        "显白",
+        "夏季妆容",
+        "种草",
+        "口红色号",
+        "显白",
+        "夏季妆容",
+        "种草"
+      ],
+      "status": "active"
+    },
+    {
       "id": "family-screen-management",
       "name": "孩子手机使用管理",
       "description": "针对孩子日常屏幕时长与使用方式的家长决策投票。",
