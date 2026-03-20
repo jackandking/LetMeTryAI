@@ -1,0 +1,24 @@
+{
+  "id": "modern-stealth-fighter-faceoff",
+  "name": "现代战机对决",
+  "description": "对比三款代表性隐身战机的隐身性、机动性与传感器优势。",
+  "category": "军事装备",
+  "directory": "modern-stealth-fighter-faceoff",
+  "url": "modern-stealth-fighter-faceoff",
+  "image": "modern-stealth-fighter-faceoff/images/f-22.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "隐身",
+    "机动性",
+    "雷达",
+    "空优",
+    "战机对比",
+    "隐身",
+    "机动性",
+    "雷达",
+    "空优",
+    "战机对比"
+  ],
+  "status": "active"
+}
