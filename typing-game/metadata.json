@@ -1,0 +1,16 @@
+{
+  "id": "typing",
+  "name": "爱打字",
+  "description": "提升打字速度的游戏",
+  "category": "教育",
+  "directory": "typing-game",
+  "url": "typing-game",
+  "image": "https://picsum.photos/seed/typing/600/400",
+  "tags": [
+    "打字",
+    "游戏",
+    "技能"
+  ],
+  "featured": true,
+  "status": "active"
+}

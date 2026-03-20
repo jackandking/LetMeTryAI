@@ -1,0 +1,16 @@
+{
+  "id": "elder-love",
+  "name": "爱老人",
+  "description": "老人关怀和娱乐应用",
+  "category": "生活",
+  "directory": "elder-love",
+  "url": "elder-love",
+  "image": "images/1621725673908_.pic.jpg",
+  "tags": [
+    "老人",
+    "关怀",
+    "生活"
+  ],
+  "featured": true,
+  "status": "active"
+}

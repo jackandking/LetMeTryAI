@@ -6,8 +6,8 @@
 // Import GitHub utilities (will be loaded as module)
 let githubUtil = null;
 
-// Import metadata file
-const APPS_METADATA_URL = 'apps-metadata.json';
+// Homepage config file listing featured app IDs
+const HOMEPAGE_FEATURED_URL = 'homepage-featured.json';
 
 // Global state
 let appsData = [];
@@ -52,16 +52,18 @@ async function initializeApp() {
  */
 async function loadAppsMetadata() {
     try {
-        const response = await fetch(APPS_METADATA_URL + '?t=' + Date.now());
-        if (!response.ok) {
-            throw new Error('Failed to load apps metadata');
+        const configResp = await fetch(HOMEPAGE_FEATURED_URL + '?t=' + Date.now());
+        if (!configResp.ok) {
+            throw new Error('Failed to load homepage config');
         }
-        
-        const data = await response.json();
-        appsData = data.apps || [];
+        const config = await configResp.json();
+        const fetches = config.featured.map(id =>
+            fetch(`${id}/metadata.json`).then(r => r.json()).catch(() => null)
+        );
+        appsData = (await Promise.all(fetches)).filter(Boolean);
         filteredApps = [...appsData];
-        
-        console.log(`Loaded ${appsData.length} apps`);
+
+        console.log(`Loaded ${appsData.length} featured apps`);
     } catch (error) {
         console.error('Error loading apps metadata:', error);
         // Fallback to hardcoded data if JSON fails

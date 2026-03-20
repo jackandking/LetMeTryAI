@@ -1,0 +1,24 @@
+{
+  "id": "flagship-phone-camera-pk",
+  "name": "旗舰拍照PK",
+  "description": "比较主流旗舰手机在拍照、夜景、长焦和色彩上的表现，适合轻量投票与图文样张展示。",
+  "category": "科技数码",
+  "directory": "flagship-phone-camera-pk",
+  "url": "flagship-phone-camera-pk",
+  "image": "flagship-phone-camera-pk/images/iphone-flagship.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "拍照",
+    "旗舰手机",
+    "夜景",
+    "长焦",
+    "像素",
+    "拍照",
+    "旗舰手机",
+    "夜景",
+    "长焦",
+    "像素"
+  ],
+  "status": "active"
+}

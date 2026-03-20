@@ -1,0 +1,22 @@
+{
+  "id": "homework-routine",
+  "name": "作业安排投票",
+  "description": "调查家长在孩子放学后是先完成作业还是先让孩子休息/玩耍，以便制定更平衡的日常安排。",
+  "category": "家庭",
+  "directory": "homework-routine",
+  "url": "homework-routine",
+  "image": "homework-routine/images/complete-homework-first.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "作业安排",
+    "放学",
+    "日常规则",
+    "家庭沟通",
+    "作业安排",
+    "放学",
+    "日常规则",
+    "家庭沟通"
+  ],
+  "status": "active"
+}

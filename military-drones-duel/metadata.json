@@ -1,0 +1,24 @@
+{
+  "id": "military-drones-duel",
+  "name": "军用无人机对决",
+  "description": "比较续航、载荷与隐蔽性等参数，硬核玩家快速投票判断优势。",
+  "category": "军事装备",
+  "directory": "military-drones-duel",
+  "url": "military-drones-duel",
+  "image": "military-drones-duel/images/long-endurance-drone.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "无人机",
+    "军用",
+    "续航",
+    "载荷",
+    "隐身",
+    "无人机",
+    "军用",
+    "续航",
+    "载荷",
+    "隐身"
+  ],
+  "status": "active"
+}

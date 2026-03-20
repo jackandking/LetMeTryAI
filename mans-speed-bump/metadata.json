@@ -1,0 +1,17 @@
+{
+  "id": "mans-speed-bump",
+  "name": "男人减速带",
+  "description": "除了钓鱼，还有什么能让你驻足半小时？",
+  "category": "娱乐",
+  "directory": "mans-speed-bump",
+  "url": "mans-speed-bump",
+  "image": "https://picsum.photos/seed/excavator/600/400",
+  "tags": [
+    "娱乐",
+    "投票",
+    "减速带",
+    "男人的快乐"
+  ],
+  "featured": true,
+  "status": "active"
+}

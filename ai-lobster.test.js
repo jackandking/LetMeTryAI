@@ -56,9 +56,8 @@ describe('AI Lobster Page', () => {
     });
 
     test('App metadata should include ai-lobster', () => {
-        const metadataPath = path.join(__dirname, 'apps-metadata.json');
-        const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-        const app = metadata.apps.find(item => item.id === 'ai-lobster');
+        const metadataPath = path.join(__dirname, 'ai-lobster', 'metadata.json');
+        const app = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
 
         expect(app).toBeDefined();
         expect(app.name).toBe('AI养龙虾');

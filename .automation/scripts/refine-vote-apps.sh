@@ -122,18 +122,18 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     exit 1
 fi
 
-# Detect brand from apps-metadata.json
+# Detect brand from per-app metadata.json
 detect_brand() {
     local app_dir="$1"
     local app_id
     app_id=$(basename "$app_dir")
-    
-    # Try to find app in metadata and check tags
-    if [[ -f "$PROJECT_DIR/apps-metadata.json" ]]; then
+
+    # Try to find app tags in per-app metadata.json
+    if [[ -f "$app_dir/metadata.json" ]]; then
         # Extract all tags for this app
         local tags
-        tags=$(grep -A 30 '"id": "'$app_id'"' "$PROJECT_DIR/apps-metadata.json" | grep -A 20 '"tags":' | grep -o '"[^"]*"' | tr '\n' ' ')
-        
+        tags=$(python3 -c "import json; print(' '.join(json.load(open('$app_dir/metadata.json')).get('tags',[])))" 2>/dev/null || echo "")
+
         # Check for brand indicators in tags
         if echo "$tags" | grep -qi "nanrenbao\|男人宝\|男性\|体育\|足球\|球星"; then
             echo "nanrenbao"

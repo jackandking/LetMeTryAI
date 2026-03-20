@@ -1,0 +1,22 @@
+{
+  "id": "children-homework-companion",
+  "name": "作业陪伴投票",
+  "description": "测一测家长在孩子写作业时更倾向的陪伴方式",
+  "category": "教育",
+  "directory": "children-homework-companion",
+  "url": "children-homework-companion",
+  "image": "children-homework-companion/images/sit-next-and-supervise.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "写作业",
+    "陪伴",
+    "学习习惯",
+    "家庭沟通",
+    "写作业",
+    "陪伴",
+    "学习习惯",
+    "家庭沟通"
+  ],
+  "status": "active"
+}

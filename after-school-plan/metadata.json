@@ -1,0 +1,24 @@
+{
+  "id": "after-school-plan",
+  "name": "放学规划投票",
+  "description": "投票帮助家长判断放学后先做作业还是先活动更合适，适合教育与家庭场景讨论。",
+  "category": "教育",
+  "directory": "after-school-plan",
+  "url": "after-school-plan",
+  "image": "after-school-plan/images/homework-first.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "放学安排",
+    "作业",
+    "课外活动",
+    "家庭时间管理",
+    "学习效率",
+    "放学安排",
+    "作业",
+    "课外活动",
+    "家庭时间管理",
+    "学习效率"
+  ],
+  "status": "active"
+}

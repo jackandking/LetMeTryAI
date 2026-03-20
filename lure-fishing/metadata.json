@@ -1,0 +1,16 @@
+{
+  "id": "lure-fishing",
+  "name": "爱钓鱼",
+  "description": "钓鱼爱好者的工具",
+  "category": "娱乐",
+  "directory": "lure-fishing",
+  "url": "lure-fishing",
+  "image": "https://picsum.photos/seed/fishing/600/400",
+  "tags": [
+    "钓鱼",
+    "户外",
+    "娱乐"
+  ],
+  "featured": true,
+  "status": "active"
+}

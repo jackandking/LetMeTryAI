@@ -1,0 +1,16 @@
+{
+  "id": "fighter-jets",
+  "name": "空战之王",
+  "description": "全球现代战机战力排行投票",
+  "category": "军事",
+  "directory": "fighter-jets",
+  "url": "fighter-jets",
+  "image": "fighter-jets/images/j20.jpg",
+  "tags": [
+    "军事",
+    "战机",
+    "投票",
+    "排名"
+  ],
+  "status": "active"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "guimi-fenlian-reasons",
+  "name": "闺蜜情感投票",
+  "description": "盘点闺蜜关系中最让人翻脸的行为，提升互动与情感讨论。",
+  "category": "情感",
+  "directory": "guimi-fenlian-reasons",
+  "url": "guimi-fenlian-reasons",
+  "image": "guimi-fenlian-reasons/images/bei-hou-shuo-huai-hua.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "闺蜜",
+    "友情",
+    "背叛",
+    "情感共鸣",
+    "闺蜜",
+    "友情",
+    "背叛",
+    "情感共鸣"
+  ],
+  "status": "active"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "after-school-practice-duration",
+  "name": "课外练习时长投票",
+  "description": "调查家长对孩子每天课外练习时长的选择（短时高频 vs 长时稳固）。",
+  "category": "教育",
+  "directory": "after-school-practice-duration",
+  "url": "after-school-practice-duration",
+  "image": "after-school-practice-duration/images/15-min.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "课外",
+    "练习",
+    "时间管理",
+    "学习习惯",
+    "课外",
+    "练习",
+    "时间管理",
+    "学习习惯"
+  ],
+  "status": "active"
+}

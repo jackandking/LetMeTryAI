@@ -1,0 +1,16 @@
+{
+  "id": "rockets-king",
+  "name": "火箭之王",
+  "description": "全球重型火箭运力排行投票",
+  "category": "科技",
+  "directory": "rockets-king",
+  "url": "rockets-king",
+  "image": "rockets-king/images/falcon9.jpg",
+  "tags": [
+    "航天",
+    "火箭",
+    "投票",
+    "科技"
+  ],
+  "status": "active"
+}

@@ -722,7 +722,7 @@ export function buildScaffoldPlan(spec) {
             '保留或复制 fighter-jets/styles.css 作为默认样式',
             '写入 generatedAssets 中的本地占位图，直到替换成正式图片素材',
             '运行 node scripts/validate-voting-app.js <app-directory> 做完整性校验',
-            '在 apps-metadata.json 中注册新应用',
+            '在应用目录中创建 metadata.json',
             '部署后验证线上链接、图片加载和投票结果显示'
         ]
     };

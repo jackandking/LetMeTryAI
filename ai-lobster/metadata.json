@@ -1,0 +1,17 @@
+{
+  "id": "ai-lobster",
+  "name": "AI养龙虾",
+  "description": "今天刷屏的 AI 养龙虾，到底是科技真升级还是新型智商税？",
+  "category": "科技",
+  "directory": "ai-lobster",
+  "url": "ai-lobster",
+  "image": "ai-lobster/images/yield.svg",
+  "tags": [
+    "科技",
+    "AI",
+    "龙虾",
+    "投票"
+  ],
+  "featured": true,
+  "status": "active"
+}

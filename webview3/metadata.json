@@ -1,0 +1,16 @@
+{
+  "id": "magic",
+  "name": "爱魔术",
+  "description": "神奇的魔术效果展示",
+  "category": "娱乐",
+  "directory": "webview3",
+  "url": "webview3",
+  "image": "https://picsum.photos/seed/magic/600/400",
+  "tags": [
+    "魔术",
+    "互动",
+    "娱乐"
+  ],
+  "featured": true,
+  "status": "active"
+}
