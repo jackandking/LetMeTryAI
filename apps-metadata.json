@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "sleep-improvement-methods",
+      "name": "睡眠小贴士投票",
+      "description": "对比几种安全的睡眠改善方法，看看大家更愿意尝试哪一种。",
+      "category": "健康",
+      "directory": "sleep-improvement-methods",
+      "url": "sleep-improvement-methods",
+      "image": "sleep-improvement-methods/images/sleep-warm-milk.svg",
+      "tags": [
+        "投票",
+        "健康",
+        "睡眠",
+        "助眠",
+        "晚间习惯",
+        "休息质量",
+        "睡眠",
+        "助眠",
+        "晚间习惯",
+        "休息质量"
+      ],
+      "status": "active"
+    },
+    {
       "id": "guimi-fenlian-reasons",
       "name": "闺蜜情感投票",
       "description": "盘点闺蜜关系中最让人翻脸的行为，提升互动与情感讨论。",
