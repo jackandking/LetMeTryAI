@@ -112,43 +112,4 @@ export const nanrenbaoProfile = {
     }
 };
 
-// 检查主题是否重复
-export function checkTopicDuplicate(newTopic, recentTopics, days = 7) {
-    const keywords = newTopic.toLowerCase();
-    
-    for (const topic of recentTopics) {
-        const similarity = calculateSimilarity(keywords, topic.toLowerCase());
-        if (similarity > 0.7) {
-            return {
-                isDuplicate: true,
-                similarTo: topic,
-                similarity: similarity
-            };
-        }
-    }
-    
-    return { isDuplicate: false };
-}
-
-// 简单相似度计算
-function calculateSimilarity(str1, str2) {
-    const set1 = new Set(str1.split(''));
-    const set2 = new Set(str2.split(''));
-    const intersection = new Set([...set1].filter(x => set2.has(x)));
-    const union = new Set([...set1, ...set2]);
-    return intersection.size / union.size;
-}
-
-// 获取推荐的选题类别（轮换）
-export function getRecommendedCategory(recentCategories) {
-    const { rotationPriority } = nanrenbaoProfile;
-    
-    // 找到最近使用最少的类别
-    const categoryCount = {};
-    for (const cat of rotationPriority) {
-        categoryCount[cat] = recentCategories.filter(c => c === cat).length;
-    }
-    
-    // 返回使用次数最少的类别
-    return rotationPriority.sort((a, b) => categoryCount[a] - categoryCount[b])[0];
-}
+export { checkTopicDuplicate, getRecommendedCategory } from '../../../shared/topic-dedup.js';
