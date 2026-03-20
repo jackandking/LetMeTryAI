@@ -20,8 +20,8 @@ export const elderLoveProfile = {
     requiredQualities: ['易理解', '实用'],
     avoidSignals: ['饭圈撕扯', '高刺激', '黑话梗', '参数党', '过度焦虑'],
     hardBlocks: ['暴力', '低俗', '极限挑战', '擦边', '饭圈对骂'],
-    titlePatterns: ['爱老人关注：{title}'],
-    questionPatterns: ['如果是爱老人用户，你最支持哪个选项：{title}？'],
+    titlePatterns: ['关注：{title}'],
+    questionPatterns: ['亲，你最支持哪个选项：{title}？'],
     assetHints: ['大字标题', '清晰照片', '温和配色', '高对比度排版', '熟悉生活场景'],
     topicGuidelines: {
         doMore: [

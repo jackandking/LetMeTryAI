@@ -9,6 +9,6 @@ export const womanaiProfile = {
     avoidSignals: ['硬核军事', '参数党', '血腥', '过强说教'],
     hardBlocks: ['军武', '暴力', '成人擦边'],
     titlePatterns: ['女人爱热议：{title}'],
-    questionPatterns: ['如果是女人爱用户，你会把这一票投给谁：{title}？'],
+    questionPatterns: ['你会把这一票投给谁：{title}？'],
     assetHints: ['高质感封面', '妆造细节', '明亮配色']
 };
