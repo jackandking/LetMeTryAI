@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>恋爱中最不能忍的行为</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">恋爱中最不能忍的行为</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">恋爱中哪种行为最让你无法忍受？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="womanai" value="lying-or-hiding">
+                    <img src="images/lying-or-hiding.svg" alt="说谎隐瞒" loading="lazy">
+                    <span>对方经常说谎或隐瞒重要事情</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="cheating-or-betrayal">
+                    <img src="images/cheating-or-betrayal.svg" alt="背叛劈腿" loading="lazy">
+                    <span>出轨或背着你做出亲密行为</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="silent-treatment-no-communication">
+                    <img src="images/silent-treatment-no-communication.svg" alt="不沟通冷暴力" loading="lazy">
+                    <span>用冷处理回避问题、不愿沟通</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="controlling-or-restricting">
+                    <img src="images/controlling-or-restricting.svg" alt="过度控制" loading="lazy">
+                    <span>干涉社交、行程或私生活的控制行为</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
