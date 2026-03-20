@@ -1,0 +1,21 @@
+{
+  "id": "classic-old-songs",
+  "name": "经典老歌投票",
+  "description": "投票选出最具回忆感的经典老歌，便于引发故事分享与代际交流。",
+  "category": "怀旧",
+  "directory": "classic-old-songs",
+  "url": "classic-old-songs",
+  "image": "classic-old-songs/images/yue-liang-dai-biao-wo-de-xin.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "经典老歌",
+    "回忆",
+    "代际共鸣",
+    "经典老歌",
+    "怀旧",
+    "回忆",
+    "代际共鸣"
+  ],
+  "status": "active"
+}
