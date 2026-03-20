@@ -1,0 +1,20 @@
+{
+  "id": "weekend-family-activities",
+  "name": "周末亲子活动推荐",
+  "description": "列出常见且可落地的周末亲子活动类型，帮助家长快速选计划。",
+  "category": "家庭",
+  "directory": "weekend-family-activities",
+  "url": "weekend-family-activities",
+  "image": "weekend-family-activities/images/park-hike.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "周末",
+    "亲子活动",
+    "亲子时光",
+    "周末",
+    "亲子活动",
+    "亲子时光"
+  ],
+  "status": "active"
+}
