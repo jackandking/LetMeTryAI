@@ -8,7 +8,7 @@ export const parentToolsProfile = {
     requiredQualities: ['实用', '可执行'],
     avoidSignals: ['纯八卦', '极端情绪', '空泛鸡汤'],
     hardBlocks: ['擦边', '暴力', '赌博'],
-    titlePatterns: ['家长爱话题：{title}'],
-    questionPatterns: ['站在家长爱用户视角，你会怎么选：{title}？'],
+    titlePatterns: ['家长话题：{title}'],
+    questionPatterns: ['站在家长视角，你会怎么选：{title}？'],
     assetHints: ['清晰图示', '家庭场景', '教育工具感']
 };

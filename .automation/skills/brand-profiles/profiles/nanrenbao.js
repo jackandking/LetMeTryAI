@@ -71,9 +71,9 @@ export const nanrenbaoProfile = {
     
     // 问题模板
     questionPatterns: [
-        '站在男人宝用户视角，你更想把票投给谁：{title}？',
+        '亲，你更想把票投给谁：{title}？',
         '作为硬核玩家，你更认可：{title}？',
-        '男人宝热议：{title}，你的选择是？'
+        '全网热议：{title}，你的选择是？'
     ],
     
     // 资源提示
