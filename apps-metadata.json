@@ -1,6 +1,28 @@
 {
   "apps": [
     {
+      "id": "family-screen-management",
+      "name": "孩子手机使用管理",
+      "description": "针对孩子日常屏幕时长与使用方式的家长决策投票。",
+      "category": "家庭",
+      "directory": "family-screen-management",
+      "url": "family-screen-management",
+      "image": "family-screen-management/images/fixed-daily-limit.svg",
+      "tags": [
+        "投票",
+        "家庭",
+        "屏幕时间",
+        "亲子沟通",
+        "使用规则",
+        "家庭管理",
+        "屏幕时间",
+        "亲子沟通",
+        "使用规则",
+        "家庭管理"
+      ],
+      "status": "active"
+    },
+    {
       "id": "creamy-vs-coral-blush",
       "name": "腮红之选",
       "description": "两种春季热门腮红色系对比，看看哪种更显白、更温柔。",
