@@ -1,0 +1,22 @@
+{
+  "id": "respond-to-kid-tantrum",
+  "name": "亲子沟通投票",
+  "description": "收集家长在孩子情绪爆发时的首选应对策略，便于交流和示范。",
+  "category": "成长",
+  "directory": "respond-to-kid-tantrum",
+  "url": "respond-to-kid-tantrum",
+  "image": "respond-to-kid-tantrum/images/listen-and-support.svg",
+  "tags": [
+    "投票",
+    "成长",
+    "亲子沟通",
+    "情绪管理",
+    "育儿方法",
+    "家庭沟通",
+    "亲子沟通",
+    "情绪管理",
+    "育儿方法",
+    "家庭沟通"
+  ],
+  "status": "active"
+}
