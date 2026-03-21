@@ -1,0 +1,22 @@
+{
+  "id": "children-desk-lamp-choice",
+  "name": "实用工具投票",
+  "description": "对比常见台灯功能与设计，帮助家长快速判断适合孩子的台灯类型。",
+  "category": "工具",
+  "directory": "children-desk-lamp-choice",
+  "url": "children-desk-lamp-choice",
+  "image": "children-desk-lamp-choice/images/adjustable-color-temp.svg",
+  "tags": [
+    "投票",
+    "工具",
+    "护眼台灯",
+    "选购指南",
+    "亮度",
+    "色温",
+    "护眼台灯",
+    "选购指南",
+    "亮度",
+    "色温"
+  ],
+  "status": "active"
+}
