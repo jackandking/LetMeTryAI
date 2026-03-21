@@ -1,0 +1,23 @@
+{
+  "id": "80s-best-tv-dramas",
+  "name": "80年代剧回忆投票",
+  "description": "带大家回看80年代经典电视剧类型，唤起共同回忆与讨论。",
+  "category": "怀旧",
+  "directory": "80s-best-tv-dramas",
+  "url": "80s-best-tv-dramas",
+  "image": "80s-best-tv-dramas/images/classic-family-dramas.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "电视剧",
+    "80年代",
+    "回忆",
+    "家庭共鸣",
+    "怀旧",
+    "电视剧",
+    "80年代",
+    "回忆",
+    "家庭共鸣"
+  ],
+  "status": "active"
+}
