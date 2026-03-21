@@ -1,0 +1,24 @@
+{
+  "id": "military-unmanned-drones-duel",
+  "name": "无人机对决",
+  "description": "对比几款代表性军用无人机的侦察与打击能力，适合配实拍与参数图。",
+  "category": "军事装备",
+  "directory": "military-unmanned-drones-duel",
+  "url": "military-unmanned-drones-duel",
+  "image": "military-unmanned-drones-duel/images/mq-9-reaper.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "续航",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "续航"
+  ],
+  "status": "active"
+}
