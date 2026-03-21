@@ -143,6 +143,66 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .upload-or-divider {
+            text-align: center;
+            margin: 16px 0;
+            color: #999;
+            font-size: 0.95em;
+            position: relative;
+        }
+
+        .upload-or-divider::before,
+        .upload-or-divider::after {
+            content: '';
+            display: inline-block;
+            width: 40%;
+            height: 1px;
+            background: #ddd;
+            vertical-align: middle;
+            margin: 0 8px;
+        }
+
+        .file-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .file-btn {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+
+        .file-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .file-name {
+            font-size: 0.88em;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .file-name.selected {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .compress-hint {
+            font-size: 0.82em;
+            color: #888;
+            margin-top: 5px;
+        }
+
         .submit-btn {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
@@ -228,9 +288,20 @@
                         type="url" 
                         id="imageUrl" 
                         name="imageUrl" 
-                        placeholder="请输入图片URL" 
-                        required
+                        placeholder="请输入图片URL"
                     >
+                </div>
+
+                <div class="upload-or-divider">— 或者选择本地图片 —</div>
+
+                <div class="form-group">
+                    <label>本地图片上传：</label>
+                    <div class="file-upload-row">
+                        <input type="file" id="localFileInput" accept="image/*" style="display:none">
+                        <button type="button" id="localFileBtn" class="file-btn">📁 选择本地图片</button>
+                        <span id="localFileName" class="file-name">未选择文件</span>
+                    </div>
+                    <div class="compress-hint">📦 本地图片将自动压缩至500KB以内，适合手机浏览</div>
                 </div>
 
                 <div class="preview-section" id="previewSection" style="display: none;">
@@ -287,18 +358,157 @@
             }
         }
 
-        // Preview image when URL is entered
+        // Local file state
+        var localFile = null;
+
+        // File input elements
+        var localFileInput = document.getElementById('localFileInput');
+        var localFileBtn = document.getElementById('localFileBtn');
+        var localFileNameEl = document.getElementById('localFileName');
+
+        // File button click
+        localFileBtn.addEventListener('click', function() {
+            localFileInput.click();
+        });
+
+        // File selected
+        localFileInput.addEventListener('change', function() {
+            var file = this.files && this.files[0];
+            if (file) {
+                localFile = file;
+                localFileNameEl.textContent = file.name;
+                localFileNameEl.className = 'file-name selected';
+                // Clear URL input when file is selected
+                imageUrlInput.value = '';
+                previewSection.style.display = 'none';
+                // Show local preview
+                var objectUrl = URL.createObjectURL(file);
+                previewImage.onload = function() { URL.revokeObjectURL(objectUrl); };
+                previewImage.src = objectUrl;
+                previewSection.style.display = 'block';
+            } else {
+                localFile = null;
+                localFileNameEl.textContent = '未选择文件';
+                localFileNameEl.className = 'file-name';
+            }
+        });
+
+        // Generate UUID for unique filenames
+        function generateUUID() {
+            if (window.crypto && window.crypto.randomUUID) {
+                return window.crypto.randomUUID();
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0;
+                var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Compress image file to ≤500KB
+        function compressImageFile(file, maxWidth, maxHeight, quality) {
+            maxWidth = maxWidth || 800;
+            maxHeight = maxHeight || 1440;
+            quality = quality || 0.85;
+            var MAX_FILE_SIZE = 500 * 1024;
+            var MIN_QUALITY = 0.3;
+            var QUALITY_STEP = 0.1;
+            return new Promise(function(resolve, reject) {
+                var img = new Image();
+                var objectUrl = URL.createObjectURL(file);
+                img.onload = function() {
+                    URL.revokeObjectURL(objectUrl);
+                    var w = img.naturalWidth || img.width;
+                    var h = img.naturalHeight || img.height;
+                    if (w > maxWidth || h > maxHeight) {
+                        var ratio = Math.min(maxWidth / w, maxHeight / h);
+                        w = Math.round(w * ratio);
+                        h = Math.round(h * ratio);
+                    }
+                    var canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.drawImage(img, 0, 0, w, h);
+                    var currentQuality = quality;
+                    function attempt() {
+                        canvas.toBlob(function(blob) {
+                            if (!blob) { return reject(new Error('图片压缩失败')); }
+                            if (blob.size > MAX_FILE_SIZE && currentQuality > MIN_QUALITY) {
+                                currentQuality = Math.max(Math.round((currentQuality - QUALITY_STEP) * 10) / 10, MIN_QUALITY);
+                                attempt();
+                            } else {
+                                var uuid = generateUUID();
+                                resolve(new File([blob], uuid + '.jpg', { type: 'image/jpeg', lastModified: Date.now() }));
+                            }
+                        }, 'image/jpeg', currentQuality);
+                    }
+                    attempt();
+                };
+                img.onerror = function() { URL.revokeObjectURL(objectUrl); reject(new Error('图片加载失败')); };
+                img.src = objectUrl;
+            });
+        }
+
+        // Upload file to image API and return response JSON
+        async function uploadFileToImageApi(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            var resp;
+            try {
+                resp = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, { method: 'POST', body: formData });
+            } catch (err) {
+                throw new Error('上传请求失败：' + (err.message || '网络错误'));
+            }
+            if (!resp.ok) {
+                var bodyText = '';
+                try { bodyText = await resp.text(); } catch (e) { bodyText = ''; }
+                var msg = bodyText ? ('图片上传失败：' + bodyText) : ('图片上传失败：HTTP ' + resp.status);
+                throw new Error(msg);
+            }
+            try {
+                return await resp.json();
+            } catch (err) {
+                try { return { url: await resp.text() }; } catch (e) { throw new Error('图片上传后解析响应失败: ' + e.message); }
+            }
+        }
+
+        // Extract image URL from API response
+        function extractImageUrlFromResponse(json) {
+            if (!json) { return null; }
+            if (json.url) { return json.url; }
+            if (json.path) { return json.path.startsWith('http') ? json.path : window.getImageUrl(json.path); }
+            if (json.data && json.data.url) { return json.data.url; }
+            if (json.file && json.file.url) { return json.file.url; }
+            for (var v of Object.values(json)) {
+                if (typeof v === 'string' && v.startsWith('http')) { return v; }
+            }
+            return null;
+        }
+
+        // Preview image when URL is entered (on blur)
         imageUrlInput.addEventListener('input', function() {
-            const url = this.value.trim();
+            // Clear local file when user types a URL
+            if (this.value.trim()) {
+                localFile = null;
+                localFileInput.value = '';
+                localFileNameEl.textContent = '未选择文件';
+                localFileNameEl.className = 'file-name';
+            }
+        });
+
+        imageUrlInput.addEventListener('blur', function() {
+            var url = this.value.trim();
             if (url && isValidUrl(url)) {
                 previewImage.src = url;
                 previewSection.style.display = 'block';
-                
                 previewImage.onerror = function() {
                     previewSection.style.display = 'none';
                     showMessage('无法加载预览图片，请检查URL是否正确', 'error');
                 };
-            } else {
+            } else if (!url) {
                 previewSection.style.display = 'none';
             }
         });
@@ -307,21 +517,55 @@
         uploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const imageUrl = imageUrlInput.value.trim();
-            
-            // Validate URL
-            if (!isValidUrl(imageUrl)) {
-                showMessage('请输入有效的图片URL', 'error');
-                return;
-            }
+            var urlValue = imageUrlInput.value.trim();
 
-            // Validate domain
-            if (!isAllowedDomain(imageUrl)) {
-                showMessage('该图片来源域名不在允许列表中，请使用小红书、知乎、Instagram等平台的图片', 'error');
+            // Must have either a local file or a URL
+            if (!localFile && !urlValue) {
+                showMessage('请输入图片URL或选择本地图片', 'error');
                 return;
             }
 
             submitBtn.disabled = true;
+
+            var imageUrl = urlValue;
+
+            // --- Local file upload path ---
+            if (localFile) {
+                try {
+                    submitBtn.textContent = '压缩中...';
+                    var compressed = await compressImageFile(localFile);
+                    submitBtn.textContent = '上传图片中...';
+                    var apiResponse = await uploadFileToImageApi(compressed);
+                    var uploadedUrl = extractImageUrlFromResponse(apiResponse);
+                    if (!uploadedUrl) {
+                        throw new Error('未能从服务器响应中获取图片URL');
+                    }
+                    imageUrl = uploadedUrl;
+                } catch (err) {
+                    console.error('Local file upload error:', err);
+                    showMessage('本地图片上传失败：' + (err.message || '请稍后重试'), 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '上传图片';
+                    return;
+                }
+            } else {
+                // Validate URL
+                if (!isValidUrl(imageUrl)) {
+                    showMessage('请输入有效的图片URL', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '上传图片';
+                    return;
+                }
+
+                // Validate domain
+                if (!isAllowedDomain(imageUrl)) {
+                    showMessage('该图片来源域名不在允许列表中，请使用小红书、知乎、Instagram等平台的图片', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '上传图片';
+                    return;
+                }
+            }
+
             submitBtn.textContent = '上传中...';
 
             try {
@@ -355,6 +599,9 @@
                         console.warn('points award failed', err);
                     }
                     imageUrlInput.value = '';
+                    localFile = null;
+                    localFileNameEl.textContent = '未选择文件';
+                    localFileNameEl.className = 'file-name';
                     previewSection.style.display = 'none';
                     
                     // Redirect to appreciate page after 2 seconds
