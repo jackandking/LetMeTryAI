@@ -1,0 +1,22 @@
+{
+  "id": "beginner-perfume-tribe",
+  "name": "香水入门指南",
+  "description": "用简单香调分类帮助用户找到入口，便于生成香水种草内容。",
+  "category": "美妆",
+  "directory": "beginner-perfume-tribe",
+  "url": "beginner-perfume-tribe",
+  "image": "beginner-perfume-tribe/images/floral-fresh.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "香调",
+    "种草",
+    "入门",
+    "香水",
+    "香调",
+    "种草",
+    "入门"
+  ],
+  "status": "active"
+}
