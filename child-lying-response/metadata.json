@@ -1,0 +1,22 @@
+{
+  "id": "child-lying-response",
+  "name": "孩子说谎怎么回应",
+  "description": "投票收集家长处理孩子说谎的常见做法，便于形成可执行建议。",
+  "category": "家庭",
+  "directory": "child-lying-response",
+  "url": "child-lying-response",
+  "image": "child-lying-response/images/gentle-guidance.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "亲子沟通",
+    "撒谎",
+    "家庭规则",
+    "成长教育",
+    "亲子沟通",
+    "撒谎",
+    "家庭规则",
+    "成长教育"
+  ],
+  "status": "active"
+}
