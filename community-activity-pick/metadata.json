@@ -1,0 +1,24 @@
+{
+  "id": "community-activity-pick",
+  "name": "社区活动选择",
+  "description": "投票选择最想参加的社区活动，帮助发现身边社交与服务偏好。",
+  "category": "生活",
+  "directory": "community-activity-pick",
+  "url": "community-activity-pick",
+  "image": "community-activity-pick/images/community-calligraphy-class.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区",
+    "邻里活动",
+    "志愿服务",
+    "广场舞",
+    "兴趣小组",
+    "社区",
+    "邻里活动",
+    "志愿服务",
+    "广场舞",
+    "兴趣小组"
+  ],
+  "status": "active"
+}
