@@ -1,0 +1,22 @@
+{
+  "id": "love-dealbreakers",
+  "name": "恋爱雷区投票",
+  "description": "列出恋爱中最让人无法接受的行为，激发共鸣与讨论。",
+  "category": "情感",
+  "directory": "love-dealbreakers",
+  "url": "love-dealbreakers",
+  "image": "love-dealbreakers/images/lying-and-secrecy.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "恋爱",
+    "底线",
+    "分手导火线",
+    "情感共鸣",
+    "恋爱",
+    "底线",
+    "分手导火线",
+    "情感共鸣"
+  ],
+  "status": "active"
+}
