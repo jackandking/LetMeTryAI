@@ -1,0 +1,22 @@
+{
+  "id": "evening-sleep-habit-poll",
+  "name": "睡眠小习惯投票",
+  "description": "对比简单易行的助眠方法，便于读者对照选择并在评论分享经验。",
+  "category": "健康",
+  "directory": "evening-sleep-habit-poll",
+  "url": "evening-sleep-habit-poll",
+  "image": "evening-sleep-habit-poll/images/gentle-stretch.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "夜间习惯",
+    "放松",
+    "晚间阅读",
+    "睡眠",
+    "夜间习惯",
+    "放松",
+    "晚间阅读"
+  ],
+  "status": "active"
+}
