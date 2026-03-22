@@ -10,8 +10,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOCAL_DIR="$PROJECT_DIR/.automation/.local"
 REPORT_SCRIPT="$PROJECT_DIR/.automation/scripts/daily_kuaishou_report.js"
+USAGE_REPORT_SCRIPT="$PROJECT_DIR/.automation/scripts/run-daily-usage-report.js"
 PROFILE_RUNNER="$PROJECT_DIR/.automation/scripts/run-daily-profile.sh"
 REPORT_LOG_FILE="$LOCAL_DIR/logs/daily_report.log"
+USAGE_REPORT_LOG_FILE="$LOCAL_DIR/logs/daily-usage.log"
 NANRENBAO_LOG_FILE="$LOCAL_DIR/logs/daily-run-nanrenbao.log"
 ELDER_LOVE_LOG_FILE="$LOCAL_DIR/logs/daily-run-elder-love.log"
 PARENT_TOOLS_LOG_FILE="$LOCAL_DIR/logs/daily-run-parent-tools.log"
@@ -68,6 +70,7 @@ NANRENBAO_CRON_CMD="0 7 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" nanrenb
 ELDER_LOVE_CRON_CMD="0 8 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" elder-love >> \"$ELDER_LOVE_LOG_FILE\" 2>&1"
 PARENT_TOOLS_CRON_CMD="0 9 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" parent-tools >> \"$PARENT_TOOLS_LOG_FILE\" 2>&1"
 WOMANAI_CRON_CMD="0 10 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" womanai >> \"$WOMANAI_LOG_FILE\" 2>&1"
+USAGE_REPORT_CRON_CMD="55 23 * * * cd \"$PROJECT_DIR\" && KUAISHOU_EMAIL_TO=\"$email\" \"$NODE_PATH\" \"$USAGE_REPORT_SCRIPT\" >> \"$USAGE_REPORT_LOG_FILE\" 2>&1"
 
 echo ""
 echo "Cron commands:"
@@ -76,12 +79,13 @@ echo "$NANRENBAO_CRON_CMD"
 echo "$ELDER_LOVE_CRON_CMD"
 echo "$PARENT_TOOLS_CRON_CMD"
 echo "$WOMANAI_CRON_CMD"
+echo "$USAGE_REPORT_CRON_CMD"
 echo ""
 
 # Check existing crontab
 existing_crontab=$(crontab -l 2>/dev/null || true)
 
-if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profile.sh|daily_run.sh"; then
+if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profile.sh|daily_run.sh|run-daily-usage-report.js"; then
     echo -e "${YELLOW}Warning: Related cron jobs already exist!${NC}"
     echo ""
     read -p "Do you want to update it? (y/n): " -n 1 -r
@@ -91,7 +95,7 @@ if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profi
         exit 0
     fi
     # Remove existing app/report entries for this repo before reinstalling.
-    existing_crontab=$(echo "$existing_crontab" | grep -v "daily_kuaishou_report.js" | grep -v "run-daily-profile.sh" | grep -v "daily_run.sh")
+    existing_crontab=$(echo "$existing_crontab" | grep -v "daily_kuaishou_report.js" | grep -v "run-daily-profile.sh" | grep -v "daily_run.sh" | grep -v "run-daily-usage-report.js")
 fi
 
 # Add new cron jobs
@@ -106,6 +110,8 @@ $ELDER_LOVE_CRON_CMD
 $PARENT_TOOLS_CRON_CMD
 # Daily App Run - womanai
 $WOMANAI_CRON_CMD
+# Daily Usage Report (creator adoption) - Added $(date)
+$USAGE_REPORT_CRON_CMD
 "
 
 echo "$new_crontab" | crontab -
@@ -118,6 +124,7 @@ echo "  - Nanrenbao daily run: every day at 7:00 AM"
 echo "  - Elder Love daily run: every day at 8:00 AM"
 echo "  - Parent Tools daily run: every day at 9:00 AM"
 echo "  - Womanai daily run: every day at 10:00 AM"
+echo "  - Usage report (creator adoption): every day at 11:55 PM"
 echo "Recipient: $email"
 echo "Report log file: $REPORT_LOG_FILE"
 echo "Nanrenbao log file: $NANRENBAO_LOG_FILE"
@@ -148,4 +155,5 @@ echo "  tail -f $NANRENBAO_LOG_FILE"
 echo "  tail -f $ELDER_LOVE_LOG_FILE"
 echo "  tail -f $PARENT_TOOLS_LOG_FILE"
 echo "  tail -f $WOMANAI_LOG_FILE"
+echo "  tail -f $USAGE_REPORT_LOG_FILE"
 echo "=========================================="
