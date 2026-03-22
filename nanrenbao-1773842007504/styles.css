@@ -441,8 +441,8 @@ body {
     }
 
     .card-image {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         flex-shrink: 0;
         border-radius: var(--radius-sm) 0 0 var(--radius-sm);
     }
@@ -509,8 +509,8 @@ body {
     }
 
     .card-image {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
     }
 
     .card-content {
@@ -523,5 +523,122 @@ body {
 
     .option-desc {
         font-size: 12px;
+    }
+}
+
+/* ── Legacy HTML compat (button-group / label.option) ── */
+body > h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--color-primary);
+    padding: 24px 16px 8px;
+    margin: 0;
+}
+
+body > form,
+body > .result,
+body > .show-result-btn,
+body > .more {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+label.option {
+    position: relative;
+    background: var(--color-card);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+label.option:hover {
+    border-color: var(--color-secondary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+label.option:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, rgba(74, 122, 184, 0.05) 100%);
+}
+
+label.option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+label.option img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e0e8f0 100%);
+    padding: 16px;
+    transition: var(--transition);
+}
+
+label.option span {
+    padding: 16px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+    body > h1 {
+        font-size: 22px;
+        padding: 16px 12px 8px;
+    }
+
+    body > form,
+    body > .result,
+    body > .show-result-btn,
+    body > .more {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    label.option {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    label.option img {
+        width: 120px;
+        height: 120px;
+        flex-shrink: 0;
+    }
+
+    label.option span {
+        text-align: left;
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    label.option img {
+        width: 100px;
+        height: 100px;
     }
 }

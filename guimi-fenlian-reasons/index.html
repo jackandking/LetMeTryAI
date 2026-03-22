@@ -20,46 +20,83 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="pageTitle">闺蜜翻脸的原因排行 — 最让你受不了的是？</h1>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">闺蜜翻脸的原因排行 — 最让你受不了的是？</h1>
+        </header>
 
-    <form id="questionnaire">
-        <div class="question" id="questionArea">
-            <p id="questionText">你会把这一票投给谁：闺蜜翻脸的原因排行？</p>
-            <div class="button-group" id="optionsContainer">
-                <label class="option">
-                    <input type="radio" name="womanai" value="bei-hou-shuo-huai-hua">
-                    <img src="images/bei-hou-shuo-huai-hua.svg" alt="背后说我坏话" loading="lazy">
-                    <span>在背后贬低或散步坏话，让人最不能接受。</span>
-                </label>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你会把这一票投给谁：闺蜜翻脸的原因排行？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="bei-hou-shuo-huai-hua">
+                            <div class="card-image">
+                                <img src="images/bei-hou-shuo-huai-hua.svg" alt="背后说我坏话" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">背后说我坏话</h3>
+                                <p class="option-desc">在背后贬低或散步坏话，让人最不能接受。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="womanai" value="qiang-wo-duixiang">
-                    <img src="images/qiang-wo-duixiang.svg" alt="抢我的对象" loading="lazy">
-                    <span>与自己关系密切的人介入恋情，伤害感强。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="qiang-wo-duixiang">
+                            <div class="card-image">
+                                <img src="images/qiang-wo-duixiang.svg" alt="抢我的对象" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">抢我的对象</h3>
+                                <p class="option-desc">与自己关系密切的人介入恋情，伤害感强。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="womanai" value="jian-qi-shi-ke-bu-zhandui">
-                    <img src="images/jian-qi-shi-ke-bu-zhandui.svg" alt="关键时刻不站队" loading="lazy">
-                    <span>重要关头选择置身事外或倒戈，让人失望。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="jian-qi-shi-ke-bu-zhandui">
+                            <div class="card-image">
+                                <img src="images/jian-qi-shi-ke-bu-zhandui.svg" alt="关键时刻不站队" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">关键时刻不站队</h3>
+                                <p class="option-desc">重要关头选择置身事外或倒戈，让人失望。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
 
-                <label class="option">
-                    <input type="radio" name="womanai" value="changqi-hulue">
-                    <img src="images/changqi-hulue.svg" alt="长期忽略或疏远" loading="lazy">
-                    <span>慢慢冷淡、长期不联络让感情慢慢破裂。</span>
-                </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="changqi-hulue">
+                            <div class="card-image">
+                                <img src="images/changqi-hulue.svg" alt="长期忽略或疏远" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长期忽略或疏远</h3>
+                                <p class="option-desc">慢慢冷淡、长期不联络让感情慢慢破裂。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
             </div>
-        </div>
-    </form>
 
-    <div class="result" id="result">
-        <p>正在汇总实时投票结果...</p>
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-
-    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
-
-    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
 
     <script>
         (function() {
