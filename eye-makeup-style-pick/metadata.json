@@ -1,0 +1,23 @@
+{
+  "id": "eye-makeup-style-pick",
+  "name": "眼妆风格投票",
+  "description": "选出你最常画或最想尝试的眼妆风格，适合种草与教程链接。",
+  "category": "美妆",
+  "directory": "eye-makeup-style-pick",
+  "url": "eye-makeup-style-pick",
+  "image": "eye-makeup-style-pick/images/natural-daily.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "眼妆",
+    "妆容",
+    "种草",
+    "教程",
+    "眼妆",
+    "美妆",
+    "妆容",
+    "种草",
+    "教程"
+  ],
+  "status": "active"
+}
