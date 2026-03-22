@@ -426,7 +426,7 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .container {
         padding: 12px;
     }
@@ -452,24 +452,51 @@ body {
     }
 
     .options-grid {
+        grid-template-columns: 1fr;
         gap: 12px;
     }
 
     .option-card {
+        flex-direction: row;
+        align-items: center;
         padding: 12px;
     }
 
+    .card-image {
+        width: auto;
+        flex-shrink: 0;
+        margin-bottom: 0;
+        margin-right: 16px;
+    }
+
     .card-image img {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
+    }
+
+    .card-content {
+        text-align: left;
+        flex: 1;
     }
 
     .option-title {
-        font-size: 14px;
+        font-size: 16px;
+        text-align: left;
     }
 
     .option-desc {
-        font-size: 11px;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    .check-indicator {
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%) scale(0);
+    }
+
+    .option-card:has(input[type="radio"]:checked) .check-indicator {
+        transform: translateY(-50%) scale(1);
     }
 
     .bar-chart {
@@ -493,6 +520,21 @@ body {
     .show-result-btn {
         padding: 14px 36px;
         font-size: 15px;
+    }
+}
+
+@media (max-width: 380px) {
+    .card-image img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .option-title {
+        font-size: 15px;
+    }
+
+    .option-desc {
+        font-size: 12px;
     }
 }
 

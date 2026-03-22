@@ -441,8 +441,8 @@ body {
     }
 
     .card-image {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         flex-shrink: 0;
         border-radius: var(--radius-sm) 0 0 var(--radius-sm);
     }
@@ -509,8 +509,8 @@ body {
     }
 
     .card-image {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
     }
 
     .card-content {
