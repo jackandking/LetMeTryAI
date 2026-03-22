@@ -16,13 +16,16 @@ import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 import {
+    ensureDirectory,
     ensureParentDirectory,
     resolveKuaishouAuthFile,
     resolveProjectRoot,
     resolveRuntimeDir
 } from './runtime-paths.js';
+import { buildUsageReport, formatEmailBody as formatAdoptionEmail } from './lib/usage-report-builder.js';
 
 const PROJECT_ROOT = resolveProjectRoot(import.meta.url);
+const RUNTIME_DIR = resolveRuntimeDir(import.meta.url);
 
 // Configuration
 const CONFIG = {
@@ -159,7 +162,16 @@ async function getAllTasks(page) {
     return allTasks;
 }
 
-// Get statistics for a task
+// Navigate to a specific page in the task list
+async function navigateToPage(page, targetPage) {
+    const btn = page.locator('.ks-pager li.number').filter({ hasText: String(targetPage) }).first();
+    if (await btn.count() > 0) {
+        await btn.click();
+        await page.waitForTimeout(2000);
+    }
+}
+
+// Get statistics for a task (caller must ensure correct page is displayed)
 async function getTaskStats(page, task) {
     try {
         await closeOverlay(page);
@@ -264,10 +276,8 @@ async function saveResults(report, dateStr) {
 }
 
 // Build email body
-function buildEmailBody(report, dateStr, filename) {
-    return `Hi,
-
-📊 快手星火计划日报 (${dateStr})
+function buildEmailBody(report, adoptionReport, dateStr, filename) {
+    const rawSection = `📊 快手星火计划日报 (${dateStr})
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📈 数据概览
@@ -283,12 +293,16 @@ function buildEmailBody(report, dateStr, filename) {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔥 TOP 10 曝光任务
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝光: ${t.stats.组件曝光数} | 点击: ${t.stats.组件点击数 || 'N/A'} | 达人: ${t.stats.已履单达人数量 || 'N/A'}`).join('\n')}
+${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝光: ${t.stats.组件曝光数} | 点击: ${t.stats.组件点击数 || 'N/A'} | 达人: ${t.stats.已履单达人数量 || 'N/A'}`).join('\n')}`;
+
+    const adoptionSection = formatAdoptionEmail(adoptionReport);
+
+    return `${rawSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-👥 TOP 10 达人参与
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${report.topByDaren.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   达人: ${t.stats.已履单达人数量} | 作品: ${t.stats.已发布作品数 || 'N/A'} | 曝光: ${t.stats.组件曝光数 || 'N/A'}`).join('\n')}
+
+${adoptionSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📁 附件
@@ -297,9 +311,6 @@ ${report.topByDaren.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   达人:
 • ${filename}.json - JSON格式数据
 
 文件位置: ${CONFIG.outputDir}
-
-Best regards,
-Kuaishou Daily Bot 🤖
 `;
 }
 
@@ -350,11 +361,11 @@ ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent
 }
 
 // Send email report
-async function sendEmail(report, dateStr, filename) {
+async function sendEmail(report, adoptionReport, dateStr, filename) {
     log('INFO', 'Sending email report...');
-    
-    const body = buildEmailBody(report, dateStr, filename);
-    const subject = `[快手日报] ${dateStr} | ${report.summary.totalTasks}任务 ${report.summary.totalExposure.toLocaleString()}曝光`;
+
+    const body = buildEmailBody(report, adoptionReport, dateStr, filename);
+    const subject = `[快手日报] ${dateStr} | ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
     
     // Try AgentMail first
@@ -364,11 +375,12 @@ async function sendEmail(report, dateStr, filename) {
         const client = new AgentMailClient({ apiKey: CONFIG.apiKey });
         
         const inboxesResp = await client.inboxes.list();
-        const inboxes = inboxesResp.inboxes || inboxesResp.data || inboxesResp;
-        const inbox = inboxes.find(i => (i.inbox_id || i.id).includes('letmetry')) || inboxes[0];
-        
-        await client.inboxes.messages.send({
-            inbox_id: inbox.inbox_id || inbox.id,
+        const inboxes = inboxesResp.inboxes || inboxesResp.data || [];
+        if (!inboxes.length) throw new Error('No inboxes found');
+        const inbox = inboxes.find(i => String(i.inboxId || i.inbox_id || i.id || '').includes('letmetry')) || inboxes[0];
+        const inboxId = inbox.inboxId || inbox.inbox_id || inbox.id;
+
+        await client.inboxes.messages.send(inboxId, {
             to: [CONFIG.emailTo],
             subject: subject,
             text: body,
@@ -439,12 +451,20 @@ async function main() {
         // 3. Get all tasks
         const tasks = await getAllTasks(page);
         
-        // 4. Get statistics for each task
+        // 4. Get statistics for each task (navigate page-by-page)
         log('INFO', 'Getting statistics...');
+        let currentPage = -1;
         for (let i = 0; i < tasks.length; i++) {
             const task = tasks[i];
-            log('INFO', `[${i + 1}/${tasks.length}] ${task.name}`);
-            
+            log('INFO', `[${i + 1}/${tasks.length}] ${task.name} (page ${task.page})`);
+
+            // Navigate to the correct page if needed
+            if (task.page !== currentPage) {
+                log('INFO', `  Navigating to page ${task.page}...`);
+                await navigateToPage(page, task.page);
+                currentPage = task.page;
+            }
+
             let retries = 0;
             let stats;
             
@@ -472,9 +492,20 @@ async function main() {
         
         // 6. Save results
         const filename = await saveResults(report, dateStr);
-        
-        // 7. Send email
-        await sendEmail(report, dateStr, filename);
+
+        // 7. Build adoption analysis (creator popularity ranking)
+        log('INFO', 'Building adoption analysis...');
+        const adoptionReport = buildUsageReport(dateStr, report);
+        const usageOutputDir = path.join(RUNTIME_DIR, 'exports', 'metrics', 'daily-usage');
+        ensureDirectory(usageOutputDir);
+        fs.writeFileSync(
+            path.join(usageOutputDir, `usage_${dateStr}.json`),
+            JSON.stringify(adoptionReport, null, 2)
+        );
+        log('INFO', `Adoption report: ${adoptionReport.summary.tasksWithData} tasks, ${adoptionReport.summary.totalDaren} daren, ${adoptionReport.summary.totalWorks} works`);
+
+        // 8. Send combined email (raw data + adoption analysis)
+        await sendEmail(report, adoptionReport, dateStr, filename);
         
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         log('INFO', `Completed in ${duration}s`);
