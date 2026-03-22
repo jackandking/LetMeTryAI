@@ -1,0 +1,22 @@
+{
+  "id": "kids-reading-habit",
+  "name": "孩子阅读习惯养成",
+  "description": "比较四种常见的亲子阅读策略，帮助家长选出最可行的做法。",
+  "category": "教育",
+  "directory": "kids-reading-habit",
+  "url": "kids-reading-habit",
+  "image": "kids-reading-habit/images/daily-short-read.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读习惯",
+    "亲子共读",
+    "图书选择",
+    "兴趣培养",
+    "阅读习惯",
+    "亲子共读",
+    "图书选择",
+    "兴趣培养"
+  ],
+  "status": "active"
+}
