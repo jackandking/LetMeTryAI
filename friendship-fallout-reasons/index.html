@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>女人爱热议：闺蜜翻脸的原因排行</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">女人爱热议：闺蜜翻脸的原因排行</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">你会把这一票投给谁：闺蜜翻脸最常见的原因是？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="womanai" value="talk-behind-back">
+                    <img src="images/talk-behind-back.svg" alt="背后议论的闺蜜插画" loading="lazy">
+                    <span>被闺蜜背后讲你坏话，最让人受伤</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="money-or-benefits">
+                    <img src="images/money-or-benefits.svg" alt="金钱矛盾的象征图" loading="lazy">
+                    <span>因金钱或利益分配出现矛盾</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="romantic-betrayal">
+                    <img src="images/romantic-betrayal.svg" alt="爱情三角关系示意图" loading="lazy">
+                    <span>涉及感情背叛或争夺伴侣，无法释怀</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="womanai" value="values-differ">
+                    <img src="images/values-differ.svg" alt="分歧与距离感插画" loading="lazy">
+                    <span>观点和生活方式逐渐分歧，聚少离多</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
