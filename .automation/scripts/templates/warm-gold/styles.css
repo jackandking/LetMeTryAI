@@ -421,3 +421,125 @@ body {
         height: 100px;
     }
 }
+
+/* ── Legacy HTML compat (button-group / label.option) ── */
+body > h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    padding: 30px 20px 10px;
+    margin: 0;
+}
+
+body > form,
+body > .result,
+body > .show-result-btn,
+body > .more {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+label.option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+    background: var(--color-card);
+    border-radius: 12px;
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+label.option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(139, 105, 20, 0.2);
+    border-color: var(--color-secondary);
+}
+
+label.option:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, #fff 0%, #fdf8e8 100%);
+}
+
+label.option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+label.option img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #faf6ed 0%, #f5f0e3 100%);
+    padding: 8px;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+label.option span {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+label.option:nth-child(1) { animation-delay: 0.1s; }
+label.option:nth-child(2) { animation-delay: 0.2s; }
+label.option:nth-child(3) { animation-delay: 0.3s; }
+label.option:nth-child(4) { animation-delay: 0.4s; }
+
+@media (max-width: 600px) {
+    body > h1 {
+        font-size: 1.4rem;
+        padding: 20px 15px 10px;
+    }
+
+    body > form,
+    body > .result,
+    body > .show-result-btn,
+    body > .more {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    label.option {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+        padding: 15px;
+    }
+
+    label.option img {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 0;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    label.option span {
+        font-size: 0.9rem;
+        flex: 1;
+    }
+}

@@ -558,3 +558,132 @@ body {
 .option-card:nth-child(2) { animation-delay: 0.2s; }
 .option-card:nth-child(3) { animation-delay: 0.3s; }
 .option-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* ── Legacy HTML compat (button-group / label.option) ── */
+body > h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    padding: 30px 20px 10px;
+    margin: 0;
+}
+
+body > form,
+body > .result,
+body > .show-result-btn,
+body > .more {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+label.option {
+    position: relative;
+    background: var(--color-card);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+label.option:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-secondary);
+}
+
+label.option:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
+}
+
+label.option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+label.option img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffeef2 0%, #ffe4e9 100%);
+    padding: 8px;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+}
+
+label.option span {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+label.option:nth-child(1) { animation-delay: 0.1s; }
+label.option:nth-child(2) { animation-delay: 0.2s; }
+label.option:nth-child(3) { animation-delay: 0.3s; }
+label.option:nth-child(4) { animation-delay: 0.4s; }
+
+@media (max-width: 768px) {
+    body > h1 {
+        font-size: 22px;
+        padding: 20px 12px 10px;
+    }
+
+    body > form,
+    body > .result,
+    body > .show-result-btn,
+    body > .more {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    label.option {
+        flex-direction: row;
+        align-items: center;
+        padding: 12px;
+    }
+
+    label.option img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 0;
+        margin-right: 16px;
+        flex-shrink: 0;
+    }
+
+    label.option span {
+        text-align: left;
+        flex: 1;
+    }
+}
+
+@media (max-width: 380px) {
+    label.option img {
+        width: 100px;
+        height: 100px;
+    }
+}
