@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>关注：晚上助眠你更习惯哪种小方法？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">关注：晚上助眠你更习惯哪种小方法？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">亲，你最支持哪个助眠小方法？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="elder-love" value="gentle-stretch">
+                    <img src="images/gentle-stretch.svg" alt="老人做轻柔拉伸" loading="lazy">
+                    <span>睡前做几分钟伸展放松身体</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="warm-drink">
+                    <img src="images/warm-drink.svg" alt="一杯温牛奶或花草茶" loading="lazy">
+                    <span>喝杯温牛奶或淡花草茶助放松</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="soft-music">
+                    <img src="images/soft-music.svg" alt="老年人戴耳机听音乐放松" loading="lazy">
+                    <span>播放舒缓音乐或熟悉老歌入眠</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="elder-love" value="short-reading">
+                    <img src="images/short-reading.svg" alt="老人床头阅读灯下看书" loading="lazy">
+                    <span>看段短文或书籍让心情平静</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
