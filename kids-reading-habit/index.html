@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：你觉得最能培养孩子阅读兴趣的方法？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pageTitle">家长话题：你觉得最能培养孩子阅读兴趣的方法？</h1>
+
+    <form id="questionnaire">
+        <div class="question" id="questionArea">
+            <p id="questionText">站在家长视角，你会怎么选：最能让孩子爱上阅读的方法是？</p>
+            <div class="button-group" id="optionsContainer">
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="daily-short-read">
+                    <img src="images/daily-short-read.svg" alt="父母与孩子每天读书" loading="lazy">
+                    <span>每天固定10-20分钟，共读培养习惯和安全感。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="child-choose-books">
+                    <img src="images/child-choose-books.svg" alt="孩子在书店选书" loading="lazy">
+                    <span>根据孩子兴趣选书，增强自主性与好奇心。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="picture-books-storytime">
+                    <img src="images/picture-books-storytime.svg" alt="图画书阅读场景" loading="lazy">
+                    <span>用图画书和互动式讲述点燃想象力。</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="parent-tools" value="home-book-corner-reward">
+                    <img src="images/home-book-corner-reward.svg" alt="家庭书角与陪伴" loading="lazy">
+                    <span>打造固定阅读空间并用小奖励维持动力。</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div class="result" id="result">
+        <p>正在汇总实时投票结果...</p>
+    </div>
+
+    <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+
+    <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
