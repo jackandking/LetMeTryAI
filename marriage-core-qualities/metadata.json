@@ -1,0 +1,24 @@
+{
+  "id": "marriage-core-qualities",
+  "name": "婚姻品质投票",
+  "description": "投票选出你认为婚姻中最重要的那一项，选项便于配图与短文案。",
+  "category": "情感",
+  "directory": "marriage-core-qualities",
+  "url": "marriage-core-qualities",
+  "image": "marriage-core-qualities/images/understanding-tolerance.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "婚姻",
+    "品质",
+    "信任",
+    "包容",
+    "家庭",
+    "婚姻",
+    "品质",
+    "信任",
+    "包容",
+    "家庭"
+  ],
+  "status": "active"
+}
