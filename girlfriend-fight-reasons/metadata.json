@@ -1,0 +1,22 @@
+{
+  "id": "girlfriend-fight-reasons",
+  "name": "闺蜜情感榜",
+  "description": "关于友情边界与信任的投票话题，激发评论与转发。",
+  "category": "情感",
+  "directory": "girlfriend-fight-reasons",
+  "url": "girlfriend-fight-reasons",
+  "image": "girlfriend-fight-reasons/images/reveal-secret.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "闺蜜",
+    "友情",
+    "信任",
+    "情感共鸣",
+    "闺蜜",
+    "友情",
+    "信任",
+    "情感共鸣"
+  ],
+  "status": "active"
+}
