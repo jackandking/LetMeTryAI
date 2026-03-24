@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：表扬哪种更能让孩子进步？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家长话题：表扬哪种更能让孩子进步？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长视角，你会怎么选：表扬方式哪种更有效？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="immediate-verbal-praise">
+                            <div class="card-image">
+                                <img src="images/immediate-verbal-praise.svg" alt="家长当面夸孩子的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">即时口头表扬</h3>
+                                <p class="option-desc">当下夸一夸，及时肯定孩子行为</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="written-encouragement-card">
+                            <div class="card-image">
+                                <img src="images/written-encouragement-card.svg" alt="写给孩子的鼓励小卡片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">书面鼓励（卡片）</h3>
+                                <p class="option-desc">写卡片或便签，保存并回看效果更持久</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="public-praise-in-front-others">
+                            <div class="card-image">
+                                <img src="images/public-praise-in-front-others.svg" alt="家人面前表扬孩子的情境" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">公开表扬（夸给别人听）</h3>
+                                <p class="option-desc">在家人或老师面前表扬，提升孩子自信</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="small-tangible-reward">
+                            <div class="card-image">
+                                <img src="images/small-tangible-reward.svg" alt="贴纸或小奖励激励孩子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">小奖励（贴纸/零花）</h3>
+                                <p class="option-desc">用贴纸或小礼物作为短期激励</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
