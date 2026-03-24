@@ -1,0 +1,22 @@
+{
+  "id": "praise-methods-vote",
+  "name": "表扬方式投票",
+  "description": "对比即时口头、书面卡片、公开表扬与小奖励，投票选出你觉得更有效的表扬方式。",
+  "category": "成长",
+  "directory": "praise-methods-vote",
+  "url": "praise-methods-vote",
+  "image": "praise-methods-vote/images/immediate-verbal-praise.svg",
+  "tags": [
+    "投票",
+    "成长",
+    "表扬",
+    "亲子沟通",
+    "鼓励孩子",
+    "家庭教育",
+    "表扬",
+    "亲子沟通",
+    "鼓励孩子",
+    "家庭教育"
+  ],
+  "status": "active"
+}
