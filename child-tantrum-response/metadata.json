@@ -1,0 +1,22 @@
+{
+  "id": "child-tantrum-response",
+  "name": "家长沟通投票",
+  "description": "让家长投票选出最常用/最有效的孩子发脾气应对方式。",
+  "category": "家庭",
+  "directory": "child-tantrum-response",
+  "url": "child-tantrum-response",
+  "image": "child-tantrum-response/images/wait-calm-down.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "亲子沟通",
+    "情绪管理",
+    "管教方式",
+    "家庭教育",
+    "亲子沟通",
+    "情绪管理",
+    "管教方式",
+    "家庭教育"
+  ],
+  "status": "active"
+}
