@@ -1,0 +1,24 @@
+{
+  "id": "gaming-gpu-showdown",
+  "name": "显卡性能对决",
+  "description": "用游戏帧数、能耗和价格做简单对比，适合渴望性能的男性受众投票。",
+  "category": "科技数码",
+  "directory": "gaming-gpu-showdown",
+  "url": "gaming-gpu-showdown",
+  "image": "gaming-gpu-showdown/images/nvidia-rtx-4090.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "显卡",
+    "帧数",
+    "游戏性能",
+    "高帧",
+    "散热",
+    "显卡",
+    "帧数",
+    "游戏性能",
+    "高帧",
+    "散热"
+  ],
+  "status": "active"
+}

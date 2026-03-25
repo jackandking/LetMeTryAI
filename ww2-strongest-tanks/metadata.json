@@ -1,0 +1,24 @@
+{
+  "id": "ww2-strongest-tanks",
+  "name": "坦克对比",
+  "description": "比较T-34、Panther、M4 Sherman、KV-1等二战坦克的装甲、火力与机动性。",
+  "category": "军事装备",
+  "directory": "ww2-strongest-tanks",
+  "url": "ww2-strongest-tanks",
+  "image": "ww2-strongest-tanks/images/t-34.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "二战",
+    "坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "二战",
+    "坦克",
+    "装甲",
+    "火力",
+    "机动性"
+  ],
+  "status": "active"
+}

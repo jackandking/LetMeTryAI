@@ -1,0 +1,22 @@
+{
+  "id": "grandchild-activities",
+  "name": "代际亲情投票",
+  "description": "投票看大家和孙辈最喜欢做的互动活动，促进亲子/隔代交流话题。",
+  "category": "家庭",
+  "directory": "grandchild-activities",
+  "url": "grandchild-activities",
+  "image": "grandchild-activities/images/making-handicrafts.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "孙辈",
+    "家庭活动",
+    "代际交流",
+    "亲情",
+    "孙辈",
+    "家庭活动",
+    "代际交流",
+    "亲情"
+  ],
+  "status": "active"
+}

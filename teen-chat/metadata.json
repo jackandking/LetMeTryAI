@@ -1,0 +1,20 @@
+{
+  "id": "teen-chat",
+  "name": "青春期沟通小测",
+  "description": "选择你认为最有效的与青春期孩子沟通方式。",
+  "category": "成长",
+  "directory": "teen-chat",
+  "url": "teen-chat",
+  "image": "teen-chat/images/schedule-regular-talk.svg",
+  "tags": [
+    "投票",
+    "成长",
+    "亲子沟通",
+    "青春期",
+    "情感交流",
+    "亲子沟通",
+    "青春期",
+    "情感交流"
+  ],
+  "status": "active"
+}
