@@ -1,0 +1,22 @@
+{
+  "id": "sleep-improvement-options",
+  "name": "睡眠小贴士投票",
+  "description": "比较常见的睡前小习惯，看看哪种最受欢迎、最易坚持。",
+  "category": "健康",
+  "directory": "sleep-improvement-options",
+  "url": "sleep-improvement-options",
+  "image": "sleep-improvement-options/images/pre-sleep-walk.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "助眠方法",
+    "情绪管理",
+    "晚间习惯",
+    "睡眠",
+    "助眠方法",
+    "情绪管理",
+    "晚间习惯"
+  ],
+  "status": "active"
+}
