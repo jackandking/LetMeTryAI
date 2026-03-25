@@ -222,6 +222,217 @@ function generateReport(tasks) {
     };
 }
 
+// ─── Delta comparison (daily + 7-day trend) ───
+
+function dateOffset(dateStr, days) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const date = new Date(y, m - 1, d + days);
+    const yy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yy}-${mm}-${dd}`;
+}
+
+function loadHistoricalReport(dateStr) {
+    const filePath = path.join(CONFIG.outputDir, `kuaishou_report_${dateStr}.json`);
+    if (!fs.existsSync(filePath)) return null;
+    try {
+        return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    } catch { return null; }
+}
+
+function buildTaskMap(report) {
+    const map = new Map();
+    if (!report?.allTasks) return map;
+    for (const t of report.allTasks) {
+        if (t.stats && !t.stats.error) {
+            map.set(t.planId, t);
+        }
+    }
+    return map;
+}
+
+function buildDeltaReport(todayReport, dateStr) {
+    const yesterday = dateOffset(dateStr, -1);
+    const prevReport = loadHistoricalReport(yesterday);
+
+    if (!prevReport) {
+        log('INFO', `No previous report found for ${yesterday}, skipping delta`);
+        return null;
+    }
+
+    log('INFO', `Comparing with ${yesterday} report`);
+    const prevMap = buildTaskMap(prevReport);
+    const todayTasks = todayReport.allTasks.filter(t => t.stats && !t.stats.error);
+
+    const deltas = todayTasks.map(t => {
+        const prev = prevMap.get(t.planId);
+        const prevDaren = prev?.stats?.已履单达人数量 || 0;
+        const prevWorks = prev?.stats?.已发布作品数 || 0;
+        const prevExposure = prev?.stats?.组件曝光数 || 0;
+        return {
+            planId: t.planId,
+            name: t.name,
+            source: t.source,
+            daren: t.stats.已履单达人数量 || 0,
+            works: t.stats.已发布作品数 || 0,
+            exposure: t.stats.组件曝光数 || 0,
+            deltaDaren: (t.stats.已履单达人数量 || 0) - prevDaren,
+            deltaWorks: (t.stats.已发布作品数 || 0) - prevWorks,
+            deltaExposure: (t.stats.组件曝光数 || 0) - prevExposure,
+            isNew: !prev
+        };
+    });
+
+    // Top gainers by new daren (only tasks with positive delta)
+    const topGainersByDaren = deltas
+        .filter(d => d.deltaDaren > 0)
+        .sort((a, b) => b.deltaDaren - a.deltaDaren)
+        .slice(0, 15);
+
+    const topGainersByWorks = deltas
+        .filter(d => d.deltaWorks > 0)
+        .sort((a, b) => b.deltaWorks - a.deltaWorks)
+        .slice(0, 15);
+
+    // Summary delta
+    const prevSummary = prevReport.summary || {};
+    const summaryDelta = {
+        deltaDaren: (todayReport.summary.totalDaren || 0) - (prevSummary.totalDaren || 0),
+        deltaWorks: (todayReport.summary.totalWorks || 0) - (prevSummary.totalWorks || 0),
+        deltaExposure: (todayReport.summary.totalExposure || 0) - (prevSummary.totalExposure || 0),
+        deltaClicks: (todayReport.summary.totalClicks || 0) - (prevSummary.totalClicks || 0)
+    };
+
+    return {
+        comparedWith: yesterday,
+        summaryDelta,
+        topGainersByDaren,
+        topGainersByWorks,
+        allDeltas: deltas
+    };
+}
+
+function build7DayTrend(planIds, dateStr) {
+    // Load 7 days of history (today + 6 previous days)
+    const dates = [];
+    for (let i = -6; i <= 0; i++) {
+        dates.push(dateOffset(dateStr, i));
+    }
+
+    const reports = dates.map(d => ({ date: d, report: loadHistoricalReport(d) }));
+    const availableDates = reports.filter(r => r.report).map(r => r.date);
+
+    if (availableDates.length < 2) {
+        log('INFO', `Only ${availableDates.length} historical reports available, need 2+ for trend`);
+        return null;
+    }
+
+    log('INFO', `Building 7-day trend from ${availableDates.length} reports (${availableDates[0]} ~ ${availableDates[availableDates.length - 1]})`);
+
+    const trends = planIds.map(planId => {
+        const dailyData = reports.map(({ date, report }) => {
+            if (!report) return { date, daren: null, works: null, exposure: null };
+            const task = report.allTasks?.find(t => t.planId === planId);
+            if (!task?.stats || task.stats.error) return { date, daren: null, works: null, exposure: null };
+            return {
+                date,
+                daren: task.stats.已履单达人数量 || 0,
+                works: task.stats.已发布作品数 || 0,
+                exposure: task.stats.组件曝光数 || 0
+            };
+        });
+
+        // Calculate daily increments (delta between consecutive days)
+        const increments = [];
+        for (let i = 1; i < dailyData.length; i++) {
+            const prev = dailyData[i - 1];
+            const curr = dailyData[i];
+            if (prev.daren !== null && curr.daren !== null) {
+                increments.push({
+                    date: curr.date,
+                    deltaDaren: curr.daren - prev.daren,
+                    deltaWorks: curr.works - prev.works,
+                    deltaExposure: curr.exposure - prev.exposure
+                });
+            }
+        }
+
+        const name = (() => {
+            for (const { report } of reports) {
+                const t = report?.allTasks?.find(t => t.planId === planId);
+                if (t?.name) return t.name;
+            }
+            return `planId:${planId}`;
+        })();
+
+        return { planId, name, dailyData, increments };
+    });
+
+    return { dates: availableDates, trends };
+}
+
+// ─── Format delta section for email ───
+
+function formatDeltaEmail(deltaReport, trendReport) {
+    if (!deltaReport) return '(无历史数据，明天开始可以看增量对比)';
+
+    const sd = deltaReport.summaryDelta;
+    const lines = [
+        `📊 日增量对比 (vs ${deltaReport.comparedWith})`,
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '📈 总量变化',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        `• 达人: ${fmtDelta(sd.deltaDaren)}`,
+        `• 作品: ${fmtDelta(sd.deltaWorks)}`,
+        `• 曝光: ${fmtDelta(sd.deltaExposure)}`,
+        `• 点击: ${fmtDelta(sd.deltaClicks)}`,
+    ];
+
+    if (deltaReport.topGainersByDaren.length > 0) {
+        lines.push('');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push('🔥 今日达人增长 TOP 15');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        deltaReport.topGainersByDaren.forEach((t, i) => {
+            const tag = t.isNew ? ' [新]' : '';
+            lines.push(`${String(i + 1).padStart(2)}. ${t.name}${tag}`);
+            lines.push(`    达人 +${t.deltaDaren} (总${t.daren}) | 作品 ${fmtDelta(t.deltaWorks)} (总${t.works})`);
+        });
+    } else {
+        lines.push('');
+        lines.push('(今日无新增达人)');
+    }
+
+    // 7-day trend for top gainers
+    if (trendReport && trendReport.trends.length > 0) {
+        lines.push('');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push('📈 TOP 达人增长 — 7日趋势（每日新增达人）');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        for (const t of trendReport.trends) {
+            if (t.increments.length === 0) continue;
+            const sparkline = t.increments.map(inc => {
+                const d = inc.date.slice(5); // MM-DD
+                const v = inc.deltaDaren;
+                return `${d}:${v >= 0 ? '+' : ''}${v}`;
+            }).join('  ');
+            lines.push(`• ${t.name}`);
+            lines.push(`  ${sparkline}`);
+        }
+    }
+
+    return lines.join('\n');
+}
+
+function fmtDelta(n) {
+    if (n > 0) return `+${n.toLocaleString()}`;
+    if (n < 0) return n.toLocaleString();
+    return '0';
+}
+
 // ─── Save results ───
 
 function saveResults(report, dateStr) {
@@ -258,7 +469,7 @@ function saveResults(report, dateStr) {
 
 // ─── Email ───
 
-function buildEmailBody(report, adoptionReport, dateStr, filename) {
+function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename) {
     const rawSection = `📊 快手星火计划日报 (${dateStr})
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -277,9 +488,15 @@ function buildEmailBody(report, adoptionReport, dateStr, filename) {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝光: ${t.stats.组件曝光数} | 点击: ${t.stats.组件点击数 || 'N/A'} | 达人: ${t.stats.已履单达人数量 || 'N/A'}`).join('\n')}`;
 
+    const deltaSection = formatDeltaEmail(deltaReport, trendReport);
     const adoptionSection = formatAdoptionEmail(adoptionReport);
 
     return `${rawSection}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${deltaSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -332,10 +549,10 @@ ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent
     }
 }
 
-async function sendEmail(report, adoptionReport, dateStr, filename) {
+async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename) {
     log('INFO', 'Sending email report...');
 
-    const body = buildEmailBody(report, adoptionReport, dateStr, filename);
+    const body = buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename);
     const subject = `[快手日报] ${dateStr} | ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
 
@@ -357,7 +574,7 @@ async function sendEmail(report, adoptionReport, dateStr, filename) {
             text: body,
             attachments: fs.existsSync(attachmentPath) ? [{
                 filename: `${filename}.csv`,
-                content: fs.readFileSync(attachmentPath, 'utf-8'),
+                content: fs.readFileSync(attachmentPath).toString('base64'),
                 content_type: 'text/csv'
             }] : []
         });
@@ -427,8 +644,28 @@ async function main() {
         );
         log('INFO', `Adoption report: ${adoptionReport.summary.tasksWithData} tasks, ${adoptionReport.summary.totalDaren} daren, ${adoptionReport.summary.totalWorks} works`);
 
-        // 7. Send combined email
-        await sendEmail(report, adoptionReport, dateStr, filename);
+        // 7. Build delta comparison (vs yesterday)
+        log('INFO', 'Building delta comparison...');
+        const deltaReport = buildDeltaReport(report, dateStr);
+
+        // 8. Build 7-day trend for top gainers
+        let trendReport = null;
+        if (deltaReport && deltaReport.topGainersByDaren.length > 0) {
+            const topPlanIds = deltaReport.topGainersByDaren.slice(0, 10).map(t => t.planId);
+            trendReport = build7DayTrend(topPlanIds, dateStr);
+        }
+
+        // Save delta report
+        if (deltaReport) {
+            fs.writeFileSync(
+                path.join(CONFIG.outputDir, `kuaishou_delta_${dateStr}.json`),
+                JSON.stringify({ delta: deltaReport, trend: trendReport }, null, 2)
+            );
+            log('INFO', `Delta report saved: kuaishou_delta_${dateStr}.json`);
+        }
+
+        // 9. Send combined email
+        await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename);
 
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         log('INFO', `Completed in ${duration}s`);
