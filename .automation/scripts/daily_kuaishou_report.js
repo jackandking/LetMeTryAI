@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 /**
- * Daily Kuaishou Report Generator
- * 每天早上自动抓取快手数据并发送邮件报告
- * 
+ * Daily Kuaishou Report Generator (API mode)
+ *
+ * Uses pure HTTP API calls to fetch distribution task data from Kuaishou.
+ * No browser needed — just cookies from a prior login session.
+ *
  * Usage:
  *   node .automation/scripts/daily_kuaishou_report.js
- * 
+ *
  * Environment Variables:
  *   KUAISHOU_EMAIL_TO=jackandking@163.com
  *   AGENTMAIL_API_KEY=xxx
- *   HEADLESS=true|false (default: true for cron)
+ *
+ * To refresh auth session (when cookies expire):
+ *   node .automation/scripts/ks-api-poc.js --sniff
  */
 
-import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 import {
@@ -30,202 +33,179 @@ const RUNTIME_DIR = resolveRuntimeDir(import.meta.url);
 // Configuration
 const CONFIG = {
     authFile: resolveKuaishouAuthFile(import.meta.url),
-    outputDir: path.join(resolveRuntimeDir(import.meta.url), 'exports', 'metrics', 'kuaishou', 'daily'),
-    headless: process.env.HEADLESS !== 'false', // Default true for cron
+    outputDir: path.join(RUNTIME_DIR, 'exports', 'metrics', 'kuaishou', 'daily'),
     emailTo: process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com',
     apiKey: process.env.AGENTMAIL_API_KEY || 'am_us_8ad8e7f3b27ce401a22901ee8ab1108e290efe027f80b66b0ab434f6f9b2b5b4',
+    baseUrl: 'https://daren.kuaishou.com',
+    delayMin: 500,   // ms between API calls (random range)
+    delayMax: 1500,
     maxRetries: 3,
-    delayBetweenTasks: 800 // ms
+    pageSize: 50      // tasks per page
 };
 
-// Ensure output directory exists
-if (!fs.existsSync(CONFIG.outputDir)) {
-    fs.mkdirSync(CONFIG.outputDir, { recursive: true });
-}
+ensureDirectory(CONFIG.outputDir);
 
-// Logger with timestamp
+// Logger
 function log(level, message) {
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] [${level}] ${message}`);
 }
 
-// Initialize browser
-async function initBrowser() {
-    log('INFO', 'Initializing browser...');
-    
-    const browser = await chromium.launch({ 
-        headless: CONFIG.headless,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    
-    const context = await browser.newContext({
-        storageState: fs.existsSync(CONFIG.authFile) 
-            ? JSON.parse(fs.readFileSync(CONFIG.authFile, 'utf-8')) 
-            : undefined,
-        viewport: { width: 1280, height: 800 },
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-    });
-    
-    const page = await context.newPage();
-    return { browser, context, page };
+function randomDelay() {
+    const ms = CONFIG.delayMin + Math.random() * (CONFIG.delayMax - CONFIG.delayMin);
+    return new Promise(r => setTimeout(r, ms));
 }
 
-// Close overlay
-async function closeOverlay(page) {
-    try {
-        await page.keyboard.press('Escape');
-        await page.waitForTimeout(300);
-        
-        const selectors = ['.ks-drawer__close', '.ks-icon-close', 'button:has-text("取消")'];
-        for (const sel of selectors) {
-            const btn = page.locator(sel).first();
-            if (await btn.isVisible({ timeout: 500 }).catch(() => false)) {
-                await btn.click({ timeout: 2000 });
-                await page.waitForTimeout(300);
-            }
-        }
-    } catch (e) {}
-}
+// ─── Cookie extraction from Playwright storageState ───
 
-// Force click
-async function forceClick(page, rowIndex, btnIndex = 1) {
-    return await page.evaluate(({ r, b }) => {
-        const rows = document.querySelectorAll('table tbody tr');
-        if (r >= rows.length) return { success: false, error: 'Row out of range' };
-        const btns = rows[r]?.querySelector('td:last-child')?.querySelectorAll('button');
-        if (!btns || btns.length <= b) return { success: false, error: 'Not enough buttons' };
-        btns[b].click();
-        return { success: true };
-    }, { r: rowIndex, b: btnIndex });
-}
-
-// Get all tasks with pagination
-async function getAllTasks(page) {
-    log('INFO', 'Getting task list...');
-    
-    const allTasks = [];
-    
-    // Get pagination info
-    const pageInfo = await page.evaluate(() => {
-        const text = document.querySelector('.distribution-list__table__pagination-total')?.textContent || '';
-        const match = text.match(/(\d+)/);
-        const btns = document.querySelectorAll('.ks-pager li.number');
-        return {
-            total: match ? parseInt(match[1]) : 0,
-            maxPage: Math.max(...Array.from(btns).map(b => parseInt(b.textContent) || 1), 1)
-        };
-    });
-    
-    log('INFO', `Found ${pageInfo.total} tasks across ${pageInfo.maxPage} pages`);
-    
-    // Iterate pages
-    for (let p = 1; p <= pageInfo.maxPage; p++) {
-        log('INFO', `Processing page ${p}/${pageInfo.maxPage}`);
-        
-        if (p > 1) {
-            const btn = page.locator('.ks-pager li.number').filter({ hasText: String(p) }).first();
-            if (await btn.count() > 0) {
-                await btn.click();
-                await page.waitForTimeout(2000);
-            }
-        }
-        
-        const tasks = await page.evaluate((pageNum) => {
-            const seen = new Set();
-            // 使用更精确的选择器，只选中任务列表表格
-            const rows = document.querySelectorAll('.distribution-list__table table tbody tr');
-            return Array.from(rows)
-                .map((row, idx) => {
-                    const cells = row.querySelectorAll('td');
-                    // 任务表格有10-11列，页码表格只有1-2列
-                    if (cells.length < 6) return null;
-                    const planId = cells[0]?.textContent?.trim();
-                    const name = cells[1]?.textContent?.trim();
-                    if (!planId || !name || seen.has(planId)) return null;
-                    seen.add(planId);
-                    return {
-                        page: pageNum,
-                        rowIndex: idx,
-                        planId,
-                        name,
-                        source: cells[2]?.textContent?.trim(),
-                        status: cells[3]?.textContent?.trim()
-                    };
-                })
-                .filter(Boolean);
-        }, p);
-        
-        allTasks.push(...tasks);
+function extractCookieHeader() {
+    if (!fs.existsSync(CONFIG.authFile)) {
+        log('ERROR', `Auth file not found: ${CONFIG.authFile}`);
+        log('ERROR', 'Run sniff mode to login: node .automation/scripts/ks-api-poc.js --sniff');
+        process.exit(1);
     }
-    
-    log('INFO', `Total unique tasks: ${allTasks.length}`);
+    const state = JSON.parse(fs.readFileSync(CONFIG.authFile, 'utf-8'));
+    const cookies = (state.cookies || [])
+        .filter(c => c.domain?.includes('kuaishou.com'))
+        .map(c => `${c.name}=${c.value}`)
+        .join('; ');
+
+    if (!cookies) {
+        log('ERROR', 'No kuaishou cookies found in auth file. Re-login with --sniff mode.');
+        process.exit(1);
+    }
+    return cookies;
+}
+
+// ─── HTTP API helper ───
+
+async function apiRequest(endpoint, body, cookies) {
+    const url = `${CONFIG.baseUrl}${endpoint}`;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Cookie': cookies,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+            'Referer': 'https://daren.kuaishou.com/distribution-plan-list',
+            'Origin': 'https://daren.kuaishou.com'
+        },
+        body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+
+    if (data.result === 109) {
+        throw new Error('SESSION_EXPIRED');
+    }
+    if (data.result !== 1) {
+        throw new Error(`API error: result=${data.result}, message=${data.message}`);
+    }
+    return data.data;
+}
+
+// ─── Data fetching ───
+
+async function fetchAllTasks(cookies) {
+    log('INFO', 'Fetching task list...');
+    const allTasks = [];
+    let pageNum = 1;
+
+    while (true) {
+        const result = await apiRequest('/rest/pc/creator/marketing/distribution/list', {
+            pageNum,
+            pageSize: CONFIG.pageSize,
+            distributionStatus: 0,
+            resourceTitle: '',
+            distributionPlanTitle: '',
+            distributionPlanId: ''
+        }, cookies);
+
+        const tasks = result.dataList || [];
+        allTasks.push(...tasks);
+        log('INFO', `  Page ${pageNum}: ${tasks.length} tasks (total: ${allTasks.length}/${result.total})`);
+
+        if (allTasks.length >= result.total || tasks.length === 0) break;
+        pageNum++;
+        await randomDelay();
+    }
+
+    log('INFO', `Total tasks: ${allTasks.length}`);
     return allTasks;
 }
 
-// Navigate to a specific page in the task list
-async function navigateToPage(page, targetPage) {
-    const btn = page.locator('.ks-pager li.number').filter({ hasText: String(targetPage) }).first();
-    if (await btn.count() > 0) {
-        await btn.click();
-        await page.waitForTimeout(2000);
-    }
+async function fetchTaskStats(planId, cookies) {
+    return await apiRequest('/rest/pc/creator/marketing/distribution/data', {
+        distributionPlanId: planId
+    }, cookies);
 }
 
-// Get statistics for a task (caller must ensure correct page is displayed)
-async function getTaskStats(page, task) {
-    try {
-        await closeOverlay(page);
-        
-        const result = await forceClick(page, task.rowIndex, 1);
-        if (!result.success) {
-            return { error: result.error };
+async function fetchAllStats(tasks, cookies) {
+    log('INFO', 'Fetching stats for each task...');
+    const results = [];
+
+    for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
+        const planId = task.distributionPlanId;
+        const name = task.distributionPlanTitle || task.miniAppName;
+        log('INFO', `  [${i + 1}/${tasks.length}] ${name}`);
+
+        let stats = null;
+        let retries = 0;
+
+        while (retries < CONFIG.maxRetries) {
+            try {
+                const raw = await fetchTaskStats(planId, cookies);
+                stats = {
+                    组件曝光数: raw.playCount || 0,
+                    组件点击数: raw.clickCount || 0,
+                    任务下发人数: raw.assignUsers || 0,
+                    已履单达人数量: raw.attendUsers || 0,
+                    已发布作品数: raw.photoCount || 0,
+                    已结算金额: raw.settlementGmv || 0
+                };
+                break;
+            } catch (e) {
+                if (e.message === 'SESSION_EXPIRED') throw e; // don't retry auth failures
+                retries++;
+                log('WARN', `    Retry ${retries}/${CONFIG.maxRetries}: ${e.message}`);
+                await new Promise(r => setTimeout(r, 1000));
+            }
         }
-        
-        await page.waitForTimeout(2000);
-        
-        const stats = await page.evaluate(() => {
-            const text = document.body.innerText;
-            const extract = (label) => {
-                const match = text.match(new RegExp(`${label}\\s*([\\d,]+|--)`));
-                return match ? (match[1] === '--' ? null : match[1]) : null;
-            };
-            return {
-                组件曝光数: extract('组件曝光数'),
-                组件点击数: extract('组件点击数'),
-                任务下发人数: extract('任务下发人数'),
-                已履单达人数量: extract('已履单达人数量'),
-                已发布作品数: extract('已发布作品数'),
-                已结算金额: extract('已结算金额')
-            };
+
+        results.push({
+            planId,
+            name,
+            source: task.source || '',
+            miniAppName: task.miniAppName || '',
+            status: task.distributionStatus?.desc || '',
+            stats: stats || { error: 'Failed after retries' }
         });
-        
-        await closeOverlay(page);
-        return stats;
-    } catch (e) {
-        await closeOverlay(page);
-        return { error: e.message };
+
+        if (i < tasks.length - 1) await randomDelay();
     }
+
+    return results;
 }
 
-// Generate report
+// ─── Report generation ───
+
 function generateReport(tasks) {
     const withData = tasks.filter(t => t.stats && !t.stats.error);
-    const totalExposure = withData.reduce((s, t) => s + (parseInt(t.stats.组件曝光数?.replace(/,/g, '')) || 0), 0);
-    const totalClicks = withData.reduce((s, t) => s + (parseInt(t.stats.组件点击数) || 0), 0);
-    const totalDaren = withData.reduce((s, t) => s + (parseInt(t.stats.已履单达人数量) || 0), 0);
-    const totalWorks = withData.reduce((s, t) => s + (parseInt(t.stats.已发布作品数) || 0), 0);
-    
-    // Top performers
-    const topByExposure = withData
-        .filter(t => t.stats.组件曝光数)
-        .sort((a, b) => parseInt(b.stats.组件曝光数?.replace(/,/g, '')) - parseInt(a.stats.组件曝光数?.replace(/,/g, '')))
+    const totalExposure = withData.reduce((s, t) => s + (t.stats.组件曝光数 || 0), 0);
+    const totalClicks = withData.reduce((s, t) => s + (t.stats.组件点击数 || 0), 0);
+    const totalDaren = withData.reduce((s, t) => s + (t.stats.已履单达人数量 || 0), 0);
+    const totalWorks = withData.reduce((s, t) => s + (t.stats.已发布作品数 || 0), 0);
+
+    const topByExposure = [...withData]
+        .sort((a, b) => (b.stats.组件曝光数 || 0) - (a.stats.组件曝光数 || 0))
         .slice(0, 10);
-    
-    const topByDaren = withData
-        .filter(t => t.stats.已履单达人数量)
-        .sort((a, b) => parseInt(b.stats.已履单达人数量) - parseInt(a.stats.已履单达人数量))
+
+    const topByDaren = [...withData]
+        .sort((a, b) => (b.stats.已履单达人数量 || 0) - (a.stats.已履单达人数量 || 0))
         .slice(0, 10);
-    
+
     return {
         summary: {
             totalTasks: tasks.length,
@@ -242,40 +222,42 @@ function generateReport(tasks) {
     };
 }
 
-// Save results
-async function saveResults(report, dateStr) {
+// ─── Save results ───
+
+function saveResults(report, dateStr) {
     const filename = `kuaishou_report_${dateStr}`;
-    
+
     // JSON
     fs.writeFileSync(
         path.join(CONFIG.outputDir, `${filename}.json`),
         JSON.stringify(report, null, 2)
     );
-    
+
     // CSV
     const headers = ['序号', '计划ID', '任务名称', '来源', '状态', '曝光数', '点击数', '达人', '作品'];
     const rows = report.allTasks.map((t, i) => [
         i + 1,
         t.planId,
-        `"${t.taskName || t.name}"`,
-        `"${t.source}"`,
-        `"${t.status}"`,
+        `"${t.name || ''}"`,
+        `"${t.source || ''}"`,
+        `"${t.status || ''}"`,
         t.stats?.组件曝光数 || '',
         t.stats?.组件点击数 || '',
         t.stats?.已履单达人数量 || '',
         t.stats?.已发布作品数 || ''
     ]);
-    
+
     fs.writeFileSync(
         path.join(CONFIG.outputDir, `${filename}.csv`),
         [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
     );
-    
+
     log('INFO', `Results saved: ${filename}.json/csv`);
     return filename;
 }
 
-// Build email body
+// ─── Email ───
+
 function buildEmailBody(report, adoptionReport, dateStr, filename) {
     const rawSection = `📊 快手星火计划日报 (${dateStr})
 
@@ -314,28 +296,18 @@ ${adoptionSection}
 `;
 }
 
-// Send email using system mail command
 async function sendEmailWithSystemMail(to, subject, body, attachmentPath) {
     const { exec } = await import('child_process');
     const util = await import('util');
     const execAsync = util.promisify(exec);
-    
-    // Check for sendmail
-    let hasSendmail = false;
-    try {
-        await execAsync('test -x /usr/sbin/sendmail');
-        hasSendmail = true;
-    } catch (e) {
-        throw new Error('No sendmail found');
-    }
-    
-    // Read CSV if available
+
+    await execAsync('test -x /usr/sbin/sendmail');
+
     let csvContent = '';
     if (attachmentPath && fs.existsSync(attachmentPath)) {
         csvContent = fs.readFileSync(attachmentPath, 'utf-8');
     }
-    
-    // Build email content with proper headers for UTF-8
+
     const date = new Date().toUTCString();
     const emailContent = `To: ${to}
 From: daily-report@letmetryai.cn
@@ -346,10 +318,10 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
 
 ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent.split('\n').slice(0, 15).join('\n') + '\n... (see attachment for full data)' : '')).toString('base64')}`;
-    
+
     const tempEmail = `/tmp/kuaishou_email_${Date.now()}.eml`;
     fs.writeFileSync(tempEmail, emailContent);
-    
+
     try {
         await execAsync(`/usr/sbin/sendmail ${to} < "${tempEmail}"`);
         fs.unlinkSync(tempEmail);
@@ -360,20 +332,19 @@ ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent
     }
 }
 
-// Send email report
 async function sendEmail(report, adoptionReport, dateStr, filename) {
     log('INFO', 'Sending email report...');
 
     const body = buildEmailBody(report, adoptionReport, dateStr, filename);
     const subject = `[快手日报] ${dateStr} | ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
-    
+
     // Try AgentMail first
     try {
         log('INFO', 'Trying AgentMail...');
         const { AgentMailClient } = await import('agentmail');
         const client = new AgentMailClient({ apiKey: CONFIG.apiKey });
-        
+
         const inboxesResp = await client.inboxes.list();
         const inboxes = inboxesResp.inboxes || inboxesResp.data || [];
         if (!inboxes.length) throw new Error('No inboxes found');
@@ -386,17 +357,17 @@ async function sendEmail(report, adoptionReport, dateStr, filename) {
             text: body,
             attachments: fs.existsSync(attachmentPath) ? [{
                 filename: `${filename}.csv`,
-                content: fs.readFileSync(attachmentPath),
+                content: fs.readFileSync(attachmentPath, 'utf-8'),
                 content_type: 'text/csv'
             }] : []
         });
-        
+
         log('INFO', 'Email sent via AgentMail');
         return true;
     } catch (e) {
         log('WARN', `AgentMail failed: ${e.message}`);
     }
-    
+
     // Fallback to system mail
     try {
         log('INFO', 'Trying system mail command...');
@@ -406,94 +377,46 @@ async function sendEmail(report, adoptionReport, dateStr, filename) {
     } catch (e) {
         log('ERROR', `System mail also failed: ${e.message}`);
     }
-    
+
     return false;
 }
 
-// Main execution
+// ─── Main ───
+
 async function main() {
     const startTime = Date.now();
     const today = new Date();
-    const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
-    
+    const dateStr = today.toISOString().split('T')[0];
+
     log('INFO', '========================================');
     log('INFO', `Daily Kuaishou Report - ${dateStr}`);
     log('INFO', '========================================');
-    
-    let browser, context, page;
-    const results = [];
-    
+
     try {
-        // 1. Init browser
-        ({ browser, context, page } = await initBrowser());
-        
-        // 2. Navigate and check login
-        log('INFO', 'Navigating to Kuaishou...');
-        await page.goto('https://daren.kuaishou.com/distribution-plan-list', { timeout: 30000 });
-        
-        // Wait for page to fully load
-        await page.waitForTimeout(3000);
-        
-        if (page.url().includes('login')) {
-            log('WARN', 'Session expired, login required');
-            if (CONFIG.headless) {
-                log('ERROR', 'Cannot login in headless mode. Please run manually first:');
-                log('ERROR', '  HEADLESS=false node .automation/scripts/daily_kuaishou_report.js');
-                throw new Error('Login required');
-            }
-            log('INFO', 'Waiting for manual login...');
-            await page.waitForURL(u => !u.toString().includes('login'), { timeout: 120000 });
-            ensureParentDirectory(CONFIG.authFile);
-            await context.storageState({ path: CONFIG.authFile });
-            log('INFO', 'Login saved');
-        }
-        
-        // 3. Get all tasks
-        const tasks = await getAllTasks(page);
-        
-        // 4. Get statistics for each task (navigate page-by-page)
-        log('INFO', 'Getting statistics...');
-        let currentPage = -1;
-        for (let i = 0; i < tasks.length; i++) {
-            const task = tasks[i];
-            log('INFO', `[${i + 1}/${tasks.length}] ${task.name} (page ${task.page})`);
+        // 1. Extract cookies
+        const cookies = extractCookieHeader();
+        log('INFO', 'Auth cookies loaded');
 
-            // Navigate to the correct page if needed
-            if (task.page !== currentPage) {
-                log('INFO', `  Navigating to page ${task.page}...`);
-                await navigateToPage(page, task.page);
-                currentPage = task.page;
-            }
+        // 2. Fetch all tasks
+        const tasks = await fetchAllTasks(cookies);
 
-            let retries = 0;
-            let stats;
-            
-            while (retries < CONFIG.maxRetries) {
-                stats = await getTaskStats(page, task);
-                if (!stats.error) break;
-                retries++;
-                log('WARN', `  Retry ${retries}/${CONFIG.maxRetries}: ${stats.error}`);
-                await new Promise(r => setTimeout(r, 1000));
-            }
-            
-            results.push({ ...task, stats });
-            await new Promise(r => setTimeout(r, CONFIG.delayBetweenTasks));
-        }
-        
-        // 5. Generate report
+        // 3. Fetch stats for each task
+        const results = await fetchAllStats(tasks, cookies);
+
+        // 4. Generate report
         log('INFO', 'Generating report...');
         const report = generateReport(results);
-        
+
         log('INFO', 'Summary:');
         log('INFO', `  Total Tasks: ${report.summary.totalTasks}`);
         log('INFO', `  Total Exposure: ${report.summary.totalExposure.toLocaleString()}`);
         log('INFO', `  Total Clicks: ${report.summary.totalClicks.toLocaleString()}`);
         log('INFO', `  Click Rate: ${report.summary.clickRate}`);
-        
-        // 6. Save results
-        const filename = await saveResults(report, dateStr);
 
-        // 7. Build adoption analysis (creator popularity ranking)
+        // 5. Save results
+        const filename = saveResults(report, dateStr);
+
+        // 6. Build adoption analysis
         log('INFO', 'Building adoption analysis...');
         const adoptionReport = buildUsageReport(dateStr, report);
         const usageOutputDir = path.join(RUNTIME_DIR, 'exports', 'metrics', 'daily-usage');
@@ -504,21 +427,21 @@ async function main() {
         );
         log('INFO', `Adoption report: ${adoptionReport.summary.tasksWithData} tasks, ${adoptionReport.summary.totalDaren} daren, ${adoptionReport.summary.totalWorks} works`);
 
-        // 8. Send combined email (raw data + adoption analysis)
+        // 7. Send combined email
         await sendEmail(report, adoptionReport, dateStr, filename);
-        
+
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         log('INFO', `Completed in ${duration}s`);
-        
+
     } catch (error) {
-        log('ERROR', `Fatal error: ${error.message}`);
-        process.exit(1);
-    } finally {
-        if (browser) {
-            await browser.close();
+        if (error.message === 'SESSION_EXPIRED') {
+            log('ERROR', 'Kuaishou session expired!');
+            log('ERROR', 'Re-login: node .automation/scripts/ks-api-poc.js --sniff');
+        } else {
+            log('ERROR', `Fatal error: ${error.message}`);
         }
+        process.exit(1);
     }
 }
 
-// Run
 main();
