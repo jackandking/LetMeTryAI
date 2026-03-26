@@ -1,0 +1,22 @@
+{
+  "id": "military-drones-duel-2026-03-26",
+  "name": "军用无人机对决",
+  "description": "比较远程打击、战术侦察与中空长航时平台的优劣与适用场景",
+  "category": "军事装备",
+  "directory": "military-drones-duel-2026-03-26",
+  "url": "military-drones-duel-2026-03-26",
+  "image": "military-drones-duel-2026-03-26/images/mq-9-reaper.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "无人机",
+    "长航时",
+    "侦察",
+    "打击",
+    "无人机",
+    "长航时",
+    "侦察",
+    "打击"
+  ],
+  "status": "active"
+}
