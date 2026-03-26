@@ -1,0 +1,22 @@
+{
+  "id": "perfume-beginner-recommendations",
+  "name": "香水种草投票",
+  "description": "为香水初学者做选择投票，按香型与场景帮助种草。",
+  "category": "美妆",
+  "directory": "perfume-beginner-recommendations",
+  "url": "perfume-beginner-recommendations",
+  "image": "perfume-beginner-recommendations/images/floral-fresh.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "香型",
+    "入门",
+    "种草",
+    "香水",
+    "香型",
+    "入门",
+    "种草"
+  ],
+  "status": "active"
+}
