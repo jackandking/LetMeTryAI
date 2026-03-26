@@ -1,0 +1,22 @@
+{
+  "id": "sleep-habit-pick",
+  "name": "睡眠习惯对比",
+  "description": "从简单易做的生活习惯中选出你认为最有助于提高睡眠质量的那一项。",
+  "category": "健康",
+  "directory": "sleep-habit-pick",
+  "url": "sleep-habit-pick",
+  "image": "sleep-habit-pick/images/wen-niunai.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "助眠",
+    "生活习惯",
+    "心理健康",
+    "睡眠",
+    "助眠",
+    "生活习惯",
+    "心理健康"
+  ],
+  "status": "active"
+}
