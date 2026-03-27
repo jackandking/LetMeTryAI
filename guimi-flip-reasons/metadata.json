@@ -1,0 +1,24 @@
+{
+  "id": "guimi-flip-reasons",
+  "name": "闺蜜话题投票",
+  "description": "列举常见让闺蜜关系破裂的行为，吸引用户分享经历与投票。",
+  "category": "情感",
+  "directory": "guimi-flip-reasons",
+  "url": "guimi-flip-reasons",
+  "image": "guimi-flip-reasons/images/gossip-behind-back.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "闺蜜",
+    "友谊",
+    "信任",
+    "背叛",
+    "情感共鸣",
+    "闺蜜",
+    "友谊",
+    "信任",
+    "背叛",
+    "情感共鸣"
+  ],
+  "status": "active"
+}
