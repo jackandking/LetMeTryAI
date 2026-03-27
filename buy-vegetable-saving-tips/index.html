@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>买菜省钱，哪招最实用？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">买菜省钱，哪招最实用？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">亲，你最支持哪个选项：买菜省钱小妙招？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="seasonal-produce">
+                            <div class="card-image">
+                                <img src="images/seasonal-produce.svg" alt="当季蔬菜摊位" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">买当季食材更便宜</h3>
+                                <p class="option-desc">选当季菜、价格更实惠、更新鲜</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="off-peak-market">
+                            <div class="card-image">
+                                <img src="images/off-peak-market.svg" alt="早晨菜市场场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">错峰去菜市场避高峰</h3>
+                                <p class="option-desc">非高峰买菜人少价更好谈</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="group-buying">
+                            <div class="card-image">
+                                <img src="images/group-buying.svg" alt="邻里拼单取货" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">邻里团购或拼单</h3>
+                                <p class="option-desc">和邻居拼单更划算又新鲜</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="shopping-list">
+                            <div class="card-image">
+                                <img src="images/shopping-list.svg" alt="手写买菜清单" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">列清单只买所需</h3>
+                                <p class="option-desc">事先列清单，避免冲动购买浪费</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
