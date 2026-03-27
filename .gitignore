@@ -178,3 +178,6 @@ kuaishou_all_tasks_dedup.json
 # Manual topics - runtime data, not version controlled
 .automation/.local/state/topics/*-manual-topics.txt
 .automation/.local/tmp/topics-cache/
+.venv/
+ref/snowpark_config.py
+explorations/

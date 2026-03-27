@@ -123,55 +123,84 @@ export class KuaishouLogin {
     }
 
     /**
-     * Check if currently logged in
+     * Check if currently logged in by navigating to the target URL
      */
     async isLoggedIn() {
         try {
             log('🔍 Checking login status...', 'cyan');
             await this.page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-            
-            // Wait a moment for page to stabilize
-            await this.page.waitForTimeout(2000);
-            
-            // Check for login indicators
+            await this.page.waitForTimeout(3000);
+            return this.checkPageLoggedIn();
+        } catch (error) {
+            log(`⚠️ Error checking login status: ${error.message}`, 'yellow');
+            return false;
+        }
+    }
+
+    /**
+     * Check if the current page shows a logged-in state (no navigation)
+     */
+    async checkPageLoggedIn() {
+        try {
+            // If URL is still on login/passport page, not logged in
+            const currentUrl = this.page.url();
+            if (currentUrl.includes('passport.kuaishou.com') || currentUrl.includes('/login')) {
+                log('⚠️ Still on login page', 'yellow');
+                return false;
+            }
+
+            // If URL reached the target page (distribution-plan-list), we're logged in
+            if (currentUrl.includes('distribution-plan-list') || currentUrl.includes('daren.kuaishou.com')) {
+                // Double check: look for login form indicators (SMS/password inputs)
+                const hasLoginForm = await this.page.locator('input[placeholder*="密码"], input[placeholder*="验证码"]').first()
+                    .isVisible({ timeout: 1000 }).catch(() => false);
+                if (hasLoginForm) {
+                    log('⚠️ Login form still visible on page', 'yellow');
+                    return false;
+                }
+                log('✅ Reached target page - logged in', 'green');
+                return true;
+            }
+
+            // Check for common logged-in indicators
             const loginIndicators = [
                 '.distribution-plan-list-container',
                 '.create-plan-btn',
                 '.user-avatar',
                 '.ks-dropdown-menu',
                 '[class*="user-info"]',
-                '[class*="profile"]'
+                '[class*="sidebar"]',
+                '[class*="nav-menu"]'
             ];
-            
+
             for (const selector of loginIndicators) {
                 try {
                     const element = this.page.locator(selector).first();
-                    if (await element.isVisible({ timeout: 2000 })) {
+                    if (await element.isVisible({ timeout: 1000 })) {
                         log(`✅ Found login indicator: ${selector}`, 'green');
                         return true;
                     }
                 } catch (e) {
-                    // Continue checking other indicators
+                    // Continue
                 }
             }
-            
-            // Check for login-related text
+
+            // Check for login-form-specific text (not just any "登录")
             const pageText = await this.page.content();
-            if (pageText.includes('登录') || pageText.includes('手机号登录') || pageText.includes('密码登录')) {
+            if (pageText.includes('手机号登录') || pageText.includes('密码登录') || pageText.includes('验证码登录')) {
                 log('⚠️ Login page detected', 'yellow');
                 return false;
             }
-            
-            // Check if URL changed to login page
-            const currentUrl = this.page.url();
-            if (currentUrl.includes('login') || currentUrl.includes('passport')) {
-                log('⚠️ Redirected to login page', 'yellow');
-                return false;
+
+            // If we're on the target domain and no login form, assume logged in
+            if (currentUrl.includes('kuaishou.com') && !currentUrl.includes('passport')) {
+                log('✅ On Kuaishou domain without login redirect', 'green');
+                return true;
             }
-            
+
             return false;
         } catch (error) {
-            log(`⚠️ Error checking login status: ${error.message}`, 'yellow');
+            log(`⚠️ Error checking page state: ${error.message}`, 'yellow');
             return false;
         }
     }
@@ -286,7 +315,7 @@ export class KuaishouLogin {
             const submitBtn = await this.findLoginButton();
             
             if (submitBtn) {
-                await submitBtn.click();
+                await submitBtn.click({ force: true });
                 log('✅ Clicked login button automatically', 'green');
             } else {
                 log('\n⚠️ Could not find login button automatically', 'yellow');
@@ -300,7 +329,7 @@ export class KuaishouLogin {
             // Wait for login to complete
             log('\n⏳ Waiting for login to complete...', 'cyan');
             await this.page.waitForTimeout(5000);
-            
+
             // Check for slider captcha
             const hasSlider = await this.checkForSliderCaptcha();
             if (hasSlider) {
@@ -308,23 +337,29 @@ export class KuaishouLogin {
                 log('📝 Please complete the captcha manually in the browser', 'yellow');
                 await prompt('\n⏸️ Press Enter after completing captcha...');
             }
-            
-            // Wait for login success
+
+            // First check current page without re-navigating
+            if (await this.checkPageLoggedIn()) {
+                log('\n✅ Login successful!', 'green');
+                await this.saveSession();
+                return true;
+            }
+
+            // Wait and check again with navigation
             log('⏳ Waiting for login success...', 'cyan');
-            
+
             let attempts = 0;
-            const maxAttempts = 12; // 60 seconds total
-            
+            const maxAttempts = 6; // 30 seconds total
+
             while (attempts < maxAttempts) {
+                await this.page.waitForTimeout(5000);
+                attempts++;
+                log(`  Attempt ${attempts}/${maxAttempts}...`, 'cyan');
                 if (await this.isLoggedIn()) {
                     log('\n✅ Login successful!', 'green');
                     await this.saveSession();
                     return true;
                 }
-                
-                await this.page.waitForTimeout(5000);
-                attempts++;
-                log(`  Attempt ${attempts}/${maxAttempts}...`, 'cyan');
             }
             
             throw new Error('Login timeout - please check if SMS code was correct');
@@ -336,106 +371,84 @@ export class KuaishouLogin {
     }
 
     /**
+     * Check if we're on the SMS login form (code input visible)
+     */
+    async isOnSmsLoginForm() {
+        try {
+            const codeInput = this.page.locator('input[placeholder*="验证码"]').first();
+            return await codeInput.isVisible({ timeout: 1000 });
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
      * Switch to phone/SMS login method if not already on it
      */
     async switchToPhoneLogin() {
         log('\n📱 Checking current login method...', 'cyan');
-        
+
         // Wait for page to fully load
         await this.page.waitForTimeout(2000);
-        
-        // First, check if we can find the "获取验证码" button - this is the definitive SMS login indicator
+
+        // Check if already on SMS login form
+        if (await this.isOnSmsLoginForm()) {
+            log('✅ Already on SMS login page', 'green');
+            return;
+        }
+
+        // Click "验证码登录" tab - use force:true for Svelte components
+        log('🔍 Clicking "验证码登录" tab...', 'cyan');
+
+        // Strategy 1: Svelte tab li with force click
         try {
-            const smsBtn = this.page.locator('button:has-text("获取验证码")').first();
-            if (await smsBtn.isVisible({ timeout: 2000 })) {
-                log('✅ Already on SMS login page (found 获取验证码 button)', 'green');
+            const smsTab = this.page.locator('li:has(span:has-text("验证码登录"))').first();
+            await smsTab.click({ force: true, timeout: 3000 });
+            log('✅ Clicked "验证码登录" tab', 'green');
+            await this.page.waitForTimeout(2000);
+            if (await this.isOnSmsLoginForm()) {
+                log('✅ Successfully switched to SMS login', 'green');
                 return;
             }
         } catch (e) {
-            // Not on SMS login yet
+            log(`  Strategy 1 (li force click) failed: ${e.message}`, 'blue');
         }
-        
-        // Try to find and click "验证码登录" tab
-        log('🔍 Looking for "验证码登录" tab...', 'cyan');
-        
-        // Strategy 1: Find the li element containing "验证码登录" span
-        try {
-            const smsTab = this.page.locator('li:has(span:has-text("验证码登录"))').first();
-            if (await smsTab.isVisible({ timeout: 3000 })) {
-                await smsTab.click();
-                log('✅ Clicked "验证码登录" tab (li element)', 'green');
-                await this.page.waitForTimeout(3000);
-                
-                // Verify we switched
-                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
-                if (hasSmsBtn) {
-                    log('✅ Successfully switched to SMS login', 'green');
-                    return;
-                }
-            }
-        } catch (e) {
-            log(`  Strategy 1 failed: ${e.message}`, 'blue');
-        }
-        
-        // Strategy 2: Click the span directly
+
+        // Strategy 2: Click span directly with force
         try {
             const smsSpan = this.page.locator('span:has-text("验证码登录")').first();
-            if (await smsSpan.isVisible({ timeout: 3000 })) {
-                await smsSpan.click();
-                log('✅ Clicked "验证码登录" span', 'green');
-                await this.page.waitForTimeout(3000);
-                
-                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
-                if (hasSmsBtn) {
-                    log('✅ Successfully switched to SMS login', 'green');
-                    return;
-                }
+            await smsSpan.click({ force: true, timeout: 3000 });
+            log('✅ Clicked "验证码登录" span', 'green');
+            await this.page.waitForTimeout(2000);
+            if (await this.isOnSmsLoginForm()) {
+                log('✅ Successfully switched to SMS login', 'green');
+                return;
             }
         } catch (e) {
-            log(`  Strategy 2 failed: ${e.message}`, 'blue');
+            log(`  Strategy 2 (span force click) failed: ${e.message}`, 'blue');
         }
-        
-        // Strategy 3: Use JavaScript to find and click
-        log('🔍 Trying JavaScript click...', 'cyan');
+
+        // Strategy 3: JavaScript dispatchEvent (proper bubbling for Svelte)
+        log('🔍 Trying dispatchEvent...', 'cyan');
         try {
-            const result = await this.page.evaluate(() => {
-                // Find the span with exact text "验证码登录"
-                const spans = document.querySelectorAll('span');
-                for (const span of spans) {
-                    if (span.textContent?.trim() === '验证码登录') {
-                        // Click the parent li or the span itself
-                        const clickTarget = span.closest('li') || span;
-                        clickTarget.click();
-                        return `Clicked: ${clickTarget.tagName} with span text "验证码登录"`;
+            await this.page.evaluate(() => {
+                const lis = document.querySelectorAll('li');
+                for (const li of lis) {
+                    if (li.textContent?.trim() === '验证码登录') {
+                        li.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                        return;
                     }
                 }
-                
-                // Fallback: find any element containing the text
-                const allElements = document.querySelectorAll('li, div, button, a, span');
-                for (const el of allElements) {
-                    if (el.textContent?.trim() === '验证码登录') {
-                        el.click();
-                        return `Clicked: ${el.tagName} with text "验证码登录"`;
-                    }
-                }
-                
-                return '验证码登录 tab not found';
             });
-            log(`  ${result}`, 'blue');
-            
-            if (result.includes('Clicked')) {
-                await this.page.waitForTimeout(3000);
-                
-                const hasSmsBtn = await this.page.locator('button:has-text("获取验证码")').isVisible().catch(() => false);
-                if (hasSmsBtn) {
-                    log('✅ Successfully switched to SMS login', 'green');
-                    return;
-                }
+            await this.page.waitForTimeout(2000);
+            if (await this.isOnSmsLoginForm()) {
+                log('✅ Successfully switched to SMS login', 'green');
+                return;
             }
         } catch (e) {
-            log(`  Strategy 3 failed: ${e.message}`, 'blue');
+            log(`  Strategy 3 (dispatchEvent) failed: ${e.message}`, 'blue');
         }
-        
+
         log('⚠️ Could not auto-switch to SMS login', 'yellow');
         log('📝 Please manually click "验证码登录" tab in the browser', 'yellow');
         await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
@@ -447,15 +460,15 @@ export class KuaishouLogin {
     async findPhoneInput() {
         const phoneInputSelectors = [
             'input[placeholder*="手机号"]',
+            'input[placeholder*="手机"]',
+            'input[placeholder*="电话"]',
             'input[type="tel"]',
             'input[name*="phone"]',
             'input[name*="mobile"]',
             'input[class*="phone"]',
-            'input[maxlength="11"]',
-            'input[placeholder*="电话"]',
-            'input[placeholder*="手机"]'
+            'input[maxlength="11"]'
         ];
-        
+
         for (const selector of phoneInputSelectors) {
             try {
                 const input = this.page.locator(selector).first();
@@ -467,24 +480,20 @@ export class KuaishouLogin {
                 // Try next
             }
         }
-        
-        // Try to find by input type
+
+        // Fallback: first visible text input on the page
         try {
-            const inputs = await this.page.locator('input').all();
+            const inputs = await this.page.locator('input[type="text"]').all();
             for (const input of inputs) {
-                const type = await input.getAttribute('type').catch(() => '');
-                const placeholder = await input.getAttribute('placeholder').catch(() => '');
-                if (type === 'tel' || type === 'number' || placeholder.includes('手机') || placeholder.includes('电话')) {
-                    if (await input.isVisible()) {
-                        log('  Found phone input by type/placeholder', 'blue');
-                        return input;
-                    }
+                if (await input.isVisible()) {
+                    log('  Found phone input (first visible text input)', 'blue');
+                    return input;
                 }
             }
         } catch (e) {
             // Continue
         }
-        
+
         return null;
     }
 
@@ -492,20 +501,24 @@ export class KuaishouLogin {
      * Click get SMS code button with multiple strategies
      */
     async clickGetSMSButton() {
-        // Strategy 1: Try text-based selectors (span, div, button, a)
-        const smsTextSelectors = [
+        // Strategy 1: Any visible element with exact text "获取验证码"
+        const textSelectors = [
             'text="获取验证码"',
             'span:has-text("获取验证码")',
-            'div:has-text("获取验证码")',
             'a:has-text("获取验证码")',
-            'button:has-text("获取验证码")'
+            'div:has-text("获取验证码")',
+            'button:has-text("获取验证码")',
+            '[class*="code-btn"]',
+            '[class*="verify-btn"]',
+            '[class*="send-code"]',
+            '[class*="get-code"]'
         ];
-        
-        for (const selector of smsTextSelectors) {
+
+        for (const selector of textSelectors) {
             try {
                 const btn = this.page.locator(selector).first();
                 if (await btn.isVisible({ timeout: 2000 })) {
-                    await btn.click();
+                    await btn.click({ force: true });
                     log(`  Clicked SMS button: ${selector}`, 'blue');
                     return btn;
                 }
@@ -513,65 +526,26 @@ export class KuaishouLogin {
                 // Try next selector
             }
         }
-        
-        // Strategy 2: Try class-based selectors
-        const classSelectors = [
-            '[class*="code-btn"]',
-            '[class*="verify-btn"]',
-            '[class*="send-code"]',
-            '[class*="get-code"]'
-        ];
-        
-        for (const selector of classSelectors) {
-            try {
-                const btn = this.page.locator(selector).first();
-                if (await btn.isVisible({ timeout: 2000 })) {
-                    const text = await btn.textContent().catch(() => '');
-                    if (text.includes('获取') || text.includes('验证码')) {
-                        await btn.click();
-                        log(`  Clicked SMS button by class: ${selector}`, 'blue');
-                        return btn;
-                    }
-                }
-            } catch (e) {
-                // Try next
-            }
-        }
-        
-        // Strategy 3: Use JavaScript to find and click by exact text
-        log('  Trying JavaScript click...', 'blue');
+
+        // Strategy 2: JavaScript find and click with dispatchEvent
+        log('  Trying JavaScript click for 获取验证码...', 'blue');
         try {
             const clicked = await this.page.evaluate(() => {
-                // Find element with exact text "获取验证码"
-                const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
-                let node;
-                while (node = walker.nextNode()) {
-                    if (node.textContent?.trim() === '获取验证码' && node.offsetParent !== null) {
-                        node.click();
-                        return `Clicked: ${node.tagName} with exact text "获取验证码"`;
-                    }
-                }
-                
-                // Fallback: find any clickable element containing the text
-                const elements = document.querySelectorAll('span, div, a, button');
-                for (const el of elements) {
+                const all = document.querySelectorAll('span, a, div, button');
+                for (const el of all) {
                     if (el.textContent?.trim() === '获取验证码' && el.offsetParent !== null) {
-                        el.click();
+                        el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
                         return `Clicked: ${el.tagName}`;
                     }
                 }
-                
-                return '获取验证码 button not found';
+                return 'not found';
             });
-            
             log(`  ${clicked}`, clicked.includes('Clicked') ? 'blue' : 'yellow');
-            if (clicked.includes('Clicked')) {
-                return true;
-            }
+            if (clicked.includes('Clicked')) return true;
         } catch (e) {
-            log(`  Error in evaluate: ${e.message}`, 'yellow');
+            log(`  JS click failed: ${e.message}`, 'yellow');
         }
-        
+
         return null;
     }
 
@@ -581,17 +555,16 @@ export class KuaishouLogin {
     async findCodeInput() {
         const codeInputSelectors = [
             'input[placeholder*="验证码"]',
-            'input[type="number"][maxlength="6"]',
+            'input[placeholder*="短信"]',
             'input[name*="code"]',
             'input[name*="verify"]',
             'input[name*="captcha"]',
             'input[class*="code"]',
             'input[class*="verify"]',
-            'input[placeholder*="短信"]',
             'input[maxlength="4"]',
             'input[maxlength="6"]'
         ];
-        
+
         for (const selector of codeInputSelectors) {
             try {
                 const input = this.page.locator(selector).first();
@@ -603,31 +576,22 @@ export class KuaishouLogin {
                 // Try next
             }
         }
-        
-        // Try to find second input (usually phone is first, code is second)
+
+        // Fallback: find second visible text input (first is phone)
         try {
-            const inputs = await this.page.locator('input').all();
-            let phoneFound = false;
+            const inputs = await this.page.locator('input[type="text"]').all();
+            const visibleInputs = [];
             for (const input of inputs) {
-                const type = await input.getAttribute('type').catch(() => '');
-                const placeholder = await input.getAttribute('placeholder').catch(() => '');
-                
-                if (!phoneFound) {
-                    if (type === 'tel' || placeholder.includes('手机')) {
-                        phoneFound = true;
-                        continue;
-                    }
-                } else {
-                    if (await input.isVisible()) {
-                        log('  Found code input (second input)', 'blue');
-                        return input;
-                    }
-                }
+                if (await input.isVisible()) visibleInputs.push(input);
+            }
+            if (visibleInputs.length >= 2) {
+                log('  Found code input (second visible text input)', 'blue');
+                return visibleInputs[1];
             }
         } catch (e) {
             // Continue
         }
-        
+
         return null;
     }
 
