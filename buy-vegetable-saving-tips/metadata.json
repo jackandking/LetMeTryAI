@@ -1,0 +1,24 @@
+{
+  "id": "buy-vegetable-saving-tips",
+  "name": "买菜省钱投票",
+  "description": "盘点社区里大家常用的买菜省钱招式，投票选出最靠谱的一招。",
+  "category": "实用",
+  "directory": "buy-vegetable-saving-tips",
+  "url": "buy-vegetable-saving-tips",
+  "image": "buy-vegetable-saving-tips/images/seasonal-produce.svg",
+  "tags": [
+    "投票",
+    "实用",
+    "买菜",
+    "省钱",
+    "社区",
+    "当季",
+    "清单",
+    "买菜",
+    "省钱",
+    "社区",
+    "当季",
+    "清单"
+  ],
+  "status": "active"
+}
