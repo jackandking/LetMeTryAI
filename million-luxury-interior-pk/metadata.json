@@ -1,0 +1,24 @@
+{
+  "id": "million-luxury-interior-pk",
+  "name": "豪车内饰PK",
+  "description": "对比数款百万级豪车内饰质感与科技配备，迎合机械美感与收藏兴趣人群。",
+  "category": "汽车机械",
+  "directory": "million-luxury-interior-pk",
+  "url": "million-luxury-interior-pk",
+  "image": "million-luxury-interior-pk/images/mercedes-s-class.svg",
+  "tags": [
+    "投票",
+    "汽车机械",
+    "内饰",
+    "豪车",
+    "质感",
+    "科技配置",
+    "座舱",
+    "内饰",
+    "豪车",
+    "质感",
+    "科技配置",
+    "座舱"
+  ],
+  "status": "active"
+}
