@@ -1,0 +1,22 @@
+{
+  "id": "sleep-habit-picks",
+  "name": "睡前习惯投票",
+  "description": "温和的睡前习惯选项投票，供中老年人分享经验与偏好。",
+  "category": "健康",
+  "directory": "sleep-habit-picks",
+  "url": "sleep-habit-picks",
+  "image": "sleep-habit-picks/images/warm-milk.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "睡前习惯",
+    "助眠",
+    "心理健康",
+    "睡眠",
+    "睡前习惯",
+    "助眠",
+    "心理健康"
+  ],
+  "status": "active"
+}
