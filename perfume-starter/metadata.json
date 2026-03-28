@@ -1,0 +1,21 @@
+{
+  "id": "perfume-starter",
+  "name": "香水气质投票",
+  "description": "按香调帮你找到第一瓶香水的气质定位，便于后续种草内容延伸。",
+  "category": "美妆",
+  "directory": "perfume-starter",
+  "url": "perfume-starter",
+  "image": "perfume-starter/images/floral-sweet.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "香调",
+    "种草",
+    "香水",
+    "香调",
+    "美妆",
+    "种草"
+  ],
+  "status": "active"
+}
