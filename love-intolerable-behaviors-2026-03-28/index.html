@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>恋爱中最不能忍的行为，你最在意哪一点？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">恋爱中最不能忍的行为，你最在意哪一点？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你会把这一票投给谁：恋爱中最不能忍的行为？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="cold-violence">
+                            <div class="card-image">
+                                <img src="images/cold-violence.svg" alt="冷暴力示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">经常冷暴力（不理不回应）</h3>
+                                <p class="option-desc">持续沉默或冷处理，让人崩溃的冷暴力</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="hide-major-facts">
+                            <div class="card-image">
+                                <img src="images/hide-major-facts.svg" alt="隐瞒与谎言图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">隐瞒重大事实/说谎</h3>
+                                <p class="option-desc">重大的隐瞒或谎言，信任无法重建</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="disrespect-family">
+                            <div class="card-image">
+                                <img src="images/disrespect-family.svg" alt="不尊重示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不尊重家人和朋友</h3>
+                                <p class="option-desc">当着你或他人面不尊重家人或朋友的行为</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="infidelity">
+                            <div class="card-image">
+                                <img src="images/infidelity.svg" alt="不忠示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">出轨/明显花心</h3>
+                                <p class="option-desc">感情不忠或明显对他人暧昧，难以接受</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
