@@ -1,0 +1,24 @@
+{
+  "id": "flagship-phone-photo-pk",
+  "name": "旗舰拍照PK",
+  "description": "选出当下主流旗舰手机中拍照表现最吸引你的型号。",
+  "category": "科技数码",
+  "directory": "flagship-phone-photo-pk",
+  "url": "flagship-phone-photo-pk",
+  "image": "flagship-phone-photo-pk/images/iphone-15-pro.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "旗舰手机",
+    "拍照",
+    "样张PK",
+    "夜景",
+    "像素与算法",
+    "旗舰手机",
+    "拍照",
+    "样张pk",
+    "夜景",
+    "像素与算法"
+  ],
+  "status": "active"
+}
