@@ -1,0 +1,22 @@
+{
+  "id": "modern-fighter-faceoff",
+  "name": "战机对决",
+  "description": "对比F-22、Su-57、J-20、Rafale的隐身与机动表现，适合硬核装备粉投票。",
+  "category": "军事装备",
+  "directory": "modern-fighter-faceoff",
+  "url": "modern-fighter-faceoff",
+  "image": "modern-fighter-faceoff/images/f-22-raptor.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "战机",
+    "隐身",
+    "机动性",
+    "对比",
+    "战机",
+    "隐身",
+    "机动性",
+    "对比"
+  ],
+  "status": "active"
+}
