@@ -1,0 +1,21 @@
+{
+  "id": "classic-old-songs-pick",
+  "name": "老歌投票",
+  "description": "回忆与投票你心中的经典老歌，激发分享与评论。",
+  "category": "怀旧",
+  "directory": "classic-old-songs-pick",
+  "url": "classic-old-songs-pick",
+  "image": "classic-old-songs-pick/images/yue-liang-dai-biao-wo-de-xin.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "老歌",
+    "经典",
+    "回忆",
+    "老歌",
+    "怀旧",
+    "经典",
+    "回忆"
+  ],
+  "status": "active"
+}
