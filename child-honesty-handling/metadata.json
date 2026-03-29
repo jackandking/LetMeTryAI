@@ -1,0 +1,22 @@
+{
+  "id": "child-honesty-handling",
+  "name": "孩子说谎处理投票",
+  "description": "调查家长面对孩子说谎时更偏向哪种处理方式，帮家庭形成可执行策略。",
+  "category": "教育",
+  "directory": "child-honesty-handling",
+  "url": "child-honesty-handling",
+  "image": "child-honesty-handling/images/patient-communication.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "亲子沟通",
+    "诚信教育",
+    "行为引导",
+    "家庭决策",
+    "亲子沟通",
+    "诚信教育",
+    "行为引导",
+    "家庭决策"
+  ],
+  "status": "active"
+}
