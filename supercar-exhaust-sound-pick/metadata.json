@@ -1,0 +1,24 @@
+{
+  "id": "supercar-exhaust-sound-pick",
+  "name": "声浪党",
+  "description": "不同排气声代表不同风格，你被哪种声浪打动？",
+  "category": "汽车机械",
+  "directory": "supercar-exhaust-sound-pick",
+  "url": "supercar-exhaust-sound-pick",
+  "image": "supercar-exhaust-sound-pick/images/v8-na.svg",
+  "tags": [
+    "投票",
+    "汽车机械",
+    "跑车",
+    "声浪",
+    "排气",
+    "V8",
+    "机械美感",
+    "跑车",
+    "声浪",
+    "排气",
+    "v8",
+    "机械美感"
+  ],
+  "status": "active"
+}

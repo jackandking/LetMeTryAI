@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>跑车声浪PK：你更喜欢哪种？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">跑车声浪PK：你更喜欢哪种？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">以下哪种跑车排气声最能燃起你的热血？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="v8-na">
+                            <div class="card-image">
+                                <img src="images/v8-na.svg" alt="V8发动机排气口特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">V8 自然吸气</h3>
+                                <p class="option-desc">浑厚低沉，油门一踩热血沸腾</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="v10-roar">
+                            <div class="card-image">
+                                <img src="images/v10-roar.svg" alt="V10发动机侧视" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">V10 咆哮</h3>
+                                <p class="option-desc">高频尖锐，竞技气息十足</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="turbo-i6">
+                            <div class="card-image">
+                                <img src="images/turbo-i6.svg" alt="涡轮增压器与排气管" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">涡轮增压直六</h3>
+                                <p class="option-desc">涡轮爆发，声浪带冲击力</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="electric-sound">
+                            <div class="card-image">
+                                <img src="images/electric-sound.svg" alt="电动车外观与音响拟声" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">电动模拟声</h3>
+                                <p class="option-desc">科技化合成声，未来感十足</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
