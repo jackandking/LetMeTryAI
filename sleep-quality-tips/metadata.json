@@ -1,0 +1,22 @@
+{
+  "id": "sleep-quality-tips",
+  "name": "睡眠小贴士",
+  "description": "面向中老年受众的温和睡眠改善方法投票，便于日常实践与分享。",
+  "category": "健康",
+  "directory": "sleep-quality-tips",
+  "url": "sleep-quality-tips",
+  "image": "sleep-quality-tips/images/consistent-schedule.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "晚间习惯",
+    "睡眠质量",
+    "实用建议",
+    "睡眠",
+    "晚间习惯",
+    "睡眠质量",
+    "实用建议"
+  ],
+  "status": "active"
+}

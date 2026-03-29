@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>睡得更好：哪种方法对你最有效？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">睡得更好：哪种方法对你最有效？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">亲，你最支持哪种改善睡眠的方法？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="consistent-schedule">
+                            <div class="card-image">
+                                <img src="images/consistent-schedule.svg" alt="闹钟与床的示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">固定作息</h3>
+                                <p class="option-desc">每天同一时间睡觉与起床，建立规律生物钟</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="pre-sleep-relaxation">
+                            <div class="card-image">
+                                <img src="images/pre-sleep-relaxation.svg" alt="泡脚与放松的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">睡前放松（泡脚/听轻音乐）</h3>
+                                <p class="option-desc">睡前做些放松活动，缓解一天的紧张与疲劳</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="reduce-screen-time">
+                            <div class="card-image">
+                                <img src="images/reduce-screen-time.svg" alt="手机与床的对比图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">减少睡前屏幕时间</h3>
+                                <p class="option-desc">睡前一小时尽量不看手机或看电视，保护入睡节律</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="adjust-bedding">
+                            <div class="card-image">
+                                <img src="images/adjust-bedding.svg" alt="枕头与床垫的图片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">调整卧具（枕头/床垫）</h3>
+                                <p class="option-desc">根据舒适度选择合适的枕头或床垫，提升睡眠体验</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
