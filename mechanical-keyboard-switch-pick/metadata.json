@@ -1,0 +1,24 @@
+{
+  "id": "mechanical-keyboard-switch-pick",
+  "name": "轴体手感PK",
+  "description": "按手感和反馈选择你心目中最顺手的机械轴体。",
+  "category": "科技数码",
+  "directory": "mechanical-keyboard-switch-pick",
+  "url": "mechanical-keyboard-switch-pick",
+  "image": "mechanical-keyboard-switch-pick/images/red-switch.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "机械键盘",
+    "轴体",
+    "手感",
+    "游戏",
+    "打字",
+    "机械键盘",
+    "轴体",
+    "手感",
+    "游戏",
+    "打字"
+  ],
+  "status": "active"
+}
