@@ -1,0 +1,22 @@
+{
+  "id": "kid-tantrum-response",
+  "name": "亲子沟通投票",
+  "description": "投票选出家长在孩子发脾气时最常用且可执行的处理方法。",
+  "category": "家庭",
+  "directory": "kid-tantrum-response",
+  "url": "kid-tantrum-response",
+  "image": "kid-tantrum-response/images/calm-listen.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "情绪管理",
+    "亲子沟通",
+    "青春期",
+    "回应方式",
+    "情绪管理",
+    "亲子沟通",
+    "青春期",
+    "回应方式"
+  ],
+  "status": "active"
+}
