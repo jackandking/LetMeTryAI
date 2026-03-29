@@ -1,0 +1,22 @@
+{
+  "id": "actress-transformation-poll",
+  "name": "演员转型榜",
+  "description": "投票选出现阶段转型最成功、作品表现最令人印象深刻的女演员。",
+  "category": "明星",
+  "directory": "actress-transformation-poll",
+  "url": "actress-transformation-poll",
+  "image": "actress-transformation-poll/images/zhou-xun.svg",
+  "tags": [
+    "投票",
+    "明星",
+    "转型",
+    "演员",
+    "影视",
+    "明星话题",
+    "转型",
+    "演员",
+    "影视",
+    "明星话题"
+  ],
+  "status": "active"
+}
