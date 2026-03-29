@@ -1,0 +1,24 @@
+{
+  "id": "community-activities-choice",
+  "name": "社区活动投票",
+  "description": "选择你最期待的社区活动类型，便于邻里互动与身心愉悦。",
+  "category": "生活",
+  "directory": "community-activities-choice",
+  "url": "community-activities-choice",
+  "image": "community-activities-choice/images/interest-groups-handicraft.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "短途旅行",
+    "兴趣小组",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "短途旅行",
+    "兴趣小组"
+  ],
+  "status": "active"
+}
