@@ -1,0 +1,24 @@
+{
+  "id": "parent-teen-chat",
+  "name": "青春期沟通小抉择",
+  "description": "家长视角下，选择最适合与青春期孩子交流的方式。",
+  "category": "教育",
+  "directory": "parent-teen-chat",
+  "url": "parent-teen-chat",
+  "image": "parent-teen-chat/images/invite-conversation.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "青春期",
+    "沟通",
+    "亲子",
+    "倾听",
+    "家庭",
+    "青春期",
+    "沟通",
+    "亲子",
+    "倾听",
+    "家庭"
+  ],
+  "status": "active"
+}
