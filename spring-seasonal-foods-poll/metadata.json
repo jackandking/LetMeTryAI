@@ -1,0 +1,22 @@
+{
+  "id": "spring-seasonal-foods-poll",
+  "name": "春季应季菜投票",
+  "description": "列出春季常见的应季食物类别，看看大家餐桌上最常吃哪类。",
+  "category": "健康",
+  "directory": "spring-seasonal-foods-poll",
+  "url": "spring-seasonal-foods-poll",
+  "image": "spring-seasonal-foods-poll/images/seasonal-vegetables.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "季节饮食",
+    "春季",
+    "应季蔬果",
+    "健康菜谱",
+    "季节饮食",
+    "春季",
+    "应季蔬果",
+    "健康菜谱"
+  ],
+  "status": "active"
+}
