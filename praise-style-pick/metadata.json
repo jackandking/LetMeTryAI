@@ -1,0 +1,22 @@
+{
+  "id": "praise-style-pick",
+  "name": "表扬方式投票",
+  "description": "比较不同表扬方式，帮助家长选择更能促进孩子成长的方法。",
+  "category": "教育",
+  "directory": "praise-style-pick",
+  "url": "praise-style-pick",
+  "image": "praise-style-pick/images/praise-specific-behavior.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "表扬",
+    "亲子沟通",
+    "正向教育",
+    "鼓励方式",
+    "表扬",
+    "亲子沟通",
+    "正向教育",
+    "鼓励方式"
+  ],
+  "status": "active"
+}
