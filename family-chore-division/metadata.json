@@ -1,0 +1,22 @@
+{
+  "id": "family-chore-division",
+  "name": "家务分工投票",
+  "description": "家务分配方式对亲子合作与责任感培养的影响，投票帮助家长快速获得他人做法参考。",
+  "category": "家庭",
+  "directory": "family-chore-division",
+  "url": "family-chore-division",
+  "image": "family-chore-division/images/assign-by-age.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "家务",
+    "分工",
+    "亲子沟通",
+    "责任分配",
+    "家务",
+    "分工",
+    "亲子沟通",
+    "责任分配"
+  ],
+  "status": "active"
+}
