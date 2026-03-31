@@ -1,0 +1,22 @@
+{
+  "id": "sleep-habit-choices",
+  "name": "睡前习惯投票",
+  "description": "比较几种温和的睡前习惯，帮助提升睡眠质量，适合中老年人参考。",
+  "category": "健康",
+  "directory": "sleep-habit-choices",
+  "url": "sleep-habit-choices",
+  "image": "sleep-habit-choices/images/no-phone-30-min.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "晚间习惯",
+    "情绪放松",
+    "助眠方法",
+    "睡眠",
+    "晚间习惯",
+    "情绪放松",
+    "助眠方法"
+  ],
+  "status": "active"
+}
