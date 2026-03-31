@@ -9,11 +9,19 @@ const questionConfig = {
     "options": [
         {
             "value": "1",
-            "label": "选项1"
+            "label": "《红楼梦》"
         },
         {
             "value": "2",
-            "label": "选项2"
+            "label": "《西游记》"
+        },
+        {
+            "value": "3",
+            "label": "《水浒传》"
+        },
+        {
+            "value": "4",
+            "label": "《三国演义》"
         }
     ],
     "storageKey": "nanrenbao_1774976409716_v1.data"
