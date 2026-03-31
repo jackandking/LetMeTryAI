@@ -24,7 +24,7 @@ const questionConfig = {
             "label": "《三国演义》"
         }
     ],
-    "storageKey": "nanrenbao_1774976409716_v1.data"
+    "storageKey": "nanrenbao_1774976409716_v2.data"
 };
 
 let currentQuestion = 1;
