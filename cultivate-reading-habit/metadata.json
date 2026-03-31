@@ -1,0 +1,22 @@
+{
+  "id": "cultivate-reading-habit",
+  "name": "阅读习惯养成",
+  "description": "比较几种可执行的亲子阅读方法，帮助家长选择入手方案。",
+  "category": "教育",
+  "directory": "cultivate-reading-habit",
+  "url": "cultivate-reading-habit",
+  "image": "cultivate-reading-habit/images/daily-parent-child-reading.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读",
+    "亲子共读",
+    "习惯养成",
+    "时间管理",
+    "阅读",
+    "亲子共读",
+    "习惯养成",
+    "时间管理"
+  ],
+  "status": "active"
+}
