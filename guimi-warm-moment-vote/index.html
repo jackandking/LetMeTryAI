@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>闺蜜暖心瞬间 — 你最感动哪一幕？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">闺蜜暖心瞬间 — 你最感动哪一幕？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在闺蜜给你做过的暖心瞬间里，你最想把一票投给哪一项？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="late-night-noodles">
+                            <div class="card-image">
+                                <img src="images/late-night-noodles.svg" alt="闺蜜深夜陪你吃宵夜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">深夜立刻起床陪你吃宵夜</h3>
+                                <p class="option-desc">半夜难受或失眠发消息，她马上到你家/约你吃夜宵陪着你聊到天亮。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="shield-embarrassment">
+                            <div class="card-image">
+                                <img src="images/shield-embarrassment.svg" alt="闺蜜化解尴尬" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当众帮你化解尴尬场面</h3>
+                                <p class="option-desc">你在朋友面前出糗，她机智接话或转移注意力为你挡场保住面子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="take-bad-news">
+                            <div class="card-image">
+                                <img src="images/take-bad-news.svg" alt="闺蜜替你扛下坏消息" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">替你向家人/领导传达难说的话</h3>
+                                <p class="option-desc">你不方便说的事她主动替你去沟通，替你承受不安和压力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="surprise-mini-party">
+                            <div class="card-image">
+                                <img src="images/surprise-mini-party.svg" alt="闺蜜准备惊喜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">偷偷准备小惊喜为你庆祝</h3>
+                                <p class="option-desc">在你毫无预期的日子她安排小惊喜或默默筹备一场暖心庆祝，让你感动落泪。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
