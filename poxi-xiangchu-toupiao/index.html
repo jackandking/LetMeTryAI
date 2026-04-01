@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>婆媳相处：哪种相处方式最让你崩溃？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">婆媳相处：哪种相处方式最让你崩溃？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在婆媳相处中，你最不能忍受哪种具体行为？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="interfere-child-rearing">
+                            <div class="card-image">
+                                <img src="images/interfere-child-rearing.svg" alt="婆婆干涉孩子教养" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">动不动干涉孩子教养</h3>
+                                <p class="option-desc">对孩子教育、喂养、作息频繁指手画脚，让人无地自容。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="criticize-habits">
+                            <div class="card-image">
+                                <img src="images/criticize-habits.svg" alt="批评生活习惯" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">对你日常生活无休止挑剔</h3>
+                                <p class="option-desc">从做饭到穿衣到卫生都被反复批评，像在被考核一样疲惫。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="silent-treatment">
+                            <div class="card-image">
+                                <img src="images/silent-treatment.svg" alt="冷战不满" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冷战、背后抱怨制造家里尴尬</h3>
+                                <p class="option-desc">冷脸或背后讲短话，家里气氛瞬间僵硬，沟通无门。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="demand-extra-chores-money">
+                            <div class="card-image">
+                                <img src="images/demand-extra-chores-money.svg" alt="要求额外家务金钱" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">无理由增加家务或金钱负担</h3>
+                                <p class="option-desc">擅自安排你额外家务或经济支出，压力和委屈被不断叠加。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
