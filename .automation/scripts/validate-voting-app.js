@@ -20,6 +20,13 @@ export function validateVotingAppFiles(files) {
     if (optionCount === 0) {
         errors.push('No radio options found in index.html');
     }
+    if (optionCount > 0 && optionCount < 3) {
+        errors.push(`Only ${optionCount} option(s) found in index.html, minimum is 3`);
+    }
+    const placeholderOptions = (indexHtml.match(/<h3 class="option-title">选项\d+<\/h3>/g) || []);
+    if (placeholderOptions.length > 0) {
+        errors.push(`Found ${placeholderOptions.length} placeholder option(s) with generic "选项N" labels`);
+    }
     if (imageCount < optionCount) {
         errors.push('Not every option has a local image in index.html');
     }

@@ -6,7 +6,8 @@ import { ensureParentDirectory } from './runtime-paths.js';
 import {
   resolveAuthFilePath,
   isSubmissionErrorSignal,
-  isSubmissionSuccessSignal
+  isSubmissionSuccessSignal,
+  validateTaskName
 } from './publish-kuaishou-task-utils.js';
 
 // Configuration
@@ -80,6 +81,13 @@ async function main() {
     process.exit(1);
   }
   const [appId, appName, appDesc] = args;
+
+  // Validate task name for forbidden words before launching browser
+  const nameCheck = validateTaskName(appName);
+  if (!nameCheck.valid) {
+    console.error(`❌ ${nameCheck.message}`);
+    process.exit(1);
+  }
 
   console.log(`Starting Kuaishou Task Publisher for app: ${appId}`);
   console.log(`Source Task: ${SOURCE_TASK_ID}`);

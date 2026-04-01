@@ -1,6 +1,9 @@
 const DEFAULT_SOURCE_TASK_ID = '165805';
 const DEFAULT_AUTH_FILE = '.automation/.local/auth/kuaishou_auth.json';
-const DEFAULT_SCRIPT_PATH = '.automation/scripts/publish-kuaishou-task.js';
+// Pure HTTP API publisher — no browser needed (faster, more reliable)
+const DEFAULT_SCRIPT_PATH = '.automation/scripts/publish-kuaishou-api.js';
+// Legacy Playwright publisher kept as fallback
+const LEGACY_SCRIPT_PATH = '.automation/scripts/publish-kuaishou-task.js';
 const BRAND_SOURCE_TASK_IDS = {
     'elder-love': '183044',
     'parent-tools': '186229',
@@ -87,11 +90,23 @@ export function normalizePublishSpec(spec) {
  */
 export function buildPublishCommand(spec) {
     const normalized = normalizePublishSpec(spec);
-    const envParts = [
-        normalized.headless ? 'HEADLESS=true' : 'HEADLESS=false',
-        `SOURCE_TASK_ID=${quoteShellArg(normalized.sourceTaskId)}`,
-        `PUBLISH_WAIT_FOR_MANUAL_MS=${normalized.waitAfterFinishMs}`
-    ];
+    const isApiMode = normalized.scriptPath === DEFAULT_SCRIPT_PATH;
+
+    let envParts;
+    if (isApiMode) {
+        // API publisher uses PROFILE_ID and SOURCE_TASK_ID
+        envParts = [
+            normalized.profileId ? `PROFILE_ID=${quoteShellArg(normalized.profileId)}` : '',
+            `SOURCE_TASK_ID=${quoteShellArg(normalized.sourceTaskId)}`
+        ].filter(Boolean);
+    } else {
+        // Legacy Playwright publisher
+        envParts = [
+            normalized.headless ? 'HEADLESS=true' : 'HEADLESS=false',
+            `SOURCE_TASK_ID=${quoteShellArg(normalized.sourceTaskId)}`,
+            `PUBLISH_WAIT_FOR_MANUAL_MS=${normalized.waitAfterFinishMs}`
+        ];
+    }
 
     return `${envParts.join(' ')} node ${quoteShellArg(normalized.scriptPath)} ${quoteShellArg(normalized.appId)} ${quoteShellArg(normalized.appName)} ${quoteShellArg(normalized.description)}`;
 }
@@ -136,8 +151,8 @@ export function buildPublishPlan(spec) {
         },
         notes: [
             `默认模板任务 ID: ${normalized.sourceTaskId}`,
-            '实际页面自动化由 scripts/publish-kuaishou-task.js 负责',
-            '如 Kuaishou UI 变更，优先更新原脚本中的选择器'
+            '默认使用纯 API 模式发布 (publish-kuaishou-api.js)，无需浏览器',
+            '如需回退到 Playwright 模式，设置 scriptPath 为 .automation/scripts/publish-kuaishou-task.js'
         ]
     };
 }

@@ -19,6 +19,7 @@ import {
     resolveEmailDraftLatestPath
 } from './runtime-paths.js';
 import { validateVotingAppDirectory } from './validate-voting-app.js';
+import { fetchTrendingTopics } from './lib/fetch-trending.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -382,11 +383,11 @@ function buildTopicConstraintsPrompt(profile) {
     return constraints.length > 0 ? constraints.join('\n') : '';
 }
 
-export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics }) {
+export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, trendingContext, topicHint }) {
     const preferredCategories = buildPreferredCategoriesPrompt(profile);
     const profileNotes = buildProfilePromptNotes(profile);
     const constraints = buildTopicConstraintsPrompt(profile);
-    
+
     // Build recent topics note
     let recentTopicsNote = '';
     if (recentTopics && recentTopics.length > 0) {
@@ -396,7 +397,10 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics }
     return [
         `今天是 ${currentDate}。`,
         '你要为 LetMeTryAI 的日更投票页挑选热点话题。',
-        `先自己检索今天与该品牌最相关的热点或常青高传播话题，优先关注：${preferredCategories}。`,
+        trendingContext
+            ? `参考以下热搜数据，结合该品牌定位，选出适合做投票的主题，优先关注：${preferredCategories}。`
+            : `先自己检索今天与该品牌最相关的热点或常青高传播话题，优先关注：${preferredCategories}。`,
+        trendingContext ? `\n${trendingContext}\n` : '',
         recentTopicsNote,
         constraints ? `\n选题约束（重要）：\n${constraints}\n` : '',
         '你只需要返回 JSON，不要写代码，不要创建文件，不要给解释，不要使用 Markdown 代码块。',
@@ -427,7 +431,14 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics }
         '  ]',
         '}',
         '要求：',
-        '- 提供 3 个 topicCandidates。',
+        ...(topicHint ? [
+            `重要：你必须围绕这个指定话题生成投票页面：「${topicHint}」。`,
+            '- 只需提供 1 个 topicCandidate（不是3个），标题必须使用或包含该指定话题。',
+            '- 必须生成 3-4 个与该话题高度相关的具体投票选项。',
+            '- 问题和选项文案要具体生动，不要使用泛化占位内容。',
+        ] : [
+            '- 提供 3 个 topicCandidates。',
+        ]),
         '- 每个候选必须有 2-4 个 options。',
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
         '- 问题、标题、选项要适合做清晰直观、易于配图、适合手机阅读的图文投票页。',
@@ -437,7 +448,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics }
     ].join('\n');
 }
 
-export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics }) {
+export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics, topicHint }) {
     const preferredCategories = buildPreferredCategoriesPrompt(profile);
     const profileNotes = buildProfilePromptNotes(profile);
     const constraints = buildTopicConstraintsPrompt(profile);
@@ -452,7 +463,12 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
         `今天是 ${currentDate}。`,
         '请只返回一个 JSON object。',
         '不要解释，不要 Markdown，不要代码块，不要任何额外文本。',
-        `生成 3 个与该品牌相关、适合在 ${preferredCategories} 中传播的投票候选。`,
+        `生成 ${topicHint ? '1' : '3'} 个与该品牌相关、适合在 ${preferredCategories} 中传播的投票候选。`,
+        ...(topicHint ? [
+            `重要：你必须围绕这个指定话题生成投票页面：「${topicHint}」。`,
+            '标题必须使用或包含该指定话题。必须生成 3-4 个与该话题高度相关的具体投票选项。',
+            '问题和选项文案要具体生动，不要使用泛化占位内容。',
+        ] : []),
         `profileId 固定为 ${profile.id}。`,
         '返回字段只能有：profileId, reportSummary, topicCandidates。',
         '每个 topicCandidates 元素必须包含：appId, title, pageTitle, appName, summary, description, question, category, format, keywords, signals, qualities, riskFlags, options。',
@@ -584,16 +600,27 @@ async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
     };
 }
 
-async function requestStructuredTopics({ model, profile, currentDate, copilotBin }) {
+async function requestStructuredTopics({ model, profile, currentDate, copilotBin, topicHint }) {
     // Get recent topics for deduplication
     const recentTopics = getRecentTopicsSummary(profile.id, 7);
     if (recentTopics && recentTopics.length > 0) {
         logStage('topics', `Found ${recentTopics.length} recent topics for deduplication check`);
     }
-    
+
+    // Fetch trending data (non-blocking, graceful failure)
+    let trendingContext = '';
+    try {
+        trendingContext = await fetchTrendingTopics({ profile });
+        if (trendingContext) {
+            logStage('topics', `Trending data: ${trendingContext.length} chars`);
+        }
+    } catch (err) {
+        logStage('topics', `Trending fetch failed (non-fatal): ${err.message}`);
+    }
+
     const attempts = [
-        { mode: 'primary', prompt: buildTopicSelectionPrompt({ profile, currentDate, recentTopics }) },
-        { mode: 'fallback', prompt: buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics }) }
+        { mode: 'primary', prompt: buildTopicSelectionPrompt({ profile, currentDate, recentTopics, trendingContext, topicHint }) },
+        { mode: 'fallback', prompt: buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics, topicHint }) }
     ];
     const failures = [];
 
@@ -910,31 +937,10 @@ export async function runDailyOrchestrator(options = {}) {
             const manualTopic = selectNextTopic(profileId);
             if (manualTopic) {
                 logStage('topics', `Using manual topic: "${manualTopic.title}"`);
-                // Construct a minimal modelResponse from manual topic
-                modelResponse = {
-                    profileId: profile.id,
-                    reportSummary: `Manual topic: ${manualTopic.title}`,
-                    topicCandidates: [{
-                        appId: `${profileId}-${Date.now()}`,
-                        title: manualTopic.title,
-                        pageTitle: manualTopic.title,
-                        appName: manualTopic.title,
-                        summary: manualTopic.title,
-                        description: manualTopic.title,
-                        question: `你认为：${manualTopic.title}？`,
-                        category: profile.preferredCategories?.[0] || 'general',
-                        format: 'voting',
-                        keywords: [profileId, 'manual'],
-                        signals: ['manual-topic'],
-                        qualities: ['human-curated'],
-                        riskFlags: [],
-                        options: [
-                            { id: 'opt1', name: '选项A', description: '第一个选项' },
-                            { id: 'opt2', name: '选项B', description: '第二个选项' }
-                        ]
-                    }],
-                    responseMode: 'manual'
-                };
+                modelResponse = await requestStructuredTopics({
+                    model, profile, currentDate, copilotBin,
+                    topicHint: manualTopic.title
+                });
                 manualTopicUsed = true;
             } else {
                 logStage('topics', 'No manual topics found, requesting AI generation');
