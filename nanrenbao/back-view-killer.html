@@ -597,6 +597,15 @@
             cardElement.classList.add('flipped');
             flippedCards.add(imageId);
 
+            // Move viewed card to the end of gallery (visual feedback)
+            setTimeout(() => {
+                const gallery = document.getElementById('gallery');
+                if (gallery && cardElement.parentNode === gallery) {
+                    gallery.appendChild(cardElement);
+                    console.log('[Debug] 已看过的卡片已移动到最后');
+                }
+            }, 1000); // Wait for flip animation to complete
+
             // Remove locked overlay if present
             const lockedOverlay = cardElement.querySelector('.locked-overlay');
             if (lockedOverlay) {
