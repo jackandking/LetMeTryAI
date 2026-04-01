@@ -589,6 +589,9 @@
                 console.error('Failed to update click count:', error);
             }
 
+            // Mark as viewed for prioritization
+            PointsSystem.markImageIdAsViewed(imageId, 'backview');
+
             // Flip the card
             cardElement.classList.add('flipped');
             flippedCards.add(imageId);
@@ -621,8 +624,13 @@
                     })
                 });
 
-                const data = await response.json();
+                let data = await response.json();
                 loading.style.display = 'none';
+
+                // Sort: unseen images first
+                if (data && data.length > 0) {
+                    data = PointsSystem.sortImagesByViewedStatus(data, 'id', 'backview');
+                }
 
                 if (data && data.length > 0) {
                     data.forEach(item => {

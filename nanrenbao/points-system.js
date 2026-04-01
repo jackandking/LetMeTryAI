@@ -9,7 +9,8 @@ const PointsSystem = (function() {
         POINTS: 'nanrenbao_points',
         LAST_VISIT: 'nanrenbao_last_visit',
         VIEWED_IMAGES: 'nanrenbao_viewed_images',
-        INITIALIZED: 'nanrenbao_initialized'
+        INITIALIZED: 'nanrenbao_initialized',
+        VIEWED_IDS: 'nanrenbao_viewed_ids'
     };
 
     const POINTS_CONFIG = {
@@ -570,6 +571,72 @@ const PointsSystem = (function() {
         return !status.needsPayment;
     }
 
+    /**
+     * Get viewed IDs record
+     * @param {string} type - Type of images ('beauty' or 'backview')
+     * @returns {Array} Array of viewed IDs
+     */
+    function getViewedIds(type) {
+        const data = localStorage.getItem(STORAGE_KEYS.VIEWED_IDS);
+        const allViewed = data ? JSON.parse(data) : {};
+        return allViewed[type] || [];
+    }
+
+    /**
+     * Save viewed IDs record
+     * @param {string} type - Type of images ('beauty' or 'backview')
+     * @param {Array} ids - Array of viewed IDs
+     */
+    function saveViewedIds(type, ids) {
+        const data = localStorage.getItem(STORAGE_KEYS.VIEWED_IDS);
+        const allViewed = data ? JSON.parse(data) : {};
+        allViewed[type] = ids;
+        localStorage.setItem(STORAGE_KEYS.VIEWED_IDS, JSON.stringify(allViewed));
+    }
+
+    /**
+     * Mark an image ID as viewed (for prioritizing unseen images)
+     * @param {number|string} id - Image ID
+     * @param {string} type - Type of images ('beauty' or 'backview')
+     */
+    function markImageIdAsViewed(id, type) {
+        const viewedIds = getViewedIds(type);
+        const idStr = String(id);
+        if (!viewedIds.includes(idStr)) {
+            viewedIds.push(idStr);
+            saveViewedIds(type, viewedIds);
+        }
+    }
+
+    /**
+     * Check if an image ID has been viewed
+     * @param {number|string} id - Image ID
+     * @param {string} type - Type of images ('beauty' or 'backview')
+     * @returns {boolean} True if viewed
+     */
+    function hasViewedImageId(id, type) {
+        const viewedIds = getViewedIds(type);
+        return viewedIds.includes(String(id));
+    }
+
+    /**
+     * Sort images array: unseen images first, then by original order
+     * @param {Array} images - Array of image objects
+     * @param {string} idField - Field name for ID (e.g., 'id')
+     * @param {string} type - Type of images ('beauty' or 'backview')
+     * @returns {Array} Sorted array
+     */
+    function sortImagesByViewedStatus(images, idField, type) {
+        const viewedIds = getViewedIds(type);
+        return images.slice().sort((a, b) => {
+            const aViewed = viewedIds.includes(String(a[idField]));
+            const bViewed = viewedIds.includes(String(b[idField]));
+            // Unseen images come first
+            if (aViewed === bViewed) return 0;
+            return aViewed ? 1 : -1;
+        });
+    }
+
     // Public API
     return {
         initialize: initialize,
@@ -588,7 +655,11 @@ const PointsSystem = (function() {
         deleteBackViewImage: deleteBackViewImage,
         markBackViewViewedById: markBackViewViewedById,
         hasViewedImage: hasViewedImage,
-        POINTS_CONFIG: POINTS_CONFIG
+        POINTS_CONFIG: POINTS_CONFIG,
+        // Viewed IDs API for prioritizing unseen images
+        markImageIdAsViewed: markImageIdAsViewed,
+        hasViewedImageId: hasViewedImageId,
+        sortImagesByViewedStatus: sortImagesByViewedStatus
     };
 })();
 
