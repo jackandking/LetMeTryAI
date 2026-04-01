@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>好想回到的恋爱阶段 — 你最怀念哪一刻？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">好想回到的恋爱阶段 — 你最怀念哪一刻？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你最想回到哪一个恋爱阶段？选出让你最怀念的一刻</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="chu-xi-de-xin-dong-yue-hui">
+                            <div class="card-image">
+                                <img src="images/chu-xi-de-xin-dong-yue-hui.svg" alt="两人初次约会微笑对视" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">初识的心动约会：第一次见面的小心机</h3>
+                                <p class="option-desc">记得第一次见面时的窘但甜的瞬间吗？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="re-lian-qi-da-ka-tian-mi">
+                            <div class="card-image">
+                                <img src="images/re-lian-qi-da-ka-tian-mi.svg" alt="情侣早安晚安信息截图风格插图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">热恋期的打卡甜蜜：早安晚安不停讯息</h3>
+                                <p class="option-desc">每天互道早安晚安、狂发小心情，那段超甜的频率。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="cheng-nuo-yu-lv-xing-yi-qi-jian-fu-mu">
+                            <div class="card-image">
+                                <img src="images/cheng-nuo-yu-lv-xing-yi-qi-jian-fu-mu.svg" alt="行李箱与两张飞机票象征旅行和承诺" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">承诺与旅行期：一起订票见父母那次</h3>
+                                <p class="option-desc">第一次带她/他回家、一起规划未来的那趟旅行。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="wen-ding-xiang-chu-an-xin-ri-chang-pei-ban">
+                            <div class="card-image">
+                                <img src="images/wen-ding-xiang-chu-an-xin-ri-chang-pei-ban.svg" alt="两人并肩做家务或看剧的温馨日常" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">稳定相处的安心日常：平淡却最踏实的陪伴</h3>
+                                <p class="option-desc">没大戏但有陪伴，最让人怀念的平凡日常。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
