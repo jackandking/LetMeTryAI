@@ -1,0 +1,28 @@
+{
+  "id": "four-classics-which-one",
+  "name": "四大名著站队",
+  "description": "把《三国》《水浒》《西游》《红楼》放到同一张票面，比较英雄、战术、冒险与人性，一图一段话直观呈现。",
+  "category": "历史军事",
+  "directory": "four-classics-which-one",
+  "url": "four-classics-which-one",
+  "image": "four-classics-which-one/images/romance-of-three-kingdoms.svg",
+  "tags": [
+    "投票",
+    "历史军事",
+    "四大名著",
+    "三国",
+    "水浒",
+    "西游记",
+    "红楼梦",
+    "历史对比",
+    "站队",
+    "四大名著",
+    "三国",
+    "水浒",
+    "西游记",
+    "红楼梦",
+    "历史对比",
+    "站队"
+  ],
+  "status": "active"
+}
