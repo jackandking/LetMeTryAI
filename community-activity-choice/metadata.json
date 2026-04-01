@@ -1,0 +1,22 @@
+{
+  "id": "community-activity-choice",
+  "name": "社区活动投票",
+  "description": "选择你最想去参加的社区活动，方便统计居民偏好并鼓励邻里互动。",
+  "category": "生活",
+  "directory": "community-activity-choice",
+  "url": "community-activity-choice",
+  "image": "community-activity-choice/images/community-square-dance.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "广场舞",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "广场舞"
+  ],
+  "status": "active"
+}
