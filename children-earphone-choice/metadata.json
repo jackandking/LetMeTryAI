@@ -1,0 +1,24 @@
+{
+  "id": "children-earphone-choice",
+  "name": "儿童耳机选购",
+  "description": "家长在选购儿童耳机时最看重哪一点（安全/续航/使用场景）？",
+  "category": "工具",
+  "directory": "children-earphone-choice",
+  "url": "children-earphone-choice",
+  "image": "children-earphone-choice/images/wired-earphones.svg",
+  "tags": [
+    "投票",
+    "工具",
+    "儿童耳机",
+    "有线",
+    "无线",
+    "选购",
+    "护耳",
+    "儿童耳机",
+    "有线",
+    "无线",
+    "选购",
+    "护耳"
+  ],
+  "status": "active"
+}
