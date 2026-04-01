@@ -1,0 +1,24 @@
+{
+  "id": "summer-plan-choice",
+  "name": "暑假计划投票",
+  "description": "暑假如何安排孩子的时间：阅读、运动、兴趣还是旅行实践？",
+  "category": "教育",
+  "directory": "summer-plan-choice",
+  "url": "summer-plan-choice",
+  "image": "summer-plan-choice/images/self-reading-goals.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "暑假计划",
+    "兴趣培养",
+    "阅读习惯",
+    "体育活动",
+    "实践体验",
+    "暑假计划",
+    "兴趣培养",
+    "阅读习惯",
+    "体育活动",
+    "实践体验"
+  ],
+  "status": "active"
+}
