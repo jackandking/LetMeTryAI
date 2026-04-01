@@ -1,0 +1,24 @@
+{
+  "id": "guimi-warm-moment-vote",
+  "name": "闺蜜暖心瞬间投票",
+  "description": "投票挑选朋友间那些让你心头一暖的真实瞬间，适合情感共鸣与社交分享。",
+  "category": "情感",
+  "directory": "guimi-warm-moment-vote",
+  "url": "guimi-warm-moment-vote",
+  "image": "guimi-warm-moment-vote/images/late-night-noodles.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "闺蜜",
+    "暖心",
+    "友情",
+    "感动",
+    "日常",
+    "闺蜜",
+    "暖心",
+    "友情",
+    "感动",
+    "日常"
+  ],
+  "status": "active"
+}
