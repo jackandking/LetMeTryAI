@@ -621,8 +621,13 @@
                     })
                 });
 
-                const data = await response.json();
+                let data = await response.json();
                 loading.style.display = 'none';
+
+                // Sort: unseen images first
+                if (data && data.length > 0) {
+                    data = PointsSystem.sortImagesByViewedStatus(data, 'id', 'beauty');
+                }
 
                 if (data && data.length > 0) {
                     data.forEach(item => {
@@ -698,6 +703,8 @@
 
                                 // Click to view full image
                                 div.onclick = function() {
+                                    // Mark as viewed for prioritization
+                                    PointsSystem.markImageIdAsViewed(item.id, 'beauty');
                                     showModal(item.image_url);
                                 };
 
