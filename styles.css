@@ -1,267 +1,325 @@
-/**
- * LetMeTryAI Homepage Styles
- * Creator Monetization Service — Professional Business Theme
- */
+/* LetMeTryAI — Creator Monetization Landing Page
+   Design: dark, minimal, image-first. No gradients, no emoji icons, no glow. */
 
-/* ==========================================================================
-   Base
-   ========================================================================== */
+/* === Reset & Base === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --color-bg: #0a0a0a;
+    --color-surface: #141414;
+    --color-border: rgba(255,255,255,0.08);
+    --color-text: rgba(255,255,255,0.88);
+    --color-muted: rgba(255,255,255,0.5);
+    --color-accent: #e8a230;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --space-section: 112px;
+    --space-group: 64px;
+    --space-element: 24px;
+}
 
 body {
-    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
-    color: #1a1a2e;
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
     line-height: 1.7;
-    background: #fafafa;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 { line-height: 1.3; }
-
-section { padding: 4rem 1.5rem; }
-
-section h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 0.6rem;
+/* === Section Label (small caps above headings) === */
+.section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: 12px;
 }
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
-
+/* === Hero === */
 .hero {
-    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-    color: #fff;
-    text-align: center;
-    padding: 5rem 1.5rem 4rem;
+    padding: var(--space-section) 24px;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
-.hero-inner { max-width: 720px; margin: 0 auto; }
+.hero-label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
 
 .hero h1 {
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 6vw, 3.6rem);
     font-weight: 800;
-    margin-bottom: 0.3rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: #fff;
 }
 
-.hero h1 .accent {
-    display: block;
-    background: linear-gradient(90deg, #f7971e, #ffd200);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.hero-sub {
-    font-size: 1.15rem;
-    opacity: 0.85;
-    margin-bottom: 2.2rem;
-}
-
-.cta-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #f7971e, #ffd200);
-    color: #1a1a2e;
-    font-weight: 700;
+.hero-desc {
     font-size: 1.1rem;
-    padding: 0.9rem 2.8rem;
-    border-radius: 50px;
+    color: var(--color-muted);
+    max-width: 520px;
+    margin-bottom: 40px;
+    line-height: 1.8;
+}
+
+.btn-primary {
+    display: inline-block;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 36px;
+    border-radius: var(--radius-md);
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(247, 151, 30, 0.35);
+    transition: background 0.2s;
+    cursor: pointer;
 }
 
-.cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 28px rgba(247, 151, 30, 0.5);
+.btn-primary:hover { background: rgba(255,255,255,0.88); }
+
+/* === VIP Section (the star) === */
+.vip {
+    padding: var(--space-section) 24px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* ==========================================================================
-   How It Works — Steps
-   ========================================================================== */
+.vip-header { margin-bottom: var(--space-group); }
 
-.steps { background: #fff; max-width: 960px; margin: 0 auto; }
+.vip-header h2 {
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+}
 
-.steps-grid {
+.vip-lead {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    max-width: 560px;
+    line-height: 1.8;
+}
+
+/* Demo link — prominent clickable block */
+.vip-showcase { margin-bottom: var(--space-group); }
+
+.vip-demo {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    transition: border-color 0.2s;
+    cursor: pointer;
+}
+
+.vip-demo:hover { border-color: var(--color-accent); }
+
+.vip-demo-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: 16px;
+}
+
+.vip-demo-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vip-demo-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.vip-demo-arrow {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    transition: transform 0.2s;
+}
+
+.vip-demo:hover .vip-demo-arrow { transform: translateX(4px); }
+
+/* Benefit cards */
+.vip-benefits {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: var(--space-element);
 }
 
-.step {
-    text-align: center;
-    padding: 1.5rem;
+.benefit {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+}
+
+.benefit h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.benefit p {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+}
+
+/* === Process === */
+.process {
+    padding: var(--space-section) 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-top: 1px solid var(--color-border);
+}
+
+.process h2 {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-group);
+}
+
+.steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.steps li {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
 }
 
 .step-num {
-    width: 48px; height: 48px;
-    line-height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f7971e, #ffd200);
-    color: #1a1a2e;
-    font-weight: 800;
-    font-size: 1.3rem;
-    margin: 0 auto 1rem;
-}
-
-.step h3 { font-size: 1.2rem; margin-bottom: 0.4rem; }
-.step p { color: #555; font-size: 0.95rem; }
-
-/* ==========================================================================
-   VIP Room Showcase
-   ========================================================================== */
-
-.showcase {
-    background: #f5f3ef;
-    max-width: 960px;
-    margin: 0 auto;
-    border-radius: 16px;
-}
-
-.showcase-desc {
-    text-align: center;
-    color: #555;
-    max-width: 640px;
-    margin: 0 auto 2.5rem;
-    font-size: 1.05rem;
-}
-
-.benefits {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-}
-
-.benefit-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-
-.benefit-icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
-.benefit-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
-.benefit-card p { color: #555; font-size: 0.95rem; }
-
-.example-box {
-    background: #fff;
-    border-left: 4px solid #f7971e;
-    border-radius: 8px;
-    padding: 1.5rem 2rem;
-    text-align: center;
-}
-
-.example-box h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
-.example-box p { color: #555; font-size: 0.95rem; margin-bottom: 1rem; }
-
-.example-link {
-    display: inline-block;
-    color: #f7971e;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 1.05rem;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s;
-}
-
-.example-link:hover { border-color: #f7971e; }
-
-/* ==========================================================================
-   Stats
-   ========================================================================== */
-
-.stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-    color: #fff;
-    padding: 3rem 1.5rem;
-}
-
-.stat { text-align: center; min-width: 120px; }
-
-.stat-num {
-    display: block;
-    font-size: 2.4rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #f7971e, #ffd200);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.stat-label {
-    display: block;
-    font-size: 0.95rem;
-    opacity: 0.8;
-    margin-top: 0.2rem;
-}
-
-/* ==========================================================================
-   Contact
-   ========================================================================== */
-
-.contact {
-    text-align: center;
-    background: #fff;
-    padding: 4rem 1.5rem;
-}
-
-.contact h2 { margin-bottom: 0.4rem; }
-.contact p { color: #555; margin-bottom: 1.5rem; font-size: 1.05rem; }
-
-.qr-code {
-    width: 220px;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-footer {
-    text-align: center;
-    padding: 1.5rem;
-    background: #fafafa;
-    color: #999;
     font-size: 0.85rem;
-    border-top: 1px solid #eee;
+    font-weight: 700;
+    color: var(--color-accent);
+    flex-shrink: 0;
+    width: 32px;
+    padding-top: 2px;
 }
 
-footer a { color: #999; text-decoration: none; margin-left: 0.5rem; }
-footer a:hover { color: #555; }
+.steps h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
 
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
+.steps p {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+}
 
+/* === Stats === */
+.stats {
+    padding: 80px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.stat { text-align: center; flex: 1; }
+
+.stat-value {
+    display: block;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+.stat-name {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-top: 4px;
+}
+
+/* === Contact === */
+.contact {
+    padding: var(--space-section) 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.contact-desc {
+    color: var(--color-muted);
+    margin-bottom: 32px;
+}
+
+.qr {
+    width: 200px;
+    height: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+/* === Footer === */
+footer {
+    padding: 24px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    border-top: 1px solid var(--color-border);
+}
+
+footer a {
+    color: var(--color-muted);
+    text-decoration: none;
+    margin-left: 12px;
+}
+
+footer a:hover { color: var(--color-text); }
+
+/* === Responsive === */
 @media (min-width: 640px) {
-    .steps-grid { grid-template-columns: repeat(3, 1fr); }
-    .benefits { grid-template-columns: repeat(2, 1fr); }
-    .hero h1 { font-size: 2.8rem; }
+    .vip-benefits { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 639px) {
-    .hero { padding: 3.5rem 1rem 3rem; }
-    .hero h1 { font-size: 1.8rem; }
-    .hero-sub { font-size: 1rem; }
-    .cta-btn { font-size: 1rem; padding: 0.8rem 2rem; }
-    section { padding: 3rem 1rem; }
-    section h2 { font-size: 1.5rem; }
-    .stat-num { font-size: 1.8rem; }
-    .stats { gap: 1.5rem; }
-    .qr-code { width: 180px; }
+    :root {
+        --space-section: 72px;
+        --space-group: 40px;
+    }
+    .hero { padding-top: 64px; }
+    .stats { gap: 8px; }
+    .stat-value { font-size: 1.6rem; }
+    .qr { width: 160px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .cta-btn { transition: none; }
-    .cta-btn:hover { transform: none; }
+    .btn-primary, .vip-demo, .vip-demo-arrow { transition: none; }
 }
