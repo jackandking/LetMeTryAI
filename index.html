@@ -3,168 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>把创意变成小应用 - LetMeTryAI</title>
-    <meta name="description" content="将您的创意快速转化为实用的小应用。提交想法，我们帮您实现！">
-    <meta name="keywords" content="创意,小应用,AI,工具,教育,娱乐">
+    <title>快手星火计划 · 创作者变现服务 - LetMeTryAI</title>
+    <meta name="description" content="为快手创作者定制星火计划任务，让优质内容持续产生收益。VIP房间、投票互动等多种任务类型。">
+    <meta name="keywords" content="快手,星火计划,创作者变现,达人任务,广告收入,流量增长">
     <link rel="stylesheet" href="styles.css">
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
-    <script src="config.js"></script>  
-    <script src="main.js" type="module"></script>  
     <script>
-	    var _hmt = _hmt || [];
-	    (function() {
-		    var hm = document.createElement("script");
-		    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
-		    var s = document.getElementsByTagName("script")[0];
-		    s.parentNode.insertBefore(hm, s);
-	    })();
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
     </script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>把创意变成小应用 ✨</h1>
-            <p class="tagline">快速将您的想法转化为现实</p>
-        </div>
-    </header>
-    
-    <!-- Hero Section -->
+
+    <!-- Hero -->
     <section class="hero">
-        <div class="hero-content">
-            <h2>有创意？让我们帮您实现！</h2>
-            <p>提交您的想法，AI 自动生成应用并发布到这个平台</p>
-            
-            <!-- Quick Idea Input -->
-            <div class="quick-idea-input">
-                <input 
-                    type="text" 
-                    id="quick-idea-input" 
-                    class="quick-input" 
-                    placeholder="💡 在这里输入您的创意..."
-                    maxlength="100"
-                />
-                <button class="quick-submit-button" onclick="handleQuickInput()">开始创建</button>
-            </div>
-            
-            <button class="cta-button-secondary" onclick="scrollToSubmitForm()">或查看详细表单</button>
+        <div class="hero-inner">
+            <h1>快手星火计划<span class="accent">创作者变现服务</span></h1>
+            <p class="hero-sub">为创作者定制专属任务，让优质内容持续产生收益</p>
+            <a href="#contact" class="cta-btn">了解合作方案</a>
         </div>
     </section>
 
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="搜索应用...">
-            <div class="filter-controls">
-                <select id="category-filter" class="filter-select">
-                    <option value="all">全部分类</option>
-                    <option value="教育">教育</option>
-                    <option value="娱乐">娱乐</option>
-                    <option value="工具">工具</option>
-                    <option value="生活">生活</option>
-                    <option value="科技">科技</option>
-                    <option value="军事">军事</option>
-                </select>
-                <select id="sort-select" class="filter-select">
-                    <option value="visits" selected>最热</option>
-                    <option value="featured">推荐</option>
-                    <option value="name">名称</option>
-                    <option value="category">分类</option>
-                </select>
+    <!-- How It Works -->
+    <section class="steps" id="how">
+        <h2>如何运作</h2>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>定制任务</h3>
+                <p>根据你的内容领域，打造专属推广任务页面</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>挂载作品</h3>
+                <p>将任务挂载到你的新作品下，用户点击即产生广告收益</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>流量增长</h3>
+                <p>优秀老作品获得二次曝光，形成持续变现的正向循环</p>
             </div>
         </div>
     </section>
 
-    <!-- Apps Grid -->
-    <main id="apps-container">
-        <!-- Apps will be dynamically loaded here -->
-    </main>
+    <!-- VIP Room Showcase -->
+    <section class="showcase" id="vip">
+        <h2>VIP房间 — 精选作品汇总任务</h2>
+        <p class="showcase-desc">把创作者的几个精选作品汇总为一个任务页面，挂载在新作品下。观众点击后既能浏览你的优质内容，又能为你带来收益。</p>
 
-    <!-- Idea Submission Form -->
-    <section class="submit-section" id="submit-form">
-        <div class="submit-container">
-            <h2>💡 提交您的创意</h2>
-            <p class="submit-description">告诉我们您的想法，我们将自动创建项目并开始开发！</p>
-            
-            <form id="idea-form" class="idea-form">
-                <div class="form-group">
-                    <label for="idea-title">创意标题 *</label>
-                    <input 
-                        type="text" 
-                        id="idea-title" 
-                        name="title" 
-                        class="form-input" 
-                        placeholder="例如：智能诗词生成器"
-                        maxlength="100"
-                        required
-                    >
-                    <span class="char-count" id="title-count">0/100</span>
-                </div>
+        <div class="benefits">
+            <div class="benefit-card">
+                <div class="benefit-icon">&#x1F4B0;</div>
+                <h3>广告收入</h3>
+                <p>用户通过任务页面点击后，产生的广告收入直接归你</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">&#x1F4C8;</div>
+                <h3>流量加持</h3>
+                <p>老作品通过新作品的任务入口获得二次曝光，优质内容持续发光</p>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="idea-description">创意描述 *</label>
-                    <textarea 
-                        id="idea-description" 
-                        name="description" 
-                        class="form-textarea" 
-                        placeholder="详细描述您的创意想法，包括功能、目标用户等..."
-                        maxlength="2000"
-                        rows="6"
-                        required
-                    ></textarea>
-                    <span class="char-count" id="description-count">0/2000</span>
-                </div>
-
-                <div class="form-group">
-                    <label for="idea-category">分类（可选）</label>
-                    <select id="idea-category" name="category" class="form-select">
-                        <option value="">选择分类</option>
-                        <option value="教育">教育</option>
-                        <option value="娱乐">娱乐</option>
-                        <option value="工具">工具</option>
-                        <option value="生活">生活</option>
-                        <option value="科技">科技</option>
-                        <option value="军事">军事</option>
-                        <option value="游戏">游戏</option>
-                        <option value="其他">其他</option>
-                    </select>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="submit-button" id="submit-button">
-                        🚀 提交创意
-                    </button>
-                </div>
-
-                <div id="form-message" class="form-message"></div>
-            </form>
+        <div class="example-box">
+            <h3>真实案例</h3>
+            <p>点击查看一个 VIP 房间任务页面的实际效果：</p>
+            <a href="elder-love/cooking/" class="example-link" target="_blank">查看示例：爱做饭 VIP 房间 &rarr;</a>
         </div>
     </section>
-    
+
+    <!-- Stats -->
+    <section class="stats" id="stats">
+        <div class="stat">
+            <span class="stat-num">170+</span>
+            <span class="stat-label">已创建任务</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">3,000+</span>
+            <span class="stat-label">合作达人</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">180万+</span>
+            <span class="stat-label">累计曝光</span>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <h2>联系我们</h2>
+        <p>扫码关注快手号，了解更多变现方案</p>
+        <img src="images/LetMeTryKS.jpg" alt="快手二维码" class="qr-code" />
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 把创意变成小应用 - LetMeTryAI. 保留所有权利.</p>
+        <p>&copy; 2025 LetMeTryAI. 保留所有权利.</p>
         <a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024092319号-1</a>
     </footer>
-    
-    <!-- VConsole for mobile debugging - loads only when ?debug=true is in URL -->
+
+    <!-- VConsole for mobile debugging -->
     <script>
-        // Load and initialize VConsole only if debug parameter is present
         (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const debugMode = urlParams.get('debug') === 'true';
-            
-            if (debugMode) {
-                // Dynamically load VConsole script only when needed
-                const script = document.createElement('script');
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                var script = document.createElement('script');
                 script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
                 script.onload = function() {
-                    if (window.VConsole) {
-                        const vConsole = new window.VConsole();
-                        console.log('VConsole initialized for debugging');
-                    }
-                };
-                script.onerror = function() {
-                    console.warn('Failed to load VConsole. Debug mode unavailable.');
+                    if (window.VConsole) new window.VConsole();
                 };
                 document.head.appendChild(script);
             }
