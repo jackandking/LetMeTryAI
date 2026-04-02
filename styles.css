@@ -1,713 +1,267 @@
 /**
- * Main Application Styles
- * Responsive design for the LetMeTryAI home page
- * Theme: Turn Ideas into Mini Apps
+ * LetMeTryAI Homepage Styles
+ * Creator Monetization Service — Professional Business Theme
  */
 
 /* ==========================================================================
-   Base Styles
+   Base
    ========================================================================== */
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    font-family: 'Arial', 'Helvetica', 'Microsoft YaHei', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-attachment: fixed;
-    line-height: 1.6;
-    color: #333;
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+    color: #1a1a2e;
+    line-height: 1.7;
+    background: #fafafa;
 }
 
-* {
-    box-sizing: border-box;
+h1, h2, h3 { line-height: 1.3; }
+
+section { padding: 4rem 1.5rem; }
+
+section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
 }
 
 /* ==========================================================================
-   Header Styles
+   Hero
    ========================================================================== */
 
-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    color: #333;
-    padding: 2em 1em;
+.hero {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    color: #fff;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 5rem 1.5rem 4rem;
 }
 
-.header-content h1 {
-    margin: 0;
-    font-size: 2.5em;
-    font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero-inner { max-width: 720px; margin: 0 auto; }
+
+.hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.hero h1 .accent {
+    display: block;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-.tagline {
-    margin: 0.5em 0 0 0;
-    font-size: 1.1em;
-    color: #666;
-    font-weight: 300;
+.hero-sub {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    margin-bottom: 2.2rem;
 }
 
-/* ==========================================================================
-   Hero Section
-   ========================================================================== */
-
-.hero {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 4em 2em;
-    text-align: center;
-    margin: 2em auto;
-    max-width: 1200px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-.hero-content h2 {
-    font-size: 2.2em;
-    margin: 0 0 0.5em 0;
-    color: #333;
-}
-
-.hero-content p {
-    font-size: 1.2em;
-    color: #666;
-    margin-bottom: 2em;
-}
-
-.cta-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 1em 3em;
-    font-size: 1.2em;
+.cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.9rem 2.8rem;
     border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    font-weight: 600;
-}
-
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.cta-button:active {
-    transform: translateY(-1px);
-}
-
-.cta-button-secondary {
-    background: transparent;
-    color: #667eea;
-    border: 2px solid #667eea;
-    padding: 0.6em 2em;
-    font-size: 0.95em;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    margin-top: 1em;
-}
-
-.cta-button-secondary:hover {
-    background: #667eea;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Quick Idea Input */
-.quick-idea-input {
-    display: flex;
-    gap: 1em;
-    max-width: 600px;
-    margin: 2em auto 0;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.quick-input {
-    flex: 1;
-    min-width: 250px;
-    padding: 1em 1.5em;
-    font-size: 1.1em;
-    border: 2px solid #e0e0e0;
-    border-radius: 50px;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.quick-input:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.quick-input::placeholder {
-    color: #999;
-}
-
-.quick-submit-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 1em 2.5em;
-    font-size: 1.1em;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.quick-submit-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.quick-submit-button:active {
-    transform: translateY(0);
-}
-
-/* ==========================================================================
-   Search Section
-   ========================================================================== */
-
-.search-section {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 2em;
-    margin: 2em auto;
-    max-width: 1200px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.search-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-}
-
-.search-input {
-    width: 100%;
-    padding: 1em 1.5em;
-    font-size: 1.1em;
-    border: 2px solid #e0e0e0;
-    border-radius: 50px;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.filter-controls {
-    display: flex;
-    gap: 1em;
-    flex-wrap: wrap;
-}
-
-.filter-select {
-    flex: 1;
-    min-width: 150px;
-    padding: 0.8em 1em;
-    font-size: 1em;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    outline: none;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-select:focus {
-    border-color: #667eea;
-}
-
-/* ==========================================================================
-   Main Content Layout
-   ========================================================================== */
-
-main {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2em;
-    padding: 2em;
-    max-width: 1200px;
-    margin: 2em auto;
-}
-
-/* ==========================================================================
-   Section Components (App Cards)
-   ========================================================================== */
-
-.section {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-}
-
-.section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
-}
-
-.section:hover::before {
-    left: 100%;
-}
-
-.section:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
-}
-
-.section a {
     text-decoration: none;
-    color: #333;
-    display: block;
-    transition: color 0.3s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(247, 151, 30, 0.35);
 }
 
-.section a:hover {
-    color: #667eea;
-}
-
-.app-category {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 0.3em 0.8em;
-    border-radius: 20px;
-    font-size: 0.8em;
-    font-weight: 600;
-    z-index: 10;
-}
-
-.app-tags {
-    padding: 0 1em 1em 1em;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-}
-
-.app-tag {
-    background: #f0f0f0;
-    color: #666;
-    padding: 0.2em 0.6em;
-    border-radius: 10px;
-    font-size: 0.8em;
-}
-
-/* ==========================================================================
-   Image Styles
-   ========================================================================== */
-
-.responsive-img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.section:hover .responsive-img {
-    transform: scale(1.08);
-}
-
-/* ==========================================================================
-   Typography
-   ========================================================================== */
-
-.section h2 {
-    margin: 1em;
-    font-size: 1.4em;
-    font-weight: 600;
-    color: #333;
-}
-
-.section p {
-    margin: 0 1em 1em 1em;
-    color: #666;
-    font-size: 0.95em;
-}
-
-/* ==========================================================================
-   Submit Form Section
-   ========================================================================== */
-
-.submit-section {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 3em 2em;
-    margin: 3em auto;
-    max-width: 800px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-.submit-container h2 {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 0.5em;
-    color: #333;
-}
-
-.submit-description {
-    text-align: center;
-    color: #666;
-    margin-bottom: 2em;
-    font-size: 1.1em;
-}
-
-.idea-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.form-group label {
-    font-weight: 600;
-    margin-bottom: 0.5em;
-    color: #333;
-    font-size: 1em;
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-    padding: 0.8em 1em;
-    font-size: 1em;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    outline: none;
-    transition: all 0.3s ease;
-    font-family: inherit;
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-.char-count {
-    position: absolute;
-    right: 10px;
-    bottom: -20px;
-    font-size: 0.85em;
-    color: #999;
-}
-
-.form-actions {
-    margin-top: 1em;
-}
-
-.submit-button {
-    width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 1em 2em;
-    font-size: 1.1em;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.submit-button:hover:not(:disabled) {
+.cta-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.submit-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.form-message {
-    margin-top: 1em;
-    padding: 1em;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: 500;
-    display: none;
-}
-
-.form-message.success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    display: block;
-}
-
-.form-message.error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    display: block;
-}
-
-/* Empty state */
-.empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3em;
-    color: #666;
-}
-
-.empty-state h3 {
-    font-size: 1.5em;
-    margin-bottom: 0.5em;
+    box-shadow: 0 6px 28px rgba(247, 151, 30, 0.5);
 }
 
 /* ==========================================================================
-   Footer Styles
+   How It Works — Steps
+   ========================================================================== */
+
+.steps { background: #fff; max-width: 960px; margin: 0 auto; }
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.step {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.step-num {
+    width: 48px; height: 48px;
+    line-height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin: 0 auto 1rem;
+}
+
+.step h3 { font-size: 1.2rem; margin-bottom: 0.4rem; }
+.step p { color: #555; font-size: 0.95rem; }
+
+/* ==========================================================================
+   VIP Room Showcase
+   ========================================================================== */
+
+.showcase {
+    background: #f5f3ef;
+    max-width: 960px;
+    margin: 0 auto;
+    border-radius: 16px;
+}
+
+.showcase-desc {
+    text-align: center;
+    color: #555;
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    font-size: 1.05rem;
+}
+
+.benefits {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.benefit-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.benefit-icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
+.benefit-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+.benefit-card p { color: #555; font-size: 0.95rem; }
+
+.example-box {
+    background: #fff;
+    border-left: 4px solid #f7971e;
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+}
+
+.example-box h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.example-box p { color: #555; font-size: 0.95rem; margin-bottom: 1rem; }
+
+.example-link {
+    display: inline-block;
+    color: #f7971e;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1.05rem;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.example-link:hover { border-color: #f7971e; }
+
+/* ==========================================================================
+   Stats
+   ========================================================================== */
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    color: #fff;
+    padding: 3rem 1.5rem;
+}
+
+.stat { text-align: center; min-width: 120px; }
+
+.stat-num {
+    display: block;
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-top: 0.2rem;
+}
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+.contact {
+    text-align: center;
+    background: #fff;
+    padding: 4rem 1.5rem;
+}
+
+.contact h2 { margin-bottom: 0.4rem; }
+.contact p { color: #555; margin-bottom: 1.5rem; font-size: 1.05rem; }
+
+.qr-code {
+    width: 220px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* ==========================================================================
+   Footer
    ========================================================================== */
 
 footer {
     text-align: center;
-    padding: 2em 1em;
-    background: rgba(255, 255, 255, 0.95);
-    color: #333;
-    margin-top: 3em;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background: #fafafa;
+    color: #999;
+    font-size: 0.85rem;
+    border-top: 1px solid #eee;
 }
 
-footer p {
-    margin: 0.5em 0;
-}
-
-footer a {
-    color: #667eea;
-    text-decoration: none;
-    margin: 0 0.5em;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-}
-
-footer a:hover {
-    opacity: 1;
-    text-decoration: underline;
-}
+footer a { color: #999; text-decoration: none; margin-left: 0.5rem; }
+footer a:hover { color: #555; }
 
 /* ==========================================================================
-   Responsive Design
+   Responsive
    ========================================================================== */
 
-/* Tablet and larger screens */
-@media (min-width: 768px) {
-    .search-container {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .search-input {
-        flex: 2;
-    }
-
-    .filter-controls {
-        flex: 1;
-    }
+@media (min-width: 640px) {
+    .steps-grid { grid-template-columns: repeat(3, 1fr); }
+    .benefits { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 2.8rem; }
 }
 
-/* Desktop screens */
-@media (min-width: 1024px) {
-    main {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2.5em;
-    }
-
-    .hero-content h2 {
-        font-size: 2.5em;
-    }
+@media (max-width: 639px) {
+    .hero { padding: 3.5rem 1rem 3rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .hero-sub { font-size: 1rem; }
+    .cta-btn { font-size: 1rem; padding: 0.8rem 2rem; }
+    section { padding: 3rem 1rem; }
+    section h2 { font-size: 1.5rem; }
+    .stat-num { font-size: 1.8rem; }
+    .stats { gap: 1.5rem; }
+    .qr-code { width: 180px; }
 }
 
-/* Mobile optimization */
-@media (max-width: 767px) {
-    .header-content h1 {
-        font-size: 1.8em;
-    }
-
-    .tagline {
-        font-size: 1em;
-    }
-
-    .hero {
-        padding: 2em 1em;
-        margin: 1em;
-    }
-
-    .hero-content h2 {
-        font-size: 1.6em;
-    }
-
-    .hero-content p {
-        font-size: 1em;
-    }
-
-    .cta-button {
-        padding: 0.8em 2em;
-        font-size: 1em;
-    }
-    
-    .cta-button-secondary {
-        padding: 0.5em 1.5em;
-        font-size: 0.9em;
-    }
-    
-    .quick-idea-input {
-        flex-direction: column;
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    .quick-input {
-        width: 100%;
-        min-width: 100%;
-    }
-    
-    .quick-submit-button {
-        width: 100%;
-    }
-
-    .search-section {
-        margin: 1em;
-        padding: 1em;
-    }
-
-    main {
-        padding: 1em;
-        gap: 1em;
-        margin: 1em auto;
-    }
-
-    .submit-section {
-        margin: 1em;
-        padding: 2em 1em;
-    }
-
-    .submit-container h2 {
-        font-size: 1.5em;
-    }
-
-    .filter-select {
-        min-width: 100%;
-    }
-}
-
-/* ==========================================================================
-   Accessibility and Performance
-   ========================================================================== */
-
-/* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-    .section,
-    .section::before,
-    .section a,
-    .responsive-img,
-    .cta-button,
-    .submit-button,
-    .search-input,
-    .filter-select,
-    .form-input,
-    .form-textarea,
-    .form-select {
-        transition: none;
-    }
-
-    .section:hover {
-        transform: none;
-    }
-
-    .section:hover .responsive-img {
-        transform: none;
-    }
-
-    .cta-button:hover,
-    .submit-button:hover {
-        transform: none;
-    }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .section {
-        border: 2px solid #333;
-    }
-
-    .section:hover {
-        border-color: #667eea;
-    }
-}
-
-/* Focus styles for keyboard navigation */
-.section a:focus,
-.cta-button:focus,
-.cta-button-secondary:focus,
-.submit-button:focus,
-.search-input:focus,
-.filter-select:focus,
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus,
-.quick-input:focus,
-.quick-submit-button:focus {
-    outline: 3px solid #667eea;
-    outline-offset: 2px;
-}
-
-/* Loading state */
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3em;
-    grid-column: 1 / -1;
-}
-
-.loading::after {
-    content: '';
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #667eea;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    .cta-btn { transition: none; }
+    .cta-btn:hover { transform: none; }
 }
