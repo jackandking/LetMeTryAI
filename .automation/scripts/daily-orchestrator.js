@@ -33,6 +33,10 @@ const DEFAULT_HEARTBEAT_INTERVAL_MS = Math.max(
     5000,
     Number.parseInt(process.env.DAILY_HEARTBEAT_INTERVAL_MS || '15000', 10) || 15000
 );
+const DEFAULT_PROCESS_TIMEOUT_MS = Math.max(
+    60000,
+    Number.parseInt(process.env.DAILY_PROCESS_TIMEOUT_MS || '300000', 10) || 300000
+);
 
 function normalizeKebabId(value, fallback = 'daily-vote') {
     if (typeof value !== 'string') {
@@ -515,6 +519,8 @@ async function runStreamingProcess(command, args, options = {}) {
     const shell = options.shell === true;
     const heartbeatIntervalMs = Math.max(0, options.heartbeatIntervalMs || DEFAULT_HEARTBEAT_INTERVAL_MS);
 
+    const timeoutMs = options.timeoutMs || DEFAULT_PROCESS_TIMEOUT_MS;
+
     logProgress(`Starting ${label}: ${formatCommand(command, args, shell)}`);
 
     return await new Promise((resolve, reject) => {
@@ -526,11 +532,22 @@ async function runStreamingProcess(command, args, options = {}) {
         });
         let stdout = '';
         let stderr = '';
+        let killed = false;
         const startedAt = Date.now();
         const heartbeatTimer = heartbeatIntervalMs > 0
             ? setInterval(() => {
                 logProgress(formatProgressHeartbeat(label, Date.now() - startedAt));
             }, heartbeatIntervalMs)
+            : null;
+        const killTimer = timeoutMs > 0
+            ? setTimeout(() => {
+                killed = true;
+                logProgress(`${label} timed out after ${Math.round(timeoutMs / 1000)}s — killing process`);
+                child.kill('SIGTERM');
+                setTimeout(() => {
+                    if (!child.killed) child.kill('SIGKILL');
+                }, 5000);
+            }, timeoutMs)
             : null;
 
         child.stdout?.on('data', chunk => {
@@ -550,15 +567,17 @@ async function runStreamingProcess(command, args, options = {}) {
         });
 
         child.on('error', error => {
-            if (heartbeatTimer) {
-                clearInterval(heartbeatTimer);
-            }
+            if (heartbeatTimer) clearInterval(heartbeatTimer);
+            if (killTimer) clearTimeout(killTimer);
             reject(error);
         });
 
         child.on('close', code => {
-            if (heartbeatTimer) {
-                clearInterval(heartbeatTimer);
+            if (heartbeatTimer) clearInterval(heartbeatTimer);
+            if (killTimer) clearTimeout(killTimer);
+            if (killed) {
+                reject(new Error(`${label} timed out after ${Math.round(timeoutMs / 1000)}s`));
+                return;
             }
             logProgress(`Finished ${label} with exit code ${code ?? 1}`);
             resolve({
