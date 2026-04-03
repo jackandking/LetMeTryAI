@@ -1,0 +1,24 @@
+{
+  "id": "classic-arcade-games-ranking",
+  "name": "经典街机游戏排行",
+  "description": "挑选四款具有代表性的经典街机，通过像素画面与操作感对比，激发用户怀旧情绪与投票参与。",
+  "category": "游戏电竞",
+  "directory": "classic-arcade-games-ranking",
+  "url": "classic-arcade-games-ranking",
+  "image": "classic-arcade-games-ranking/images/street-fighter-ii.svg",
+  "tags": [
+    "投票",
+    "游戏电竞",
+    "街机",
+    "怀旧",
+    "对战",
+    "操作手感",
+    "像素",
+    "街机",
+    "怀旧",
+    "对战",
+    "操作手感",
+    "像素"
+  ],
+  "status": "active"
+}
