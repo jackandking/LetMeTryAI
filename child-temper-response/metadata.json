@@ -1,0 +1,22 @@
+{
+  "id": "child-temper-response",
+  "name": "孩子发脾气如何回应",
+  "description": "面对孩子情绪爆发时，家长常用的几种回应方式对比投票。",
+  "category": "家庭",
+  "directory": "child-temper-response",
+  "url": "child-temper-response",
+  "image": "child-temper-response/images/give-space-calm-down.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "亲子沟通",
+    "情绪管理",
+    "应对策略",
+    "家庭教育",
+    "亲子沟通",
+    "情绪管理",
+    "应对策略",
+    "家庭教育"
+  ],
+  "status": "active"
+}
