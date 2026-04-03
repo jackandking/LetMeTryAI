@@ -1,0 +1,24 @@
+{
+  "id": "zhuiju-bikan-guzhuangju",
+  "name": "追剧必看古装剧投票",
+  "description": "盘点最适合追的古装剧：宫斗、权谋、仙侠、情感各具看点，选出你的必追名单。",
+  "category": "娱乐",
+  "directory": "zhuiju-bikan-guzhuangju",
+  "url": "zhuiju-bikan-guzhuangju",
+  "image": "zhuiju-bikan-guzhuangju/images/zhen-huan-chuan.svg",
+  "tags": [
+    "投票",
+    "娱乐",
+    "古装",
+    "追剧",
+    "宫斗",
+    "权谋",
+    "仙侠",
+    "古装",
+    "追剧",
+    "宫斗",
+    "权谋",
+    "仙侠"
+  ],
+  "status": "active"
+}
