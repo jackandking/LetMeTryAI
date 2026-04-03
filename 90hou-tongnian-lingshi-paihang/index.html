@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>90后童年零食排行 — 哪款让你瞬间回到童年？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">90后童年零食排行 — 哪款让你瞬间回到童年？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">作为90后男生，你最怀念下面哪款童年零食？把票投给唤起回忆的一款吧！</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="bai-tu-nai-tang">
+                            <div class="card-image">
+                                <img src="images/bai-tu-nai-tang.svg" alt="白兔奶糖特写包装拉丝" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">白兔奶糖（入口奶香、经典拉丝）</h3>
+                                <p class="option-desc">那股浓郁奶香和纸上薄薄的可食包装，童年必备甜蜜回忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="wang-zai-xiao-man-tou">
+                            <div class="card-image">
+                                <img src="images/wang-zai-xiao-man-tou.svg" alt="旺仔小馒头零食包装与散落小馒头" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">旺仔小馒头（酥脆小点心，嘴停不下）</h3>
+                                <p class="option-desc">小巧酥脆，随手一包的街头回忆，放学路上的快乐来源。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="tiao-tiao-tang">
+                            <div class="card-image">
+                                <img src="images/tiao-tiao-tang.svg" alt="跳跳糖颗粒在舌尖跳动的示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">跳跳糖（舌尖爆裂的惊喜）</h3>
+                                <p class="option-desc">吃下去会“噼啪”跳的糖果，瞬间点燃童年调皮好奇心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="la-tiao">
+                            <div class="card-image">
+                                <img src="images/la-tiao.svg" alt="辣条整包与撕开条状展示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">辣条（记忆中的辣味零食，记忆点强）</h3>
+                                <p class="option-desc">街边小吃档的辣条，既刺激又上瘾，是少年时的“硬核零食”。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
