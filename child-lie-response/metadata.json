@@ -1,0 +1,22 @@
+{
+  "id": "child-lie-response",
+  "name": "家长话题",
+  "description": "投票了解家长面对孩子说谎时的实际做法，便于后续内容引导与技巧分享。",
+  "category": "家庭",
+  "directory": "child-lie-response",
+  "url": "child-lie-response",
+  "image": "child-lie-response/images/ask-and-encourage.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "亲子沟通",
+    "孩子说谎",
+    "家庭教育",
+    "实用技巧",
+    "亲子沟通",
+    "孩子说谎",
+    "家庭教育",
+    "实用技巧"
+  ],
+  "status": "active"
+}
