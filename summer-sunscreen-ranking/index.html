@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>夏季防晒霜排行</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">夏季防晒霜排行</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你会把这一票投给谁：夏季防晒霜排行里哪款最适合你的夏日场景？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="lightweight-gel-oily-skin">
+                            <div class="card-image">
+                                <img src="images/lightweight-gel-oily-skin.svg" alt="轻薄凝露防晒瓶" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">轻薄凝露型（适合油皮与炎热通勤）</h3>
+                                <p class="option-desc">清爽不粘腻，夏天通勤和闷热城市里最舒服的日常防晒选择。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="hydrating-cream-dry-skin">
+                            <div class="card-image">
+                                <img src="images/hydrating-cream-dry-skin.svg" alt="保湿乳霜防晒罐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高保湿乳霜型（适合干性肌和空调环境）</h3>
+                                <p class="option-desc">兼顾滋润与防晒，适合干皮或长时间室内外切换的人群。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="mineral-physical-sensitive-skin">
+                            <div class="card-image">
+                                <img src="images/mineral-physical-sensitive-skin.svg" alt="物理防晒管" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">物理矿物温和型（适合敏感肌与温和需求）</h3>
+                                <p class="option-desc">低刺激易卸，适合敏感肌或想要温和防护的日常使用者。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="waterproof-sport-beach">
+                            <div class="card-image">
+                                <img src="images/waterproof-sport-beach.svg" alt="防水运动防晒喷雾" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">防水运动型（适合海边、游泳与健身出汗场景）</h3>
+                                <p class="option-desc">耐汗耐水，海边度假和高强度运动时更省心的防晒选择。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

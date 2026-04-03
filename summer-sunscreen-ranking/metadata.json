@@ -1,0 +1,28 @@
+{
+  "id": "summer-sunscreen-ranking",
+  "name": "夏季防晒榜",
+  "description": "针对油皮/干皮/敏感/出游场景的防晒选择投票页，助读者快速找到适合自己的夏日防晒类型。",
+  "category": "美妆",
+  "directory": "summer-sunscreen-ranking",
+  "url": "summer-sunscreen-ranking",
+  "image": "summer-sunscreen-ranking/images/lightweight-gel-oily-skin.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "夏季",
+    "防晒霜",
+    "防晒",
+    "肤质",
+    "出游",
+    "海边",
+    "日常防晒",
+    "夏季",
+    "防晒霜",
+    "防晒",
+    "肤质",
+    "出游",
+    "海边",
+    "日常防晒"
+  ],
+  "status": "active"
+}
