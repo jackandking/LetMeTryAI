@@ -1,0 +1,22 @@
+{
+  "id": "reading-habit-for-kids",
+  "name": "儿童阅读习惯投票",
+  "description": "比较几种家长常用的阅读培养策略，便于家长快速做决定并分享经验。",
+  "category": "教育",
+  "directory": "reading-habit-for-kids",
+  "url": "reading-habit-for-kids",
+  "image": "reading-habit-for-kids/images/parent-child-daily-reading.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读习惯",
+    "亲子共读",
+    "家庭阅读角",
+    "每日读书",
+    "阅读习惯",
+    "亲子共读",
+    "家庭阅读角",
+    "每日读书"
+  ],
+  "status": "active"
+}
