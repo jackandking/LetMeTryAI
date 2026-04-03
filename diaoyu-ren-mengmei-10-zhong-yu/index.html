@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>钓鱼人梦寐以求的十种鱼 — 你最想钓到哪一条？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">钓鱼人梦寐以求的十种鱼 — 你最想钓到哪一条？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">亲，你更想把票投给谁：钓鱼人梦寐以求的十种鱼里，哪一条让你最想挑战？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="ju-xing-qingyu">
+                            <div class="card-image">
+                                <img src="images/ju-xing-qingyu.svg" alt="巨型青鱼在江河中挣扎，水花四溅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">巨型青鱼（江河霸主）</h3>
+                                <p class="option-desc">江河常见但体型巨大，吃口暴烈，拉力惊人，钓友梦寐以求的大物代表。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="da-kou-heilv">
+                            <div class="card-image">
+                                <img src="images/da-kou-heilv.svg" alt="大口黑鲈跃出水面，展现强劲拉力" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">大口黑鲈（淡水拉力王）</h3>
+                                <p class="option-desc">淡水激烈拉扯体验，顶级路亚与竿线配合的硬核对决对象。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="lanqi-jinqiangyu">
+                            <div class="card-image">
+                                <img src="images/lanqi-jinqiangyu.svg" alt="蓝鳍金枪鱼在海面高速掠过，力量感十足" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">蓝鳍金枪鱼（海钓霸主）</h3>
+                                <p class="option-desc">海钓终极挑战，速度与力量兼备，能征服任何远洋钓具与耐力的人。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="caoyu-laojiang">
+                            <div class="card-image">
+                                <img src="images/caoyu-laojiang.svg" alt="草鱼在静水中缓缓吸食饵料的瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">草鱼老将（技巧与耐心的回报）</h3>
+                                <p class="option-desc">看似普通却变化多端，饵料与技巧的试金石，考验钓技与耐心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
