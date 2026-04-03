@@ -1,0 +1,24 @@
+{
+  "id": "grandchild-activities-pick",
+  "name": "代际陪伴活动投票",
+  "description": "选择与孙辈相处的温馨活动，反映家庭亲情与互动偏好。",
+  "category": "家庭",
+  "directory": "grandchild-activities-pick",
+  "url": "grandchild-activities-pick",
+  "image": "grandchild-activities-pick/images/story-reading.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "孙辈",
+    "陪伴",
+    "家庭活动",
+    "代际交流",
+    "亲情",
+    "孙辈",
+    "陪伴",
+    "家庭活动",
+    "代际交流",
+    "亲情"
+  ],
+  "status": "active"
+}
