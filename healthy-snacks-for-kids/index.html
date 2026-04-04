@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：孩子放学或旅行时，你首选哪类零食？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家长话题：孩子放学或旅行时，你首选哪类零食？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长视角，你会怎么选：给孩子准备零食时优先考虑哪类？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="fresh-fruit">
+                            <div class="card-image">
+                                <img src="images/fresh-fruit.svg" alt="切好的水果盒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当季新鲜水果</h3>
+                                <p class="option-desc">自然甜、易携带（需家长处理）</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="low-sugar-yogurt">
+                            <div class="card-image">
+                                <img src="images/low-sugar-yogurt.svg" alt="酸奶杯的特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">低糖酸奶或酸奶杯</h3>
+                                <p class="option-desc">补充蛋白与钙，适合冷藏携带</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="homemade-snacks">
+                            <div class="card-image">
+                                <img src="images/homemade-snacks.svg" alt="家长和孩子做点心的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">自制小点心（烘焙/能量球）</h3>
+                                <p class="option-desc">可控配方、亲子制作乐趣</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="nuts-dried-fruit">
+                            <div class="card-image">
+                                <img src="images/nuts-dried-fruit.svg" alt="小包装坚果与干果" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">简单坚果与干果（适龄）</h3>
+                                <p class="option-desc">便携且饱腹，注意年龄与份量</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
