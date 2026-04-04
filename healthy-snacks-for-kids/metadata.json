@@ -1,0 +1,22 @@
+{
+  "id": "healthy-snacks-for-kids",
+  "name": "儿童零食选择",
+  "description": "讨论适合孩子的便携零食类型，侧重可操作与家庭可执行方案。",
+  "category": "生活",
+  "directory": "healthy-snacks-for-kids",
+  "url": "healthy-snacks-for-kids",
+  "image": "healthy-snacks-for-kids/images/fresh-fruit.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "零食",
+    "儿童饮食",
+    "家庭选择",
+    "便携",
+    "零食",
+    "儿童饮食",
+    "家庭选择",
+    "便携"
+  ],
+  "status": "active"
+}
