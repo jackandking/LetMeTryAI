@@ -1,0 +1,22 @@
+{
+  "id": "stealth-fighter-showdown",
+  "name": "战机对决",
+  "description": "通过隐身性、机动性和武器载荷对比三款代表性战机。",
+  "category": "军事装备",
+  "directory": "stealth-fighter-showdown",
+  "url": "stealth-fighter-showdown",
+  "image": "stealth-fighter-showdown/images/j-20.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "隐身",
+    "战机对比",
+    "机动性",
+    "装备党",
+    "隐身",
+    "战机对比",
+    "机动性",
+    "装备党"
+  ],
+  "status": "active"
+}
