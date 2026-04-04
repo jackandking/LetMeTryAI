@@ -1,0 +1,22 @@
+{
+  "id": "retired-fighter-nostalgia",
+  "name": "战机情怀投票",
+  "description": "三款代表性退役战机的外观与机械感对比，适合配实机高清图与参数卡片。",
+  "category": "军事装备",
+  "directory": "retired-fighter-nostalgia",
+  "url": "retired-fighter-nostalgia",
+  "image": "retired-fighter-nostalgia/images/jian-6.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "退役战机",
+    "战机情怀",
+    "机械美感",
+    "历史装备",
+    "退役战机",
+    "战机情怀",
+    "机械美感",
+    "历史装备"
+  ],
+  "status": "active"
+}
