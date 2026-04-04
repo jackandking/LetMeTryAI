@@ -1,0 +1,22 @@
+{
+  "id": "friendship-fallout-rank",
+  "name": "闺蜜翻脸排行",
+  "description": "列出闺蜜翻脸的常见原因，让用户为最能共情的一项投票并留言故事",
+  "category": "情感",
+  "directory": "friendship-fallout-rank",
+  "url": "friendship-fallout-rank",
+  "image": "friendship-fallout-rank/images/gossip-behind-back.svg",
+  "tags": [
+    "投票",
+    "情感",
+    "闺蜜",
+    "友情",
+    "背叛",
+    "情感共鸣",
+    "闺蜜",
+    "友情",
+    "背叛",
+    "情感共鸣"
+  ],
+  "status": "active"
+}
