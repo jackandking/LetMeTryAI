@@ -1,0 +1,22 @@
+{
+  "id": "sleep-quality-pick",
+  "name": "睡眠小贴士",
+  "description": "比较几种提升睡眠的日常方法，帮助读者选出最适合自己的做法。",
+  "category": "健康",
+  "directory": "sleep-quality-pick",
+  "url": "sleep-quality-pick",
+  "image": "sleep-quality-pick/images/consistent-schedule.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "睡眠质量",
+    "晚间习惯",
+    "中老年健康",
+    "睡眠",
+    "睡眠质量",
+    "晚间习惯",
+    "中老年健康"
+  ],
+  "status": "active"
+}
