@@ -1,0 +1,21 @@
+{
+  "id": "favorite-perfume-style",
+  "name": "香水风格投票",
+  "description": "花香、木质、清新或甜香，哪个香调最触动你？适合配嗅觉联想图与小样推荐。",
+  "category": "美妆",
+  "directory": "favorite-perfume-style",
+  "url": "favorite-perfume-style",
+  "image": "favorite-perfume-style/images/floral-note.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "香调",
+    "种草",
+    "香水",
+    "香调",
+    "种草",
+    "美妆"
+  ],
+  "status": "active"
+}
