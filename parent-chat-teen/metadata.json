@@ -1,0 +1,22 @@
+{
+  "id": "parent-chat-teen",
+  "name": "青春期聊天技巧",
+  "description": "四种日常聊天方式对比，帮助家长找到更顺畅的沟通方式。",
+  "category": "成长",
+  "directory": "parent-chat-teen",
+  "url": "parent-chat-teen",
+  "image": "parent-chat-teen/images/open-questions.svg",
+  "tags": [
+    "投票",
+    "成长",
+    "青春期",
+    "亲子沟通",
+    "倾听",
+    "家庭",
+    "青春期",
+    "亲子沟通",
+    "倾听",
+    "家庭"
+  ],
+  "status": "active"
+}
