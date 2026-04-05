@@ -1,0 +1,23 @@
+{
+  "id": "nostalgia-classic-songs",
+  "name": "经典老歌投票",
+  "description": "从春晚、电影、戏曲或流行金曲中选出你最怀念的那类老歌。",
+  "category": "怀旧",
+  "directory": "nostalgia-classic-songs",
+  "url": "nostalgia-classic-songs",
+  "image": "nostalgia-classic-songs/images/spring-festival-hits.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "老歌",
+    "春晚",
+    "电影主题曲",
+    "戏曲",
+    "老歌",
+    "怀旧",
+    "春晚",
+    "电影主题曲",
+    "戏曲"
+  ],
+  "status": "active"
+}
