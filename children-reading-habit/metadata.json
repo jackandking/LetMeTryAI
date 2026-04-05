@@ -1,0 +1,22 @@
+{
+  "id": "children-reading-habit",
+  "name": "阅读习惯投票",
+  "description": "选择最可落地的亲子阅读方式，帮助孩子养成长期阅读习惯。",
+  "category": "教育",
+  "directory": "children-reading-habit",
+  "url": "children-reading-habit",
+  "image": "children-reading-habit/images/fixed-reading-time.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读习惯",
+    "亲子共读",
+    "每日读书",
+    "图书馆探索",
+    "阅读习惯",
+    "亲子共读",
+    "每日读书",
+    "图书馆探索"
+  ],
+  "status": "active"
+}
