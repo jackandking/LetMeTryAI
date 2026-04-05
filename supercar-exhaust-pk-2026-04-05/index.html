@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>装备党首选：跑车声浪终极PK</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">装备党首选：跑车声浪终极PK</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">亲，你更愿意把票投给哪种跑车声浪？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="ferrari-v8">
+                            <div class="card-image">
+                                <img src="images/ferrari-v8.svg" alt="法拉利 V8 排气声浪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">法拉利 V8 怒吼</h3>
+                                <p class="option-desc">法拉利 V8：高亢、穿透力强的中高频怒吼。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="lamborghini-v10">
+                            <div class="card-image">
+                                <img src="images/lamborghini-v10.svg" alt="兰博基尼 V10 排气声浪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">兰博基尼 V10 咆哮</h3>
+                                <p class="option-desc">兰博 V10：低频冲击与高频嘶吼结合，震撼感强。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="porsche-flat-six">
+                            <div class="card-image">
+                                <img src="images/porsche-flat-six.svg" alt="保时捷 平六 排气声浪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">保时捷 平六 劲爆</h3>
+                                <p class="option-desc">保时捷 平六：独特的层次感与持续性低沉音色。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="mclaren-v8">
+                            <div class="card-image">
+                                <img src="images/mclaren-v8.svg" alt="迈凯伦 V8 排气声浪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">迈凯伦 V8 低嗓</h3>
+                                <p class="option-desc">迈凯伦 V8：低频厚重且富有攻击性的排气声。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
