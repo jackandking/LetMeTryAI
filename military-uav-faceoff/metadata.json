@@ -1,0 +1,22 @@
+{
+  "id": "military-uav-faceoff",
+  "name": "无人机对决",
+  "description": "对比代表性军用无人机的战术优势与作战定位，易配图文参数对比。",
+  "category": "军事装备",
+  "directory": "military-uav-faceoff",
+  "url": "military-uav-faceoff",
+  "image": "military-uav-faceoff/images/mq-9-reaper.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "军用无人机",
+    "无人机对决",
+    "战术",
+    "装备",
+    "军用无人机",
+    "无人机对决",
+    "战术",
+    "装备"
+  ],
+  "status": "active"
+}
