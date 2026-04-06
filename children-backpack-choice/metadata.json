@@ -1,0 +1,22 @@
+{
+  "id": "children-backpack-choice",
+  "name": "书包选购指南",
+  "description": "挑选儿童书包时，家长最在意什么性能或特性？",
+  "category": "工具",
+  "directory": "children-backpack-choice",
+  "url": "children-backpack-choice",
+  "image": "children-backpack-choice/images/spine-support-backpack.svg",
+  "tags": [
+    "投票",
+    "工具",
+    "儿童书包",
+    "护脊",
+    "收纳",
+    "耐用",
+    "儿童书包",
+    "护脊",
+    "收纳",
+    "耐用"
+  ],
+  "status": "active"
+}
