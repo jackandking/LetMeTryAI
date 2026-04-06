@@ -46,7 +46,8 @@
       "html"
     ],
     "testMatch": [
-      "**/*.test.js"
+      "**/*.test.js",
+      "**/.*/**/*.test.js"
     ]
   },
   "keywords": [

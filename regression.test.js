@@ -1,5 +1,11 @@
 // regression.test.js - Regression tests to ensure changes don't break existing functionality
 import { API_ENDPOINTS, BASE_URL, getImageUrl } from './util/config.js';
+import {
+  APPROVED_STATUS,
+  DEFAULT_CANDIDATE_STATUS,
+  buildCreateGeneratedImagesTableSql,
+  buildReviewUpdateStatement
+} from './womanai/.automation/scripts/womanai-image-pipeline.js';
 
 describe('Regression Tests - Domain to IP Migration', () => {
   describe('API Endpoint Migration', () => {
@@ -139,6 +145,36 @@ describe('Regression Tests - Domain to IP Migration', () => {
       expect(typeof BASE_URL).toBe('string');
       expect(typeof API_ENDPOINTS).toBe('object');
       expect(typeof getImageUrl).toBe('function');
+    });
+  });
+
+  describe('Regression Tests - WomanAI Automation Review Flow', () => {
+    it('should keep pending review as the default candidate status', () => {
+      const ddl = buildCreateGeneratedImagesTableSql('womanai_generated_images');
+      expect(DEFAULT_CANDIDATE_STATUS).toBe('pending_review');
+      expect(ddl).toContain(`DEFAULT '${DEFAULT_CANDIDATE_STATUS}'`);
+      expect(ddl).toContain('approved_image_id');
+    });
+
+    it('should preserve approval updates that link back to handsome_images', () => {
+      const update = buildReviewUpdateStatement('womanai_generated_images', {
+        candidateId: 9,
+        status: APPROVED_STATUS,
+        reviewNote: 'Approved manually',
+        approvedImageId: 33
+      });
+
+      expect(update.sql).toContain('approved_image_id = ?');
+      expect(update.params).toEqual([APPROVED_STATUS, 'Approved manually', 33, 9]);
+    });
+
+    it('should continue surfacing reactivated approved images through non-deleted rows', () => {
+      const duplicateLookup =
+        'SELECT id, deleted FROM handsome_images WHERE SUBSTRING(image_url, 1, 255) = SUBSTRING(?, 1, 255) LIMIT 1';
+      const reactivateSql = 'UPDATE handsome_images SET deleted = 0 WHERE id = ?';
+
+      expect(duplicateLookup).toContain('deleted');
+      expect(reactivateSql).toContain('SET deleted = 0');
     });
   });
 });

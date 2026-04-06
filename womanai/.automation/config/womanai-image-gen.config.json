@@ -1,0 +1,106 @@
+{
+  "database": {
+    "mysqlQueryEndpoint": "https://letmetry.cloud/mysql/query",
+    "imagesTable": "handsome_images",
+    "generatedImagesTable": "womanai_generated_images"
+  },
+  "generation": {
+    "dailyVolume": 3,
+    "hotSampleLimit": 30,
+    "topDirections": 3,
+    "provider": "minimax",
+    "aspectRatio": "2:3",
+    "quality": "standard",
+    "exportFilenamePrefix": "womanai-generation-summary"
+  },
+  "promptFoundation": {
+    "baseFragments": [
+      "年轻男性写真",
+      "真实摄影风格",
+      "清爽干净",
+      "明亮通透",
+      "适合女性用户审美"
+    ]
+  },
+  "tagDictionary": {
+    "temperament": ["清纯", "甜妹", "御姐", "知性", "松弛感"],
+    "hair": ["长直发", "微卷", "盘发", "短发"],
+    "makeup": ["淡妆", "精致妆", "素颜感"],
+    "scene": ["室内自然光", "咖啡馆", "通勤街拍", "居家"],
+    "outfit": ["简约", "通勤", "温柔穿搭", "轻时尚"],
+    "composition": ["近景头像", "半身", "侧脸", "氛围感"]
+  },
+  "manualImageTags": [
+    {
+      "imageId": 0,
+      "tags": ["清纯", "长直发", "淡妆", "室内自然光", "温柔穿搭", "近景头像"],
+      "disabled": true,
+      "note": "Replace with real hot image ids or imageUrlContains rules before production runs"
+    }
+  ],
+  "directionTemplates": [
+    {
+      "key": "pure-longhair-indoor",
+      "label": "清纯长发室内感",
+      "requiredTags": ["清纯", "长直发", "室内自然光"],
+      "optionalTags": ["淡妆", "温柔穿搭", "近景头像"],
+      "promptFragments": ["自然皮肤质感", "亲和力强", "柔和情绪"],
+      "variants": [
+        {
+          "key": "close-up",
+          "promptFragments": ["近景头像", "浅景深", "视线交流感"]
+        },
+        {
+          "key": "half-body",
+          "promptFragments": ["半身构图", "上身穿搭细节", "自然站姿"]
+        },
+        {
+          "key": "side-profile",
+          "promptFragments": ["轻侧脸", "氛围感", "柔和轮廓光"]
+        }
+      ]
+    },
+    {
+      "key": "smart-commute-cafe",
+      "label": "知性通勤咖啡馆感",
+      "requiredTags": ["知性", "通勤", "咖啡馆"],
+      "optionalTags": ["精致妆", "半身", "轻时尚"],
+      "promptFragments": ["城市生活方式", "成熟松弛", "高级简洁"],
+      "variants": [
+        {
+          "key": "table-seat",
+          "promptFragments": ["坐姿", "桌边环境", "轻松交流感"]
+        },
+        {
+          "key": "window-light",
+          "promptFragments": ["窗边自然光", "半身构图", "明暗层次"]
+        },
+        {
+          "key": "street-commute",
+          "promptFragments": ["通勤街拍", "轻步行动态", "都市背景虚化"]
+        }
+      ]
+    },
+    {
+      "key": "sweet-soft-home",
+      "label": "甜感居家松弛感",
+      "requiredTags": ["甜妹", "居家"],
+      "optionalTags": ["素颜感", "微卷", "氛围感"],
+      "promptFragments": ["放松自然", "生活化瞬间", "温暖柔和"],
+      "variants": [
+        {
+          "key": "sofa",
+          "promptFragments": ["沙发场景", "松弛神态", "近中景"]
+        },
+        {
+          "key": "reading",
+          "promptFragments": ["阅读动作", "安静氛围", "自然手部细节"]
+        },
+        {
+          "key": "portrait",
+          "promptFragments": ["肖像感更强", "柔和表情", "居家背景虚化"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+.local/*
+!.local/.gitkeep
+!.local/exports/
+!.local/exports/.gitkeep
+!.local/generated/
+!.local/generated/.gitkeep
+!.local/logs/
+!.local/logs/.gitkeep
+!.local/tmp/
+!.local/tmp/.gitkeep
