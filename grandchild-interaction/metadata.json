@@ -1,0 +1,24 @@
+{
+  "id": "grandchild-interaction",
+  "name": "孙辈互动投票",
+  "description": "选择最让你和孙辈关系更亲近的互动方式。",
+  "category": "家庭",
+  "directory": "grandchild-interaction",
+  "url": "grandchild-interaction",
+  "image": "grandchild-interaction/images/story-time.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "孙辈",
+    "陪伴",
+    "家庭互动",
+    "代际关系",
+    "亲情",
+    "孙辈",
+    "陪伴",
+    "家庭互动",
+    "代际关系",
+    "亲情"
+  ],
+  "status": "active"
+}
