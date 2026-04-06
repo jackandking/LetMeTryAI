@@ -1,5 +1,10 @@
 // integration.test.js - Integration tests for the entire configuration system
 import { API_ENDPOINTS, BASE_URL, getImageUrl } from './util/config.js';
+import {
+  attachTagsToImages,
+  buildGenerationPlan,
+  scoreDirections
+} from './womanai/.automation/scripts/womanai-image-pipeline.js';
 
 describe('Integration Tests - Configuration System', () => {
   describe('End-to-End Configuration Consistency', () => {
@@ -231,6 +236,49 @@ describe('Integration Tests - Configuration System', () => {
       expectedEndpoints.forEach(endpoint => {
         expect(API_ENDPOINTS).toHaveProperty(endpoint);
       });
+    });
+  });
+
+  describe('Integration Tests - WomanAI Automation', () => {
+    it('should turn hot image stats into generation prompts', () => {
+      const hotImages = [
+        { id: 1, image_url: 'https://example.com/a.jpg', view_count: 90 },
+        { id: 2, image_url: 'https://example.com/b.jpg', view_count: 70 }
+      ];
+      const tagged = attachTagsToImages(hotImages, [
+        { imageId: 1, tags: ['清纯', '长直发', '室内自然光', '近景头像'] },
+        { imageId: 2, tags: ['知性', '通勤', '咖啡馆', '半身'] }
+      ]);
+      const ranked = scoreDirections(tagged, [
+        {
+          key: 'pure-longhair-indoor',
+          label: '清纯长发室内感',
+          requiredTags: ['清纯', '长直发', '室内自然光'],
+          optionalTags: ['近景头像'],
+          promptFragments: ['亲和力强'],
+          variants: [{ key: 'close-up', promptFragments: ['浅景深'] }]
+        },
+        {
+          key: 'smart-commute-cafe',
+          label: '知性通勤咖啡馆感',
+          requiredTags: ['知性', '通勤', '咖啡馆'],
+          optionalTags: ['半身'],
+          promptFragments: ['高级简洁'],
+          variants: [{ key: 'window-light', promptFragments: ['窗边自然光'] }]
+        }
+      ]);
+      const plan = buildGenerationPlan({
+        rankedDirections: ranked.slice(0, 2),
+        dailyVolume: 2,
+        promptFoundation: {
+          baseFragments: ['年轻男性写真', '真实摄影风格']
+        }
+      });
+
+      expect(plan).toHaveLength(2);
+      expect(plan[0].promptText).toContain('年轻男性写真');
+      expect(plan[0].sourceImageIds).toEqual([1]);
+      expect(plan[1].sourceImageIds).toEqual([2]);
     });
   });
 });
