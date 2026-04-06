@@ -19,6 +19,7 @@ import {
     resolveEmailDraftLatestPath
 } from './runtime-paths.js';
 import { validateVotingAppDirectory } from './validate-voting-app.js';
+import { validateTaskName } from './publish-kuaishou-task-utils.js';
 import { fetchTrendingTopics } from './lib/fetch-trending.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -270,6 +271,21 @@ export function parseCopilotEventStream(text) {
 }
 
 function chooseBestTopicCandidate(topicCandidates, profile) {
+    // Sanitize titles: replace forbidden words before scoring
+    const FORBIDDEN_REPLACEMENTS = { '最': '更', '第一': '领先', '唯一': '独特', '极致': '出色', '绝对': '非常', '顶级': '高端', '史上': '历来', '全网': '网上' };
+    for (const candidate of topicCandidates) {
+        for (const field of ['title', 'pageTitle', 'appName']) {
+            if (typeof candidate[field] === 'string') {
+                for (const [word, replacement] of Object.entries(FORBIDDEN_REPLACEMENTS)) {
+                    if (candidate[field].includes(word)) {
+                        logStage('topics', `Sanitized "${word}" → "${replacement}" in ${field}: "${candidate[field]}"`);
+                        candidate[field] = candidate[field].replaceAll(word, replacement);
+                    }
+                }
+            }
+        }
+    }
+
     const scored = topicCandidates
         .map(candidate => ({
             candidate,
@@ -447,6 +463,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
         '- 问题、标题、选项要适合做清晰直观、易于配图、适合手机阅读的图文投票页。',
         '- 避免低俗、侵权、血腥、政治敏感、医疗误导。',
+        '- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网（快手审核会拒绝）。如需表达程度，用「更」「哪款」「你选谁」等替代。',
         ...profileNotes,
         `品牌画像如下：${JSON.stringify(profile)}`
     ].join('\n');
