@@ -1,0 +1,22 @@
+{
+  "id": "kids-desk-lamp",
+  "name": "护眼台灯选购投票",
+  "description": "对比常见护眼台灯类型，让家长依据习惯与预算选择最合适的款式。",
+  "category": "工具",
+  "directory": "kids-desk-lamp",
+  "url": "kids-desk-lamp",
+  "image": "kids-desk-lamp/images/adjustable-color-temp.svg",
+  "tags": [
+    "投票",
+    "工具",
+    "护眼",
+    "台灯",
+    "学习工具",
+    "阅读光源",
+    "护眼",
+    "台灯",
+    "学习工具",
+    "阅读光源"
+  ],
+  "status": "active"
+}
