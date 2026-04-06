@@ -1,0 +1,22 @@
+{
+  "id": "flagship-phone-night-pk",
+  "name": "科技数码对比：旗舰夜拍",
+  "description": "对比几款主流旗舰手机的夜景成像与降噪表现，便于用户快速投票与讨论拍照偏好。",
+  "category": "科技数码",
+  "directory": "flagship-phone-night-pk",
+  "url": "flagship-phone-night-pk",
+  "image": "flagship-phone-night-pk/images/iphone-15-pro.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "夜景拍照",
+    "旗舰手机",
+    "夜拍表现",
+    "降噪",
+    "夜景拍照",
+    "旗舰手机",
+    "夜拍表现",
+    "降噪"
+  ],
+  "status": "active"
+}
