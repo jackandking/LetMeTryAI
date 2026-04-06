@@ -1,0 +1,24 @@
+{
+  "id": "modern-multirole-fighter-pick",
+  "name": "现代战机对比",
+  "description": "以任务与性能维度对比几款现役多用途战机，便于投票和参数图片化展示。",
+  "category": "军事装备",
+  "directory": "modern-multirole-fighter-pick",
+  "url": "modern-multirole-fighter-pick",
+  "image": "modern-multirole-fighter-pick/images/j-20.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "战机",
+    "多用途",
+    "隐身",
+    "航电",
+    "机动性",
+    "战机",
+    "多用途",
+    "隐身",
+    "航电",
+    "机动性"
+  ],
+  "status": "active"
+}
