@@ -20,6 +20,7 @@ import {
 } from './runtime-paths.js';
 import { validateVotingAppDirectory } from './validate-voting-app.js';
 import { validateTaskName } from './publish-kuaishou-task-utils.js';
+import { checkTopicDuplicate, calculateSimilarity } from '../shared/topic-dedup.js';
 import { fetchTrendingTopics } from './lib/fetch-trending.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -286,7 +287,21 @@ function chooseBestTopicCandidate(topicCandidates, profile) {
         }
     }
 
+    // Hard dedup: reject candidates too similar to already-published Kuaishou tasks
+    const publishedNames = loadPublishedTaskNames();
+    if (publishedNames.length > 0) {
+        for (const candidate of topicCandidates) {
+            const title = candidate.title || candidate.appName || '';
+            const dupCheck = checkTopicDuplicate(title, publishedNames, { threshold: 0.6 });
+            if (dupCheck.isDuplicate) {
+                logStage('dedup', `BLOCKED "${title}" — too similar to published "${dupCheck.similarTo}" (${(dupCheck.similarity * 100).toFixed(0)}%)`);
+                candidate._blocked = true;
+            }
+        }
+    }
+
     const scored = topicCandidates
+        .filter(candidate => !candidate._blocked)
         .map(candidate => ({
             candidate,
             scoring: scoreTopicCandidate(candidate, profile)
@@ -295,7 +310,16 @@ function chooseBestTopicCandidate(topicCandidates, profile) {
         .sort((left, right) => right.scoring.score - left.scoring.score);
 
     if (scored.length === 0) {
-        throw new Error(`No accepted topic candidates found for profile ${profile.id}`);
+        // If all candidates blocked by dedup, fall through without dedup filter
+        logStage('dedup', 'All candidates blocked by dedup — allowing best scoring candidate as fallback');
+        const fallback = topicCandidates
+            .map(candidate => ({ candidate, scoring: scoreTopicCandidate(candidate, profile) }))
+            .filter(item => item.scoring.accepted)
+            .sort((left, right) => right.scoring.score - left.scoring.score);
+        if (fallback.length === 0) {
+            throw new Error(`No accepted topic candidates found for profile ${profile.id}`);
+        }
+        return fallback[0];
     }
 
     return scored[0];
@@ -323,6 +347,29 @@ function buildProfilePromptNotes(profile) {
     }
 
     return notes;
+}
+
+/**
+ * Load all published Kuaishou task names from the most recent daily report.
+ * Returns an array of task name strings for dedup checking.
+ */
+function loadPublishedTaskNames() {
+    const metricsDir = path.join(REPO_DIR, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+    try {
+        if (!fs.existsSync(metricsDir)) return [];
+        const files = fs.readdirSync(metricsDir)
+            .filter(f => f.startsWith('kuaishou_report_') && f.endsWith('.json'))
+            .sort()
+            .reverse();
+        if (files.length === 0) return [];
+        const report = JSON.parse(fs.readFileSync(path.join(metricsDir, files[0]), 'utf-8'));
+        const names = (report.allTasks || []).map(t => t.name).filter(Boolean);
+        logStage('dedup', `Loaded ${names.length} published task names from ${files[0]}`);
+        return names;
+    } catch (err) {
+        logStage('dedup', `Failed to load published tasks: ${err.message}`);
+        return [];
+    }
 }
 
 function getRecentTopicsSummary(profileId, days = 7) {
@@ -411,7 +458,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
     // Build recent topics note
     let recentTopicsNote = '';
     if (recentTopics && recentTopics.length > 0) {
-        recentTopicsNote = `\n最近7天已发布的主题（避免重复）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
+        recentTopicsNote = `\n最近30天已发布的主题（严禁重复或高度相似）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
     }
 
     return [
@@ -477,7 +524,7 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
     // Build recent topics note
     let recentTopicsNote = '';
     if (recentTopics && recentTopics.length > 0) {
-        recentTopicsNote = `\n最近7天已发布的主题（避免重复）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
+        recentTopicsNote = `\n最近30天已发布的主题（严禁重复或高度相似）：\n${recentTopics.map(t => `- ${t}`).join('\n')}\n`;
     }
 
     return [
@@ -637,8 +684,8 @@ async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
 }
 
 async function requestStructuredTopics({ model, profile, currentDate, copilotBin, topicHint }) {
-    // Get recent topics for deduplication
-    const recentTopics = getRecentTopicsSummary(profile.id, 7);
+    // Get recent topics for deduplication — check 30 days for prompt, use published tasks for hard check
+    const recentTopics = getRecentTopicsSummary(profile.id, 30);
     if (recentTopics && recentTopics.length > 0) {
         logStage('topics', `Found ${recentTopics.length} recent topics for deduplication check`);
     }
