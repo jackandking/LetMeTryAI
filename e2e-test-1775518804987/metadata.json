@@ -1,0 +1,14 @@
+{
+  "id": "e2e-test-1775518804987",
+  "name": "运动装备偏好小调查",
+  "description": "这是一个关于运动装备偏好的投票应用",
+  "category": "运动",
+  "keywords": [
+    "运动",
+    "装备",
+    "健身",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "e2e-test-1775518804987/images/basketball-shoes.svg"
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>运动装备偏好 - LetMeTryAI</title>
+  <meta name="description" content="这是一个关于运动装备偏好的投票应用">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <h1>运动装备偏好小调查</h1>
+      <p class="question">以下运动装备，你喜欢哪个？</p>
+    </header>
+    
+    <main class="vote-container">
+      <form id="voteForm" class="options-grid">
+        
+      <div class="option-card" data-value="basketball-shoes">
+        <img src="images/basketball-shoes.svg" alt="篮球鞋" loading="lazy">
+        <div class="option-content">
+          <h3>篮球鞋</h3>
+          <p>专业缓震，实战首选</p>
+        </div>
+      </div>
+
+      <div class="option-card" data-value="running-shoes">
+        <img src="images/running-shoes.svg" alt="跑鞋" loading="lazy">
+        <div class="option-content">
+          <h3>跑鞋</h3>
+          <p>轻便透气，长跑必备</p>
+        </div>
+      </div>
+
+      <div class="option-card" data-value="gym-gloves">
+        <img src="images/gym-gloves.svg" alt="健身手套" loading="lazy">
+        <div class="option-content">
+          <h3>健身手套</h3>
+          <p>防滑耐磨，力量训练</p>
+        </div>
+      </div>
+        <input type="hidden" name="vote" id="voteInput" required>
+      </form>
+      
+      <div class="action-bar">
+        <button type="submit" form="voteForm" class="submit-btn" disabled>
+          投票
+        </button>
+      </div>
+    </main>
+    
+    <div id="results" class="results-container hidden">
+      <h2>投票结果</h2>
+      <div id="chart" class="chart"></div>
+    </div>
+  </div>
+  
+  <script type="module" src="app.js"></script>
+</body>
+</html>
