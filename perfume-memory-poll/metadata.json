@@ -1,0 +1,20 @@
+{
+  "id": "perfume-memory-poll",
+  "name": "香氛记忆投票",
+  "description": "选出最让人印象深刻的香调，适合做图文种草页。",
+  "category": "美妆",
+  "directory": "perfume-memory-poll",
+  "url": "perfume-memory-poll",
+  "image": "perfume-memory-poll/images/floral-fragrance.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "气味",
+    "种草",
+    "香水",
+    "气味",
+    "种草"
+  ],
+  "status": "active"
+}
