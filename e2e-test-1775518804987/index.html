@@ -1,61 +1,103 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>运动装备偏好 - LetMeTryAI</title>
-  <meta name="description" content="这是一个关于运动装备偏好的投票应用">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>运动装备偏好小调查</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <header class="app-header">
-      <h1>运动装备偏好小调查</h1>
-      <p class="question">以下运动装备，你喜欢哪个？</p>
-    </header>
-    
-    <main class="vote-container">
-      <form id="voteForm" class="options-grid">
-        
-      <div class="option-card" data-value="basketball-shoes">
-        <img src="images/basketball-shoes.svg" alt="篮球鞋" loading="lazy">
-        <div class="option-content">
-          <h3>篮球鞋</h3>
-          <p>专业缓震，实战首选</p>
-        </div>
-      </div>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">运动装备偏好小调查</h1>
+        </header>
 
-      <div class="option-card" data-value="running-shoes">
-        <img src="images/running-shoes.svg" alt="跑鞋" loading="lazy">
-        <div class="option-content">
-          <h3>跑鞋</h3>
-          <p>轻便透气，长跑必备</p>
-        </div>
-      </div>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">以下运动装备，你喜欢哪个？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="basketball-shoes">
+                            <div class="card-image">
+                                <img src="images/basketball-shoes.svg" alt="篮球鞋" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">篮球鞋</h3>
+                                <p class="option-caption">专业缓震，实战首选</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="running-shoes">
+                            <div class="card-image">
+                                <img src="images/running-shoes.svg" alt="跑鞋" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">跑鞋</h3>
+                                <p class="option-caption">轻便透气，长跑必备</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="gym-gloves">
+                            <div class="card-image">
+                                <img src="images/gym-gloves.svg" alt="健身手套" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">健身手套</h3>
+                                <p class="option-caption">防滑耐磨，力量训练</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
 
-      <div class="option-card" data-value="gym-gloves">
-        <img src="images/gym-gloves.svg" alt="健身手套" loading="lazy">
-        <div class="option-content">
-          <h3>健身手套</h3>
-          <p>防滑耐磨，力量训练</p>
-        </div>
-      </div>
-        <input type="hidden" name="vote" id="voteInput" required>
-      </form>
-      
-      <div class="action-bar">
-        <button type="submit" form="voteForm" class="submit-btn" disabled>
-          投票
-        </button>
-      </div>
-    </main>
-    
-    <div id="results" class="results-container hidden">
-      <h2>投票结果</h2>
-      <div id="chart" class="chart"></div>
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
     </div>
-  </div>
-  
-  <script type="module" src="app.js"></script>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
 </body>
 </html>
