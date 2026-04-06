@@ -1,0 +1,21 @@
+{
+  "id": "classic-old-songs-poll",
+  "name": "经典老歌回忆",
+  "description": "回忆老歌，点名喜欢的曲目并分享听歌故事。",
+  "category": "怀旧",
+  "directory": "classic-old-songs-poll",
+  "url": "classic-old-songs-poll",
+  "image": "classic-old-songs-poll/images/tian-mi-mi.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "老歌",
+    "回忆",
+    "歌曲",
+    "老歌",
+    "怀旧",
+    "回忆",
+    "歌曲"
+  ],
+  "status": "active"
+}
