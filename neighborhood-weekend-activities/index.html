@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>邻里周末活动你更愿意参加哪类？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">邻里周末活动你更愿意参加哪类？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">亲，你更愿意参加哪类社区周末活动？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="neighborhood-volunteer">
+                            <div class="card-image">
+                                <img src="images/neighborhood-volunteer.svg" alt="邻里志愿活动" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">邻里志愿服务</h3>
+                                <p class="option-desc">一起做志愿，帮忙邻里或社区公益</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="square-dance-fitness">
+                            <div class="card-image">
+                                <img src="images/square-dance-fitness.svg" alt="广场舞或健身" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">广场舞或健身活动</h3>
+                                <p class="option-desc">跟朋友跳舞或参加社区健身班，热闹又有益身心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="crafts-interest-club">
+                            <div class="card-image">
+                                <img src="images/crafts-interest-club.svg" alt="手工兴趣小组" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手工或兴趣小组</h3>
+                                <p class="option-desc">书画、编织或手工班，一起学新技艺</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="elder-love" value="tea-reading-club">
+                            <div class="card-image">
+                                <img src="images/tea-reading-club.svg" alt="茶话会读书会" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">邻里茶话会或读书会</h3>
+                                <p class="option-desc">喝茶聊天或读书分享，轻松交流情感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
