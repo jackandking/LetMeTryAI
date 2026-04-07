@@ -1,0 +1,24 @@
+{
+  "id": "neighborhood-weekend-activities",
+  "name": "邻里周末活动",
+  "description": "投票收集大家对社区活动类型的偏好，利于生成活动推荐与宣传素材。",
+  "category": "生活",
+  "directory": "neighborhood-weekend-activities",
+  "url": "neighborhood-weekend-activities",
+  "image": "neighborhood-weekend-activities/images/neighborhood-volunteer.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "兴趣班",
+    "聚会",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "兴趣班",
+    "聚会"
+  ],
+  "status": "active"
+}
