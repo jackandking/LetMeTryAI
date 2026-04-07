@@ -148,51 +148,41 @@ function attachRadioHandlers() {
 }
 
 // Async version of processVote
-function processVoteAsync(selectedLabel) {
-    return new Promise((resolve) => {
-        // Always resolve - use local data if server fails
-        try {
-            getConfig(questionConfig.storageKey, (data) => {
-                try {
-                    if (data !== null && typeof data === 'object') {
-                        voteData = { ...data };
-                    }
+async function processVoteAsync(selectedLabel) {
+    // Always try to get existing data first
+    let existingData = null;
+    try {
+        existingData = await new Promise((resolve) => {
+            getConfig(questionConfig.storageKey, (data) => resolve(data));
+        });
+    } catch (e) {
+        console.warn('Failed to get existing data:', e);
+    }
+    
+    if (existingData !== null && typeof existingData === 'object') {
+        voteData = { ...existingData };
+    }
+    
+    // Update local vote count
+    voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
+    
+    // Try to update server (fire and forget)
+    try {
+        updateConfig(questionConfig.storageKey, voteData);
+    } catch (error) {
+        console.warn('Server update failed, using local data only:', error);
+    }
+    
+    // Always hide question area and show result button
+    const questionArea = document.getElementById('questionArea');
+    if (questionArea) {
+        questionArea.style.display = 'none';
+    }
 
-                    voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
-                    
-                    // Try to update server, but don't block on failure
-                    updateConfig(questionConfig.storageKey, voteData, (success) => {
-                        if (!success) {
-                            console.warn('Server update failed, using local data only');
-                        }
-                        
-                        // Always hide question area and show result button
-                        const questionArea = document.getElementById('questionArea');
-                        if (questionArea) {
-                            questionArea.style.display = 'none';
-                        }
-
-                        const showResultBtn = document.getElementById('showResultBtn');
-                        if (showResultBtn) {
-                            showResultBtn.style.display = 'block';
-                        }
-                        
-                        resolve();
-                    });
-                } catch (error) {
-                    console.warn('Vote processing error, using local data:', error);
-                    // Still resolve - update local data
-                    voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
-                    resolve();
-                }
-            });
-        } catch (error) {
-            console.warn('getConfig failed, using local data:', error);
-            // Fallback: just update local data
-            voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
-            resolve();
-        }
-    });
+    const showResultBtn = document.getElementById('showResultBtn');
+    if (showResultBtn) {
+        showResultBtn.style.display = 'block';
+    }
 }
 
 // Async version of showAd
