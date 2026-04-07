@@ -57,17 +57,30 @@ function setupPageContent() {
 }
 
 function attachRadioHandlers() {
-    const radios = document.querySelectorAll('input[name="equipment"]');
-    if (!radios || radios.length === 0) return;
+    const optionCards = document.querySelectorAll('.option-card');
+    if (!optionCards || optionCards.length === 0) return;
 
-    radios.forEach(radio => {
-        radio.addEventListener('change', (event) => {
-            const selectedValue = event.target.value;
-            const matched = questionConfig.options.find(option => option.value === selectedValue);
-
-            if (matched) {
-                processVote(matched.label);
-                showAd();
+    optionCards.forEach(card => {
+        // Click on card selects the radio
+        card.addEventListener('click', (event) => {
+            // Don't trigger if clicking on already selected card
+            const radio = card.querySelector('input[type="radio"]');
+            if (!radio) return;
+            
+            // If not already checked, check it and trigger vote
+            if (!radio.checked) {
+                radio.checked = true;
+                const selectedValue = radio.value;
+                const matched = questionConfig.options.find(option => option.value === selectedValue);
+                
+                if (matched) {
+                    // Visual feedback - highlight selected card
+                    optionCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    
+                    processVote(matched.label);
+                    showAd();
+                }
             }
         });
     });
