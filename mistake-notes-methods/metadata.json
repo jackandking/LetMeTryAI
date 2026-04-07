@@ -1,0 +1,22 @@
+{
+  "id": "mistake-notes-methods",
+  "name": "实用工具：错题整理方法",
+  "description": "错题整理方式对复习效率影响大，投票帮助家长选择可执行方法。",
+  "category": "工具",
+  "directory": "mistake-notes-methods",
+  "url": "mistake-notes-methods",
+  "image": "mistake-notes-methods/images/mistake-notebook.svg",
+  "tags": [
+    "投票",
+    "工具",
+    "错题整理",
+    "学习工具",
+    "复习方法",
+    "学习习惯",
+    "错题整理",
+    "学习工具",
+    "复习方法",
+    "学习习惯"
+  ],
+  "status": "active"
+}
