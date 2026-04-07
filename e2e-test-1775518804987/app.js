@@ -92,59 +92,83 @@ function attachRadioHandlers() {
     }
 
     optionCards.forEach(card => {
-        card.addEventListener('click', async (event) => {
-            // Prevent double voting
-            if (isVoting) return;
-            
-            const radio = card.querySelector('input[type="radio"]');
-            if (!radio) {
-                console.error('No radio input found in card');
-                return;
-            }
-            
-            // If already checked, do nothing
-            if (radio.checked) return;
-            
-            // Set voting flag
-            isVoting = true;
-            
-            // Check the radio
-            radio.checked = true;
-            
-            // Get selected value
-            const selectedValue = radio.value;
-            const matched = questionConfig.options.find(option => option.value === selectedValue);
-            
-            if (!matched) {
-                console.error('No matching option found for:', selectedValue);
-                isVoting = false;
-                return;
-            }
-            
-            // Visual feedback - highlight selected card
-            optionCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            
-            // Show voting overlay
-            showVotingOverlay();
-            
-            try {
-                // Process vote
-                await processVoteAsync(matched.label);
-                
-                // Show ad or fallback
-                await showAdAsync();
-                
-            } catch (error) {
-                console.error('Vote processing error:', error);
-                hideVotingOverlay();
-                isVoting = false;
-                
-                // Show error to user
-                alert('投票提交失败，请重试');
-            }
-        });
+        // Use pointerdown for faster response on mobile + click for fallback
+        card.addEventListener('pointerdown', handleCardInteraction);
+        card.addEventListener('click', handleCardInteraction);
     });
+    
+    console.log('Radio handlers attached to', optionCards.length, 'cards');
+}
+
+async function handleCardInteraction(event) {
+    // Prevent double voting
+    if (isVoting) {
+        console.log('Already voting, ignoring click');
+        return;
+    }
+    
+    // Find the card that was clicked (could be a child element)
+    const card = event.currentTarget;
+    if (!card) {
+        console.error('No card found');
+        return;
+    }
+    
+    const radio = card.querySelector('input[type="radio"]');
+    if (!radio) {
+        console.error('No radio input found in card');
+        return;
+    }
+    
+    // If already checked, do nothing (prevents double trigger)
+    if (radio.checked) {
+        console.log('Radio already checked');
+        return;
+    }
+    
+    console.log('Card clicked, processing vote...');
+    
+    // Set voting flag immediately
+    isVoting = true;
+    
+    // Check the radio
+    radio.checked = true;
+    
+    // Get selected value
+    const selectedValue = radio.value;
+    const matched = questionConfig.options.find(option => option.value === selectedValue);
+    
+    if (!matched) {
+        console.error('No matching option found for:', selectedValue);
+        isVoting = false;
+        return;
+    }
+    
+    console.log('Selected:', matched.label);
+    
+    // Visual feedback - highlight selected card
+    const optionCards = document.querySelectorAll('.option-card');
+    optionCards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    
+    // Show voting overlay
+    showVotingOverlay();
+    
+    try {
+        // Process vote
+        await processVoteAsync(matched.label);
+        
+        // Show ad or fallback (only in browser, Kuaishou will navigate away)
+        await showAdAsync();
+        
+    } catch (error) {
+        console.error('Vote processing error:', error);
+        hideVotingOverlay();
+        isVoting = false;
+        
+        // Show error to user
+        alert('投票提交失败，请重试');
+    }
 }
 
 // Async version of processVote
@@ -186,6 +210,11 @@ async function processVoteAsync(selectedLabel) {
 }
 
 // Async version of showAd
+// Legacy showAd function (for HTML onclick compatibility)
+function showAd() {
+    return showAdAsync();
+}
+
 function showAdAsync() {
     return new Promise((resolve) => {
         // Check if we're in Kuaishou environment
