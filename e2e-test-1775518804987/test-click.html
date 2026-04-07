@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Test - Voting App</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .result { padding: 10px; margin: 5px 0; border-radius: 4px; font-family: monospace; }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #testFrame { width: 100%; height: 500px; border: 2px solid #ccc; margin-top: 10px; }
+        .controls { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Voting App Click Test</h1>
+    <div class="controls">
+        <button onclick="runTests()">▶️ 运行测试</button>
+        <button onclick="simulateClick()">🖱️ 手动点击测试</button>
+        <button onclick="document.getElementById('testFrame').src='index.html?debug=true&v='+Date.now()">🔄 刷新 iframe</button>
+    </div>
+    <div id="results"></div>
+    <iframe id="testFrame" src="index.html?debug=true&v=fix"></iframe>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            results.appendChild(div);
+        }
+
+        function clearLogs() {
+            results.innerHTML = '';
+        }
+
+        async function runTests() {
+            clearLogs();
+            log('=== 开始测试 ===', 'info');
+            
+            const frame = document.getElementById('testFrame');
+            const frameWin = frame.contentWindow;
+            const frameDoc = frame.contentDocument || frameWin.document;
+            
+            // Wait for iframe to load
+            await new Promise(r => setTimeout(r, 1500));
+            
+            // Test 1: Function existence
+            log('--- 函数存在性检查 ---', 'info');
+            
+            const tests = [
+                ['showAd', typeof frameWin.showAd === 'function'],
+                ['showAdAsync', typeof frameWin.showAdAsync === 'function'],
+                ['processVoteAsync', typeof frameWin.processVoteAsync === 'function'],
+                ['attachRadioHandlers', typeof frameWin.attachRadioHandlers === 'function'],
+                ['handleCardInteraction', typeof frameWin.handleCardInteraction === 'function'],
+            ];
+            
+            let passed = 0;
+            tests.forEach(([name, exists]) => {
+                if (exists) {
+                    log(`✅ ${name}() 存在`, 'pass');
+                    passed++;
+                } else {
+                    log(`❌ ${name}() 不存在`, 'fail');
+                }
+            });
+            
+            // Test 2: DOM elements
+            log('--- DOM 元素检查 ---', 'info');
+            
+            const cards = frameDoc.querySelectorAll('.option-card');
+            log(`${cards.length} 个选项卡片找到`, cards.length > 0 ? 'pass' : 'fail');
+            
+            const radios = frameDoc.querySelectorAll('input[type="radio"]');
+            log(`${radios.length} 个 radio 按钮找到`, radios.length > 0 ? 'pass' : 'fail');
+            
+            // Test 3: CSS check
+            log('--- CSS 样式检查 ---', 'info');
+            if (radios.length > 0) {
+                const style = frameWin.getComputedStyle(radios[0]);
+                log(`Radio width: ${style.width}, height: ${style.height}`, 'info');
+                if (style.width === '0px' || style.width === '0') {
+                    log('✅ Radio 按钮不会阻挡点击 (width=0)', 'pass');
+                } else {
+                    log('⚠️ Radio 按钮可能有阻挡问题', 'fail');
+                }
+            }
+            
+            log(`=== 测试完成: ${passed}/${tests.length} 通过 ===`, passed === tests.length ? 'pass' : 'fail');
+        }
+
+        async function simulateClick() {
+            log('--- 模拟点击测试 ---', 'info');
+            
+            const frame = document.getElementById('testFrame');
+            const frameWin = frame.contentWindow;
+            const frameDoc = frame.contentDocument || frameWin.document;
+            
+            const card = frameDoc.querySelector('.option-card');
+            if (!card) {
+                log('❌ 找不到选项卡片', 'fail');
+                return;
+            }
+            
+            log('正在点击第一个选项...', 'info');
+            
+            // Simulate click
+            card.click();
+            
+            // Check results after delay
+            await new Promise(r => setTimeout(r, 800));
+            
+            const radio = card.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                log('✅ Radio 按钮已被选中', 'pass');
+            } else {
+                log('❌ Radio 按钮未被选中', 'fail');
+            }
+            
+            const questionArea = frameDoc.getElementById('questionArea');
+            if (questionArea && questionArea.style.display === 'none') {
+                log('✅ 问题区域已隐藏 (投票成功)', 'pass');
+            } else {
+                log('❌ 问题区域仍然可见 (投票未成功)', 'fail');
+            }
+            
+            const showResultBtn = frameDoc.getElementById('showResultBtn');
+            if (showResultBtn && showResultBtn.style.display === 'block') {
+                log('✅ 查看结果按钮已显示', 'pass');
+            } else {
+                log('❌ 查看结果按钮未显示', 'fail');
+            }
+        }
+        
+        // Auto-run on load
+        window.onload = () => {
+            setTimeout(runTests, 2000);
+        };
+    </script>
+</body>
+</html>
