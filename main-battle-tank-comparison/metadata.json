@@ -1,0 +1,18 @@
+{
+  "id": "main-battle-tank-comparison",
+  "name": "坦克装备投票",
+  "description": "选取具有代表性的主战坦克，从机动性、防护与火力三方面以参数图与要点说明进行对比，适合军迷在移动端快速阅读并投票。",
+  "category": "军事",
+  "keywords": [
+    "主战坦克",
+    "火力",
+    "防护",
+    "机动性",
+    "军事装备对比",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "main-battle-tank-comparison/images/m1a2-abrams.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-07T23:23:31.772Z"
+}
