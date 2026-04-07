@@ -1,0 +1,18 @@
+{
+  "id": "main-battle-tank-compare",
+  "name": "坦克对比投票",
+  "description": "对比主战坦克在火力、防护、机动三大维度的侧重点，适合加入参数图表与短评，便于手机端快速浏览与投票。",
+  "category": "军事",
+  "keywords": [
+    "坦克",
+    "军事装备",
+    "火力",
+    "防护",
+    "机动",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "main-battle-tank-compare/images/firepower.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-07T23:34:33.812Z"
+}
