@@ -1,0 +1,24 @@
+{
+  "id": "ww2-tank-faceoff",
+  "name": "二战坦克对比",
+  "description": "以经典二战坦克为对象，侧重装甲、火力与机动性对比，适合图文+参数展示。",
+  "category": "军事装备",
+  "directory": "ww2-tank-faceoff",
+  "url": "ww2-tank-faceoff",
+  "image": "ww2-tank-faceoff/images/t-34.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "二战",
+    "坦克",
+    "装甲",
+    "火力",
+    "机械美感",
+    "二战",
+    "坦克",
+    "装甲",
+    "火力",
+    "机械美感"
+  ],
+  "status": "active"
+}
