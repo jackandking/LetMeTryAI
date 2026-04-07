@@ -1,0 +1,22 @@
+{
+  "id": "evening-sleep-habit-choice",
+  "name": "助眠小习惯投票",
+  "description": "非处方、日常可操作的助眠习惯投票，适合中老年读者交流实用方法。",
+  "category": "健康",
+  "directory": "evening-sleep-habit-choice",
+  "url": "evening-sleep-habit-choice",
+  "image": "evening-sleep-habit-choice/images/warm-milk.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "助眠",
+    "放松",
+    "夜间习惯",
+    "睡眠",
+    "助眠",
+    "放松",
+    "夜间习惯"
+  ],
+  "status": "active"
+}
