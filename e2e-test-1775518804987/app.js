@@ -32,10 +32,15 @@ function initializeApp() {
 
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('finishedAd') === 'false') {
-        if (typeof ks !== 'undefined' && ks.navigateBack) {
-            ks.navigateBack();
-        }
+    const finishedAd = urlParams.get('finishedAd');
+    
+    if (finishedAd === 'false') {
+        // 用户没看完广告，但仍然显示结果（因为已经投票了）
+        console.log('Ad not finished, but showing results anyway');
+        // 延迟显示结果，让用户知道发生了什么
+        setTimeout(() => {
+            displayResults();
+        }, 100);
     }
 }
 
@@ -262,20 +267,59 @@ function displayResults() {
 function handleResultDisplay() {
     const urlParams = new URLSearchParams(window.location.search);
     const finishedAd = urlParams.get('finishedAd');
-    if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
+    
+    // 看完广告或没看完都显示结果（用户已经投票了）
+    if (finishedAd === 'true' || finishedAd === '1' || finishedAd === 'false') {
         const questionnaire = document.getElementById('questionnaire');
         const result = document.getElementById('result');
         if (questionnaire) questionnaire.style.display = 'none';
         if (result) {
             result.style.display = 'block';
-            // Scroll to result
             setTimeout(() => {
                 result.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         }
-
+        
+        // 如果没看完广告，添加提示
+        if (finishedAd === 'false') {
+            showAdIncompleteNotice();
+        }
+        
         displayResults();
     }
+}
+
+function showAdIncompleteNotice() {
+    // 创建温和提示，不强制要求看完广告
+    const notice = document.createElement('div');
+    notice.className = 'ad-notice';
+    notice.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 16px auto;
+            max-width: 90%;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        ">
+            💡 支持作者：下次完整观看广告可以支持我们继续提供免费投票服务哦~
+        </div>
+    `;
+    
+    const result = document.getElementById('result');
+    if (result && result.firstChild) {
+        result.insertBefore(notice, result.firstChild);
+    }
+    
+    // 3秒后淡出
+    setTimeout(() => {
+        notice.style.transition = 'opacity 0.5s';
+        notice.style.opacity = '0';
+        setTimeout(() => notice.remove(), 500);
+    }, 5000);
 }
 
 function showResult(latestVoteData) {
