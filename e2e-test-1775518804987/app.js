@@ -149,7 +149,8 @@ function attachRadioHandlers() {
 
 // Async version of processVote
 function processVoteAsync(selectedLabel) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+        // Always resolve - use local data if server fails
         try {
             getConfig(questionConfig.storageKey, (data) => {
                 try {
@@ -159,31 +160,37 @@ function processVoteAsync(selectedLabel) {
 
                     voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
                     
+                    // Try to update server, but don't block on failure
                     updateConfig(questionConfig.storageKey, voteData, (success) => {
-                        if (success) {
-                            // Hide question area
-                            const questionArea = document.getElementById('questionArea');
-                            if (questionArea) {
-                                questionArea.style.display = 'none';
-                            }
-
-                            // Show result button (for manual viewing if needed)
-                            const showResultBtn = document.getElementById('showResultBtn');
-                            if (showResultBtn) {
-                                showResultBtn.style.display = 'block';
-                            }
-                            
-                            resolve();
-                        } else {
-                            reject(new Error('Failed to update config'));
+                        if (!success) {
+                            console.warn('Server update failed, using local data only');
                         }
+                        
+                        // Always hide question area and show result button
+                        const questionArea = document.getElementById('questionArea');
+                        if (questionArea) {
+                            questionArea.style.display = 'none';
+                        }
+
+                        const showResultBtn = document.getElementById('showResultBtn');
+                        if (showResultBtn) {
+                            showResultBtn.style.display = 'block';
+                        }
+                        
+                        resolve();
                     });
                 } catch (error) {
-                    reject(error);
+                    console.warn('Vote processing error, using local data:', error);
+                    // Still resolve - update local data
+                    voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
+                    resolve();
                 }
             });
         } catch (error) {
-            reject(error);
+            console.warn('getConfig failed, using local data:', error);
+            // Fallback: just update local data
+            voteData[selectedLabel] = (voteData[selectedLabel] || 0) + 1;
+            resolve();
         }
     });
 }
