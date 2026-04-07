@@ -1,6 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <rect fill="#f0f0f0" width="200" height="200"/>
-  <text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="16" fill="#666">
-    健身手套
-  </text>
+  <!-- Background -->
+  <rect fill="url(#bg3)" width="200" height="200"/>
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.3"/>
+    </linearGradient>
+    <linearGradient id="glove" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1f2937"/>
+      <stop offset="100%" style="stop-color:#374151"/>
+    </linearGradient>
+    <linearGradient id="pad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Dumbbell icon -->
+  <g transform="translate(140, 35)" opacity="0.3">
+    <rect x="0" y="8" width="40" height="6" rx="2" fill="#3b82f6"/>
+    <rect x="5" y="0" width="8" height="22" rx="2" fill="#3b82f6"/>
+    <rect x="27" y="0" width="8" height="22" rx="2" fill="#3b82f6"/>
+  </g>
+  
+  <!-- Gym Glove -->
+  <g transform="translate(45, 60)">
+    <!-- Wrist wrap -->
+    <rect x="30" y="95" width="70" height="25" rx="3" fill="#1f2937"/>
+    <line x1="35" y1="102" x2="95" y2="102" stroke="#4b5563" stroke-width="1.5"/>
+    <line x1="35" y1="108" x2="95" y2="108" stroke="#4b5563" stroke-width="1.5"/>
+    <line x1="35" y1="114" x2="95" y2="114" stroke="#4b5563" stroke-width="1.5"/>
+    
+    <!-- Main glove body -->
+    <path d="M 35 95 L 40 50 Q 42 35 55 35 L 85 38 Q 95 40 95 55 L 90 95 Z" fill="url(#glove)"/>
+    
+    <!-- Palm pad (blue) -->
+    <ellipse cx="65" cy="75" rx="20" ry="15" fill="url(#pad)"/>
+    <ellipse cx="65" cy="75" rx="12" ry="8" fill="#60a5fa" opacity="0.5"/>
+    
+    <!-- Finger holes outline -->
+    <ellipse cx="50" cy="45" rx="6" ry="8" fill="#111827"/>
+    <ellipse cx="65" cy="43" rx="6" ry="8" fill="#111827"/>
+    <ellipse cx="80" cy="46" rx="6" ry="8" fill="#111827"/>
+    
+    <!-- Finger padding -->
+    <rect x="44" y="35" width="12" height="12" rx="3" fill="#2563eb"/>
+    <rect x="59" y="33" width="12" height="12" rx="3" fill="#2563eb"/>
+    <rect x="74" y="36" width="12" height="12" rx="3" fill="#2563eb"/>
+    
+    <!-- Ventilation holes -->
+    <circle cx="55" cy="65" r="2" fill="#4b5563"/>
+    <circle cx="65" cy="62" r="2" fill="#4b5563"/>
+    <circle cx="75" cy="65" r="2" fill="#4b5563"/>
+    <circle cx="60" cy="72" r="2" fill="#4b5563"/>
+    <circle cx="70" cy="70" r="2" fill="#4b5563"/>
+  </g>
 </svg>
