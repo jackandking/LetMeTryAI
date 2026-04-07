@@ -367,28 +367,8 @@ function addSummaryStatistics(container, latestVoteData) {
 }
 
 function addResultActions(container) {
-    const actionsDiv = document.createElement('div');
-    actionsDiv.style.cssText = 'display: flex; gap: 16px; justify-content: center; margin-top: 24px; flex-wrap: wrap;';
-    
-    // Vote again button
-    const voteAgainBtn = document.createElement('button');
-    voteAgainBtn.className = 'show-result-btn';
-    voteAgainBtn.style.cssText = 'margin: 0; max-width: 200px; background: linear-gradient(135deg, #F97316 0%, #FB923C 100%);';
-    voteAgainBtn.textContent = '再投一次';
-    voteAgainBtn.onclick = () => {
-        window.location.reload();
-    };
-    
-    // Back to home button
-    const homeBtn = document.createElement('button');
-    homeBtn.className = 'show-result-btn';
-    homeBtn.style.cssText = 'margin: 0; max-width: 200px; background: var(--color-bg-light); color: var(--color-text); border: 2px solid var(--color-primary);';
-    homeBtn.textContent = '返回首页';
-    homeBtn.onclick = jumpToIndex;
-    
-    actionsDiv.appendChild(voteAgainBtn);
-    actionsDiv.appendChild(homeBtn);
-    container.appendChild(actionsDiv);
+    // 页面底部已有"返回主页查看更多"链接，这里不再重复添加
+    // 如需添加其他操作按钮，可在此处扩展
 }
 
 function jumpToIndex() {
