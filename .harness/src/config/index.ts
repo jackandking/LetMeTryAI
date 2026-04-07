@@ -1,7 +1,7 @@
 /**
  * Configuration management for Harness
  */
-import { mkdirSync, existsSync, symlinkSync, readdirSync, copyFileSync } from 'fs';
+import { mkdirSync, existsSync, readdirSync, copyFileSync, statSync } from 'fs';
 import { join } from 'path';
 import type { HarnessConfig, HarnessMode, ProfileConfig } from '../types/index.js';
 
@@ -9,18 +9,20 @@ const PROJECT_ROOT = process.env.PROJECT_DIR || join(process.cwd(), '..');
 
 // 方案 A: 完全独立的运行时目录
 const HARNESS_RUNTIME_DIR = join(PROJECT_ROOT, '.harness', '.local');
-// 认证文件共享来源（legacy 系统）
-const LEGACY_AUTH_DIR = join(PROJECT_ROOT, '.automation', '.local', 'auth');
+// 认证文件来源（从 prod 复制最新）
+const PROD_AUTH_DIR = join(PROJECT_ROOT, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'auth');
+const DEV_AUTH_DIR = join(PROJECT_ROOT, '.automation', '.local', 'auth');
 
 export const PATHS = {
   projectRoot: PROJECT_ROOT,
   harnessRuntimeDir: HARNESS_RUNTIME_DIR,
-  legacyAuthDir: LEGACY_AUTH_DIR,
+  prodAuthDir: PROD_AUTH_DIR,
+  devAuthDir: DEV_AUTH_DIR,
   config: join(PROJECT_ROOT, '.harness', 'config'),
   state: join(HARNESS_RUNTIME_DIR, 'state'),
   logs: join(HARNESS_RUNTIME_DIR, 'logs'),
   tasks: join(HARNESS_RUNTIME_DIR, 'tasks'),
-  auth: join(HARNESS_RUNTIME_DIR, 'auth'),  // 独立 auth 目录，通过软链接共享
+  auth: join(HARNESS_RUNTIME_DIR, 'auth'),  // 独立 auth 目录，从 prod 复制
 } as const;
 
 export function getHarnessMode(): HarnessMode {
@@ -139,41 +141,63 @@ export function loadProfileConfig(profileId: string): ProfileConfig {
 
 /**
  * 设置认证文件共享
- * 方案 A: 软链接方式 - harness 独立运行时，共享 legacy 认证
+ * 方案: 从 prod 复制最新认证文件到 harness 运行时目录
  */
-function setupAuthSymlink(): void {
+function setupAuthCopy(): void {
   const harnessAuthDir = PATHS.auth;
-  const legacyAuthDir = PATHS.legacyAuthDir;
   
   // 确保 harness auth 目录存在
   if (!existsSync(harnessAuthDir)) {
     mkdirSync(harnessAuthDir, { recursive: true });
   }
   
-  // 如果 legacy auth 存在，创建软链接或复制文件
-  if (existsSync(legacyAuthDir)) {
+  // 优先从 prod 复制，如果不存在则从 dev 复制
+  const sourceDirs = [PATHS.prodAuthDir, PATHS.devAuthDir];
+  let copied = false;
+  
+  for (const sourceDir of sourceDirs) {
+    if (!existsSync(sourceDir)) {
+      continue;
+    }
+    
     try {
-      const files = readdirSync(legacyAuthDir);
+      const files = readdirSync(sourceDir);
+      let copiedCount = 0;
+      
       for (const file of files) {
-        const sourceFile = join(legacyAuthDir, file);
+        const sourceFile = join(sourceDir, file);
         const targetFile = join(harnessAuthDir, file);
         
-        // 如果目标已存在，跳过
-        if (existsSync(targetFile)) continue;
+        // 检查是否需要更新（比较修改时间）
+        let needCopy = true;
+        if (existsSync(targetFile)) {
+          const sourceStat = statSync(sourceFile);
+          const targetStat = statSync(targetFile);
+          // 如果目标文件比源文件新或相同，跳过
+          if (targetStat.mtime >= sourceStat.mtime) {
+            needCopy = false;
+          }
+        }
         
-        // 尝试创建软链接（首选）
-        try {
-          symlinkSync(sourceFile, targetFile);
-          console.log(`[Config] Linked auth file: ${file}`);
-        } catch (e) {
-          // 软链接失败则复制文件（Windows 可能需要管理员权限）
+        if (needCopy) {
           copyFileSync(sourceFile, targetFile);
-          console.log(`[Config] Copied auth file: ${file}`);
+          copiedCount++;
+          console.log(`[Config] Copied auth file: ${file} from ${sourceDir}`);
         }
       }
+      
+      if (copiedCount > 0) {
+        console.log(`[Config] Auth sync complete: ${copiedCount} files from ${sourceDir}`);
+        copied = true;
+        break; // 成功从当前源复制后不再检查其他源
+      }
     } catch (e) {
-      console.warn('[Config] Failed to setup auth sharing:', (e as Error).message);
+      console.warn(`[Config] Failed to copy from ${sourceDir}:`, (e as Error).message);
     }
+  }
+  
+  if (!copied) {
+    console.warn('[Config] No auth files found in prod or dev directories');
   }
 }
 
@@ -193,6 +217,6 @@ export function ensureDirectories(): void {
     }
   });
   
-  // 设置认证文件共享
-  setupAuthSymlink();
+  // 设置认证文件共享（从 prod 复制）
+  setupAuthCopy();
 }
