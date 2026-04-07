@@ -1,0 +1,24 @@
+{
+  "id": "military-uav-duel",
+  "name": "军用无人机对决",
+  "description": "对比常见军用无人机的任务定位与性能，适合装备党投票与讨论。",
+  "category": "军事装备",
+  "directory": "military-uav-duel",
+  "url": "military-uav-duel",
+  "image": "military-uav-duel/images/mq-9-reaper.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "性能对比",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "性能对比"
+  ],
+  "status": "active"
+}
