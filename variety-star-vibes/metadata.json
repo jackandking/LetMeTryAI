@@ -1,0 +1,22 @@
+{
+  "id": "variety-star-vibes",
+  "name": "综艺感女星投票",
+  "description": "投票选出你觉得综艺感最好、最带节目的女明星。",
+  "category": "娱乐",
+  "directory": "variety-star-vibes",
+  "url": "variety-star-vibes",
+  "image": "variety-star-vibes/images/yang-chaoyue.svg",
+  "tags": [
+    "投票",
+    "娱乐",
+    "综艺",
+    "女明星",
+    "娱乐八卦",
+    "轻娱乐",
+    "综艺",
+    "女明星",
+    "娱乐八卦",
+    "轻娱乐"
+  ],
+  "status": "active"
+}
