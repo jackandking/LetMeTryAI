@@ -60,7 +60,7 @@ export class DailyAppAgent {
         const parsed = parseTopicSelectionResponse(result);
         
         // Choose best candidate
-        const best = chooseBestTopic(parsed.topicCandidates, this.profile);
+        const best = await chooseBestTopic(parsed.topicCandidates, this.profile);
         
         // Validate constraints
         try {
