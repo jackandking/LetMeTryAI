@@ -1,0 +1,18 @@
+{
+  "id": "fighter-jet-comparison",
+  "name": "战机能力投票",
+  "description": "通过隐身、机动、传感器与作战适配四项维度，对代表性机型进行对比，适合军事爱好者投票与讨论。",
+  "category": "军事",
+  "keywords": [
+    "战机",
+    "隐身",
+    "机动",
+    "雷达",
+    "飞行性能",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "fighter-jet-comparison/images/j-20.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-07T23:45:09.494Z"
+}
