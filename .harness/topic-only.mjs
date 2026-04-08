@@ -5,6 +5,7 @@
 import { spawn } from 'child_process';
 import { loadProfileConfig } from './src/config/index.js';
 import { buildTopicSelectionPrompt, parseTopicSelectionResponse, chooseBestTopic } from './src/services/topic-selector.js';
+import { fetchTrendingTopics } from './src/services/trending.js';
 
 const profileId = process.argv[2] || 'nanrenbao';
 const profile = loadProfileConfig(profileId);
@@ -18,8 +19,17 @@ console.log(`  Name: ${profile.name}`);
 console.log(`  Categories: ${profile.preferredCategories.join(', ')}`);
 console.log('');
 
-// 构建 prompt
-const prompt = buildTopicSelectionPrompt(profile);
+// 获取热点数据
+console.log('⏳ Fetching trending topics...');
+const trendingContext = await fetchTrendingTopics();
+if (trendingContext) {
+  console.log('✅ Trending data fetched\n');
+} else {
+  console.log('⚠️  No trending data (using default)\n');
+}
+
+// 构建 prompt（包含热点）
+const prompt = buildTopicSelectionPrompt(profile, new Date().toISOString().split('T')[0], trendingContext);
 
 console.log('⏳ Calling Copilot (gpt-5-mini)...');
 console.log('   This may take 10-30 seconds...\n');
