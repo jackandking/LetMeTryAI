@@ -1,0 +1,26 @@
+{
+  "id": "phone-camera-mode-pick",
+  "name": "手机拍照模式投票",
+  "description": "把旗舰手机的常用拍照模式拆成可视化选项，便于图文演示与投票互动。",
+  "category": "科技数码",
+  "directory": "phone-camera-mode-pick",
+  "url": "phone-camera-mode-pick",
+  "image": "phone-camera-mode-pick/images/phone-night-mode.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "拍照",
+    "夜景",
+    "长焦",
+    "人像",
+    "广角",
+    "数码对比",
+    "拍照",
+    "夜景",
+    "长焦",
+    "人像",
+    "广角",
+    "数码对比"
+  ],
+  "status": "active"
+}
