@@ -1,0 +1,22 @@
+{
+  "id": "gpu-performance-vs-efficiency",
+  "name": "显卡性能对比",
+  "description": "对比主流游戏显卡在性能、功耗与性价比上的取舍。",
+  "category": "科技数码",
+  "directory": "gpu-performance-vs-efficiency",
+  "url": "gpu-performance-vs-efficiency",
+  "image": "gpu-performance-vs-efficiency/images/high-performance.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "显卡",
+    "游戏性能",
+    "功耗",
+    "跑分对比",
+    "显卡",
+    "游戏性能",
+    "功耗",
+    "跑分对比"
+  ],
+  "status": "active"
+}
