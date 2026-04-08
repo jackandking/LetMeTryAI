@@ -1,0 +1,18 @@
+{
+  "id": "tank-systems-compare",
+  "name": "坦克系统对比",
+  "description": "面向军迷与机械爱好者的移动端投票页，分别展示火力、装甲与机动三类优势点与对比图，支持短说明和关键参数对照，便于转发与引导评论。",
+  "category": "军事",
+  "keywords": [
+    "坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "装备评测",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "tank-systems-compare/images/heavy-firepower.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-08T23:27:15.103Z"
+}
