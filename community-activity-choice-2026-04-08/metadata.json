@@ -1,0 +1,22 @@
+{
+  "id": "community-activity-choice-2026-04-08",
+  "name": "社区活动投票",
+  "description": "了解中老年用户对社区活动的偏好，帮助运营安排贴近生活的线下/线上活动。",
+  "category": "生活",
+  "directory": "community-activity-choice-2026-04-08",
+  "url": "community-activity-choice-2026-04-08",
+  "image": "community-activity-choice-2026-04-08/images/neighborhood-gathering.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "短途旅行",
+    "社区活动",
+    "邻里",
+    "志愿服务",
+    "短途旅行"
+  ],
+  "status": "active"
+}
