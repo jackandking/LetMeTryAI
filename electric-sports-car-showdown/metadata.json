@@ -1,0 +1,18 @@
+{
+  "id": "electric-sports-car-showdown",
+  "name": "电动跑车对比",
+  "description": "围绕续航、加速、操控和充电便利性比较不同取向的电动跑车类型，适配品牌汽车机械解析方向并可结合近期新车上市话题。",
+  "category": "汽车",
+  "keywords": [
+    "电动跑车",
+    "续航",
+    "操控",
+    "加速",
+    "充电",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "electric-sports-car-showdown/images/long-range-gt.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-08T23:10:42.645Z"
+}

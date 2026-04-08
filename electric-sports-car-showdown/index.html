@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>电动跑车：续航、加速与操控，你更看重哪一点？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">电动跑车续航与操控对比</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">买电动跑车你最看重哪项表现？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="long-range-gt">
+                            <div class="card-image">
+                                <img src="images/long-range-gt.svg" alt="长续航GT车型侧视图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长续航GT</h3>
+                                <p class="option-caption">以长途舒适和续航为优先，适合旅行与日常兼顾</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="track-focused-sports-car">
+                            <div class="card-image">
+                                <img src="images/track-focused-sports-car.svg" alt="赛道操控型车型侧视图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">赛道操控型</h3>
+                                <p class="option-caption">强调操控与制动，比拼转向与底盘调校</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="balanced-performance-coupe">
+                            <div class="card-image">
+                                <img src="images/balanced-performance-coupe.svg" alt="均衡性能跑车侧视图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">均衡性能跑车</h3>
+                                <p class="option-caption">追求加速与续航的平衡，适合多场景使用</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fast-charging-priority">
+                            <div class="card-image">
+                                <img src="images/fast-charging-priority.svg" alt="快充优先车型示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">充电便利优先型</h3>
+                                <p class="option-caption">以快充与充电网络为卖点，缩短长途恢复时间</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
