@@ -11,7 +11,7 @@ export interface TopicSelectionResult {
   topicCandidates: TopicCandidate[];
 }
 
-export function buildTopicSelectionPrompt(profile: ProfileConfig, date: string): string {
+export function buildTopicSelectionPrompt(profile: ProfileConfig, date: string, trendingContext?: string): string {
   const categories = profile.preferredCategories.join('、');
   const doMore = profile.topicGuidelines.doMore.join('；');
   const avoid = profile.topicGuidelines.avoid.join('；');
@@ -24,6 +24,10 @@ export function buildTopicSelectionPrompt(profile: ProfileConfig, date: string):
 优先类别：${categories}
 优先方向：${doMore}
 避免方向：${avoid}
+
+${trendingContext ? `\n${trendingContext}\n` : '\n当前无热点数据，请基于品牌定位自选话题。\n'}
+
+重要：优先从今日热搜中选择与品牌定位相关的话题，或将热点元素融入选题。避免选择过于冷门或与当前时事完全无关的话题。
 
 请返回 JSON 格式：
 {
