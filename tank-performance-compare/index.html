@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>主战坦克性能，你看重哪一点？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">主战坦克性能对比：火力 / 装甲 / 机动</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果只选一项，你认为主战坦克最该优先强化哪方面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="firepower-focused">
+                            <div class="card-image">
+                                <img src="images/firepower-focused.svg" alt="火力优先图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">火力优先</h3>
+                                <p class="option-caption">更大口径与更远射程，提升突破能力</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="protection-focused">
+                            <div class="card-image">
+                                <img src="images/protection-focused.svg" alt="防护优先图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">防护优先</h3>
+                                <p class="option-caption">强化装甲与主动防护，提高生存率</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mobility-focused">
+                            <div class="card-image">
+                                <img src="images/mobility-focused.svg" alt="机动优先图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">机动优先</h3>
+                                <p class="option-caption">轻量化与动力提升，快速机动作战</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="balanced">
+                            <div class="card-image">
+                                <img src="images/balanced.svg" alt="综合平衡图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">综合平衡</h3>
+                                <p class="option-caption">火力、防护与机动兼顾，更通用的战场适配</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "id": "tank-performance-compare",
+  "name": "坦克性能投票",
+  "description": "以装备性能维度为主，聚焦火力、装甲、机动以及平衡型的优劣对比，配图讲解要点，适合手机图文展示与投票互动。",
+  "category": "军事",
+  "keywords": [
+    "坦克",
+    "装甲",
+    "火力",
+    "机动",
+    "军事装备",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "tank-performance-compare/images/firepower-focused.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-08T23:09:16.063Z"
+}
