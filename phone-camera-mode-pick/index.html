@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>旗舰拍照PK：你选哪种拍照模式？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">旗舰拍照PK：你选哪种拍照模式？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">拍照时你最常用或最看重哪种拍照模式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="night-mode">
+                            <div class="card-image">
+                                <img src="images/phone-night-mode.svg" alt="夜景样张示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">夜景模式</h3>
+                                <p class="option-desc">弱光高亮度、降噪与细节提升</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="telephoto-zoom">
+                            <div class="card-image">
+                                <img src="images/phone-telephoto.svg" alt="长焦样张示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长焦变焦</h3>
+                                <p class="option-desc">远摄清晰，适合抓取远处细节</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="portrait-bokeh">
+                            <div class="card-image">
+                                <img src="images/phone-portrait.svg" alt="人像虚化示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">人像虚化</h3>
+                                <p class="option-desc">人像主体突出，背景虚化自然</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="ultrawide-scene">
+                            <div class="card-image">
+                                <img src="images/phone-ultrawide.svg" alt="超广角样张示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">超广角</h3>
+                                <p class="option-desc">大场景与建筑与合影更具视觉冲击</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

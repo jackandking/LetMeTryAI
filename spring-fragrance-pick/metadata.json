@@ -1,0 +1,24 @@
+{
+  "id": "spring-fragrance-pick",
+  "name": "春季香水投票",
+  "description": "以香调为切入点的美妆种草投票，便于配风格化图片与使用场景。",
+  "category": "美妆",
+  "directory": "spring-fragrance-pick",
+  "url": "spring-fragrance-pick",
+  "image": "spring-fragrance-pick/images/fresh-floral.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "香调",
+    "春季",
+    "种草",
+    "轻奢",
+    "香水",
+    "香调",
+    "春季",
+    "种草",
+    "轻奢"
+  ],
+  "status": "active"
+}
