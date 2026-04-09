@@ -1,0 +1,26 @@
+{
+  "id": "military-uav-showdown",
+  "name": "无人机对比",
+  "description": "比较代表性军用无人机的任务适配与续航/打击能力。",
+  "category": "军事装备",
+  "directory": "military-uav-showdown",
+  "url": "military-uav-showdown",
+  "image": "military-uav-showdown/images/mq-9-reaper.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "续航",
+    "对比",
+    "无人机",
+    "军用",
+    "侦察",
+    "打击",
+    "续航",
+    "对比"
+  ],
+  "status": "active"
+}
