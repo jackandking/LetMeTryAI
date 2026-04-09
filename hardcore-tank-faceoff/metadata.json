@@ -1,0 +1,23 @@
+{
+  "id": "hardcore-tank-faceoff",
+  "name": "坦克对决",
+  "description": "四款主战坦克从防护、火力、机动性角度对比，适合硬核读者投票互动。",
+  "category": "军事装备",
+  "directory": "hardcore-tank-faceoff",
+  "url": "hardcore-tank-faceoff",
+  "image": "hardcore-tank-faceoff/images/m1a2-abrams.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "军事装备"
+  ],
+  "status": "active"
+}
