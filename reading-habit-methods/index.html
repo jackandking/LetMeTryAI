@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>如何让孩子爱上读书？家长怎么看？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">如何让孩子爱上读书？家长怎么看？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长视角，你会怎么选：培养孩子阅读习惯更应优先采取哪种方式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="parent-child-reading">
+                            <div class="card-image">
+                                <img src="images/parent-child-reading.svg" alt="亲子共读" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">亲子共读（每天固定一起读）</h3>
+                                <p class="option-desc">家长陪读、示范阅读，增强亲子互动与阅读兴趣</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="fixed-reading-time">
+                            <div class="card-image">
+                                <img src="images/fixed-reading-time.svg" alt="固定阅读时间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">固定阅读时间（睡前或放学后）</h3>
+                                <p class="option-desc">每天同一时间形成习惯，利于稳定作息与习惯养成</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="reward-and-checkin">
+                            <div class="card-image">
+                                <img src="images/reward-and-checkin.svg" alt="奖励与打卡阅读" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">奖励与打卡（激励机制）</h3>
+                                <p class="option-desc">通过小奖励与打卡保持持续性，适合入门阶段</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="let-kid-choose">
+                            <div class="card-image">
+                                <img src="images/let-kid-choose.svg" alt="孩子自由选书" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">让孩子自由选书（兴趣驱动）</h3>
+                                <p class="option-desc">尊重孩子兴趣，提升主动性与探索欲望</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
