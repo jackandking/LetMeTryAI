@@ -59,6 +59,44 @@
       "estimatedHours": 3
     },
     {
+      "id": "fix-topic-dedup",
+      "title": "修复选题重复问题",
+      "description": "在 run-topic-to-email.mjs 中添加选题查重功能，避免生成重复话题",
+      "acceptanceCriteria": [
+        "读取 apps-metadata.json 获取已有应用列表",
+        "生成话题前检查 appId 是否已存在",
+        "如果存在则重新生成或添加序号后缀",
+        "读取已发布话题历史记录",
+        "相似话题检测（使用字符串相似度）",
+        "测试：连续运行两次不产生重复appId"
+      ],
+      "priority": 3.5,
+      "dependsOn": [
+        "publish-workflow"
+      ],
+      "passes": true,
+      "estimatedHours": 2
+    },
+    {
+      "id": "fix-invalid-images",
+      "title": "修复图片无效问题",
+      "description": "修复 run-topic-to-email.mjs 中图片引用无效的问题，确保生成的应用有有效的选项图片",
+      "acceptanceCriteria": [
+        "检查 fighter-jets/images/ 目录下的图片是否存在",
+        "如果模板图片不存在则使用 MiniMax 生成",
+        "每个选项有独立的AI生成图片",
+        "图片主题与选项内容匹配",
+        "确保图片路径在HTML中正确引用",
+        "测试：生成后所有图片URL返回200"
+      ],
+      "priority": 3.6,
+      "dependsOn": [
+        "publish-workflow"
+      ],
+      "passes": true,
+      "estimatedHours": 2
+    },
+    {
       "id": "batch-publish",
       "title": "支持批量发布",
       "description": "实现批量发布功能，一次性发布多个应用的视频",
@@ -72,7 +110,8 @@
       ],
       "priority": 4,
       "dependsOn": [
-        "publish-workflow"
+        "fix-topic-dedup",
+        "fix-invalid-images"
       ],
       "passes": false,
       "estimatedHours": 2
@@ -136,7 +175,8 @@
   ],
   "metadata": {
     "createdAt": "2024-01-15",
-    "estimatedTotalHours": 16,
+    "updatedAt": "2024-01-15",
+    "estimatedTotalHours": 20,
     "techStack": [
       "TypeScript",
       "Playwright",
@@ -146,7 +186,23 @@
     "existingCode": [
       ".harness/src/services/video-publisher.ts",
       ".harness/src/services/video-generator.ts",
-      ".automation/scripts/publish-kuaishou-task.js"
+      ".harness/src/services/minimax-image.ts",
+      ".automation/scripts/publish-kuaishou-task.js",
+      ".harness/run-topic-to-email.mjs"
+    ],
+    "issues": [
+      {
+        "id": 1,
+        "title": "选题重复",
+        "description": "连续运行会产生相同的appId，导致Git提交失败",
+        "storyId": "fix-topic-dedup"
+      },
+      {
+        "id": 2,
+        "title": "图片无效",
+        "description": "生成的应用引用的图片文件不存在或路径错误",
+        "storyId": "fix-invalid-images"
+      }
     ]
   }
 }

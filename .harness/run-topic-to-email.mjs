@@ -16,8 +16,86 @@ import { spawn } from 'child_process';
 
 const OUTPUT_DIR = join(process.cwd(), '.local', 'workflow-output');
 const EMAIL_TO = 'jackandking@163.com';
+const PROJECT_ROOT = join(process.cwd(), '..');
+const HISTORY_FILE = join(OUTPUT_DIR, 'topic-history.json');
 
 mkdirSync(OUTPUT_DIR, { recursive: true });
+
+// ========== 查重功能 ==========
+function loadAppsMetadata() {
+  try {
+    const metadataPath = join(PROJECT_ROOT, 'apps-metadata.json');
+    if (existsSync(metadataPath)) {
+      const data = JSON.parse(readFileSync(metadataPath, 'utf-8'));
+      return data.apps || [];
+    }
+  } catch (e) {
+    console.log('⚠️  无法读取 apps-metadata.json');
+  }
+  return [];
+}
+
+function loadTopicHistory() {
+  try {
+    if (existsSync(HISTORY_FILE)) {
+      return JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+    }
+  } catch (e) {
+    console.log('⚠️  无法读取话题历史');
+  }
+  return [];
+}
+
+function saveTopicHistory(history) {
+  writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
+}
+
+function generateUniqueAppId(baseId, existingIds) {
+  if (!existingIds.includes(baseId)) {
+    return baseId;
+  }
+  
+  // 添加序号后缀
+  let counter = 2;
+  let newId = `${baseId}-${counter}`;
+  while (existingIds.includes(newId)) {
+    counter++;
+    newId = `${baseId}-${counter}`;
+  }
+  return newId;
+}
+
+function calculateSimilarity(str1, str2) {
+  // 简单的字符串相似度计算（基于共同字符）
+  const s1 = str1.toLowerCase().replace(/[^\w]/g, '');
+  const s2 = str2.toLowerCase().replace(/[^\w]/g, '');
+  
+  if (s1 === s2) return 1;
+  if (s1.length === 0 || s2.length === 0) return 0;
+  
+  const set1 = new Set(s1);
+  const set2 = new Set(s2);
+  const intersection = new Set([...set1].filter(x => set2.has(x)));
+  const union = new Set([...set1, ...set2]);
+  
+  return intersection.size / union.size;
+}
+
+function isSimilarTopic(newTopic, existingTopics, threshold = 0.6) {
+  for (const existing of existingTopics) {
+    const nameSimilarity = calculateSimilarity(newTopic.appName, existing.appName);
+    const questionSimilarity = calculateSimilarity(newTopic.question, existing.question);
+    
+    if (nameSimilarity > threshold || questionSimilarity > threshold) {
+      return {
+        isSimilar: true,
+        similarTo: existing,
+        similarity: Math.max(nameSimilarity, questionSimilarity),
+      };
+    }
+  }
+  return { isSimilar: false };
+}
 
 // ========== 配置 ==========
 const PROFILE = {
@@ -62,6 +140,14 @@ async function runCommand(cmd, args, options = {}) {
 async function selectTopic() {
   console.log('\n📋 步骤 1: AI 选题\n');
   
+  // 加载已有应用和历史
+  const existingApps = loadAppsMetadata();
+  const existingIds = existingApps.map(app => app.id);
+  const topicHistory = loadTopicHistory();
+  
+  console.log(`📚 已有应用: ${existingApps.length} 个`);
+  console.log(`📜 历史话题: ${topicHistory.length} 个`);
+  
   // 使用 kimi 生成选题
   const prompt = `为"${PROFILE.name}"生成一个投票类话题。
 
@@ -70,6 +156,8 @@ async function selectTopic() {
 - 标题：15-25字，吸引人点击
 - 3个选项，每个选项有简短描述
 - 适合生成投票小程序
+- appId 使用 kebab-case 格式（如 tank-battle, jet-fighter-pk）
+- 避免使用这些已存在的ID: ${existingIds.slice(-10).join(', ')}
 
 输出格式：
 {
@@ -86,32 +174,70 @@ async function selectTopic() {
 
   console.log('🤖 正在调用 AI 生成选题...');
   
-  try {
-    // 尝试使用 kimi CLI
-    const { stdout } = await runCommand('kimi', ['--yolo', '-p', prompt], { 
-      silent: true, 
-      timeout: 60000 
-    });
+  let topic = null;
+  let attempts = 0;
+  const maxAttempts = 3;
+  
+  while (attempts < maxAttempts && !topic) {
+    attempts++;
     
-    // 解析 JSON
-    const jsonMatch = stdout.match(/```json\s*([\s\S]*?)```/) || 
-                      stdout.match(/{[\s\S]*}/);
-    
-    if (jsonMatch) {
-      const topic = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-      console.log('✅ 选题生成成功');
-      console.log(`   标题: ${topic.appName}`);
-      console.log(`   问题: ${topic.question}`);
-      console.log(`   选项: ${topic.options.map(o => o.name).join(' / ')}`);
-      return topic;
+    try {
+      // 尝试使用 kimi CLI
+      const { stdout } = await runCommand('kimi', ['--yolo', '-p', prompt], { 
+        silent: true, 
+        timeout: 60000 
+      });
+      
+      // 解析 JSON
+      const jsonMatch = stdout.match(/```json\s*([\s\S]*?)```/) || 
+                        stdout.match(/{[\s\S]*}/);
+      
+      if (jsonMatch) {
+        const candidate = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+        
+        // 检查相似度
+        const similarity = isSimilarTopic(candidate, topicHistory);
+        if (similarity.isSimilar) {
+          console.log(`⚠️  话题与历史记录相似 (${(similarity.similarity * 100).toFixed(0)}%)，重新生成...`);
+          continue;
+        }
+        
+        // 确保 appId 唯一
+        const uniqueId = generateUniqueAppId(candidate.appId, existingIds);
+        if (uniqueId !== candidate.appId) {
+          console.log(`⚠️  appId "${candidate.appId}" 已存在，使用 "${uniqueId}"`);
+          candidate.appId = uniqueId;
+        }
+        
+        topic = candidate;
+        console.log('✅ 选题生成成功');
+        console.log(`   ID: ${topic.appId}`);
+        console.log(`   标题: ${topic.appName}`);
+        console.log(`   问题: ${topic.question}`);
+        console.log(`   选项: ${topic.options.map(o => o.name).join(' / ')}`);
+        
+        // 保存到历史
+        topicHistory.push({
+          appId: topic.appId,
+          appName: topic.appName,
+          question: topic.question,
+          createdAt: new Date().toISOString(),
+        });
+        saveTopicHistory(topicHistory);
+        
+        return topic;
+      }
+    } catch (e) {
+      console.log(`⚠️  AI 选题失败 (尝试 ${attempts}/${maxAttempts})`);
     }
-  } catch (e) {
-    console.log('⚠️  AI 选题失败，使用默认话题');
   }
   
-  // 默认话题
-  return {
-    appId: 'classic-fighters-pk',
+  // 使用带序号的默认话题
+  const baseDefaultId = 'classic-fighters-pk';
+  const uniqueDefaultId = generateUniqueAppId(baseDefaultId, existingIds);
+  
+  topic = {
+    appId: uniqueDefaultId,
     appName: '经典战机大PK',
     question: '二战经典战机，你最喜欢哪一款？',
     options: [
@@ -121,6 +247,87 @@ async function selectTopic() {
     ],
     videoScript: '今天我们来聊聊二战经典战机！P-51野马，盟军的全能战士；喷火战斗机，不列颠的守护者；零式战机，太平洋上的传奇。三款经典战机，你最喜欢哪一款？快来投出你的一票！',
   };
+  
+  console.log('⚠️  使用默认话题');
+  console.log(`   ID: ${topic.appId}`);
+  
+  // 保存到历史
+  topicHistory.push({
+    appId: topic.appId,
+    appName: topic.appName,
+    question: topic.question,
+    createdAt: new Date().toISOString(),
+  });
+  saveTopicHistory(topicHistory);
+  
+  return topic;
+}
+
+// ========== MiniMax 图片生成 ==========
+const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY || '';
+const MINIMAX_API_URL = 'https://api.minimax.chat/v1/image_generation';
+
+async function generateMiniMaxImage(prompt, outputPath) {
+  if (!MINIMAX_API_KEY) {
+    console.log('⚠️  未设置 MINIMAX_API_KEY，跳过图片生成');
+    return false;
+  }
+  
+  try {
+    const response = await fetch(MINIMAX_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${MINIMAX_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'image-01',
+        prompt,
+        aspect_ratio: '1:1',
+        quality: 'standard',
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`MiniMax API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const imageUrl = data.data?.image_urls?.[0];
+    
+    if (!imageUrl) {
+      throw new Error('No image URL in response');
+    }
+    
+    // 下载图片
+    const imageResponse = await fetch(imageUrl);
+    const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+    writeFileSync(outputPath, imageBuffer);
+    
+    return true;
+  } catch (error) {
+    console.log(`⚠️  图片生成失败: ${error.message}`);
+    return false;
+  }
+}
+
+function generateImagePrompt(option, topic) {
+  // 根据选项内容生成合适的图片提示词
+  const basePrompt = `A dramatic, cinematic photo of ${option.name}, ${option.desc}. `;
+  const stylePrompt = 'Professional photography, dramatic lighting, high quality, detailed, 4K.';
+  
+  // 根据话题类型调整风格
+  if (topic.appId.includes('tank') || topic.appId.includes('fighter') || topic.appId.includes('jet')) {
+    return basePrompt + 'Military style, powerful composition, realistic rendering. ' + stylePrompt;
+  }
+  if (topic.appId.includes('car') || topic.appId.includes('auto')) {
+    return basePrompt + 'Automotive photography, sleek design, studio lighting. ' + stylePrompt;
+  }
+  if (topic.appId.includes('ship') || topic.appId.includes('boat')) {
+    return basePrompt + 'Maritime scene, ocean background, majestic. ' + stylePrompt;
+  }
+  
+  return basePrompt + stylePrompt;
 }
 
 // ========== 步骤 2: 生成应用 ==========
@@ -162,21 +369,44 @@ async function generateApp(topic) {
     writeFileSync(join(appDir, file), content);
   }
   
-  // 复制图片
+  // 处理图片
   const imagesDir = join(appDir, 'images');
   mkdirSync(imagesDir, { recursive: true });
   
-  // 生成或复制图片
+  console.log('🎨 处理图片...');
+  
+  let generatedCount = 0;
+  let copiedCount = 0;
+  
   for (let i = 1; i <= 3; i++) {
     const sourceImg = join(templateDir, 'images', `option${i}.jpg`);
     const destImg = join(imagesDir, `option${i}.jpg`);
+    const option = topic.options[i - 1];
+    
+    // 优先使用 MiniMax 生成图片
+    if (MINIMAX_API_KEY && option) {
+      const prompt = generateImagePrompt(option, topic);
+      console.log(`   生成图片 ${i}: ${option.name}`);
+      
+      const success = await generateMiniMaxImage(prompt, destImg);
+      if (success) {
+        generatedCount++;
+        continue;
+      }
+    }
+    
+    // 如果生成失败或没有 API key，复制模板图片
     if (existsSync(sourceImg)) {
       copyFileSync(sourceImg, destImg);
+      copiedCount++;
+    } else {
+      console.log(`   ⚠️  图片 ${i} 缺失`);
     }
   }
   
   console.log('✅ 应用生成完成');
   console.log(`   目录: ${appDir}`);
+  console.log(`   图片: ${generatedCount} 生成, ${copiedCount} 复制`);
   
   return appDir;
 }
