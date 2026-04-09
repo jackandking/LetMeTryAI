@@ -416,8 +416,13 @@ async function selectTopic() {
         continue;
       }
       
-      // 清理控制字符
-      jsonStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+      // 清理控制字符和修复常见问题
+      jsonStr = jsonStr
+        .replace(/[\x00-\x1F\x7F-\x9F]/g, '')  // 移除控制字符
+        .replace(/\n/g, '\\n')  // 转义换行符
+        .replace(/\r/g, '')     // 移除回车
+        .replace(/\t/g, ' ')    // 替换制表符为空格
+        .replace(/\s+/g, ' ');  // 合并多个空格
       
       try {
         const candidate = JSON.parse(jsonStr);
