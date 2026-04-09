@@ -137,6 +137,165 @@ const PROFILE = {
   description: '军事、科技、汽车等男性兴趣话题',
 };
 
+// ========== 错误处理 ==========
+class WorkflowError extends Error {
+  constructor(step, message, details = {}) {
+    super(message);
+    this.name = 'WorkflowError';
+    this.step = step;
+    this.details = details;
+    this.timestamp = new Date().toISOString();
+  }
+}
+
+async function sendErrorReport(error, context = {}) {
+  console.log('\n📧 发送错误报告...');
+  
+  const pythonScript = `
+import os
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import subprocess
+
+msg = MIMEMultipart()
+msg['From'] = 'harness@letmetryai.cn'
+msg['To'] = '${EMAIL_TO}'
+msg['Subject'] = '❌ 工作流失败: ' + '''${error.step || 'Unknown'}'''
+
+body = '''
+❌ 工作流执行失败
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📍 失败步骤
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+${error.step || 'Unknown'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 错误信息
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+${error.message || 'Unknown error'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 上下文信息
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+时间: ${error.timestamp || new Date().toISOString()}
+品牌: ${PROFILE.name}
+${Object.entries(context).map(([k, v]) => `${k}: ${v}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 调用栈
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+${error.stack || 'No stack trace'}
+'''
+
+msg.attach(MIMEText(body, 'plain', 'utf-8'))
+
+subprocess.run(['/usr/sbin/sendmail', '-t'], input=msg.as_bytes())
+print('错误报告已发送')
+`;
+  
+  try {
+    writeFileSync(join(OUTPUT_DIR, 'send_error.py'), pythonScript);
+    await runCommand('python3', [join(OUTPUT_DIR, 'send_error.py')], { silent: true });
+    console.log('✅ 错误报告已发送');
+  } catch (e) {
+    console.error('❌ 发送错误报告失败:', e.message);
+  }
+}
+
+// 预设话题模板（当 AI 失败时使用）
+const TOPIC_TEMPLATES = [
+  {
+    baseId: 'classic-bombers',
+    name: '经典轰炸机对决',
+    question: '二战经典轰炸机，你更看好哪一款？',
+    options: [
+      { name: 'B-17 空中堡垒', desc: '美军重型轰炸主力' },
+      { name: '兰开斯特', desc: '英军夜间轰炸之王' },
+      { name: 'B-29 超级堡垒', desc: '原子弹载机' },
+    ],
+  },
+  {
+    baseId: 'naval-battleships',
+    name: '战列舰巅峰对决',
+    question: '史上最强战列舰，你选哪一艘？',
+    options: [
+      { name: '大和号', desc: '日本帝国海军骄傲' },
+      { name: '密苏里号', desc: '二战终结见证者' },
+      { name: '俾斯麦号', desc: '德国海军传奇' },
+    ],
+  },
+  {
+    baseId: 'main-battle-tanks',
+    name: '主战坦克大PK',
+    question: '现代主战坦克，你支持哪一款？',
+    options: [
+      { name: 'M1 艾布拉姆斯', desc: '美军陆战之王' },
+      { name: '豹2', desc: '德国精密工程' },
+      { name: 'T-90', desc: '俄罗斯钢铁洪流' },
+    ],
+  },
+  {
+    baseId: 'attack-helicopters',
+    name: '武装直升机较量',
+    question: '最强武装直升机，你选哪一架？',
+    options: [
+      { name: 'AH-64 阿帕奇', desc: '美军空中坦克杀手' },
+      { name: '米-28 浩劫', desc: '俄罗斯低空死神' },
+      { name: '虎式', desc: '欧洲联合研制' },
+    ],
+  },
+  {
+    baseId: 'classic-rifles',
+    name: '经典步枪评选',
+    question: '二战经典步枪，你更喜欢哪一款？',
+    options: [
+      { name: '毛瑟98K', desc: '德国精工典范' },
+      { name: 'M1加兰德', desc: '美军半自动先驱' },
+      { name: '莫辛纳甘', desc: '苏联传奇步枪' },
+    ],
+  },
+  {
+    baseId: 'military-drones',
+    name: '军用无人机对比',
+    question: '现代军用无人机，你更看好哪一款？',
+    options: [
+      { name: 'MQ-9 收割者', desc: '美军察打一体' },
+      { name: '翼龙-2', desc: '中国无人机新星' },
+      { name: '彩虹-4', desc: '国产长航时利器' },
+    ],
+  },
+  {
+    baseId: 'submarine-classes',
+    name: '核潜艇大比拼',
+    question: '战略核潜艇，你认为哪艘最强？',
+    options: [
+      { name: '俄亥俄级', desc: '美国海军威慑力量' },
+      { name: '北风之神', desc: '俄罗斯深海巨兽' },
+      { name: '凯旋级', desc: '法国海基核力量' },
+    ],
+  },
+];
+
+function generateRandomTopic(existingIds) {
+  // 随机选择一个模板
+  const template = TOPIC_TEMPLATES[Math.floor(Math.random() * TOPIC_TEMPLATES.length)];
+  
+  // 确保唯一ID
+  const uniqueId = generateUniqueAppId(template.baseId, existingIds);
+  
+  // 生成视频文案
+  const videoScript = `今天我们来聊聊${template.name}！${template.options.map(o => o.name + '，' + o.desc).join('；')}。${template.question}快来投出你的一票！`;
+  
+  return {
+    appId: uniqueId,
+    appName: template.name,
+    question: template.question,
+    options: template.options,
+    videoScript,
+  };
+}
+
 // ========== 工具函数 ==========
 function getFfmpegPath() {
   const ffmpegStatic = join(process.cwd(), 'node_modules', 'ffmpeg-static', 'ffmpeg');
@@ -215,18 +374,42 @@ async function selectTopic() {
     attempts++;
     
     try {
-      // 尝试使用 kimi CLI
-      const { stdout } = await runCommand('kimi', ['--yolo', '-p', prompt], { 
+      // 尝试使用 kimi CLI（不使用 --yolo，直接输出文本）
+      const { stdout, stderr, code } = await runCommand('kimi', ['-p', prompt], { 
         silent: true, 
-        timeout: 60000 
+        timeout: 60000,
+        ignoreError: true,
       });
+      
+      if (code !== 0) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} 返回错误码: ${code}`);
+        if (stderr) console.log(`   错误: ${stderr.slice(0, 200)}`);
+        continue;
+      }
+      
+      if (!stdout || stdout.trim().length === 0) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} 无输出`);
+        continue;
+      }
       
       // 解析 JSON
       const jsonMatch = stdout.match(/```json\s*([\s\S]*?)```/) || 
-                        stdout.match(/{[\s\S]*}/);
+                        stdout.match(/{[\s\S]*?}/);
       
-      if (jsonMatch) {
+      if (!jsonMatch) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} 无法解析 JSON`);
+        console.log(`   输出预览: ${stdout.slice(0, 200)}`);
+        continue;
+      }
+      
+      try {
         const candidate = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+        
+        // 验证必要字段
+        if (!candidate.appId || !candidate.appName || !candidate.question || !candidate.options) {
+          console.log(`   尝试 ${attempts}/${maxAttempts} 字段不完整`);
+          continue;
+        }
         
         // 检查相似度
         const similarity = isSimilarTopic(candidate, topicHistory);
@@ -259,30 +442,35 @@ async function selectTopic() {
         saveTopicHistory(topicHistory);
         
         return topic;
+      } catch (parseError) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} JSON 解析失败: ${parseError.message}`);
+        console.log(`   内容预览: ${jsonMatch[0].slice(0, 100)}...`);
       }
     } catch (e) {
-      console.log(`⚠️  AI 选题失败 (尝试 ${attempts}/${maxAttempts})`);
+      console.log(`⚠️  AI 选题异常 (尝试 ${attempts}/${maxAttempts}): ${e.message}`);
     }
   }
   
-  // 使用带序号的默认话题
-  const baseDefaultId = 'classic-fighters-pk';
-  const uniqueDefaultId = generateUniqueAppId(baseDefaultId, existingIds);
+  // AI 失败，抛出错误
+  throw new WorkflowError('selectTopic', 'AI 选题失败，3次尝试均未成功', {
+    existingApps: existingApps.length,
+    topicHistory: topicHistory.length,
+  });
+}
+
+// 使用随机话题生成器（备用方案，当明确需要时使用）
+async function selectRandomTopic() {
+  console.log('\n📋 步骤 1: 随机选题\n');
   
-  topic = {
-    appId: uniqueDefaultId,
-    appName: '经典战机大PK',
-    question: '二战经典战机，你最喜欢哪一款？',
-    options: [
-      { name: 'P-51 野马', desc: '盟军全能战机' },
-      { name: '喷火战斗机', desc: '不列颠守护者' },
-      { name: '零式战机', desc: '太平洋传奇' },
-    ],
-    videoScript: '今天我们来聊聊二战经典战机！P-51野马，盟军的全能战士；喷火战斗机，不列颠的守护者；零式战机，太平洋上的传奇。三款经典战机，你最喜欢哪一款？快来投出你的一票！',
-  };
+  const existingApps = loadAppsMetadata();
+  const existingIds = existingApps.map(app => app.id);
+  const topicHistory = loadTopicHistory();
   
-  console.log('⚠️  使用默认话题');
+  const topic = generateRandomTopic(existingIds);
+  
+  console.log('✅ 随机选题生成');
   console.log(`   ID: ${topic.appId}`);
+  console.log(`   标题: ${topic.appName}`);
   
   // 保存到历史
   topicHistory.push({
@@ -437,6 +625,14 @@ async function generateApp(topic) {
     }
   }
   
+  // 验证所有图片都存在
+  for (let i = 1; i <= 3; i++) {
+    const imgPath = join(imagesDir, `option${i}.jpg`);
+    if (!existsSync(imgPath)) {
+      throw new WorkflowError('generateApp', `图片 ${i} 生成失败`, { option: topic.options[i-1]?.name });
+    }
+  }
+  
   console.log('✅ 应用生成完成');
   console.log(`   目录: ${appDir}`);
   console.log(`   图片: ${generatedCount} 生成, ${copiedCount} 复制`);
@@ -452,20 +648,27 @@ async function deployApp(appDir, topic) {
   
   // Git add
   console.log('📤 提交到 Git...');
-  await runCommand('git', ['add', topic.appId], { cwd: projectRoot });
+  try {
+    await runCommand('git', ['add', topic.appId], { cwd: projectRoot });
+  } catch (e) {
+    throw new WorkflowError('deployApp', 'Git add 失败', { error: e.message });
+  }
   
   // Git commit
   try {
     await runCommand('git', ['commit', '-m', `Add app: ${topic.appName}`], { 
       cwd: projectRoot,
-      ignoreError: true,
     });
   } catch (e) {
-    console.log('⚠️  无变更或提交失败，继续...');
+    console.log('⚠️  Git commit 失败（可能没有变更），继续...');
   }
   
   // Git push
-  await runCommand('git', ['push'], { cwd: projectRoot });
+  try {
+    await runCommand('git', ['push'], { cwd: projectRoot });
+  } catch (e) {
+    throw new WorkflowError('deployApp', 'Git push 失败', { error: e.message });
+  }
   
   const deployedUrl = `https://letmetryai.cn/${topic.appId}/`;
   console.log('✅ 部署完成');
@@ -546,18 +749,26 @@ import { chromium } from 'playwright';
   const videoPath = join(OUTPUT_DIR, `${topic.appId}-demo.mp4`);
   const ffmpeg = getFfmpegPath();
   
-  await runCommand(ffmpeg, [
-    '-y',
-    '-loop', '1', '-i', join(OUTPUT_DIR, 'screenshot.png'),
-    '-i', audioPath,
-    '-t', String(duration + 1),
-    '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black',
-    '-c:v', 'libx264', '-preset', 'fast', '-crf', '23', '-pix_fmt', 'yuv420p',
-    '-c:a', 'aac', '-b:a', '128k', '-shortest',
-    videoPath,
-  ], { silent: true });
+  try {
+    await runCommand(ffmpeg, [
+      '-y',
+      '-loop', '1', '-i', join(OUTPUT_DIR, 'screenshot.png'),
+      '-i', audioPath,
+      '-t', String(duration + 1),
+      '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black',
+      '-c:v', 'libx264', '-preset', 'fast', '-crf', '23', '-pix_fmt', 'yuv420p',
+      '-c:a', 'aac', '-b:a', '128k', '-shortest',
+      videoPath,
+    ], { silent: true });
+  } catch (e) {
+    throw new WorkflowError('generateVideo', 'FFmpeg 视频合成失败', { error: e.message });
+  }
   
-  const stats = existsSync(videoPath) ? { size: (readFileSync(videoPath).length / 1024 / 1024).toFixed(2) } : { size: 0 };
+  if (!existsSync(videoPath)) {
+    throw new WorkflowError('generateVideo', '视频文件未生成');
+  }
+  
+  const stats = { size: (readFileSync(videoPath).length / 1024 / 1024).toFixed(2) };
   
   console.log('✅ 视频生成完成');
   console.log(`   文件: ${videoPath}`);
@@ -654,7 +865,12 @@ print('邮件已发送')
 `;
   
   writeFileSync(join(OUTPUT_DIR, 'send_email.py'), pythonScript);
-  await runCommand('python3', [join(OUTPUT_DIR, 'send_email.py')], { silent: true });
+  
+  try {
+    await runCommand('python3', [join(OUTPUT_DIR, 'send_email.py')], { silent: true });
+  } catch (e) {
+    throw new WorkflowError('sendEmail', '邮件发送失败', { error: e.message });
+  }
   
   console.log('✅ 邮件发送成功');
   console.log(`   收件人: ${EMAIL_TO}`);
@@ -709,8 +925,19 @@ async function main() {
     console.log('');
     
   } catch (error) {
-    console.error('\n❌ 工作流失败:', error.message);
-    console.error(error.stack);
+    console.error('\n' + '='.repeat(60));
+    console.error('❌ 工作流失败');
+    console.error('='.repeat(60));
+    console.error(`步骤: ${error.step || 'Unknown'}`);
+    console.error(`错误: ${error.message}`);
+    console.error('='.repeat(60));
+    
+    // 发送错误报告
+    await sendErrorReport(error, {
+      brand: PROFILE.name,
+      startTime: new Date(startTime).toISOString(),
+    });
+    
     process.exit(1);
   }
 }
