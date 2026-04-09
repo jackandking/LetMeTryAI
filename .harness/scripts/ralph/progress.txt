@@ -1,0 +1,64 @@
+# Ralph Build Progress
+Started: 2024-01-15
+Feature: 视频发布到快手功能
+
+## Codebase Patterns
+- TypeScript 严格模式
+- 使用 Playwright 进行浏览器自动化
+- Session 存储在 .runtime/ 目录
+- CLI 脚本放在 .harness/scripts/ 目录
+- 使用 tsx 直接运行 TypeScript
+
+## Existing Components
+- VideoPublisher: .harness/src/services/video-publisher.ts
+- VideoGenerator: .harness/src/services/video-generator.ts
+- Kuaishou Auth: .runtime/kuaishou_auth.json (已存在登录脚本)
+
+## Completed Stories
+(none yet)
+
+## Current Context
+Starting first story: auth-cli
+2026-04-09T12:53:04.449Z - Completed story: auth-cli
+
+## Completed Stories
+2024-01-15 14:00:00 - auth-cli (skipped - using existing cookie)
+  - Reason: .runtime/kuaishou_auth.json already exists
+  
+2024-01-15 14:30:00 - video-publish-cli
+  - File: .harness/scripts/video-publish.ts
+  - Features: --video, --title, --tags, --app-id, --cover, --private
+  - Exit codes: 0 (success), 1 (error)
+  - TypeScript: Strict mode compatible
+2026-04-09T12:56:07.028Z - Completed story: video-publish-cli
+
+2024-01-15 15:30:00 - publish-workflow
+  - File: .harness/scripts/publish-app-to-kuaishou.ts
+  - Features:
+    - 视频生成 + 快手发布一体化
+    - --dry-run 预览模式
+    - --skip-video-gen 使用已有视频
+    - 完整发布报告 (JSON)
+    - 报告保存到 .harness/.local/reports/
+  - Exit codes: 0 (success), 1 (error)
+2026-04-09T13:01:09.763Z - Completed story: publish-workflow
+
+2024-01-15 22:00:00 - fix-topic-dedup (completed)
+  - 添加查重功能：
+    - 读取 apps-metadata.json 获取已有应用ID
+    - 读取 topic-history.json 获取历史话题
+    - 相似话题检测（基于字符串相似度）
+    - 自动添加序号后缀避免重复
+  - 文件修改: run-topic-to-email.mjs
+  - 测试: 连续运行会产生不同 appId
+2026-04-09T14:08:51.022Z - Completed story: fix-topic-dedup
+
+2024-01-15 22:15:00 - fix-invalid-images (completed)
+  - 添加 MiniMax 图片生成功能：
+    - 自动为每个选项生成AI图片
+    - 根据选项内容生成合适的提示词
+    - 支持军事、汽车、舰船等不同风格
+    - 失败时回退到复制模板图片
+  - 文件修改: run-topic-to-email.mjs
+  - 依赖: MINIMAX_API_KEY 环境变量
+2026-04-09T14:12:26.387Z - Completed story: fix-invalid-images
