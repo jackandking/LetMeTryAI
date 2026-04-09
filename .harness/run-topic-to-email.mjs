@@ -416,6 +416,9 @@ async function selectTopic() {
         continue;
       }
       
+      // 清理控制字符
+      jsonStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+      
       try {
         const candidate = JSON.parse(jsonStr);
         
@@ -458,7 +461,7 @@ async function selectTopic() {
         return topic;
       } catch (parseError) {
         console.log(`   尝试 ${attempts}/${maxAttempts} JSON 解析失败: ${parseError.message}`);
-        console.log(`   内容预览: ${jsonMatch[0].slice(0, 100)}...`);
+        console.log(`   内容预览: ${jsonStr.slice(0, 100)}...`);
       }
     } catch (e) {
       console.log(`⚠️  AI 选题异常 (尝试 ${attempts}/${maxAttempts}): ${e.message}`);
