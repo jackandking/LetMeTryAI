@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：家务分工，孩子能做哪类？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家长话题：家务分工，孩子能做哪类？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长视角，你会怎么选：你认为孩子最适合从哪类家务开始承担？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="tidy-toys-make-bed">
+                            <div class="card-image">
+                                <img src="images/tidy-toys-make-bed.svg" alt="孩子整理玩具" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">收拾玩具与整理床铺</h3>
+                                <p class="option-desc">日常小事，培养整理习惯</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="wash-veg-set-table">
+                            <div class="card-image">
+                                <img src="images/wash-veg-set-table.svg" alt="孩子帮忙摆餐具" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">帮忙洗果蔬与摆餐具</h3>
+                                <p class="option-desc">参与餐前准备，培养生活技能</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="simple-cleaning">
+                            <div class="card-image">
+                                <img src="images/simple-cleaning.svg" alt="孩子扫地擦桌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">简单清洁（擦桌/扫地）</h3>
+                                <p class="option-desc">适合动手能力提升与家务责任感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="pet-plant-care">
+                            <div class="card-image">
+                                <img src="images/pet-plant-care.svg" alt="孩子照顾植物" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">照顾宠物或浇花</h3>
+                                <p class="option-desc">长期任务，培养持续责任感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
