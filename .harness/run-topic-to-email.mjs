@@ -366,8 +366,13 @@ async function selectTopic() {
     attempts++;
     
     try {
-      // 尝试使用 kimi CLI（不使用 --yolo，直接输出文本）
-      const { stdout, stderr, code } = await runCommand('kimi', ['-p', prompt], { 
+      // 使用 copilot CLI（参考 daily-app-agent.ts 的实现）
+      const { stdout, stderr, code } = await runCommand('copilot', [
+        '--model', 'gpt-5-mini',
+        '--output-format', 'json',
+        '--yolo',
+        '-p', prompt,
+      ], { 
         silent: true, 
         timeout: 60000,
         ignoreError: true,
@@ -384,45 +389,47 @@ async function selectTopic() {
         continue;
       }
       
-      // 解析 JSON - 尝试多种方法
+      // 解析 JSON event stream（copilot 输出每行一个 JSON 事件）
+      const lines = stdout.split('\n').filter(Boolean);
+      const events = lines.map(line => {
+        try { return JSON.parse(line); } catch { return null; }
+      }).filter(Boolean);
+      
+      // 查找 assistant.message 事件
+      const assistantMsg = [...events].reverse()
+        .find(e => e.type === 'assistant.message' && e.data?.content);
+      
+      if (!assistantMsg?.data?.content) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} 未找到 assistant message`);
+        console.log(`   事件类型: ${events.map(e => e.type).join(', ')}`);
+        continue;
+      }
+      
+      const content = assistantMsg.data.content;
+      
+      // 从 content 中提取 JSON
       let jsonStr = null;
       
       // 方法1: 查找 ```json 代码块
-      const codeBlockMatch = stdout.match(/```json\s*([\s\S]*?)```/);
+      const codeBlockMatch = content.match(/```json\s*([\s\S]*?)```/);
       if (codeBlockMatch) {
         jsonStr = codeBlockMatch[1].trim();
       }
       
-      // 方法2: 查找最外层的大括号（从第一个 { 到最后一个 }）
+      // 方法2: 查找最外层的大括号
       if (!jsonStr) {
-        const firstBrace = stdout.indexOf('{');
-        const lastBrace = stdout.lastIndexOf('}');
+        const firstBrace = content.indexOf('{');
+        const lastBrace = content.lastIndexOf('}');
         if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-          jsonStr = stdout.slice(firstBrace, lastBrace + 1);
-        }
-      }
-      
-      // 方法3: 查找 ``` 代码块（无语言标记）
-      if (!jsonStr) {
-        const genericBlockMatch = stdout.match(/```\s*([\s\S]*?)```/);
-        if (genericBlockMatch) {
-          jsonStr = genericBlockMatch[1].trim();
+          jsonStr = content.slice(firstBrace, lastBrace + 1);
         }
       }
       
       if (!jsonStr) {
-        console.log(`   尝试 ${attempts}/${maxAttempts} 无法找到 JSON`);
-        console.log(`   输出预览: ${stdout.slice(0, 300)}`);
+        console.log(`   尝试 ${attempts}/${maxAttempts} 无法从内容提取 JSON`);
+        console.log(`   内容预览: ${content.slice(0, 300)}`);
         continue;
       }
-      
-      // 清理控制字符和修复常见问题
-      jsonStr = jsonStr
-        .replace(/[\x00-\x1F\x7F-\x9F]/g, '')  // 移除控制字符
-        .replace(/\n/g, '\\n')  // 转义换行符
-        .replace(/\r/g, '')     // 移除回车
-        .replace(/\t/g, ' ')    // 替换制表符为空格
-        .replace(/\s+/g, ' ');  // 合并多个空格
       
       try {
         const candidate = JSON.parse(jsonStr);
