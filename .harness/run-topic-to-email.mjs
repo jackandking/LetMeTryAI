@@ -351,18 +351,10 @@ async function selectTopic() {
 - appId 使用 kebab-case 格式（如 tank-battle, jet-fighter-pk）
 - 避免使用这些已存在的ID: ${existingIds.slice(-10).join(', ')}
 
-输出格式：
-{
-  "appId": "英文ID(如tank-battle)",
-  "appName": "标题",
-  "question": "投票问题",
-  "options": [
-    {"name": "选项1", "desc": "简短描述"},
-    {"name": "选项2", "desc": "简短描述"},
-    {"name": "选项3", "desc": "简短描述"}
-  ],
-  "videoScript": "30秒视频解说文案，用于AI配音"
-}`;
+重要：只返回JSON格式，不要有任何其他文字说明，不要使用代码块标记。
+
+返回格式示例：
+{"appId": "tank-battle", "appName": "坦克大战", "question": "你最喜欢哪种坦克？", "options": [{"name": "重型坦克", "desc": "火力强大"}, {"name": "中型坦克", "desc": "平衡型"}, {"name": "轻型坦克", "desc": "机动性好"}], "videoScript": "30秒视频解说文案"}`;
 
   console.log('🤖 正在调用 AI 生成选题...');
   
@@ -392,18 +384,40 @@ async function selectTopic() {
         continue;
       }
       
-      // 解析 JSON
-      const jsonMatch = stdout.match(/```json\s*([\s\S]*?)```/) || 
-                        stdout.match(/{[\s\S]*?}/);
+      // 解析 JSON - 尝试多种方法
+      let jsonStr = null;
       
-      if (!jsonMatch) {
-        console.log(`   尝试 ${attempts}/${maxAttempts} 无法解析 JSON`);
-        console.log(`   输出预览: ${stdout.slice(0, 200)}`);
+      // 方法1: 查找 ```json 代码块
+      const codeBlockMatch = stdout.match(/```json\s*([\s\S]*?)```/);
+      if (codeBlockMatch) {
+        jsonStr = codeBlockMatch[1].trim();
+      }
+      
+      // 方法2: 查找最外层的大括号（从第一个 { 到最后一个 }）
+      if (!jsonStr) {
+        const firstBrace = stdout.indexOf('{');
+        const lastBrace = stdout.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+          jsonStr = stdout.slice(firstBrace, lastBrace + 1);
+        }
+      }
+      
+      // 方法3: 查找 ``` 代码块（无语言标记）
+      if (!jsonStr) {
+        const genericBlockMatch = stdout.match(/```\s*([\s\S]*?)```/);
+        if (genericBlockMatch) {
+          jsonStr = genericBlockMatch[1].trim();
+        }
+      }
+      
+      if (!jsonStr) {
+        console.log(`   尝试 ${attempts}/${maxAttempts} 无法找到 JSON`);
+        console.log(`   输出预览: ${stdout.slice(0, 300)}`);
         continue;
       }
       
       try {
-        const candidate = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+        const candidate = JSON.parse(jsonStr);
         
         // 验证必要字段
         if (!candidate.appId || !candidate.appName || !candidate.question || !candidate.options) {
