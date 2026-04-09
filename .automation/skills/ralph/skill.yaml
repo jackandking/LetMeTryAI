@@ -1,0 +1,17 @@
+name: ralph
+description: |
+  Ralph is an autonomous AI agent loop that runs repeatedly until all PRD items are complete.
+  It implements the Ralph Wiggum pattern - each iteration is a fresh AI instance that:
+  1. Reads the current state from prd.json
+  2. Picks the highest priority uncompleted story
+  3. Implements that single story
+  4. Runs quality checks (tests, typecheck)
+  5. Commits if checks pass
+  6. Updates prd.json to mark story as complete
+  7. Appends learnings to progress.txt
+  8. Repeats until all stories pass
+
+  Use for long-running autonomous coding tasks that need structured execution.
+version: 1.0.0
+author: snarktank
+source: https://github.com/snarktank/ralph

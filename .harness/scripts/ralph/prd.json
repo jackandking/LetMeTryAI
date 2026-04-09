@@ -1,0 +1,152 @@
+{
+  "title": "视频发布到快手功能",
+  "branchName": "feature/video-publish-kuaishou",
+  "description": "将自动生成的应用演示视频发布到快手平台，支持标题、描述、标签和挂载小程序",
+  "stories": [
+    {
+      "id": "auth-cli",
+      "title": "创建快手登录 CLI 命令",
+      "description": "实现 kuaishou-login 命令行工具，支持手机号+SMS验证码登录，自动保存 session",
+      "acceptanceCriteria": [
+        "CLI 命令: tsx .harness/scripts/kuaishou-login.ts",
+        "支持 --phone 参数输入手机号",
+        "自动等待并输入 SMS 验证码",
+        "Session 保存到 .runtime/kuaishou_auth.json",
+        "登录成功/失败有明确提示",
+        "TypeScript 类型完整"
+      ],
+      "priority": 1,
+      "passes": true,
+      "estimatedHours": 2
+    },
+    {
+      "id": "video-publish-cli",
+      "title": "创建视频发布 CLI 命令",
+      "description": "实现 video-publish 命令行工具，调用 VideoPublisher 服务上传视频",
+      "acceptanceCriteria": [
+        "CLI 命令: tsx .harness/scripts/video-publish.ts",
+        "支持 --video 参数指定视频路径",
+        "支持 --title 参数设置标题",
+        "支持 --tags 参数设置标签(逗号分隔)",
+        "支持 --app-id 参数挂载小程序",
+        "输出发布结果(视频ID/分享链接)",
+        "失败时返回非零退出码"
+      ],
+      "priority": 2,
+      "dependsOn": [
+        "auth-cli"
+      ],
+      "passes": true,
+      "estimatedHours": 2
+    },
+    {
+      "id": "publish-workflow",
+      "title": "创建一键发布 Workflow",
+      "description": "整合视频生成+发布的完整 workflow，从 AppID 到发布完成",
+      "acceptanceCriteria": [
+        "Workflow: publish-app-to-kuaishou.ts",
+        "输入: AppID 和 AppName",
+        "自动调用视频生成服务",
+        "生成完成后自动发布到快手",
+        "返回完整发布报告",
+        "支持 --dry-run 预览模式"
+      ],
+      "priority": 3,
+      "dependsOn": [
+        "video-publish-cli"
+      ],
+      "passes": true,
+      "estimatedHours": 3
+    },
+    {
+      "id": "batch-publish",
+      "title": "支持批量发布",
+      "description": "实现批量发布功能，一次性发布多个应用的视频",
+      "acceptanceCriteria": [
+        "CLI 命令: batch-publish.ts --apps app1,app2,app3",
+        "读取 apps-metadata.json 获取应用列表",
+        "顺序处理每个应用(避免频率限制)",
+        "生成批量发布报告(JSON/CSV)",
+        "支持 --limit 限制发布数量",
+        "失败时记录错误并继续下一个"
+      ],
+      "priority": 4,
+      "dependsOn": [
+        "publish-workflow"
+      ],
+      "passes": false,
+      "estimatedHours": 2
+    },
+    {
+      "id": "publish-monitor",
+      "title": "添加发布状态监控",
+      "description": "创建发布任务状态跟踪和监控功能",
+      "acceptanceCriteria": [
+        "任务状态存储到 .harness/.local/video-tasks/",
+        "支持查询任务状态",
+        "发布历史记录",
+        "失败任务重试机制",
+        "TypeScript 类型定义完整"
+      ],
+      "priority": 5,
+      "dependsOn": [
+        "publish-workflow"
+      ],
+      "passes": false,
+      "estimatedHours": 2
+    },
+    {
+      "id": "integration-tests",
+      "title": "添加集成测试",
+      "description": "为视频发布功能编写完整的集成测试",
+      "acceptanceCriteria": [
+        "测试: 登录流程(Mock)",
+        "测试: 视频发布(Mock API)",
+        "测试: 批量发布",
+        "测试: 错误处理",
+        "所有测试通过: npm test",
+        "覆盖率 > 80%"
+      ],
+      "priority": 6,
+      "dependsOn": [
+        "batch-publish",
+        "publish-monitor"
+      ],
+      "passes": false,
+      "estimatedHours": 3
+    },
+    {
+      "id": "documentation",
+      "title": "编写文档",
+      "description": "编写完整的视频发布功能文档",
+      "acceptanceCriteria": [
+        "README.md: 快速开始指南",
+        "CLI 使用文档",
+        "API 参考文档",
+        "故障排除指南",
+        "集成到 .harness/README.md"
+      ],
+      "priority": 7,
+      "dependsOn": [
+        "integration-tests"
+      ],
+      "passes": false,
+      "estimatedHours": 2
+    }
+  ],
+  "metadata": {
+    "createdAt": "2024-01-15",
+    "estimatedTotalHours": 16,
+    "techStack": [
+      "TypeScript",
+      "Playwright",
+      "Node.js"
+    ],
+    "targetPlatform": "Kuaishou Creator Platform",
+    "existingCode": [
+      ".harness/src/services/video-publisher.ts",
+      ".harness/src/services/video-generator.ts",
+      ".automation/scripts/publish-kuaishou-task.js"
+    ]
+  }
+}
