@@ -62,3 +62,10 @@ Starting first story: auth-cli
   - 文件修改: run-topic-to-email.mjs
   - 依赖: MINIMAX_API_KEY 环境变量
 2026-04-09T14:12:26.387Z - Completed story: fix-invalid-images
+
+2024-01-15 23:30:00 - 添加严格错误处理
+  - WorkflowError 类，带步骤跟踪
+  - 所有步骤失败时抛出错误（无回退）
+  - sendErrorReport() 发送错误邮件
+  - 移除默认话题回退（AI失败=停止）
+  - 图片和视频生成验证
