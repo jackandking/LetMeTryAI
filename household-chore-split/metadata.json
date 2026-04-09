@@ -1,0 +1,22 @@
+{
+  "id": "household-chore-split",
+  "name": "家务分工投票",
+  "description": "比较适龄家务类型，便于配图并催生家庭规则与沟通话题。",
+  "category": "家庭",
+  "directory": "household-chore-split",
+  "url": "household-chore-split",
+  "image": "household-chore-split/images/tidy-toys-make-bed.svg",
+  "tags": [
+    "投票",
+    "家庭",
+    "家务分工",
+    "亲子合作",
+    "责任培养",
+    "家庭生活",
+    "家务分工",
+    "亲子合作",
+    "责任培养",
+    "家庭生活"
+  ],
+  "status": "active"
+}
