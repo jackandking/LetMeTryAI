@@ -1,0 +1,22 @@
+{
+  "id": "community-activity-choice-elder",
+  "name": "社区活动选择",
+  "description": "了解长者对不同社区活动的偏好，帮助运营策划线下/线上联动活动。",
+  "category": "生活",
+  "directory": "community-activity-choice-elder",
+  "url": "community-activity-choice-elder",
+  "image": "community-activity-choice-elder/images/park-walks.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "邻里",
+    "社交",
+    "银发生活",
+    "社区活动",
+    "邻里",
+    "社交",
+    "银发生活"
+  ],
+  "status": "active"
+}
