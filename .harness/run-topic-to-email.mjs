@@ -22,17 +22,50 @@ const HISTORY_FILE = join(OUTPUT_DIR, 'topic-history.json');
 mkdirSync(OUTPUT_DIR, { recursive: true });
 
 // ========== 查重功能 ==========
+import { readdirSync, statSync } from 'fs';
+
 function loadAppsMetadata() {
+  const apps = [];
+  
+  // 1. 从 apps-metadata.json 读取
   try {
     const metadataPath = join(PROJECT_ROOT, 'apps-metadata.json');
     if (existsSync(metadataPath)) {
       const data = JSON.parse(readFileSync(metadataPath, 'utf-8'));
-      return data.apps || [];
+      apps.push(...(data.apps || []));
     }
   } catch (e) {
     console.log('⚠️  无法读取 apps-metadata.json');
   }
-  return [];
+  
+  // 2. 扫描实际存在的目录（以防 apps-metadata.json 未更新）
+  try {
+    const entries = readdirSync(PROJECT_ROOT);
+    for (const entry of entries) {
+      // 排除隐藏目录和特定目录
+      if (entry.startsWith('.') || 
+          entry.startsWith('_') || 
+          ['node_modules', '.git', '.harness', '.automation', '.runtime', '.agents', 'logs', 'images', 'icons', 'docs', 'tests'].includes(entry)) {
+        continue;
+      }
+      
+      const fullPath = join(PROJECT_ROOT, entry);
+      try {
+        const stat = statSync(fullPath);
+        if (stat.isDirectory()) {
+          // 检查是否包含 index.html（投票应用特征）
+          if (existsSync(join(fullPath, 'index.html'))) {
+            // 如果不在已有列表中，添加
+            if (!apps.some(app => app.id === entry)) {
+              apps.push({ id: entry, name: entry, source: 'filesystem' });
+            }
+          }
+        }
+      } catch (e) {}
+    }
+  } catch (e) {}
+  
+  return apps;
 }
 
 function loadTopicHistory() {
