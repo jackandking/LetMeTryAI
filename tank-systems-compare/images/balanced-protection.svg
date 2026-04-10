@@ -1,0 +1,20 @@
+<svg width="320" height="213" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg2)"/>
+  <!-- Shield shape -->
+  <path d="M160 60 L220 85 L220 130 Q220 160 160 180 Q100 160 100 130 L100 85 Z" fill="#4a5568" stroke="#718096" stroke-width="3"/>
+  <path d="M160 70 L205 90 L205 128 Q205 152 160 168 Q115 152 115 128 L115 90 Z" fill="#2d3748"/>
+  <!-- Armor plates -->
+  <rect x="130" y="100" width="60" height="15" fill="#718096" rx="2"/>
+  <rect x="125" y="120" width="70" height="15" fill="#718096" rx="2"/>
+  <rect x="140" y="140" width="40" height="15" fill="#718096" rx="2"/>
+  <!-- Shine effect -->
+  <path d="M130 75 L150 75 L140 95 Z" fill="#a0aec0" opacity="0.5"/>
+  <!-- Label -->
+  <text x="50%" y="190" font-family="Arial" font-size="16" fill="#aaaaaa" text-anchor="middle">装甲防护</text>
+</svg>

@@ -175,6 +175,22 @@ kuaishou_all_tasks_dedup.json
 .automation/.local/**/*
 !.automation/.local/**/.gitkeep
 
+# Harness local runtime files (keep .gitkeep skeleton tracked)
+.harness/.local/*
+!.harness/.local/.gitkeep
+!.harness/.local/*/
+.harness/.local/**/*
+!.harness/.local/**/.gitkeep
+
+# Harness prompt scratch file
+.harness/scripts/ralph/.current_prompt.md
+
+# Harness generated topic drafts
+.harness/topic-*.json
+
+# Generated E2E apps
+/e2e-test-*/
+
 # Manual topics - runtime data, not version controlled
 .automation/.local/state/topics/*-manual-topics.txt
 .automation/.local/tmp/topics-cache/

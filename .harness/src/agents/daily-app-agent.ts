@@ -17,6 +17,8 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { spawn } from 'child_process';
 import { publishToKuaishou } from '../services/kuaishou-publisher.js';
+import { VideoGeneratorService } from '../services/video-generator.js';
+import { VideoPublisher } from '../services/video-publisher.js';
 
 interface DailyAppTask extends Task {
   type: 'daily_app_creation';
@@ -133,7 +135,25 @@ export class DailyAppAgent {
       const imagesDir = join(appDir, 'images');
       await this.ensureDir(imagesDir);
       
-      logger.info('Files materialized', { appDir, fileCount: Object.keys(scaffold.files).length });
+      // Copy template images
+      let copiedImages = 0;
+      for (const { source, dest } of scaffold.imagesToCopy) {
+        try {
+          const destPath = join(appDir, dest);
+          const { copyFileSync } = await import('fs');
+          copyFileSync(source, destPath);
+          copiedImages++;
+          logger.debug('Image copied', { source, dest: destPath });
+        } catch (error) {
+          logger.warn('Failed to copy image', { source, error: (error as Error).message });
+        }
+      }
+      
+      logger.info('Files materialized', { 
+        appDir, 
+        fileCount: Object.keys(scaffold.files).length,
+        imageCount: copiedImages 
+      });
       
       return { next: 'validation', data: { ...state.data, appDir } };
     });
@@ -202,7 +222,7 @@ export class DailyAppAgent {
       return { next: 'publish', data: { ...state.data, deployedUrl } };
     });
 
-    // 7. Kuaishou publish - Pure HTTP API implementation
+    // 7. Kuaishou publish - Distribution task (应用推广)
     this.loop.registerAction('publish', async (state) => {
       logger.info('Step: publish');
       
@@ -222,7 +242,7 @@ export class DailyAppAgent {
         // Don't fail the whole workflow - just log the error
         // This allows manual retry later
         return { 
-          next: 'done', 
+          next: 'video_generate', 
           data: { ...state.data, published: false, publishError: result.error } 
         };
       }
@@ -230,9 +250,126 @@ export class DailyAppAgent {
       logger.info('Kuaishou publish complete', { appId: topic.appId, planId: result.planId });
       
       return { 
-        next: 'done', 
+        next: 'video_generate', 
         data: { ...state.data, published: true, planId: result.planId } 
       };
+    });
+
+    // 8. Video generation - 生成应用演示视频
+    this.loop.registerAction('video_generate', async (state) => {
+      logger.info('Step: video_generate');
+      
+      const { topic, deployedUrl } = state.data as { topic: TopicCandidate; deployedUrl: string };
+      const videoDir = join(PATHS.harnessRuntimeDir, 'videos');
+      
+      logger.info('Generating demo video', { appId: topic.appId, url: deployedUrl });
+      
+      try {
+        const generator = new VideoGeneratorService();
+        const videoResult = await generator.generate({
+          appId: topic.appId,
+          appName: topic.appName,
+          appUrl: deployedUrl,
+          outputDir: videoDir,
+        });
+        
+        if (!videoResult.success || !videoResult.videoPath) {
+          logger.error('Video generation failed', new Error(videoResult.error || 'Unknown error'));
+          return { 
+            next: 'done', 
+            data: { ...state.data, videoGenerated: false, videoError: videoResult.error } 
+          };
+        }
+        
+        logger.info('Video generation complete', { 
+          videoPath: videoResult.videoPath,
+          duration: videoResult.duration,
+          size: videoResult.size,
+        });
+        
+        return { 
+          next: 'video_publish', 
+          data: { 
+            ...state.data, 
+            videoGenerated: true, 
+            videoPath: videoResult.videoPath,
+            videoTitle: videoResult.title,
+            videoDescription: videoResult.description,
+            videoTags: videoResult.tags,
+          } 
+        };
+      } catch (error) {
+        logger.error('Video generation error', error as Error);
+        return { 
+          next: 'done', 
+          data: { ...state.data, videoGenerated: false, videoError: (error as Error).message } 
+        };
+      }
+    });
+
+    // 9. Video publish - 发布视频到快手
+    this.loop.registerAction('video_publish', async (state) => {
+      logger.info('Step: video_publish');
+      
+      const { 
+        topic, 
+        videoPath, 
+        videoTitle, 
+        videoDescription, 
+        videoTags 
+      } = state.data as { 
+        topic: TopicCandidate; 
+        videoPath: string; 
+        videoTitle: string;
+        videoDescription: string;
+        videoTags: string[];
+      };
+      
+      logger.info('Publishing video to Kuaishou', { 
+        appId: topic.appId, 
+        videoPath,
+        title: videoTitle,
+      });
+      
+      try {
+        const publisher = new VideoPublisher();
+        const result = await publisher.publish({
+          videoPath,
+          title: videoTitle,
+          description: videoDescription,
+          tags: videoTags,
+          visibility: 'public',
+        });
+        
+        if (!result.success) {
+          logger.error('Video publish failed', new Error(result.error || 'Unknown error'));
+          return { 
+            next: 'done', 
+            data: { ...state.data, videoPublished: false, videoPublishError: result.error } 
+          };
+        }
+        
+        logger.info('Video publish complete', { 
+          videoId: result.videoId,
+          shareUrl: result.shareUrl,
+        });
+        
+        return { 
+          next: 'done', 
+          data: { 
+            ...state.data, 
+            videoPublished: true, 
+            videoId: result.videoId,
+            videoShareUrl: result.shareUrl,
+          } 
+        };
+      } catch (error) {
+        logger.error('Video publish error', error as Error);
+        return { 
+          next: 'done', 
+          data: { ...state.data, videoPublished: false, videoPublishError: (error as Error).message } 
+        };
+      }
     });
   }
 
@@ -255,7 +392,7 @@ export class DailyAppAgent {
 
     try {
       const state = await this.loop.run(task, {
-        states: ['topic_selection', 'scaffold', 'materialize', 'validation', 'git_push', 'deploy', 'publish', 'done'],
+        states: ['topic_selection', 'scaffold', 'materialize', 'validation', 'git_push', 'deploy', 'publish', 'video_generate', 'video_publish', 'done'],
         initialState: 'topic_selection',
         completionCheck: (s) => s.currentStep === 'done',
       });
