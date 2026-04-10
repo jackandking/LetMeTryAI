@@ -1,10 +1,11 @@
 /**
  * Topic Deduplication Service
- * Based on legacy automation/shared/topic-dedup.js
+ * Hybrid approach: Jaccard (fast) + AI (semantic)
  */
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { PATHS } from '../config/index.js';
+import { checkDuplicateWithAI, batchCheckDuplicatesWithAI, AIDedupResult } from './topic-dedup-ai.js';
 
 /**
  * Character-level Jaccard similarity between two strings.
@@ -22,10 +23,13 @@ interface DuplicateCheckResult {
   isDuplicate: boolean;
   similarTo?: string;
   similarity?: number;
+  reasoning?: string;
+  method: 'jaccard' | 'ai' | 'none';
 }
 
 /**
  * Check if a new topic duplicates any recent topic.
+ * Uses Jaccard for fast filtering, AI for semantic judgment on close matches.
  */
 export function checkTopicDuplicate(
   newTopic: string,
@@ -42,123 +46,222 @@ export function checkTopicDuplicate(
         isDuplicate: true,
         similarTo: topic,
         similarity,
+        method: 'jaccard',
       };
     }
   }
 
-  return { isDuplicate: false };
-}
-
-interface PublishedTask {
-  name: string;
-  planId?: string;
-  publishTime?: string;
+  return { isDuplicate: false, method: 'none' };
 }
 
 /**
- * Load published Kuaishou task names from metrics reports.
+ * Check duplicate with AI semantic judgment
  */
-export function loadPublishedTaskNames(): string[] {
-  // Check both prod and dev metrics directories
-  const metricsDirs = [
-    join(PATHS.projectRoot, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily'),
-    join(PATHS.projectRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily'),
-  ];
+export async function checkTopicDuplicateWithAI(
+  newTopic: string,
+  recentTopics: string[],
+  options: { 
+    threshold?: number;
+    aiThreshold?: number;
+  } = {}
+): Promise<DuplicateCheckResult> {
+  const { threshold = 0.6, aiThreshold = 0.75 } = options;
+  
+  // First pass: Jaccard for exact matches
+  const jaccardResult = checkTopicDuplicate(newTopic, recentTopics, { threshold });
+  if (jaccardResult.isDuplicate) {
+    return jaccardResult;
+  }
 
-  for (const metricsDir of metricsDirs) {
-    try {
-      if (!existsSync(metricsDir)) continue;
-
-      const files = readdirSync(metricsDir)
-        .filter(f => f.startsWith('kuaishou_report_') && f.endsWith('.json'))
-        .sort()
-        .reverse();
-
-      if (files.length === 0) continue;
-
-      const report = JSON.parse(readFileSync(join(metricsDir, files[0]), 'utf-8'));
-      const names: string[] = (report.allTasks || [])
-        .map((t: PublishedTask) => t.name)
-        .filter(Boolean);
-
-      console.log(`[Dedup] Loaded ${names.length} published tasks from ${files[0]}`);
-      return names;
-    } catch (err) {
-      console.warn(`[Dedup] Failed to load from ${metricsDir}:`, (err as Error).message);
+  // Second pass: Find potentially similar topics with lower threshold
+  const candidates: string[] = [];
+  const keywords = newTopic.toLowerCase();
+  
+  for (const topic of recentTopics) {
+    const similarity = calculateSimilarity(keywords, topic.toLowerCase());
+    // If Jaccard shows some similarity but below threshold, let AI judge
+    if (similarity > 0.3 && similarity <= threshold) {
+      candidates.push(topic);
     }
   }
 
-  return [];
+  // Limit candidates for performance
+  const limitedCandidates = candidates.slice(0, 10);
+
+  if (limitedCandidates.length === 0) {
+    return { isDuplicate: false, method: 'none' };
+  }
+
+  // AI judgment on candidates
+  const aiResult = await checkDuplicateWithAI(newTopic, limitedCandidates);
+  
+  if (aiResult.isDuplicate && aiResult.similarity >= aiThreshold) {
+    return {
+      isDuplicate: true,
+      similarTo: aiResult.similarTo,
+      similarity: aiResult.similarity,
+      reasoning: aiResult.reasoning,
+      method: 'ai',
+    };
+  }
+
+  return { 
+    isDuplicate: false, 
+    method: 'ai',
+    reasoning: aiResult.reasoning 
+  };
 }
 
 /**
- * Load recent app directories from git history.
+ * Load published task names from Kuaishou reports
  */
-export function loadRecentAppIds(days = 30): string[] {
+export function loadPublishedTaskNames(): string[] {
+  // Try harness path first, then fallback to automation
+  let metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+  
+  if (!existsSync(metricsDir)) {
+    // Fallback to automation path directly
+    metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+  }
+  
+  if (!existsSync(metricsDir)) {
+    console.log('[Dedup] Metrics directory not found:', metricsDir);
+    return [];
+  }
+
   try {
-    const { execSync } = require('child_process');
-    const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
-    
-    // Get recently created directories
-    const output = execSync(
-      `git log --since="${since}" --name-status --pretty=format: | grep -E "^A\s+[^/]+/index.html$" | head -50`,
-      { encoding: 'utf-8', cwd: PATHS.projectRoot }
+    const files = readdirSync(metricsDir)
+      .filter(f => f.startsWith('kuaishou_report_') && f.endsWith('.json'))
+      .sort()
+      .reverse();
+
+    if (files.length === 0) {
+      return [];
+    }
+
+    const latestReport = JSON.parse(
+      readFileSync(join(metricsDir, files[0]), 'utf-8')
     );
+
+    const names = (latestReport.allTasks || [])
+      .map((t: { name?: string }) => t.name)
+      .filter(Boolean) as string[];
     
-    const appIds = output
-      .split('\n')
-      .map(line => line.trim().replace(/^A\s+/, '').replace('/index.html', ''))
-      .filter(id => id && !id.includes('/'));
-    
-    return [...new Set(appIds)];
-  } catch {
+    console.log(`[Dedup] Loaded ${names.length} published tasks from ${files[0]}`);
+    return names;
+  } catch (error) {
+    console.error('[Dedup] Failed to load published tasks:', error);
     return [];
   }
 }
 
+interface DedupCandidate {
+  title: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
+interface DedupOptions {
+  publishedNames: string[];
+  threshold?: number;
+  useAI?: boolean;
+}
+
 /**
- * Comprehensive deduplication check for topic candidates.
- * Returns filtered list with duplicates marked.
+ * Mark candidates with _blocked flag if duplicate
  */
-export function deduplicateCandidates<T extends { title?: string; appName?: string }>(
-  candidates: T[],
-  options: {
-    publishedNames?: string[];
-    recentAppIds?: string[];
-    threshold?: number;
-  } = {}
-): Array<T & { _blocked?: boolean; _duplicateOf?: string; _similarity?: number }> {
-  const {
-    publishedNames = loadPublishedTaskNames(),
-    recentAppIds = loadRecentAppIds(),
-    threshold = 0.6,
-  } = options;
+export function deduplicateCandidates(
+  candidates: DedupCandidate[],
+  options: DedupOptions
+): Array<DedupCandidate & { _blocked?: boolean; _duplicateOf?: string; _similarity?: number; _reasoning?: string }> {
+  const { publishedNames, threshold = 0.6 } = options;
+  const blockedAppIds = new Set<string>();
 
   return candidates.map(candidate => {
-    const title = candidate.title || candidate.appName || '';
-    
-    // Check 1: Similar to published tasks
-    const dupCheck = checkTopicDuplicate(title, publishedNames, { threshold });
-    if (dupCheck.isDuplicate) {
+    // Check against published tasks
+    const publishedCheck = checkTopicDuplicate(
+      candidate.title,
+      publishedNames,
+      { threshold }
+    );
+
+    if (publishedCheck.isDuplicate) {
       return {
         ...candidate,
         _blocked: true,
-        _duplicateOf: dupCheck.similarTo,
-        _similarity: dupCheck.similarity,
+        _duplicateOf: publishedCheck.similarTo,
+        _similarity: publishedCheck.similarity,
       };
     }
 
-    // Check 2: App ID collision with recent apps
-    const appId = (candidate as unknown as { appId?: string }).appId;
-    if (appId && recentAppIds.includes(appId)) {
-      return {
-        ...candidate,
-        _blocked: true,
-        _duplicateOf: `existing app: ${appId}`,
-        _similarity: 1,
-      };
+    // Check against previous candidates (prevent duplicates in same batch)
+    for (const blockedId of blockedAppIds) {
+      const selfCheck = checkTopicDuplicate(
+        candidate.title,
+        [blockedId],
+        { threshold: 0.8 } // Stricter for same-batch
+      );
+      if (selfCheck.isDuplicate) {
+        return {
+          ...candidate,
+          _blocked: true,
+          _duplicateOf: blockedId,
+          _similarity: selfCheck.similarity,
+        };
+      }
     }
 
+    blockedAppIds.add(candidate.title);
     return candidate;
+  });
+}
+
+/**
+ * Async deduplication with AI judgment (batch mode for speed)
+ */
+export async function deduplicateCandidatesWithAI(
+  candidates: DedupCandidate[],
+  options: DedupOptions
+): Promise<Array<DedupCandidate & { _blocked?: boolean; _duplicateOf?: string; _similarity?: number; _reasoning?: string; _method?: string }>> {
+  const { publishedNames, threshold = 0.6, useAI = true } = options;
+  
+  if (!useAI) {
+    // Fallback to sync version
+    return deduplicateCandidates(candidates, { publishedNames, threshold });
+  }
+
+  // First pass: Jaccard for exact matches (fast)
+  const jaccardResults = deduplicateCandidates(candidates, { publishedNames, threshold: 0.8 });
+  const needAiCheck = jaccardResults.filter(c => !c._blocked);
+  
+  if (needAiCheck.length === 0) {
+    return jaccardResults;
+  }
+
+  // Second pass: Batch AI check for remaining candidates
+  console.log(`[AI Dedup] ${needAiCheck.length} candidates need semantic check`);
+  const aiResults = await batchCheckDuplicatesWithAI(
+    needAiCheck.map(c => ({ title: c.title, description: c.description })),
+    publishedNames
+  );
+
+  // Merge results
+  const aiResultMap = new Map(needAiCheck.map((c, i) => [c.title, aiResults[i]]));
+  
+  return jaccardResults.map(c => {
+    if (c._blocked) return c; // Already blocked by Jaccard
+    
+    const aiResult = aiResultMap.get(c.title);
+    if (aiResult?.isDuplicate && (aiResult.similarity || 0) >= 0.75) {
+      return {
+        ...c,
+        _blocked: true,
+        _duplicateOf: aiResult.similarTo,
+        _similarity: aiResult.similarity,
+        _reasoning: aiResult.reasoning,
+        _method: 'ai',
+      };
+    }
+    return c;
   });
 }

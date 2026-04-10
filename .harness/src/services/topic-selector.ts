@@ -132,9 +132,10 @@ export function parseTopicSelectionResponse(content: unknown): TopicSelectionRes
  */
 export async function generateTopicsWithAI(
   profile: ProfileConfig,
-  date: string = new Date().toISOString().split('T')[0]
+  date: string = new Date().toISOString().split('T')[0],
+  trendingContext?: string
 ): Promise<TopicSelectionResult> {
-  const prompt = buildTopicSelectionPrompt(profile, date);
+  const prompt = buildTopicSelectionPrompt(profile, date, trendingContext);
   
   logger.info('Generating topics with AI', { profile: profile.id, date });
 
@@ -164,21 +165,31 @@ export async function generateTopicsWithAI(
 
 export async function chooseBestTopic(
   candidates: TopicCandidate[],
-  profile: ProfileConfig
+  profile: ProfileConfig,
+  options: { useAIDedup?: boolean } = {}
 ): Promise<TopicCandidate> {
+  const { useAIDedup = false } = options;
+  
   logger.info('Choosing best topic', { 
     candidateCount: candidates.length,
     titles: candidates.map(c => c.title),
+    useAIDedup,
   });
 
   // Import dedup service
-  const { deduplicateCandidates, loadPublishedTaskNames } = await import('./topic-dedup.js');
+  const { 
+    deduplicateCandidates, 
+    deduplicateCandidatesWithAI,
+    loadPublishedTaskNames 
+  } = await import('./topic-dedup.js');
   
   // Load published tasks for dedup
   const publishedNames = loadPublishedTaskNames();
   
-  // Mark duplicates
-  const marked = deduplicateCandidates(candidates, { publishedNames, threshold: 0.6 });
+  // Mark duplicates (with or without AI)
+  const marked = useAIDedup 
+    ? await deduplicateCandidatesWithAI(candidates, { publishedNames, threshold: 0.6, useAI: true })
+    : deduplicateCandidates(candidates, { publishedNames, threshold: 0.6 });
   
   // Filter out blocked candidates
   const valid = marked.filter(c => !c._blocked);
@@ -190,6 +201,8 @@ export async function chooseBestTopic(
       title: b.title, 
       similarTo: b._duplicateOf,
       similarity: b._similarity,
+      reasoning: b._reasoning,
+      method: b._method,
     });
   }
   

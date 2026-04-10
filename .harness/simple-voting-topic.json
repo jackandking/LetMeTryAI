@@ -1,0 +1,43 @@
+{
+  "id": "voting-favorite-programming-language",
+  "title": "你最喜欢的编程语言是？",
+  "description": "在众多编程语言中，哪一种是你最喜欢、最常用的？",
+  "category": "技术",
+  "type": "single_choice",
+  "options": [
+    {
+      "id": "option-1",
+      "text": "JavaScript / TypeScript",
+      "description": "前端开发的首选，生态系统丰富"
+    },
+    {
+      "id": "option-2",
+      "text": "Python",
+      "description": "简洁优雅，适合数据科学与AI开发"
+    },
+    {
+      "id": "option-3",
+      "text": "Java",
+      "description": "企业级应用开发的主流选择"
+    },
+    {
+      "id": "option-4",
+      "text": "Go",
+      "description": "高性能，云原生时代的宠儿"
+    },
+    {
+      "id": "option-5",
+      "text": "Rust",
+      "description": "内存安全，系统编程的新星"
+    },
+    {
+      "id": "option-6",
+      "text": "其他",
+      "description": "C/C++、C#、Ruby、PHP等"
+    }
+  ],
+  "created_at": "2026-04-09T23:17:50+08:00",
+  "expires_at": "2026-04-16T23:17:50+08:00",
+  "total_votes": 0,
+  "status": "active"
+}
