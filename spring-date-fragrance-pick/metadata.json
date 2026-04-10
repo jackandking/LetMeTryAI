@@ -1,0 +1,22 @@
+{
+  "id": "spring-date-fragrance-pick",
+  "name": "春日香氛投票",
+  "description": "用香氛调性做投票，帮助用户发现适合约会的春季气味类型。",
+  "category": "美妆",
+  "directory": "spring-date-fragrance-pick",
+  "url": "spring-date-fragrance-pick",
+  "image": "spring-date-fragrance-pick/images/floral-romantic.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "香水",
+    "春季",
+    "约会",
+    "种草",
+    "香水",
+    "春季",
+    "约会",
+    "种草"
+  ],
+  "status": "active"
+}
