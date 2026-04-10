@@ -1,0 +1,24 @@
+{
+  "id": "community-weekend-activities",
+  "name": "社区活动选择",
+  "description": "让中老年用户从常见社区活动中选择偏好，鼓励参与与交流。",
+  "category": "生活",
+  "directory": "community-weekend-activities",
+  "url": "community-weekend-activities",
+  "image": "community-weekend-activities/images/square-dance.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "周末",
+    "邻里",
+    "社交",
+    "银发生活",
+    "社区活动",
+    "周末",
+    "邻里",
+    "社交",
+    "银发生活"
+  ],
+  "status": "active"
+}
