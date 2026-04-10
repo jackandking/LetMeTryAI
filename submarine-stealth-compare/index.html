@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>潜艇隐蔽性对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">潜艇隐蔽性对比</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">作为硬核玩家，你更认可哪种潜艇在现代海战中更占优势？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="diesel-aip-submarine">
+                            <div class="card-image">
+                                <img src="images/diesel-aip-submarine.svg" alt="柴电潜艇侧面图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">柴电潜艇（含AIP）</h3>
+                                <p class="option-desc">静音、成本低、近海隐蔽性好（短程突袭优势）</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="conventional-diesel-submarine">
+                            <div class="card-image">
+                                <img src="images/conventional-diesel-submarine.svg" alt="常规柴电潜艇甲板图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">常规柴电潜艇</h3>
+                                <p class="option-desc">经典设计、维护便利、适合沿海与伏击作战</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="nuclear-attack-submarine">
+                            <div class="card-image">
+                                <img src="images/nuclear-attack-submarine.svg" alt="核动力攻击潜艇侧视图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">核动力攻击潜艇</h3>
+                                <p class="option-desc">续航与速度优势明显，远洋持续行动能力强</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

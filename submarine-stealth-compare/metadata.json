@@ -1,0 +1,24 @@
+{
+  "id": "submarine-stealth-compare",
+  "name": "潜艇隐蔽对比",
+  "description": "比较不同动力与设计下潜艇的隐身与续航特性，适合装备党投票互动。",
+  "category": "军事装备",
+  "directory": "submarine-stealth-compare",
+  "url": "submarine-stealth-compare",
+  "image": "submarine-stealth-compare/images/diesel-aip-submarine.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "潜艇",
+    "隐蔽性",
+    "AIP",
+    "核动力",
+    "海战",
+    "潜艇",
+    "隐蔽性",
+    "aip",
+    "核动力",
+    "海战"
+  ],
+  "status": "active"
+}
