@@ -1,0 +1,21 @@
+{
+  "id": "date-hairstyle-pick",
+  "name": "发型灵感",
+  "description": "围绕约会场景的发型偏好投票，易做分场景图与搭配提示，利于转化种草内容。",
+  "category": "美妆",
+  "directory": "date-hairstyle-pick",
+  "url": "date-hairstyle-pick",
+  "image": "date-hairstyle-pick/images/natural-straight-long.svg",
+  "tags": [
+    "投票",
+    "美妆",
+    "发型",
+    "约会",
+    "造型",
+    "发型",
+    "约会",
+    "造型",
+    "美妆"
+  ],
+  "status": "active"
+}
