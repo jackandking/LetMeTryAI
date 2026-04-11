@@ -1,10 +1,39 @@
-export const HOT_TASK_APP = {
+export const DEFAULT_HOT_TASK_APP = {
     appId: 'parent-chat-teen',
     pageTitle: '青春期聊天技巧',
     appTitle: '家长话题：如何跟青春期孩子聊天更有效',
     appUrl: 'https://letmetryai.cn/parent-chat-teen/',
     recipientEmail: 'jackandking@163.com'
 };
+
+function parseHotTaskAppOverrides(rawValue = process.env.HOT_TASK_APP_JSON) {
+    if (!rawValue) {
+        return {};
+    }
+
+    let parsedValue;
+    try {
+        parsedValue = JSON.parse(rawValue);
+    } catch (error) {
+        throw new Error(`Invalid HOT_TASK_APP_JSON: ${(error && error.message) || String(error)}`);
+    }
+
+    if (!parsedValue || typeof parsedValue !== 'object' || Array.isArray(parsedValue)) {
+        throw new Error('HOT_TASK_APP_JSON must be a JSON object');
+    }
+
+    return parsedValue;
+}
+
+export function buildHotTaskApp(overrides = {}) {
+    return {
+        ...DEFAULT_HOT_TASK_APP,
+        ...parseHotTaskAppOverrides(),
+        ...overrides
+    };
+}
+
+export const HOT_TASK_APP = buildHotTaskApp();
 
 export const VIDEO_CAPTURE = {
     viewportWidth: 360,
@@ -19,6 +48,10 @@ export const VIDEO_CAPTURE = {
 
 export function buildArtifactBaseName(app = HOT_TASK_APP) {
     return `${app.appId}-kuaishou-hot-task-video`;
+}
+
+export function buildEmailSubject(app = HOT_TASK_APP) {
+    return `热门任务视频 - ${app.pageTitle}`;
 }
 
 export function buildNarrationLines(app = HOT_TASK_APP) {
