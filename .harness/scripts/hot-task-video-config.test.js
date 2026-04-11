@@ -1,8 +1,11 @@
 import {
     buildArtifactBaseName,
+    buildEmailSubject,
+    buildHotTaskApp,
     buildEmailBody,
     buildNarrationLines,
     buildOverlayLines,
+    DEFAULT_HOT_TASK_APP,
     HOT_TASK_APP,
     VIDEO_CAPTURE
 } from './hot-task-video-config.js';
@@ -48,5 +51,25 @@ describe('hot-task-video-config', () => {
     it('buildArtifactBaseName should generate a distinguishable video filename prefix', () => {
         expect(buildArtifactBaseName()).toBe('parent-chat-teen-kuaishou-hot-task-video');
         expect(buildArtifactBaseName()).not.toBe('promo');
+    });
+
+    it('buildHotTaskApp should allow reusable overrides without mutating defaults', () => {
+        const overridden = buildHotTaskApp({
+            appId: 'poxi-xiangchu-toupiao',
+            pageTitle: '婆媳相处投票',
+            appUrl: 'https://letmetryai.cn/poxi-xiangchu-toupiao/',
+            recipientEmail: 'ops@example.com'
+        });
+
+        expect(overridden).toEqual(expect.objectContaining({
+            appId: 'poxi-xiangchu-toupiao',
+            pageTitle: '婆媳相处投票',
+            recipientEmail: 'ops@example.com'
+        }));
+        expect(DEFAULT_HOT_TASK_APP.appId).toBe('parent-chat-teen');
+    });
+
+    it('buildEmailSubject should include the target page title', () => {
+        expect(buildEmailSubject()).toBe(`热门任务视频 - ${HOT_TASK_APP.pageTitle}`);
     });
 });
