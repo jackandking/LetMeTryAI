@@ -1,0 +1,24 @@
+{
+  "id": "stealth-fighter-faceoff",
+  "name": "隐身战机对比",
+  "description": "比较四款主流隐身战斗机的作战侧重点与技术特点，便于图文+参数对比投票。",
+  "category": "军事装备",
+  "directory": "stealth-fighter-faceoff",
+  "url": "stealth-fighter-faceoff",
+  "image": "stealth-fighter-faceoff/images/f-22-raptor.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "隐身",
+    "战斗机",
+    "机动性",
+    "雷达",
+    "推力矢量",
+    "隐身",
+    "战斗机",
+    "机动性",
+    "雷达",
+    "推力矢量"
+  ],
+  "status": "active"
+}
