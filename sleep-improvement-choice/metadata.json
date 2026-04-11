@@ -1,0 +1,24 @@
+{
+  "id": "sleep-improvement-choice",
+  "name": "睡眠小贴士",
+  "description": "对比几种温和可行的睡眠改善习惯，适合中老年读者采纳。",
+  "category": "健康",
+  "directory": "sleep-improvement-choice",
+  "url": "sleep-improvement-choice",
+  "image": "sleep-improvement-choice/images/regular-schedule.svg",
+  "tags": [
+    "投票",
+    "健康",
+    "睡眠",
+    "休息",
+    "睡前习惯",
+    "中老年健康",
+    "睡眠改善",
+    "睡眠",
+    "休息",
+    "睡前习惯",
+    "中老年健康",
+    "睡眠改善"
+  ],
+  "status": "active"
+}
