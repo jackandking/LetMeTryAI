@@ -1259,7 +1259,10 @@ async function handleDailyIngest(options) {
     const summary = await runDailyIngestion({
         repoRoot: REPO_ROOT,
         configFile: options.configFile || '',
-        env: process.env,
+        env: {
+            ...process.env,
+            ...(options.reportEmail ? { KUAISHOU_FOLLOW_REPORT_TO: options.reportEmail } : {})
+        },
         days: Number(options.days || 1)
     });
 
@@ -1304,7 +1307,8 @@ async function handleSendReport(options) {
             ...(options.reportEmail ? { KUAISHOU_FOLLOW_REPORT_TO: options.reportEmail } : {})
         },
         dateKey: options.date || '',
-        toEmail: options.reportEmail || ''
+        toEmail: options.reportEmail || '',
+        force: true
     });
 
     console.log([
