@@ -140,7 +140,7 @@ pilot 验证完成后，日常自动化分成两段：
 
 1. **daily-ingest**：每天 `14:00 Asia/Shanghai` 跑一次，按 `official-only` 为全部配置 app 拉取最新可用挂载数据，并合并进 pending queue
 2. **run-hourly**：每小时跑一次，每批最多 `10` 人，批内 follow 间隔至少 `1` 分钟，全天最多 `100` 人
-3. **send-report**：当日任务结束（queue 清空 / 达到日上限 / 触发限流）后发送 1 封 email 报告
+3. **send-report**：支持手工补发某天报告；同时 `daily-ingest` 和每次 `run-hourly` 都会自动发送一封当天累计进度报告
 
 ### 自动化配置
 
@@ -210,7 +210,7 @@ npm run kuaishou:follow:scheduler -- start
 除原有 `follow-history.jsonl` 外，还会写入：
 
 - `pending-queue.json`：待 follow 队列
-- `daily-runs/YYYY-MM-DD.json`：当天 ingestion、hourly worker、report 状态
+- `daily-runs/YYYY-MM-DD.json`：当天 ingestion、hourly worker、最近一次 report 状态
 - `reports/follow-report-YYYY-MM-DD.txt`：邮件正文
 - `reports/follow-report-YYYY-MM-DD.json`：结构化日报摘要
 

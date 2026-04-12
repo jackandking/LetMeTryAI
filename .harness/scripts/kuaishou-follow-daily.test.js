@@ -1,8 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
-import { createFollowRecord, createPendingCandidate } from './kuaishou-follow-workflow.js';
-import { planHourlyExecution } from './kuaishou-follow-daily.js';
+import {
+    buildFollowRuntimePaths,
+    createFollowRecord,
+    createPendingCandidate,
+    ensureFollowRuntime,
+    savePendingQueue
+} from './kuaishou-follow-workflow.js';
+import { planHourlyExecution, runDailyIngestion, runHourlyFollowWorker } from './kuaishou-follow-daily.js';
 
 test('planHourlyExecution stops immediately when daily cap is exhausted', () => {
     const history = [
@@ -80,4 +89,60 @@ test('planHourlyExecution selects a round-robin hourly batch within remaining ca
     assert.equal(plan.stopReason, '');
     assert.equal(plan.remainingCap, 2);
     assert.deepEqual(plan.selected.map(item => item.profileId), ['elder-love', 'parent-tools']);
+});
+
+test('runDailyIngestion sends a report after every ingestion run', async () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), 'kuaishou-follow-ingest-'));
+
+    try {
+        const configFile = join(tempRoot, 'app-config.local.json');
+        writeFileSync(configFile, '[]', 'utf-8');
+        const calls = [];
+
+        const summary = await runDailyIngestion({
+            repoRoot: tempRoot,
+            configFile,
+            env: { KUAISHOU_FOLLOW_REPORT_TO: 'test@example.com' },
+            now: new Date('2026-04-12T06:00:00.000Z'),
+            sendReport: async args => {
+                calls.push(args);
+                return { sentAt: '2026-04-12T06:00:05.000Z' };
+            }
+        });
+
+        assert.equal(summary.appCount, 0);
+        assert.equal(calls.length, 1);
+        assert.equal(calls[0].dateKey, '2026-04-12');
+        assert.equal(calls[0].force, true);
+    } finally {
+        rmSync(tempRoot, { recursive: true, force: true });
+    }
+});
+
+test('runHourlyFollowWorker sends a report after queue-empty runs', async () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), 'kuaishou-follow-hourly-'));
+
+    try {
+        const paths = buildFollowRuntimePaths(tempRoot);
+        ensureFollowRuntime(paths);
+        savePendingQueue(paths.queueFile, []);
+        const calls = [];
+
+        const summary = await runHourlyFollowWorker({
+            repoRoot: tempRoot,
+            env: { KUAISHOU_FOLLOW_REPORT_TO: 'test@example.com' },
+            now: new Date('2026-04-12T06:00:00.000Z'),
+            sendReport: async args => {
+                calls.push(args);
+                return { sentAt: '2026-04-12T06:00:05.000Z' };
+            }
+        });
+
+        assert.equal(summary.stopReason, 'queue-empty');
+        assert.equal(calls.length, 1);
+        assert.equal(calls[0].dateKey, '2026-04-12');
+        assert.equal(calls[0].force, true);
+    } finally {
+        rmSync(tempRoot, { recursive: true, force: true });
+    }
 });

@@ -28,7 +28,6 @@ import {
     readFollowHistory,
     removeQueuedCandidate,
     savePendingQueue,
-    shouldSendEndOfDayReport,
     updateDailyIngestionState,
     updateDailyReportState,
     updateQueuedCandidate,
@@ -297,7 +296,9 @@ export async function runDailyIngestion({
     configFile = '',
     env = process.env,
     now = new Date(),
-    days = 1
+    days = 1,
+    autoSendReport = true,
+    sendReport = sendDailyFollowReport
 } = {}) {
     const paths = getFollowPaths(repoRoot);
     const configs = loadFollowAppConfigs({
@@ -371,6 +372,15 @@ export async function runDailyIngestion({
         apps: appSummaries
     };
     updateDailyIngestionState(paths.dailyRunsDir, runDateKey, ingestionSummary);
+    if (autoSendReport) {
+        await sendReport({
+            repoRoot,
+            env,
+            now,
+            dateKey: runDateKey,
+            force: true
+        });
+    }
     return ingestionSummary;
 }
 
@@ -460,7 +470,8 @@ export async function runHourlyFollowWorker({
     batchSize = Number(env.KUAISHOU_FOLLOW_BATCH_SIZE || DEFAULT_HOURLY_BATCH_SIZE),
     dailyCap = Number(env.KUAISHOU_FOLLOW_DAILY_CAP || DEFAULT_DAILY_FOLLOW_CAP),
     minFollowIntervalMs = Number(env.KUAISHOU_FOLLOW_MIN_INTERVAL_MS || DEFAULT_MIN_FOLLOW_INTERVAL_MS),
-    autoSendReport = true
+    autoSendReport = true,
+    sendReport = sendDailyFollowReport
 } = {}) {
     const paths = getFollowPaths(repoRoot);
     const runDateKey = getRunDateKey(now);
@@ -489,8 +500,8 @@ export async function runHourlyFollowWorker({
             failed: 0,
             stopReason
         });
-        if (autoSendReport && shouldSendEndOfDayReport(dayState, { queue, dateKey: runDateKey, history, dailyCap })) {
-            await sendDailyFollowReport({ repoRoot, env, now, dateKey: runDateKey });
+        if (autoSendReport) {
+            await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
         }
         return dayState.hourlyRuns[dayState.hourlyRuns.length - 1];
     }
@@ -507,8 +518,8 @@ export async function runHourlyFollowWorker({
             failed: 0,
             stopReason
         });
-        if (autoSendReport && shouldSendEndOfDayReport(dayState, { queue, dateKey: runDateKey, history, dailyCap })) {
-            await sendDailyFollowReport({ repoRoot, env, now, dateKey: runDateKey });
+        if (autoSendReport) {
+            await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
         }
         return dayState.hourlyRuns[dayState.hourlyRuns.length - 1];
     }
@@ -577,13 +588,8 @@ export async function runHourlyFollowWorker({
     savePendingQueue(paths.queueFile, queue);
 
     const dayState = appendHourlyRunState(paths.dailyRunsDir, runDateKey, metrics);
-    if (autoSendReport && shouldSendEndOfDayReport(dayState, {
-        queue,
-        dateKey: runDateKey,
-        history: readFollowHistory(paths.historyFile),
-        dailyCap
-    })) {
-        await sendDailyFollowReport({ repoRoot, env, now, dateKey: runDateKey });
+    if (autoSendReport) {
+        await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
     }
 
     return metrics;
