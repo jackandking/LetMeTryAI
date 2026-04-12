@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>女人爱热议：分手后哪些瞬间让你难以忘怀？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">女人爱热议：分手后哪些瞬间让你难以忘怀？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">分手后哪些瞬间更让你难以忘怀？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="receive-ex-ex-message">
+                            <div class="card-image">
+                                <img src="images/receive-ex-ex-message.svg" alt="收到旧爱消息的手机屏幕" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">收到旧爱消息</h3>
+                                <p class="option-desc">分手后忽然收到对方的信息，触动回忆</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="meet-mutual-friend">
+                            <div class="card-image">
+                                <img src="images/meet-mutual-friend.svg" alt="咖啡馆偶遇情景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">偶遇共同朋友</h3>
+                                <p class="option-desc">在聚会或街头遇到共同朋友谈起往事</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="discover-ex-new-relationship">
+                            <div class="card-image">
+                                <img src="images/discover-ex-new-relationship.svg" alt="社交媒体上的新恋情通知" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">发现对方新恋情</h3>
+                                <p class="option-desc">看到对方公开新恋情后的复杂情绪</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="spend-holiday-alone">
+                            <div class="card-image">
+                                <img src="images/spend-holiday-alone.svg" alt="空荡的节日餐桌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">节日独自度过</h3>
+                                <p class="option-desc">重要节日独自面对，回忆涌上心头</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

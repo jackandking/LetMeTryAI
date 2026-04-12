@@ -1,0 +1,24 @@
+{
+  "id": "community-activity-choice-elder-2026-04-12",
+  "name": "社区活动选择",
+  "description": "社区活动类型投票，帮助了解老人更愿参与的邻里活动。",
+  "category": "生活",
+  "directory": "community-activity-choice-elder-2026-04-12",
+  "url": "community-activity-choice-elder-2026-04-12",
+  "image": "community-activity-choice-elder-2026-04-12/images/guangchangwu-xiaozu.svg",
+  "tags": [
+    "投票",
+    "生活",
+    "社区活动",
+    "广场舞",
+    "志愿服务",
+    "老年大学",
+    "读书会",
+    "社区活动",
+    "广场舞",
+    "志愿服务",
+    "老年大学",
+    "读书会"
+  ],
+  "status": "active"
+}

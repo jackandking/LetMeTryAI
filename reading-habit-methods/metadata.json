@@ -1,0 +1,22 @@
+{
+  "id": "reading-habit-methods",
+  "name": "阅读习惯培养",
+  "description": "比较亲子共读、固定时间、奖励机制与自由选书等方法的实用性。",
+  "category": "教育",
+  "directory": "reading-habit-methods",
+  "url": "reading-habit-methods",
+  "image": "reading-habit-methods/images/parent-child-reading.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读习惯",
+    "亲子共读",
+    "培养方法",
+    "家庭教育",
+    "阅读习惯",
+    "亲子共读",
+    "培养方法",
+    "家庭教育"
+  ],
+  "status": "active"
+}

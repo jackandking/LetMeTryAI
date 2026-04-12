@@ -1,0 +1,22 @@
+{
+  "id": "child-lie-handling",
+  "name": "家长话题：孩子说谎怎处理",
+  "description": "当孩子被发现说谎，家长更倾向哪种方式来回应？",
+  "category": "成长",
+  "directory": "child-lie-handling",
+  "url": "child-lie-handling",
+  "image": "child-lie-handling/images/gentle-guidance.svg",
+  "tags": [
+    "投票",
+    "成长",
+    "亲子沟通",
+    "诚实教育",
+    "行为引导",
+    "家庭决策",
+    "亲子沟通",
+    "诚实教育",
+    "行为引导",
+    "家庭决策"
+  ],
+  "status": "active"
+}

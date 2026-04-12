@@ -1,0 +1,22 @@
+{
+  "id": "reading-habit",
+  "name": "阅读习惯投票",
+  "description": "投票选出家长认为最可行的孩子阅读培养方式",
+  "category": "教育",
+  "directory": "reading-habit",
+  "url": "reading-habit",
+  "image": "reading-habit/images/fixed-reading-time.svg",
+  "tags": [
+    "投票",
+    "教育",
+    "阅读",
+    "亲子",
+    "习惯",
+    "书单",
+    "阅读",
+    "亲子",
+    "习惯",
+    "书单"
+  ],
+  "status": "active"
+}
