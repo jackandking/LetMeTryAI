@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOCAL_DIR="$PROJECT_DIR/.automation/.local"
 REPORT_SCRIPT="$PROJECT_DIR/.automation/scripts/daily_kuaishou_report.js"
+REPORT_RUNNER="$PROJECT_DIR/.automation/scripts/run-daily-report.sh"
 PROFILE_RUNNER="$PROJECT_DIR/.automation/scripts/run-daily-profile.sh"
 REPORT_LOG_FILE="$LOCAL_DIR/logs/daily_report.log"
 NANRENBAO_LOG_FILE="$LOCAL_DIR/logs/daily-run-nanrenbao.log"
@@ -58,12 +59,13 @@ fi
 
 echo "Node path: $NODE_PATH"
 echo "Report script: $REPORT_SCRIPT"
+echo "Report runner: $REPORT_RUNNER"
 echo "Profile runner: $PROFILE_RUNNER"
 echo "Report log file: $REPORT_LOG_FILE"
 echo "Email: $email"
 
 # Create cron commands
-REPORT_CRON_CMD="0 6 * * * cd \"$PROJECT_DIR\" && git pull --ff-only && KUAISHOU_EMAIL_TO=\"$email\" \"$NODE_PATH\" \"$REPORT_SCRIPT\" >> \"$REPORT_LOG_FILE\" 2>&1"
+REPORT_CRON_CMD="0 6 * * * cd \"$PROJECT_DIR\" && KUAISHOU_EMAIL_TO=\"$email\" \"$REPORT_RUNNER\" >> \"$REPORT_LOG_FILE\" 2>&1"
 NANRENBAO_CRON_CMD="0 7 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" nanrenbao >> \"$NANRENBAO_LOG_FILE\" 2>&1"
 ELDER_LOVE_CRON_CMD="0 8 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" elder-love >> \"$ELDER_LOVE_LOG_FILE\" 2>&1"
 PARENT_TOOLS_CRON_CMD="0 9 * * * cd \"$PROJECT_DIR\" && \"$PROFILE_RUNNER\" parent-tools >> \"$PARENT_TOOLS_LOG_FILE\" 2>&1"

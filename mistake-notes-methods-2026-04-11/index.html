@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家长话题：错题整理，你更支持哪种方法？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家长话题：错题整理，你更支持哪种方法？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">站在家长视角，你会怎么选：错题整理方法对比？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="by-subject">
+                            <div class="card-image">
+                                <img src="images/mistake-by-subject.svg" alt="按学科分区的错题本示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">按学科分类整理</h3>
+                                <p class="option-desc">每科一本或分区，便于针对性复习</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="by-mistake-type">
+                            <div class="card-image">
+                                <img src="images/mistake-by-type.svg" alt="按错误类型分类的错题整理示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">按错因类型整理</h3>
+                                <p class="option-desc">按计算/理解/审题等错误类型归类复盘</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="parent-tools" value="by-revision-cycle">
+                            <div class="card-image">
+                                <img src="images/mistake-by-cycle.svg" alt="复习时间表与错题循环示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">按时间/章节轮回复习</h3>
+                                <p class="option-desc">按复习计划周期回看并标注重点</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
