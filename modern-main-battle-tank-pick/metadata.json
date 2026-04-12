@@ -1,0 +1,23 @@
+{
+  "id": "modern-main-battle-tank-pick",
+  "name": "主战坦克对比",
+  "description": "用外观与性能参数对比主战坦克，适合硬核玩家投票与讨论。",
+  "category": "军事装备",
+  "directory": "modern-main-battle-tank-pick",
+  "url": "modern-main-battle-tank-pick",
+  "image": "modern-main-battle-tank-pick/images/t-14-armata.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "主战坦克",
+    "装甲",
+    "火力",
+    "机动性",
+    "军事装备"
+  ],
+  "status": "active"
+}
