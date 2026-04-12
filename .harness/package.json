@@ -8,7 +8,7 @@
     "dev": "tsx watch src/scheduler.ts",
     "build": "tsc",
     "test": "tsx test-manual.mjs",
-    "test:follow": "node --test scripts/kuaishou-follow-auth.test.js scripts/kuaishou-follow-workflow.test.js scripts/kuaishou-follow-api.test.js scripts/kuaishou-follow-config.test.js scripts/kuaishou-follow-daily.test.js scripts/send-kuaishou-follow-report.test.js",
+    "test:follow": "node --test scripts/kuaishou-follow-auth.test.js scripts/kuaishou-follow-workflow.test.js scripts/kuaishou-follow-api.test.js scripts/kuaishou-follow-config.test.js scripts/kuaishou-follow-daily.test.js scripts/kuaishou-follow-cron-scripts.test.js scripts/send-kuaishou-follow-report.test.js",
     "test:mvp": "tsx test-mvp-fast.mjs",
     "test:mvp:full": "tsx test-mvp.mjs",
     "test:all": "npm run test && npm run test:mvp && npm run test:ai",
