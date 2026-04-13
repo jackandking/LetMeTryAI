@@ -394,7 +394,17 @@ test('buildDailyEmailReport formats a readable end-of-day summary', () => {
                 totalFetched: 30,
                 eligibleCandidates: 12,
                 queueAdded: 10,
-                skippedMissingVideoUrl: 2
+                skippedMissingVideoUrl: 2,
+                apps: [
+                    {
+                        profileId: 'parent-tools',
+                        fetched: 10,
+                        acceptedCandidates: 4,
+                        queueAdded: 3,
+                        queueReplaced: 0,
+                        queueSkipped: 1
+                    }
+                ]
             },
             hourlyRuns: [
                 {
@@ -407,7 +417,12 @@ test('buildDailyEmailReport formats a readable end-of-day summary', () => {
                 }
             ]
         },
-        queue: [],
+        queue: [
+            {
+                profileId: 'parent-tools',
+                profileName: '家长爱'
+            }
+        ],
         history,
         dailyCap: 100
     });
@@ -415,7 +430,12 @@ test('buildDailyEmailReport formats a readable end-of-day summary', () => {
     assert.match(report.subject, /2026-04-12/);
     assert.match(report.body, /Followed: 1/);
     assert.match(report.body, /Hourly runs: 1/);
+    assert.match(report.body, /Per-app ingestion:/);
+    assert.match(report.body, /parent-tools: fetched 10, eligible 4, queue added 3/);
+    assert.match(report.body, /Pending queue by app:/);
+    assert.match(report.body, /parent-tools: 1/);
     assert.equal(report.summary.historySummary.alreadyFollowed, 1);
+    assert.equal(report.summary.pendingByProfile['parent-tools'], 1);
 });
 
 test('buildNextDayResumeAt defers to the next report hour', () => {
