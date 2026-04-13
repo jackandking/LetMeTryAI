@@ -1,0 +1,17 @@
+{
+  "id": "spring-summer-skincare",
+  "name": "换季护肤指南",
+  "description": "面向手机用户的图文投票页，聚焦春夏换季常见护肤诉求，便于插入小技巧卡片与短说明，降低商业感。",
+  "category": "美妆",
+  "keywords": [
+    "换季护肤",
+    "补水",
+    "防晒",
+    "温和去角质",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "spring-summer-skincare/images/moisture-lock.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-13T12:33:36.839Z"
+}
