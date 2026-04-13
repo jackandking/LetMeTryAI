@@ -19,6 +19,39 @@ import { spawn } from 'child_process';
 import { publishToKuaishou } from '../services/kuaishou-publisher.js';
 import { aiGenerateTool } from '../tools/ai-generate.js';
 
+const MANUAL_TOPIC_MAP: Record<string, string> = {
+  nanrenbao: 'man',
+  womanai: 'woman',
+  'parent-tools': 'parent',
+  'elder-love': 'elder',
+};
+
+function getManualQueueFile(profileId: string): string {
+  const key = MANUAL_TOPIC_MAP[profileId] || profileId;
+  return join(PATHS.projectRoot, '.automation', '.local', 'state', 'topics', `${key}-manual-topics.txt`);
+}
+
+function popManualTopic(profileId: string): string | null {
+  const file = getManualQueueFile(profileId);
+  if (!existsSync(file)) {
+    return null;
+  }
+  const topics = readFileSync(file, 'utf-8')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
+  
+  if (topics.length === 0) {
+    return null;
+  }
+  
+  const next = topics[0];
+  const remaining = topics.slice(1);
+  writeFileSync(file, remaining.join('\n') + (remaining.length > 0 ? '\n' : ''));
+  logger.info('Popped manual topic', { profileId, topic: next });
+  return next;
+}
+
 interface DailyAppTask extends Task {
   type: 'daily_app_creation';
   profileId: string;
@@ -47,24 +80,50 @@ export class DailyAppAgent {
   }
 
   private registerActions(): void {
-    // 1. Topic selection - Call Copilot
+    // 1. Topic selection - prefer manual queue, fallback to AI
     this.loop.registerAction('topic_selection', async (state) => {
       logger.info('Step: topic_selection');
       
       const currentDate = new Date().toISOString().slice(0, 10);
-      const prompt = buildTopicSelectionPrompt(this.profile, currentDate);
       
-      logger.info('Calling Copilot for topic selection');
+      // Check manual topic queue first
+      const manualTopic = popManualTopic(this.profileId);
       
       try {
-        const aiResult = await aiGenerateTool.execute({
-          prompt,
-          outputFormat: 'json',
-        });
-        if (!aiResult.success) {
-          throw new Error(aiResult.error?.message || 'AI generation failed');
+        let parsed;
+        let manualTopicUsed = false;
+        
+        if (manualTopic) {
+          logger.info('Using manual topic from queue', { topic: manualTopic });
+          const prompt = buildTopicSelectionPrompt(
+            this.profile,
+            currentDate,
+            undefined,
+            undefined,
+            manualTopic
+          );
+          const aiResult = await aiGenerateTool.execute({
+            prompt,
+            outputFormat: 'json',
+          });
+          if (!aiResult.success) {
+            throw new Error(aiResult.error?.message || 'AI generation failed');
+          }
+          parsed = parseTopicSelectionResponse(aiResult.data);
+          manualTopicUsed = true;
+        } else {
+          logger.info('No manual topic found, calling AI for topic selection');
+          const prompt = buildTopicSelectionPrompt(this.profile, currentDate);
+          const aiResult = await aiGenerateTool.execute({
+            prompt,
+            outputFormat: 'json',
+          });
+          if (!aiResult.success) {
+            throw new Error(aiResult.error?.message || 'AI generation failed');
+          }
+          parsed = parseTopicSelectionResponse(aiResult.data);
         }
-        const parsed = parseTopicSelectionResponse(aiResult.data);
+        
         const topicSelection = {
           reportSummary: parsed.reportSummary,
           candidates: parsed.topicCandidates.map(candidate => ({
@@ -77,6 +136,12 @@ export class DailyAppAgent {
         
         // Choose best candidate
         const best = await chooseBestTopic(parsed.topicCandidates, this.profile);
+        
+        if (manualTopicUsed) {
+          logger.info('Selected manual candidate', { title: best.title });
+        } else {
+          logger.info('Selected AI candidate', { title: best.title });
+        }
         
         // Validate constraints - try all candidates, sanitize if needed
         let selectedTopic: TopicCandidate | null = null;

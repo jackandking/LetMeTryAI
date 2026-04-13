@@ -7,8 +7,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TOPICS_DIR = path.join(__dirname, '..');
+const PROJECT_ROOT = process.cwd();
+const TOPICS_DIR = path.join(PROJECT_ROOT, '.automation', '.local', 'state', 'topics');
 
 /**
  * 品牌ID映射

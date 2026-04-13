@@ -11,10 +11,20 @@ export interface TopicSelectionResult {
   topicCandidates: TopicCandidate[];
 }
 
-export function buildTopicSelectionPrompt(profile: ProfileConfig, date: string, trendingContext?: string): string {
+export function buildTopicSelectionPrompt(
+  profile: ProfileConfig,
+  date: string,
+  trendingContext?: string,
+  recentTopics?: string[],
+  topicHint?: string
+): string {
   const categories = profile.preferredCategories.join('、');
   const doMore = profile.topicGuidelines.doMore.join('；');
   const avoid = profile.topicGuidelines.avoid.join('；');
+
+  const recentNote = recentTopics && recentTopics.length > 0
+    ? `最近已发布的主题（请避免重复）：\n${recentTopics.slice(0, 15).map((t, i) => `${i + 1}. ${t}`).join('\n')}\n`
+    : '';
 
   return `今天是 ${date}。
 
@@ -27,7 +37,9 @@ export function buildTopicSelectionPrompt(profile: ProfileConfig, date: string, 
 
 ${trendingContext ? `\n${trendingContext}\n` : '\n当前无热点数据，请基于品牌定位自选话题。\n'}
 
-重要：优先从今日热搜中选择与品牌定位相关的话题，或将热点元素融入选题。避免选择过于冷门或与当前时事完全无关的话题。
+${recentNote}
+
+${topicHint ? `重要：你必须围绕这个指定话题生成投票页面：「${topicHint}」。\n- 只需提供 1 个 topicCandidate（不是3个），标题必须使用或包含该指定话题。\n- 为该话题设计 2-4 个有对比性的选项。\n` : '重要：优先从今日热搜中选择与品牌定位相关的话题，或将热点元素融入选题。避免选择过于冷门或与当前时事完全无关的话题。\n'}
 
 请返回 JSON 格式：
 {
@@ -58,7 +70,7 @@ ${trendingContext ? `\n${trendingContext}\n` : '\n当前无热点数据，请基
 }
 
 要求：
-- 提供 3 个 topicCandidates
+- ${topicHint ? '提供 1 个 topicCandidate' : '提供 3 个 topicCandidates'}
 - 每个候选必须有 2-4 个 options
 - appId、options.value、options.image 必须是 ASCII kebab-case
 - 标题、appName、question、description 中绝对禁止出现以下极限词：最、第一、唯一、极致、绝对、顶级、史上、全网。含有任意一个极限词的候选将被视为无效。
@@ -188,8 +200,8 @@ export async function chooseBestTopic(
   
   // Mark duplicates (with or without AI)
   const marked = useAIDedup 
-    ? await deduplicateCandidatesWithAI(candidates, { publishedNames, threshold: 0.6, useAI: true })
-    : deduplicateCandidates(candidates, { publishedNames, threshold: 0.6 });
+    ? await deduplicateCandidatesWithAI(candidates, { publishedNames, threshold: 0.6, useAI: true, profileId: profile.id })
+    : deduplicateCandidates(candidates, { publishedNames, threshold: 0.6, profileId: profile.id });
   
   // Filter out blocked candidates
   const valid = marked.filter(c => !c._blocked);
