@@ -13,8 +13,7 @@ import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-// @ts-ignore - external ES module outside tsconfig rootDir
-import { fetchTrendingTopics } from '../../.automation/scripts/lib/fetch-trending.js';
+import { fetchTrendingTopics } from '../src/services/fetch-trending.js';
 import { loadProfileConfig, PATHS } from '../src/config/index.js';
 import { defaultRegistry } from '../src/tools/index.js';
 import {
