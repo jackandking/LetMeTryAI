@@ -1,4 +1,4 @@
-import { chmodSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from 'child_process';
@@ -9,54 +9,59 @@ describe('run-daily-profile.sh', () => {
 
     beforeEach(() => {
         tempDir = mkdtempSync(path.join(os.tmpdir(), 'run-daily-profile-test-'));
-        mkdirSync(path.join(tempDir, '.harness', '.local', 'logs', 'daily-app-cron'), {
-            recursive: true
-        });
-        mkdirSync(path.join(tempDir, '.harness', '.local', 'state', 'daily-app-runs'), {
-            recursive: true
-        });
     });
 
     afterEach(() => {
         rmSync(tempDir, { recursive: true, force: true });
     });
 
-    it('delegates to harness runner by default and exposes analysis log paths', () => {
-        const fakeRunner = path.join(tempDir, 'fake-harness-runner.sh');
+    it('runs the legacy daily profile pipeline directly', () => {
+        const fakeGit = path.join(tempDir, 'git');
+        const fakeNode = path.join(tempDir, 'node');
+        const fakeCopilot = path.join(tempDir, 'copilot');
 
         writeFileSync(
-            fakeRunner,
+            fakeGit,
             '#!/bin/sh\n' +
-                'echo "FAKE_HARNESS profile=$1"\n' +
-                'echo "FAKE_HARNESS mode=$HARNESS_MODE"\n' +
-                'echo "FAKE_HARNESS log=$HARNESS_CRON_LOG_FILE"\n',
+                'case "$1" in\n' +
+                '  pull)\n' +
+                '    echo "FAKE_GIT pull $*"\n' +
+                '    ;;\n' +
+                '  log)\n' +
+                '    exit 0\n' +
+                '    ;;\n' +
+                '  status)\n' +
+                '    exit 0\n' +
+                '    ;;\n' +
+                '  *)\n' +
+                '    echo "FAKE_GIT $*"\n' +
+                '    ;;\n' +
+                'esac\n',
             'utf8'
         );
-        chmodSync(fakeRunner, 0o755);
+        writeFileSync(fakeNode, '#!/bin/sh\necho "FAKE_NODE $*"\n', 'utf8');
+        writeFileSync(fakeCopilot, '#!/bin/sh\necho "FAKE_COPILOT $*"\n', 'utf8');
+        chmodSync(fakeGit, 0o755);
+        chmodSync(fakeNode, 0o755);
+        chmodSync(fakeCopilot, 0o755);
 
         const result = spawnSync('bash', [scriptPath, 'nanrenbao'], {
             encoding: 'utf8',
             env: {
                 ...process.env,
                 PROJECT_DIR_OVERRIDE: tempDir,
-                HARNESS_PROFILE_RUNNER: fakeRunner
+                PATH: `${tempDir}:${process.env.PATH}`,
+                COPILOT_BIN: fakeCopilot,
+                DAILY_ALLOW_DIRTY_WORKTREE: 'true'
             }
         });
 
         expect(result.status).toBe(0);
-        expect(result.stdout).toContain('[run-daily-profile] delegating to harness workflow');
-        expect(result.stdout).toContain(`harness_runner=${fakeRunner}`);
-        expect(result.stdout).toContain(
-            `harness_log=${path.join(tempDir, '.harness', '.local', 'logs', 'daily-app-cron', 'nanrenbao.log')}`
-        );
-        expect(result.stdout).toContain(
-            `harness_summary=${path.join(tempDir, '.harness', '.local', 'state', 'daily-app-runs', 'nanrenbao.jsonl')}`
-        );
-        expect(result.stdout).toContain('FAKE_HARNESS profile=nanrenbao');
-        expect(result.stdout).toContain('FAKE_HARNESS mode=production');
-        expect(result.stdout).toContain(
-            `FAKE_HARNESS log=${path.join(tempDir, '.harness', '.local', 'logs', 'daily-app-cron', 'nanrenbao.log')}`
-        );
+        expect(result.stdout).toContain('[run-daily-profile] profile=nanrenbao model=gpt-5-mini');
+        expect(result.stdout).toContain(`log_dir=${path.join(tempDir, '.automation', '.local', 'logs', 'daily-orchestrator', 'nanrenbao')}`);
+        expect(result.stdout).toContain('FAKE_GIT pull pull --ff-only');
+        expect(result.stdout).toContain('FAKE_NODE .automation/scripts/daily-orchestrator.js');
+        expect(result.stdout).not.toContain('delegating to harness workflow');
         expect(result.stderr).toBe('');
     });
 });
