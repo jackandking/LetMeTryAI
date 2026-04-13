@@ -142,6 +142,7 @@ async function main(): Promise<void> {
   console.log(
     `[run-daily-app-profile] completed: selected=${(summary.selectedTopic as { appId?: string } | null)?.appId || 'n/a'}`
   );
+  process.exit(0);
 }
 
 await main();
