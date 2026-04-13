@@ -32,30 +32,6 @@ if [[ -z "$SAFE_PROFILE_ID" ]]; then
     exit 1
 fi
 
-HARNESS_PROFILE_RUNNER="${HARNESS_PROFILE_RUNNER:-$PROJECT_DIR/.harness/scripts/run-daily-app-cron.sh}"
-HARNESS_LOG_DIR="${HARNESS_LOG_DIR:-$PROJECT_DIR/.harness/.local/logs/daily-app-cron}"
-HARNESS_SUMMARY_DIR="${HARNESS_SUMMARY_DIR:-$PROJECT_DIR/.harness/.local/state/daily-app-runs}"
-
-if [[ "${DAILY_PROFILE_USE_LEGACY:-false}" != "true" ]]; then
-    mkdir -p "$HARNESS_LOG_DIR" "$HARNESS_SUMMARY_DIR"
-
-    export HARNESS_MODE="${HARNESS_MODE:-production}"
-    export HARNESS_CRON_LOG_FILE="${HARNESS_CRON_LOG_FILE:-$HARNESS_LOG_DIR/${SAFE_PROFILE_ID}.log}"
-
-    echo "[run-daily-profile] delegating to harness workflow"
-    echo "[run-daily-profile] profile=$PROFILE_ID"
-    echo "[run-daily-profile] harness_runner=$HARNESS_PROFILE_RUNNER"
-    echo "[run-daily-profile] harness_log=$HARNESS_CRON_LOG_FILE"
-    echo "[run-daily-profile] harness_summary=$HARNESS_SUMMARY_DIR/${SAFE_PROFILE_ID}.jsonl"
-
-    if [[ ! -x "$HARNESS_PROFILE_RUNNER" ]]; then
-        echo "Harness runner not found or not executable: $HARNESS_PROFILE_RUNNER" >&2
-        exit 1
-    fi
-
-    exec "$HARNESS_PROFILE_RUNNER" "$PROFILE_ID"
-fi
-
 cd "$PROJECT_DIR"
 
 mkdir -p "$PROJECT_DIR/.automation/.local/logs" "$PROJECT_DIR/.automation/.local/state/email-drafts"
