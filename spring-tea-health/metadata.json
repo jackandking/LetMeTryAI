@@ -1,0 +1,17 @@
+{
+  "id": "spring-tea-health",
+  "name": "春季养生茶饮",
+  "description": "春季养生茶饮小调查，看看大家都爱喝什么茶",
+  "category": "健康养生",
+  "keywords": [
+    "养生茶",
+    "春季养生",
+    "健康饮食",
+    "老年人",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "spring-tea-health/images/chrysanthemum-tea.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-13T22:15:00.062Z"
+}
