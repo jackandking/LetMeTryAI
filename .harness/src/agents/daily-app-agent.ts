@@ -179,7 +179,16 @@ export class DailyAppAgent {
       const imagesDir = join(appDir, 'images');
       await this.ensureDir(imagesDir);
       
-      // Copy template images
+      // Write generated placeholder assets
+      let generatedAssetsCount = 0;
+      for (const [relativePath, content] of Object.entries(scaffold.generatedAssets)) {
+        const assetPath = join(appDir, relativePath);
+        await this.writeFile(assetPath, content);
+        generatedAssetsCount++;
+        logger.debug('Generated asset written', { path: assetPath });
+      }
+      
+      // Copy any fallback template images
       let copiedImages = 0;
       for (const { source, dest } of scaffold.imagesToCopy) {
         try {
@@ -196,6 +205,7 @@ export class DailyAppAgent {
       logger.info('Files materialized', { 
         appDir, 
         fileCount: Object.keys(scaffold.files).length,
+        generatedAssetsCount,
         imageCount: copiedImages 
       });
       
