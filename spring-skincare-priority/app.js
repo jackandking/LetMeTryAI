@@ -3,13 +3,13 @@
  */
 
 const questionConfig = {
-    title: '换季护肤你更想解决哪个难题？',
-    question: '换季护肤你更想解决哪个难题？',
+    title: '春季护肤，你更想优先解决哪个困扰？',
+    question: '春季护肤，你更想优先解决哪个肌肤困扰？',
     options: [
-        { value: 'sensitive-redness', label: '敏感泛红' },
-        { value: 'dry-peeling', label: '干燥起皮' },
-        { value: 'oily-acne', label: '出油长痘' },
-        { value: 'dull-skin', label: '暗沉无光' }
+        { value: 'hydration-care', label: '补水保湿' },
+        { value: 'soothing-care', label: '稳定舒缓' },
+        { value: 'sun-protection', label: '防晒抗光老' },
+        { value: 'oil-control', label: '控油清洁' }
     ],
     storageKey: 'spring_skincare_priority.data'
 };
@@ -172,7 +172,7 @@ function showResult(latestVoteData) {
     const resultDiv = document.getElementById('result');
     if (!resultDiv) return;
 
-    resultDiv.innerHTML = '<h2>换季护肤你更想解决哪个难题？结果</h2>';
+    resultDiv.innerHTML = '<h2>春季护肤，你更想优先解决哪个困扰？结果</h2>';
     resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);

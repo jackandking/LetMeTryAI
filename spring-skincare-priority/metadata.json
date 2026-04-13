@@ -1,17 +1,17 @@
 {
   "id": "spring-skincare-priority",
-  "name": "换季护肤投票",
-  "description": "换季期间皮肤容易出现各种问题，来看看大家都在关注哪些护肤难题，一起找到适合你的护肤方向。",
+  "name": "春季护肤投票",
+  "description": "春季护肤困扰投票，看看大家都在关注哪些护肤重点",
   "category": "美妆",
   "keywords": [
-    "换季护肤",
     "春季护肤",
-    "护肤难题",
-    "女人爱",
+    "敏感肌",
+    "保湿",
+    "防晒",
     "投票",
     "女人爱"
   ],
-  "coverImage": "spring-skincare-priority/images/sensitive-redness.svg",
+  "coverImage": "spring-skincare-priority/images/hydration-care.svg",
   "generatedFrom": "fighter-jets",
-  "generatedAt": "2026-04-13T14:27:49.522Z"
+  "generatedAt": "2026-04-13T15:39:50.951Z"
 }
