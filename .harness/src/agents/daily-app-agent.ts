@@ -60,6 +60,15 @@ export class DailyAppAgent {
       try {
         const result = await this.callCopilot(prompt);
         const parsed = parseTopicSelectionResponse(result);
+        const topicSelection = {
+          reportSummary: parsed.reportSummary,
+          candidates: parsed.topicCandidates.map(candidate => ({
+            appId: candidate.appId,
+            title: candidate.title,
+            appName: candidate.appName,
+            category: candidate.category,
+          })),
+        };
         
         // Choose best candidate
         const best = await chooseBestTopic(parsed.topicCandidates, this.profile);
@@ -77,13 +86,27 @@ export class DailyAppAgent {
             if (parsed.topicCandidates.length > 1) {
               const next = parsed.topicCandidates[1];
               await this.constraints.validateTopicAllowed(next);
-              return { next: 'scaffold', data: { topic: next } };
+              return {
+                next: 'scaffold',
+                data: {
+                  ...state.data,
+                  topicSelection,
+                  topic: next,
+                },
+              };
             }
           }
           throw error;
         }
         
-        return { next: 'scaffold', data: { topic: best } };
+        return {
+          next: 'scaffold',
+          data: {
+            ...state.data,
+            topicSelection,
+            topic: best,
+          },
+        };
       } catch (error) {
         logger.error('Topic selection failed', error as Error);
         throw error;
