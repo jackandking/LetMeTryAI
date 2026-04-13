@@ -1,0 +1,28 @@
+{
+  "id": "humanoid-robot-street-show-which-job",
+  "name": "人形机器人街头秀",
+  "description": "街头出现会走路的人形机器人，你觉得它更适合做哪类城市工作？",
+  "category": "科技数码",
+  "directory": "humanoid-robot-street-show-which-job",
+  "url": "humanoid-robot-street-show-which-job",
+  "image": "humanoid-robot-street-show-which-job/images/delivery-robot.svg",
+  "tags": [
+    "投票",
+    "科技数码",
+    "人形机器人",
+    "街头秀",
+    "服务机器人",
+    "配送",
+    "安保",
+    "表演",
+    "导购",
+    "人形机器人",
+    "街头秀",
+    "服务机器人",
+    "配送",
+    "安保",
+    "表演",
+    "导购"
+  ],
+  "status": "active"
+}

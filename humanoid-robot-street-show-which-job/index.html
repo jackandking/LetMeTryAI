@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>人形机器人街头秀｜你先投它去哪行？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">人形机器人街头秀｜你先投它去哪行？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果有人形机器人走上街头，你会先投票让它去做哪一行？请选最想看的场景。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="delivery-robot">
+                            <div class="card-image">
+                                <img src="images/delivery-robot.svg" alt="机器人骑车送外卖" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">外卖配送小哥</h3>
+                                <p class="option-desc">骑着小车穿梭街巷，准时把外卖递到手上，你想看它送餐的操作细节吗？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="security-patrol-robot">
+                            <div class="card-image">
+                                <img src="images/security-patrol-robot.svg" alt="机器人巡逻引导人群" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">城市安保巡逻</h3>
+                                <p class="option-desc">在商圈、公园做引导与秩序维护，沉稳巡逻款更有气场，你支持吗？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="street-performer-robot">
+                            <div class="card-image">
+                                <img src="images/street-performer-robot.svg" alt="机器人街头表演" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">街头表演艺人</h3>
+                                <p class="option-desc">跳舞、演奏或炫技互动吸粉，看看它能不能变成新的围观焦点？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="shop-guide-robot">
+                            <div class="card-image">
+                                <img src="images/shop-guide-robot.svg" alt="机器人导购展示商品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">商场导购机器人</h3>
+                                <p class="option-desc">在卖场为顾客推荐、试用商品，专业又省事，你会让它帮你挑东西吗？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
