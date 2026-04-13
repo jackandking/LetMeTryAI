@@ -132,19 +132,34 @@ async function main() {
                 throw new Error('No image URL returned');
             }
 
-            const ext = path.extname(opt.imageFile) || '.png';
-            // Keep original extension to avoid rewriting index.html references
-            const outputPath = path.join(imagesDir, opt.imageFile);
+            const outputName = `${opt.value}.jpg`;
+            const outputPath = path.join(imagesDir, outputName);
 
             await generator.downloadImage(result.url, outputPath);
-            log('saved', `${opt.imageFile} -> ${outputPath}`);
+            log('saved', `${outputName} -> ${outputPath}`);
         } catch (err) {
             log('error', `Failed to generate image for ${opt.value}: ${err.message}`);
         }
     }
 
+    // Update index.html references to .jpg
+    const indexHtmlPath = path.join(appDir, 'index.html');
+    if (existsSync(indexHtmlPath)) {
+        let htmlContent = readFileSync(indexHtmlPath, 'utf8');
+        const originalHtml = htmlContent;
+        for (const opt of voteOptions) {
+            const oldRef = `images/${opt.imageFile}`;
+            const newRef = `images/${opt.value}.jpg`;
+            htmlContent = htmlContent.replaceAll(oldRef, newRef);
+        }
+        if (htmlContent !== originalHtml) {
+            writeFileSync(indexHtmlPath, htmlContent, 'utf8');
+            log('html', `Updated image references in ${indexHtmlPath}`);
+        }
+    }
+
     // Git commit
-    const gitAdd = spawnSync('git', ['add', `${app.appId}/images/`], { cwd: repoRoot, encoding: 'utf8' });
+    const gitAdd = spawnSync('git', ['add', `${app.appId}/images/`, `${app.appId}/index.html`], { cwd: repoRoot, encoding: 'utf8' });
     if (gitAdd.status !== 0) {
         log('warn', `git add failed: ${gitAdd.stderr || gitAdd.stdout}`);
     } else {
