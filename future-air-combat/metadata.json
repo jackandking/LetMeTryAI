@@ -1,0 +1,17 @@
+{
+  "id": "future-air-combat",
+  "name": "未来空战投票",
+  "description": "探讨未来空中作战的主力装备，六代战机、无人僚机与无人机蜂群各有优势，快来投票表达你的观点。",
+  "category": "军事",
+  "keywords": [
+    "六代机",
+    "无人机",
+    "空战",
+    "军事装备",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "future-air-combat/images/sixth-gen-fighter.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-13T22:15:11.270Z"
+}
