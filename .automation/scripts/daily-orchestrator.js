@@ -664,14 +664,19 @@ async function runStreamingChecked(command, args, options = {}) {
 }
 
 async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
-    const result = await runStreamingChecked(
+    const copilotPromise = runStreamingChecked(
         copilotBin,
         ['--model', model, '--allow-all-tools', '--output-format', 'json', '--yolo', '-p', prompt],
         {
             cwd: REPO_DIR,
-            label: `Copilot topic selection (${mode})`
+            label: `Copilot topic selection (${mode})`,
+            timeoutMs: Number(process.env.COPILOT_TIMEOUT_MS) || 30000
         }
     );
+    const absoluteTimeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Copilot absolute timeout (orphan process may remain)')), 35000);
+    });
+    const result = await Promise.race([copilotPromise, absoluteTimeoutPromise]);
     const rawOutput = [result.stdout, result.stderr].filter(Boolean).join('\n');
     const rawLogPath = writeDebugLog('copilot-topic-response', rawOutput);
     logStage('topics', `Saved raw Copilot response to ${rawLogPath}`);
@@ -680,6 +685,50 @@ async function runCopilotJsonPrompt({ model, copilotBin, prompt, mode }) {
         rawOutput,
         rawLogPath,
         messageContent: parseCopilotEventStream(rawOutput)
+    };
+}
+
+function parseKimiStreamJson(stdout) {
+    const lines = stdout.split('\n').filter((line) => line.trim().length > 0);
+    const jsonLines = lines.filter((line) => !line.includes('To resume this session:'));
+
+    const messages = jsonLines
+        .map((line) => {
+            try {
+                return JSON.parse(line);
+            } catch {
+                return null;
+            }
+        })
+        .filter(Boolean);
+
+    const assistantMsg = [...messages]
+        .reverse()
+        .find((m) => m.role === 'assistant' && Array.isArray(m.content));
+
+    const textItem = assistantMsg?.content?.find((item) => item.type === 'text');
+    return textItem?.text?.trim() || '';
+}
+
+async function runKimiJsonPrompt({ prompt, mode }) {
+    const finalPrompt = `${prompt}\n\nDo not use any tools, just reply directly.`;
+    const result = await runStreamingChecked(
+        'kimi',
+        ['--print', '--output-format', 'stream-json', '--yolo', '-p', finalPrompt],
+        {
+            cwd: REPO_DIR,
+            label: `Kimi topic selection (${mode})`,
+            timeoutMs: Number(process.env.KIMI_TIMEOUT_MS) || 120000
+        }
+    );
+    const rawOutput = [result.stdout, result.stderr].filter(Boolean).join('\n');
+    const rawLogPath = writeDebugLog('kimi-topic-response', rawOutput);
+    logStage('topics', `Saved raw Kimi response to ${rawLogPath}`);
+
+    return {
+        rawOutput,
+        rawLogPath,
+        messageContent: parseKimiStreamJson(rawOutput)
     };
 }
 
@@ -709,7 +758,7 @@ async function requestStructuredTopics({ model, profile, currentDate, copilotBin
 
     for (const attempt of attempts) {
         try {
-            logStage('topics', `Requesting structured candidates via ${attempt.mode} prompt`);
+            logStage('topics', `Requesting structured candidates via ${attempt.mode} prompt (Copilot)`);
             const response = await runCopilotJsonPrompt({
                 model,
                 copilotBin,
@@ -724,8 +773,29 @@ async function requestStructuredTopics({ model, profile, currentDate, copilotBin
                 responseMode: attempt.mode
             };
         } catch (error) {
-            failures.push(`${attempt.mode}: ${error instanceof Error ? error.message : String(error)}`);
-            logStage('topics', `Attempt ${attempt.mode} failed: ${error instanceof Error ? error.message : String(error)}`);
+            failures.push(`copilot-${attempt.mode}: ${error instanceof Error ? error.message : String(error)}`);
+            logStage('topics', `Copilot attempt ${attempt.mode} failed: ${error instanceof Error ? error.message : String(error)}`);
+        }
+    }
+
+    // Fallback to Kimi if all Copilot attempts failed
+    for (const attempt of attempts) {
+        try {
+            logStage('topics', `Requesting structured candidates via ${attempt.mode} prompt (Kimi fallback)`);
+            const response = await runKimiJsonPrompt({
+                prompt: attempt.prompt,
+                mode: attempt.mode
+            });
+            const parsed = parseTopicSelectionResponse(response.messageContent);
+
+            return {
+                ...parsed,
+                rawResponsePath: response.rawLogPath,
+                responseMode: `kimi-${attempt.mode}`
+            };
+        } catch (error) {
+            failures.push(`kimi-${attempt.mode}: ${error instanceof Error ? error.message : String(error)}`);
+            logStage('topics', `Kimi attempt ${attempt.mode} failed: ${error instanceof Error ? error.message : String(error)}`);
         }
     }
 
