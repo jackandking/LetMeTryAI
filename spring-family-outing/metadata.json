@@ -1,0 +1,17 @@
+{
+  "id": "spring-family-outing",
+  "name": "春日亲子出行",
+  "description": "春季周末亲子户外活动投票，发现适合家庭的美好出行方式",
+  "category": "家庭生活",
+  "keywords": [
+    "亲子活动",
+    "春游",
+    "户外",
+    "周末出行",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "spring-family-outing/images/park-picnic.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-13T22:15:06.898Z"
+}
