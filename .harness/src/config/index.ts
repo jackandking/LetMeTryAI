@@ -10,7 +10,10 @@ const PROJECT_ROOT = process.env.PROJECT_DIR || join(process.cwd(), '..');
 // 方案 A: 完全独立的运行时目录
 const HARNESS_RUNTIME_DIR = join(PROJECT_ROOT, '.harness', '.local');
 // 认证文件来源（从 prod 复制最新）
-const PROD_AUTH_DIR = join(PROJECT_ROOT, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'auth');
+// 如果当前就是 prod 目录，直接使用自身的 .automation auth
+const LOCAL_AUTOMATION_AUTH = join(PROJECT_ROOT, '.automation', '.local', 'auth');
+const INFERRED_PROD_AUTH_DIR = join(PROJECT_ROOT, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'auth');
+const PROD_AUTH_DIR = existsSync(LOCAL_AUTOMATION_AUTH) ? LOCAL_AUTOMATION_AUTH : INFERRED_PROD_AUTH_DIR;
 const DEV_AUTH_DIR = join(PROJECT_ROOT, '.automation', '.local', 'auth');
 
 export const PATHS = {
