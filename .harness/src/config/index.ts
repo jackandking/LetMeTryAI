@@ -9,23 +9,15 @@ const PROJECT_ROOT = process.env.PROJECT_DIR || join(process.cwd(), '..');
 
 // 方案 A: 完全独立的运行时目录
 const HARNESS_RUNTIME_DIR = join(PROJECT_ROOT, '.harness', '.local');
-// 认证文件来源（从 prod 复制最新）
-// 如果当前就是 prod 目录，直接使用自身的 .automation auth
-const LOCAL_AUTOMATION_AUTH = join(PROJECT_ROOT, '.automation', '.local', 'auth');
-const INFERRED_PROD_AUTH_DIR = join(PROJECT_ROOT, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'auth');
-const PROD_AUTH_DIR = existsSync(LOCAL_AUTOMATION_AUTH) ? LOCAL_AUTOMATION_AUTH : INFERRED_PROD_AUTH_DIR;
-const DEV_AUTH_DIR = join(PROJECT_ROOT, '.automation', '.local', 'auth');
 
 export const PATHS = {
   projectRoot: PROJECT_ROOT,
   harnessRuntimeDir: HARNESS_RUNTIME_DIR,
-  prodAuthDir: PROD_AUTH_DIR,
-  devAuthDir: DEV_AUTH_DIR,
   config: join(PROJECT_ROOT, '.harness', 'config'),
   state: join(HARNESS_RUNTIME_DIR, 'state'),
   logs: join(HARNESS_RUNTIME_DIR, 'logs'),
   tasks: join(HARNESS_RUNTIME_DIR, 'tasks'),
-  auth: join(HARNESS_RUNTIME_DIR, 'auth'),  // 独立 auth 目录，从 prod 复制
+  auth: join(HARNESS_RUNTIME_DIR, 'auth'),  // 直接使用 harness 自身的 auth 目录
 } as const;
 
 export function getHarnessMode(): HarnessMode {
@@ -143,64 +135,14 @@ export function loadProfileConfig(profileId: string): ProfileConfig {
 }
 
 /**
- * 设置认证文件共享
- * 方案: 从 prod 复制最新认证文件到 harness 运行时目录
+ * 确保认证目录存在
+ * Harness 直接使用 .harness/.local/auth 作为认证文件目录
  */
-function setupAuthCopy(): void {
+function setupAuthDir(): void {
   const harnessAuthDir = PATHS.auth;
   
-  // 确保 harness auth 目录存在
   if (!existsSync(harnessAuthDir)) {
     mkdirSync(harnessAuthDir, { recursive: true });
-  }
-  
-  // 优先从 prod 复制，如果不存在则从 dev 复制
-  const sourceDirs = [PATHS.prodAuthDir, PATHS.devAuthDir];
-  let copied = false;
-  
-  for (const sourceDir of sourceDirs) {
-    if (!existsSync(sourceDir)) {
-      continue;
-    }
-    
-    try {
-      const files = readdirSync(sourceDir);
-      let copiedCount = 0;
-      
-      for (const file of files) {
-        const sourceFile = join(sourceDir, file);
-        const targetFile = join(harnessAuthDir, file);
-        
-        // 检查是否需要更新（比较修改时间）
-        let needCopy = true;
-        if (existsSync(targetFile)) {
-          const sourceStat = statSync(sourceFile);
-          const targetStat = statSync(targetFile);
-          // 如果目标文件比源文件新或相同，跳过
-          if (targetStat.mtime >= sourceStat.mtime) {
-            needCopy = false;
-          }
-        }
-        
-        if (needCopy) {
-          copyFileSync(sourceFile, targetFile);
-          copiedCount++;
-          console.log(`[Config] Copied auth file: ${file} from ${sourceDir}`);
-        }
-      }
-      
-      if (copiedCount > 0) {
-        console.log(`[Config] Auth sync complete: ${copiedCount} files from ${sourceDir}`);
-        copied = true;
-        break; // 成功从当前源复制后不再检查其他源
-      }
-    } catch (e) {
-      console.warn(`[Config] Failed to copy from ${sourceDir}:`, (e as Error).message);
-    }
-  }
-  
-  if (!copied) {
-    console.warn('[Config] No auth files found in prod or dev directories');
   }
 }
 
@@ -220,6 +162,6 @@ export function ensureDirectories(): void {
     }
   });
   
-  // 设置认证文件共享（从 prod 复制）
-  setupAuthCopy();
+  // 确保认证目录存在
+  setupAuthDir();
 }
