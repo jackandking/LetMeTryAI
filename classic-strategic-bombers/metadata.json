@@ -1,0 +1,23 @@
+{
+  "id": "classic-strategic-bombers",
+  "name": "经典战略轰炸机投票",
+  "description": "B-2、图-160、B-1B、B-52四大经典战略轰炸机同台较量，选出你心中的空中霸主。",
+  "category": "军事装备",
+  "directory": "classic-strategic-bombers",
+  "url": "classic-strategic-bombers",
+  "image": "classic-strategic-bombers/images/b-2-spirit.svg",
+  "tags": [
+    "投票",
+    "军事装备",
+    "战略轰炸机",
+    "B-2",
+    "图-160",
+    "硬核科技",
+    "战略轰炸机",
+    "b-2",
+    "图-160",
+    "军事装备",
+    "硬核科技"
+  ],
+  "status": "active"
+}
