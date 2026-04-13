@@ -718,6 +718,11 @@ export function buildDailyEmailReport({
     const summary = summarizeFollowRecords(scopedHistory);
     const quotaUsed = computeDailyQuotaUsage(history, dateKey);
     const pendingCount = (Array.isArray(queue) ? queue : []).length;
+    const pendingByProfile = (Array.isArray(queue) ? queue : []).reduce((result, candidate) => {
+        const key = String(candidate?.profileId || candidate?.profileName || 'unknown').trim() || 'unknown';
+        result[key] = (result[key] || 0) + 1;
+        return result;
+    }, {});
     const hourlyRuns = Array.isArray(dayState?.hourlyRuns) ? dayState.hourlyRuns : [];
     const latestRun = hourlyRuns.length > 0 ? hourlyRuns[hourlyRuns.length - 1] : null;
     const subject = `[Harness] Kuaishou follow report ${dateKey}`;
@@ -744,6 +749,22 @@ export function buildDailyEmailReport({
             `- queue added: ${dayState.ingestion.queueAdded || 0}`,
             `- skipped missing URL: ${dayState.ingestion.skippedMissingVideoUrl || 0}`
         );
+        if (Array.isArray(dayState.ingestion.apps) && dayState.ingestion.apps.length > 0) {
+            lines.push('', 'Per-app ingestion:');
+            dayState.ingestion.apps.forEach(app => {
+                const pendingForApp = pendingByProfile[String(app.profileId || '').trim()] || 0;
+                lines.push(
+                    `- ${app.profileId}: fetched ${app.fetched || 0}, ` +
+                    `eligible ${app.acceptedCandidates || 0}, ` +
+                    `queue added ${app.queueAdded || 0}, ` +
+                    `queue replaced ${app.queueReplaced || 0}, ` +
+                    `queue skipped ${app.queueSkipped || 0}, ` +
+                    `pending ${pendingForApp}`
+                );
+            });
+        }
+    } else {
+        lines.push('', 'Ingestion:', '- not run yet for this date');
     }
 
     if (hourlyRuns.length > 0) {
@@ -757,6 +778,17 @@ export function buildDailyEmailReport({
         });
     }
 
+    lines.push('', 'Pending queue by app:');
+    if (Object.keys(pendingByProfile).length === 0) {
+        lines.push('- none');
+    } else {
+        Object.entries(pendingByProfile)
+            .sort(([left], [right]) => left.localeCompare(right))
+            .forEach(([profileId, count]) => {
+                lines.push(`- ${profileId}: ${count}`);
+            });
+    }
+
     return {
         subject,
         body: lines.join('\n'),
@@ -765,6 +797,7 @@ export function buildDailyEmailReport({
             dailyCap,
             quotaUsed,
             pendingCount,
+            pendingByProfile,
             ingestion: dayState?.ingestion || null,
             hourlyRuns,
             historySummary: summary

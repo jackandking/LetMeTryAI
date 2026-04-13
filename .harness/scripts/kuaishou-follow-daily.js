@@ -312,8 +312,12 @@ export async function runDailyIngestion({
     const startedAt = now instanceof Date ? now.toISOString() : String(now);
     const appSummaries = [];
     const candidates = [];
+    let mergedQueue = queue;
     let totalFetched = 0;
     let skippedMissingVideoUrl = 0;
+    let totalQueueAdded = 0;
+    let totalQueueReplaced = 0;
+    let totalQueueSkipped = 0;
 
     for (const profile of configs) {
         const result = await fetchOfficialPastDayData({
@@ -351,12 +355,23 @@ export async function runDailyIngestion({
             appId: profile.appId,
             fetched: records.length,
             acceptedCandidates: accepted.length,
+            queueAdded: 0,
+            queueReplaced: 0,
+            queueSkipped: 0,
             exportFile
         });
+
+        const mergeResult = mergeCandidatesIntoQueue(mergedQueue, accepted, history);
+        mergedQueue = mergeResult.queue;
+        totalQueueAdded += mergeResult.added;
+        totalQueueReplaced += mergeResult.replaced;
+        totalQueueSkipped += mergeResult.skipped;
+        appSummaries[appSummaries.length - 1].queueAdded = mergeResult.added;
+        appSummaries[appSummaries.length - 1].queueReplaced = mergeResult.replaced;
+        appSummaries[appSummaries.length - 1].queueSkipped = mergeResult.skipped;
     }
 
-    const merged = mergeCandidatesIntoQueue(queue, candidates, history);
-    savePendingQueue(paths.queueFile, merged.queue);
+    savePendingQueue(paths.queueFile, mergedQueue);
 
     const ingestionSummary = {
         startedAt,
@@ -365,9 +380,9 @@ export async function runDailyIngestion({
         appCount: configs.length,
         totalFetched,
         eligibleCandidates: candidates.length,
-        queueAdded: merged.added,
-        queueReplaced: merged.replaced,
-        queueSkipped: merged.skipped,
+        queueAdded: totalQueueAdded,
+        queueReplaced: totalQueueReplaced,
+        queueSkipped: totalQueueSkipped,
         skippedMissingVideoUrl,
         apps: appSummaries
     };
