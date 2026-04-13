@@ -13,12 +13,11 @@ import {
   chooseBestTopic,
 } from '../services/topic-selector.js';
 import { logger } from '../utils/logger.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { spawn } from 'child_process';
 import { publishToKuaishou } from '../services/kuaishou-publisher.js';
-import { VideoGeneratorService } from '../services/video-generator.js';
-import { VideoPublisher } from '../services/video-publisher.js';
+import { aiGenerateTool } from '../tools/ai-generate.js';
 
 interface DailyAppTask extends Task {
   type: 'daily_app_creation';
@@ -58,8 +57,14 @@ export class DailyAppAgent {
       logger.info('Calling Copilot for topic selection');
       
       try {
-        const result = await this.callCopilot(prompt);
-        const parsed = parseTopicSelectionResponse(result);
+        const aiResult = await aiGenerateTool.execute({
+          prompt,
+          outputFormat: 'json',
+        });
+        if (!aiResult.success) {
+          throw new Error(aiResult.error?.message || 'AI generation failed');
+        }
+        const parsed = parseTopicSelectionResponse(aiResult.data);
         const topicSelection = {
           reportSummary: parsed.reportSummary,
           candidates: parsed.topicCandidates.map(candidate => ({
@@ -73,30 +78,46 @@ export class DailyAppAgent {
         // Choose best candidate
         const best = await chooseBestTopic(parsed.topicCandidates, this.profile);
         
-        // Validate constraints
-        try {
-          await this.constraints.validateTopicAllowed(best);
-          logger.info('Topic passed constraint validation', { title: best.title });
-        } catch (error) {
-          if (error instanceof ConstraintViolationError) {
-            logger.warn('Topic failed constraints, trying next', { 
-              violations: error.violations.map(v => v.message),
-            });
-            // Try next candidate
-            if (parsed.topicCandidates.length > 1) {
-              const next = parsed.topicCandidates[1];
-              await this.constraints.validateTopicAllowed(next);
-              return {
-                next: 'scaffold',
-                data: {
-                  ...state.data,
-                  topicSelection,
-                  topic: next,
-                },
-              };
+        // Validate constraints - try all candidates, sanitize if needed
+        let selectedTopic: TopicCandidate | null = null;
+        for (const candidate of parsed.topicCandidates) {
+          try {
+            await this.constraints.validateTopicAllowed(candidate);
+            selectedTopic = candidate;
+            logger.info('Topic passed constraint validation', { title: candidate.title });
+            break;
+          } catch (err) {
+            if (err instanceof ConstraintViolationError) {
+              logger.warn('Candidate failed constraints', { 
+                title: candidate.title,
+                violations: err.violations.map(v => v.message),
+              });
             }
           }
-          throw error;
+        }
+
+        // If none passed, try sanitizing the best candidate
+        if (!selectedTopic) {
+          const sanitized: TopicCandidate = {
+            ...best,
+            title: this.constraints.sanitizeText(best.title),
+            appName: this.constraints.sanitizeText(best.appName),
+            description: this.constraints.sanitizeText(best.description),
+            question: this.constraints.sanitizeText(best.question),
+          };
+          try {
+            await this.constraints.validateTopicAllowed(sanitized);
+            selectedTopic = sanitized;
+            logger.info('Topic passed constraint validation after sanitization', { title: sanitized.title });
+          } catch (err) {
+            logger.warn('Sanitized candidate still failed constraints', { 
+              title: sanitized.title,
+            });
+          }
+        }
+
+        if (!selectedTopic) {
+          throw new Error('All topic candidates failed constraint validation');
         }
         
         return {
@@ -104,7 +125,7 @@ export class DailyAppAgent {
           data: {
             ...state.data,
             topicSelection,
-            topic: best,
+            topic: selectedTopic,
           },
         };
       } catch (error) {
@@ -262,10 +283,8 @@ export class DailyAppAgent {
       
       if (!result.success) {
         logger.error('Kuaishou publish failed', new Error(result.error || 'Unknown error'));
-        // Don't fail the whole workflow - just log the error
-        // This allows manual retry later
         return { 
-          next: 'video_generate', 
+          next: 'send_report', 
           data: { ...state.data, published: false, publishError: result.error } 
         };
       }
@@ -273,126 +292,49 @@ export class DailyAppAgent {
       logger.info('Kuaishou publish complete', { appId: topic.appId, planId: result.planId });
       
       return { 
-        next: 'video_generate', 
+        next: 'send_report', 
         data: { ...state.data, published: true, planId: result.planId } 
       };
     });
 
-    // 8. Video generation - 生成应用演示视频
-    this.loop.registerAction('video_generate', async (state) => {
-      logger.info('Step: video_generate');
+    // 8. Send report email
+    this.loop.registerAction('send_report', async (state) => {
+      logger.info('Step: send_report');
       
-      const { topic, deployedUrl } = state.data as { topic: TopicCandidate; deployedUrl: string };
-      const videoDir = join(PATHS.harnessRuntimeDir, 'videos');
-      
-      logger.info('Generating demo video', { appId: topic.appId, url: deployedUrl });
-      
-      try {
-        const generator = new VideoGeneratorService();
-        const videoResult = await generator.generate({
-          appId: topic.appId,
-          appName: topic.appName,
-          appUrl: deployedUrl,
-          outputDir: videoDir,
-        });
-        
-        if (!videoResult.success || !videoResult.videoPath) {
-          logger.error('Video generation failed', new Error(videoResult.error || 'Unknown error'));
-          return { 
-            next: 'done', 
-            data: { ...state.data, videoGenerated: false, videoError: videoResult.error } 
-          };
-        }
-        
-        logger.info('Video generation complete', { 
-          videoPath: videoResult.videoPath,
-          duration: videoResult.duration,
-          size: videoResult.size,
-        });
-        
-        return { 
-          next: 'video_publish', 
-          data: { 
-            ...state.data, 
-            videoGenerated: true, 
-            videoPath: videoResult.videoPath,
-            videoTitle: videoResult.title,
-            videoDescription: videoResult.description,
-            videoTags: videoResult.tags,
-          } 
-        };
-      } catch (error) {
-        logger.error('Video generation error', error as Error);
-        return { 
-          next: 'done', 
-          data: { ...state.data, videoGenerated: false, videoError: (error as Error).message } 
-        };
-      }
-    });
-
-    // 9. Video publish - 发布视频到快手
-    this.loop.registerAction('video_publish', async (state) => {
-      logger.info('Step: video_publish');
-      
-      const { 
-        topic, 
-        videoPath, 
-        videoTitle, 
-        videoDescription, 
-        videoTags 
-      } = state.data as { 
-        topic: TopicCandidate; 
-        videoPath: string; 
-        videoTitle: string;
-        videoDescription: string;
-        videoTags: string[];
+      const { topic, deployedUrl, planId, published, publishError } = state.data as {
+        topic: TopicCandidate;
+        deployedUrl: string;
+        planId?: string;
+        published?: boolean;
+        publishError?: string;
       };
       
-      logger.info('Publishing video to Kuaishou', { 
-        appId: topic.appId, 
-        videoPath,
-        title: videoTitle,
-      });
+      const toEmail = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
+      const subject = `[LetMeTryAI] Daily app published: ${topic.appName}`;
+      const body = [
+        `Profile: ${this.profileId}`,
+        `App ID: ${topic.appId}`,
+        `App Name: ${topic.appName}`,
+        `Category: ${topic.category}`,
+        `URL: ${deployedUrl}`,
+        `Kuaishou Plan ID: ${planId || 'N/A'}`,
+        `Kuaishou Publish Status: ${published ? 'Success' : 'Failed'}`,
+        publishError ? `Publish Error: ${publishError}` : '',
+      ].join('\n');
       
-      try {
-        const publisher = new VideoPublisher();
-        const result = await publisher.publish({
-          videoPath,
-          title: videoTitle,
-          description: videoDescription,
-          tags: videoTags,
-          visibility: 'public',
-        });
-        
-        if (!result.success) {
-          logger.error('Video publish failed', new Error(result.error || 'Unknown error'));
-          return { 
-            next: 'done', 
-            data: { ...state.data, videoPublished: false, videoPublishError: result.error } 
-          };
-        }
-        
-        logger.info('Video publish complete', { 
-          videoId: result.videoId,
-          shareUrl: result.shareUrl,
-        });
-        
-        return { 
-          next: 'done', 
-          data: { 
-            ...state.data, 
-            videoPublished: true, 
-            videoId: result.videoId,
-            videoShareUrl: result.shareUrl,
-          } 
-        };
-      } catch (error) {
-        logger.error('Video publish error', error as Error);
-        return { 
-          next: 'done', 
-          data: { ...state.data, videoPublished: false, videoPublishError: (error as Error).message } 
-        };
+      const reportDir = join(PATHS.harnessRuntimeDir, 'daily-reports');
+      if (!existsSync(reportDir)) {
+        await this.ensureDir(reportDir);
       }
+      const bodyFile = join(reportDir, `${topic.appId}-report.txt`);
+      writeFileSync(bodyFile, body, 'utf-8');
+      
+      const scriptPath = join(PATHS.projectRoot, '.harness', 'scripts', 'send-daily-report.py');
+      await this.runCommand('python3', [scriptPath, subject, toEmail, bodyFile]);
+      
+      logger.info('Report email sent', { toEmail, subject });
+      
+      return { next: 'done', data: { ...state.data, reportSent: true } };
     });
   }
 
@@ -415,7 +357,7 @@ export class DailyAppAgent {
 
     try {
       const state = await this.loop.run(task, {
-        states: ['topic_selection', 'scaffold', 'materialize', 'validation', 'git_push', 'deploy', 'publish', 'video_generate', 'video_publish', 'done'],
+        states: ['topic_selection', 'scaffold', 'materialize', 'validation', 'git_push', 'deploy', 'publish', 'send_report', 'done'],
         initialState: 'topic_selection',
         completionCheck: (s) => s.currentStep === 'done',
       });
@@ -434,68 +376,6 @@ export class DailyAppAgent {
   }
 
   // Helper methods
-  private async callCopilot(prompt: string): Promise<unknown> {
-    return new Promise((resolve, reject) => {
-      const copilotBin = process.env.COPILOT_BIN || 'copilot';
-      const args = [
-        '--model', 'gpt-5-mini',
-        '--allow-all-tools',
-        '--output-format', 'json',
-        '--yolo',
-        '-p', prompt,
-      ];
-
-      const child = spawn(copilotBin, args, {
-        stdio: ['ignore', 'pipe', 'pipe'],
-        env: process.env,
-        timeout: 300000,
-      });
-
-      let stdout = '';
-      let stderr = '';
-
-      child.stdout?.on('data', (chunk) => { stdout += chunk.toString(); });
-      child.stderr?.on('data', (chunk) => { stderr += chunk.toString(); });
-
-      child.on('close', (code) => {
-        if (code !== 0) {
-          reject(new Error(`Copilot exited with code ${code}: ${stderr}`));
-          return;
-        }
-
-        // Parse JSON event stream
-        const lines = stdout.split('\n').filter(Boolean);
-        const events = lines.map(line => {
-          try { return JSON.parse(line); } catch { return null; }
-        }).filter(Boolean);
-
-        const assistantMsg = [...events].reverse()
-          .find(e => e.type === 'assistant.message' && e.data?.content);
-
-        if (assistantMsg?.data?.content) {
-          const content = assistantMsg.data.content;
-          // Try to extract JSON
-          const jsonMatch = content.match(/```json\s*([\s\S]*?)```/) ||
-                           content.match(/```\s*([\s\S]*?)```/);
-          if (jsonMatch) {
-            try {
-              resolve(JSON.parse(jsonMatch[1].trim()));
-              return;
-            } catch {}
-          }
-          try {
-            resolve(JSON.parse(content));
-            return;
-          } catch {}
-        }
-
-        resolve(stdout);
-      });
-
-      child.on('error', reject);
-    });
-  }
-
   private async writeFile(filePath: string, content: string): Promise<void> {
     const { writeFileSync, mkdirSync } = await import('fs');
     const { dirname } = await import('path');
@@ -509,9 +389,13 @@ export class DailyAppAgent {
   }
 
   private async runGit(args: string[]): Promise<string> {
+    return this.runCommand('git', args, PATHS.projectRoot);
+  }
+
+  private async runCommand(command: string, args: string[], cwd?: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      const child = spawn('git', args, {
-        cwd: PATHS.projectRoot,
+      const child = spawn(command, args, {
+        cwd: cwd || process.cwd(),
         stdio: ['ignore', 'pipe', 'pipe'],
       });
 
@@ -523,7 +407,7 @@ export class DailyAppAgent {
 
       child.on('close', (code) => {
         if (code !== 0) {
-          reject(new Error(`git ${args.join(' ')} failed: ${stderr || stdout}`));
+          reject(new Error(`${command} ${args.join(' ')} failed: ${stderr || stdout}`));
         } else {
           resolve(stdout.trim());
         }

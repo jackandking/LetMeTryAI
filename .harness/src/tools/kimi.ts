@@ -13,6 +13,33 @@ interface KimiArgs {
   temperature?: number;
 }
 
+interface StreamJsonMessage {
+  role?: string;
+  content?: Array<{ type: string; text?: string }>;
+}
+
+function parseKimiStreamJson(stdout: string): string {
+  const lines = stdout.split('\n').filter((line) => line.trim().length > 0);
+  const jsonLines = lines.filter((line) => !line.includes('To resume this session:'));
+
+  const messages: StreamJsonMessage[] = jsonLines
+    .map((line) => {
+      try {
+        return JSON.parse(line) as StreamJsonMessage;
+      } catch {
+        return null;
+      }
+    })
+    .filter((m): m is StreamJsonMessage => m !== null);
+
+  const assistantMsg = [...messages]
+    .reverse()
+    .find((m) => m.role === 'assistant' && Array.isArray(m.content));
+
+  const textItem = assistantMsg?.content?.find((item) => item.type === 'text');
+  return textItem?.text?.trim() || '';
+}
+
 export const kimiTool: Tool = {
   name: 'kimi.generate',
   description: 'Generate content using Kimi Code CLI',
@@ -39,17 +66,18 @@ export const kimiTool: Tool = {
 
     logger.info('Calling Kimi CLI', { outputFormat, promptLength: prompt.length });
 
-    // Add JSON instruction if needed
+    // Add JSON instruction and tool restriction
     let finalPrompt = prompt;
+    finalPrompt = `${finalPrompt}\n\nDo not use any tools, just reply directly.`;
     if (outputFormat === 'json') {
-      finalPrompt = `${prompt}\n\n重要：只返回纯 JSON 格式，不要 markdown 代码块，不要其他文字。`;
+      finalPrompt = `${finalPrompt}\n\n重要：只返回纯 JSON 格式，不要 markdown 代码块，不要其他文字。`;
     }
 
     const kimiBin = process.env.KIMI_BIN || 'kimi';
     const kimiArgs = [
       '-p', finalPrompt,
       '--print',
-      '--final-message-only',
+      '--output-format', 'stream-json',
       '--yolo',
     ];
 
@@ -77,7 +105,7 @@ export const kimiTool: Tool = {
           return;
         }
 
-        const content = stdout.trim();
+        const content = parseKimiStreamJson(stdout);
         logger.info('Kimi CLI response received', { 
           contentLength: content.length,
           duration: Date.now() - startTime,

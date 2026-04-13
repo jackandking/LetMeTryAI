@@ -138,7 +138,7 @@ export class ConstraintsEngine {
     return suggestions;
   }
 
-  private sanitizeText(text: string): string {
+  sanitizeText(text: string): string {
     const forbidden = this.profile.constraints.forbiddenKeywords || [];
     let sanitized = text;
     
