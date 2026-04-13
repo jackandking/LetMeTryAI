@@ -21,6 +21,7 @@ export interface ScaffoldResult {
   };
   images: string[];
   imagesToCopy: Array<{ source: string; dest: string }>;
+  generatedAssets: Record<string, string>;
 }
 
 // Feature signatures that MUST be present in generated code
@@ -101,23 +102,67 @@ export function generateScaffold(
 
   const images = topic.options.map(opt => `images/${opt.image}`);
   
-  // 获取需要复制的模板图片
-  const imagesToCopy = getImagesToCopy(templateDir, templateAppId, topic);
+  // 生成占位图资源（替代复制模板图片）
+  const generatedAssets = generatePlaceholderAssets(topic.options);
+  
+  // 保留复制封面图的能力（如果有模板封面图）
+  const imagesToCopy = getCoverImageToCopy(templateDir, topic);
 
   return {
     outputDir,
     files,
     images,
     imagesToCopy,
+    generatedAssets,
   };
 }
 
 /**
- * 获取需要从模板复制的图片
+ * 生成占位 SVG 图片资源
  */
-function getImagesToCopy(
-  templateDir: string, 
-  templateId: string,
+function generatePlaceholderAssets(options: TopicCandidate['options']): Record<string, string> {
+  const palettes = [
+    ['#1f4e79', '#4f8fba'],
+    ['#7f5539', '#ddb892'],
+    ['#2f4858', '#86bbd8'],
+    ['#4a5759', '#b0c4b1'],
+    ['#7b2cbf', '#c77dff']
+  ];
+
+  const assets: Record<string, string> = {};
+
+  options.forEach((option, index) => {
+    if (!option.image.endsWith('.svg')) {
+      return;
+    }
+    const palette = palettes[index % palettes.length];
+    const content = [
+      '<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">',
+      '  <defs>',
+      `    <linearGradient id="grad-${index}" x1="0%" y1="0%" x2="100%" y2="100%">`,
+      `      <stop offset="0%" stop-color="${palette[0]}"/>`,
+      `      <stop offset="100%" stop-color="${palette[1]}"/>`,
+      '    </linearGradient>',
+      '  </defs>',
+      `  <rect width="720" height="480" rx="32" fill="url(#grad-${index})"/>`,
+      '  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>',
+      '  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>',
+      `  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">${escapeHtml(option.label)}</text>`,
+      '  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>',
+      '</svg>'
+    ].join('\n');
+
+    assets[`images/${option.image}`] = content;
+  });
+
+  return assets;
+}
+
+/**
+ * 尝试复制模板封面图（仅用于 fallback）
+ */
+function getCoverImageToCopy(
+  templateDir: string,
   topic: TopicCandidate
 ): Array<{ source: string; dest: string }> {
   const imagesDir = join(templateDir, 'images');
@@ -127,21 +172,17 @@ function getImagesToCopy(
     return copies;
   }
   
-  // 读取模板图片
   const templateImages = readdirSync(imagesDir).filter(f => 
     f.endsWith('.jpg') || f.endsWith('.jpeg') || f.endsWith('.png') || f.endsWith('.svg')
   );
   
-  // 将模板图片映射到新应用的图片名称
-  topic.options.forEach((opt, index) => {
-    // 尝试找到对应的模板图片
-    const templateImage = templateImages[index] || templateImages[0];
-    if (templateImage) {
-      const sourcePath = join(imagesDir, templateImage);
-      const destName = opt.image;
-      copies.push({ source: sourcePath, dest: `images/${destName}` });
-    }
-  });
+  // 只复制第一张作为封面 fallback（如果生成的占位图不够）
+  if (templateImages.length > 0 && !topic.options[0]?.image.endsWith('.svg')) {
+    copies.push({
+      source: join(imagesDir, templateImages[0]),
+      dest: `images/${topic.options[0].image}`
+    });
+  }
   
   return copies;
 }
@@ -262,6 +303,15 @@ function getTemplateOptionValue(templateId: string, index: number): string {
   
   const values = templateMaps[templateId];
   return values?.[index] || `option${index}`;
+}
+
+function escapeHtml(value: string): string {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function generateMetadata(topic: TopicCandidate, profile: ProfileConfig): string {
