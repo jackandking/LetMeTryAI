@@ -28,7 +28,7 @@ const PROVIDERS: ProviderConfig[] = [
   {
     name: 'copilot',
     tool: copilotTool,
-    timeout: 300000, // 5 minutes
+    timeout: Number(process.env.COPILOT_TIMEOUT_MS) || 300000, // 5 minutes (or env override)
     priority: 1,
   },
   {

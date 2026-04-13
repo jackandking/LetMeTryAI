@@ -61,7 +61,7 @@ ${trendingContext ? `\n${trendingContext}\n` : '\n当前无热点数据，请基
 - 提供 3 个 topicCandidates
 - 每个候选必须有 2-4 个 options
 - appId、options.value、options.image 必须是 ASCII kebab-case
-- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网
+- 标题、appName、question、description 中绝对禁止出现以下极限词：最、第一、唯一、极致、绝对、顶级、史上、全网。含有任意一个极限词的候选将被视为无效。
 - 适合手机阅读的图文投票页
 - 避免低俗、侵权、血腥、政治敏感、医疗误导`;
 }
