@@ -52,12 +52,10 @@ if [[ "$EXIT_CODE" -ne 0 ]]; then
         SUBJECT="[Alert] DailyAppAgent failed for $PROFILE_ID"
         BODY="Profile: $PROFILE_ID\nTime: $(date -Iseconds)\nExit code: $EXIT_CODE\n\nLog file: $LOG_FILE\n\nTail:\n$(tail -n 20 "$LOG_FILE" 2>/dev/null || echo 'N/A')"
 
-        if python3 "$PROJECT_DIR/.automation/scripts/send_email.py" "$SUBJECT" "$REPORT_TO" "$BODY" 2>/dev/null; then
-            echo "[run-daily-app-cron] Alert email sent to $REPORT_TO"
-        elif command -v mail >/dev/null 2>&1; then
+        if command -v mail >/dev/null 2>&1; then
             echo -e "$BODY" | mail -s "$SUBJECT" "$REPORT_TO" && echo "[run-daily-app-cron] Alert email sent via mail command"
         else
-            echo "[run-daily-app-cron] Could not send alert email (no send method available)"
+            echo "[run-daily-app-cron] Could not send alert email (mail command not available)"
         fi
     fi
 
