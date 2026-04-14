@@ -358,6 +358,23 @@ export class DailyAppAgent {
       
       if (!result.success) {
         logger.error('Kuaishou publish failed', new Error(result.error || 'Unknown error'));
+        // Send failure alert email immediately
+        try {
+          const alertSubject = `[Kuaishou Publish Failed] ${topic.appName} (${topic.appId})`;
+          const alertBody = `Profile: ${this.profileId}\nApp ID: ${topic.appId}\nApp Name: ${topic.appName}\nURL: ${deployedUrl}\nError: ${result.error || 'Unknown error'}\nTime: ${new Date().toISOString()}`;
+          const alertDir = join(PATHS.harnessRuntimeDir, 'daily-reports');
+          if (!existsSync(alertDir)) {
+            await this.ensureDir(alertDir);
+          }
+          const alertBodyFile = join(alertDir, `${topic.appId}-publish-alert.txt`);
+          writeFileSync(alertBodyFile, alertBody, 'utf-8');
+          const alertScript = join(PATHS.projectRoot, '.automation', 'scripts', 'send_email.py');
+          const alertTo = process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
+          await this.runCommand('python3', [alertScript, alertSubject, alertTo, alertBodyFile]);
+          logger.info('Kuaishou publish failure alert sent', { to: alertTo, subject: alertSubject });
+        } catch (alertErr) {
+          logger.warn('Failed to send Kuaishou publish failure alert', { error: (alertErr as Error).message });
+        }
         return { 
           next: 'send_report', 
           data: { ...state.data, published: false, publishError: result.error } 
