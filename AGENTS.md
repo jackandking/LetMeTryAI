@@ -326,6 +326,15 @@ if (typeof targetPath !== 'string' || targetPath.includes('..')) {
 }
 ```
 
+## Agent Modification Rules
+
+### `.automation/` Directory — Read-Only by Default
+The `.automation/` directory contains critical automation tooling, cron jobs, and publisher scripts. **By default, treat this directory as read-only.**
+
+If any task requires modifying code inside `.automation/` (including but not limited to `.automation/scripts/`, `.automation/skills/`, `.automation/config/`), you **must** explicitly ask the user for approval before making changes. Do not assume permission based on prior conversation context.
+
+**Exception**: Reading logs, reports, and state files inside `.automation/.local/` for debugging or verification is always allowed.
+
 ## Development Conventions
 
 ### Adding New Mini-Apps
