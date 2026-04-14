@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { spawn } from 'child_process';
 import { ensureParentDirectory } from './runtime-paths.js';
 import {
   resolveAuthFilePath,
@@ -18,6 +19,67 @@ const AUTH_FILE = resolveAuthFilePath();
 const WAIT_AFTER_FINISH_MS = Math.max(0, Number.parseInt(process.env.PUBLISH_WAIT_FOR_MANUAL_MS || '0', 10) || 0);
 const SUBMISSION_CONFIRM_TIMEOUT_MS = Math.max(3000, Number.parseInt(process.env.PUBLISH_CONFIRM_TIMEOUT_MS || '15000', 10) || 15000);
 const HEADLESS = process.env.HEADLESS !== 'false';
+
+function getLatestReportPath() {
+  const reportDir = '/Users/weiping/prod/LetMeTryAI/.automation/.local/exports/metrics/kuaishou/daily';
+  if (!fs.existsSync(reportDir)) {
+    return null;
+  }
+  const files = fs.readdirSync(reportDir)
+    .filter(f => /^kuaishou_report_\d{4}-\d{2}-\d{2}\.json$/.test(f))
+    .sort();
+  return files.length > 0 ? path.join(reportDir, files[files.length - 1]) : null;
+}
+
+function isAlreadyPublished(appName) {
+  const reportPath = getLatestReportPath();
+  if (!reportPath) {
+    console.log('⚠️ No historical report found for deduplication, continuing.');
+    return false;
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+    const names = new Set((data.allTasks || []).map(t => t.name).filter(Boolean));
+    if (names.has(appName)) {
+      console.log(`✅ "${appName}" already exists in latest report (${path.basename(reportPath)}), skipping publication.`);
+      return true;
+    }
+  } catch (e) {
+    console.log('⚠️ Failed to read report for deduplication:', e.message);
+  }
+  return false;
+}
+
+async function sendFailureEmail(appId, appName, screenshotPath, htmlPath, errorMessage) {
+  const toEmail = process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
+  const timestamp = new Date().toISOString();
+  const subject = `[Kuaishou Publish Failed] ${appName} (${appId})`;
+  const body = `Kuaishou publish failed for ${appName} (${appId}) at ${timestamp}.\n\nError: ${errorMessage}\n\nScreenshot: ${screenshotPath}\nHTML dump: ${htmlPath}`;
+
+  const bodyFile = path.join('/tmp', `publish-error-body-${appId}-${Date.now()}.txt`);
+  fs.writeFileSync(bodyFile, body);
+
+  const args = [
+    path.resolve(process.cwd(), '.automation/scripts/send_email.py'),
+    '-a', screenshotPath,
+    '-a', htmlPath,
+    subject,
+    toEmail,
+    bodyFile
+  ];
+
+  return new Promise((resolve) => {
+    const proc = spawn('python3', args, { stdio: 'inherit' });
+    proc.on('close', (code) => {
+      if (code === 0) {
+        console.log('📧 Failure alert email sent.');
+      } else {
+        console.log('⚠️ Failed to send failure alert email.');
+      }
+      resolve();
+    });
+  });
+}
 
 async function readFirstVisibleText(locator) {
   const count = await locator.count().catch(() => 0);
@@ -87,6 +149,11 @@ async function main() {
   if (!nameCheck.valid) {
     console.error(`❌ ${nameCheck.message}`);
     process.exit(1);
+  }
+
+  // Deduplication: skip if already published in latest daily report
+  if (isAlreadyPublished(appName)) {
+    process.exit(0);
   }
 
   console.log(`Starting Kuaishou Task Publisher for app: ${appId}`);
@@ -493,10 +560,29 @@ async function main() {
 
   } catch (error) {
     console.error('❌ Error during automation:', error);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const errorDir = path.resolve('/Users/weiping/prod/LetMeTryAI/.automation/.local/logs/publish-errors');
+    ensureParentDirectory(path.join(errorDir, '.keep'));
+    const screenshotPath = path.join(errorDir, `${appId}-error-${timestamp}.png`);
+    const htmlPath = path.join(errorDir, `${appId}-error-${timestamp}.html`);
     try {
-        await page.screenshot({ path: 'automation-error.png' });
-        console.log('📸 Error screenshot saved to automation-error.png');
-    } catch (e) {}
+        await page.screenshot({ path: screenshotPath });
+        console.log(`📸 Error screenshot saved to ${screenshotPath}`);
+    } catch (e) {
+        console.log('⚠️ Failed to save screenshot:', e.message);
+    }
+    try {
+        const html = await page.content();
+        fs.writeFileSync(htmlPath, html);
+        console.log(`📄 Page HTML dumped to ${htmlPath}`);
+    } catch (e) {
+        console.log('⚠️ Failed to dump HTML:', e.message);
+    }
+    try {
+        await sendFailureEmail(appId, appName, screenshotPath, htmlPath, error.message || String(error));
+    } catch (e) {
+        console.log('⚠️ Failed to send failure email:', e.message);
+    }
     process.exitCode = 1;
     if (process.env.PUBLISH_DEBUG === 'true') {
       await page.pause();
