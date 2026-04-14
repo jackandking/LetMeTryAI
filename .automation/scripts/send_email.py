@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import sys
 from email.message import EmailMessage
+from email.mime.application import MIMEApplication
 
 
 API_KEY = os.environ.get("AGENTMAIL_API_KEY") or "am_us_8ad8e7f3b27ce401a22901ee8ab1108e290efe027f80b66b0ab434f6f9b2b5b4"
@@ -64,7 +65,7 @@ def send_via_agentmail(subject, to_email, body):
     print("Email sent successfully.")
 
 
-def send_via_system_mail(subject, to_email, body):
+def send_via_system_mail(subject, to_email, body, attachments=None):
     forced_error = get_forced_error("SEND_EMAIL_FORCE_SENDMAIL_ERROR")
     if forced_error:
         raise RuntimeError(forced_error)
@@ -83,11 +84,19 @@ def send_via_system_mail(subject, to_email, body):
     message["Subject"] = subject
     message.set_content(body, subtype="plain", charset="utf-8")
 
+    attachments = attachments or []
+    for file_path in attachments:
+        if os.path.isfile(file_path):
+            with open(file_path, "rb") as f:
+                file_data = f.read()
+            file_name = os.path.basename(file_path)
+            message.add_attachment(file_data, maintype="application", subtype="octet-stream", filename=file_name)
+
     subprocess.run([sendmail_path, to_email], input=message.as_bytes(), check=True)
     print("Email sent via system mail.")
 
 
-def send_email(subject, to_email, body_file):
+def send_email(subject, to_email, body_file, attachments=None):
     try:
         with open(body_file, "r", encoding="utf-8") as file_handle:
             body = file_handle.read()
@@ -104,7 +113,7 @@ def send_email(subject, to_email, body_file):
 
     print("Trying system mail command...")
     try:
-        send_via_system_mail(subject, to_email, body)
+        send_via_system_mail(subject, to_email, body, attachments)
         return 0
     except Exception as sendmail_error:
         print(f"System mail also failed: {sendmail_error}", file=sys.stderr)
@@ -112,11 +121,28 @@ def send_email(subject, to_email, body_file):
 
 
 def main(argv):
-    if len(argv) < 3:
-        print("Usage: python3 send_email.py <subject> <to_email> <body_file>", file=sys.stderr)
+    attachments = []
+    parsed_args = []
+    skip = False
+    for i, arg in enumerate(argv):
+        if skip:
+            skip = False
+            continue
+        if arg in ("-a", "--attach"):
+            if i + 1 < len(argv):
+                attachments.append(argv[i + 1])
+                skip = True
+            else:
+                print("Usage: python3 send_email.py [-a ATTACHMENT]... <subject> <to_email> <body_file>", file=sys.stderr)
+                return 1
+        else:
+            parsed_args.append(arg)
+
+    if len(parsed_args) < 3:
+        print("Usage: python3 send_email.py [-a ATTACHMENT]... <subject> <to_email> <body_file>", file=sys.stderr)
         return 1
 
-    return send_email(argv[0], argv[1], argv[2])
+    return send_email(parsed_args[0], parsed_args[1], parsed_args[2], attachments)
 
 
 if __name__ == "__main__":
