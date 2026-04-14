@@ -76,7 +76,7 @@ function extractPageTitle(html) {
 function buildImagePrompt(pageTitle, option) {
     const base = `为投票页面「${pageTitle}」的选项「${option.title}」生成一张简洁的配图。`;
     const desc = option.caption ? `画面内容要体现：${option.caption}。` : '';
-    const style = '风格要求：扁平插画风格，色彩柔和，画面干净，主体突出，适合手机端投票页面展示，正方形构图，无文字。';
+    const style = '风格要求：扁平插画风格，色彩柔和，画面干净。关键要求：主体必须占画面80%以上，人物采用特写构图，填满整个画面，四周不要大面积留白，不要大面积纯色背景，视觉焦点集中在画面中央。正方形构图，无文字。';
     return `${base}${desc}${style}`;
 }
 
