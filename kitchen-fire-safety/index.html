@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>厨房里的安全小细节</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">厨房里的安全小细节：油锅起火怎么办？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果炒菜时油锅突然起火了，你的第一反应是什么？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cover-with-lid">
+                            <div class="card-image">
+                                <img src="images/cover-with-lid.svg" alt="用锅盖盖住起火的油锅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">盖上锅盖</h3>
+                                <p class="option-caption">迅速盖上锅盖，隔绝空气来灭火</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="add-vegetables">
+                            <div class="card-image">
+                                <img src="images/add-vegetables.svg" alt="向油锅倒入蔬菜降温灭火" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">倒入蔬菜</h3>
+                                <p class="option-caption">倒入大量冷蔬菜或冷油来降温</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="pour-water">
+                            <div class="card-image">
+                                <img src="images/pour-water.svg" alt="用水泼向起火的油锅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">用水浇灭</h3>
+                                <p class="option-caption">赶紧接一碗水把火浇灭</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="carry-pot-away">
+                            <div class="card-image">
+                                <img src="images/carry-pot-away.svg" alt="端起起火的油锅往外跑" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">端锅离开</h3>
+                                <p class="option-caption">端起油锅快速离开厨房</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

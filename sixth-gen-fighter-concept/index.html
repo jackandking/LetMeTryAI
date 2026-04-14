@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>六代机气动布局投票 - 男人宝</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">六代机气动布局偏好</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你更看好哪种六代机气动布局方案？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="flying-wing">
+                            <div class="card-image">
+                                <img src="images/flying-wing.svg" alt="无尾翼飞翼布局示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">无尾翼飞翼布局</h3>
+                                <p class="option-caption">强调全向隐身与内置弹舱容量，代表未来隐身战机的主流思路。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="canard-delta">
+                            <div class="card-image">
+                                <img src="images/canard-delta.svg" alt="鸭翼三角翼布局示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">鸭翼三角翼布局</h3>
+                                <p class="option-caption">兼顾超音速机动与可控性，适合复杂空战环境下的战术灵活性。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="variable-sweep">
+                            <div class="card-image">
+                                <img src="images/variable-sweep.svg" alt="可变后掠翼方案示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">可变后掠翼方案</h3>
+                                <p class="option-caption">通过变形机翼兼顾高速拦截与低速巡航，对材料工艺要求较高。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
