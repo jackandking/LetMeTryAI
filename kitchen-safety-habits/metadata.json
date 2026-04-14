@@ -1,0 +1,22 @@
+{
+  "id": "kitchen-safety-habits",
+  "name": "厨房好习惯 - 爱老人",
+  "description": "关注厨房里的健康小细节，选出你觉得更该留意的好习惯。",
+  "category": "实用",
+  "directory": "kitchen-safety-habits",
+  "url": "kitchen-safety-habits",
+  "image": "kitchen-safety-habits/images/no-rinse-raw-meat.svg",
+  "tags": [
+    "投票",
+    "实用",
+    "厨房安全",
+    "食品安全",
+    "生活经验",
+    "健康习惯",
+    "厨房安全",
+    "食品安全",
+    "生活经验",
+    "健康习惯"
+  ],
+  "status": "active"
+}
