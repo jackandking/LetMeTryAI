@@ -9,19 +9,19 @@ const questionConfig = {
     "options": [
         {
             "value": "yang-chaoyue",
-            "label": "yang-chaoyue"
+            "label": "杨超越"
         },
         {
             "value": "di-li-re-ba",
-            "label": "di-li-re-ba"
+            "label": "迪丽热巴"
         },
         {
             "value": "yang-mi",
-            "label": "yang-mi"
+            "label": "杨幂"
         },
         {
             "value": "zhou-dongyu",
-            "label": "zhou-dongyu"
+            "label": "周冬雨"
         }
     ],
     "storageKey": "variety_star_vibes_v1.data"
