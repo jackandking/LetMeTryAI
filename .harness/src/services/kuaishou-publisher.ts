@@ -2,8 +2,8 @@
  * Kuaishou Publisher - HTTP API implementation
  * Uses /rest/pc/creator/marketing/* endpoints (same as legacy)
  */
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, readdirSync, existsSync } from 'fs';
+import { join, basename } from 'path';
 import { PATHS } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
@@ -17,6 +17,36 @@ const PROFILE_SOURCE_TASKS: Record<string, string> = {
 
 const BASE_URL = 'https://daren.kuaishou.com';
 const DELAY_MS = { min: 300, max: 800 };
+
+function getLatestReportPath(): string | null {
+  const reportDir = join(PATHS.projectRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+  if (!existsSync(reportDir)) {
+    return null;
+  }
+  const files = readdirSync(reportDir)
+    .filter(f => /^kuaishou_report_\d{4}-\d{2}-\d{2}\.json$/.test(f))
+    .sort();
+  return files.length > 0 ? join(reportDir, files[files.length - 1]) : null;
+}
+
+function isAlreadyPublished(appName: string): boolean {
+  const reportPath = getLatestReportPath();
+  if (!reportPath) {
+    logger.info('No historical report found for deduplication, continuing.');
+    return false;
+  }
+  try {
+    const data = JSON.parse(readFileSync(reportPath, 'utf-8'));
+    const names = new Set((data.allTasks || []).map((t: { name?: string }) => t.name).filter(Boolean));
+    if (names.has(appName)) {
+      logger.info(`${appName} already exists in latest report (${basename(reportPath)}), skipping publication.`);
+      return true;
+    }
+  } catch (e) {
+    logger.warn('Failed to read report for deduplication', { error: (e as Error).message });
+  }
+  return false;
+}
 
 function randomDelay(): Promise<void> {
   const ms = DELAY_MS.min + Math.random() * (DELAY_MS.max - DELAY_MS.min);
@@ -46,6 +76,11 @@ export class KuaishouPublisher {
 
   async publish(): Promise<PublishResult> {
     try {
+      // 0. Deduplication
+      if (isAlreadyPublished(this.config.appName)) {
+        return { success: true };
+      }
+
       // 1. Extract cookies
       this.cookies = this.extractCookies();
       logger.info('Auth cookies loaded');
