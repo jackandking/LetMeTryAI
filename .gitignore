@@ -197,3 +197,6 @@ kuaishou_all_tasks_dedup.json
 .venv/
 ref/snowpark_config.py
 explorations/
+
+# Temporary self-improvement report drafts
+.learnings/report-latest.txt
