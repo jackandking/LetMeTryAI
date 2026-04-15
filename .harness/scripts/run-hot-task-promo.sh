@@ -6,7 +6,8 @@ HARNESS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_DIR="$(cd "$HARNESS_DIR/.." && pwd)"
 
 REPORT_TO="${HOT_TASK_RECIPIENT:-jackandking@163.com}"
-LOG_FILE="${HOT_TASK_PROMO_LOG_FILE:-$PROJECT_DIR/.harness/.local/logs/hot-task-promo.log}"
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+LOG_FILE="${HOT_TASK_PROMO_LOG_FILE:-$PROJECT_DIR/.harness/.local/logs/hot-task-promo-${TIMESTAMP}.log}"
 
 cd "$PROJECT_DIR"
 
