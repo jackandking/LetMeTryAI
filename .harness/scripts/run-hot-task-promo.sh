@@ -13,11 +13,14 @@ cd "$PROJECT_DIR"
 
 mkdir -p "$(dirname "$LOG_FILE")"
 
+# Unify all output into a single log file
+exec >> "$LOG_FILE" 2>&1
+
 echo "[run-hot-task-promo] starting at $(date -Iseconds)"
 echo "[run-hot-task-promo] recipient=$REPORT_TO"
 
 EXIT_CODE=0
-node .harness/scripts/run-hot-task-promo.mjs --recipient "$REPORT_TO" >> "$LOG_FILE" 2>&1 || EXIT_CODE=$?
+node .harness/scripts/run-hot-task-promo.mjs --recipient "$REPORT_TO" || EXIT_CODE=$?
 
 if [[ "$EXIT_CODE" -ne 0 ]]; then
     echo "[run-hot-task-promo] FAILED with exit code $EXIT_CODE"
