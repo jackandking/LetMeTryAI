@@ -1,0 +1,23 @@
+{
+  "id": "classic-tv-drama-vote",
+  "name": "经典电视剧投票",
+  "description": "那些年我们一起追过的电视剧，承载了多少人的青春记忆。快来投票选出你最喜欢的80年代经典电视剧吧！",
+  "category": "怀旧",
+  "directory": "classic-tv-drama-vote",
+  "url": "classic-tv-drama-vote",
+  "image": "classic-tv-drama-vote/images/legend-condor-heroes.svg",
+  "tags": [
+    "投票",
+    "怀旧",
+    "80年代",
+    "电视剧",
+    "经典",
+    "回忆",
+    "80年代",
+    "电视剧",
+    "经典",
+    "怀旧",
+    "回忆"
+  ],
+  "status": "active"
+}
