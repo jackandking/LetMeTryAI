@@ -28,7 +28,7 @@ function log(stage, message) {
 }
 
 function parseArgs(argv) {
-    const options = { metricsDir: null, forceAppId: null, force: false, dryRun: false, cooldownDays: 1 };
+    const options = { metricsDir: null, forceAppId: null, force: false, dryRun: false, cooldownDays: 7 };
     for (let i = 0; i < argv.length; i += 1) {
         const arg = argv[i];
         const next = argv[i + 1];

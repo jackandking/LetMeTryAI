@@ -170,6 +170,12 @@ async function recordVideo() {
     await page.waitForSelector('#optionsContainer .option-card img', { state: 'visible', timeout: 30000 });
     await page.evaluate(async () => {
         await document.fonts.ready;
+        const lazyImages = Array.from(document.images).filter((img) => img.loading === 'lazy' || !img.complete);
+        for (const img of lazyImages) {
+            img.scrollIntoView({ behavior: 'instant', block: 'center' });
+            await new Promise((resolve) => setTimeout(resolve, 300));
+        }
+        window.scrollTo({ top: 0, behavior: 'instant' });
         await Promise.all(
             Array.from(document.images).map((img) => {
                 if (img.complete) return Promise.resolve();
@@ -180,6 +186,7 @@ async function recordVideo() {
             })
         );
     });
+    await page.waitForTimeout(3000);
     await injectOverlay(page);
     await page.screenshot({ path: outputPaths.referenceFrame, fullPage: false, timeout: 0 });
     await page.waitForTimeout(2600);
