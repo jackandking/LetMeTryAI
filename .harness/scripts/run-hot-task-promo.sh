@@ -20,7 +20,7 @@ echo "[run-hot-task-promo] starting at $(date -Iseconds)"
 echo "[run-hot-task-promo] recipient=$REPORT_TO"
 
 EXIT_CODE=0
-node .harness/scripts/run-hot-task-promo.mjs --recipient "$REPORT_TO" || EXIT_CODE=$?
+node .harness/scripts/run-hot-task-promo.mjs --recipient "$REPORT_TO" "$@" || EXIT_CODE=$?
 
 if [[ "$EXIT_CODE" -ne 0 ]]; then
     echo "[run-hot-task-promo] FAILED with exit code $EXIT_CODE"
