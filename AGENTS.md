@@ -361,6 +361,7 @@ app-name/
 4. Commit with descriptive messages
 5. Create PR
 6. **After `git push` in dev (`/Users/weiping/LetMeTryAI`), immediately `git pull --ff-only` in prod (`/Users/weiping/prod/LetMeTryAI`) to catch merge conflicts or deployment issues early**
+7. **NEVER modify tracked files in prod (`/Users/weiping/prod/LetMeTryAI`) directly (e.g., `cp`, `sed`, manual edits). All prod updates must go through `dev → commit → push → prod pull`. Any exception requires explicit user approval.**
 
 ### Database Schema Changes
 - Document in `[feature]/database-schema.sql`
