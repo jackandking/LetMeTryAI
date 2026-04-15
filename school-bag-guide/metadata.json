@@ -1,0 +1,24 @@
+{
+  "id": "school-bag-guide",
+  "name": "儿童书包选购投票",
+  "description": "儿童书包是每天陪伴孩子的实用工具，护脊、轻便、容量等因素让家长们纠结。站在家长视角，你会怎么选？",
+  "category": "工具",
+  "directory": "school-bag-guide",
+  "url": "school-bag-guide",
+  "image": "school-bag-guide/images/option-spine-protection",
+  "tags": [
+    "投票",
+    "工具",
+    "儿童书包",
+    "护脊",
+    "实用工具",
+    "选购指南",
+    "家长决策",
+    "儿童书包",
+    "护脊",
+    "实用工具",
+    "选购指南",
+    "家长决策"
+  ],
+  "status": "active"
+}
