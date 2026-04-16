@@ -616,17 +616,6 @@ export function computeDailyQuotaUsage(records, dateKey) {
     }).length;
 }
 
-const HOT_TASK_STATE_FILE = join('.local', 'state', 'hot-task-app-id.txt');
-
-function readHotTaskProfileId() {
-    try {
-        const payload = JSON.parse(readFileSync(HOT_TASK_STATE_FILE, 'utf8'));
-        return payload.profileId || '';
-    } catch {
-        return '';
-    }
-}
-
 export function buildRoundRobinBatch(queue, {
     limit = DEFAULT_HOURLY_BATCH_SIZE,
     now = new Date()
@@ -648,9 +637,6 @@ export function buildRoundRobinBatch(queue, {
         groups.get(key).push(candidate);
     }
 
-    const hotTaskProfileId = readHotTaskProfileId();
-    const hotTaskWeight = hotTaskProfileId ? 3 : 1;
-
     const selected = [];
     while (selected.length < effectiveLimit) {
         let progressed = false;
@@ -659,11 +645,8 @@ export function buildRoundRobinBatch(queue, {
             if (!group || group.length === 0) {
                 continue;
             }
-            const weight = (key === hotTaskProfileId) ? hotTaskWeight : 1;
-            for (let i = 0; i < weight && group.length > 0 && selected.length < effectiveLimit; i++) {
-                selected.push(group.shift());
-                progressed = true;
-            }
+            selected.push(group.shift());
+            progressed = true;
             if (selected.length >= effectiveLimit) {
                 break;
             }
