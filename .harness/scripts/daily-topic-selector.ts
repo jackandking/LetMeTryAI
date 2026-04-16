@@ -208,7 +208,9 @@ async function main(): Promise<void> {
   log('done', `Selected="${selected.title}" | category="${selected.category}"`);
 }
 
-main().catch((err) => {
+main().then(() => {
+  process.exit(0);
+}).catch((err) => {
   logger.error('Topic selector failed', err);
   process.exit(1);
 });
