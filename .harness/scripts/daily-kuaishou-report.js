@@ -189,6 +189,51 @@ async function fetchAllStats(tasks, cookies) {
     return results;
 }
 
+// ─── Topic Performance persistence ───
+
+function inferProfileId(source, name) {
+    const direct = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
+    if (direct.includes(source)) return source;
+    const nameLower = (name || '').toLowerCase();
+    if (nameLower.includes('男人') || nameLower.includes('军事') || nameLower.includes('坦克') || nameLower.includes('战机') || nameLower.includes('火箭')) return 'nanrenbao';
+    if (nameLower.includes('女人') || nameLower.includes('护肤') || nameLower.includes('穿搭') || nameLower.includes('美妆') || nameLower.includes('香氛')) return 'womanai';
+    if (nameLower.includes('家长') || nameLower.includes('孩子') || nameLower.includes('亲子') || nameLower.includes('书包') || nameLower.includes('阅读')) return 'parent-tools';
+    if (nameLower.includes('老人') || nameLower.includes('养生') || nameLower.includes('广场舞') || nameLower.includes('社区')) return 'elder-love';
+    return 'unknown';
+}
+
+function appendTopicPerformance(report, dateStr, projectRoot) {
+    const perfFile = path.join(projectRoot, '.automation', '.local', 'state', 'topic-performance.jsonl');
+    ensureParentDirectory(perfFile);
+
+    const records = [];
+    for (const task of report.allTasks || []) {
+        if (!task.stats || task.stats.error) continue;
+        const exposure = task.stats.组件曝光数 || 0;
+        const clicks = task.stats.组件点击数 || 0;
+        const daren = task.stats.已履单达人数量 || 0;
+        const works = task.stats.已发布作品数 || 0;
+        const ctr = exposure > 0 ? (clicks / exposure) : 0;
+        const score = Number((ctr * 1000 + daren * 0.1 + works * 0.05).toFixed(4));
+
+        records.push({
+            date: dateStr,
+            planId: String(task.planId || ''),
+            name: task.name || '',
+            source: task.source || '',
+            profileId: inferProfileId(task.source, task.name),
+            metrics: { exposure, clicks, daren, works },
+            score
+        });
+    }
+
+    if (records.length === 0) return;
+
+    const lines = records.map(r => JSON.stringify(r)).join('\n') + '\n';
+    fs.appendFileSync(perfFile, lines, 'utf-8');
+    log('INFO', `Appended ${records.length} topic-performance record(s) to ${perfFile}`);
+}
+
 // ─── Report generation ───
 
 function generateReport(tasks) {
@@ -664,7 +709,10 @@ async function main() {
             log('INFO', `Delta report saved: kuaishou_delta_${dateStr}.json`);
         }
 
-        // 9. Send combined email
+        // 9. Append topic-performance for downstream analysis
+        appendTopicPerformance(report, dateStr, PROJECT_ROOT);
+
+        // 10. Send combined email
         await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename);
 
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
