@@ -505,6 +505,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
             '- 问题和选项文案要具体生动，不要使用泛化占位内容。',
         ] : [
             '- 提供 3 个 topicCandidates。',
+            trendingContext ? '- 重要：3个候选中至少1个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。其余候选可以结合品牌定位自由发挥。' : '',
         ]),
         '- 每个候选必须有 2-4 个 options。',
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
@@ -512,7 +513,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         '- 避免低俗、侵权、血腥、政治敏感、医疗误导。',
         '- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网（快手审核会拒绝）。如需表达程度，用「更」「哪款」「你选谁」等替代。',
         ...profileNotes,
-        `品牌画像如下：${JSON.stringify(profile)}`
+        `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
     ].join('\n');
 }
 
@@ -536,14 +537,16 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
             `重要：你必须围绕这个指定话题生成投票页面：「${topicHint}」。`,
             '标题必须使用或包含该指定话题。必须生成 3-4 个与该话题高度相关的具体投票选项。',
             '问题和选项文案要具体生动，不要使用泛化占位内容。',
-        ] : []),
+        ] : [
+            trendingContext ? '重要：3个候选中至少1个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。' : '',
+        ]),
         `profileId 固定为 ${profile.id}。`,
         '返回字段只能有：profileId, reportSummary, topicCandidates。',
         '每个 topicCandidates 元素必须包含：appId, title, pageTitle, appName, summary, description, question, category, format, keywords, signals, qualities, riskFlags, options。',
         '每个 options 元素必须包含：label, value, caption, alt, image。',
         'appId、value、image 只能用 ASCII 字母数字和连字符。',
         ...profileNotes,
-        `品牌画像：${JSON.stringify(profile)}`
+        `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
     ].join('\n');
 }
 
