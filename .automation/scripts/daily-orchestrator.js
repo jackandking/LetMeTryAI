@@ -505,7 +505,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
             '- 问题和选项文案要具体生动，不要使用泛化占位内容。',
         ] : [
             '- 提供 3 个 topicCandidates。',
-            trendingContext ? '- 重要：3个候选中至少1个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。其余候选可以结合品牌定位自由发挥。' : '',
+            trendingContext ? '- 重要：3个候选中至少2个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。第3个候选可以结合品牌定位自由发挥。' : '',
         ]),
         '- 每个候选必须有 2-4 个 options。',
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
@@ -538,7 +538,7 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
             '标题必须使用或包含该指定话题。必须生成 3-4 个与该话题高度相关的具体投票选项。',
             '问题和选项文案要具体生动，不要使用泛化占位内容。',
         ] : [
-            trendingContext ? '重要：3个候选中至少1个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。' : '',
+            trendingContext ? '重要：3个候选中至少2个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。' : '',
         ]),
         `profileId 固定为 ${profile.id}。`,
         '返回字段只能有：profileId, reportSummary, topicCandidates。',
