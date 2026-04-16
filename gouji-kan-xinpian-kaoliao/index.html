@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>购机看芯片的考量 — 选出你重视的要点</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">购机看芯片的考量：性能、续航还是生态？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">购机看芯片的考量：你在挑选手机时更看重哪项？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cpu-gpu-performance">
+                            <div class="card-image">
+                                <img src="images/cpu-gpu-performance.svg" alt="CPU 与 GPU 性能比较" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">性能优先（CPU/GPU）</h3>
+                                <p class="option-caption">追求流畅体验与高帧率，关注多核跑分与图形性能</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="battery-thermal">
+                            <div class="card-image">
+                                <img src="images/battery-thermal.svg" alt="电池续航与发热示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">续航与发热控制</h3>
+                                <p class="option-caption">看重电池寿命与长期使用的温控与功耗表现</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="camera-media">
+                            <div class="card-image">
+                                <img src="images/camera-media.svg" alt="拍照与视频性能示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">拍照与多媒体体验</h3>
+                                <p class="option-caption">关注芯片对影像处理、视频编码和媒体加速的提升</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ecosystem-updates">
+                            <div class="card-image">
+                                <img src="images/ecosystem-updates.svg" alt="系统生态与更新支持图标" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">系统生态与更新支持</h3>
+                                <p class="option-caption">看重平台兼容、系统优化与长线更新承诺带来的体验稳定性</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
