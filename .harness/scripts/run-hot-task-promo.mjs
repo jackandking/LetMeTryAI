@@ -10,6 +10,7 @@ import {
     loadLatestMetrics,
     loadProcessedTaskLog,
     recordPromotionRun,
+    saveHotTaskSelection,
     selectPromotionCandidate,
     rankHotTaskCandidates
 } from './hot-task-promo-workflow.js';
@@ -88,16 +89,47 @@ function printSelection(app, candidate, options) {
     console.log(JSON.stringify(payload, null, 2));
 }
 
+function loadHotTaskState() {
+    try {
+        return JSON.parse(readFileSync(HOT_TASK_PROMO_PATHS.hotTaskStateFile, 'utf8'));
+    } catch {
+        return null;
+    }
+}
+
+function isToday(dateString) {
+    if (!dateString) return false;
+    const d = new Date(dateString);
+    const now = new Date();
+    return d.getFullYear() === now.getFullYear() &&
+           d.getMonth() === now.getMonth() &&
+           d.getDate() === now.getDate();
+}
+
 function main() {
     const options = parseArgs(process.argv.slice(2));
     const latestMetrics = loadLatestMetrics(options.metricsDir);
     const candidates = rankHotTaskCandidates(latestMetrics);
     const records = loadProcessedTaskLog();
-    const candidate = selectPromotionCandidate(candidates, records, {
-        force: options.force,
-        forceAppId: options.forceAppId,
-        cooldownDays: options.cooldownDays
-    });
+
+    let candidate = null;
+    const hotTaskState = loadHotTaskState();
+
+    if (hotTaskState && isToday(hotTaskState.savedAt) && !options.forceAppId && !options.force) {
+        candidate = candidates.find(c => c.metadata?.id === hotTaskState.appId);
+        if (candidate) {
+            console.log(`[run-hot-task-promo] Reusing hot-task selection from image-gen: ${hotTaskState.appId}`);
+        }
+    }
+
+    if (!candidate) {
+        candidate = selectPromotionCandidate(candidates, records, {
+            force: options.force,
+            forceAppId: options.forceAppId,
+            cooldownDays: options.cooldownDays
+        });
+    }
+
     const appOverrides = options.recipient ? { recipientEmail: options.recipient } : {};
     const app = buildHotTaskAppFromCandidate(candidate, appOverrides);
     saveHotTaskSelection(candidate.metadata);
