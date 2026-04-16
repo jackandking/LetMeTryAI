@@ -1,0 +1,23 @@
+{
+  "id": "offroad-vehicle-pk",
+  "name": "男人宝",
+  "description": "从奔驰G级到Jeep牧马人，每一款硬派越野车都承载着男人对征服的渴望。涉水深度、接近角、离去角、差速锁配置全面对比，你的选择是？",
+  "category": "汽车机械",
+  "directory": "offroad-vehicle-pk",
+  "url": "offroad-vehicle-pk",
+  "image": "offroad-vehicle-pk/images/offroad-vehicle-pk-mercedes-g-class.svg",
+  "tags": [
+    "投票",
+    "汽车机械",
+    "越野车",
+    "性能参数",
+    "装备",
+    "机械美感",
+    "越野车",
+    "汽车机械",
+    "性能参数",
+    "装备",
+    "机械美感"
+  ],
+  "status": "active"
+}
