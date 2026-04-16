@@ -49,15 +49,15 @@ export function loadProfileConfig(profileId: string): ProfileConfig {
     nanrenbao: {
       id: 'nanrenbao',
       name: '男人宝',
-      preferredCategories: ['军事', '科技', '汽车', '体育', '历史', '游戏'],
+      preferredCategories: ['社会热点', '美食生活', '影视娱乐', '科技', '汽车', '户外', '游戏', '收藏', '体育', '军事历史'],
       topicGuidelines: {
-        doMore: ['军事装备对比', '科技数码评测', '汽车机械解析'],
-        avoid: ['过度情感内容', '生活琐事'],
+        doMore: ['社会热点讨论', '美食生活投票', '影视娱乐对比', '科技数码评测', '汽车机械解析'],
+        avoid: ['过度情感内容', '过于硬核晦涩', '生活琐事'],
       },
       constraints: {
         categoryRotation: {
           sports: { maxPerWeek: 2, cooldownDays: 3 },
-          military: { maxPerWeek: 2, cooldownDays: 3 },
+          military: { maxPerWeek: 1, cooldownDays: 5 },
         },
         forbiddenKeywords: ['最', '第一', '顶级', '史上最强'],
         budget: {

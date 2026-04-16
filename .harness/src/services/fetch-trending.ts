@@ -105,7 +105,7 @@ function formatTrendingForPrompt(platformData: Record<string, TrendingItem[]>): 
     sections.push(`【${config.label}】${line}`);
   }
   if (sections.length === 0) return '';
-  return `今日热搜参考（仅供灵感，不必照搬，需结合品牌定位筛选）：\n${sections.join('\n')}`;
+  return `今日热搜数据（重要素材，请至少将其中1个热点转化为符合品牌定位的投票主题）：\n${sections.join('\n')}`;
 }
 
 // ─── Main entry ───
