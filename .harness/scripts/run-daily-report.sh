@@ -1,14 +1,10 @@
 #!/bin/bash
-/**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="${PROJECT_DIR_OVERRIDE:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-REPORT_SCRIPT="${DAILY_REPORT_SCRIPT:-$PROJECT_DIR/.automation/scripts/daily_kuaishou_report.js}"
+REPORT_SCRIPT="${DAILY_REPORT_SCRIPT:-$PROJECT_DIR/.harness/scripts/daily-kuaishou-report.js}"
 NODE_BIN="${DAILY_NODE_BIN:-$(command -v node)}"
 GIT_BIN="${DAILY_GIT_BIN:-$(command -v git)}"
 EMAIL_TO="${KUAISHOU_EMAIL_TO:-jackandking@163.com}"
@@ -35,5 +31,5 @@ cd "$PROJECT_DIR"
 echo "[run-daily-report] running git pull --ff-only"
 "$GIT_BIN" pull --ff-only
 
-echo "[run-daily-report] running daily_kuaishou_report.js"
-exec env KUAISHOU_EMAIL_TO="$EMAIL_TO" "$NODE_BIN" "$REPORT_SCRIPT"
+echo "[run-daily-report] running daily-kuaishou-report.js"
+exec env KUAISHOU_EMAIL_TO="$EMAIL_TO" LETMETRY_RUNTIME_DIR="$PROJECT_DIR/.harness/.local" "$NODE_BIN" "$REPORT_SCRIPT"

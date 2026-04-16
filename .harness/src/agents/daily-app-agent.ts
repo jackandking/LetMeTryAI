@@ -28,7 +28,7 @@ const MANUAL_TOPIC_MAP: Record<string, string> = {
 
 function getManualQueueFile(profileId: string): string {
   const key = MANUAL_TOPIC_MAP[profileId] || profileId;
-  return join(PATHS.projectRoot, '.automation', '.local', 'state', 'topics', `${key}-manual-topics.txt`);
+  return join(PATHS.projectRoot, '.harness', '.local', 'state', 'topics', `${key}-manual-topics.txt`);
 }
 
 function popManualTopic(profileId: string): string | null {
@@ -368,7 +368,7 @@ export class DailyAppAgent {
           }
           const alertBodyFile = join(alertDir, `${topic.appId}-publish-alert.txt`);
           writeFileSync(alertBodyFile, alertBody, 'utf-8');
-          const alertScript = join(PATHS.projectRoot, '.automation', 'scripts', 'send_email.py');
+          const alertScript = join(PATHS.projectRoot, '.harness', 'scripts', 'send-email.py');
           const alertTo = process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
           await this.runCommand('python3', [alertScript, alertSubject, alertTo, alertBodyFile]);
           logger.info('Kuaishou publish failure alert sent', { to: alertTo, subject: alertSubject });

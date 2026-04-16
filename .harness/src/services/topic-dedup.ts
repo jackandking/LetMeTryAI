@@ -190,11 +190,11 @@ export async function checkTopicDuplicateWithAI(
  */
 export function loadPublishedTaskNames(): string[] {
   // Try harness path first, then fallback to automation
-  let metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+  let metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
   
   if (!existsSync(metricsDir)) {
     // Fallback to automation path directly
-    metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+    metricsDir = join(PATHS.harnessRuntimeDir, '..', '..', '..', 'prod', 'LetMeTryAI', '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
   }
   
   if (!existsSync(metricsDir)) {

@@ -1,8 +1,4 @@
 /**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
-/**
  * Fetch trending topics from Chinese platforms for topic selection inspiration.
  *
  * Supported sources: Baidu Hot Search, Toutiao Hot Board.

@@ -31,7 +31,7 @@ function loadAuth(): AuthInfo | null {
   // 尝试多个可能的 auth 文件位置
   const paths = [
     AUTH_FILE,
-    '.automation/.local/auth/kuaishou_auth.json',
+    '.harness/.local/auth/kuaishou_auth.json',
     '/Users/weiping/.runtime/kuaishou_auth.json',
   ];
   
@@ -165,7 +165,7 @@ function showAccountInfo() {
     console.error('❌ 未找到快手认证文件');
     console.log('\n可能的位置:');
     console.log('  - .runtime/kuaishou_auth.json');
-    console.log('  - .automation/.local/auth/kuaishou_auth.json');
+    console.log('  - .harness/.local/auth/kuaishou_auth.json');
     console.log('  - ~/.runtime/kuaishou_auth.json');
     process.exit(1);
   }
