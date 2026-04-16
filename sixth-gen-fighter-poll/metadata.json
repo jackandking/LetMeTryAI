@@ -1,0 +1,18 @@
+{
+  "id": "sixth-gen-fighter-poll",
+  "name": "战机技术投票",
+  "description": "探讨下一代战斗机应该优先突破的核心技术方向，包括隐身、超音速与人工智能协同等维度。",
+  "category": "军事",
+  "keywords": [
+    "六代机",
+    "军事装备",
+    "战斗机",
+    "隐身技术",
+    "高超音速",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "sixth-gen-fighter-poll/images/stealth-icon.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-15T17:01:24.696Z"
+}
