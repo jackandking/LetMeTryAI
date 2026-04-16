@@ -34,7 +34,7 @@ const REPO_DIR = path.resolve(__dirname, '../..');
 const LEARNINGS_DIR = path.join(REPO_DIR, '.learnings');
 const RULES_PENDING_DIR = path.join(LEARNINGS_DIR, 'rules-pending');
 const PATCHES_DIR = path.join(LEARNINGS_DIR, 'auto-fix-patches');
-const AUDIT_LOG = path.join(LEARNINGS_DIR, 'auto-fix-audit.jsonl');
+const AUDIT_LOG = path.join(REPO_DIR, '.automation', '.local', 'logs', 'auto-fix-audit.jsonl');
 const EMAIL_SCRIPT = path.join(REPO_DIR, '.automation', 'scripts', 'send_email.py');
 const PYTHON_BIN = process.env.DAILY_PYTHON_BIN || '/usr/bin/python3';
 const REPORT_TO = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
@@ -43,6 +43,11 @@ const MAX_ATTEMPTS_PER_WEEK = 3;
 const ALLOWED_HOURS = [2, 3, 4, 5]; // 02:00 - 05:59
 const WHITELISTED_EXTENSIONS = ['.sh', '.js', '.mjs', '.ts', '.md', '.json', '.yml', '.yaml'];
 const WHITELISTED_DIRS = ['.automation/', '.harness/', 'scripts/', 'config/', 'docs/'];
+const MAX_DIFF_LINES = 50;
+const ALLOW_FILE_DELETION = false;
+const FORBID_PATTERNS = [/password/i, /secret/i, /apiKey/i, /cookie/i];
+const AUTO_FIX_MERGE_MODE = process.env.AUTO_FIX_MERGE_MODE || 'manual';
+const SAFE_AUTO_MERGE_PATTERNS = (process.env.SAFE_AUTO_MERGE_PATTERNS || '').split(',').filter(Boolean);
 
 // ---------------------------------------------------------------------------
 // Fix Templates Registry
@@ -257,6 +262,19 @@ function sendEmailReport(subject, body) {
 // ---------------------------------------------------------------------------
 
 async function main() {
+  // Kill switch
+  const killSwitch = path.join(REPO_DIR, '.automation', '.local', 'state', 'SELF_EVOLUTION_DISABLED');
+  if (fs.existsSync(killSwitch)) {
+    console.log('[auto-fix] Kill switch active. Exiting.');
+    process.exit(0);
+  }
+
+  // Dev-only guard
+  if (!REPO_DIR.includes('LetMeTryAI') || REPO_DIR.includes('/prod/')) {
+    console.log(`[auto-fix] Dev-only guard: refusing to run in ${REPO_DIR}. Exiting.`);
+    process.exit(0);
+  }
+
   ensureDir(PATCHES_DIR);
   ensureDir(path.dirname(AUDIT_LOG));
 
@@ -341,8 +359,28 @@ async function main() {
         if (!patchResult.stdout.trim()) {
           throw new Error('No diff generated after fix');
         }
+        const patchContent = patchResult.stdout;
+
+        // Diff size guard
+        const diffLines = patchContent.split('\n').length;
+        if (diffLines > MAX_DIFF_LINES) {
+          throw new Error(`Diff too large (${diffLines} lines > ${MAX_DIFF_LINES} limit)`);
+        }
+
+        // File deletion guard
+        if (!ALLOW_FILE_DELETION && /deleted file mode/.test(patchContent)) {
+          throw new Error('Patch contains file deletions, which are not allowed');
+        }
+
+        // Sensitive content guard
+        for (const pattern of FORBID_PATTERNS) {
+          if (pattern.test(patchContent)) {
+            throw new Error(`Patch contains forbidden pattern: ${pattern.source}`);
+          }
+        }
+
         const patchFile = path.join(PATCHES_DIR, `${branchName}.patch`);
-        fs.writeFileSync(patchFile, patchResult.stdout, 'utf-8');
+        fs.writeFileSync(patchFile, patchContent, 'utf-8');
         attemptResult.patchFile = patchFile;
 
         // Create branch and commit in real repo

@@ -1,0 +1,1 @@
+{"version":3,"file":"fetch-trending.d.ts","sourceRoot":"","sources":["../../src/services/fetch-trending.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;GAWG;AAmBH,UAAU,aAAa;IACrB,eAAe,CAAC,EAAE,MAAM,EAAE,CAAC;CAC5B;AAgFD,wBAAsB,mBAAmB,CACvC,EAAE,OAAO,EAAE,UAAU,EAAE,GAAE;IAAE,OAAO,CAAC,EAAE,aAAa,CAAC;IAAC,UAAU,CAAC,EAAE,MAAM,CAAA;CAAO,GAC7E,OAAO,CAAC,MAAM,CAAC,CAmCjB"}
