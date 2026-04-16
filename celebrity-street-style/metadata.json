@@ -1,0 +1,19 @@
+{
+  "id": "celebrity-street-style",
+  "name": "街拍风格投票",
+  "description": "将热议的街拍造型按风格分类，图文呈现供手机用户投票与评论，引导时尚话题互动。",
+  "category": "美女明星",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "街拍",
+    "女星造型",
+    "穿搭",
+    "时尚",
+    "互动",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "celebrity-street-style/images/casual-relaxed.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-16T14:58:00.488Z"
+}
