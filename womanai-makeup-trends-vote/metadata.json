@@ -1,0 +1,20 @@
+{
+  "id": "womanai-makeup-trends-vote",
+  "name": "女人爱护肤投票",
+  "description": "投票比较四类当前流行的美妆护肤趋势：补水保湿、屏障修护、轻薄裸妆与功效型精华，适合手机阅读的图文投票页，用于了解读者的优先尝试意愿并引导后续推荐或内容策划。",
+  "category": "美妆护肤",
+  "profileId": "womanai",
+  "keywords": [
+    "补水",
+    "屏障修护",
+    "轻薄底妆",
+    "功效精华",
+    "护肤趋势",
+    "女人爱",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "womanai-makeup-trends-vote/images/hyaluronic-hydration.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-16T20:00:58.395Z"
+}
