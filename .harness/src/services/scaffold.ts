@@ -320,6 +320,7 @@ function generateMetadata(topic: TopicCandidate, profile: ProfileConfig): string
     name: topic.appName,
     description: topic.description,
     category: topic.category,
+    profileId: profile.id,
     keywords: [...topic.keywords, '投票', profile.name],
     coverImage: `${topic.appId}/images/${topic.options[0]?.image || 'cover.svg'}`,
     generatedFrom: 'fighter-jets',

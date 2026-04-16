@@ -100,6 +100,7 @@ function main() {
     });
     const appOverrides = options.recipient ? { recipientEmail: options.recipient } : {};
     const app = buildHotTaskAppFromCandidate(candidate, appOverrides);
+    saveHotTaskSelection(candidate.metadata);
     const artifactPaths = getArtifactPaths(app);
 
     if (options.dryRun) {
