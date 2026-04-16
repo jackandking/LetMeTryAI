@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>装备党首选：硬派越野车通过性大PK</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">装备党首选：硬派越野车通过性大PK</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">全网热议：硬派越野车通过性大PK，你的选择是？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="mercedes-g-class">
+                            <div class="card-image">
+                                <img src="images/offroad-vehicle-pk-mercedes-g-class.svg" alt="奔驰G级越野车高清实物图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">奔驰G级</h3>
+                                <p class="option-desc">三把差速锁，越野图腾级存在</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="jeep-wrangler">
+                            <div class="card-image">
+                                <img src="images/offroad-vehicle-pk-jeep-wrangler.svg" alt="Jeep牧马人越野车高清实物图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">Jeep牧马人</h3>
+                                <p class="option-desc">越野活化石，改装潜力无穷</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="toyota-land-cruiser">
+                            <div class="card-image">
+                                <img src="images/offroad-vehicle-pk-toyota-land-cruiser.svg" alt="丰田兰德酷路泽越野车高清实物图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">丰田兰德酷路泽</h3>
+                                <p class="option-desc">可靠性之王，穿越无人区首选</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="land-rover-defender">
+                            <div class="card-image">
+                                <img src="images/offroad-vehicle-pk-land-rover-defender.svg" alt="路虎卫士越野车高清实物图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">路虎卫士</h3>
+                                <p class="option-desc">全地形科技，英伦硬派新标杆</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在汇总实时投票结果...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
