@@ -15,7 +15,8 @@ import {
     loadProcessedTaskLog,
     selectPromotionCandidate,
     buildHotTaskAppFromCandidate,
-    recordPromotionRun
+    recordPromotionRun,
+    saveHotTaskSelection
 } from './hot-task-promo-workflow.js';
 import { ImageGenerator } from '../../.agents/skills/ai-image-generator/index.js';
 
@@ -111,6 +112,7 @@ async function main() {
     }
 
     log('selected', `appId=${app.appId} pageTitle="${pageTitle}" options=${voteOptions.length}`);
+    saveHotTaskSelection(candidate.metadata);
 
     if (options.dryRun) {
         for (const opt of voteOptions) {

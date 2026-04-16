@@ -1,4 +1,4 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'fs';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { buildHotTaskApp } from './hot-task-video-config.js';
@@ -11,6 +11,7 @@ export const HOT_TASK_PROMO_PATHS = {
     repoRoot,
     stateDir: path.join(repoRoot, '.harness', '.local', 'state'),
     processedLog: path.join(repoRoot, '.harness', '.local', 'state', 'hot-task-video-processed.jsonl'),
+    hotTaskStateFile: path.join(repoRoot, '.harness', '.local', 'state', 'hot-task-app-id.txt'),
     localMetricsDir: path.join(repoRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily'),
     prodMetricsDir: path.join(repoRoot, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily')
 };
@@ -257,5 +258,39 @@ export function formatMetricsSummary(candidate) {
 export function recordPromotionRun(entry, logPath = HOT_TASK_PROMO_PATHS.processedLog) {
     mkdirSync(path.dirname(logPath), { recursive: true });
     appendFileSync(logPath, `${JSON.stringify(entry)}\n`, 'utf8');
+}
+
+const PROFILE_NAME_TO_ID = {
+    '男人宝': 'nanrenbao',
+    '女人爱': 'womanai',
+    '家长爱': 'parent-tools',
+    '爱老人': 'elder-love'
+};
+
+export function resolveProfileIdFromMetadata(metadata = {}) {
+    if (metadata.profileId) {
+        return metadata.profileId;
+    }
+    const keywords = Array.isArray(metadata.keywords) ? metadata.keywords : [];
+    for (const keyword of keywords) {
+        const matched = PROFILE_NAME_TO_ID[keyword];
+        if (matched) {
+            return matched;
+        }
+    }
+    return '';
+}
+
+export function saveHotTaskSelection(metadata = {}, stateFile = HOT_TASK_PROMO_PATHS.hotTaskStateFile) {
+    const profileId = resolveProfileIdFromMetadata(metadata);
+    const payload = {
+        appId: metadata.id || '',
+        name: metadata.name || '',
+        profileId,
+        savedAt: new Date().toISOString()
+    };
+    mkdirSync(path.dirname(stateFile), { recursive: true });
+    writeFileSync(stateFile, JSON.stringify(payload, null, 2), 'utf8');
+    return payload;
 }
 
