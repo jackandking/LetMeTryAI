@@ -296,7 +296,7 @@ export async function runDailyIngestion({
     configFile = '',
     env = process.env,
     now = new Date(),
-    days = 1,
+    days = 2,
     autoSendReport = true,
     sendReport = sendDailyFollowReport
 } = {}) {

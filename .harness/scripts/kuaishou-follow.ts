@@ -989,7 +989,7 @@ async function handleFetchData(options) {
     }
 
     const range = buildPastDayRange({
-        days: Number(options.days || 1)
+        days: Number(options.days || 2)
     });
     const officialEndpoint = options.officialEndpoint || undefined;
     const browserAuthFile = getAuthFile('https://open.kuaishou.com/console');

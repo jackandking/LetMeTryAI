@@ -18,6 +18,7 @@ NANRENBAO_LOG_FILE="$HARNESS_LOCAL_DIR/logs/daily-app-cron/nanrenbao.log"
 ELDER_LOVE_LOG_FILE="$HARNESS_LOCAL_DIR/logs/daily-app-cron/elder-love.log"
 PARENT_TOOLS_LOG_FILE="$HARNESS_LOCAL_DIR/logs/daily-app-cron/parent-tools.log"
 WOMANAI_LOG_FILE="$HARNESS_LOCAL_DIR/logs/daily-app-cron/womanai.log"
+HEALTH_CHECK_LOG_FILE="$LOCAL_DIR/logs/cron-health-check/runner.log"
 
 # Colors
 RED='\033[0;31m'
@@ -72,6 +73,7 @@ NANRENBAO_CRON_CMD="0 7 * * * cd \"$PROJECT_DIR\" && HARNESS_MODE=production HAR
 ELDER_LOVE_CRON_CMD="0 8 * * * cd \"$PROJECT_DIR\" && HARNESS_MODE=production HARNESS_CRON_LOG_FILE=\"$ELDER_LOVE_LOG_FILE\" \"$PROFILE_RUNNER\" elder-love >> \"$ELDER_LOVE_LOG_FILE\" 2>&1"
 PARENT_TOOLS_CRON_CMD="0 9 * * * cd \"$PROJECT_DIR\" && HARNESS_MODE=production HARNESS_CRON_LOG_FILE=\"$PARENT_TOOLS_LOG_FILE\" \"$PROFILE_RUNNER\" parent-tools >> \"$PARENT_TOOLS_LOG_FILE\" 2>&1"
 WOMANAI_CRON_CMD="0 10 * * * cd \"$PROJECT_DIR\" && HARNESS_MODE=production HARNESS_CRON_LOG_FILE=\"$WOMANAI_LOG_FILE\" \"$PROFILE_RUNNER\" womanai >> \"$WOMANAI_LOG_FILE\" 2>&1"
+HEALTH_CHECK_CRON_CMD="0 20 * * * cd \"$PROJECT_DIR\" && \"$PROJECT_DIR/.automation/scripts/run-cron-health-check.sh\" >> \"$HEALTH_CHECK_LOG_FILE\" 2>&1"
 
 echo ""
 echo "Cron commands:"
@@ -80,12 +82,13 @@ echo "$NANRENBAO_CRON_CMD"
 echo "$ELDER_LOVE_CRON_CMD"
 echo "$PARENT_TOOLS_CRON_CMD"
 echo "$WOMANAI_CRON_CMD"
+echo "$HEALTH_CHECK_CRON_CMD"
 echo ""
 
 # Check existing crontab
 existing_crontab=$(crontab -l 2>/dev/null || true)
 
-if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profile.sh|run-daily-app-cron.sh|daily_run.sh"; then
+if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profile.sh|run-daily-app-cron.sh|daily_run.sh|run-cron-health-check.sh"; then
     echo -e "${YELLOW}Warning: Related cron jobs already exist!${NC}"
     echo ""
     read -p "Do you want to update it? (y/n): " -n 1 -r
@@ -95,7 +98,7 @@ if echo "$existing_crontab" | grep -Eq "daily_kuaishou_report.js|run-daily-profi
         exit 0
     fi
     # Remove existing app/report entries for this repo before reinstalling.
-    existing_crontab=$(echo "$existing_crontab" | grep -v "daily_kuaishou_report.js" | grep -v "run-daily-profile.sh" | grep -v "run-daily-app-cron.sh" | grep -v "daily_run.sh")
+    existing_crontab=$(echo "$existing_crontab" | grep -v "daily_kuaishou_report.js" | grep -v "run-daily-profile.sh" | grep -v "run-daily-app-cron.sh" | grep -v "daily_run.sh" | grep -v "run-cron-health-check.sh")
 fi
 
 # Add new cron jobs
@@ -110,6 +113,8 @@ $ELDER_LOVE_CRON_CMD
 $PARENT_TOOLS_CRON_CMD
 # Daily App Run - womanai
 $WOMANAI_CRON_CMD
+# Daily Cron Health Check
+$HEALTH_CHECK_CRON_CMD
 "
 
 echo "$new_crontab" | crontab -
@@ -122,12 +127,14 @@ echo "  - Nanrenbao harness run: every day at 7:00 AM"
 echo "  - Elder Love harness run: every day at 8:00 AM"
 echo "  - Parent Tools harness run: every day at 9:00 AM"
 echo "  - Womanai harness run: every day at 10:00 AM"
+echo "  - Cron health check: every day at 8:00 PM"
 echo "Recipient: $email"
 echo "Report log file: $REPORT_LOG_FILE"
 echo "Nanrenbao log file: $NANRENBAO_LOG_FILE"
 echo "Elder Love log file: $ELDER_LOVE_LOG_FILE"
 echo "Parent Tools log file: $PARENT_TOOLS_LOG_FILE"
 echo "Womanai log file: $WOMANAI_LOG_FILE"
+echo "Health check log file: $HEALTH_CHECK_LOG_FILE"
 echo "Run summaries: $HARNESS_LOCAL_DIR/state/daily-app-runs/*.jsonl"
 echo ""
 
@@ -153,6 +160,7 @@ echo "  tail -f $NANRENBAO_LOG_FILE"
 echo "  tail -f $ELDER_LOVE_LOG_FILE"
 echo "  tail -f $PARENT_TOOLS_LOG_FILE"
 echo "  tail -f $WOMANAI_LOG_FILE"
+echo "  tail -f $HEALTH_CHECK_LOG_FILE"
 echo "  tail -n 5 $HARNESS_LOCAL_DIR/state/daily-app-runs/nanrenbao.jsonl"
 echo "  tail -n 5 $HARNESS_LOCAL_DIR/state/daily-app-runs/elder-love.jsonl"
 echo "  tail -n 5 $HARNESS_LOCAL_DIR/state/daily-app-runs/parent-tools.jsonl"
