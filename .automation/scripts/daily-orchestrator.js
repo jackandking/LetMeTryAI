@@ -22,6 +22,7 @@ import { validateVotingAppDirectory } from './validate-voting-app.js';
 import { validateTaskName } from './publish-kuaishou-task-utils.js';
 import { checkTopicDuplicate, calculateSimilarity } from '../shared/topic-dedup.js';
 import { fetchTrendingTopics } from './lib/fetch-trending.js';
+import { getPromptSuffix } from './prompt-experiment-registry.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -514,7 +515,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         '- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网（快手审核会拒绝）。如需表达程度，用「更」「哪款」「你选谁」等替代。',
         ...profileNotes,
         `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
-    ].join('\n');
+    ].join('\n') + getPromptSuffix(profile.id);
 }
 
 export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recentTopics, topicHint }) {
