@@ -49,7 +49,7 @@ export function loadProfileConfig(profileId: string): ProfileConfig {
     nanrenbao: {
       id: 'nanrenbao',
       name: '男人宝',
-      preferredCategories: ['社会热点', '美食生活', '影视娱乐', '科技', '汽车', '户外', '游戏', '收藏', '体育', '军事历史'],
+      preferredCategories: ['美女明星', '社会热点', '影视娱乐', '美食生活', '科技', '汽车', '户外', '游戏', '收藏', '体育', '军事历史'],
       topicGuidelines: {
         doMore: ['社会热点讨论', '美食生活投票', '影视娱乐对比', '科技数码评测', '汽车机械解析'],
         avoid: ['过度情感内容', '过于硬核晦涩', '生活琐事'],
