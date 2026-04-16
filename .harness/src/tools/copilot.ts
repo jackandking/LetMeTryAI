@@ -74,13 +74,21 @@ export const copilotTool: Tool = {
             // Copilot outputs JSON event stream, extract the last assistant message
             const result = parseCopilotOutput(stdout);
             logger.info('Copilot response parsed', { resultType: typeof result });
-            resolve(result);
+            resolve({
+              success: true,
+              data: result,
+              metadata: {},
+            });
           } catch (error) {
             logger.error('Failed to parse Copilot output', error as Error);
             reject(error);
           }
         } else {
-          resolve(stdout.trim());
+          resolve({
+            success: true,
+            data: stdout.trim(),
+            metadata: {},
+          });
         }
       });
 

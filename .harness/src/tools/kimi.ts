@@ -99,13 +99,22 @@ export const kimiTool: Tool = {
       });
 
       child.on('close', (code) => {
-        if (code !== 0) {
+        const content = parseKimiStreamJson(stdout);
+
+        // Kimi CLI sometimes prints "To resume this session" to stderr and exits with code 1
+        // even when the response is valid. Try to use stdout content if it's parseable.
+        const hasValidContent = content.length > 0;
+
+        if (code !== 0 && !hasValidContent) {
           logger.error('Kimi CLI failed', new Error(stderr || 'Unknown error'), { code });
           reject(new Error(`Kimi exited with code ${code}: ${stderr}`));
           return;
         }
 
-        const content = parseKimiStreamJson(stdout);
+        if (code !== 0) {
+          logger.warn('Kimi CLI exited with non-zero code but stdout contains valid content', { code, stderr: stderr?.trim() });
+        }
+
         logger.info('Kimi CLI response received', { 
           contentLength: content.length,
           duration: Date.now() - startTime,
