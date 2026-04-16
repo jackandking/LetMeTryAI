@@ -4,6 +4,8 @@
 import { ProfileConfig, TopicCandidate, ToolResult } from '../types/index.js';
 import { logger } from '../utils/logger.js';
 import { defaultRegistry } from '../tools/index.js';
+import fs from 'fs';
+import path from 'path';
 
 export interface TopicSelectionResult {
   profileId: string;
@@ -220,11 +222,15 @@ export async function chooseBestTopic(
   
   // Use valid candidates, or fallback to all if all blocked
   const pool = valid.length > 0 ? valid : candidates;
-  
+
+  // Load historical performance for this profile
+  const profilePerformance = loadProfilePerformance(profile.id);
+  logger.info('Loaded profile performance', { profileId: profile.id, avgScore: profilePerformance });
+
   // Score and select best
   const scored = pool.map(c => ({
     candidate: c,
-    score: scoreCandidate(c, profile),
+    score: scoreCandidate(c, profile, profilePerformance),
   })).sort((a, b) => b.score - a.score);
   
   const best = scored[0]?.candidate || candidates[0];
@@ -248,37 +254,73 @@ export async function chooseBestTopic(
 /**
  * Score a candidate based on profile preferences.
  */
-function scoreCandidate(candidate: TopicCandidate, profile: ProfileConfig): number {
+function loadProfilePerformance(profileId: string): number {
+  const perfFile = path.join(process.cwd(), '.automation', '.local', 'state', 'topic-performance.jsonl');
+  if (!fs.existsSync(perfFile)) return 0;
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+
+  let total = 0;
+  let count = 0;
+
+  const lines = fs.readFileSync(perfFile, 'utf-8').split('\n').filter(Boolean);
+  for (const line of lines) {
+    try {
+      const record = JSON.parse(line) as { date?: string; profileId?: string; score?: number };
+      if (!record.date || record.profileId !== profileId || typeof record.score !== 'number') continue;
+      const recordDate = new Date(record.date);
+      if (recordDate < cutoff) continue;
+      total += record.score;
+      count += 1;
+    } catch {
+      // ignore malformed lines
+    }
+  }
+
+  return count > 0 ? total / count : 0;
+}
+
+function scoreCandidate(
+  candidate: TopicCandidate,
+  profile: ProfileConfig,
+  profilePerformance: number = 0
+): number {
   let score = 0;
-  
+
   // Category preference (30 points)
   const catIndex = profile.preferredCategories.indexOf(candidate.category);
   if (catIndex >= 0) {
     score += 30 - catIndex * 5; // Higher score for earlier categories
   }
-  
+
   // Do More guidelines (20 points)
   const doMoreMatch = profile.topicGuidelines.doMore.some(guideline => {
     const keywords = guideline.toLowerCase().split(/[，,、\s]+/);
-    return keywords.some(kw => 
+    return keywords.some(kw =>
       candidate.title.toLowerCase().includes(kw) ||
       candidate.description.toLowerCase().includes(kw)
     );
   });
   if (doMoreMatch) score += 20;
-  
+
   // Avoid guidelines penalty (-20 points)
   const avoidMatch = profile.topicGuidelines.avoid.some(guideline => {
     const keywords = guideline.toLowerCase().split(/[，,、\s]+/);
-    return keywords.some(kw => 
+    return keywords.some(kw =>
       candidate.title.toLowerCase().includes(kw) ||
       candidate.description.toLowerCase().includes(kw)
     );
   });
   if (avoidMatch) score -= 20;
-  
+
   // Option count bonus (up to 10 points)
   score += Math.min(candidate.options.length * 3, 10);
-  
+
+  // Historical performance boost / penalty
+  if (profilePerformance >= 40) score += 10;
+  else if (profilePerformance >= 20) score += 5;
+  else if (profilePerformance > 0 && profilePerformance < 5) score -= 10;
+
   return score;
 }
