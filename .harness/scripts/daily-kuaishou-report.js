@@ -1,23 +1,19 @@
 #!/usr/bin/env node
 /**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
-/**
  * Daily Kuaishou Report Generator (API mode)
  *
  * Uses pure HTTP API calls to fetch distribution task data from Kuaishou.
  * No browser needed — just cookies from a prior login session.
  *
  * Usage:
- *   node .automation/scripts/daily_kuaishou_report.js
+ *   node .harness/scripts/daily-kuaishou-report.js
  *
  * Environment Variables:
  *   KUAISHOU_EMAIL_TO=jackandking@163.com
  *   AGENTMAIL_API_KEY=xxx
  *
  * To refresh auth session (when cookies expire):
- *   node .automation/scripts/ks-api-poc.js --sniff
+ *   node .harness/scripts/ks-api-poc.js --sniff
  */
 
 import fs from 'fs';
@@ -28,7 +24,7 @@ import {
     resolveKuaishouAuthFile,
     resolveProjectRoot,
     resolveRuntimeDir
-} from './runtime-paths.js';
+} from './lib/runtime-paths.js';
 import { buildUsageReport, formatEmailBody as formatAdoptionEmail } from './lib/usage-report-builder.js';
 
 const PROJECT_ROOT = resolveProjectRoot(import.meta.url);
@@ -65,7 +61,7 @@ function randomDelay() {
 function extractCookieHeader() {
     if (!fs.existsSync(CONFIG.authFile)) {
         log('ERROR', `Auth file not found: ${CONFIG.authFile}`);
-        log('ERROR', 'Run sniff mode to login: node .automation/scripts/ks-api-poc.js --sniff');
+        log('ERROR', 'Run sniff mode to login: node .harness/scripts/ks-api-poc.js --sniff');
         process.exit(1);
     }
     const state = JSON.parse(fs.readFileSync(CONFIG.authFile, 'utf-8'));
@@ -677,7 +673,7 @@ async function main() {
     } catch (error) {
         if (error.message === 'SESSION_EXPIRED') {
             log('ERROR', 'Kuaishou session expired!');
-            log('ERROR', 'Re-login: node .automation/scripts/ks-api-poc.js --sniff');
+            log('ERROR', 'Re-login: node .harness/scripts/ks-api-poc.js --sniff');
         } else {
             log('ERROR', `Fatal error: ${error.message}`);
         }

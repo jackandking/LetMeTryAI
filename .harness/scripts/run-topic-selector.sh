@@ -26,7 +26,7 @@ export HARNESS_MODE="${HARNESS_MODE:-production}"
 
 REPORT_TO="${TOPIC_SELECTOR_REPORT_TO:-jackandking@163.com}"
 PYTHON_BIN="${DAILY_PYTHON_BIN:-$(command -v python3 || echo /usr/bin/python3)}"
-SEND_EMAIL_SCRIPT="$PROJECT_DIR/.automation/scripts/send_email.py"
+SEND_EMAIL_SCRIPT="$PROJECT_DIR/.harness/scripts/send-email.py"
 
 RUN_LOG_DIR="$PROJECT_DIR/.harness/.local/logs"
 mkdir -p "$RUN_LOG_DIR"

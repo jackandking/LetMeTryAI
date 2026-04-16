@@ -1,8 +1,4 @@
 /**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
-/**
  * Usage Report Builder — 创作者采纳度报告
  *
  * 核心指标：已履单达人数量、已发布作品数（哪些 idea 最受短视频创作者欢迎）

@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 /**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
-/**
  * Kuaishou API POC
  *
  * Two modes:
@@ -11,8 +7,8 @@
  *   (default) Use pure HTTP to call APIs directly (no browser needed)
  *
  * Usage:
- *   node .automation/scripts/ks-api-poc.js            # API mode
- *   node .automation/scripts/ks-api-poc.js --sniff     # Sniff mode
+ *   node .harness/scripts/ks-api-poc.js            # API mode
+ *   node .harness/scripts/ks-api-poc.js --sniff     # Sniff mode
  *
  * Environment:
  *   HEADLESS=true|false  — for sniff mode (default: false)
@@ -25,7 +21,7 @@ import {
     resolveRuntimeDir,
     ensureDirectory,
     ensureParentDirectory
-} from './runtime-paths.js';
+} from './lib/runtime-paths.js';
 
 const AUTH_FILE = resolveKuaishouAuthFile(import.meta.url);
 const RUNTIME_DIR = resolveRuntimeDir(import.meta.url);
@@ -52,7 +48,7 @@ function randomDelay() {
 function extractCookieHeader() {
     if (!fs.existsSync(AUTH_FILE)) {
         log('ERROR', `Auth file not found: ${AUTH_FILE}`);
-        log('ERROR', 'Run sniff mode first: node .automation/scripts/ks-api-poc.js --sniff');
+        log('ERROR', 'Run sniff mode first: node .harness/scripts/ks-api-poc.js --sniff');
         process.exit(1);
     }
     const state = JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8'));

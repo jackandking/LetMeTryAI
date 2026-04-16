@@ -12,8 +12,8 @@ export const HOT_TASK_PROMO_PATHS = {
     stateDir: path.join(repoRoot, '.harness', '.local', 'state'),
     processedLog: path.join(repoRoot, '.harness', '.local', 'state', 'hot-task-video-processed.jsonl'),
     hotTaskStateFile: path.join(repoRoot, '.harness', '.local', 'state', 'hot-task-app-id.txt'),
-    localMetricsDir: path.join(repoRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily'),
-    prodMetricsDir: path.join(repoRoot, '..', 'prod', 'LetMeTryAI', '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily')
+    localMetricsDir: path.join(repoRoot, '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily'),
+    prodMetricsDir: path.join(repoRoot, '..', 'prod', 'LetMeTryAI', '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily')
 };
 
 function readJsonFile(filePath) {

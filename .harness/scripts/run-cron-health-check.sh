@@ -1,8 +1,4 @@
 #!/bin/bash
-/**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
 #
 # Cron Health Check — daily体检过去24小时的定时任务运行情况
 # 结果保存本地 + 发送邮件
@@ -12,7 +8,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="${PROJECT_DIR_OVERRIDE:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
-RUNTIME_DIR="$PROJECT_DIR/.automation/.local"
+RUNTIME_DIR="${RUNTIME_DIR_OVERRIDE:-$PROJECT_DIR/.harness/.local}"
 LOG_DIR="$RUNTIME_DIR/logs"
 REPORT_DIR="$LOG_DIR/cron-health-check"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
@@ -325,7 +321,7 @@ log_info "Report saved to: $REPORT_FILE"
 log_info "Sending email to $EMAIL_TO ..."
 
 if [[ -x "$PYTHON_BIN" ]]; then
-    "$PYTHON_BIN" "$SCRIPT_DIR/send_email.py" "$EMAIL_SUBJECT" "$EMAIL_TO" "$REPORT_FILE" || {
+    "$PYTHON_BIN" "$SCRIPT_DIR/send-email.py" "$EMAIL_SUBJECT" "$EMAIL_TO" "$REPORT_FILE" || {
         log_info "WARNING: Email sending failed"
         exit 1
     }

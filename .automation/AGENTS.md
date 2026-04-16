@@ -11,6 +11,7 @@ This directory contains all automation tooling, cron jobs, CLI scripts, and agen
 3. **MySQL API**: Always use `sql` parameter (NOT `query`).
 4. **No Hardcoded URLs**: Use `BASE_URL` from `util/config.js` for all API calls.
 5. **File Upload Security**: Always validate `targetPath` (reject `..` sequences).
+6. **Evolution Layer Only**: `.automation` is the self-evolving meta-system (observation, learning, auto-fix, A/B experiments). It must never modify production-tracked files directly in prod. All code changes go through dev → commit → push → prod pull. `.harness` is the independent stable layer.
 
 ## Build and Development Commands
 

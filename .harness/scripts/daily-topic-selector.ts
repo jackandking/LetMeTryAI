@@ -120,7 +120,7 @@ function pushToManualQueue(profileId: string, topic: string): void {
     'elder-love': 'elder',
   };
   const fileKey = map[profileId] || profileId;
-  const queueDir = join(PATHS.projectRoot, '.automation', '.local', 'state', 'topics');
+  const queueDir = join(PATHS.projectRoot, '.harness', '.local', 'state', 'topics');
   const queueFile = join(queueDir, `${fileKey}-manual-topics.txt`);
 
   mkdirSync(queueDir, { recursive: true });

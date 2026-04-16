@@ -19,7 +19,7 @@ const BASE_URL = 'https://daren.kuaishou.com';
 const DELAY_MS = { min: 300, max: 800 };
 
 function getLatestReportPath(): string | null {
-  const reportDir = join(PATHS.projectRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+  const reportDir = join(PATHS.projectRoot, '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
   if (!existsSync(reportDir)) {
     return null;
   }

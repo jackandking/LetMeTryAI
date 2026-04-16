@@ -1,7 +1,3 @@
-/**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
 import path from 'path';
 
 export const SUCCESS_MESSAGE_PATTERN = /(成功|已发布|已提交|创建成功|发布成功)/;
@@ -31,5 +27,5 @@ export function isSubmissionErrorSignal(messageText = '') {
 export function resolveAuthFilePath(authFile = process.env.KUAISHOU_AUTH_FILE) {
     return typeof authFile === 'string' && authFile.trim()
         ? path.resolve(authFile.trim())
-        : path.resolve(process.cwd(), '.automation', '.local', 'auth', 'kuaishou_auth.json');
+        : path.resolve(process.cwd(), '.harness', '.local', 'auth', 'kuaishou_auth.json');
 }

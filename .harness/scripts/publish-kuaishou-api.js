@@ -1,14 +1,10 @@
 #!/usr/bin/env node
 /**
- * @deprecated This file has been migrated to .harness/. Use .harness equivalent instead.
- * Will be removed after 2026-05-01.
- */
-/**
  * Publish a Kuaishou distribution task via pure HTTP API.
  * No browser/Playwright needed — just cookies from a prior login session.
  *
  * Usage:
- *   node .automation/scripts/publish-kuaishou-api.js <appId> <appName> [description]
+ *   node .harness/scripts/publish-kuaishou-api.js <appId> <appName> [description]
  *
  * Environment:
  *   SOURCE_TASK_ID   — template task to clone settings from (default: per-profile)
@@ -16,7 +12,7 @@
  *   KUAISHOU_AUTH_FILE — path to Playwright storageState JSON
  *
  * Examples:
- *   PROFILE_ID=nanrenbao node .automation/scripts/publish-kuaishou-api.js \
+ *   PROFILE_ID=nanrenbao node .harness/scripts/publish-kuaishou-api.js \
  *     rockets-king "火箭之王" "哪款火箭更强？来投票！"
  */
 
@@ -27,7 +23,7 @@ import {
     resolveKuaishouAuthFile,
     resolveRuntimeDir,
     ensureDirectory
-} from './runtime-paths.js';
+} from './lib/runtime-paths.js';
 import { validateTaskName } from './publish-kuaishou-task-utils.js';
 
 // ─── Profile → Source Task mapping ───
@@ -59,7 +55,7 @@ function randomDelay() {
 function extractCookieHeader() {
     if (!fs.existsSync(AUTH_FILE)) {
         log('ERROR', `Auth file not found: ${AUTH_FILE}`);
-        log('ERROR', 'Run: node .automation/scripts/ks-api-poc.js --sniff');
+        log('ERROR', 'Run: node .harness/scripts/ks-api-poc.js --sniff');
         process.exit(1);
     }
     const state = JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8'));
@@ -192,7 +188,7 @@ async function createDistributionTask(payload, cookies) {
 async function main() {
     const args = process.argv.slice(2);
     if (args.length < 2) {
-        console.error('Usage: node .automation/scripts/publish-kuaishou-api.js <appId> <appName> [description]');
+        console.error('Usage: node .harness/scripts/publish-kuaishou-api.js <appId> <appName> [description]');
         console.error('Environment: PROFILE_ID=nanrenbao|womanai|parent-tools|elder-love');
         process.exit(1);
     }
@@ -325,7 +321,7 @@ async function main() {
 
     } catch (error) {
         if (error.message === 'SESSION_EXPIRED') {
-            log('ERROR', 'Session expired! Re-login: node .automation/scripts/ks-api-poc.js --sniff');
+            log('ERROR', 'Session expired! Re-login: node .harness/scripts/ks-api-poc.js --sniff');
         } else {
             log('ERROR', error.message);
         }
