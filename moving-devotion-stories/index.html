@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>那些让人感动的奉献故事 - 投票与回忆</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">那些让人感动的奉献故事：您更感动的是哪一种？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在这些真实的奉献故事中，您被哪种类型的付出打动？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="childcare-daily">
+                            <div class="card-image">
+                                <img src="images/childcare-daily.svg" alt="子女日常照护的温暖场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">子女日常照护</h3>
+                                <p class="option-caption">子女或孙辈日复一日的耐心照顾与陪伴，让人感到温暖与安心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="retired-teacher-mentoring">
+                            <div class="card-image">
+                                <img src="images/retired-teacher-mentoring.svg" alt="退休教师与学生的温馨画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">退休教师的无私辅导</h3>
+                                <p class="option-caption">退休后仍坚持教书或辅导年轻人，把知识和关怀一代代传递。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="neighbor-companion">
+                            <div class="card-image">
+                                <img src="images/neighbor-companion.svg" alt="邻里互助的握手或聊天场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">邻里长期陪伴互助</h3>
+                                <p class="option-caption">街坊邻里长期的问候与帮助，在日常里构成可靠的支持网络。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="volunteer-longterm-care">
+                            <div class="card-image">
+                                <img src="images/volunteer-longterm-care.svg" alt="志愿者陪伴长者的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">志愿者长期陪护</h3>
+                                <p class="option-caption">志愿者长期为长者提供陪护或探访，用持续行动传递关怀。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
