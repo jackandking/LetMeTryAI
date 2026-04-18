@@ -14,11 +14,12 @@ import { spawnSync } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_DIR = path.resolve(__dirname, '../..');
+const PROD_DIR = process.env.PROD_DIR || REPO_DIR;
 const LEARNINGS_DIR = path.join(REPO_DIR, '.learnings');
 const INDEX_FILE = path.join(LEARNINGS_DIR, 'index.jsonl');
 const SCAN_DIRS = [
-  path.join(REPO_DIR, '.automation', '.local', 'logs'),
-  path.join(REPO_DIR, '.harness', '.local', 'logs')
+  path.join(PROD_DIR, '.automation', '.local', 'logs'),
+  path.join(PROD_DIR, '.harness', '.local', 'logs')
 ];
 
 // Patterns: regex -> patternKey
