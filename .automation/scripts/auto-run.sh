@@ -124,6 +124,14 @@ elif [[ -d "$REPO_DIR/.learnings/rules-pending" ]] && \
   ACTION="auto-fix"
   ACTION_REASON="pending_proposals"
 
+# Check if there are learnings but no proposals yet → generate proposals first
+elif [[ -d "$REPO_DIR/.learnings" ]] && \
+     [[ $(find "$REPO_DIR/.learnings" -name "ERR-*.md" -mtime -7 2>/dev/null | wc -l) -gt 0 ]]; then
+  LEARNING_COUNT=$(find "$REPO_DIR/.learnings" -name "ERR-*.md" -mtime -7 2>/dev/null | wc -l | tr -d ' ')
+  echo "[auto-run] Found $LEARNING_COUNT recent learnings, no pending proposals — generating proposals"
+  ACTION="generate-proposals"
+  ACTION_REASON="learnings_without_proposals"
+
 # If failure rate > 50%, run log scanner to diagnose
 elif [[ $TOTAL_RUNS -gt 0 ]] && [[ $FAILURES -gt 0 ]]; then
   FAIL_RATE=$((FAILURES * 100 / TOTAL_RUNS))
@@ -157,10 +165,25 @@ echo "[auto-run] === ACT ==="
 case "$ACTION" in
   auto-fix)
     echo "[auto-run] Running auto-fix-agent..."
-    # auto-fix-agent already handles branch creation, shadow, and push
     node "$REPO_DIR/.automation/scripts/auto-fix-agent.js" 2>&1 || {
       echo "[auto-run] auto-fix-agent exited with error (may be expected: time window, limits)"
     }
+    ;;
+
+  generate-proposals)
+    echo "[auto-run] Running self-improvement to generate proposals..."
+    node "$REPO_DIR/.automation/scripts/self-improvement-orchestrator.js" 2>&1 || true
+    # If proposals were generated, try auto-fix immediately
+    if [[ -d "$REPO_DIR/.learnings/rules-pending" ]] && \
+       [[ $(ls "$REPO_DIR/.learnings/rules-pending"/*.md 2>/dev/null | wc -l) -gt 0 ]]; then
+      PENDING=$(ls "$REPO_DIR/.learnings/rules-pending"/*.md 2>/dev/null | wc -l | tr -d ' ')
+      echo "[auto-run] Generated $PENDING proposal(s), running auto-fix-agent..."
+      node "$REPO_DIR/.automation/scripts/auto-fix-agent.js" 2>&1 || {
+        echo "[auto-run] auto-fix-agent exited with error (may be expected: time window, limits)"
+      }
+    else
+      echo "[auto-run] No proposals generated"
+    fi
     ;;
 
   diagnose)
