@@ -269,9 +269,9 @@ async function main() {
     process.exit(0);
   }
 
-  // Dev-only guard
-  if (!REPO_DIR.includes('LetMeTryAI') || REPO_DIR.includes('/prod/')) {
-    console.log(`[auto-fix] Dev-only guard: refusing to run in ${REPO_DIR}. Exiting.`);
+  // Safety guard: refuse to run in the prod directory
+  if (REPO_DIR.includes('/prod/')) {
+    console.log(`[auto-fix] Safety guard: refusing to run in prod directory (${REPO_DIR}). Exiting.`);
     process.exit(0);
   }
 
@@ -353,6 +353,20 @@ async function main() {
           throw new Error(`Tests failed with exit code ${testResult.status}`);
         }
         attemptResult.testsPassed = true;
+
+        // Shadow verification: run harness in shadow mode to verify the fix doesn't break anything
+        console.log(`[auto-fix] Running shadow verification...`);
+        const shadowCwd = path.join(worktreeDir, '.harness');
+        const shadowEnv = { ...process.env, HARNESS_MODE: 'shadow', PROJECT_DIR: worktreeDir };
+        const shadowProc = spawnSync('npx', [
+          'tsx', 'scripts/run-daily-app-profile.ts', 'nanrenbao',
+        ], { cwd: shadowCwd, encoding: 'utf-8', env: shadowEnv, timeout: 5 * 60 * 1000 });
+        if (shadowProc.status !== 0) {
+          attemptResult.shadowPassed = false;
+          throw new Error(`Shadow verification failed: ${(shadowProc.stderr || shadowProc.stdout || '').slice(0, 500)}`);
+        }
+        attemptResult.shadowPassed = true;
+        console.log(`[auto-fix] Shadow verification passed`);
 
         // Generate patch from worktree
         const patchResult = runProcess('git', ['diff', 'HEAD'], worktreeDir);
