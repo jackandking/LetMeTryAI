@@ -1,57 +1,21 @@
 /**
- * 综艺感女星投票 Survey Application
- * Logic for the "女人爱热议：综艺感十足的女明星" survey
+ * Fighter Jets Vote Application
  */
 
 const questionConfig = {
-    "title": "女人爱热议：综艺感十足的女明星",
-    "question": "你会把这一票投给谁：哪位女明星综艺感更强？",
-    "options": [
-        {
-            "value": "yang-chaoyue",
-            "label": "杨超越"
-        },
-        {
-            "value": "di-li-re-ba",
-            "label": "迪丽热巴"
-        },
-        {
-            "value": "yang-mi",
-            "label": "杨幂"
-        },
-        {
-            "value": "zhou-dongyu",
-            "label": "周冬雨"
-        }
+    title: '家庭资金优先用在哪儿？公积金用途变化下的选择',
+    question: '在公积金用途变化的背景下，您会把家庭资金优先用在哪个方向？',
+    options: [
+        { value: 'mortgage-repayment', label: '优先偿还房贷' },
+        { value: 'education-savings', label: '优先教育储蓄' },
+        { value: 'emergency-fund', label: '优先家庭应急与保障' },
+        { value: 'home-improvement', label: '优先改善家庭生活' }
     ],
-    "storageKey": "variety_star_vibes_v1.data"
+    storageKey: 'family_fund_priority.data'
 };
 
 let currentQuestion = 1;
 let voteData = {};
-
-const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
-const pageStartTime = Date.now();
-
-function logEvent(event, data = {}) {
-    const payload = {
-        event,
-        appId: questionConfig.storageKey.replace(/\.data$/, ''),
-        timestamp: Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        ...data
-    };
-    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-        navigator.sendBeacon(EVENT_ENDPOINT, JSON.stringify(payload));
-    } else if (typeof fetch !== 'undefined') {
-        fetch(EVENT_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            keepalive: true
-        }).catch(() => {});
-    }
-}
 
 function initializeApp() {
     try {
@@ -59,35 +23,13 @@ function initializeApp() {
         initializeVoteData();
         setupPageContent();
         handleResultDisplay();
-        setupEventTracking();
     } catch (error) {
         console.error('Error initializing app:', error);
     }
 }
 
-function setupEventTracking() {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    // 1. 页面加载
-    logEvent('page_load', { showAd: urlParams.get('showAd') === 'true' });
-
-    // 2. 检测广告返回状态
-    const finishedAd = urlParams.get('finishedAd');
-    if (finishedAd === 'true') {
-        logEvent('rewarded_ad_complete');
-    } else if (finishedAd === 'false') {
-        logEvent('rewarded_ad_skip');
-    }
-
-    // 3. 页面离开
-    window.addEventListener('beforeunload', () => {
-        logEvent('page_exit', { durationMs: Date.now() - pageStartTime });
-    });
-}
-
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
-
     if (urlParams.get('finishedAd') === 'false') {
         if (typeof ks !== 'undefined' && ks.navigateBack) {
             ks.navigateBack();
@@ -116,10 +58,8 @@ function setupPageContent() {
 }
 
 function attachRadioHandlers() {
-    const radios = document.querySelectorAll('input[name="womanai"]');
-    if (!radios || radios.length === 0) {
-        return;
-    }
+    const radios = document.querySelectorAll('input[name="equipment"]');
+    if (!radios || radios.length === 0) return;
 
     radios.forEach(radio => {
         radio.addEventListener('change', (event) => {
@@ -135,7 +75,6 @@ function attachRadioHandlers() {
 }
 
 function processVote(selectedLabel) {
-    logEvent('vote_complete', { option: selectedLabel });
     getConfig(questionConfig.storageKey, (data) => {
         try {
             if (data !== null && typeof data === 'object') {
@@ -161,10 +100,9 @@ function processVote(selectedLabel) {
 }
 
 function showAd() {
-    logEvent('rewarded_ad_trigger');
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
-            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=variety-star-vibes'
+            url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=family-fund-priority'
         });
         return;
     }
@@ -178,8 +116,12 @@ function displayAdFallback() {
         if (!overlay) {
             overlay = document.createElement('div');
             overlay.id = 'adOverlay';
-            overlay.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;color:#fff;flex-direction:column;';
-            overlay.innerHTML = '<div style="background:#2f4858;padding:30px;border-radius:12px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);"><h3>正在分析“女人爱热议：综艺感十足的女明星”的投票趋势...</h3><div style="margin-top:15px;width:40px;height:40px;border:4px solid #ff7f50;border-top:4px solid transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div><style>@keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}</style></div>';
+            overlay.innerHTML = `
+                <div class="ad-content">
+                    <h3>正在分析投票趋势...</h3>
+                    <div class="ad-spinner"></div>
+                </div>
+            `;
             document.body.appendChild(overlay);
         } else {
             overlay.style.display = 'flex';
@@ -198,15 +140,9 @@ function displayResults() {
     const result = document.getElementById('result');
     const showResultBtn = document.getElementById('showResultBtn');
 
-    if (questionnaire) {
-        questionnaire.style.display = 'none';
-    }
-    if (showResultBtn) {
-        showResultBtn.style.display = 'none';
-    }
-    if (result) {
-        result.style.display = 'block';
-    }
+    if (questionnaire) questionnaire.style.display = 'none';
+    if (showResultBtn) showResultBtn.style.display = 'none';
+    if (result) result.style.display = 'block';
 
     getConfig(questionConfig.storageKey, (data) => {
         if (data) {
@@ -223,29 +159,21 @@ function handleResultDisplay() {
     if (finishedAd === 'true' || finishedAd === true || finishedAd === '1') {
         const questionnaire = document.getElementById('questionnaire');
         const result = document.getElementById('result');
-        if (questionnaire) {
-            questionnaire.style.display = 'none';
-        }
-        if (result) {
-            result.style.display = 'block';
-        }
+        if (questionnaire) questionnaire.style.display = 'none';
+        if (result) result.style.display = 'block';
 
         displayResults();
     }
 }
 
 function showResult(latestVoteData) {
-    if (!latestVoteData || typeof latestVoteData !== 'object') {
-        return;
-    }
+    if (!latestVoteData || typeof latestVoteData !== 'object') return;
 
     const resultDiv = document.getElementById('result');
-    if (!resultDiv) {
-        return;
-    }
+    if (!resultDiv) return;
 
-    resultDiv.innerHTML = "<h2 style='text-align:center;color:#2f4858;'>综艺感女星投票投票结果</h2>";
-    resultDiv.innerHTML += "<p style='text-align:center;color:#7f8c8d;margin-bottom:20px;font-size:14px;'>看看大家对“女人爱热议：综艺感十足的女明星”的最新态度</p>";
+    resultDiv.innerHTML = '<h2>家庭资金优先用在哪儿？公积金用途变化下的选择结果</h2>';
+    resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);
     resultDiv.appendChild(barChart);
@@ -267,23 +195,22 @@ function createBarChart(latestVoteData) {
 
         const bar = document.createElement('div');
         bar.className = 'bar';
+        if (count === maxCount && count > 0) {
+            bar.classList.add('top-vote');
+        }
         bar.style.height = '2px';
 
         requestAnimationFrame(() => {
             bar.style.height = `${Math.max(count * scale, 2)}px`;
         });
 
-        if (count === maxCount && count > 0) {
-            bar.style.background = 'linear-gradient(to top, #ff6b35, #ffb199)';
-        }
-
         const barLabel = document.createElement('div');
         barLabel.className = 'bar-label';
-        barLabel.innerText = `${count}`;
+        barLabel.textContent = `${count}`;
 
         const optionLabel = document.createElement('div');
-        optionLabel.className = 'jet-label';
-        optionLabel.innerText = option.split(' ')[0];
+        optionLabel.className = 'option-label';
+        optionLabel.textContent = option;
 
         barContainer.appendChild(bar);
         barContainer.appendChild(barLabel);
@@ -298,15 +225,15 @@ function addSummaryStatistics(container, latestVoteData) {
     const total = Object.values(latestVoteData).reduce((sum, count) => sum + count, 0);
 
     const statsDiv = document.createElement('div');
-    statsDiv.style.cssText = 'text-align:center; margin-top:20px; padding-top:15px; border-top:1px dashed #bdc3c7;';
+    statsDiv.className = 'stats-container';
 
     const totalVotes = document.createElement('p');
-    totalVotes.style.fontWeight = 'bold';
-    totalVotes.innerText = `总参与人数: ${total}`;
+    totalVotes.className = 'total-votes';
+    totalVotes.innerHTML = `总参与人数: <span>${total}</span>`;
 
     const timestamp = document.createElement('p');
-    timestamp.style.cssText = 'font-size: 12px; color: #95a5a6; margin-top: 5px;';
-    timestamp.innerText = `最后更新: ${new Date().toLocaleString()}`;
+    timestamp.className = 'timestamp';
+    timestamp.textContent = `最后更新: ${new Date().toLocaleString('zh-CN')}`;
 
     statsDiv.appendChild(totalVotes);
     statsDiv.appendChild(timestamp);

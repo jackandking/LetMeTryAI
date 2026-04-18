@@ -1,0 +1,20 @@
+{
+  "id": "gouji-kan-xinpian-kaoliao",
+  "name": "芯片购机指南",
+  "description": "围绕芯片相关的四大决策维度（性能、续航与发热、拍照与多媒体、系统生态与更新）设计投票，页面以图文并茂呈现每个选项的直观考量点，便于手机阅读与社交分享。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "芯片",
+    "购机",
+    "性能",
+    "续航",
+    "拍照",
+    "系统生态",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "gouji-kan-xinpian-kaoliao/images/cpu-gpu-performance.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-16T17:01:02.144Z"
+}

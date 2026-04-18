@@ -1,0 +1,19 @@
+{
+  "id": "buy-phone-battery-claims",
+  "name": "续航说明投票",
+  "description": "围绕买手机时常见的续航说明类型，提供清晰对比选项与简短说明，帮助用户快速判断哪类说法更可信并分享看法。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "续航",
+    "电池",
+    "实测",
+    "快充",
+    "手机评测",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "buy-phone-battery-claims/images/manufacturer-claim.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-17T17:00:58.430Z"
+}

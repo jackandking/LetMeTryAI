@@ -1,0 +1,20 @@
+{
+  "id": "family-fund-priority",
+  "name": "家长爱·资金选择",
+  "description": "在公积金用途与使用规则调整的背景下，家长需要在偿还房贷、孩子教育储蓄、应急保障和改善家庭生活之间做出优先级判断。通过投票了解不同家庭的资金侧重，便于分享实用经验与工具建议。",
+  "category": "家庭理财",
+  "profileId": "parent-tools",
+  "keywords": [
+    "公积金",
+    "家庭理财",
+    "教育储蓄",
+    "房贷",
+    "应急基金",
+    "亲子生活",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "family-fund-priority/images/mortgage-repayment.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-16T19:00:45.312Z"
+}
