@@ -1,0 +1,19 @@
+{
+  "id": "spring-parent-outing",
+  "name": "春季亲子出游投票页",
+  "description": "对比短途半日、一天轻旅行、周末多日与在家主题亲子日四种安排，展示适配场景、准备要点与互动建议，适合手机阅读与社交转发。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "亲子出游",
+    "春游",
+    "家庭活动",
+    "亲子沟通",
+    "育儿工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "spring-parent-outing/images/short-half-day.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-17T19:00:49.212Z"
+}

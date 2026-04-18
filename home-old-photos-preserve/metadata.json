@@ -1,0 +1,19 @@
+{
+  "id": "home-old-photos-preserve",
+  "name": "老照片守护投票",
+  "description": "为老年用户与其家人设计的轻量投票页，展示整理、保存、展示与再利用多种做法，支持图文说明与移动端分享，便于收集家庭保存习惯与交流故事。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "老照片",
+    "数字化",
+    "家族记忆",
+    "相册",
+    "手工",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "home-old-photos-preserve/images/digitize-and-backup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-16T18:00:44.449Z"
+}
