@@ -123,6 +123,7 @@ async function main() {
 
     const generator = new ImageGenerator({ provider: 'minimax' });
     const imagesDir = path.join(appDir, 'images');
+    const successfulOptions = [];
 
     for (const opt of voteOptions) {
         const prompt = buildImagePrompt(pageTitle, opt);
@@ -135,29 +136,49 @@ async function main() {
             }
 
             const outputName = `${opt.value}.jpg`;
+            const tmpPath = path.join(imagesDir, `${opt.value}.tmp.jpg`);
             const outputPath = path.join(imagesDir, outputName);
 
-            await generator.downloadImage(result.url, outputPath);
+            await generator.downloadImage(result.url, tmpPath);
+
+            // Verify the downloaded file is valid (non-empty)
+            const stat = await import('node:fs').then(m => m.statSync(tmpPath));
+            if (stat.size < 1000) {
+                throw new Error(`Downloaded image too small (${stat.size} bytes), likely corrupt`);
+            }
+
+            // Atomic replace: rename tmp to final
+            const { renameSync } = await import('node:fs');
+            renameSync(tmpPath, outputPath);
+
+            successfulOptions.push(opt);
             log('saved', `${outputName} -> ${outputPath}`);
         } catch (err) {
             log('error', `Failed to generate image for ${opt.value}: ${err.message}`);
+            // Clean up tmp file if exists
+            const tmpPath = path.join(imagesDir, `${opt.value}.tmp.jpg`);
+            try { const { unlinkSync } = await import('node:fs'); unlinkSync(tmpPath); } catch {}
         }
     }
 
-    // Update index.html references to .jpg
-    const indexHtmlPath = path.join(appDir, 'index.html');
-    if (existsSync(indexHtmlPath)) {
-        let htmlContent = readFileSync(indexHtmlPath, 'utf8');
-        const originalHtml = htmlContent;
-        for (const opt of voteOptions) {
-            const oldRef = `images/${opt.imageFile}`;
-            const newRef = `images/${opt.value}.jpg`;
-            htmlContent = htmlContent.replaceAll(oldRef, newRef);
+    // Only update HTML for images that were actually generated successfully
+    if (successfulOptions.length > 0) {
+        const indexHtmlPath2 = path.join(appDir, 'index.html');
+        if (existsSync(indexHtmlPath2)) {
+            let htmlContent = readFileSync(indexHtmlPath2, 'utf8');
+            const originalHtml = htmlContent;
+            for (const opt of successfulOptions) {
+                const oldRef = `images/${opt.imageFile}`;
+                const newRef = `images/${opt.value}.jpg`;
+                htmlContent = htmlContent.replaceAll(oldRef, newRef);
+            }
+            if (htmlContent !== originalHtml) {
+                writeFileSync(indexHtmlPath2, htmlContent, 'utf8');
+                log('html', `Updated ${successfulOptions.length}/${voteOptions.length} image references`);
+            }
         }
-        if (htmlContent !== originalHtml) {
-            writeFileSync(indexHtmlPath, htmlContent, 'utf8');
-            log('html', `Updated image references in ${indexHtmlPath}`);
-        }
+    } else {
+        log('warn', 'No images generated successfully — HTML left unchanged');
     }
 
     // Git commit
