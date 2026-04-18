@@ -5,7 +5,7 @@ import type { Task, TaskState, TopicCandidate } from '../types/index.js';
 import { ReActLoop } from '../workflows/react-loop.js';
 import { ConstraintsEngine, ConstraintViolationError } from '../constraints/engine.js';
 import { ToolRegistry } from '../tools/registry.js';
-import { loadProfileConfig, PATHS } from '../config/index.js';
+import { loadProfileConfig, getHarnessMode, PATHS } from '../config/index.js';
 import { generateScaffold } from '../services/scaffold.js';
 import { 
   buildTopicSelectionPrompt, 
@@ -226,13 +226,21 @@ export class DailyAppAgent {
     // 3. Materialize files
     this.loop.registerAction('materialize', async (state) => {
       logger.info('Step: materialize');
-      
-      const { topic, scaffold } = state.data as { 
-        topic: TopicCandidate; 
+
+      const mode = getHarnessMode();
+      const { topic, scaffold } = state.data as {
+        topic: TopicCandidate;
         scaffold: ReturnType<typeof generateScaffold>;
       };
-      
-      const appDir = join(PATHS.projectRoot, scaffold.outputDir);
+
+      const outputRoot = mode === 'shadow'
+        ? join('/tmp', 'shadow-output', this.profileId)
+        : PATHS.projectRoot;
+      const appDir = join(outputRoot, scaffold.outputDir);
+
+      if (mode === 'shadow') {
+        logger.info('Shadow mode: materializing to temp directory', { appDir });
+      }
       
       // Write files
       for (const [filename, content] of Object.entries(scaffold.files)) {
@@ -300,8 +308,18 @@ export class DailyAppAgent {
     // 5. Git operations
     this.loop.registerAction('git_push', async (state) => {
       logger.info('Step: git_push');
-      
-      const { topic, appDir } = state.data as { topic: TopicCandidate; appDir: string };
+
+      const mode = getHarnessMode();
+      const { topic } = state.data as { topic: TopicCandidate; appDir: string };
+
+      if (mode === 'shadow') {
+        logger.info('Shadow mode: skipping git push', {
+          appId: topic.appId,
+          wouldCommit: `Add daily app: ${topic.appName}`,
+        });
+        return { next: 'deploy', data: { ...state.data, gitPushed: false, shadowMode: true } };
+      }
+
       const relativeDir = topic.appId;
       
       // Check git status
@@ -344,9 +362,22 @@ export class DailyAppAgent {
     // 7. Kuaishou publish - Distribution task (应用推广)
     this.loop.registerAction('publish', async (state) => {
       logger.info('Step: publish');
-      
+
+      const mode = getHarnessMode();
       const { topic, deployedUrl } = state.data as { topic: TopicCandidate; deployedUrl: string };
-      
+
+      if (mode === 'shadow') {
+        logger.info('Shadow mode: skipping Kuaishou publish', {
+          appId: topic.appId,
+          appName: topic.appName,
+          wouldPublishTo: deployedUrl,
+        });
+        return {
+          next: 'send_report',
+          data: { ...state.data, published: false, shadowMode: true },
+        };
+      }
+
       logger.info('Publishing to Kuaishou via API', { appId: topic.appId, url: deployedUrl });
       
       const result = await publishToKuaishou(
@@ -392,7 +423,8 @@ export class DailyAppAgent {
     // 8. Send report email
     this.loop.registerAction('send_report', async (state) => {
       logger.info('Step: send_report');
-      
+
+      const mode = getHarnessMode();
       const { topic, deployedUrl, planId, published, publishError } = state.data as {
         topic: TopicCandidate;
         deployedUrl: string;
@@ -400,7 +432,15 @@ export class DailyAppAgent {
         published?: boolean;
         publishError?: string;
       };
-      
+
+      if (mode === 'shadow') {
+        logger.info('Shadow mode: skipping report email', {
+          appId: topic.appId,
+          wouldSendTo: process.env.DAILY_REPORT_TO || 'jackandking@163.com',
+        });
+        return { next: 'done', data: { ...state.data, reportSent: false, shadowMode: true } };
+      }
+
       const toEmail = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
       const subject = `[LetMeTryAI] Daily app published: ${topic.appName}`;
       const body = [
@@ -441,11 +481,17 @@ export class DailyAppAgent {
       metadata: { profile: this.profile.name },
     };
 
-    logger.info('Starting DailyAppAgent', { 
-      taskId: task.id, 
+    logger.info('Starting DailyAppAgent', {
+      taskId: task.id,
       profile: this.profileId,
       profileName: this.profile.name,
+      mode: getHarnessMode(),
     });
+
+    const mode = getHarnessMode();
+    if (mode === 'shadow') {
+      logger.info('Running in shadow mode: git push, Kuaishou publish, and email will be skipped');
+    }
 
     try {
       const state = await this.loop.run(task, {
