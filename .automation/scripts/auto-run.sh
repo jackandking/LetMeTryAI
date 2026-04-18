@@ -50,10 +50,16 @@ git checkout main --quiet 2>/dev/null || true
 git pull origin main --quiet 2>/dev/null || true
 
 # ============================================================
-# PHASE 1: OBSERVE — collect data from prod
+# PHASE 1: OBSERVE — collect data from prod + check regression
 # ============================================================
 echo ""
 echo "[auto-run] === OBSERVE ==="
+
+# Check for regression from previous auto-promote
+echo "[auto-run] Running regression check..."
+PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/auto-monitor.js" check-and-rollback 2>&1 || {
+  echo "[auto-run] Regression detected and rollback attempted"
+}
 
 OBSERVE_RESULT=""
 FAILURES=0

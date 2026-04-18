@@ -60,6 +60,13 @@ if [[ "$AUTO_PROMOTE" != "true" ]]; then
   exit 0
 fi
 
+# Snapshot metrics baseline before merge
+echo ""
+echo "[auto-promote] Snapshotting metrics baseline..."
+PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/auto-monitor.js" baseline 2>&1 || {
+  echo "[auto-promote] WARNING: baseline snapshot failed, continuing anyway"
+}
+
 # Merge
 echo ""
 echo "[auto-promote] Merging $BRANCH to main..."
