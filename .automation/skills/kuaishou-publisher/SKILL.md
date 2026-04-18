@@ -11,7 +11,7 @@ Reusable publication workflow for Kuaishou Spark Plan.
 
 This skill exposes the repository's existing Kuaishou publication workflow as a stable, reusable interface.
 
-It does **not** replace `scripts/publish-kuaishou-task.js`. Instead, it:
+It does **not** replace the publish-kuaishou-task.js script. Instead, it:
 
 - normalizes publish inputs
 - prepares the command to run
@@ -21,9 +21,8 @@ It does **not** replace `scripts/publish-kuaishou-task.js`. Instead, it:
 
 ## Source of Truth
 
-- Script: `scripts/publish-kuaishou-task.js`
-- Guide: `docs/MCP-KUAISHOU-PUBLISH.md`
-- Related skill: `kuaishou-scraper`
+- Script: publish-kuaishou-task.js (located in .automation/scripts/)
+- Related skill: kuaishou-scraper
 
 ## Inputs
 
@@ -64,7 +63,7 @@ Normalizes input and fills sensible defaults from the existing repo workflow.
 
 ### `buildPublishCommand(spec)`
 
-Returns the exact `node scripts/publish-kuaishou-task.js ...` command.
+Returns the exact node publish-kuaishou-task.js ... command.
 
 ### `buildPublishChecklist(spec)`
 
@@ -94,7 +93,7 @@ const publishPlan = buildPublishPlan({
 
 1. Deploy first.
 2. Reuse `kuaishou_auth.json` if available.
-3. The browser automation is handled by `scripts/publish-kuaishou-task.js`.
+3. The browser automation is handled by publish-kuaishou-task.js.
 4. The script now supports `SOURCE_TASK_ID` and exits non-zero when submission is not confirmed.
 5. If selectors drift, update the script rather than forking publisher logic here.
 

@@ -10,18 +10,12 @@ Automated report generation and email delivery.
 ## Quick Start
 
 ```javascript
-import { ReportSender } from './scripts/sender.js';
+import { sendEmail } from './.automation/scripts/send_email.py';
 
-const sender = new ReportSender({
-    apiKey: process.env.AGENTMAIL_API_KEY,
-    inboxId: 'letmetry@agentmail.to'
-});
-
-await sender.send({
+await sendEmail({
     to: 'user@example.com',
     subject: 'Data Report - 36 tasks',
-    data: scrapedData,
-    template: 'kuaishou',
+    body: reportBody,
     attachments: ['data.csv', 'data.json']
 });
 ```
@@ -31,18 +25,10 @@ await sender.send({
 ### Pattern 1: Simple Data Report
 
 ```javascript
-import { sendDataReport } from './scripts/sender.js';
-
-await sendDataReport({
+await sendEmail({
     to: 'jackandking@163.com',
     subject: 'Kuaishou Tasks Report',
-    title: '快手任务统计报告',
-    data: tasks,
-    summary: {
-        totalTasks: tasks.length,
-        totalExposure: 68085,
-        totalClicks: 7713
-    },
+    body: reportBody,
     attachments: ['metrics/kuaishou/all_36_stats.csv']
 });
 ```
@@ -151,39 +137,28 @@ await send({
 ### JSON to Markdown Table
 
 ```javascript
-import { toMarkdownTable } from './scripts/formatters.js';
-
-const table = toMarkdownTable(tasks, [
-    { key: 'planId', header: 'ID' },
-    { key: 'name', header: 'Name' },
-    { key: 'stats.组件曝光数', header: 'Exposure' }
-]);
+// Format data as markdown table for email body
+const table = tasks.map(t => `| ${t.planId} | ${t.name} | ${t.stats?.组件曝光数 || '--'} |`).join('\n');
 ```
 
 ### Summary Statistics
 
 ```javascript
-import { calculateStats } from './scripts/formatters.js';
-
-const stats = calculateStats(tasks, {
-    exposure: t => parseInt(t.stats?.组件曝光数) || 0,
-    clicks: t => parseInt(t.stats?.组件点击数) || 0,
-    daren: t => parseInt(t.stats?.已履单达人数量) || 0
-});
-
-// Returns: { sum, avg, max, min, count }
+// Calculate summary statistics manually
+const stats = {
+    totalExposure: tasks.reduce((sum, t) => sum + (parseInt(t.stats?.组件曝光数) || 0), 0),
+    totalClicks: tasks.reduce((sum, t) => sum + (parseInt(t.stats?.组件点击数) || 0), 0),
+    totalDaren: tasks.reduce((sum, t) => sum + (parseInt(t.stats?.已履单达人数量) || 0), 0)
+};
 ```
 
 ### Top N Items
 
 ```javascript
-import { getTopN } from './scripts/formatters.js';
-
-const top10 = getTopN(tasks, {
-    by: t => parseInt(t.stats?.组件曝光数) || 0,
-    n: 10,
-    descending: true
-});
+// Get top N items by exposure
+const top10 = tasks
+    .sort((a, b) => (parseInt(b.stats?.组件曝光数) || 0) - (parseInt(a.stats?.组件曝光数) || 0))
+    .slice(0, 10);
 ```
 
 ## Configuration
@@ -266,60 +241,23 @@ try {
 ## Integration with Crawlers
 
 ```javascript
-import { KuaishouCrawler } from '../kuaishou-crawler/scripts/crawler.js';
-import { ReportSender } from './scripts/sender.js';
-
 async function scrapeAndSend() {
-    // Scrape data
-    const crawler = new KuaishouCrawler();
-    await crawler.init();
-    const data = await crawler.scrapeAllTasks();
-    await crawler.saveResults(data);
-    await crawler.close();
+    // Scrape data using existing automation scripts
+    // e.g., node .automation/scripts/daily_kuaishou_report.js
     
-    // Generate and send report
-    const sender = new ReportSender();
-    
-    const stats = calculateStats(data);
-    const topTasks = getTopN(data, { by: t => t.stats?.组件曝光数, n: 10 });
-    
-    await sender.send({
-        to: 'manager@company.com',
-        subject: `Daily Kuaishou Report - ${data.length} tasks`,
-        template: 'kuaishou',
-        templateData: {
-            title: '快手数据日报',
-            date: new Date().toISOString(),
-            totalTasks: data.length,
-            ...stats,
-            topTasks,
-            allTasks: data
-        },
-        attachments: [
-            'metrics/kuaishou/latest.csv',
-            'metrics/kuaishou/latest.json'
-        ]
-    });
+    // Send report via Python email script
+    // .automation/scripts/send_email.py
 }
-
-// Schedule daily
-schedule('0 9 * * *', scrapeAndSend);  // 9 AM daily
 ```
 
 ## CLI Usage
 
 ```bash
-# Send existing data file
-node scripts/sender.js --file data.json --to user@example.com
+# Send report via Python script
+python3 .automation/scripts/send_email.py "Subject" "to@example.com" /path/to/report.txt
 
-# Send with template
-node scripts/sender.js --file data.json --template kuaishou --to user@example.com
-
-# Preview (don't send)
-node scripts/sender.js --file data.json --template kuaishou --preview
-
-# Send to multiple recipients
-node scripts/sender.js --file data.json --to user1@example.com,user2@example.com
+# Or use the daily report orchestrator
+node .automation/scripts/daily-orchestrator.js
 ```
 
 ## Examples

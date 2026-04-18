@@ -81,16 +81,16 @@ This skill keeps the selector generic and pushes audience differences into profi
 
 ### Profile
 
-Load from `../brand-profiles/scripts/profile-loader.js`.
+Load from .automation/skills/brand-profiles/scripts/profile-loader.js.
 
 ```javascript
-import { getBrandProfile } from '../brand-profiles/scripts/profile-loader.js';
+import { getBrandProfile } from '../../../.automation/skills/brand-profiles/scripts/profile-loader.js';
 ```
 
 ## Quick Start
 
 ```javascript
-import { getBrandProfile } from '../brand-profiles/scripts/profile-loader.js';
+import { getBrandProfile } from '../../../.automation/skills/brand-profiles/scripts/profile-loader.js';
 import { rankTopicCandidates, buildTopicBrief } from './scripts/topic-selector.js';
 
 const profile = getBrandProfile('womanai');
@@ -126,7 +126,7 @@ Produces a compact brief that downstream skills can feed into app scaffolding or
 ## Composition Pattern
 
 ```javascript
-import { getBrandProfile } from '../brand-profiles/scripts/profile-loader.js';
+import { getBrandProfile } from '../../../.automation/skills/brand-profiles/scripts/profile-loader.js';
 import { rankTopicCandidates } from './scripts/topic-selector.js';
 
 const profile = getBrandProfile('nanrenbao');
