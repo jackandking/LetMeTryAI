@@ -489,6 +489,24 @@ async function main() {
       fs.unlinkSync(proposal.filePath);
       console.log(`[auto-fix] Removed processed proposal: ${proposal.file}`);
     }
+
+    // Auto-promote safe patterns if configured
+    if (AUTO_FIX_MERGE_MODE === 'auto' && SAFE_AUTO_MERGE_PATTERNS.includes(s.patternKey)) {
+      console.log(`[auto-fix] Auto-promoting safe pattern: ${s.patternKey}`);
+      const promoteScript = path.join(REPO_DIR, '.automation', 'scripts', 'auto-promote.sh');
+      const promoteResult = spawnSync('bash', [promoteScript, s.branchName], {
+        cwd: REPO_DIR,
+        encoding: 'utf-8',
+        env: { ...process.env, AUTO_PROMOTE: 'true', PROD_DIR: process.env.PROD_DIR || '' },
+      });
+      if (promoteResult.status === 0) {
+        console.log(`[auto-fix] Auto-promote succeeded for ${s.branchName}`);
+        s.autoPromoted = true;
+      } else {
+        console.error(`[auto-fix] Auto-promote failed: ${promoteResult.stderr || promoteResult.stdout}`);
+        s.autoPromoted = false;
+      }
+    }
   }
 }
 
