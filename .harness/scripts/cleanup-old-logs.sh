@@ -15,6 +15,13 @@ LOG_DIRS=(
   "$PROJECT_DIR/.harness/.local/logs/daily-app-cron"
 )
 
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+LOG_FILE="$PROJECT_DIR/.harness/.local/logs/cleanup-old-logs-${TIMESTAMP}.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+
+# Unify all output into a single log file
+exec > "$LOG_FILE" 2>&1
+
 echo "[cleanup-old-logs] started at $(date -Iseconds)"
 
 for dir in "${LOG_DIRS[@]}"; do

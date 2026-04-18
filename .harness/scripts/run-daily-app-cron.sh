@@ -27,6 +27,9 @@ LOG_FILE="${HARNESS_CRON_LOG_FILE:-$LOG_DIR/${SAFE_PROFILE_ID}.log}"
 
 mkdir -p "$LOG_DIR"
 
+# Unify all output into the per-run log file
+exec > "$LOG_FILE" 2>&1
+
 export PROJECT_DIR
 export HARNESS_MODE="${HARNESS_MODE:-production}"
 export HARNESS_CRON_LOG_FILE="$LOG_FILE"

@@ -8,6 +8,12 @@ REPORT_SCRIPT="${DAILY_REPORT_SCRIPT:-$PROJECT_DIR/.harness/scripts/daily-kuaish
 NODE_BIN="${DAILY_NODE_BIN:-$(command -v node)}"
 GIT_BIN="${DAILY_GIT_BIN:-$(command -v git)}"
 EMAIL_TO="${KUAISHOU_EMAIL_TO:-jackandking@163.com}"
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+LOG_FILE="$PROJECT_DIR/.harness/.local/logs/daily-report-${TIMESTAMP}.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+
+# Unify all output into a single log file
+exec > "$LOG_FILE" 2>&1
 
 echo "[run-daily-report] started_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 echo "[run-daily-report] project_dir=$PROJECT_DIR"
