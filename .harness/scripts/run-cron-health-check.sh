@@ -21,6 +21,10 @@ EMAIL_SUBJECT="[Cron体检] ${DATE_STR} 定时任务健康报告"
 
 mkdir -p "$REPORT_DIR"
 
+LOG_FILE="$LOG_DIR/cron-health-check-${TIMESTAMP}.log"
+# Unify all output into a single log file
+exec > "$LOG_FILE" 2>&1
+
 # ───────────────────────────────────────────────────────────────
 # Helper functions
 # ───────────────────────────────────────────────────────────────
