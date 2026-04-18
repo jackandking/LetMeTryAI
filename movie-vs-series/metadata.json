@@ -1,0 +1,19 @@
+{
+  "id": "movie-vs-series",
+  "name": "观影对比",
+  "description": "把大银幕的沉浸体验与连续剧的连载讨论做成投票，帮助内容侧产生话题和评论互动。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电影",
+    "网剧",
+    "观影",
+    "追剧",
+    "娱乐讨论",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "movie-vs-series/images/watch-movie.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-18T17:02:47.912Z"
+}
