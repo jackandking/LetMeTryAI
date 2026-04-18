@@ -1,0 +1,19 @@
+{
+  "id": "after-school-time-plan",
+  "name": "家长爱·课外时间投票",
+  "description": "针对家长如何分配孩子课外时间（辅导、兴趣、日常练习、家庭活动）做出简短对比，适合手机投票页与分享。投票结果作为经验参考，不构成医疗或专业诊断建议。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "课外学习",
+    "时间管理",
+    "亲子沟通",
+    "兴趣培养",
+    "家庭生活",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "after-school-time-plan/images/fixed-tutoring-home-review.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-18T19:00:59.282Z"
+}
