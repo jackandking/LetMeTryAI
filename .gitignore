@@ -199,4 +199,4 @@ ref/snowpark_config.py
 explorations/
 
 # Temporary self-improvement report drafts
-.learnings/report-latest.txt
+.learnings/

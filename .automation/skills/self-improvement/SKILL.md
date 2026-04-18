@@ -184,43 +184,17 @@ for (const issue of issues) {
 
 ## Scripts
 
-### analyze-logs.ts
+The following analysis scripts are planned but not yet implemented:
 
-Analyze execution logs and identify patterns:
-
-```bash
-npx tsx scripts/analyze-logs.ts --task video_generation --days 7
-```
-
-### diagnose-failure.ts
-
-Diagnose specific failure types:
-
-```bash
-npx tsx scripts/diagnose-failure.ts --error "ffmpeg failed" --context
-```
-
-### generate-fix.ts
-
-Generate fix suggestions:
-
-```bash
-npx tsx scripts/generate-fix.ts --file src/services/video-generator.ts --issue timeout
-```
-
-### validate-fix.ts
-
-Validate proposed fixes:
-
-```bash
-npx tsx scripts/validate-fix.ts --fix fix.patch --tests
-```
+- **analyze-logs.ts** - Analyze execution logs and identify patterns
+- **diagnose-failure.ts** - Diagnose specific failure types
+- **generate-fix.ts** - Generate fix suggestions
+- **validate-fix.ts** - Validate proposed fixes
 
 ## References
 
 - `references/failure-patterns.md` - Common failure patterns and solutions
 - `references/performance-tips.md` - Performance optimization guidelines
-- `references/skill-templates.md` - Templates for skill improvements
 
 ## Best Practices
 

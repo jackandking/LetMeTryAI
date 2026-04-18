@@ -38,8 +38,21 @@ function parseMdFile(filePath) {
   const patternMatch = content.match(/\*\*Pattern-Key\*\*:\s*(\S+)/);
   const areaMatch = content.match(/\*\*Area\*\*:\s*(\S+)/);
   const summaryMatch = content.match(/### Summary\n+(.+?)(?:\n{2,}|\n###)/s);
-  const dateMatch = path.basename(filePath).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  // Support both "YYYY-MM-DD-xxx.md" and "ERR-YYYYMMDD-NNN-xxx.md" filename patterns
+  let dateMatch = path.basename(filePath).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!dateMatch) {
+    dateMatch = path.basename(filePath).match(/ERR-(\d{4})(\d{2})(\d{2})/);
+  }
+  // Fallback to **Logged** field in content
+  const loggedMatch = content.match(/\*\*Logged\*\*:\s*(\d{4})-(\d{2})-(\d{2})/);
   const idMatch = content.match(/##\s*\[(\S+)\]/);
+
+  let parsedDate = '';
+  if (dateMatch) {
+    parsedDate = `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`;
+  } else if (loggedMatch) {
+    parsedDate = `${loggedMatch[1]}-${loggedMatch[2]}-${loggedMatch[3]}`;
+  }
 
   return {
     id: idMatch ? idMatch[1] : path.basename(filePath, '.md'),
@@ -48,7 +61,7 @@ function parseMdFile(filePath) {
     patternKey: patternMatch ? patternMatch[1] : '',
     area: areaMatch ? areaMatch[1] : 'unknown',
     summary: summaryMatch ? summaryMatch[1].trim() : '',
-    date: dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : '',
+    date: parsedDate,
   };
 }
 

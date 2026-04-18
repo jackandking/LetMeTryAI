@@ -363,6 +363,14 @@ app-name/
 6. **After `git push` in dev (`/Users/weiping/LetMeTryAI`), immediately `git pull --ff-only` in prod (`/Users/weiping/prod/LetMeTryAI`) to catch merge conflicts or deployment issues early**
 7. **NEVER modify tracked files in prod (`/Users/weiping/prod/LetMeTryAI`) directly (e.g., `cp`, `sed`, manual edits). All prod updates must go through `dev → commit → push → prod pull`. Any exception requires explicit user approval.**
 
+### Skills Maintenance
+All `.agents/skills/<skill-name>/SKILL.md` files are the canonical documentation for that skill. **Stale references silently break automation.**
+
+- **Referenced paths must exist**: Every file path or script referenced in `SKILL.md` (backtick-quoted or parenthesized) must point to an existing file.
+- **Referenced scripts must be executable**: If `SKILL.md` mentions running a script (e.g. `node scripts/foo.js`), the script file must exist and be runnable.
+- **Keep references in sync**: When moving, renaming, or deleting a file that is referenced by any `SKILL.md`, update the corresponding skill documentation in the same commit.
+- **Run `skill-health-check` after structural changes**: If you refactor scripts or reorganize directories, run `node .automation/scripts/skill-health-check.js` to verify no references were broken.
+
 ### Database Schema Changes
 - Document in `[feature]/database-schema.sql`
 - Update MCP server queries if needed

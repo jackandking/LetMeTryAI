@@ -172,5 +172,5 @@ async function scrapeAllPages(startUrl) {
 
 ## References
 
-- `references/playwright_best_practices.md`
-- `references/common_selectors.md`
+- Playwright official documentation: https://playwright.dev
+- Common selectors and best practices are documented inline above

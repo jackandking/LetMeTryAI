@@ -19,9 +19,10 @@ Complete solution for scraping Kuaishou Creator Platform.
 
 ## Quick Start
 
-```javascript
-import { KuaishouCrawler } from './scripts/crawler.js';
+The crawler is used as a conceptual module. In practice, Kuaishou data extraction is handled by the scripts in .automation/scripts/ and .harness/scripts/.
 
+```javascript
+// Conceptual usage pattern
 const crawler = new KuaishouCrawler({
     authFile: 'kuaishou_auth.json',
     outputDir: 'metrics/kuaishou'
@@ -41,8 +42,6 @@ console.log(`Scraped ${results.length} tasks`);
 ### Pattern 1: Full Scrape (All Tasks + Statistics)
 
 ```javascript
-import { KuaishouCrawler } from './scripts/crawler.js';
-
 async function fullScrape() {
     const crawler = new KuaishouCrawler();
     
@@ -264,46 +263,28 @@ try {
 
 ```javascript
 // Combine with report-sender
-import { KuaishouCrawler } from '../kuaishou-crawler/scripts/crawler.js';
-import { sendReport } from '../report-sender/scripts/sender.js';
-
 async function scrapeAndReport() {
-    const crawler = new KuaishouCrawler();
-    await crawler.init();
+    // Scrape data using daily_kuaishou_report.js
+    // or run-kuaishou-scrape.sh
     
-    const data = await crawler.scrapeAllTasks();
-    await crawler.close();
-    
-    // Send email report
-    await sendReport({
-        to: 'user@example.com',
-        subject: `Kuaishou Report - ${data.length} tasks`,
-        data,
-        attachments: [
-            'metrics/kuaishou/kuaishou_tasks.csv',
-            'metrics/kuaishou/kuaishou_tasks.json'
-        ]
-    });
+    // Send email report via send_email.py
 }
 ```
 
 ## CLI Usage
 
 ```bash
-# Full scrape
-node scripts/crawler.js --full
+# Full scrape (run from repo root)
+node .automation/scripts/daily_kuaishou_report.js
 
 # Task list only
-node scripts/crawler.js --list-only
+node .automation/scripts/fetch-task-list-smart.js
 
-# Specific tasks by ID
-node scripts/crawler.js --ids 167291,64508,54709
+# Statistics extraction
+node .automation/scripts/fetch-task-stats.js
 
 # Batch processing
-node scripts/crawler.js --batch-size 10
-
-# Custom output directory
-node scripts/crawler.js --output ./my-data
+node .automation/scripts/fetch-all-tasks-paginated.js
 ```
 
 ## Troubleshooting
