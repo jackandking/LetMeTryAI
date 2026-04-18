@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "email": "jackandking@163.com",
+  "harness": {
+    "profiles": {
+      "nanrenbao": {
+        "enabled": true,
+        "topicSelectorTime": "00:05",
+        "dailyAppRunTime": "01:00",
+        "appsPerRun": 1
+      },
+      "elder-love": {
+        "enabled": true,
+        "topicSelectorTime": "00:10",
+        "dailyAppRunTime": "02:00",
+        "appsPerRun": 1
+      },
+      "parent-tools": {
+        "enabled": true,
+        "topicSelectorTime": "00:15",
+        "dailyAppRunTime": "03:00",
+        "appsPerRun": 1
+      },
+      "womanai": {
+        "enabled": true,
+        "topicSelectorTime": "00:20",
+        "dailyAppRunTime": "04:00",
+        "appsPerRun": 1
+      }
+    },
+    "dailyReportTime": "06:00",
+    "hotTaskImageTime": "11:00",
+    "hotTaskPromoTime": "11:30",
+    "followIngestTime": "14:00",
+    "followWorkerInterval": "*/5",
+    "healthCheckTime": "20:00",
+    "logCleanupDay": "0",
+    "logCleanupTime": "03:00"
+  },
+  "auto": {
+    "runTime": "11:00",
+    "circuitBreakerTime": "20:30",
+    "logScannerTime": "21:00"
+  }
+}
