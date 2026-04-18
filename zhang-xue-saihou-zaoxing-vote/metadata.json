@@ -1,0 +1,19 @@
+{
+  "id": "zhang-xue-saihou-zaoxing-vote",
+  "name": "张雪造型投票",
+  "description": "面向手机用户的图文投票页，展示张雪赛后四种风格造型（妆容+发型+穿搭），鼓励讨论妆容与穿搭亮点，避免商业推广内容，利于社交分享与评论。",
+  "category": "明星",
+  "profileId": "womanai",
+  "keywords": [
+    "张雪",
+    "赛后造型",
+    "美妆",
+    "时尚",
+    "明星造型",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "zhang-xue-saihou-zaoxing-vote/images/qingxin-yundong.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-18T20:00:55.699Z"
+}
