@@ -27,8 +27,8 @@ LOG_FILE="$LOG_DIR/${JOB_NAME}-${TIMESTAMP}.log"
 
 mkdir -p "$LOG_DIR"
 
-# Extract ENV=val arguments, pass the rest as command
-while [[ $# -gt 0 && "$1" == *=* && "$1" != */* ]]; do
+# Extract ENV=val arguments (key must be uppercase letters/underscore, value can be anything)
+while [[ $# -gt 0 ]] && echo "$1" | grep -qE '^[A-Z_][A-Z_0-9]*='; do
   export "$1"
   shift
 done
