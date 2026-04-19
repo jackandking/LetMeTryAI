@@ -1,0 +1,19 @@
+{
+  "id": "queue-for-popular-snack-shop",
+  "name": "零食排队投票",
+  "description": "围绕街头或社交媒体刷屏的热门零食店是否值得排队展开投票。页面适配手机阅读，图文结合展示四类典型态度，便于用户快速选择并产生讨论与转发。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "零食",
+    "排队",
+    "美食",
+    "社交",
+    "街头小吃",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "queue-for-popular-snack-shop/images/willing-to-queue.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-19T17:01:55.494Z"
+}
