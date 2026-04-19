@@ -61,6 +61,12 @@ PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/auto-monitor.js" check-
   echo "[auto-run] Regression detected and rollback attempted"
 }
 
+# Analyze topic performance from Kuaishou data
+echo "[auto-run] Analyzing topic performance..."
+PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/topic-performance-analyzer.js" 2>&1 || {
+  echo "[auto-run] Topic performance analysis failed (non-fatal)"
+}
+
 OBSERVE_RESULT=""
 FAILURES=0
 TOTAL_RUNS=0
