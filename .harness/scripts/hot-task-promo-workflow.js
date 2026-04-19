@@ -233,11 +233,14 @@ export function buildHotTaskAppFromCandidate(candidate, overrides = {}) {
         throw new Error(`Unable to resolve metadata for candidate ${candidate.name}`);
     }
 
+    const miniAppName = candidate.reportTask?.miniAppName || candidate.miniAppName || '';
+
     return buildHotTaskApp({
         appId: metadata.id,
         pageTitle: metadata.name,
         appTitle: metadata.name,
         appUrl: `https://letmetryai.cn/${metadata.url || metadata.id}/`,
+        miniAppName,
         ...overrides
     });
 }

@@ -73,7 +73,8 @@ export function buildOverlayLines(app = HOT_TASK_APP) {
 
 export function buildEmailBody(app = HOT_TASK_APP) {
     const taskName = app.pageTitle || app.appTitle || '';
-    const tags = [`#${taskName}`, '#LetMeTryAI', '#星火计划'].join(' ');
+    const appName = app.miniAppName || 'LetMeTryAI';
+    const tags = [`#${taskName}`, `#${appName}`, '#星火计划'].join(' ');
 
     return [
         `热门任务视频已生成：${app.pageTitle}`,
