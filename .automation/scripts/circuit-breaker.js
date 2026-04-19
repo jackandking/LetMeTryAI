@@ -14,6 +14,7 @@ import { spawnSync } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_DIR = path.resolve(__dirname, '../..');
+const PROD_DIR = process.env.PROD_DIR || REPO_DIR;
 const STATE_FILE = path.join(REPO_DIR, '.automation', '.local', 'state', 'CIRCUIT_BREAKER_ACTIVE');
 const EMAIL_SCRIPT = path.join(REPO_DIR, '.automation', 'scripts', 'send_email.py');
 const PYTHON_BIN = process.env.DAILY_PYTHON_BIN || '/usr/bin/python3';
@@ -23,7 +24,7 @@ const LOOKBACK_HOURS = 24;
 const BRAND_FAILURE_THRESHOLD = 2; // same brand fails >=2 times
 const TOTAL_FAILURE_THRESHOLD = 4; // overall >=4 failures
 
-const HARNESS_LOG_DIR = path.join(REPO_DIR, '.harness', '.local', 'logs', 'daily-app-cron');
+const HARNESS_LOG_DIR = path.join(PROD_DIR, '.harness', '.local', 'logs', 'daily-app-cron');
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
