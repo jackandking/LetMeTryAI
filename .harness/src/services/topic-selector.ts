@@ -116,7 +116,10 @@ export function parseTopicSelectionResponse(content: unknown): TopicSelectionRes
         value: String(opt.value || `option-${oidx + 1}`),
         caption: String(opt.caption || opt.label || `选项${oidx + 1}`),
         alt: String(opt.alt || opt.label || `选项${oidx + 1}`),
-        image: String(opt.image || `${opt.value || 'option'}.svg`),
+        image: (() => {
+          const img = String(opt.image || `${opt.value || 'option'}.svg`);
+          return img.endsWith('.svg') || img.endsWith('.jpg') || img.endsWith('.png') ? img : `${img}.svg`;
+        })(),
       };
     });
 

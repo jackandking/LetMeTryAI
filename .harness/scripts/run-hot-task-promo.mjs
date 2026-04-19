@@ -133,19 +133,33 @@ function main() {
     const appOverrides = options.recipient ? { recipientEmail: options.recipient } : {};
     const app = buildHotTaskAppFromCandidate(candidate, appOverrides);
 
-    // Check if app has new-format HTML (option-card) before proceeding
+    // Check if app has new-format HTML (option-card) and images exist
     const appIndexPath = path.join(HOT_TASK_PROMO_PATHS.repoRoot, app.appId, 'index.html');
-    if (!existsSync(appIndexPath) || !readFileSync(appIndexPath, 'utf8').includes('option-card')) {
-        console.log(`[run-hot-task-promo] Skipping ${app.appId}: old HTML format (no option-card)`);
-        // Send notification
+    const appHtml = existsSync(appIndexPath) ? readFileSync(appIndexPath, 'utf8') : '';
+    let skipReason = null;
+
+    if (!appHtml.includes('option-card')) {
+        skipReason = 'old HTML format (no option-card)';
+    } else {
+        // Check images referenced in HTML actually exist on disk
+        const imgRefs = [...appHtml.matchAll(/src="(images\/[^"]+)"/g)].map(m => m[1]);
+        const appDirPath = path.join(HOT_TASK_PROMO_PATHS.repoRoot, app.appId);
+        const missing = imgRefs.filter(ref => !existsSync(path.join(appDirPath, ref)));
+        if (missing.length > 0) {
+            skipReason = `${missing.length} image(s) missing: ${missing.join(', ')}`;
+        }
+    }
+
+    if (skipReason) {
+        console.log(`[run-hot-task-promo] Skipping ${app.appId}: ${skipReason}`);
         const alertTo = options.recipient || process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
         const alertFile = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', '.local', 'logs', 'hot-task-promo-skip.txt');
-        const alertBody = `[hot-task-promo] Skipped ${app.appId}: old HTML format.\nTime: ${new Date().toISOString()}`;
+        const alertBody = `[hot-task-promo] Skipped ${app.appId}: ${skipReason}\nTime: ${new Date().toISOString()}`;
         try {
             writeFileSync(alertFile, alertBody, 'utf8');
             const sendScript = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', 'scripts', 'send-email.py');
             if (existsSync(sendScript)) {
-                spawnSync('python3', [sendScript, '[Hot Task Promo] Skipped - old format', alertTo, alertFile],
+                spawnSync('python3', [sendScript, `[Hot Task Promo] Skipped - ${skipReason.slice(0, 40)}`, alertTo, alertFile],
                     { cwd: HOT_TASK_PROMO_PATHS.repoRoot });
             }
         } catch {}

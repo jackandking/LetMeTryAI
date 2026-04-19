@@ -122,6 +122,18 @@ async function main() {
             continue;
         }
 
+        // Check that existing images are present (page must be functional before we touch it)
+        const imagesDir = path.join(appDir, 'images');
+        const missingImages = voteOptions.filter(opt => {
+            const imgPath = path.join(imagesDir, opt.imageFile);
+            return !existsSync(imgPath);
+        });
+        if (missingImages.length > 0) {
+            log('skip', `${app.appId}: ${missingImages.length} image(s) missing on disk (page already broken), skipping`);
+            skipped.push(app.appId);
+            continue;
+        }
+
         break; // found a valid candidate
     }
 
