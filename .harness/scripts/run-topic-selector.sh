@@ -24,6 +24,10 @@ fi
 export PROJECT_DIR
 export HARNESS_MODE="${HARNESS_MODE:-production}"
 
+# Sync to latest main before running (catches developer/auto pushes)
+cd "$PROJECT_DIR"
+git pull origin main --quiet 2>/dev/null || echo "[run-topic-selector] WARNING: git pull failed, continuing with current code" >&2
+
 REPORT_TO="${TOPIC_SELECTOR_REPORT_TO:-jackandking@163.com}"
 PYTHON_BIN="${DAILY_PYTHON_BIN:-$(command -v python3 || echo /usr/bin/python3)}"
 SEND_EMAIL_SCRIPT="$PROJECT_DIR/.harness/scripts/send-email.py"
