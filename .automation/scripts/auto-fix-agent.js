@@ -229,9 +229,9 @@ function getPendingProposals() {
         filePath: path.join(RULES_PENDING_DIR, f),
         patternKey: patternMatch ? patternMatch[1] : '',
         content,
+        hasTemplateFixer: !!(patternMatch && FIXERS[patternMatch[1]]),
       };
-    })
-    .filter((p) => FIXERS[p.patternKey]);
+    });
 }
 
 function sendEmailReport(subject, body) {
@@ -258,8 +258,151 @@ function sendEmailReport(subject, body) {
 }
 
 // ---------------------------------------------------------------------------
-// Main
+// AI-Powered Fix Generation
 // ---------------------------------------------------------------------------
+
+function extractFileRefsFromLearning(content) {
+  // Extract file paths mentioned in the learning entry
+  const refs = [];
+  const patterns = [
+    /(?:in|at|from|file)\s+[`"]?([.\w/-]+\.[a-z]{1,4})[`"]?/gi,
+    /([.\w/-]+\.(?:js|ts|mjs|sh|json))\b/g,
+  ];
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(content)) !== null) {
+      const filePath = match[1];
+      if (filePath.includes('/') && !refs.includes(filePath)) {
+        refs.push(filePath);
+      }
+    }
+  }
+  return refs.slice(0, 5); // limit to 5 files
+}
+
+function buildAiFixPrompt(proposal, repoDir) {
+  const fileRefs = extractFileRefsFromLearning(proposal.content);
+  let codeContext = '';
+
+  for (const ref of fileRefs) {
+    const fullPath = path.join(repoDir, ref);
+    if (fs.existsSync(fullPath)) {
+      try {
+        const content = fs.readFileSync(fullPath, 'utf-8');
+        // Limit to first 200 lines to keep prompt manageable
+        const lines = content.split('\n').slice(0, 200).join('\n');
+        codeContext += `\n### ${ref}\n\`\`\`\n${lines}\n\`\`\`\n`;
+      } catch {
+        // skip unreadable files
+      }
+    }
+  }
+
+  return `You are a code fixing agent for the LetMeTryAI project.
+
+## Error Report
+${proposal.content}
+
+## Relevant Source Code
+${codeContext || '(no source files found — analyze the error and suggest which files to modify)'}
+
+## Rules
+- Only modify files in these directories: .automation/, .harness/, scripts/, config/
+- The patch must be less than 50 lines of diff
+- Do NOT delete any files
+- Do NOT include passwords, secrets, API keys, or cookies in the patch
+- Output ONLY a unified diff patch (the kind produced by \`git diff\`) that can be applied with \`git apply\`
+- If this error is caused by an external dependency (e.g., API down, service unavailable) and cannot be fixed by code changes, respond with exactly: NO_CODE_FIX_NEEDED
+- Wrap the patch in a code block with \`\`\`diff ... \`\`\`
+
+## Output Format
+\`\`\`diff
+--- a/path/to/file
++++ b/path/to/file
+@@ ... @@
+ context line
+-old line
++new line
+\`\`\``;
+}
+
+function callCopilotForFix(prompt) {
+  const copilotBin = process.env.COPILOT_BIN || 'copilot';
+  const timeout = parseInt(process.env.AI_FIX_TIMEOUT_MS || '300000', 10);
+
+  console.log(`[auto-fix] Calling Copilot for AI-generated fix...`);
+  const result = spawnSync(copilotBin, ['-p', prompt, '--yolo'], {
+    encoding: 'utf-8',
+    timeout,
+    maxBuffer: 5 * 1024 * 1024,
+  });
+
+  if (result.status !== 0 || result.error) {
+    const errMsg = result.error?.message || result.stderr || 'unknown error';
+    console.log(`[auto-fix] Copilot failed: ${errMsg}`);
+    return null;
+  }
+
+  return result.stdout;
+}
+
+function extractPatchFromAiResponse(response) {
+  if (!response) return null;
+  if (response.includes('NO_CODE_FIX_NEEDED')) return 'NO_CODE_FIX_NEEDED';
+
+  // Extract diff from code block
+  const match = response.match(/```diff\n([\s\S]*?)```/);
+  if (match) return match[1].trim();
+
+  // Try without language tag
+  const match2 = response.match(/```\n(---[\s\S]*?)```/);
+  if (match2) return match2[1].trim();
+
+  // If response starts with --- it might be a raw patch
+  if (response.trim().startsWith('---')) return response.trim();
+
+  return null;
+}
+
+function applyAiFix(proposal, repoDir) {
+  const prompt = buildAiFixPrompt(proposal, repoDir);
+  const aiResponse = callCopilotForFix(prompt);
+  const patch = extractPatchFromAiResponse(aiResponse);
+
+  if (!patch) {
+    return { patched: false, reason: 'AI did not produce a valid patch', source: 'ai' };
+  }
+
+  if (patch === 'NO_CODE_FIX_NEEDED') {
+    return { patched: false, reason: 'AI determined this is not a code issue', source: 'ai' };
+  }
+
+  // Write patch to temp file and apply
+  const patchFile = path.join(os.tmpdir(), `auto-fix-ai-${Date.now()}.patch`);
+  fs.writeFileSync(patchFile, patch, 'utf-8');
+
+  try {
+    const applyResult = runProcess('git', ['apply', '--check', patchFile], repoDir);
+    if (applyResult.status !== 0) {
+      return { patched: false, reason: `Patch does not apply cleanly: ${applyResult.stderr}`, source: 'ai' };
+    }
+
+    // Actually apply
+    const realApply = runProcess('git', ['apply', patchFile], repoDir);
+    if (realApply.status !== 0) {
+      return { patched: false, reason: `Patch apply failed: ${realApply.stderr}`, source: 'ai' };
+    }
+
+    // Find which files were changed
+    const statusResult = runProcess('git', ['diff', '--name-only'], repoDir);
+    const changedFiles = statusResult.stdout.trim().split('\n').filter(Boolean)
+      .map(f => path.join(repoDir, f));
+
+    return { patched: true, files: changedFiles, patchContent: patch, source: 'ai' };
+  } finally {
+    try { fs.unlinkSync(patchFile); } catch {}
+  }
+}
 
 async function main() {
   // Kill switch
@@ -269,9 +412,9 @@ async function main() {
     process.exit(0);
   }
 
-  // Dev-only guard
-  if (!REPO_DIR.includes('LetMeTryAI') || REPO_DIR.includes('/prod/')) {
-    console.log(`[auto-fix] Dev-only guard: refusing to run in ${REPO_DIR}. Exiting.`);
+  // Safety guard: refuse to run in the prod directory
+  if (REPO_DIR.includes('/prod/')) {
+    console.log(`[auto-fix] Safety guard: refusing to run in prod directory (${REPO_DIR}). Exiting.`);
     process.exit(0);
   }
 
@@ -300,7 +443,7 @@ async function main() {
     process.exit(0);
   }
 
-  console.log(`[auto-fix] Found ${proposals.length} fixable proposal(s).`);
+  console.log(`[auto-fix] Found ${proposals.length} proposal(s) (${proposals.filter(p => p.hasTemplateFixer).length} with template, ${proposals.filter(p => !p.hasTemplateFixer).length} for AI).`);
 
   const results = [];
 
@@ -311,10 +454,11 @@ async function main() {
     }
 
     const fixer = FIXERS[proposal.patternKey];
+    const useAi = !fixer;
     const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
-    const branchName = `auto-fix/${dateStr}-${proposal.patternKey}`;
+    const branchName = `auto-fix/${dateStr}-${proposal.patternKey || 'ai-fix'}`;
 
-    console.log(`[auto-fix] Attempting fix for pattern: ${proposal.patternKey}`);
+    console.log(`[auto-fix] Attempting ${useAi ? 'AI' : 'template'} fix for: ${proposal.patternKey || proposal.file}`);
 
     let attemptResult = {
       attempted: true,
@@ -324,97 +468,175 @@ async function main() {
       testsPassed: false,
       pushed: false,
       error: null,
+      source: useAi ? 'ai' : 'template',
     };
 
     try {
-      const affectedFiles = fixer.findFiles(REPO_DIR);
-      for (const f of affectedFiles) {
-        const check = validateFileWhitelist(f, REPO_DIR);
-        if (!check.ok) {
-          throw new Error(`File whitelist rejected ${path.relative(REPO_DIR, f)}: ${check.reason}`);
-        }
-      }
-
-      withTempWorktree(REPO_DIR, (worktreeDir) => {
-        // Apply fix inside worktree
-        const applyResult = fixer.apply(worktreeDir);
-        if (!applyResult.patched) {
-          throw new Error(`Fix did not apply: ${applyResult.reason}`);
-        }
-        attemptResult.patched = true;
-        attemptResult.files = applyResult.files.map((f) => path.relative(worktreeDir, f));
-
-        // Run tests
-        const testCmd = fixer.testCommand;
-        const testCwd = testCmd.cwd === '.' ? worktreeDir : path.join(worktreeDir, testCmd.cwd);
-        const testResult = runProcess(testCmd.cmd, testCmd.args, testCwd);
-        attemptResult.testOutput = testResult.stdout + '\n' + testResult.stderr;
-        if (testResult.status !== 0) {
-          throw new Error(`Tests failed with exit code ${testResult.status}`);
-        }
-        attemptResult.testsPassed = true;
-
-        // Generate patch from worktree
-        const patchResult = runProcess('git', ['diff', 'HEAD'], worktreeDir);
-        if (!patchResult.stdout.trim()) {
-          throw new Error('No diff generated after fix');
-        }
-        const patchContent = patchResult.stdout;
-
-        // Diff size guard
-        const diffLines = patchContent.split('\n').length;
-        if (diffLines > MAX_DIFF_LINES) {
-          throw new Error(`Diff too large (${diffLines} lines > ${MAX_DIFF_LINES} limit)`);
-        }
-
-        // File deletion guard
-        if (!ALLOW_FILE_DELETION && /deleted file mode/.test(patchContent)) {
-          throw new Error('Patch contains file deletions, which are not allowed');
-        }
-
-        // Sensitive content guard
-        for (const pattern of FORBID_PATTERNS) {
-          if (pattern.test(patchContent)) {
-            throw new Error(`Patch contains forbidden pattern: ${pattern.source}`);
+      if (useAi) {
+        // AI-generated fix path
+        withTempWorktree(REPO_DIR, (worktreeDir) => {
+          const aiResult = applyAiFix(proposal, worktreeDir);
+          if (!aiResult.patched) {
+            throw new Error(`AI fix did not apply: ${aiResult.reason}`);
           }
-        }
+          attemptResult.patched = true;
+          attemptResult.files = aiResult.files.map((f) => path.relative(worktreeDir, f));
 
-        const patchFile = path.join(PATCHES_DIR, `${branchName}.patch`);
-        fs.writeFileSync(patchFile, patchContent, 'utf-8');
-        attemptResult.patchFile = patchFile;
+          // Validate files against whitelist
+          for (const f of aiResult.files) {
+            const check = validateFileWhitelist(f, worktreeDir);
+            if (!check.ok) {
+              throw new Error(`AI patch touches disallowed file: ${check.reason}`);
+            }
+          }
 
-        // Create branch and commit in real repo
-        try {
-          git(['checkout', '-b', branchName], REPO_DIR);
-          for (const f of applyResult.files) {
-            const relPath = path.relative(REPO_DIR, f);
-            // We need to apply the same change to the real repo. Re-apply fix on real repo.
-            // Actually, easier: apply the patch to the real repo while on the branch.
+          // Diff size guard
+          const patchLines = (aiResult.patchContent || '').split('\n').length;
+          if (patchLines > MAX_DIFF_LINES) {
+            throw new Error(`AI patch too large (${patchLines} lines > ${MAX_DIFF_LINES} limit)`);
           }
-          // Better approach: apply fix again on real repo (same function is deterministic)
-          const realApplyResult = fixer.apply(REPO_DIR);
-          if (!realApplyResult.patched) {
-            git(['checkout', '-'], REPO_DIR);
-            git(['branch', '-D', branchName], REPO_DIR);
-            throw new Error(`Real repo fix did not apply: ${realApplyResult.reason}`);
+
+          // Sensitive content guard
+          for (const pattern of FORBID_PATTERNS) {
+            if (pattern.test(aiResult.patchContent || '')) {
+              throw new Error(`AI patch contains forbidden pattern: ${pattern.source}`);
+            }
           }
-          for (const f of realApplyResult.files) {
-            git(['add', path.relative(REPO_DIR, f)], REPO_DIR);
+
+          // Run tests
+          const testResult = runProcess('npm', ['test'], worktreeDir);
+          attemptResult.testOutput = testResult.stdout + '\n' + testResult.stderr;
+          if (testResult.status !== 0) {
+            throw new Error(`Tests failed with exit code ${testResult.status}`);
           }
-          git(['commit', '-m', `auto-fix: ${fixer.description}\n\nPattern: ${proposal.patternKey}`], REPO_DIR);
-          git(['push', 'origin', branchName], REPO_DIR);
-          attemptResult.pushed = true;
-        } catch (branchErr) {
-          // Cleanup branch if created
+          attemptResult.testsPassed = true;
+
+          // Shadow verification
+          console.log(`[auto-fix] Running shadow verification...`);
+          const shadowCwd = path.join(worktreeDir, '.harness');
+          const shadowEnv = { ...process.env, HARNESS_MODE: 'shadow', PROJECT_DIR: worktreeDir };
+          const shadowProc = spawnSync('npx', [
+            'tsx', 'scripts/run-daily-app-profile.ts', 'nanrenbao',
+          ], { cwd: shadowCwd, encoding: 'utf-8', env: shadowEnv, timeout: 5 * 60 * 1000 });
+          if (shadowProc.status !== 0) {
+            attemptResult.shadowPassed = false;
+            throw new Error(`Shadow verification failed: ${(shadowProc.stderr || shadowProc.stdout || '').slice(0, 500)}`);
+          }
+          attemptResult.shadowPassed = true;
+
+          // Save patch
+          const patchFile = path.join(PATCHES_DIR, `${branchName.replace(/\//g, '-')}.patch`);
+          fs.writeFileSync(patchFile, aiResult.patchContent, 'utf-8');
+          attemptResult.patchFile = patchFile;
+
+          // Create branch and apply in real repo
           try {
-            git(['checkout', '-'], REPO_DIR);
-            git(['branch', '-D', branchName], REPO_DIR);
-          } catch {
-            // ignore cleanup errors
+            git(['checkout', '-b', branchName], REPO_DIR);
+            const realResult = applyAiFix(proposal, REPO_DIR);
+            if (!realResult.patched) {
+              git(['checkout', '-'], REPO_DIR);
+              git(['branch', '-D', branchName], REPO_DIR);
+              throw new Error(`Real repo AI fix did not apply: ${realResult.reason}`);
+            }
+            for (const f of realResult.files) {
+              git(['add', path.relative(REPO_DIR, f)], REPO_DIR);
+            }
+            git(['commit', '-m', `auto-fix(ai): ${proposal.patternKey || 'general'}\n\nPattern: ${proposal.patternKey}\nSource: ai-generated`], REPO_DIR);
+            git(['push', 'origin', branchName], REPO_DIR);
+            attemptResult.pushed = true;
+          } catch (branchErr) {
+            try {
+              git(['checkout', '-'], REPO_DIR);
+              git(['branch', '-D', branchName], REPO_DIR);
+            } catch {}
+            throw branchErr;
           }
-          throw branchErr;
+        });
+      } else {
+        // Template fixer path (existing logic)
+        const affectedFiles = fixer.findFiles(REPO_DIR);
+        for (const f of affectedFiles) {
+          const check = validateFileWhitelist(f, REPO_DIR);
+          if (!check.ok) {
+            throw new Error(`File whitelist rejected ${path.relative(REPO_DIR, f)}: ${check.reason}`);
+          }
         }
-      });
+
+        withTempWorktree(REPO_DIR, (worktreeDir) => {
+          const applyResult = fixer.apply(worktreeDir);
+          if (!applyResult.patched) {
+            throw new Error(`Fix did not apply: ${applyResult.reason}`);
+          }
+          attemptResult.patched = true;
+          attemptResult.files = applyResult.files.map((f) => path.relative(worktreeDir, f));
+
+          const testCmd = fixer.testCommand;
+          const testCwd = testCmd.cwd === '.' ? worktreeDir : path.join(worktreeDir, testCmd.cwd);
+          const testResult = runProcess(testCmd.cmd, testCmd.args, testCwd);
+          attemptResult.testOutput = testResult.stdout + '\n' + testResult.stderr;
+          if (testResult.status !== 0) {
+            throw new Error(`Tests failed with exit code ${testResult.status}`);
+          }
+          attemptResult.testsPassed = true;
+
+          console.log(`[auto-fix] Running shadow verification...`);
+          const shadowCwd = path.join(worktreeDir, '.harness');
+          const shadowEnv = { ...process.env, HARNESS_MODE: 'shadow', PROJECT_DIR: worktreeDir };
+          const shadowProc = spawnSync('npx', [
+            'tsx', 'scripts/run-daily-app-profile.ts', 'nanrenbao',
+          ], { cwd: shadowCwd, encoding: 'utf-8', env: shadowEnv, timeout: 5 * 60 * 1000 });
+          if (shadowProc.status !== 0) {
+            attemptResult.shadowPassed = false;
+            throw new Error(`Shadow verification failed: ${(shadowProc.stderr || shadowProc.stdout || '').slice(0, 500)}`);
+          }
+          attemptResult.shadowPassed = true;
+          console.log(`[auto-fix] Shadow verification passed`);
+
+          const patchResult = runProcess('git', ['diff', 'HEAD'], worktreeDir);
+          if (!patchResult.stdout.trim()) {
+            throw new Error('No diff generated after fix');
+          }
+          const patchContent = patchResult.stdout;
+          const diffLines = patchContent.split('\n').length;
+          if (diffLines > MAX_DIFF_LINES) {
+            throw new Error(`Diff too large (${diffLines} lines > ${MAX_DIFF_LINES} limit)`);
+          }
+          if (!ALLOW_FILE_DELETION && /deleted file mode/.test(patchContent)) {
+            throw new Error('Patch contains file deletions, which are not allowed');
+          }
+          for (const pattern of FORBID_PATTERNS) {
+            if (pattern.test(patchContent)) {
+              throw new Error(`Patch contains forbidden pattern: ${pattern.source}`);
+            }
+          }
+
+          const patchFile = path.join(PATCHES_DIR, `${branchName}.patch`);
+          fs.writeFileSync(patchFile, patchContent, 'utf-8');
+          attemptResult.patchFile = patchFile;
+
+          try {
+            git(['checkout', '-b', branchName], REPO_DIR);
+            const realApplyResult = fixer.apply(REPO_DIR);
+            if (!realApplyResult.patched) {
+              git(['checkout', '-'], REPO_DIR);
+              git(['branch', '-D', branchName], REPO_DIR);
+              throw new Error(`Real repo fix did not apply: ${realApplyResult.reason}`);
+            }
+            for (const f of realApplyResult.files) {
+              git(['add', path.relative(REPO_DIR, f)], REPO_DIR);
+            }
+            git(['commit', '-m', `auto-fix: ${fixer.description}\n\nPattern: ${proposal.patternKey}`], REPO_DIR);
+            git(['push', 'origin', branchName], REPO_DIR);
+            attemptResult.pushed = true;
+          } catch (branchErr) {
+            try {
+              git(['checkout', '-'], REPO_DIR);
+              git(['branch', '-D', branchName], REPO_DIR);
+            } catch {}
+            throw branchErr;
+          }
+        });
+      } // end if/else useAi
     } catch (err) {
       attemptResult.error = err.message;
       console.error(`[auto-fix] Failed for ${proposal.patternKey}: ${err.message}`);
@@ -423,6 +645,7 @@ async function main() {
     logAudit({
       timestamp: now.toISOString(),
       mode: 'attempt',
+      source: attemptResult.source || 'template',
       pattern: proposal.patternKey,
       branchName: attemptResult.branchName,
       files: attemptResult.files || [],
@@ -474,6 +697,24 @@ async function main() {
     if (proposal && fs.existsSync(proposal.filePath)) {
       fs.unlinkSync(proposal.filePath);
       console.log(`[auto-fix] Removed processed proposal: ${proposal.file}`);
+    }
+
+    // Auto-promote safe patterns if configured
+    if (AUTO_FIX_MERGE_MODE === 'auto' && SAFE_AUTO_MERGE_PATTERNS.includes(s.patternKey)) {
+      console.log(`[auto-fix] Auto-promoting safe pattern: ${s.patternKey}`);
+      const promoteScript = path.join(REPO_DIR, '.automation', 'scripts', 'auto-promote.sh');
+      const promoteResult = spawnSync('bash', [promoteScript, s.branchName], {
+        cwd: REPO_DIR,
+        encoding: 'utf-8',
+        env: { ...process.env, AUTO_PROMOTE: 'true', PROD_DIR: process.env.PROD_DIR || '' },
+      });
+      if (promoteResult.status === 0) {
+        console.log(`[auto-fix] Auto-promote succeeded for ${s.branchName}`);
+        s.autoPromoted = true;
+      } else {
+        console.error(`[auto-fix] Auto-promote failed: ${promoteResult.stderr || promoteResult.stdout}`);
+        s.autoPromoted = false;
+      }
     }
   }
 }
