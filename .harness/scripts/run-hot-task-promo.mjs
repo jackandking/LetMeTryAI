@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'child_process';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import path from 'path';
 import {
     HOT_TASK_PROMO_PATHS,
@@ -132,6 +132,26 @@ function main() {
 
     const appOverrides = options.recipient ? { recipientEmail: options.recipient } : {};
     const app = buildHotTaskAppFromCandidate(candidate, appOverrides);
+
+    // Check if app has new-format HTML (option-card) before proceeding
+    const appIndexPath = path.join(HOT_TASK_PROMO_PATHS.repoRoot, app.appId, 'index.html');
+    if (!existsSync(appIndexPath) || !readFileSync(appIndexPath, 'utf8').includes('option-card')) {
+        console.log(`[run-hot-task-promo] Skipping ${app.appId}: old HTML format (no option-card)`);
+        // Send notification
+        const alertTo = options.recipient || process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
+        const alertFile = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', '.local', 'logs', 'hot-task-promo-skip.txt');
+        const alertBody = `[hot-task-promo] Skipped ${app.appId}: old HTML format.\nTime: ${new Date().toISOString()}`;
+        try {
+            writeFileSync(alertFile, alertBody, 'utf8');
+            const sendScript = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', 'scripts', 'send-email.py');
+            if (existsSync(sendScript)) {
+                spawnSync('python3', [sendScript, '[Hot Task Promo] Skipped - old format', alertTo, alertFile],
+                    { cwd: HOT_TASK_PROMO_PATHS.repoRoot });
+            }
+        } catch {}
+        return;
+    }
+
     saveHotTaskSelection(candidate.metadata);
     const artifactPaths = getArtifactPaths(app);
 

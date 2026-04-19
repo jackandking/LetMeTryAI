@@ -89,29 +89,59 @@ async function main() {
     const candidates = rankHotTaskCandidates(latestMetrics);
     const records = loadProcessedTaskLog();
 
-    const candidate = selectPromotionCandidate(candidates, records, {
-        force: options.force,
-        forceAppId: options.forceAppId,
-        cooldownDays: options.cooldownDays
-    });
+    // Try candidates until we find one with new-format HTML (option-card)
+    let candidate, app, appDir, indexPath, html, pageTitle, voteOptions;
+    const skipped = [];
+    const triedIds = new Set();
 
-    const app = buildHotTaskAppFromCandidate(candidate);
-    const appDir = path.join(repoRoot, app.appId);
-    const indexPath = path.join(appDir, 'index.html');
+    for (let attempt = 0; attempt < candidates.length; attempt++) {
+        candidate = selectPromotionCandidate(candidates.filter(c => !triedIds.has(c.metadata?.id)), records, {
+            force: options.force,
+            forceAppId: options.forceAppId,
+            cooldownDays: options.cooldownDays
+        });
 
-    if (!existsSync(indexPath)) {
-        throw new Error(`index.html not found: ${indexPath}`);
+        app = buildHotTaskAppFromCandidate(candidate);
+        triedIds.add(candidate.metadata?.id);
+        appDir = path.join(repoRoot, app.appId);
+        indexPath = path.join(appDir, 'index.html');
+
+        if (!existsSync(indexPath)) {
+            log('skip', `${app.appId}: index.html not found`);
+            skipped.push(app.appId);
+            continue;
+        }
+
+        html = readFileSync(indexPath, 'utf8');
+        pageTitle = extractPageTitle(html);
+        voteOptions = extractOptionsFromHtml(html);
+
+        if (voteOptions.length === 0) {
+            log('skip', `${app.appId}: old HTML format (no option-card), skipping`);
+            skipped.push(app.appId);
+            continue;
+        }
+
+        break; // found a valid candidate
     }
 
-    const html = readFileSync(indexPath, 'utf8');
-    const pageTitle = extractPageTitle(html);
-    const voteOptions = extractOptionsFromHtml(html);
-
-    if (voteOptions.length === 0) {
-        throw new Error(`No vote options found in ${indexPath}`);
+    if (!voteOptions || voteOptions.length === 0) {
+        log('abort', `All candidates have old HTML format. Skipped: ${skipped.join(', ')}`);
+        // Send notification email
+        const alertBody = `[hot-task-image] No compatible candidate found.\nSkipped apps (old format): ${skipped.join(', ')}\nTime: ${new Date().toISOString()}\n\nConsider supporting old HTML format if this happens frequently.`;
+        const alertFile = path.join(repoRoot, '.harness', '.local', 'logs', 'hot-task-skip-alert.txt');
+        writeFileSync(alertFile, alertBody, 'utf8');
+        const sendScript = path.join(repoRoot, '.harness', 'scripts', 'send-email.py');
+        const pythonBin = process.env.DAILY_PYTHON_BIN || 'python3';
+        const alertTo = process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
+        if (existsSync(sendScript)) {
+            const { spawnSync: sp } = await import('node:child_process');
+            sp(pythonBin, [sendScript, '[Hot Task] Skipped - old format apps only', alertTo, alertFile]);
+        }
+        return;
     }
 
-    log('selected', `appId=${app.appId} pageTitle="${pageTitle}" options=${voteOptions.length}`);
+    log('selected', `appId=${app.appId} pageTitle="${pageTitle}" options=${voteOptions.length} (skipped ${skipped.length} old-format apps)`);
     saveHotTaskSelection(candidate.metadata);
 
     if (options.dryRun) {
