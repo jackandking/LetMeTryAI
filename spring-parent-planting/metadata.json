@@ -1,0 +1,19 @@
+{
+  "id": "spring-parent-planting",
+  "name": "家长爱·亲子种植",
+  "description": "面向家长的手机图文投票，比较四种简单可落地的春季亲子种植方式，包含准备材料、亲子分工与培养观察习惯的建议，便于家长选择并分享心得。",
+  "category": "亲子活动",
+  "profileId": "parent-tools",
+  "keywords": [
+    "春季",
+    "亲子种植",
+    "家庭活动",
+    "育儿工具",
+    "植物教育",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "spring-parent-planting/images/balcony-mini-garden.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-19T19:00:51.996Z"
+}
