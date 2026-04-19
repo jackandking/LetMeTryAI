@@ -13,6 +13,13 @@ exec > "$LOG_FILE" 2>&1
 
 echo "[run-daily-hot-task-image-gen] starting at $(date -Iseconds)"
 
+# Load environment (contains MINIMAX_API_KEY etc.)
+if [ -f "$PROJECT_DIR/.harness/.env" ]; then
+  set -a
+  . "$PROJECT_DIR/.harness/.env"
+  set +a
+fi
+
 cd "$PROJECT_DIR"
 "${DAILY_NODE_BIN:-$(command -v node)}" .harness/scripts/daily-hot-task-image-gen.mjs "$@"
 

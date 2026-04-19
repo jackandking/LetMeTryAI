@@ -13,6 +13,13 @@ cd "$PROJECT_DIR"
 
 mkdir -p "$(dirname "$LOG_FILE")"
 
+# Load environment (contains MINIMAX_API_KEY etc.)
+if [ -f "$PROJECT_DIR/.harness/.env" ]; then
+  set -a
+  . "$PROJECT_DIR/.harness/.env"
+  set +a
+fi
+
 # Unify all output into a single log file
 exec >> "$LOG_FILE" 2>&1
 
