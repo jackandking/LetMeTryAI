@@ -1,0 +1,19 @@
+{
+  "id": "humanoid-robot-marathon-arrangement",
+  "name": "人形机器人马拉松安排投票",
+  "description": "讨论人形机器人在马拉松中该以何种方式参与：与人同场竞争、单独组别、辅助角色，或仅作展示与测试，便于观众投票并讨论规则与伦理。",
+  "category": "科技·体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "人形机器人",
+    "马拉松",
+    "赛制",
+    "科技与体育",
+    "机器人赛事",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "humanoid-robot-marathon-arrangement/images/mixed-competition.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-19T02:05:55.164Z"
+}
