@@ -1,0 +1,20 @@
+{
+  "id": "family-elder-spending",
+  "name": "爱老人·家庭小决策",
+  "description": "针对常见家庭消费场景设计的图文投票页，帮助子女在尊重长辈自主与必要监督之间做出实用选择，页面简洁、便于参与与转发。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "长辈",
+    "花钱",
+    "家庭决策",
+    "关怀",
+    "理财小技巧",
+    "沟通",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "family-elder-spending/images/respect-autonomy.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-20T18:00:52.619Z"
+}
