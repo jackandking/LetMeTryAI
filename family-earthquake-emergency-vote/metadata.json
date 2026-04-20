@@ -1,0 +1,19 @@
+{
+  "id": "family-earthquake-emergency-vote",
+  "name": "家长应急准备投票",
+  "description": "围绕家庭地震应急准备设计的投票页，帮助家长比较食物与饮水储备、避难与疏散计划、家庭通讯与集合点、儿童情绪安抚等不同准备侧重点，适合手机图文展示与社交分享。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "地震",
+    "应急准备",
+    "家庭安全",
+    "育儿工具",
+    "避难计划",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "family-earthquake-emergency-vote/images/food-water-supply.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-20T19:00:53.114Z"
+}
