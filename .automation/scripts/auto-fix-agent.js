@@ -40,7 +40,9 @@ const PYTHON_BIN = process.env.DAILY_PYTHON_BIN || '/usr/bin/python3';
 const REPORT_TO = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
 
 const MAX_ATTEMPTS_PER_WEEK = 3;
-const ALLOWED_HOURS = [2, 3, 4, 5]; // 02:00 - 05:59
+const ALLOWED_HOURS = process.env.AUTO_FIX_SKIP_TIME_CHECK
+  ? Array.from({ length: 24 }, (_, i) => i) // allow any hour when called by auto-run
+  : [2, 3, 4, 5]; // 02:00 - 05:59 for standalone runs
 const WHITELISTED_EXTENSIONS = ['.sh', '.js', '.mjs', '.ts', '.md', '.json', '.yml', '.yaml'];
 const WHITELISTED_DIRS = ['.automation/', '.harness/', 'scripts/', 'config/', 'docs/'];
 const MAX_DIFF_LINES = 50;

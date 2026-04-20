@@ -138,10 +138,10 @@ elif [[ -d "$REPO_DIR/.learnings" ]] && \
   ACTION="generate-proposals"
   ACTION_REASON="learnings_without_proposals"
 
-# If failure rate > 50%, run log scanner to diagnose
+# If failure rate > 20%, run log scanner to diagnose
 elif [[ $TOTAL_RUNS -gt 0 ]] && [[ $FAILURES -gt 0 ]]; then
   FAIL_RATE=$((FAILURES * 100 / TOTAL_RUNS))
-  if [[ $FAIL_RATE -ge 50 ]]; then
+  if [[ $FAIL_RATE -ge 20 ]]; then
     echo "[auto-run] High failure rate: ${FAIL_RATE}% — running diagnostics"
     ACTION="diagnose"
     ACTION_REASON="high_failure_rate"
@@ -171,7 +171,7 @@ echo "[auto-run] === ACT ==="
 case "$ACTION" in
   auto-fix)
     echo "[auto-run] Running auto-fix-agent..."
-    node "$REPO_DIR/.automation/scripts/auto-fix-agent.js" 2>&1 || {
+    AUTO_FIX_SKIP_TIME_CHECK=1 node "$REPO_DIR/.automation/scripts/auto-fix-agent.js" 2>&1 || {
       echo "[auto-run] auto-fix-agent exited with error (may be expected: time window, limits)"
     }
     ;;

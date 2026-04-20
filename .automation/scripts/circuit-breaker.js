@@ -65,7 +65,7 @@ function main() {
   let failureReasons = [];
 
   for (const brand of brands) {
-    const logs = findLogs(HARNESS_LOG_DIR, new RegExp(`^daily-run-${brand}-.*\\.log$`));
+    const logs = findLogs(HARNESS_LOG_DIR, new RegExp(`^(${brand}|daily-run-${brand}-.*)\\.log$`));
     // Sort descending by mtime
     logs.sort((a, b) => fs.statSync(b).mtime - fs.statSync(a).mtime);
 
