@@ -348,6 +348,36 @@ function callCopilotForFix(prompt) {
   return result.stdout;
 }
 
+function callKimiForFix(prompt) {
+  const kimiBin = process.env.KIMI_BIN || 'kimi';
+  const timeout = parseInt(process.env.AI_FIX_TIMEOUT_MS || '300000', 10);
+
+  console.log(`[auto-fix] Calling Kimi CLI as fallback...`);
+  const result = spawnSync(kimiBin, [
+    '--quiet',
+    '-p', prompt,
+    '--max-steps-per-turn', '20',
+  ], {
+    encoding: 'utf-8',
+    timeout,
+    maxBuffer: 5 * 1024 * 1024,
+  });
+
+  if (result.status !== 0 || result.error) {
+    const errMsg = result.error?.message || result.stderr || 'unknown error';
+    console.log(`[auto-fix] Kimi CLI failed: ${errMsg}`);
+    return null;
+  }
+
+  // Strip the session resume line that kimi appends
+  let stdout = result.stdout || '';
+  const resumeLine = stdout.match(/\nTo resume this session: .*/);
+  if (resumeLine) {
+    stdout = stdout.slice(0, resumeLine.index);
+  }
+  return stdout;
+}
+
 function extractPatchFromAiResponse(response) {
   if (!response) return null;
   if (response.includes('NO_CODE_FIX_NEEDED')) return 'NO_CODE_FIX_NEEDED';
@@ -368,7 +398,10 @@ function extractPatchFromAiResponse(response) {
 
 function applyAiFix(proposal, repoDir) {
   const prompt = buildAiFixPrompt(proposal, repoDir);
-  const aiResponse = callCopilotForFix(prompt);
+  let aiResponse = callCopilotForFix(prompt);
+  if (!aiResponse) {
+    aiResponse = callKimiForFix(prompt);
+  }
   const patch = extractPatchFromAiResponse(aiResponse);
 
   if (!patch) {
