@@ -1,0 +1,19 @@
+{
+  "id": "car-price-cut-choice",
+  "name": "降价抉择",
+  "description": "本投票聚焦车企降价时消费者的取舍，适合手机图文展示并引导评论与分享，帮助了解购车决策倾向。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "降价",
+    "买车",
+    "换购",
+    "观望",
+    "汽车",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "car-price-cut-choice/images/buy-now.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-20T17:01:01.566Z"
+}
