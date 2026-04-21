@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="fighter" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>新一代电动车电池你更关注哪方面？投票页</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">新一代电动车电池你更关注哪方面？续航 / 充电 / 安全 / 寿命</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">新一代电动车电池你更关注哪方面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="range">
+                            <div class="card-image">
+                                <img src="images/range.svg" alt="续航里程图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">续航里程</h3>
+                                <p class="option-caption">一次充电能跑多远，决定日常通勤和长途便利性。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fast-charging">
+                            <div class="card-image">
+                                <img src="images/fast-charging.svg" alt="快充桩与充电动画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">充电速度</h3>
+                                <p class="option-caption">充电时间越短，上路恢复越快，影响长途与快节奏生活体验。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="thermal-management">
+                            <div class="card-image">
+                                <img src="images/thermal-management.svg" alt="热管理与安全示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">热管理与安全</h3>
+                                <p class="option-caption">防止过热与起火的设计，关系到用车安全与整车可靠性。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="lifespan-degradation">
+                            <div class="card-image">
+                                <img src="images/lifespan-degradation.svg" alt="电池寿命曲线示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">电池寿命与衰减</h3>
+                                <p class="option-caption">电池随时间衰减速度影响长期成本与二手保值率。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

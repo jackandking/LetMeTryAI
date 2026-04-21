@@ -1,0 +1,20 @@
+{
+  "id": "ev-battery-concern",
+  "name": "男人宝 电动车电池关注",
+  "description": "面向对电动车选购与使用有实际关切的用户，比较续航、充电速度、安全性与电池寿命四个维度，适合手机图文投票页与评论互动。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电动车",
+    "电池",
+    "续航",
+    "快充",
+    "安全",
+    "电池寿命",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ev-battery-concern/images/range.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-21T17:00:41.535Z"
+}
