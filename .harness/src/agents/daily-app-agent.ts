@@ -408,7 +408,9 @@ export class DailyAppAgent {
         }
         return { 
           next: 'send_report', 
-          data: { ...state.data, published: false, publishError: result.error } 
+          data: { ...state.data, published: false, publishError: result.error },
+          success: false,
+          error: new Error(result.error || 'Unknown error')
         };
       }
       

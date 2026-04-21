@@ -119,7 +119,14 @@ export class ReActLoop {
       } else {
         // Handle failure - retry or adjust
         console.log(`[ReAct] Step failed: ${observation.error?.message}`);
-        // Stay in current state for retry
+        // Graceful degradation: if action provided next step, advance anyway
+        const actionResult = result as { next?: string; data?: unknown };
+        if (actionResult.next) {
+          state.currentStep = actionResult.next;
+          if (actionResult.data) {
+            state.data = { ...state.data, ...actionResult.data };
+          }
+        }
       }
     }
 
