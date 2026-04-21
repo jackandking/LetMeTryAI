@@ -434,11 +434,32 @@ function callCopilotForFix(prompt) {
   return result.stdout;
 }
 
+function resolveKimiBin() {
+  if (process.env.KIMI_BIN) return process.env.KIMI_BIN;
+
+  const whichResult = spawnSync('which', ['kimi'], { encoding: 'utf-8' });
+  if (whichResult.status === 0 && whichResult.stdout.trim()) {
+    return whichResult.stdout.trim();
+  }
+
+  const homeDir = process.env.HOME || process.env.USERPROFILE || '';
+  const commonPaths = [
+    path.join(homeDir, '.local', 'bin', 'kimi'),
+    '/usr/local/bin/kimi',
+    '/opt/homebrew/bin/kimi',
+  ];
+  for (const p of commonPaths) {
+    if (fs.existsSync(p)) return p;
+  }
+
+  return 'kimi';
+}
+
 function callKimiForFix(prompt) {
-  const kimiBin = process.env.KIMI_BIN || 'kimi';
+  const kimiBin = resolveKimiBin();
   const timeout = parseInt(process.env.KIMI_FIX_TIMEOUT_MS || '600000', 10);
 
-  console.log(`[auto-fix] Calling Kimi CLI as fallback...`);
+  console.log(`[auto-fix] Calling Kimi CLI as fallback (${kimiBin})...`);
   const result = spawnSync(kimiBin, [
     '--quiet',
     '-p', prompt,

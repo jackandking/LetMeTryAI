@@ -100,6 +100,25 @@ function findRecentLogs() {
   return files;
 }
 
+function isBenignFollowWorkerLog(logFile, content) {
+  const basename = path.basename(logFile);
+  if (!basename.includes('follow-worker')) return false;
+
+  // queue-empty is a normal state, not a failure
+  if (content.includes('Stop reason: queue-empty')) return true;
+
+  // If all metrics are zero, it's just an empty queue run
+  const failedMatch = content.match(/Failed:\s*(\d+)/);
+  if (failedMatch && parseInt(failedMatch[1], 10) === 0) {
+    const attemptedMatch = content.match(/Attempted:\s*(\d+)/);
+    if (attemptedMatch && parseInt(attemptedMatch[1], 10) === 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 function extractContext(logPath, regex) {
   const content = fs.readFileSync(logPath, 'utf-8');
   const lines = content.split('\n');
@@ -167,6 +186,12 @@ async function main() {
 
   for (const logFile of logs) {
     const content = fs.readFileSync(logFile, 'utf-8');
+
+    if (isBenignFollowWorkerLog(logFile, content)) {
+      console.log(`[log-scanner] Skipping ${path.basename(logFile)} (benign follow-worker queue-empty)`);
+      continue;
+    }
+
     for (const { regex, key } of ERROR_PATTERNS) {
       if (!regex.test(content)) continue;
       if (isAlreadyLogged(indexEntries, logFile, key)) {
