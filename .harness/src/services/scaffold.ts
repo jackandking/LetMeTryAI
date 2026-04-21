@@ -225,7 +225,7 @@ function transformHtml(template: string, topic: TopicCandidate, templateId: stri
                             </div>
                             <div class="card-content">
                                 <h3 class="option-title">${opt.label}</h3>
-                                <p class="option-caption">${opt.caption || ''}</p>
+                                <p class="option-desc">${opt.caption || ''}</p>
                             </div>
                             <div class="check-indicator">✓</div>
                         </label>`;

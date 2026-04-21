@@ -3,6 +3,7 @@
 import { spawnSync } from 'child_process';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import path from 'path';
+import { chromium } from 'playwright';
 import {
     HOT_TASK_PROMO_PATHS,
     buildHotTaskAppFromCandidate,
@@ -52,6 +53,50 @@ function parseArgs(argv) {
     }
 
     return options;
+}
+
+async function verifyMobileLayout(appUrl, appId) {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 360, height: 640 },
+      isMobile: true,
+      hasTouch: true,
+      deviceScaleFactor: 3,
+    });
+    const page = await context.newPage();
+    await page.goto(appUrl, { waitUntil: 'networkidle', timeout: 30000 });
+    await page.waitForTimeout(1500);
+
+    const layoutInfo = await page.evaluate(() => {
+      const grid = document.querySelector('.options-grid');
+      const meta = document.querySelector('meta[name="viewport"]');
+      if (!grid) return { hasGrid: false, columnCount: 0, viewportMeta: meta ? meta.getAttribute('content') : null };
+      const computed = window.getComputedStyle(grid);
+      const columns = computed.gridTemplateColumns.split(' ').filter(Boolean);
+      return {
+        hasGrid: true,
+        columnCount: columns.length,
+        viewportMeta: meta ? meta.getAttribute('content') : null,
+        gridTemplateColumns: computed.gridTemplateColumns,
+      };
+    });
+
+    await browser.close();
+
+    if (!layoutInfo.viewportMeta) {
+      return { valid: false, reason: `Missing viewport meta tag. options-grid columns: ${layoutInfo.gridTemplateColumns}` };
+    }
+
+    if (layoutInfo.hasGrid && layoutInfo.columnCount > 1) {
+      return { valid: false, reason: `Desktop layout detected on mobile viewport (${layoutInfo.columnCount} columns). options-grid: ${layoutInfo.gridTemplateColumns}` };
+    }
+
+    return { valid: true };
+  } catch (error) {
+    await browser.close();
+    return { valid: false, reason: `Layout verification error: ${error.message}` };
+  }
 }
 
 function runChecked(command, args, options, label) {
@@ -106,7 +151,7 @@ function isToday(dateString) {
            d.getDate() === now.getDate();
 }
 
-function main() {
+async function main() {
     const options = parseArgs(process.argv.slice(2));
     const latestMetrics = loadLatestMetrics(options.metricsDir);
     const candidates = rankHotTaskCandidates(latestMetrics);
@@ -165,6 +210,27 @@ function main() {
         } catch {}
         return;
     }
+
+    // Verify mobile layout before generating video
+    console.log(`[run-hot-task-promo] Verifying mobile layout for ${app.appId}...`);
+    const layoutCheck = await verifyMobileLayout(app.appUrl, app.appId);
+    if (!layoutCheck.valid) {
+        const failReason = layoutCheck.reason;
+        console.log(`[run-hot-task-promo] BLOCKED ${app.appId}: ${failReason}`);
+        const alertTo = options.recipient || process.env.KUAISHOU_EMAIL_TO || 'jackandking@163.com';
+        const alertFile = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', '.local', 'logs', 'hot-task-promo-blocked.txt');
+        const alertBody = `[hot-task-promo] BLOCKED ${app.appId}: ${failReason}\nTime: ${new Date().toISOString()}\nURL: ${app.appUrl}`;
+        try {
+            writeFileSync(alertFile, alertBody, 'utf8');
+            const sendScript = path.join(HOT_TASK_PROMO_PATHS.repoRoot, '.harness', 'scripts', 'send-email.py');
+            if (existsSync(sendScript)) {
+                spawnSync('python3', [sendScript, `[Hot Task Promo] BLOCKED - Mobile layout broken`, alertTo, alertFile],
+                    { cwd: HOT_TASK_PROMO_PATHS.repoRoot });
+            }
+        } catch {}
+        return;
+    }
+    console.log(`[run-hot-task-promo] Mobile layout OK for ${app.appId}`);
 
     saveHotTaskSelection(candidate.metadata);
     const artifactPaths = getArtifactPaths(app);
@@ -225,4 +291,7 @@ function main() {
     console.log(`processedLog=${HOT_TASK_PROMO_PATHS.processedLog}`);
 }
 
-main();
+main().catch(err => {
+  console.error('[run-hot-task-promo] Fatal error:', err);
+  process.exit(1);
+});
