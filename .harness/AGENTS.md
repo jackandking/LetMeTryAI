@@ -12,6 +12,7 @@ This directory contains the next-generation automation orchestration system (Har
 4. **TypeScript First**: All new Harness code is TypeScript. Use ES modules (`import`/`export`).
 5. **No Business Logic in Harness**: Harness orchestrates topic selection, scaffold generation, and publishing. It does not modify mini-app HTML/JS/CSS directly.
 6. **Self-Contained Stable Layer**: `.harness` is the independent production layer. It must not depend on `.automation/` for any runtime capability. All scripts, utilities, and configs required for prod must live under `.harness/`.
+7. **Kuaishou Auth Session Failures**: `SESSION_EXPIRED` responses must be returned as `success: false` in the ReAct loop observation with a `next` state for graceful degradation. Automatic retries on session expiry are prohibited; use the kuaishou-login skill for manual re-authentication.
 
 ## Technology Stack
 
