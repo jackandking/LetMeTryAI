@@ -1,0 +1,19 @@
+{
+  "id": "class-reunion-makeup-vote",
+  "name": "聚会妆容投票",
+  "description": "为女人爱品牌制作的图文投票页，展示四种适合同学聚会的妆容风格与快速妆容要点，便于用户投票并保存作为妆容参考。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "同学聚会",
+    "妆容风格",
+    "化妆技巧",
+    "聚会妆",
+    "拍照妆",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "class-reunion-makeup-vote/images/natural-fresh.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-21T20:00:57.375Z"
+}
