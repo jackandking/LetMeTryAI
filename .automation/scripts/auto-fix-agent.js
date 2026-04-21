@@ -39,7 +39,7 @@ const EMAIL_SCRIPT = path.join(REPO_DIR, '.automation', 'scripts', 'send_email.p
 const PYTHON_BIN = process.env.DAILY_PYTHON_BIN || '/usr/bin/python3';
 const REPORT_TO = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
 
-const MAX_ATTEMPTS_PER_WEEK = 3;
+const MAX_ATTEMPTS_PER_WEEK = parseInt(process.env.AUTO_FIX_MAX_ATTEMPTS_PER_WEEK || '3', 10);
 const ALLOWED_HOURS = process.env.AUTO_FIX_SKIP_TIME_CHECK
   ? Array.from({ length: 24 }, (_, i) => i) // allow any hour when called by auto-run
   : [2, 3, 4, 5]; // 02:00 - 05:59 for standalone runs
@@ -219,9 +219,83 @@ function withTempWorktree(repoDir, fn) {
   }
 }
 
+function checkJobSuccessRecently(jobPattern, hours) {
+  const prodDir = process.env.PROD_DIR || REPO_DIR;
+  const logDir = path.join(prodDir, '.harness', '.local', 'logs');
+  const cutoff = new Date();
+  cutoff.setHours(cutoff.getHours() - hours);
+
+  if (!fs.existsSync(logDir)) return false;
+
+  const entries = fs.readdirSync(logDir);
+  for (const entry of entries) {
+    if (!jobPattern.test(entry)) continue;
+    const fullPath = path.join(logDir, entry);
+    const stat = fs.statSync(fullPath);
+    if (!stat.isFile() || stat.mtime < cutoff) continue;
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    if (/completed successfully|success.*true/i.test(content)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function crossValidateProposal(proposal) {
+  const patternKey = proposal.patternKey;
+
+  // auth.session_expire: if daily-report succeeded recently, session is fine
+  // Also skip if the proposal's own source entries contain success markers
+  if (patternKey === 'auth.session_expire') {
+    if (checkJobSuccessRecently(/daily-report.*\.log$/, 24)) {
+      return {
+        valid: false,
+        reason: 'daily-report succeeded recently — session not expired (false positive)',
+        action: 'skip',
+      };
+    }
+    const successMarkers = ['✓', 'completed successfully', 'step publish'];
+    const contentLower = proposal.content.toLowerCase();
+    if (successMarkers.some((m) => contentLower.includes(m))) {
+      return {
+        valid: false,
+        reason: 'source entries contain success markers — likely false positive',
+        action: 'skip',
+      };
+    }
+  }
+
+  // infra.timeout / infra.network: if any harness job succeeded recently, skip
+  if (patternKey === 'infra.timeout' || patternKey === 'infra.network') {
+    if (checkJobSuccessRecently(/.*\.log$/, 24)) {
+      return {
+        valid: false,
+        reason: 'harness jobs succeeded recently — infra issue may be transient (false positive)',
+        action: 'skip',
+      };
+    }
+  }
+
+  // runtime.error / runtime.failure: if proposal source entries contain success markers, skip
+  if (patternKey === 'runtime.error' || patternKey === 'runtime.failure') {
+    const successMarkers = ['✓', 'completed successfully', 'email sent', 'response received', 'step publish'];
+    const contentLower = proposal.content.toLowerCase();
+    const hasSuccess = successMarkers.some((m) => contentLower.includes(m));
+    if (hasSuccess) {
+      return {
+        valid: false,
+        reason: 'source entries contain success markers — likely false positive',
+        action: 'skip',
+      };
+    }
+  }
+
+  return { valid: true };
+}
+
 function getPendingProposals() {
   if (!fs.existsSync(RULES_PENDING_DIR)) return [];
-  return fs.readdirSync(RULES_PENDING_DIR)
+  const proposals = fs.readdirSync(RULES_PENDING_DIR)
     .filter((f) => f.endsWith('.md'))
     .map((f) => {
       const content = fs.readFileSync(path.join(RULES_PENDING_DIR, f), 'utf-8');
@@ -234,6 +308,18 @@ function getPendingProposals() {
         hasTemplateFixer: !!(patternMatch && FIXERS[patternMatch[1]]),
       };
     });
+
+  // Cross-validate and filter out false positives
+  const validated = [];
+  for (const p of proposals) {
+    const check = crossValidateProposal(p);
+    if (check.valid) {
+      validated.push(p);
+    } else {
+      console.log(`[auto-fix] Cross-validation SKIP: ${p.patternKey} — ${check.reason}`);
+    }
+  }
+  return validated;
 }
 
 function sendEmailReport(subject, body) {
@@ -350,7 +436,7 @@ function callCopilotForFix(prompt) {
 
 function callKimiForFix(prompt) {
   const kimiBin = process.env.KIMI_BIN || 'kimi';
-  const timeout = parseInt(process.env.AI_FIX_TIMEOUT_MS || '300000', 10);
+  const timeout = parseInt(process.env.KIMI_FIX_TIMEOUT_MS || '600000', 10);
 
   console.log(`[auto-fix] Calling Kimi CLI as fallback...`);
   const result = spawnSync(kimiBin, [
@@ -363,9 +449,14 @@ function callKimiForFix(prompt) {
     maxBuffer: 5 * 1024 * 1024,
   });
 
-  if (result.status !== 0 || result.error) {
-    const errMsg = result.error?.message || result.stderr || 'unknown error';
+  if (result.status !== 0) {
+    const errMsg = result.error?.message || result.stderr || `exit code ${result.status}`;
     console.log(`[auto-fix] Kimi CLI failed: ${errMsg}`);
+    return null;
+  }
+
+  if (!result.stdout || !result.stdout.trim()) {
+    console.log('[auto-fix] Kimi CLI returned empty output');
     return null;
   }
 
