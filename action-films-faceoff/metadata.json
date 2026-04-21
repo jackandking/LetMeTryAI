@@ -1,0 +1,19 @@
+{
+  "id": "action-films-faceoff",
+  "name": "动作片对比",
+  "description": "针对近期上映或讨论度较高的动作类型影片，通过图文与海报片段让用户选择更带感的一部，适合社交传播与评论区延展话题。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "动作片",
+    "新片",
+    "电影对比",
+    "观影偏好",
+    "影视讨论",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "action-films-faceoff/images/guochan-action.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-21T23:00:36.310Z"
+}
