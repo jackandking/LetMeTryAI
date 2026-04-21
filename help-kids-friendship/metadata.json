@@ -1,0 +1,19 @@
+{
+  "id": "help-kids-friendship",
+  "name": "维持同学友谊小助手",
+  "description": "面向家长，收集在日常生活中帮助孩子保持同学关系的可操作建议（如主动交往、固定活动、冲突处理与减压引导），用于生成图文投票页与实用讨论。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "友谊",
+    "同学关系",
+    "亲子沟通",
+    "育儿方法",
+    "家庭活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "help-kids-friendship/images/teach-initiate.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-21T19:02:11.396Z"
+}
