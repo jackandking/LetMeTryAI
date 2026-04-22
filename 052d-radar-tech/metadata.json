@@ -1,0 +1,21 @@
+{
+  "id": "052d-radar-tech",
+  "name": "男人宝·舰载雷达话题",
+  "description": "以052D驱逐舰的雷达系统为切入点，对比相控阵、三坐标搜索、被动侦测与数据融合等能力，适合军事历史与科技爱好者参与投票与交流。",
+  "category": "军事历史",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "052D",
+    "驱逐舰",
+    "雷达",
+    "相控阵",
+    "三坐标",
+    "电子侦察",
+    "数据融合",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "052d-radar-tech/images/phased-array.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-22T17:00:50.965Z"
+}
