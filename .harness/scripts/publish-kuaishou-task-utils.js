@@ -5,12 +5,24 @@ export const ERROR_MESSAGE_PATTERN = /(失败|错误|请选择|请填写|不能�
 
 // Kuaishou forbids exaggerated/clickbait words in task names — the AI cover button stays
 // disabled when the name contains any of these, causing the entire publish flow to fail.
-const FORBIDDEN_WORDS = ['最', '第一', '唯一', '极致', '绝对', '顶级', '史上', '全网'];
+// Kuaishou also treats some English words as special symbols.
+const FORBIDDEN_WORDS = ['最', '第一', '唯一', '极致', '绝对', '顶级', '史上', '全网', 'Pro'];
+
+// Symbols that Kuaishou textCheck rejects as "special symbols"
+const FORBIDDEN_SYMBOLS = /[-|/\\@#$%^&*()+=[\]{};:'"<>?~`]/;
+
+export function sanitizeTaskName(name) {
+    return name.replace(/[-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
 
 export function validateTaskName(name) {
-    const found = FORBIDDEN_WORDS.filter(w => name.includes(w));
-    if (found.length > 0) {
-        return { valid: false, forbidden: found, message: `任务名称含极限词 [${found.join(', ')}]，快手会禁止AI封面生成。请修改后重试。` };
+    const foundWords = FORBIDDEN_WORDS.filter(w => name.includes(w));
+    if (foundWords.length > 0) {
+        return { valid: false, forbidden: foundWords, message: `任务名称含极限词 [${foundWords.join(', ')}]，快手会禁止AI封面生成。请修改后重试。` };
+    }
+    const foundSymbol = FORBIDDEN_SYMBOLS.test(name);
+    if (foundSymbol) {
+        return { valid: false, forbidden: [], message: `任务名称含特殊符号，快手会拒绝发布。请修改后重试。` };
     }
     return { valid: true, forbidden: [], message: '' };
 }

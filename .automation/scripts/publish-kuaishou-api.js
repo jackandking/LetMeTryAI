@@ -28,7 +28,7 @@ import {
     resolveRuntimeDir,
     ensureDirectory
 } from './runtime-paths.js';
-import { validateTaskName } from './publish-kuaishou-task-utils.js';
+import { validateTaskName, sanitizeTaskName } from './publish-kuaishou-task-utils.js';
 
 // ─── Profile → Source Task mapping ───
 const PROFILE_SOURCE_TASKS = {
@@ -197,7 +197,14 @@ async function main() {
         process.exit(1);
     }
 
-    const [appId, appName, appDesc] = args;
+    let [appId, appName, appDesc] = args;
+
+    // Sanitize task name: Kuaishou rejects special symbols like '-' in titles
+    const sanitizedName = sanitizeTaskName(appName);
+    if (sanitizedName !== appName) {
+        log('WARN', `Task name sanitized: "${appName}" → "${sanitizedName}"`);
+        appName = sanitizedName;
+    }
 
     log('INFO', '═══════════════════════════════════════');
     log('INFO', ' Kuaishou API Publisher (no browser)');

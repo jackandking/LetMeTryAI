@@ -19,7 +19,8 @@ const LEARNINGS_DIR = path.join(REPO_DIR, '.learnings');
 const INDEX_FILE = path.join(LEARNINGS_DIR, 'index.jsonl');
 const SCAN_DIRS = [
   path.join(PROD_DIR, '.automation', '.local', 'logs'),
-  path.join(PROD_DIR, '.harness', '.local', 'logs')
+  path.join(PROD_DIR, '.harness', '.local', 'logs'),
+  path.join(PROD_DIR, '.automation', '.local', 'logs', 'publish-errors')
 ];
 
 // Patterns: regex -> patternKey
@@ -30,7 +31,8 @@ const ERROR_PATTERNS = [
   { regex: /network error|ECONNREFUSED|ENOTFOUND/i, key: 'infra.network' },
   { regex: /MySQL.*error|mysql.*fail/i, key: 'db.mysql_error' },
   { regex: /FAIL|FAILED/i, key: 'runtime.failure' },
-  { regex: /ERROR|Exception|exception/i, key: 'runtime.error' }
+  { regex: /ERROR|Exception|exception/i, key: 'runtime.error' },
+  { regex: /不可出现特殊符号|含极限词|禁止发布|请修改后重新提交/i, key: 'kuaishou.forbidden_word' }
 ];
 
 const LOOKBACK_HOURS = 24;
