@@ -565,6 +565,7 @@ async function main() {
     ensureParentDirectory(path.join(errorDir, '.keep'));
     const screenshotPath = path.join(errorDir, `${appId}-error-${timestamp}.png`);
     const htmlPath = path.join(errorDir, `${appId}-error-${timestamp}.html`);
+    const logPath = path.join(errorDir, `${appId}-error-${timestamp}.log`);
     try {
         await page.screenshot({ path: screenshotPath });
         console.log(`📸 Error screenshot saved to ${screenshotPath}`);
@@ -577,6 +578,13 @@ async function main() {
         console.log(`📄 Page HTML dumped to ${htmlPath}`);
     } catch (e) {
         console.log('⚠️ Failed to dump HTML:', e.message);
+    }
+    try {
+        const logContent = `[${new Date().toISOString()}] Kuaishou publish failed for ${appName} (${appId})\nError: ${error.message || String(error)}\n`;
+        fs.writeFileSync(logPath, logContent);
+        console.log(`📝 Error log saved to ${logPath}`);
+    } catch (e) {
+        console.log('⚠️ Failed to save error log:', e.message);
     }
     try {
         await sendFailureEmail(appId, appName, screenshotPath, htmlPath, error.message || String(error));

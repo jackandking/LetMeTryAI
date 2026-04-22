@@ -513,6 +513,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         '- 问题、标题、选项要适合做清晰直观、易于配图、适合手机阅读的图文投票页。',
         '- 避免低俗、侵权、血腥、政治敏感、医疗误导。',
         '- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网（快手审核会拒绝）。如需表达程度，用「更」「哪款」「你选谁」等替代。',
+        '- appName中禁止出现特殊符号（如 - | / \\ @ # $ % 等），快手会拒绝发布。',
         ...profileNotes,
         `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
     ].join('\n') + getPromptSuffix(profile.id);
