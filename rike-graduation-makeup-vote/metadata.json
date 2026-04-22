@@ -1,0 +1,21 @@
+{
+  "id": "rike-graduation-makeup-vote",
+  "name": "理科班妆容投票",
+  "description": "以理科班毕业照为场景，展示自然清新、学院风、韩系光感、复古文艺四类妆容风格的对比示例，适合手机图文投票页并提供妆容要点与服饰搭配建议。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "理科班",
+    "毕业照",
+    "妆容",
+    "学院风",
+    "韩系",
+    "自然妆",
+    "复古",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "rike-graduation-makeup-vote/images/natural-fresh.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-22T20:00:56.118Z"
+}
