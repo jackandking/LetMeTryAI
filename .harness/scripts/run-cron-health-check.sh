@@ -271,7 +271,14 @@ write_section "Hot Task (11:00-11:30)" "ℹ️ 见详情" "$HOT_DETAILS"
 # 6. Kuaishou Follow (14:00 / 每5分钟)
 # ───────────────────────────────────────────────────────────────
 
-log_info "Checking Kuaishou follow logs..."
+log_info "Checking Kuaishou follow health..."
+FOLLOW_HEALTH=""
+FOLLOW_STATUS="✅ 正常"
+FOLLOW_HEALTH_CODE=0
+if [[ -x "$NODE_BIN" ]]; then
+    FOLLOW_HEALTH=$($NODE_BIN "$SCRIPT_DIR/kuaishou-follow-health-check.js" "$PROJECT_DIR" 2>&1) || FOLLOW_HEALTH_CODE=$?
+fi
+
 FOLLOW_INGEST_LOG=$(find_logs "kuaishou-follow-ingest-*.log" | tail -1)
 FOLLOW_WORKER_LOGS=$(find_logs "kuaishou-follow-worker-*.log")
 
@@ -287,19 +294,29 @@ if [[ -n "$FOLLOW_WORKER_LOGS" ]]; then
     FOLLOW_DETAILS="${FOLLOW_DETAILS}Worker 运行次数: ${WORKER_COUNT} (过去24h)\n"
     LATEST_WORKER=$(echo "$FOLLOW_WORKER_LOGS" | tail -1)
     if grep -qE "queue-empty|Attempted:" "$LATEST_WORKER" 2>/dev/null; then
-        FOLLOW_DETAILS="${FOLLOW_DETAILS}最新 Worker: 正常 ($(basename "$LATEST_WORKER"))\n"
+        FOLLOW_DETAILS="${FOLLOW_DETAILS}最新 Worker: $(basename "$LATEST_WORKER")\n"
     else
         FOLLOW_DETAILS="${FOLLOW_DETAILS}最新 Worker: 异常 ($(basename "$LATEST_WORKER"))\n"
-        OVERALL_STATUS="⚠️ 部分异常"
-        ISSUES="${ISSUES}KuaishouFollow异常; "
     fi
 else
     FOLLOW_DETAILS="${FOLLOW_DETAILS}Worker: 未找到日志\n"
-    OVERALL_STATUS="⚠️ 部分异常"
-    ISSUES="${ISSUES}KuaishouFollow缺失; "
 fi
 
-write_section "Kuaishou Follow (14:00/每5分钟)" "✅ 正常" "$FOLLOW_DETAILS"
+if [[ -n "$FOLLOW_HEALTH" ]]; then
+    FOLLOW_DETAILS="${FOLLOW_DETAILS}\n${FOLLOW_HEALTH}\n"
+fi
+
+if [[ "$FOLLOW_HEALTH_CODE" -eq 2 ]]; then
+    FOLLOW_STATUS="❌ 严重"
+    OVERALL_STATUS="⚠️ 部分异常"
+    ISSUES="${ISSUES}KuaishouFollow严重异常; "
+elif [[ "$FOLLOW_HEALTH_CODE" -eq 1 ]]; then
+    FOLLOW_STATUS="⚠️ 降级"
+    OVERALL_STATUS="⚠️ 部分异常"
+    ISSUES="${ISSUES}KuaishouFollow降级; "
+fi
+
+write_section "Kuaishou Follow (14:00/每5分钟)" "$FOLLOW_STATUS" "$FOLLOW_DETAILS"
 
 # ───────────────────────────────────────────────────────────────
 # 7. 异常摘要

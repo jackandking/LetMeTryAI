@@ -47,6 +47,7 @@ const RATE_LIMIT_KEYWORDS = [
 const INVALID_VIDEO_KEYWORDS = ['找不到该作品', '热门作品'];
 const IMAGE_POST_KEYWORDS = ['暂未支持显示图片作品'];
 const FOLLOWED_TEXTS = new Set(['已关注', '互相关注', '回关']);
+const FOLLOW_BUTTON_TEXTS = new Set(['关注', '+关注', '＋关注', '+ 关注']);
 
 function getFollowPaths(repoRoot) {
     const paths = buildFollowRuntimePaths(repoRoot);
@@ -107,15 +108,22 @@ async function getPageBodyText(page) {
 }
 
 async function findFollowButton(page) {
-    const candidates = [
+    // Phase 1: explicit locators (fast, specific)
+    const explicitCandidates = [
         page.locator('.follow-button').first(),
+        page.locator('.follow-btn').first(),
+        page.locator('.btn-follow').first(),
+        page.locator('[data-action="follow"]').first(),
+        page.locator('[data-testid*="follow" i]').first(),
         page.getByText('关注', { exact: true }).first(),
+        page.getByText('+关注').first(),
+        page.getByText('+ 关注').first(),
         page.getByText('已关注', { exact: true }).first(),
         page.getByText('互相关注', { exact: true }).first(),
         page.getByText('回关', { exact: true }).first()
     ];
 
-    for (const candidate of candidates) {
+    for (const candidate of explicitCandidates) {
         try {
             if (await candidate.count() > 0 && await candidate.isVisible({ timeout: 1000 })) {
                 return candidate;
@@ -123,6 +131,41 @@ async function findFollowButton(page) {
         } catch {
             // Try the next locator.
         }
+    }
+
+    // Phase 2: fuzzy text search (handles icons + text composites)
+    try {
+        const fuzzyButton = page.locator('button, [role="button"], a').filter({
+            hasText: /^(关注|\+关注|\+ 关注|＋关注)$/
+        }).first();
+        if (await fuzzyButton.count() > 0 && await fuzzyButton.isVisible({ timeout: 1000 })) {
+            return fuzzyButton;
+        }
+    } catch {
+        // Fall through.
+    }
+
+    // Phase 3: evaluate in page context (last resort, catches shadow DOM or dynamic renders)
+    try {
+        const handle = await page.evaluateHandle(() => {
+            const allButtons = document.querySelectorAll('button, [role="button"], a, div');
+            for (const el of allButtons) {
+                const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                if (text === '关注' || text === '+关注' || text === '+ 关注' || text === '＋关注') {
+                    return el;
+                }
+            }
+            return null;
+        });
+        const element = handle.asElement();
+        if (element) {
+            return page.locator('html').locator('*').nth(await page.evaluate(el => {
+                const all = document.querySelectorAll('*');
+                return Array.from(all).indexOf(el);
+            }, element)).first();
+        }
+    } catch {
+        // Fall through.
     }
 
     return null;
@@ -135,10 +178,41 @@ async function readFollowButtonText(page) {
     }
 
     try {
-        return String(await button.innerText()).replace(/\s+/g, ' ').trim();
+        const innerText = String(await button.innerText()).replace(/\s+/g, ' ').trim();
+        if (innerText) {
+            return innerText;
+        }
     } catch {
-        return '';
+        // Fall through to aria-label.
     }
+
+    try {
+        const ariaLabel = await button.getAttribute('aria-label');
+        if (ariaLabel) {
+            return String(ariaLabel).trim();
+        }
+    } catch {
+        // Fall through to title.
+    }
+
+    try {
+        const title = await button.getAttribute('title');
+        if (title) {
+            return String(title).trim();
+        }
+    } catch {
+        // Exhausted.
+    }
+
+    return '';
+}
+
+function isFollowButtonText(text) {
+    if (!text) {
+        return false;
+    }
+    const normalized = text.replace(/\s+/g, ' ').trim();
+    return FOLLOW_BUTTON_TEXTS.has(normalized);
 }
 
 async function followCandidate(page, candidate, { logsDir }) {
@@ -163,7 +237,19 @@ async function followCandidate(page, candidate, { logsDir }) {
         };
     }
 
-    if (initialText !== '关注') {
+    if (!isFollowButtonText(initialText)) {
+        // Diagnostic: save page snippet when button text is unexpected
+        const diagPath = join(
+            logsDir,
+            `follow-diag-${Date.now()}-${candidate.queueKey.replace(/[^a-z0-9_-]/gi, '-')}`
+        );
+        try {
+            const html = await page.content();
+            writeFileSync(`${diagPath}.html`, html, 'utf-8');
+            await page.screenshot({ path: `${diagPath}.png`, fullPage: true }).catch(() => {});
+        } catch {
+            // Best-effort diagnostics.
+        }
         return {
             status: 'failed',
             reason: initialText ? `unsupported-button:${initialText}` : 'follow-button-not-found'
