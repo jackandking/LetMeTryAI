@@ -70,7 +70,7 @@ count_errors() {
 has_success() {
     local file="$1"
     if [[ -f "$file" ]]; then
-        grep -qE "completed successfully|✓|done" "$file" 2>/dev/null && echo "yes" || echo "no"
+        grep -qE "completed successfully|✓|done|Completed( in|$)" "$file" 2>/dev/null && echo "yes" || echo "no"
     else
         echo "no"
     fi
