@@ -97,7 +97,7 @@ ISSUES=""
 # ───────────────────────────────────────────────────────────────
 
 log_info "Checking Kuaishou daily report..."
-REPORT_LOGS=$(find_logs "daily_report-*.log")
+REPORT_LOGS=$(find_logs "daily[\-_]report-*.log")
 if [[ -n "$REPORT_LOGS" ]]; then
     LATEST_REPORT_LOG=$(echo "$REPORT_LOGS" | tail -1)
     ERRORS=$(count_errors "$LATEST_REPORT_LOG")
@@ -133,7 +133,7 @@ if [[ -n "$TOPIC_SELECTOR_LOGS" ]]; then
         if grep -qE "FAILED|failed|ERROR" "$log" 2>/dev/null; then
             TOPIC_FAILED=$((TOPIC_FAILED + 1))
             TOPIC_DETAILS="${TOPIC_DETAILS}${basename_log}: 失败\n"
-        elif grep -qE "completed successfully|✓" "$log" 2>/dev/null; then
+        elif grep -qE "completed successfully|✓|\[done\] Selected=" "$log" 2>/dev/null; then
             TOPIC_OK=$((TOPIC_OK + 1))
             TOPIC_DETAILS="${TOPIC_DETAILS}${basename_log}: 成功\n"
         else
@@ -161,7 +161,18 @@ HARNESS_FAILED=0
 HARNESS_OK=0
 HARNESS_DETAILS=""
 for brand in nanrenbao elder-love parent-tools womanai; do
-    LOG=$(find_logs "daily-run-${brand}-*.log" | tail -1)
+    # New harness writes to daily-app-cron/<brand>.log
+    CRON_LOG="$PROJECT_DIR/.harness/.local/logs/daily-app-cron/${brand}.log"
+    if [[ -f "$CRON_LOG" ]]; then
+        mtime_check=$(find "$CRON_LOG" -mtime -1 2>/dev/null)
+        if [[ -n "$mtime_check" ]]; then
+            LOG="$CRON_LOG"
+        fi
+    fi
+    if [[ -z "$LOG" ]]; then
+        # Fallback: old naming pattern
+        LOG=$(find_logs "daily-run-${brand}-*.log" | tail -1)
+    fi
     if [[ -n "$LOG" ]]; then
         basename_log=$(basename "$LOG")
         if grep -qE "completed successfully" "$LOG" 2>/dev/null; then
@@ -176,6 +187,8 @@ for brand in nanrenbao elder-love parent-tools womanai; do
         HARNESS_FAILED=$((HARNESS_FAILED + 1))
         HARNESS_DETAILS="${HARNESS_DETAILS}${brand}: 未找到日志\n"
     fi
+    # Reset LOG for next iteration
+    LOG=""
 done
 
 if [[ "$HARNESS_FAILED" -eq 0 ]]; then
@@ -195,32 +208,26 @@ AUTO_FAILED=0
 AUTO_OK=0
 AUTO_DETAILS=""
 for brand in nanrenbao elder-love parent-tools womanai; do
-    LOG=$(find_logs "daily-run-${brand}-20*.log" | tail -1)
-    if [[ -n "$LOG" ]]; then
-        basename_log=$(basename "$LOG")
-        errors=$(count_errors "$LOG")
-        if grep -qE "Failure reason: none" "$LOG" 2>/dev/null; then
+    # Legacy .automation daily-run logs are no longer maintained.
+    # Harness daily-app-cron now handles all app generation.
+    # Check harness state for confirmation instead of stale logs.
+    STATE_FILE="$PROJECT_DIR/.harness/.local/state/daily-app-runs/${brand}.jsonl"
+    if [[ -f "$STATE_FILE" ]]; then
+        latest=$(tail -1 "$STATE_FILE" 2>/dev/null || true)
+        if echo "$latest" | grep -q '"success":true' 2>/dev/null; then
             AUTO_OK=$((AUTO_OK + 1))
-            deploy=$(grep "Deploy URL:" "$LOG" 2>/dev/null | tail -1 | sed 's/.*Deploy URL: //' || echo "N/A")
-            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 成功 (deploy=${deploy})\n"
-        elif grep -qE "Failure reason:" "$LOG" 2>/dev/null; then
+            app_id=$(echo "$latest" | grep -o '"appId":"[^"]*"' | head -1 | sed 's/.*:"//;s/"$//' || echo "N/A")
+            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 成功 (appId=${app_id})\n"
+        elif echo "$latest" | grep -q '"success":false' 2>/dev/null; then
             AUTO_FAILED=$((AUTO_FAILED + 1))
-            reason=$(grep "Failure reason:" "$LOG" 2>/dev/null | tail -1 | sed 's/.*Failure reason: //' || echo "unknown")
-            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 失败 (${reason})\n"
+            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 失败\n"
         else
             AUTO_OK=$((AUTO_OK + 1))
-            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 成功\n"
+            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 成功（通过state确认）\n"
         fi
     else
-        # 对于 nanrenbao，可能是 09:09 完成的，尝试用 orchestrator 日志确认
-        ORCH_LOG=$(find "$PROJECT_DIR/.automation/.local/logs/daily-orchestrator/${brand}" -name "kimi-topic-response-*.log" -type f -mtime -1 2>/dev/null | tail -1)
-        if [[ -n "$ORCH_LOG" ]]; then
-            AUTO_OK=$((AUTO_OK + 1))
-            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 成功（通过orchestrator日志确认）\n"
-        else
-            AUTO_FAILED=$((AUTO_FAILED + 1))
-            AUTO_DETAILS="${AUTO_DETAILS}${brand}: 未找到日志\n"
-        fi
+        AUTO_FAILED=$((AUTO_FAILED + 1))
+        AUTO_DETAILS="${AUTO_DETAILS}${brand}: 未找到state\n"
     fi
 done
 
