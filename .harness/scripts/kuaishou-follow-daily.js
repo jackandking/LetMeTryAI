@@ -306,9 +306,27 @@ async function openFollowBrowser({ headless = true, runtimeDirs }) {
         throw new Error(`Website auth is missing or not logged in: ${authFile}`);
     }
 
-    const browser = await chromium.launch({ headless });
-    const context = await browser.newContext({ storageState: authState });
+    const browser = await chromium.launch({
+        headless,
+        args: ['--disable-blink-features=AutomationControlled']
+    });
+    const context = await browser.newContext({
+        storageState: authState,
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+        viewport: { width: 1280, height: 720 },
+        locale: 'zh-CN',
+        timezoneId: 'Asia/Shanghai',
+        permissions: []
+    });
     const page = await context.newPage();
+
+    // Hide webdriver flag to evade anti-automation detection
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined
+        });
+    });
+
     return {
         browser,
         context,
