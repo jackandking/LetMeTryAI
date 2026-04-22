@@ -1,0 +1,19 @@
+{
+  "id": "encourage-girls-stem-vote",
+  "name": "家长爱·亲子投票",
+  "description": "为家长提供简明可操作的选项，适合手机图文投票页，帮助汇聚社区可落地的教育与亲子活动建议（非医疗或专业诊断内容）。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "理科",
+    "女童",
+    "亲子活动",
+    "教育方法",
+    "实践工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "encourage-girls-stem-vote/images/school-science-club.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-22T19:00:44.614Z"
+}

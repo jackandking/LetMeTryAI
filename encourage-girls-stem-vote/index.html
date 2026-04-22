@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>鼓励女生参与理科活动：您会怎么做？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">鼓励女生参与理科活动投票</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">针对“鼓励女生参与理科活动”，您更支持哪种方式帮助孩子培养兴趣？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="school-science-club">
+                            <div class="card-image">
+                                <img src="images/school-science-club.svg" alt="校内科学社团海报" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">校内科学社团</h3>
+                                <p class="option-desc">鼓励孩子加入或尝试学校的科学社团与俱乐部，结识同好并参与项目。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-parent-child-experiments">
+                            <div class="card-image">
+                                <img src="images/home-parent-child-experiments.svg" alt="家庭亲子科学实验" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家庭亲子实验</h3>
+                                <p class="option-desc">在家与孩子一起做动手实验，用生活例子激发好奇与探究欲。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="community-online-workshops">
+                            <div class="card-image">
+                                <img src="images/community-online-workshops.svg" alt="社区或在线理科工作坊" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">社区或在线工作坊</h3>
+                                <p class="option-desc">报名社区活动或在线课程，拓展接触面并体验不同理科项目。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="classroom-questions-contests">
+                            <div class="card-image">
+                                <img src="images/classroom-questions-contests.svg" alt="课堂提问与科学竞赛" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">课堂提问与竞赛鼓励</h3>
+                                <p class="option-desc">鼓励课堂上提问并支持参加小型科学竞赛或展示，建立表现自信。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
