@@ -18,6 +18,9 @@
     "typecheck": "tsc --noEmit",
     "kuaishou:follow": "tsx scripts/kuaishou-follow.ts",
     "kuaishou:follow:scheduler": "tsx src/kuaishou-follow-scheduler.ts",
+    "evolve": "node scripts/auto-evolve.mjs",
+    "evolve:act": "node scripts/auto-evolve.mjs act",
+    "evolve:report": "node scripts/auto-evolve.mjs report",
     "verify": "node verify.mjs",
     "clean": "rm -rf dist node_modules harness-test-* harness-mvp-*"
   },
