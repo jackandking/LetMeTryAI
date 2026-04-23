@@ -25,12 +25,32 @@ description: >
 2. `/Users/weiping/LetMeTryAI/.kimi/EVOLUTION_STATE.md` — 进化引擎状态、指标、历史行动
 3. `/Users/weiping/LetMeTryAI/AGENTS.md` — 项目全局规范
 4. `/Users/weiping/LetMeTryAI/.harness/AGENTS.md` — Harness 子系统规范
+5. **SESSION_MEMORY.md 中的 `## 知识索引` 表** — 轻量索引（只加载索引，不加载 learning 全文）
 
 **读取后，在回复开头简要总结当前状态：**
 - 当前北极星指标（达人采用数）及趋势
 - 上次行动的结果
 - 当前待办/阻塞项
 - 本次可以做什么
+
+### 按需加载学习点（Knowledge Index Lazy Load）
+
+**执行用户任务前，检查是否需要按需加载学习点：**
+
+1. 扫描用户输入和当前任务上下文
+2. 与 SESSION_MEMORY.md `## 知识索引` 表中的 `触发关键词` 匹配
+3. **匹配成功** → 读取 `来源文件` 的 `行号范围`，将学习点注入当前上下文，再继续执行任务
+4. **匹配失败** → 正常执行，不加载任何 learning
+
+**加载规则：**
+- 同一 session 内已加载的 learning 不重复加载（去重）
+- 匹配是"或"关系：任意一个关键词命中即触发
+- 关键词大小写不敏感
+
+**示例：**
+- 用户问"分析一下 womanai" → 匹配 `womanai` → 加载 WomanAI 新任务采用率低分析
+- 用户问"调研一下数据" → 匹配 `调研` → 加载"调研前先确认数据源"
+- 用户问"写一个投票小程序" → 无匹配 → 不加载任何 learning
 
 ## 项目核心上下文（精简版）
 
@@ -42,6 +62,7 @@ description: >
   - `.automation/` — 老自动化系统（JS）
   - `.kimi/` — Kimi CLI 上下文和记忆
 - **当前问题**: AUTO 系统每天空转，不观测业务指标，不带来进化
+- **知识管理**: 新 session 启动时加载 Knowledge Index（轻量索引），执行时按需加载相关学习点。详见 `.kimi/docs/knowledge-index-design.md`
 
 ## 行动指令
 
