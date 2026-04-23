@@ -1,0 +1,19 @@
+{
+  "id": "boost-home-efficiency",
+  "name": "家长爱·家庭效率小工具",
+  "description": "面向家长的移动端图文投票页，围绕“提升家庭效率的小方法”比较实用习惯与工具，每个选项配短文与插画，便于投票后生成实用贴士汇编。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "家庭效率",
+    "育儿工具",
+    "时间管理",
+    "亲子沟通",
+    "家务分工",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "boost-home-efficiency/images/time-blocking.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-23T19:00:42.372Z"
+}
