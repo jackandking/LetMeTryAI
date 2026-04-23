@@ -59,6 +59,112 @@ function readJson(filePath, fallback = null) {
   }
 }
 
+// ============================================================
+// Knowledge Index — 按需加载学习点
+// ============================================================
+
+class KnowledgeIndex {
+  constructor() {
+    this.entries = this.loadFromSessionMemory();
+  }
+
+  /**
+   * 从 SESSION_MEMORY.md 中解析知识索引表
+   */
+  loadFromSessionMemory() {
+    const sessionMemoryPath = path.join(KIMI_DIR, 'SESSION_MEMORY.md');
+    if (!fs.existsSync(sessionMemoryPath)) return [];
+
+    const content = fs.readFileSync(sessionMemoryPath, 'utf-8');
+
+    // 找到 ## 知识索引 区块
+    const sectionMatch = content.match(/## 知识索引[\s\S]*?(?=\n## |$)/);
+    if (!sectionMatch) return [];
+
+    const lines = sectionMatch[0].split('\n').filter(
+      (l) => l.startsWith('|') && !l.includes('---') && !l.includes('触发关键词')
+    );
+
+    const entries = [];
+    for (const line of lines) {
+      const cells = line.split('|').map((c) => c.trim()).filter((c) => c);
+      if (cells.length >= 4) {
+        entries.push({
+          keywords: cells[0].split(',').map((k) => k.trim()),
+          sourceFile: cells[1],
+          lineRange: cells[2],
+          summary: cells[3],
+        });
+      }
+    }
+    return entries;
+  }
+
+  /**
+   * 根据文本内容匹配相关知识索引条目
+   */
+  lookup(text) {
+    if (!text) return [];
+    const lowerText = text.toLowerCase();
+    const matches = [];
+    const seen = new Set();
+
+    for (const entry of this.entries) {
+      for (const kw of entry.keywords) {
+        if (lowerText.includes(kw.toLowerCase())) {
+          const key = `${entry.sourceFile}:${entry.lineRange}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            matches.push(entry);
+          }
+          break;
+        }
+      }
+    }
+    return matches;
+  }
+
+  /**
+   * 读取指定学习点的内容
+   */
+  loadLearning(entry) {
+    const filePath = path.join(REPO_DIR, entry.sourceFile.replace(/^\.\//, ''));
+    if (!fs.existsSync(filePath)) return null;
+
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const lines = content.split('\n');
+
+    if (entry.lineRange === '全文') {
+      return content;
+    }
+
+    const rangeMatch = entry.lineRange.match(/L(\d+)(?:-L?(\d+))?/);
+    if (!rangeMatch) return null;
+
+    const start = Math.max(0, parseInt(rangeMatch[1], 10) - 1);
+    const end = rangeMatch[2] ? parseInt(rangeMatch[2], 10) : lines.length;
+
+    return lines.slice(start, end).join('\n');
+  }
+
+  /**
+   * 提取学习点中的"教训"或核心结论
+   */
+  extractLesson(content) {
+    if (!content) return '';
+    // 匹配中文 "教训:" 或 "教训：" 后的内容
+    const lessonMatch = content.match(/\*\*教训\*\*[:：](.+)/);
+    if (lessonMatch) return lessonMatch[1].trim();
+
+    // 匹配英文 "Lesson:" 或 "Rule of thumb:"
+    const ruleMatch = content.match(/(?:Lesson|Rule of thumb)[:：](.+)/i);
+    if (ruleMatch) return ruleMatch[1].trim();
+
+    // 返回前 100 字符作为摘要
+    return content.slice(0, 100).replace(/\n/g, ' ') + '...';
+  }
+}
+
 function readJsonLines(filePath) {
   try {
     return fs
@@ -286,10 +392,23 @@ class Observer {
 // ============================================================
 
 class Diagnostician {
-  constructor(data) {
+  constructor(data, knowledgeIndex = null) {
     this.data = data;
+    this.knowledgeIndex = knowledgeIndex;
     this.issues = [];
     this.opportunities = [];
+  }
+
+  /**
+   * 为 issue 关联相关知识索引条目
+   */
+  enrichWithLearnings(issue) {
+    if (!this.knowledgeIndex) return;
+    const text = `${issue.title} ${issue.detail} ${issue.category}`;
+    const related = this.knowledgeIndex.lookup(text);
+    if (related.length > 0) {
+      issue.relatedLearnings = related;
+    }
   }
 
   diagnose() {
@@ -298,13 +417,15 @@ class Diagnostician {
     // 1. DailyAppAgent 失败率
     for (const [profile, stats] of Object.entries(this.data.dailyAppRuns)) {
       if (stats.failureRate > 20) {
-        this.issues.push({
+        const issue = {
           severity: 'high',
           category: 'system',
           title: `${profile} 失败率过高`,
           detail: `最近7次运行中失败 ${stats.failureRate}%，最后运行: ${stats.lastDate}`,
           action: '检查 DailyAppAgent 日志，修复失败原因',
-        });
+        };
+        this.enrichWithLearnings(issue);
+        this.issues.push(issue);
       }
     }
 
@@ -312,81 +433,95 @@ class Diagnostician {
     const expectedProfiles = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
     for (const profile of expectedProfiles) {
       if (!this.data.dailyAppRuns[profile]) {
-        this.issues.push({
+        const issue = {
           severity: 'medium',
           category: 'system',
           title: `${profile} 没有运行记录`,
           detail: '该 profile 可能未配置 cron 或从未成功运行',
           action: '检查 cron 配置和 DailyAppAgent 状态',
-        });
+        };
+        this.enrichWithLearnings(issue);
+        this.issues.push(issue);
       }
     }
 
     // 3. Pending learnings 堆积
     if (this.data.pendingLearnings.total > 10) {
-      this.issues.push({
+      const issue = {
         severity: 'high',
         category: 'system',
         title: `Pending learnings 堆积: ${this.data.pendingLearnings.total} 个`,
         detail: `主要类型: ${JSON.stringify(this.data.pendingLearnings.byPattern)}`,
         action: '运行 auto-fix 或手动修复 pending errors',
-      });
+      };
+      this.enrichWithLearnings(issue);
+      this.issues.push(issue);
     }
 
     // 4. Skill 引用断裂
     if (this.data.skillHealth.brokenCount > 0) {
-      this.issues.push({
+      const issue = {
         severity: 'medium',
         category: 'system',
         title: `Skill 引用断裂: ${this.data.skillHealth.brokenCount} 处`,
         detail: this.data.skillHealth.brokenReferences.slice(0, 5).map((r) => `${r.skill}: ${r.ref}`).join(', '),
         action: '修复 SKILL.md 中的引用路径或创建缺失文件',
-      });
+      };
+      this.enrichWithLearnings(issue);
+      this.issues.push(issue);
     }
 
     // 5. 快手 follow 数据异常
     const followSummary = this.data.kuaishouFollow.summary;
     if (followSummary && followSummary.daysObserved > 0) {
       if (followSummary.avgDailyQueueAdded === 0) {
-        this.issues.push({
+        const issue = {
           severity: 'high',
           category: 'business',
           title: '快手 follow 数据采集异常',
           detail: '最近几天没有新达人入队',
           action: '检查快手 API 认证状态和 ingestion 流程',
-        });
+        };
+        this.enrichWithLearnings(issue);
+        this.issues.push(issue);
       }
     } else {
-      this.issues.push({
+      const issue = {
         severity: 'medium',
         category: 'business',
         title: '缺少快手 follow 数据',
         detail: 'daily-runs 目录为空或数据不足',
         action: '确认 cron 是否正确配置了 kuaishou-follow ingestion',
-      });
+      };
+      this.enrichWithLearnings(issue);
+      this.issues.push(issue);
     }
 
     // 6. 业务机会：达人采用趋势
     if (followSummary) {
       if (followSummary.totalFollowed < followSummary.totalQueueAdded * 0.5) {
-        this.opportunities.push({
+        const opp = {
           title: 'Follow 转化率低',
           detail: `队列中有 ${followSummary.totalQueueAdded} 人，但只 follow 了 ${followSummary.totalFollowed} 人`,
           action: '增加 hourly worker 频率或检查 follow 失败原因',
-        });
+        };
+        this.enrichWithLearnings(opp);
+        this.opportunities.push(opp);
       }
     }
 
     // 7. Harness 错误模式
     if (this.data.harnessErrors.totalInWindow > 10) {
       const topPattern = this.data.harnessErrors.topPatterns[0];
-      this.issues.push({
+      const issue = {
         severity: 'medium',
         category: 'system',
         title: `Harness 近期错误较多: ${this.data.harnessErrors.totalInWindow} 个`,
         detail: topPattern ? `最常见: "${topPattern[0]}" (${topPattern[1]} 次)` : '',
         action: '分析 harness.log 中的错误模式并修复',
-      });
+      };
+      this.enrichWithLearnings(issue);
+      this.issues.push(issue);
     }
 
     log('info', `诊断完成: ${this.issues.length} 个问题, ${this.opportunities.length} 个机会`);
@@ -493,10 +628,11 @@ class Fixer {
 // ============================================================
 
 class Reporter {
-  constructor(data, diagnosis, fixResults) {
+  constructor(data, diagnosis, fixResults, knowledgeIndex = null) {
     this.data = data;
     this.diagnosis = diagnosis;
     this.fixResults = fixResults;
+    this.knowledgeIndex = knowledgeIndex;
   }
 
   generateReport() {
@@ -537,6 +673,13 @@ class Reporter {
         lines.push(`  ${icon} [${issue.category}] ${issue.title}`);
         lines.push(`     → ${issue.detail}`);
         lines.push(`     💡 ${issue.action}`);
+        if (issue.relatedLearnings && this.knowledgeIndex) {
+          for (const learning of issue.relatedLearnings) {
+            const content = this.knowledgeIndex.loadLearning(learning);
+            const lesson = this.knowledgeIndex.extractLesson(content);
+            lines.push(`     📚 历史学习: ${lesson}`);
+          }
+        }
       }
       lines.push('');
     }
@@ -671,8 +814,12 @@ Examples:
   const observer = new Observer();
   const data = observer.run();
 
+  // Knowledge Index 初始化
+  const knowledgeIndex = new KnowledgeIndex();
+  log('info', `知识索引加载完成: ${knowledgeIndex.entries.length} 条`);
+
   // Phase 2: Diagnose
-  const diagnostician = new Diagnostician(data);
+  const diagnostician = new Diagnostician(data, knowledgeIndex);
   const diagnosis = diagnostician.diagnose();
 
   // Phase 3: Act (fix)
@@ -680,7 +827,7 @@ Examples:
   const fixResults = fixer.run();
 
   // Phase 4: Report
-  const reporter = new Reporter(data, diagnosis, fixResults);
+  const reporter = new Reporter(data, diagnosis, fixResults, knowledgeIndex);
   reporter.run();
 
   log('info', 'Auto-Evolve 完成');
