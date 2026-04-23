@@ -1,0 +1,18 @@
+{
+  "id": "family-transfer-privacy",
+  "name": "家人转账隐私投票",
+  "description": "面向女性受众的情感隐私话题投票：探讨查看家人或伴侣转账记录时的边界与信任，鼓励理性交流与观点分享。",
+  "category": "情感",
+  "profileId": "womanai",
+  "keywords": [
+    "隐私",
+    "信任",
+    "家庭关系",
+    "沟通",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "family-transfer-privacy/images/check-occasionally.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-23T20:00:48.997Z"
+}
