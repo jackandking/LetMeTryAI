@@ -1,0 +1,19 @@
+{
+  "id": "apple-penalty-replace-plan",
+  "name": "换机影响投票",
+  "description": "基于苹果被罚的新闻事件，调查用户是否改变换机计划，适合手机图文投票页，选项直观可比。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "苹果被罚",
+    "换机计划",
+    "购机决策",
+    "手机价格",
+    "品牌切换",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "apple-penalty-replace-plan/images/keep-planned.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-23T17:00:41.284Z"
+}
