@@ -14,6 +14,7 @@ export declare class KuaishouPublisher {
     private cookies;
     private sourceTaskId;
     constructor(config: PublishConfig);
+    private sanitizeAppName;
     publish(): Promise<PublishResult>;
     private extractCookies;
     private apiPost;

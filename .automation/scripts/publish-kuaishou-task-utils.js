@@ -13,10 +13,10 @@ export const ERROR_MESSAGE_PATTERN = /(失败|错误|请选择|请填写|不能�
 const FORBIDDEN_WORDS = ['最', '第一', '唯一', '极致', '绝对', '顶级', '史上', '全网', 'Pro'];
 
 // Symbols that Kuaishou textCheck rejects as "special symbols"
-const FORBIDDEN_SYMBOLS = /[-|/\\@#$%^&*()+=[\]{};:'"<>?~`]/;
+const FORBIDDEN_SYMBOLS = /[·\-|/\\@#$%^&*()+=[\]{};:'"<>?~`]/;
 
 export function sanitizeTaskName(name) {
-    return name.replace(/[-]/g, ' ').replace(/\s+/g, ' ').trim();
+    return name.replace(/[·\-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 export function validateTaskName(name) {
