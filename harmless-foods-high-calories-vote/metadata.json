@@ -1,0 +1,19 @@
+{
+  "id": "harmless-foods-high-calories-vote",
+  "name": "爱老人·轻松识热量",
+  "description": "面向老年人和家庭照护者的图文投票页，列出日常中看似无害但热量偏高的食物选项，配合短说明便于手机阅读与分享，强调生活习惯调整而非医疗建议。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "健康养生",
+    "热量提醒",
+    "长者饮食",
+    "家庭生活",
+    "实用生活技巧",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "harmless-foods-high-calories-vote/images/nuts-and-seeds.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-24T18:00:57.156Z"
+}
