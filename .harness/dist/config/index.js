@@ -1,7 +1,7 @@
 /**
  * Configuration management for Harness
  */
-import { mkdirSync, existsSync } from 'fs';
+import { mkdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 const PROJECT_ROOT = process.env.PROJECT_DIR || join(process.cwd(), '..');
 // 方案 A: 完全独立的运行时目录
@@ -36,20 +36,37 @@ export function loadHarnessConfig() {
     return defaultConfig;
 }
 export function loadProfileConfig(profileId) {
-    // Built-in profile configs
+    // Try loading from external JSON file (auto can tune these)
+    const configPath = join(PATHS.config, 'profiles', `${profileId}.json`);
+    if (existsSync(configPath)) {
+        try {
+            const parsed = JSON.parse(readFileSync(configPath, 'utf-8'));
+            if (typeof parsed.id === 'string' &&
+                typeof parsed.name === 'string' &&
+                Array.isArray(parsed.preferredCategories) &&
+                parsed.preferredCategories.length > 0) {
+                return parsed;
+            }
+            console.warn(`[config] Invalid profile JSON at ${configPath}, falling back to defaults`);
+        }
+        catch (err) {
+            console.warn(`[config] Failed to load ${configPath}: ${err.message}, falling back to defaults`);
+        }
+    }
+    // Fall back to hardcoded defaults
     const profiles = {
         nanrenbao: {
             id: 'nanrenbao',
             name: '男人宝',
-            preferredCategories: ['军事', '科技', '汽车', '体育', '历史', '游戏'],
+            preferredCategories: ['美女明星', '社会热点', '影视娱乐', '美食生活', '科技', '汽车', '户外', '游戏', '收藏', '体育', '军事历史'],
             topicGuidelines: {
-                doMore: ['军事装备对比', '科技数码评测', '汽车机械解析'],
-                avoid: ['过度情感内容', '生活琐事'],
+                doMore: ['社会热点讨论', '美食生活投票', '影视娱乐对比', '科技数码评测', '汽车机械解析'],
+                avoid: ['过度情感内容', '过于硬核晦涩', '生活琐事'],
             },
             constraints: {
                 categoryRotation: {
                     sports: { maxPerWeek: 2, cooldownDays: 3 },
-                    military: { maxPerWeek: 2, cooldownDays: 3 },
+                    military: { maxPerWeek: 1, cooldownDays: 5 },
                 },
                 forbiddenKeywords: ['最', '第一', '顶级', '史上最强'],
                 budget: {
