@@ -75,6 +75,7 @@ function buildCategoryMap(runs) {
     if (topic.appId && topic.category) {
       map[topic.appId] = {
         category: topic.category,
+        appName: topic.appName || '',
         title: topic.title || topic.appName,
         profileId: run.profileId,
         date: run.timestamp?.slice(0, 10),
@@ -84,11 +85,17 @@ function buildCategoryMap(runs) {
   return map;
 }
 
-// Match Kuaishou task names to appIds (fuzzy: task name ≈ app name)
+// Match Kuaishou task names to appIds
 function matchTaskToApp(taskName, categoryMap) {
-  // Try exact match on title
+  // 1. Exact match on appName (Kuaishou task name = harness appName)
   for (const [appId, info] of Object.entries(categoryMap)) {
-    if (info.title && taskName.includes(info.title.slice(0, 6))) {
+    if (info.appName && taskName === info.appName) {
+      return { appId, ...info };
+    }
+  }
+  // 2. Fuzzy: task name contains appName or vice versa
+  for (const [appId, info] of Object.entries(categoryMap)) {
+    if (info.appName && (taskName.includes(info.appName) || info.appName.includes(taskName))) {
       return { appId, ...info };
     }
   }
