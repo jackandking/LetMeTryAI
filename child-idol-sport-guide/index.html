@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子看到偶像想学运动：家长引导投票</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子看到偶像想学运动，你会怎么引导？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子看到偶像想学运动，你更倾向于哪种引导方式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="encourage-with-safety">
+                            <div class="card-image">
+                                <img src="images/encourage-with-safety.svg" alt="家长在公园陪孩子做热身的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">鼓励尝试并保障安全</h3>
+                                <p class="option-desc">支持孩子尝试，提供安全装备与监督，先在家或公园试水再决定。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sign-up-class">
+                            <div class="card-image">
+                                <img src="images/sign-up-class.svg" alt="孩子在体育课堂跟随教练练习" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">报名正规兴趣班</h3>
+                                <p class="option-desc">选择合格教练和小班制，系统学习技术与规则，提升兴趣持续性。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="practice-together-goals">
+                            <div class="card-image">
+                                <img src="images/practice-together-goals.svg" alt="父母与孩子在家一起做基础运动练习" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">与孩子一起设小目标练习</h3>
+                                <p class="option-desc">家长参与陪练并设短期可达成的小目标，增进互动与坚持动力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wait-observe-balance">
+                            <div class="card-image">
+                                <img src="images/wait-observe-balance.svg" alt="时钟与日程表示意平衡安排" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先观察兴趣再平衡安排</h3>
+                                <p class="option-desc">观察一段时间兴趣强度，注意与学业、休息的平衡，再决定长期投入。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

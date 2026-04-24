@@ -1,0 +1,19 @@
+{
+  "id": "child-idol-sport-guide",
+  "name": "亲子引导小测",
+  "description": "当孩子因偶像想学运动，家长常在鼓励、报名、陪练与观察之间犹豫。本投票收集家长偏好与实践经验，帮助形成实用建议。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "偶像效应",
+    "运动兴趣",
+    "亲子沟通",
+    "兴趣培养",
+    "安全引导",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-idol-sport-guide/images/encourage-with-safety.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-24T19:00:47.347Z"
+}
