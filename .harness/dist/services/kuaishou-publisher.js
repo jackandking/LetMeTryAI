@@ -16,7 +16,7 @@ const PROFILE_SOURCE_TASKS = {
 const BASE_URL = 'https://daren.kuaishou.com';
 const DELAY_MS = { min: 300, max: 800 };
 function getLatestReportPath() {
-    const reportDir = join(PATHS.projectRoot, '.automation', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
+    const reportDir = join(PATHS.projectRoot, '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
     if (!existsSync(reportDir)) {
         return null;
     }
@@ -56,12 +56,17 @@ export class KuaishouPublisher {
         this.config = config;
         this.sourceTaskId = PROFILE_SOURCE_TASKS[config.profileId] || '165805';
     }
+    sanitizeAppName(name) {
+        return name.replace(/[·\-]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
     async publish() {
         try {
-            // 0. Deduplication
+            // 0. Deduplication (check original name first)
             if (isAlreadyPublished(this.config.appName)) {
                 return { success: true };
             }
+            this.config.appName = this.sanitizeAppName(this.config.appName);
+            logger.info(`Sanitized appName: "${this.config.appName}"`);
             // 1. Extract cookies
             this.cookies = this.extractCookies();
             logger.info('Auth cookies loaded');

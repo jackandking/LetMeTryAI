@@ -74,12 +74,19 @@ export class KuaishouPublisher {
     this.sourceTaskId = PROFILE_SOURCE_TASKS[config.profileId] || '165805';
   }
 
+  private sanitizeAppName(name: string): string {
+    return name.replace(/[·\-]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
   async publish(): Promise<PublishResult> {
     try {
-      // 0. Deduplication
+      // 0. Deduplication (check original name first)
       if (isAlreadyPublished(this.config.appName)) {
         return { success: true };
       }
+
+      this.config.appName = this.sanitizeAppName(this.config.appName);
+      logger.info(`Sanitized appName: "${this.config.appName}"`);
 
       // 1. Extract cookies
       this.cookies = this.extractCookies();
