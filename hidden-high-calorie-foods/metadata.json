@@ -1,0 +1,20 @@
+{
+  "id": "hidden-high-calorie-foods",
+  "name": "高热量隐匿食物",
+  "description": "面向关注饮食与体型管理的用户，列举常被忽视但热量不低的调味品、零食、饮料与看似健康的外卖选项，便于快速投票与提示替代做法。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "高热量",
+    "隐藏热量",
+    "调味酱",
+    "零食",
+    "含糖饮料",
+    "外卖沙拉",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "hidden-high-calorie-foods/images/sauces-dressings.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-24T17:00:59.747Z"
+}
