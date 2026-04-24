@@ -1,7 +1,7 @@
 /**
  * Configuration management for Harness
  */
-import { mkdirSync, existsSync, readdirSync, copyFileSync, statSync } from 'fs';
+import { mkdirSync, existsSync, readdirSync, copyFileSync, statSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { HarnessConfig, HarnessMode, ProfileConfig } from '../types/index.js';
 
@@ -44,7 +44,26 @@ export function loadHarnessConfig(): HarnessConfig {
 }
 
 export function loadProfileConfig(profileId: string): ProfileConfig {
-  // Built-in profile configs
+  // Try loading from external JSON file (auto can tune these)
+  const configPath = join(PATHS.config, 'profiles', `${profileId}.json`);
+  if (existsSync(configPath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(configPath, 'utf-8'));
+      if (
+        typeof parsed.id === 'string' &&
+        typeof parsed.name === 'string' &&
+        Array.isArray(parsed.preferredCategories) &&
+        parsed.preferredCategories.length > 0
+      ) {
+        return parsed as ProfileConfig;
+      }
+      console.warn(`[config] Invalid profile JSON at ${configPath}, falling back to defaults`);
+    } catch (err) {
+      console.warn(`[config] Failed to load ${configPath}: ${(err as Error).message}, falling back to defaults`);
+    }
+  }
+
+  // Fall back to hardcoded defaults
   const profiles: Record<string, ProfileConfig> = {
     nanrenbao: {
       id: 'nanrenbao',

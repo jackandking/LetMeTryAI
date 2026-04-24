@@ -67,6 +67,24 @@ PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/topic-performance-analy
   echo "[auto-run] Topic performance analysis failed (non-fatal)"
 }
 
+# Rebalance profile categories based on performance data
+echo "[auto-run] Running category rebalancer..."
+node "$REPO_DIR/.automation/scripts/category-rebalancer.js" 2>&1 || {
+  echo "[auto-run] Category rebalancer failed (non-fatal)"
+}
+
+# If rebalancer changed profile configs, commit and push
+if [[ -n "$(git -C "$REPO_DIR" diff --name-only .harness/config/profiles/ 2>/dev/null)" ]]; then
+  echo "[auto-run] Category rebalancer made changes, committing..."
+  cd "$REPO_DIR"
+  git add .harness/config/profiles/
+  git commit -m "auto: rebalance profile categories based on Kuaishou performance data" || true
+  git push origin main --quiet 2>/dev/null || {
+    echo "[auto-run] Failed to push rebalance changes (non-fatal)"
+  }
+  echo "[auto-run] Rebalanced categories pushed to main"
+fi
+
 OBSERVE_RESULT=""
 FAILURES=0
 TOTAL_RUNS=0

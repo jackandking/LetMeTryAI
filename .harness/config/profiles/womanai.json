@@ -1,0 +1,20 @@
+{
+  "id": "womanai",
+  "name": "女人爱",
+  "preferredCategories": ["美妆", "时尚", "明星", "情感", "生活方式"],
+  "topicGuidelines": {
+    "doMore": ["美妆护肤技巧", "时尚穿搭指南", "明星话题讨论"],
+    "avoid": ["过度商业化内容"]
+  },
+  "constraints": {
+    "categoryRotation": {
+      "beauty": { "maxPerWeek": 2, "cooldownDays": 3 },
+      "fashion": { "maxPerWeek": 2, "cooldownDays": 3 }
+    },
+    "forbiddenKeywords": ["最", "第一", "顶级"],
+    "budget": {
+      "maxCopilotCalls": 3,
+      "maxTokensPerRun": 100000
+    }
+  }
+}

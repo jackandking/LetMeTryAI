@@ -1,0 +1,19 @@
+{
+  "id": "parent-tools",
+  "name": "家长爱",
+  "preferredCategories": ["教育", "家庭生活", "实用工具", "亲子沟通"],
+  "topicGuidelines": {
+    "doMore": ["教育方法分享", "实用育儿工具", "家庭活动建议"],
+    "avoid": ["过度焦虑内容", "医疗建议"]
+  },
+  "constraints": {
+    "categoryRotation": {
+      "education": { "maxPerWeek": 2, "cooldownDays": 3 }
+    },
+    "forbiddenKeywords": ["最", "第一", "必须"],
+    "budget": {
+      "maxCopilotCalls": 3,
+      "maxTokensPerRun": 100000
+    }
+  }
+}
