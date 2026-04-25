@@ -73,6 +73,12 @@ PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/mount-data-analyzer.js"
   echo "[auto-run] Mount data analysis failed (non-fatal)"
 }
 
+# Collect ad revenue data from mini-program API
+echo "[auto-run] Collecting ad revenue data..."
+PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/ad-data-collector.js" 2>&1 || {
+  echo "[auto-run] Ad data collection failed (non-fatal)"
+}
+
 # Rebalance profile categories based on performance data
 echo "[auto-run] Running category rebalancer..."
 node "$REPO_DIR/.automation/scripts/category-rebalancer.js" 2>&1 || {
