@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>雨天居家与出行小准备 投票页</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">雨天居家与出行小准备：您平时怎么做？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">遇到下雨天，您在居家或外出前会优先准备哪一项？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="umbrella-non-slip">
+                            <div class="card-image">
+                                <img src="images/umbrella-non-slip.svg" alt="雨伞和防滑鞋" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">防风雨伞与防滑鞋</h3>
+                                <p class="option-desc">随身带结实雨伞或雨衣，换穿防滑鞋或加鞋套，减少地面滑倒风险。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="warm-dry-clothes">
+                            <div class="card-image">
+                                <img src="images/warm-dry-clothes.svg" alt="保暖衣物和毛巾" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">保暖与干衣备用</h3>
+                                <p class="option-desc">准备轻便防水外套、干毛巾或备用衣物，湿衣及时更换保持体温。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="emergency-kit">
+                            <div class="card-image">
+                                <img src="images/emergency-kit.svg" alt="应急小物与电话簿" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">应急小物与通讯</h3>
+                                <p class="option-desc">装好手电、充电宝、常用个人物品与亲友联系方式，放在易取处以备不时之需。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="plan-or-delay">
+                            <div class="card-image">
+                                <img src="images/plan-or-delay.svg" alt="规划出行或推迟出门" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">提前规划或延后外出</h3>
+                                <p class="option-desc">查看天气与路况，选择合适时间或延后外出，必要时选较安全的出行方式。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
