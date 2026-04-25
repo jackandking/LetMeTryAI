@@ -91,13 +91,75 @@ Base URL: `https://open.kuaishou.com`
 
 这些 API 来自快手小程序开发者平台，可能需要小程序自己的 AppSecret（非开放平台 OAuth）。
 
-### 高价值（优先接入 auto observe）
+### 高价值（已接入 auto observe）
 
-| API | 说明 | auto 用途 |
-|-----|------|-----------|
-| 获取短视频挂载数据 | 挂载了小程序的视频的播放/点击数据 | 衡量视频→小程序转化率，指导视频内容策略 |
-| 获取广告数据 | 小程序广告收入/展示/点击数据 | 收入是最终目标指标，指导广告位优化 |
-| 获取流量数据 | 小程序访问量/用户数/页面 PV 等 | 衡量小程序整体健康度和趋势 |
+| API | 说明 | auto 用途 | 状态 |
+|-----|------|-----------|------|
+| 获取短视频挂载数据 | 挂载了小程序的视频的播放/点击数据 | 衡量视频→小程序转化率 | **已接入** |
+| 获取广告数据 | 小程序广告收入/展示/点击数据 | 收入是最终目标指标 | **已接入** |
+| 获取流量数据 | 小程序访问量/用户数/页面 PV 等 | 衡量小程序整体健康度 | **需申请 scope** |
+
+### 5.1 短视频挂载数据（已接入）
+
+`GET https://open.kuaishou.com/openapi/mp/developer/plc/photo/query`
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| access_token | string | 小程序 client_credentials token |
+| app_id | string | 小程序 appId |
+| page_size | int | 最大 500 |
+| cursor | string | 分页游标 |
+
+返回字段（每条视频）：photoId, photoTitle, displayPlayCnt, plcShowCnt, plcClickCnt, plcClickEnterCnt, completePlayRatio, displayLikeCnt, displayCommentCnt, shareSuccessCnt, authorName, accuDisplayFansUserNum
+
+前置条件：开发者后台 → 能力 → 用户数据能力 → 开通"查询短视频挂载数据能力"
+
+**数据规模（2026-04-25）**：elder-love 895 条, parent-tools 772, nanrenbao 665, womanai 344
+**采集脚本**：kuaishou-follow cron 每日采集，存 `.harness/.local/state/kuaishou-follow/exports/`
+**分析脚本**：`.automation/scripts/mount-data-analyzer.js` → 输出 `mount-data-summary.json`
+
+### 5.2 广告数据（已接入）
+
+`POST https://open.kuaishou.com/openapi/mp/developer/ad/data/query`
+
+| 参数 | 位置 | 说明 |
+|------|------|------|
+| access_token | query | 小程序 token |
+| app_id | query | 小程序 appId |
+| startTime | body (JSON) | 开始时间戳 (ms)，**必须是正确年份** |
+| endTime | body (JSON) | 结束时间戳 (ms) |
+| type | body | 0=汇总, 1=信息流, 5=激励视频, 17=左图右文, 18=banner, 19=插屏 |
+| page / pageSize | body | 分页 |
+
+返回字段（每天一条）：impression, click, clickRadio, ecpm（千次收入）, costTotal（收入元）
+
+**无需额外权限申请**，直接可用。
+
+**7 天收入（2026-04-17~24）**：
+| 小程序 | 拉取 | 曝光 | 点击 | 收入 | eCPM |
+|--------|------|------|------|------|------|
+| nanrenbao | 308 | 243 | 10 | 6.96 元 | 28.64 |
+| womanai | 1293 | 691 | 4 | 4.27 元 | 6.18 |
+| elder-love | 90 | 72 | 4 | 1.40 元 | 19.44 |
+| parent-tools | 122 | 105 | 5 | 0.59 元 | 5.62 |
+
+**采集脚本**：`.automation/scripts/ad-data-collector.js` → 输出 `ad-data-summary.json`
+
+### 5.3 流量数据（待申请权限）
+
+`POST https://open.kuaishou.com/openapi/mp/developer/order/v1/report`
+
+| 参数 | 位置 | 说明 |
+|------|------|------|
+| access_token | query | 小程序 token |
+| app_id | query | 小程序 appId |
+| begin_date | query | yyyymmdd 格式 |
+| end_date | query | yyyymmdd（最大昨日） |
+
+限制：最近 100 天，单次最多 7 天
+返回：按日+渠道拆分，visitDeviceNum（访问设备数）, visitPageCnt（访问次数）
+
+**需联系快手开放平台申请 scope.us.profile 权限**，当前返回 100200102 access denied
 
 ### 中等价值
 
@@ -147,7 +209,6 @@ Base URL: `https://daren.kuaishou.com`
 
 ### 待办
 1. 加 cron 定期刷新 access_token（每 ~40 小时）
-2. 视频播放/点赞数据接入 auto observe
-3. 接入小程序服务端 API（短视频挂载数据、广告数据、流量数据）
-4. 小程序挂载批准后测试 mp_plc/bind
-5. 其他小程序也申请批量挂载关联"试试看"
+2. 申请流量数据 API 的 scope.us.profile 权限
+3. 小程序挂载批准后测试 mp_plc/bind
+4. 其他小程序也申请批量挂载关联"试试看"
