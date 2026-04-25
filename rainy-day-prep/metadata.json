@@ -1,0 +1,22 @@
+{
+  "id": "rainy-day-prep",
+  "name": "爱老人雨天小贴士",
+  "description": "适合手机阅读的图文投票页，围绕雨天出行与居家防滑、保暖、应急与出行规划四类实用准备，鼓励老人分享经验，提升安全感与互助意识。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "雨天",
+    "准备",
+    "居家",
+    "出行",
+    "防滑",
+    "保暖",
+    "应急",
+    "老年",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "rainy-day-prep/images/umbrella-non-slip.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-25T18:00:35.569Z"
+}
