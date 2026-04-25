@@ -188,6 +188,7 @@ Base URL: `https://daren.kuaishou.com`
 | API | 路径 | 说明 |
 |-----|------|------|
 | 创建星火任务 | `POST /rest/pc/creator/marketing/distribution/create` | 创建星火计划分发任务 |
+| 暂停任务 | `POST /rest/pc/creator/marketing/distribution/update` | body: `{"distributionPlanId":<id>,"version":1,"updateFields":{"planOffline":"1"}}` |
 | 极限词校验 | `POST /rest/pc/creator/marketing/common/textCheck` | 检查任务名是否含违禁词 |
 | 资源检查 | `POST /rest/pc/creator/marketing/distribution/resource/checkResource` | 检查可用资源 |
 | AI 封面 | `GET /rest/node/ai/img` | 生成 AI 封面图 |
