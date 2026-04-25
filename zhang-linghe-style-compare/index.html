@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>张凌赫穿搭风格对比投票页</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">张凌赫穿搭风格对比：你偏爱哪种造型？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你更喜欢张凌赫的哪种穿搭风格？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="casual-relaxed">
+                            <div class="card-image">
+                                <img src="images/zhang-linghe-casual-relaxed.svg" alt="张凌赫休闲随性穿搭" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">休闲随性</h3>
+                                <p class="option-desc">牛仔夹克、白T与运动鞋，日常舒适又有亲和力的休闲感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="formal-elegant">
+                            <div class="card-image">
+                                <img src="images/zhang-linghe-formal-elegant.svg" alt="张凌赫正式优雅穿搭" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">正式优雅</h3>
+                                <p class="option-desc">剪裁西装、衬衫或礼服，适合活动与镜头前的精致感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="street-trend">
+                            <div class="card-image">
+                                <img src="images/zhang-linghe-street-trend.svg" alt="张凌赫潮流街头穿搭" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">潮流街头</h3>
+                                <p class="option-desc">大胆配色、层次搭配与街头单品，展现个性与时尚态度</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
