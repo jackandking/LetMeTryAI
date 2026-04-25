@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家里电价上升，你会怎样调整用电？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家里电价上升，你会怎样调整用电？（家长实用篇）</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">家里电价上升，你会怎样调整用电？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="batch-cooking-laundry">
+                            <div class="card-image">
+                                <img src="images/batch-cooking-laundry.svg" alt="家庭在厨房做饭与洗衣机工作的场景插图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">集中做饭与洗衣（一次性完成）</h3>
+                                <p class="option-desc">把做饭、洗衣等高耗能操作集中到固定时段，减少高峰用电次数。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="shift-to-night">
+                            <div class="card-image">
+                                <img src="images/shift-to-night.svg" alt="夜间家中灯光与运行电器的温馨场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">错峰使用（更多夜间或低价时段）</h3>
+                                <p class="option-desc">把洗衣、热水等能延后完成的工作安排在低谷时段，以降低电费。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="use-energy-saving-devices">
+                            <div class="card-image">
+                                <img src="images/use-energy-saving-devices.svg" alt="节能电器与智能插座示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">更新节能设备&用智能插座</h3>
+                                <p class="option-desc">逐步更换耗电大件，使用智能插座与定时策略减少待机浪费。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="reduce-waste-through-habits">
+                            <div class="card-image">
+                                <img src="images/reduce-waste-through-habits.svg" alt="家长与孩子一起检查灯光与空调的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">以习惯教育为主，减少浪费</h3>
+                                <p class="option-desc">通过孩子参与与家庭规则（关灯、合理调温）形成长期节电习惯。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

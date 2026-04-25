@@ -1,0 +1,19 @@
+{
+  "id": "home-electricity-adjustment",
+  "name": "家长爱 - 用电小决策",
+  "description": "比较错峰用电、集中过电器使用、升级节能设备和培养节能习惯四种可行方案，帮助家长评估短期与长期收益并与孩子共同制定家庭用电计划。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "节能",
+    "家庭用电",
+    "省钱",
+    "亲子教育",
+    "生活技巧",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "home-electricity-adjustment/images/batch-cooking-laundry.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-25T19:00:35.487Z"
+}
