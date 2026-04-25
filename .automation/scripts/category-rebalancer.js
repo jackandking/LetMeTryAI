@@ -2,8 +2,14 @@
 /**
  * category-rebalancer.js
  *
- * Reads topic-performance-summary.json and reorders preferredCategories
- * in profile JSON configs based on actual Kuaishou exposure data.
+ * Reads topic-performance-summary.json and mount-data-summary.json,
+ * then reorders preferredCategories in profile JSON configs based on
+ * actual performance data.
+ *
+ * Ranking signal priority:
+ *   1. Mount PLC enter count (direct measure of video → mini-program conversion)
+ *   2. Kuaishou task exposure (daren platform data)
+ *   3. Original order (fallback)
  *
  * Safety: only reorders existing categories, never adds or removes.
  *
@@ -15,31 +21,87 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_DIR = path.resolve(__dirname, '../..');
+const PROD_DIR = process.env.PROD_DIR || REPO_DIR;
 const PERF_SUMMARY = path.join(REPO_DIR, '.automation', '.local', 'state', 'topic-performance-summary.json');
+const MOUNT_SUMMARY = path.join(REPO_DIR, '.automation', '.local', 'state', 'mount-data-summary.json');
+const HARNESS_RUNS_DIR = path.join(PROD_DIR, '.harness', '.local', 'state', 'daily-app-runs');
 const PROFILES_DIR = path.join(REPO_DIR, '.harness', 'config', 'profiles');
 const AUDIT_LOG = path.join(REPO_DIR, '.automation', '.local', 'logs', 'category-rebalancer.jsonl');
 const DRY_RUN = process.argv.includes('--dry-run');
 
 const PROFILE_IDS = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
 
+function buildAppSlugToCategoryMap() {
+  if (!fs.existsSync(HARNESS_RUNS_DIR)) return {};
+  const map = {};
+  for (const f of fs.readdirSync(HARNESS_RUNS_DIR)) {
+    if (!f.endsWith('.jsonl')) continue;
+    const lines = fs.readFileSync(path.join(HARNESS_RUNS_DIR, f), 'utf-8')
+      .split('\n').filter(Boolean);
+    for (const line of lines) {
+      try {
+        const run = JSON.parse(line);
+        if (!run.success || !run.selectedTopic) continue;
+        const t = run.selectedTopic;
+        if (t.appId && t.category) {
+          map[t.appId] = { category: t.category, profileId: run.profileId };
+        }
+      } catch {}
+    }
+  }
+  return map;
+}
+
+function buildMountCategoryScores(mountSummary, slugToCategory) {
+  const scores = {};
+  for (const [profileId, data] of Object.entries(mountSummary.profiles || {})) {
+    for (const app of (data.byApp || [])) {
+      // Try exact match first, then strip date suffix for fuzzy match
+      let mapping = slugToCategory[app.appSlug];
+      if (!mapping) {
+        const base = app.appSlug.replace(/-\d{4}-\d{2}-\d{2}$/, '');
+        mapping = slugToCategory[base];
+      }
+      if (!mapping || mapping.profileId !== profileId) continue;
+      const cat = mapping.category;
+      const key = `${profileId}:${cat}`;
+      if (!scores[key]) scores[key] = { profileId, category: cat, plcEnter: 0 };
+      scores[key].plcEnter += app.plcEnter;
+    }
+  }
+  return scores;
+}
+
 function main() {
-  if (!fs.existsSync(PERF_SUMMARY)) {
-    console.log('[rebalancer] No performance summary found, skipping');
-    process.exit(0);
+  // Load daren performance data (optional)
+  let darenRanking = [];
+  if (fs.existsSync(PERF_SUMMARY)) {
+    const summary = JSON.parse(fs.readFileSync(PERF_SUMMARY, 'utf-8'));
+    darenRanking = summary.categoryRanking || [];
+    console.log(`[rebalancer] Daren data: ${darenRanking.length} categories from ${summary.reportDate}`);
   }
 
-  const summary = JSON.parse(fs.readFileSync(PERF_SUMMARY, 'utf-8'));
-  const ranking = summary.categoryRanking || [];
-
-  if (ranking.length === 0) {
-    console.log('[rebalancer] No category ranking data, skipping');
-    process.exit(0);
+  // Load mount data (optional)
+  let mountScores = {};
+  if (fs.existsSync(MOUNT_SUMMARY)) {
+    const mountSummary = JSON.parse(fs.readFileSync(MOUNT_SUMMARY, 'utf-8'));
+    const slugToCategory = buildAppSlugToCategoryMap();
+    mountScores = buildMountCategoryScores(mountSummary, slugToCategory);
+    const mappedCount = Object.keys(mountScores).length;
+    console.log(`[rebalancer] Mount data: ${mappedCount} profile:category pairs mapped`);
+    if (mappedCount > 0) {
+      for (const [key, val] of Object.entries(mountScores)) {
+        console.log(`  ${key}: plcEnter=${val.plcEnter}`);
+      }
+    }
   }
 
-  console.log(`[rebalancer] Loaded performance data from ${summary.reportDate}, ${ranking.length} categories ranked`);
+  if (darenRanking.length === 0 && Object.keys(mountScores).length === 0) {
+    console.log('[rebalancer] No performance data found, skipping');
+    process.exit(0);
+  }
 
   let totalChanges = 0;
 
@@ -52,14 +114,20 @@ function main() {
 
     const profile = JSON.parse(fs.readFileSync(profilePath, 'utf-8'));
     const original = [...profile.preferredCategories];
-
     const profileCats = new Set(original);
-    const rankedForProfile = ranking
-      .filter(r => profileCats.has(r.category))
-      .map(r => r.category);
 
-    const unranked = original.filter(c => !rankedForProfile.includes(c));
-    const reordered = [...rankedForProfile, ...unranked];
+    // Score each category: mount plcEnter (priority) then daren exposure
+    const catScores = {};
+    for (const cat of original) {
+      const mountKey = `${profileId}:${cat}`;
+      const mountPlcEnter = mountScores[mountKey]?.plcEnter || 0;
+      const darenEntry = darenRanking.find(r => r.category === cat);
+      const darenExposure = darenEntry?.totalExposure || 0;
+      // Mount data gets 1M multiplier to always outrank daren-only data
+      catScores[cat] = mountPlcEnter * 1000000 + darenExposure;
+    }
+
+    const reordered = [...original].sort((a, b) => catScores[b] - catScores[a]);
 
     if (reordered.length !== original.length ||
         !original.every(c => reordered.includes(c))) {
@@ -77,6 +145,12 @@ function main() {
       console.log(`[rebalancer] DRY-RUN ${profileId}:`);
       console.log(`  Before: ${original.join(', ')}`);
       console.log(`  After:  ${reordered.join(', ')}`);
+      for (const cat of reordered) {
+        const mk = `${profileId}:${cat}`;
+        const mp = mountScores[mk]?.plcEnter || 0;
+        const de = darenRanking.find(r => r.category === cat)?.totalExposure || 0;
+        console.log(`    ${cat}: mountPlcEnter=${mp}, darenExposure=${de}`);
+      }
       totalChanges++;
       continue;
     }
@@ -92,7 +166,7 @@ function main() {
       profileId,
       before: original,
       after: reordered,
-      basedOn: summary.reportDate,
+      source: Object.keys(mountScores).length > 0 ? 'mount+daren' : 'daren',
     };
     fs.mkdirSync(path.dirname(AUDIT_LOG), { recursive: true });
     fs.appendFileSync(AUDIT_LOG, JSON.stringify(audit) + '\n', 'utf-8');
