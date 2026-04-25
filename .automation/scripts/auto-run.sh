@@ -67,6 +67,12 @@ PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/topic-performance-analy
   echo "[auto-run] Topic performance analysis failed (non-fatal)"
 }
 
+# Analyze mount data (PLC click/enter metrics from kuaishou-follow exports)
+echo "[auto-run] Analyzing mount data..."
+PROD_DIR="$PROD_DIR" node "$REPO_DIR/.automation/scripts/mount-data-analyzer.js" 2>&1 || {
+  echo "[auto-run] Mount data analysis failed (non-fatal)"
+}
+
 # Rebalance profile categories based on performance data
 echo "[auto-run] Running category rebalancer..."
 node "$REPO_DIR/.automation/scripts/category-rebalancer.js" 2>&1 || {
