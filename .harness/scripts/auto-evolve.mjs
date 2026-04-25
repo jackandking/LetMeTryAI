@@ -24,12 +24,18 @@ import { spawnSync } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_DIR = path.resolve(__dirname, '../..');
+const PROD_DIR = process.env.PROD_DIR || REPO_DIR;
 const HARNESS_DIR = path.join(REPO_DIR, '.harness');
 const LOG_DIR = path.join(HARNESS_DIR, '.local', 'logs');
 const STATE_DIR = path.join(HARNESS_DIR, '.local', 'state');
 const KIMI_DIR = path.join(REPO_DIR, '.kimi');
 const LEARNINGS_DIR = path.join(REPO_DIR, '.learnings');
 const SKILLS_DIR = path.join(REPO_DIR, '.agents', 'skills');
+
+// When running from auto directory, read production data from PROD_DIR
+const PROD_HARNESS_DIR = path.join(PROD_DIR, '.harness');
+const PROD_LOG_DIR = path.join(PROD_HARNESS_DIR, '.local', 'logs');
+const PROD_STATE_DIR = path.join(PROD_HARNESS_DIR, '.local', 'state');
 
 const MODE = process.argv[2] || 'full';
 const NOW = new Date();
@@ -198,7 +204,7 @@ class Observer {
   }
 
   observeDailyAppRuns() {
-    const runsDir = path.join(STATE_DIR, 'daily-app-runs');
+    const runsDir = path.join(PROD_STATE_DIR, 'daily-app-runs');
     if (!fs.existsSync(runsDir)) return;
 
     for (const file of fs.readdirSync(runsDir)) {
@@ -223,7 +229,7 @@ class Observer {
   }
 
   observeKuaishouFollow() {
-    const followDir = path.join(STATE_DIR, 'kuaishou-follow', 'daily-runs');
+    const followDir = path.join(PROD_STATE_DIR, 'kuaishou-follow', 'daily-runs');
     if (!fs.existsSync(followDir)) return;
 
     const files = fs.readdirSync(followDir).filter((f) => f.endsWith('.json')).sort();
@@ -264,7 +270,7 @@ class Observer {
   }
 
   observeHarnessErrors() {
-    const harnessLog = path.join(LOG_DIR, 'harness.log');
+    const harnessLog = path.join(PROD_LOG_DIR, 'harness.log');
     if (!fs.existsSync(harnessLog)) return;
 
     // Read last 500 lines
