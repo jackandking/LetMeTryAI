@@ -12,7 +12,7 @@ import { PATHS } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 // 快手开放平台配置
 const KUAISHOU_CONFIG = {
-    appId: process.env.KUAISHOU_APP_ID || 'ks662839447801476542',
+    appId: process.env.KUAISHOU_APP_ID || 'ks683421244533878879',
     appSecret: process.env.KUAISHOU_APP_SECRET || '',
     appName: process.env.KUAISHOU_APP_NAME || '试试看',
     baseUrl: 'https://open.kuaishou.com',
