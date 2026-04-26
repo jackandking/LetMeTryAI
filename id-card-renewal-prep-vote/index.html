@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>居民身份证换证：准备方式你会怎么选？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">居民身份证换证准备方式投票</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果要去办理居民身份证换证，你通常会怎样准备？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="advance-appointment-prepare">
+                            <div class="card-image">
+                                <img src="images/advance-appointment-prepare.svg" alt="提前预约准备材料" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">提前预约并按清单准备材料</h3>
+                                <p class="option-desc">提前在官网或窗口预约，按材料清单准备证件、照片与表格，减少往返和等待时间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="walk-in-same-day">
+                            <div class="card-image">
+                                <img src="images/walk-in-same-day.svg" alt="现场排队办理" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当天到现场临时办理并排队</h3>
+                                <p class="option-desc">不提前预约，直接到派出所或办证点现场排队并现场补交材料，适合临时决定或附近办证点较方便的情况。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="entrust-family">
+                            <div class="card-image">
+                                <img src="images/entrust-family.svg" alt="委托亲友代办" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">委托子女或亲友代办</h3>
+                                <p class="option-desc">由家人或熟悉的邻里代为跑腿和递交材料，适合行动不便或不熟流程的长者。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="community-home-service">
+                            <div class="card-image">
+                                <img src="images/community-home-service.svg" alt="社区代办上门服务" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">使用社区或代办平台的上门/集中代办服务</h3>
+                                <p class="option-desc">通过居委会或认证代办机构预约上门服务或社区集中代办，节省出行与排队时间，通常伴随简单指导。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "id": "id-card-renewal-prep-vote",
+  "name": "换证准备投票",
+  "description": "本投票面向老年群体，收集居民身份证换证时的准备习惯与偏好，包含材料准备、预约途径与代办选择，适合在社区或社群中发起的图文投票页。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "身份证",
+    "换证",
+    "办理指南",
+    "老年人",
+    "预约代办",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "id-card-renewal-prep-vote/images/advance-appointment-prepare.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-26T18:00:35.278Z"
+}
