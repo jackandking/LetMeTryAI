@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>被带回家的国货美妆单品投票</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">被带回家的国货美妆单品：你会选择哪种？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">出门旅行或逛街时，你最常把哪类国货美妆单品带回家？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="skincare-serums-creams">
+                            <div class="card-image">
+                                <img src="images/skincare-serums-creams.svg" alt="护肤精华与面霜摆放在化妆台上" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">护肤精华/面霜</h3>
+                                <p class="option-desc">注重修护与保湿的护肤单品，适合追求肌肤质感的人。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="makeup-lips-cheeks">
+                            <div class="card-image">
+                                <img src="images/makeup-lips-cheeks.svg" alt="口红和腮红样本展示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">彩妆口红/腮红</h3>
+                                <p class="option-desc">便于随身补妆的彩妆类，色号与质地是带回家的关键。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="masks-quick-care">
+                            <div class="card-image">
+                                <img src="images/masks-quick-care.svg" alt="多款面膜平铺展示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">面膜/急救护理</h3>
+                                <p class="option-desc">即时见效、补水或修护的面膜与急救护理单品，旅行常备。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fragrance-body-care">
+                            <div class="card-image">
+                                <img src="images/fragrance-body-care.svg" alt="香水与身体乳的摆拍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">香氛/身体护理</h3>
+                                <p class="option-desc">提升生活品质的香氛与身体护理，适合注重仪式感的用户。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
