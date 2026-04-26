@@ -1,0 +1,20 @@
+{
+  "id": "foreigners-buy-china-cars",
+  "name": "男人宝·汽车观察",
+  "description": "针对出海与海外消费者视角，比较中国车在性价比、智能配置、新能源与本地化服务等方面的吸引力，适合短平快图文投票与社交流量传播。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "中国车",
+    "出海",
+    "性价比",
+    "智能化",
+    "新能源",
+    "售后",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "foreigners-buy-china-cars/images/price-value.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-26T17:00:36.597Z"
+}
