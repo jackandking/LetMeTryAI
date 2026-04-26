@@ -1,16 +1,35 @@
 {
   "id": "elder-love",
   "name": "爱老人",
-  "preferredCategories": ["健康养生", "怀旧回忆", "家庭生活", "实用生活"],
+  "preferredCategories": [
+    "实用生活",
+    "怀旧回忆",
+    "健康养生",
+    "家庭生活"
+  ],
   "topicGuidelines": {
-    "doMore": ["健康养生知识", "怀旧经典内容", "实用生活技巧"],
-    "avoid": ["医疗建议", "过度悲伤内容"]
+    "doMore": [
+      "健康养生知识",
+      "怀旧经典内容",
+      "实用生活技巧"
+    ],
+    "avoid": [
+      "医疗建议",
+      "过度悲伤内容"
+    ]
   },
   "constraints": {
     "categoryRotation": {
-      "health": { "maxPerWeek": 2, "cooldownDays": 3 }
+      "health": {
+        "maxPerWeek": 2,
+        "cooldownDays": 3
+      }
     },
-    "forbiddenKeywords": ["最", "第一", "包治"],
+    "forbiddenKeywords": [
+      "最",
+      "第一",
+      "包治"
+    ],
     "budget": {
       "maxCopilotCalls": 3,
       "maxTokensPerRun": 100000
