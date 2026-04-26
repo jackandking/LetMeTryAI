@@ -23,16 +23,40 @@ const SCAN_DIRS = [
   path.join(PROD_DIR, '.automation', '.local', 'logs', 'publish-errors')
 ];
 
-// Patterns: regex -> patternKey
+// Patterns: regex -> patternKey (ordered specific → broad; first match wins per file)
 const ERROR_PATTERNS = [
   { regex: /SESSION_EXPIRED|session expired/i, key: 'auth.session_expire' },
   { regex: /ffmpeg failed|ffmpeg error/i, key: 'video.ffmpeg_error' },
   { regex: /Error: .*timeout|timed out/i, key: 'infra.timeout' },
   { regex: /network error|ECONNREFUSED|ENOTFOUND/i, key: 'infra.network' },
   { regex: /MySQL.*error|mysql.*fail/i, key: 'db.mysql_error' },
+  { regex: /不可出现特殊符号|含极限词|禁止发布|请修改后重新提交/i, key: 'kuaishou.forbidden_word' },
   { regex: /FAIL|FAILED/i, key: 'runtime.failure' },
   { regex: /ERROR|Exception|exception/i, key: 'runtime.error' },
-  { regex: /不可出现特殊符号|含极限词|禁止发布|请修改后重新提交/i, key: 'kuaishou.forbidden_word' }
+];
+
+// Lines matching these patterns are noise — not real application errors.
+// Tested against the line itself, before the error pattern regex runs.
+const LINE_NOISE_FILTERS = [
+  /^<[A-Z!/]/,                              // HTML tags (<TITLE>, <H1>, <!DOCTYPE, etc.)
+  /AgentMail failed:.*headers:/,            // AgentMail HTTP response dump (the fallback handles it)
+  /^Failed:\s*\d+$/,                        // Follow worker summary line "Failed: 1" (operational, not a crash)
+  /^Attempted:\s*\d+$/,                     // Follow worker summary line
+  /^Followed:\s*\d+$/,                      // Follow worker summary line
+  /^Already followed:\s*\d+$/,              // Follow worker summary line
+  /^Stop reason:/,                          // Follow worker stop reason
+  /x-cache.*cloudfront/i,                   // CloudFront response headers
+  /x-amz-cf/i,                             // CloudFront response headers
+  /content-type.*text\/html/i,              // HTTP response headers
+  /"level":"debug"/,                        // Debug-level log lines are not errors
+];
+
+// File-level suppression: if the file content matches the "suppress" pattern,
+// errors matching "errorKey" are considered recovered and not logged.
+const FALLBACK_SUPPRESSIONS = [
+  { errorKey: 'infra.timeout', suppress: /Falling back to next provider/ },
+  { errorKey: 'runtime.failure', suppress: /Email sent via system mail/ },
+  { errorKey: 'runtime.error', suppress: /Email sent via system mail/ },
 ];
 
 const LOOKBACK_HOURS = 24;
@@ -106,19 +130,17 @@ function isBenignFollowWorkerLog(logFile, content) {
   const basename = path.basename(logFile);
   if (!basename.includes('follow-worker')) return false;
 
-  // queue-empty is a normal state, not a failure
-  if (content.includes('Stop reason: queue-empty')) return true;
+  // Follow worker summary lines (Attempted/Followed/Failed/Stop reason) are
+  // operational metrics, not system errors. Only flag if there's an actual
+  // uncaught exception or crash (stack trace).
+  const hasRealCrash = /at\s+\S+\s+\(.*:\d+:\d+\)|uncaughtException|unhandledRejection|FATAL/i.test(content);
+  return !hasRealCrash;
+}
 
-  // If all metrics are zero, it's just an empty queue run
-  const failedMatch = content.match(/Failed:\s*(\d+)/);
-  if (failedMatch && parseInt(failedMatch[1], 10) === 0) {
-    const attemptedMatch = content.match(/Attempted:\s*(\d+)/);
-    if (attemptedMatch && parseInt(attemptedMatch[1], 10) === 0) {
-      return true;
-    }
-  }
-
-  return false;
+function isNoiseLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return false;
+  return LINE_NOISE_FILTERS.some(f => f.test(trimmed));
 }
 
 function extractContext(logPath, regex) {
@@ -126,6 +148,7 @@ function extractContext(logPath, regex) {
   const lines = content.split('\n');
   const matches = [];
   for (let i = 0; i < lines.length; i++) {
+    if (isNoiseLine(lines[i])) continue;
     if (regex.test(lines[i])) {
       const start = Math.max(0, i - 2);
       const end = Math.min(lines.length, i + 3);
@@ -194,15 +217,35 @@ async function main() {
       continue;
     }
 
+    const matchedKeys = new Set();
+
     for (const { regex, key } of ERROR_PATTERNS) {
+      // First-match-wins: if a specific pattern already fired, skip broader ones.
+      // e.g. auth.session_expire fires → skip runtime.failure and runtime.error
+      if ((key === 'runtime.failure' || key === 'runtime.error') && matchedKeys.size > 0) {
+        console.log(`[log-scanner] Skipping ${path.basename(logFile)} pattern=${key} (specific pattern already matched: ${[...matchedKeys].join(', ')})`);
+        continue;
+      }
+
       if (!regex.test(content)) continue;
+
+      // Check fallback suppression: did the system recover?
+      const suppression = FALLBACK_SUPPRESSIONS.find(s => s.errorKey === key);
+      if (suppression && suppression.suppress.test(content)) {
+        console.log(`[log-scanner] Skipping ${path.basename(logFile)} pattern=${key} (fallback succeeded)`);
+        continue;
+      }
+
       if (isAlreadyLogged(indexEntries, logFile, key)) {
         console.log(`[log-scanner] Skipping ${path.basename(logFile)} pattern=${key} (already logged)`);
         continue;
       }
 
       const contexts = extractContext(logFile, regex);
-      if (contexts.length === 0) continue;
+      if (contexts.length === 0) {
+        console.log(`[log-scanner] Skipping ${path.basename(logFile)} pattern=${key} (all matches were noise)`);
+        continue;
+      }
 
       const basename = path.basename(logFile);
       const id = getNextId();
@@ -232,6 +275,7 @@ async function main() {
 
       console.log(`[log-scanner] Created learning: ${filePath}`);
       created++;
+      matchedKeys.add(key);
 
       // Re-load index to avoid duplicates in same run
       indexEntries.push({ id, type: 'error', status: 'pending', file: filePath, sourceFile: basename, patternKey: key });

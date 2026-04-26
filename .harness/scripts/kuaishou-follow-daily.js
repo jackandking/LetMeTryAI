@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { chromium } from 'playwright';
 
-import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth } from './kuaishou-follow-auth.js';
+import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth, checkCookieExpiry } from './kuaishou-follow-auth.js';
 import { buildPastDayRange, fetchOfficialPastDayData, formatDateInTimeZone, writeExportFile } from './kuaishou-follow-api.js';
 import { loadFollowAppConfigs } from './kuaishou-follow-config.js';
 import {
@@ -48,6 +48,8 @@ const INVALID_VIDEO_KEYWORDS = ['找不到该作品', '热门作品'];
 const IMAGE_POST_KEYWORDS = ['暂未支持显示图片作品'];
 const FOLLOWED_TEXTS = new Set(['已关注', '互相关注', '回关']);
 const FOLLOW_BUTTON_TEXTS = new Set(['关注', '+关注', '＋关注', '+ 关注']);
+const RETRYABLE_REASONS = new Set(['follow-button-not-found', 'invalid-video', 'image-post', 'follow-state-not-confirmed']);
+const MAX_FOLLOW_ATTEMPTS = 3;
 
 function getFollowPaths(repoRoot) {
     const paths = buildFollowRuntimePaths(repoRoot);
@@ -62,6 +64,25 @@ function buildRuntimeDirs(repoRoot) {
         authDir: join(repoRoot, '.harness', '.local', 'auth'),
         logsDir: join(repoRoot, '.harness', '.local', 'logs')
     };
+}
+
+function sendAuthAlert(repoRoot, env, subject, bodyText) {
+    const recipient = String(env.KUAISHOU_FOLLOW_REPORT_TO || '').trim();
+    if (!recipient) return;
+
+    const tmpFile = join(repoRoot, '.harness', '.local', 'logs', `auth-alert-${Date.now()}.txt`);
+    writeFileSync(tmpFile, bodyText, 'utf-8');
+
+    try {
+        spawn('python3', [
+            join(repoRoot, '.harness', 'scripts', 'send-email.py'),
+            subject,
+            recipient,
+            tmpFile
+        ], { stdio: 'ignore', detached: true }).unref();
+    } catch {
+        // Best-effort alert — don't crash the worker.
+    }
 }
 
 function getRunDateKey(now = new Date()) {
@@ -94,6 +115,9 @@ function detectPageCondition(text) {
         return 'rate-limited';
     }
     if (bodyText.includes('登录/注册') || bodyText.includes('立即登录')) {
+        return 'not-logged-in';
+    }
+    if (/^\s*\{"result":\s*\d/.test(bodyText)) {
         return 'not-logged-in';
     }
     return '';
@@ -654,6 +678,44 @@ export async function runHourlyFollowWorker({
     };
 
     const runtimeDirs = buildRuntimeDirs(repoRoot);
+
+    // Preflight: check cookie TTL before opening browser
+    const authFile = resolveKuaishouAuthFile(runtimeDirs.authDir, WEB_URL);
+    const cookieStatus = checkCookieExpiry(authFile);
+
+    if (cookieStatus.isExpired) {
+        const deferUntil = buildNextDayResumeAt(now, DEFAULT_REPORT_HOUR);
+        queue = deferEntireQueue(queue, deferUntil, new Date().toISOString(), 'auth-expired');
+        savePendingQueue(paths.queueFile, queue);
+
+        sendAuthAlert(repoRoot, env,
+            '[Kuaishou Follow] Auth cookie 已过期，follow 已暂停',
+            `Cookie "${cookieStatus.cookieName}" 已过期 (${cookieStatus.reason || cookieStatus.expiresAt})。\n`
+            + `队列中 ${queue.length} 个候选人已暂停，等待手动刷新 auth。\n\n`
+            + `刷新方法: cd .harness && npx tsx scripts/kuaishou-follow.ts start`
+        );
+
+        const dayState = appendHourlyRunState(paths.dailyRunsDir, runDateKey, {
+            startedAt,
+            completedAt: new Date().toISOString(),
+            attempted: 0, followed: 0, alreadyFollowed: 0, failed: 0,
+            stopReason: 'auth-expired'
+        });
+        if (autoSendReport) {
+            await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
+        }
+        return dayState.hourlyRuns[dayState.hourlyRuns.length - 1];
+    }
+
+    if (cookieStatus.isExpiringSoon) {
+        sendAuthAlert(repoRoot, env,
+            `[Kuaishou Follow] Auth cookie 将在 ${cookieStatus.ttlHours}h 后过期`,
+            `Cookie "${cookieStatus.cookieName}" 将于 ${cookieStatus.expiresAt} 过期 (剩余 ${cookieStatus.ttlHours}h)。\n`
+            + `请尽快刷新以避免 follow 中断。\n\n`
+            + `刷新方法: cd .harness && npx tsx scripts/kuaishou-follow.ts start`
+        );
+    }
+
     const browserSession = await openFollowBrowser({ headless, runtimeDirs });
     try {
         for (let index = 0; index < selected.length; index += 1) {
@@ -678,6 +740,20 @@ export async function runHourlyFollowWorker({
                 break;
             }
 
+            if (result.reason === 'not-logged-in') {
+                const deferUntil = buildNextDayResumeAt(now, DEFAULT_REPORT_HOUR);
+                queue = deferEntireQueue(queue, deferUntil, new Date().toISOString(), 'auth-expired');
+                stopReason = 'auth-expired';
+
+                sendAuthAlert(repoRoot, env,
+                    '[Kuaishou Follow] 运行中检测到 auth 失效，已暂停',
+                    `在 follow 第 ${index + 1} 个候选人时检测到未登录状态。\n`
+                    + `队列中 ${queue.length} 个候选人已暂停。\n\n`
+                    + `刷新方法: cd .harness && npx tsx scripts/kuaishou-follow.ts start`
+                );
+                break;
+            }
+
             if (result.status === 'followed') {
                 metrics.followed += 1;
             } else if (result.status === 'already-followed') {
@@ -686,15 +762,30 @@ export async function runHourlyFollowWorker({
                 metrics.failed += 1;
             }
 
-            appendFollowRecord(paths.historyFile, createFollowRecord({
-                creatorId: candidate.authorOpenId,
-                displayName: candidate.authorName,
-                status: result.status === 'already-followed' ? 'already-followed' : result.status,
-                reason: result.reason || '',
-                sourceUrl: candidate.videoUrl,
-                now: new Date().toISOString()
-            }));
-            queue = removeQueuedCandidate(queue, candidate.queueKey);
+            const isRetryable = result.status === 'failed' && RETRYABLE_REASONS.has(result.reason);
+            const newAttemptCount = Number(candidate.attemptCount || 0) + 1;
+
+            if (isRetryable && newAttemptCount < MAX_FOLLOW_ATTEMPTS) {
+                queue = updateQueuedCandidate(queue, candidate.queueKey, {
+                    attemptCount: newAttemptCount,
+                    lastAttemptAt: new Date().toISOString(),
+                    lastError: result.reason
+                });
+            } else {
+                appendFollowRecord(paths.historyFile, createFollowRecord({
+                    creatorId: candidate.authorOpenId,
+                    displayName: candidate.authorName,
+                    status: result.status === 'already-followed' ? 'already-followed' : result.status,
+                    reason: result.reason || '',
+                    sourceUrl: candidate.videoUrl,
+                    now: new Date().toISOString()
+                }));
+                queue = removeQueuedCandidate(queue, candidate.queueKey);
+
+                if (isRetryable && newAttemptCount >= MAX_FOLLOW_ATTEMPTS) {
+                    metrics.exhaustedRetries = (metrics.exhaustedRetries || 0) + 1;
+                }
+            }
         }
     } finally {
         await browserSession.page.close().catch(() => {});

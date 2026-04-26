@@ -789,6 +789,19 @@ export function buildDailyEmailReport({
             });
     }
 
+    const retryingCandidates = (Array.isArray(queue) ? queue : []).filter(c => Number(c.attemptCount || 0) > 0);
+    if (retryingCandidates.length > 0) {
+        lines.push('', `Pending retries (${retryingCandidates.length}):`);
+        retryingCandidates.forEach(c => {
+            lines.push(`- ${c.authorName || c.queueKey} attempt=${c.attemptCount} lastError=${c.lastError || ''}`);
+        });
+    }
+
+    const totalExhausted = hourlyRuns.reduce((sum, r) => sum + (r.exhaustedRetries || 0), 0);
+    if (totalExhausted > 0) {
+        lines.push('', `⚠️ ${totalExhausted} candidate(s) exhausted all retry attempts today and were removed from queue.`);
+    }
+
     return {
         subject,
         body: lines.join('\n'),

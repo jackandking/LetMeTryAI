@@ -16,6 +16,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { checkCookieExpiry, resolveKuaishouAuthFile } from './kuaishou-follow-auth.js';
 
 const HISTORY_FILE = 'follow-history.jsonl';
 const DAILY_RUNS_DIR = 'daily-runs';
@@ -105,9 +106,22 @@ function analyzeHealth(repoRoot) {
     const pendingQueue = readJsonFile(queuePath, []);
     const queueSize = Array.isArray(pendingQueue) ? pendingQueue.length : 0;
 
-    // 4. Determine health level
+    // 4. Check auth cookie expiry
+    const authDir = join(repoRoot, '.harness', '.local', 'auth');
+    const authFile = resolveKuaishouAuthFile(authDir, 'https://www.kuaishou.com');
+    const cookieStatus = checkCookieExpiry(authFile);
+
+    // 5. Determine health level
     let level = 'healthy';
     const issues = [];
+
+    if (cookieStatus.isExpired) {
+        level = 'critical';
+        issues.push(`Auth cookie "${cookieStatus.cookieName}" 已过期 (${cookieStatus.reason || cookieStatus.expiresAt})，follow 无法运行`);
+    } else if (cookieStatus.isExpiringSoon) {
+        level = 'degraded';
+        issues.push(`Auth cookie "${cookieStatus.cookieName}" 将在 ${cookieStatus.ttlHours}h 后过期 (${cookieStatus.expiresAt})，请尽快刷新`);
+    }
 
     if (topFailureReason && topFailureReason[0] === 'follow-button-not-found' && topFailureReason[1] >= 3) {
         level = 'critical';
