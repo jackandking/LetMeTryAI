@@ -1,0 +1,18 @@
+{
+  "id": "family-id-renew-vote",
+  "name": "家庭换证小投票",
+  "description": "本投票针对家庭成员身份证换证的不同安排方式进行选择与对比，侧重节省时间、兼顾孩子与老人出行便利，适合手机阅读的图文投票页。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "家庭身份证换证",
+    "换证安排",
+    "预约办理",
+    "亲子出行",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "family-id-renew-vote/images/weekend-family-visit.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-26T19:00:41.064Z"
+}
