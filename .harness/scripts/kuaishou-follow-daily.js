@@ -661,9 +661,6 @@ export async function runHourlyFollowWorker({
             failed: 0,
             stopReason
         });
-        if (autoSendReport) {
-            await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
-        }
         return dayState.hourlyRuns[dayState.hourlyRuns.length - 1];
     }
 
@@ -798,7 +795,9 @@ export async function runHourlyFollowWorker({
     savePendingQueue(paths.queueFile, queue);
 
     const dayState = appendHourlyRunState(paths.dailyRunsDir, runDateKey, metrics);
-    if (autoSendReport) {
+    const shouldReport = metrics.followed > 0 || metrics.failed > 0
+        || metrics.exhaustedRetries > 0 || stopReason === 'rate-limited' || stopReason === 'auth-expired';
+    if (autoSendReport && shouldReport) {
         await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
     }
 
