@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>收到可疑电话或微信时：您会如何处理？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">收到可疑电话或微信时您会怎么处理</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">当您收到可疑的电话或微信时，通常会怎么办？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hang-up-and-block">
+                            <div class="card-image">
+                                <img src="images/hang-up-and-block.svg" alt="挂断并拉黑来电或微信" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">直接挂断并拉黑</h3>
+                                <p class="option-desc">不接、不回，直接挂断并把号码或联系人拉黑</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="verify-with-family">
+                            <div class="card-image">
+                                <img src="images/verify-with-family.svg" alt="联系家人核实来电内容" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先联系家人或信任的人核实</h3>
+                                <p class="option-desc">先打电话问子女或亲友确认，再决定是否处理</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="call-helpline-or-community">
+                            <div class="card-image">
+                                <img src="images/call-helpline-or-community.svg" alt="拨打防骗热线或咨询社区" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">求助防骗热线或社区帮助</h3>
+                                <p class="option-desc">拨防骗热线或向社区服务/邻居求助，听取专业建议</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="keep-record-and-inform">
+                            <div class="card-image">
+                                <img src="images/keep-record-and-inform.svg" alt="保存记录并告知亲友" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不回复但保存信息并提醒亲友</h3>
+                                <p class="option-desc">不回应对方，保留聊天/来电记录并告知家人或邻居</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
