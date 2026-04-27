@@ -1,0 +1,19 @@
+{
+  "id": "received-suspicious-call-or-wechat",
+  "name": "爱老人安全投票",
+  "description": "面向老年用户的图文投票，展示常见来电/信息场景与处理选项，鼓励分享经验并传播防骗常识。适合手机阅读，图文并茂，避免恐慌性描述。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "防骗",
+    "电话安全",
+    "微信",
+    "长辈",
+    "实用技巧",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "received-suspicious-call-or-wechat/images/hang-up-and-block.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-27T18:00:46.228Z"
+}
