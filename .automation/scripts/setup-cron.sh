@@ -137,6 +137,9 @@ HOME=$HOME_DIR
 0 14 * * * cd "$PROD_DIR/.harness" && ./scripts/run-kuaishou-follow-ingest.sh
 5 * * * * cd "$PROD_DIR/.harness" && ./scripts/run-kuaishou-follow-worker.sh
 
+# Daily Success Story - top video promo (after ingestion) - 07:30
+30 7 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-success-story.sh
+
 # Daily Cron Health Check - 20:00
 0 20 * * * cd "$PROD_DIR" && "$PROD_DIR/.harness/scripts/run-cron-health-check.sh"
 
