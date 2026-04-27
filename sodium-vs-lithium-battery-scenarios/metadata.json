@@ -1,0 +1,20 @@
+{
+  "id": "sodium-vs-lithium-battery-scenarios",
+  "name": "电池场景投票",
+  "description": "讨论钠离子电池与锂电池在不同应用场景（如电网储能、入门级电动车、手机与高性能电动车）中的适配性、成本与性能取舍。适合手机阅读的图文投票页，面向关注科技、汽车与数码的受众。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "钠离子电池",
+    "锂电池",
+    "储能",
+    "电动车",
+    "数码",
+    "科技评测",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "sodium-vs-lithium-battery-scenarios/images/sodium-grid-storage.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-27T17:00:46.751Z"
+}
