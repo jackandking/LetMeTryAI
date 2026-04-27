@@ -1,0 +1,19 @@
+{
+  "id": "beitucao-kuai-shishang-vote",
+  "name": "女人爱·快时尚投票",
+  "description": "围绕快时尚被吐槽的话题设计的图文投票页，聚焦买手法、耐用性与环保/二手选择，便于手机阅读与社交分享。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "快时尚",
+    "穿搭",
+    "购物态度",
+    "可持续",
+    "二手",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "beitucao-kuai-shishang-vote/images/buy-for-trend.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-27T20:01:02.943Z"
+}
