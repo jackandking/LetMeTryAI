@@ -1,0 +1,18 @@
+{
+  "id": "family-phone-info-safety-vote",
+  "name": "家庭电话与信息安全规则投票",
+  "description": "适合手机阅读的图文投票页，聚焦接听来电、回复陌生信息、共享紧急联系人和通话隐私等实用规则，避免医疗建议和恐慌性内容，便于形成家庭约定。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "电话安全",
+    "信息隐私",
+    "家庭规则",
+    "亲子沟通",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "family-phone-info-safety-vote/images/confirm-caller-before-answer.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-27T19:00:51.822Z"
+}
