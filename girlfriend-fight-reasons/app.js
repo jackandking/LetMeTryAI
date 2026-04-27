@@ -30,9 +30,34 @@ const questionConfig = {
 let currentQuestion = 1;
 let voteData = {};
 
+
+const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
+const pageStartTime = Date.now();
+
+function logEvent(event, data = {}) {
+    const payload = {
+        event,
+        appId: questionConfig.storageKey.replace(/\.data$/, ''),
+        timestamp: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        ...data
+    };
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        navigator.sendBeacon(EVENT_ENDPOINT, JSON.stringify(payload));
+    } else if (typeof fetch !== 'undefined') {
+        fetch(EVENT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(() => {});
+    }
+}
+
 function initializeApp() {
     try {
         checkUrlParameters();
+        setupEventTracking();
         initializeVoteData();
         setupPageContent();
         handleResultDisplay();
@@ -40,6 +65,21 @@ function initializeApp() {
         console.error('Error initializing app:', error);
     }
 }
+
+function setupEventTracking() {
+    const urlParams = new URLSearchParams(window.location.search);
+    logEvent('page_load', { showAd: urlParams.get('showAd') === 'true' });
+    const finishedAd = urlParams.get('finishedAd');
+    if (finishedAd === 'true') {
+        logEvent('rewarded_ad_complete');
+    } else if (finishedAd === 'false') {
+        logEvent('rewarded_ad_skip');
+    }
+    window.addEventListener('beforeunload', () => {
+        logEvent('page_exit', { durationMs: Date.now() - pageStartTime });
+    });
+}
+
 
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -91,6 +131,7 @@ function attachRadioHandlers() {
 }
 
 function processVote(selectedLabel) {
+    logEvent('vote_complete', { option: selectedLabel });
     getConfig(questionConfig.storageKey, (data) => {
         try {
             if (data !== null && typeof data === 'object') {
@@ -116,6 +157,7 @@ function processVote(selectedLabel) {
 }
 
 function showAd() {
+    logEvent('rewarded_ad_trigger');
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
             url: '/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=girlfriend-fight-reasons'

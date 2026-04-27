@@ -29,12 +29,37 @@ let currentQuestion = 1;
 let score = 0;
 let voteData = {};
 
+
+const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
+const pageStartTime = Date.now();
+
+function logEvent(event, data = {}) {
+    const payload = {
+        event,
+        appId: questionConfig.storageKey.replace(/\.data$/, ''),
+        timestamp: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        ...data
+    };
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        navigator.sendBeacon(EVENT_ENDPOINT, JSON.stringify(payload));
+    } else if (typeof fetch !== 'undefined') {
+        fetch(EVENT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(() => {});
+    }
+}
+
 /**
  * Initializes the application
  */
 function initializeApp() {
     try {
         checkUrlParameters();
+        setupEventTracking();
         initializeVoteData();
         setupPageContent();
         handleResultDisplay();
@@ -46,6 +71,21 @@ function initializeApp() {
 /**
  * Checks URL parameters for navigation control
  */
+function setupEventTracking() {
+    const urlParams = new URLSearchParams(window.location.search);
+    logEvent('page_load', { showAd: urlParams.get('showAd') === 'true' });
+    const finishedAd = urlParams.get('finishedAd');
+    if (finishedAd === 'true') {
+        logEvent('rewarded_ad_complete');
+    } else if (finishedAd === 'false') {
+        logEvent('rewarded_ad_skip');
+    }
+    window.addEventListener('beforeunload', () => {
+        logEvent('page_exit', { durationMs: Date.now() - pageStartTime });
+    });
+}
+
+
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
     console.log('URL parameters:', urlParams);
@@ -200,6 +240,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
  * Shows advertisement before displaying results
  */
 function showAd() {
+    logEvent('rewarded_ad_trigger');
     if (typeof ks !== 'undefined' && ks.navigateTo) {
         ks.navigateTo({
             url: `/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=${questionConfig.resultPageId}`,

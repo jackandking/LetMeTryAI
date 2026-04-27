@@ -13,6 +13,30 @@ const questionConfig = {
 
 let voteData = {};
 
+
+const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
+const pageStartTime = Date.now();
+
+function logEvent(event, data = {}) {
+    const payload = {
+        event,
+        appId: questionConfig.storageKey.replace(/\.data$/, ''),
+        timestamp: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        ...data
+    };
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        navigator.sendBeacon(EVENT_ENDPOINT, JSON.stringify(payload));
+    } else if (typeof fetch !== 'undefined') {
+        fetch(EVENT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(() => {});
+    }
+}
+
 function initializeApp() {
     try {
         initializeVoteData();
