@@ -234,6 +234,63 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
     log('INFO', `Appended ${records.length} topic-performance record(s) to ${perfFile}`);
 }
 
+// ─── Mini-app event tracking data ───
+
+const EVENT_SUMMARY_URL = 'https://letmetry.cloud/api/track/summary';
+
+async function fetchEventSummary(dateStr) {
+    try {
+        const resp = await fetch(`${EVENT_SUMMARY_URL}?date=${dateStr}`);
+        if (!resp.ok) return null;
+        return await resp.json();
+    } catch (e) {
+        log('WARN', `Event summary fetch failed: ${e.message}`);
+        return null;
+    }
+}
+
+function formatEventSection(summary) {
+    if (!summary || summary.events === 0) {
+        return '(今日无小程序用户事件数据)';
+    }
+
+    const be = summary.byEvent || {};
+    const apps = summary.apps || {};
+    const realApps = Object.entries(apps).filter(([id]) => !['test', 'diag-from-home', 'test-plain-fixed', 'prod-test', 'connectivity-test'].includes(id));
+
+    const totalPageLoads = be.page_load || 0;
+    const totalVotes = be.vote_complete || 0;
+    const totalAdTrigger = be.rewarded_ad_trigger || 0;
+    const totalAdComplete = be.rewarded_ad_complete || 0;
+    const totalAdSkip = be.rewarded_ad_skip || 0;
+    const adCompletionRate = totalAdTrigger > 0 ? ((totalAdComplete / totalAdTrigger) * 100).toFixed(0) : 'N/A';
+
+    const lines = [
+        `📱 小程序用户行为 (${summary.date})`,
+        '',
+        `• 页面访问: ${totalPageLoads}`,
+        `• 投票完成: ${totalVotes}`,
+        `• 广告触发: ${totalAdTrigger}`,
+        `• 广告看完: ${totalAdComplete} | 跳过: ${totalAdSkip}`,
+        `• 广告完成率: ${adCompletionRate}%`,
+        `• 活跃小程序: ${realApps.length} 个`,
+    ];
+
+    if (realApps.length > 0) {
+        lines.push('');
+        lines.push('各应用明细:');
+        for (const [appId, events] of realApps.sort((a, b) => (b[1].page_load || 0) - (a[1].page_load || 0))) {
+            const pl = events.page_load || 0;
+            const vc = events.vote_complete || 0;
+            const ac = events.rewarded_ad_complete || 0;
+            const at = events.rewarded_ad_trigger || 0;
+            lines.push(`  ${appId}: 访问${pl} 投票${vc} 广告${ac}/${at}`);
+        }
+    }
+
+    return lines.join('\n');
+}
+
 // ─── Report generation ───
 
 function generateReport(tasks) {
@@ -514,7 +571,7 @@ function saveResults(report, dateStr) {
 
 // ─── Email ───
 
-function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename) {
+function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary) {
     const rawSection = `📊 快手星火计划日报 (${dateStr})
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -535,6 +592,7 @@ ${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝�
 
     const deltaSection = formatDeltaEmail(deltaReport, trendReport);
     const adoptionSection = formatAdoptionEmail(adoptionReport);
+    const eventSection = formatEventSection(eventSummary);
 
     return `${rawSection}
 
@@ -547,6 +605,11 @@ ${deltaSection}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${adoptionSection}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${eventSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📁 附件
@@ -594,10 +657,10 @@ ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent
     }
 }
 
-async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename) {
+async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary) {
     log('INFO', 'Sending email report...');
 
-    const body = buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename);
+    const body = buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary);
     const subject = `[快手日报] ${dateStr} | ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
 
@@ -712,8 +775,15 @@ async function main() {
         // 9. Append topic-performance for downstream analysis
         appendTopicPerformance(report, dateStr, PROJECT_ROOT);
 
-        // 10. Send combined email
-        await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename);
+        // 10. Fetch mini-app event tracking summary
+        log('INFO', 'Fetching mini-app event summary...');
+        const eventSummary = await fetchEventSummary(dateStr);
+        if (eventSummary) {
+            log('INFO', `Event summary: ${eventSummary.events} events from ${Object.keys(eventSummary.apps || {}).length} apps`);
+        }
+
+        // 11. Send combined email
+        await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary);
 
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         log('INFO', `Completed in ${duration}s`);
