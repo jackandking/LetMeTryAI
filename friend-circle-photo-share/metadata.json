@@ -1,0 +1,19 @@
+{
+  "id": "friend-circle-photo-share",
+  "name": "家长分享投票",
+  "description": "了解家长在朋友圈更新孩子照片时的做法：公开记录、仅给亲友、保护隐私的裁剪方式或以创意替代展示，适合手机图文投票页面。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "朋友圈",
+    "孩子照片",
+    "隐私",
+    "亲子沟通",
+    "育儿分享",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "friend-circle-photo-share/images/private-family-group.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-28T19:01:11.282Z"
+}
