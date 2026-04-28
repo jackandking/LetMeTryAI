@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>买车时你更看重什么？投票聊车</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">买车时你更看重什么？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">买车时你更看重什么？选一个最符合你购车决策的因素。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="you-hao-jing-ji-xing">
+                            <div class="card-image">
+                                <img src="images/you-hao-jing-ji-xing.svg" alt="油耗与经济性图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">油耗与经济性</h3>
+                                <p class="option-desc">省油、低养护成本，适合日常通勤与预算有限的买家。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="an-quan-pei-zhi">
+                            <div class="card-image">
+                                <img src="images/an-quan-pei-zhi.svg" alt="安全与配置图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安全与配置</h3>
+                                <p class="option-desc">重视主被动安全和辅助驾驶配置，让家人出行更安心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dong-li-cao-kong">
+                            <div class="card-image">
+                                <img src="images/dong-li-cao-kong.svg" alt="动力与操控图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">动力与操控</h3>
+                                <p class="option-desc">追求驾驶乐趣、加速与操控感，适合爱开车的用户。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="pin-pai-shou-hou">
+                            <div class="card-image">
+                                <img src="images/pin-pai-shou-hou.svg" alt="品牌与售后图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">品牌与售后</h3>
+                                <p class="option-desc">看重品牌口碑、保值率与售后服务体验，讲究长期使用感受。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

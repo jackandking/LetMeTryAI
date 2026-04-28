@@ -1,0 +1,21 @@
+{
+  "id": "mai-che-shen-me",
+  "name": "买车偏好投票",
+  "description": "针对准备买车或关心汽车话题的用户设计，适合手机图文投票页，选项覆盖油耗、保安全性、驾驶体验与售后等核心考量，便于社交传播与评论引导。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "买车",
+    "购车选择",
+    "油耗",
+    "安全",
+    "动力",
+    "品牌服务",
+    "汽车评测",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "mai-che-shen-me/images/you-hao-jing-ji-xing.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-28T17:00:59.465Z"
+}
