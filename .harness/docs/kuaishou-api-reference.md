@@ -46,7 +46,7 @@ Base URL: `https://open.kuaishou.com`
 测试脚本：`.harness/scripts/test-kuaishou-video-publish.js`
 测试视频 photo_id: `3xcezrvdb75jv52`
 
-### 小程序挂载（待批准）
+### 小程序挂载（已打通 2026-04-28）
 
 `POST /openapi/photo/mp_plc/bind`
 - Content-Type: `x-www-form-urlencoded`
@@ -54,8 +54,18 @@ Base URL: `https://open.kuaishou.com`
 - 发布后需等约 1 分钟再调用（发布是异步的）
 - 文档: https://open.kuaishou.com/docs/develop/functionAccessGuide/apivideomount.html
 
-**当前状态**: 已为"老人爱"小程序发起批量挂载关联"试试看"的申请，等待平台批准。
-批准后 10001008 错误应消失。每个小程序都要单独申请。
+**已验证**:
+- `photo already bind plc` (10001005) = 已绑过，正常
+- 成功绑定返回 `{"result": 1}`
+- 测试: 达人榜视频 `3xncudbrpct3jcg` 成功绑定男人宝小程序
+- **注意**: 只能挂载小程序入口，不能关联星火计划任务（星火只能在 APP 发布时手动操作）
+
+### 用户信息（已打通 2026-04-28）
+
+`GET /openapi/user_info?access_token=&app_id=`
+- 返回: name, fan(粉丝数), follow(关注数), city, sex, head, bigHead
+- 已接入日报追踪粉丝增长趋势（account_history.jsonl）
+- 当前数据: 试试看, 1337粉丝, 875关注, 北京海淀
 
 ---
 
@@ -211,5 +221,5 @@ Base URL: `https://daren.kuaishou.com`
 ### 待办
 1. 加 cron 定期刷新 access_token（每 ~40 小时）
 2. 申请流量数据 API 的 scope.us.profile 权限
-3. 小程序挂载批准后测试 mp_plc/bind
-4. 其他小程序也申请批量挂载关联"试试看"
+3. 视频发布后自动调用 mp_plc/bind 挂载小程序（能力已打通）
+4. 其他小程序也申请挂载关联"试试看"
