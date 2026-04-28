@@ -16,7 +16,6 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { checkCookieExpiry, resolveKuaishouAuthFile } from './kuaishou-follow-auth.js';
 
 const HISTORY_FILE = 'follow-history.jsonl';
 const DAILY_RUNS_DIR = 'daily-runs';
@@ -106,21 +105,19 @@ function analyzeHealth(repoRoot) {
     const pendingQueue = readJsonFile(queuePath, []);
     const queueSize = Array.isArray(pendingQueue) ? pendingQueue.length : 0;
 
-    // 4. Check auth cookie expiry
-    const authDir = join(repoRoot, '.harness', '.local', 'auth');
-    const authFile = resolveKuaishouAuthFile(authDir, 'https://www.kuaishou.com');
-    const cookieStatus = checkCookieExpiry(authFile);
+    // 4. Check for actual auth failures (not cookie expires prediction)
+    const authExpiredRuns = recentHourlyRuns.filter(h => h.stopReason === 'auth-expired').length;
+    const notLoggedInFailures = Object.entries(failedByReason)
+        .filter(([reason]) => reason === 'not-logged-in')
+        .reduce((sum, [, count]) => sum + count, 0);
 
     // 5. Determine health level
     let level = 'healthy';
     const issues = [];
 
-    if (cookieStatus.isExpired) {
+    if (authExpiredRuns > 0 || notLoggedInFailures > 0) {
         level = 'critical';
-        issues.push(`Auth cookie "${cookieStatus.cookieName}" 已过期 (${cookieStatus.reason || cookieStatus.expiresAt})，follow 无法运行`);
-    } else if (cookieStatus.isExpiringSoon) {
-        level = 'degraded';
-        issues.push(`Auth cookie "${cookieStatus.cookieName}" 将在 ${cookieStatus.ttlHours}h 后过期 (${cookieStatus.expiresAt})，请尽快刷新`);
+        issues.push(`Auth 实际失效: ${authExpiredRuns} 次 auth-expired 停止, ${notLoggedInFailures} 次 not-logged-in 失败。请刷新 cookie`);
     }
 
     if (topFailureReason && topFailureReason[0] === 'follow-button-not-found' && topFailureReason[1] >= 3) {

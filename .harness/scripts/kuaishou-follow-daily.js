@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { chromium } from 'playwright';
 
-import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth, checkCookieExpiry } from './kuaishou-follow-auth.js';
+import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth } from './kuaishou-follow-auth.js';
 import { buildPastDayRange, fetchOfficialPastDayData, formatDateInTimeZone, writeExportFile } from './kuaishou-follow-api.js';
 import { loadFollowAppConfigs } from './kuaishou-follow-config.js';
 import {
@@ -676,42 +676,8 @@ export async function runHourlyFollowWorker({
 
     const runtimeDirs = buildRuntimeDirs(repoRoot);
 
-    // Preflight: check cookie TTL before opening browser
-    const authFile = resolveKuaishouAuthFile(runtimeDirs.authDir, WEB_URL);
-    const cookieStatus = checkCookieExpiry(authFile);
-
-    if (cookieStatus.isExpired) {
-        const deferUntil = buildNextDayResumeAt(now, DEFAULT_REPORT_HOUR);
-        queue = deferEntireQueue(queue, deferUntil, new Date().toISOString(), 'auth-expired');
-        savePendingQueue(paths.queueFile, queue);
-
-        sendAuthAlert(repoRoot, env,
-            '[Kuaishou Follow] Auth cookie 已过期，follow 已暂停',
-            `Cookie "${cookieStatus.cookieName}" 已过期 (${cookieStatus.reason || cookieStatus.expiresAt})。\n`
-            + `队列中 ${queue.length} 个候选人已暂停，等待手动刷新 auth。\n\n`
-            + `刷新方法: cd .harness && npx tsx scripts/kuaishou-follow.ts start`
-        );
-
-        const dayState = appendHourlyRunState(paths.dailyRunsDir, runDateKey, {
-            startedAt,
-            completedAt: new Date().toISOString(),
-            attempted: 0, followed: 0, alreadyFollowed: 0, failed: 0,
-            stopReason: 'auth-expired'
-        });
-        if (autoSendReport) {
-            await sendReport({ repoRoot, env, now, dateKey: runDateKey, force: true });
-        }
-        return dayState.hourlyRuns[dayState.hourlyRuns.length - 1];
-    }
-
-    if (cookieStatus.isExpiringSoon) {
-        sendAuthAlert(repoRoot, env,
-            `[Kuaishou Follow] Auth cookie 将在 ${cookieStatus.ttlHours}h 后过期`,
-            `Cookie "${cookieStatus.cookieName}" 将于 ${cookieStatus.expiresAt} 过期 (剩余 ${cookieStatus.ttlHours}h)。\n`
-            + `请尽快刷新以避免 follow 中断。\n\n`
-            + `刷新方法: cd .harness && npx tsx scripts/kuaishou-follow.ts start`
-        );
-    }
+    // Cookie expires field is unreliable (server session can outlive it).
+    // Auth failures are detected at runtime via not-logged-in and trigger alerts there.
 
     const browserSession = await openFollowBrowser({ headless, runtimeDirs });
     try {
