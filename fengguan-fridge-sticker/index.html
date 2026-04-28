@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>网红凤冠冰箱贴：你会怎么使用它？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">网红凤冠冰箱贴：你会怎么使用它？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看到网红凤冠冰箱贴，你会怎么使用或展示它？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="on-fridge-front">
+                            <div class="card-image">
+                                <img src="images/on-fridge-front.svg" alt="冰箱门上的凤冠冰箱贴" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">贴在冰箱正面当装饰</h3>
+                                <p class="option-desc">直接贴在冰箱门上，成为家中亮点装饰。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="on-fridge-side">
+                            <div class="card-image">
+                                <img src="images/on-fridge-side.svg" alt="冰箱侧面的小凤冠装饰" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">贴侧面或角落作低调点缀</h3>
+                                <p class="option-desc">贴在侧面或边柜，低调又有设计感，适合小空间点缀。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="clip-on-bag-clothes">
+                            <div class="card-image">
+                                <img src="images/clip-on-bag-clothes.svg" alt="夹在包包上的凤冠装饰" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">夹包包或衣物当时尚配件</h3>
+                                <p class="option-desc">作为挂饰夹在包包或外套上，瞬间提升复古或少女感的造型感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="photo-prop">
+                            <div class="card-image">
+                                <img src="images/photo-prop.svg" alt="作为拍照道具的凤冠冰箱贴" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当拍照道具或平面摆拍</h3>
+                                <p class="option-desc">用于拍照摆拍，打造古风或复古主题的平面创意图。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
