@@ -83,31 +83,31 @@ export function checkCookieExpiry(authFile) {
     }
 
     const nowSec = Date.now() / 1000;
-    let latest = { expires: 0, name: '' };
+    let earliest = { expires: Infinity, name: '' };
 
     for (const cookie of authState.cookies) {
         const name = String(cookie?.name || '').trim();
         if (!CRITICAL_COOKIE_NAMES.includes(name)) continue;
         const expires = Number(cookie.expires || 0);
         if (expires <= 0) continue;
-        if (expires > latest.expires) {
-            latest = { expires, name };
+        if (expires < earliest.expires) {
+            earliest = { expires, name };
         }
     }
 
-    if (latest.expires === 0) {
+    if (earliest.expires === Infinity) {
         return { expiresAt: null, ttlHours: 0, isExpired: true, isExpiringSoon: true, cookieName: '', reason: 'no-critical-cookies' };
     }
 
-    const ttlHours = Math.round((latest.expires - nowSec) / 3600);
-    const expiresAt = new Date(latest.expires * 1000).toISOString();
+    const ttlHours = Math.round((earliest.expires - nowSec) / 3600);
+    const expiresAt = new Date(earliest.expires * 1000).toISOString();
 
     return {
         expiresAt,
         ttlHours,
         isExpired: ttlHours <= 0,
         isExpiringSoon: ttlHours > 0 && ttlHours < EXPIRY_SOON_HOURS,
-        cookieName: latest.name,
+        cookieName: earliest.name,
         reason: ''
     };
 }
