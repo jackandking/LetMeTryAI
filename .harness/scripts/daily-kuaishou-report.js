@@ -238,6 +238,60 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
 
 const EVENT_SUMMARY_URL = 'https://letmetry.cloud/api/track/summary';
 
+const KS_TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
+const KS_OPEN_API = 'https://open.kuaishou.com';
+const KS_APP_ID = 'ks683421244533878879';
+
+async function fetchAccountInfo() {
+    try {
+        const tokenResp = await fetch(KS_TOKEN_URL);
+        if (!tokenResp.ok) return null;
+        const { access_token } = await tokenResp.json();
+        if (!access_token) return null;
+
+        const resp = await fetch(`${KS_OPEN_API}/openapi/user_info?access_token=${access_token}&app_id=${KS_APP_ID}`);
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        if (data.result !== 1 || !data.user_info) return null;
+        return data.user_info;
+    } catch (e) {
+        log('WARN', `Account info fetch failed: ${e.message}`);
+        return null;
+    }
+}
+
+function saveAccountHistory(dateStr, accountInfo, outputDir) {
+    if (!accountInfo) return;
+    const historyFile = path.join(outputDir, 'account_history.jsonl');
+    const record = { date: dateStr, fan: accountInfo.fan, follow: accountInfo.follow, name: accountInfo.name };
+    fs.appendFileSync(historyFile, JSON.stringify(record) + '\n');
+}
+
+function formatAccountSection(accountInfo, outputDir) {
+    if (!accountInfo) return '';
+
+    let trend = '';
+    const historyFile = path.join(outputDir, 'account_history.jsonl');
+    if (fs.existsSync(historyFile)) {
+        const lines = fs.readFileSync(historyFile, 'utf-8').trim().split('\n').filter(Boolean);
+        if (lines.length >= 2) {
+            try {
+                const prev = JSON.parse(lines[lines.length - 2]);
+                const diff = accountInfo.fan - prev.fan;
+                trend = diff > 0 ? ` (+${diff})` : diff < 0 ? ` (${diff})` : ' (±0)';
+            } catch {}
+        }
+    }
+
+    return `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 账号概况 (${accountInfo.name})
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 粉丝数: ${accountInfo.fan.toLocaleString()}${trend}
+• 关注数: ${accountInfo.follow.toLocaleString()}
+• 城市: ${accountInfo.city || 'N/A'}`;
+}
+
 async function fetchEventSummary(dateStr) {
     try {
         const resp = await fetch(`${EVENT_SUMMARY_URL}?date=${dateStr}`);
@@ -571,7 +625,7 @@ function saveResults(report, dateStr) {
 
 // ─── Email ───
 
-function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary) {
+function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary, accountInfo) {
     const rawSection = `📊 快手星火计划日报 (${dateStr})
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -593,8 +647,10 @@ ${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝�
     const deltaSection = formatDeltaEmail(deltaReport, trendReport);
     const adoptionSection = formatAdoptionEmail(adoptionReport);
     const eventSection = formatEventSection(eventSummary);
+    const accountSection = formatAccountSection(accountInfo, CONFIG.outputDir);
 
     return `${rawSection}
+${accountSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -657,11 +713,12 @@ ${Buffer.from(body + (csvContent ? '\n\n--- CSV Data Preview ---\n' + csvContent
     }
 }
 
-async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary) {
+async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary, accountInfo) {
     log('INFO', 'Sending email report...');
 
-    const body = buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary);
-    const subject = `[快手日报] ${dateStr} | ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
+    const body = buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary, accountInfo);
+    const fanLabel = accountInfo ? ` ${accountInfo.fan}粉丝` : '';
+    const subject = `[快手日报] ${dateStr} |${fanLabel} ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
 
     // Try AgentMail first
@@ -782,8 +839,16 @@ async function main() {
             log('INFO', `Event summary: ${eventSummary.events} events from ${Object.keys(eventSummary.apps || {}).length} apps`);
         }
 
-        // 11. Send combined email
-        await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary);
+        // 11. Fetch account info (fan count etc.)
+        log('INFO', 'Fetching account info...');
+        const accountInfo = await fetchAccountInfo();
+        if (accountInfo) {
+            log('INFO', `Account: ${accountInfo.name}, fans=${accountInfo.fan}, follow=${accountInfo.follow}`);
+            saveAccountHistory(dateStr, accountInfo, CONFIG.outputDir);
+        }
+
+        // 12. Send combined email
+        await sendEmail(report, adoptionReport, deltaReport, trendReport, dateStr, filename, eventSummary, accountInfo);
 
         const duration = ((Date.now() - startTime) / 1000).toFixed(1);
         log('INFO', `Completed in ${duration}s`);
