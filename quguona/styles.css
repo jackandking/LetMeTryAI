@@ -90,8 +90,50 @@ body {
 
 .stats {
     text-align: center;
-    padding: 16px 0;
+    padding: 16px 0 8px;
     color: #fff;
+}
+
+.nickname-section {
+    padding: 0 0 16px;
+}
+
+.nickname-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    outline: none;
+    text-align: center;
+}
+
+.nickname-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.nickname-input:focus {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.publish-status {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+}
+
+.publish-status.hidden {
+    display: none;
+}
+
+.publish-status.success {
+    background: rgba(76, 175, 80, 0.3);
 }
 
 .stats-text {
