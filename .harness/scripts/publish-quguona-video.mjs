@@ -24,12 +24,6 @@ const CAPTION = `你去过中国多少个省？来标记一下你的足迹吧！
 
 点击左下角链接，标记你去过的省份，生成专属足迹地图！`;
 
-function findFfmpeg() {
-  const which = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' });
-  if (which.status === 0) return which.stdout.trim();
-  return 'ffmpeg';
-}
-
 async function recordVideo() {
   console.log('Step 1: Recording demo video...');
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -79,8 +73,8 @@ async function recordVideo() {
 
   // Scale to 1080x1920 with ffmpeg
   const finalPath = path.join(OUTPUT_DIR, 'quguona-demo.mp4');
-  const ffmpeg = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' }).stdout.trim() || 'ffmpeg';
-  const result = spawnSync(ffmpeg, [
+  const ffmpegBin = path.join(__dirname, '../../node_modules/ffmpeg-static/ffmpeg');
+  const result = spawnSync(ffmpegBin, [
     '-y', '-i', rawPath,
     '-vf', 'scale=1080:1920',
     '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
