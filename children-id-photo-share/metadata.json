@@ -1,0 +1,19 @@
+{
+  "id": "children-id-photo-share",
+  "name": "家长证件照分享指南",
+  "description": "收集家长在不同场景下（亲友、学校、线上平台）分享孩子证件照的偏好，评估安全与便利的平衡，并据此给出可执行的分享做法与注意点。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "孩子证件照",
+    "隐私保护",
+    "分享方式",
+    "家长指南",
+    "学校提交",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "children-id-photo-share/images/share-in-person.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-29T19:00:52.578Z"
+}
