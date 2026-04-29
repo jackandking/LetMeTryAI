@@ -4,6 +4,7 @@
  * Run from prod directory on 192.168.1.6.
  */
 import { chromium } from 'playwright';
+import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -12,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const APP_URL = 'https://letmetryai.cn/quguona/';
 const KS_APP_ID = 'ks683421244533878879';
-const MINI_APP_ID = 'ks655273748878573030'; // 人人爱男人宝
+const MINI_APP_ID = 'ks655273748878573030';
 const TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
 const BASE = 'https://open.kuaishou.com';
 const OUTPUT_DIR = path.join(__dirname, '../.local/hot-task-video/quguona');
@@ -23,6 +24,17 @@ const CAPTION = `你去过中国多少个省？来标记一下你的足迹吧！
 
 点击左下角链接，标记你去过的省份，生成专属足迹地图！`;
 
+function findFfmpeg() {
+  try {
+    const mod = await import('ffmpeg-static');
+    return mod.default;
+  } catch {
+    const which = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' });
+    if (which.status === 0) return which.stdout.trim();
+    return 'ffmpeg';
+  }
+}
+
 async function recordVideo() {
   console.log('Step 1: Recording demo video...');
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -30,9 +42,13 @@ async function recordVideo() {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     viewport: { width: 360, height: 640 },
+    screen: { width: 360, height: 640 },
+    deviceScaleFactor: 3,
+    isMobile: true,
+    hasTouch: true,
     recordVideo: {
       dir: OUTPUT_DIR,
-      size: { width: 1080, height: 1920 },
+      size: { width: 360, height: 640 },
     },
   });
 
@@ -40,7 +56,6 @@ async function recordVideo() {
   await page.goto(APP_URL, { waitUntil: 'networkidle' });
   await page.waitForTimeout(2000);
 
-  // Interact: click several provinces
   const provinces = ['北京', '上海', '广东', '四川', '云南', '浙江', '海南', '山东'];
   for (const name of provinces) {
     const tag = page.locator(`.province-tag:has-text("${name}")`);
@@ -51,37 +66,48 @@ async function recordVideo() {
   }
 
   await page.waitForTimeout(1500);
-
-  // Scroll to show the map with highlights
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(2000);
 
-  // Click generate button
   const genBtn = page.locator('#generate-btn');
   if (await genBtn.isVisible()) {
     await genBtn.click();
     await page.waitForTimeout(3000);
   }
 
-  // Close context to save video
   const video = page.video();
   await context.close();
   await browser.close();
 
-  const videoPath = await video.path();
-  const finalPath = path.join(OUTPUT_DIR, 'quguona-demo.mp4');
-  fs.renameSync(videoPath, finalPath);
-  console.log('  Video saved:', finalPath, `(${(fs.statSync(finalPath).size / 1024 / 1024).toFixed(2)} MB)`);
+  const rawPath = await video.path();
+  console.log('  Raw video:', rawPath, `(${(fs.statSync(rawPath).size / 1024 / 1024).toFixed(2)} MB)`);
 
-  // Take a cover screenshot separately
+  // Scale to 1080x1920 with ffmpeg
+  const finalPath = path.join(OUTPUT_DIR, 'quguona-demo.mp4');
+  const ffmpeg = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' }).stdout.trim() || 'ffmpeg';
+  const result = spawnSync(ffmpeg, [
+    '-y', '-i', rawPath,
+    '-vf', 'scale=1080:1920',
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p',
+    '-an', finalPath
+  ], { encoding: 'utf8' });
+  if (result.status !== 0) {
+    console.error('  ffmpeg failed:', result.stderr);
+    fs.renameSync(rawPath, finalPath);
+  } else {
+    fs.unlinkSync(rawPath);
+  }
+  console.log('  Final video:', finalPath, `(${(fs.statSync(finalPath).size / 1024 / 1024).toFixed(2)} MB)`);
+
+  // Cover screenshot
   const browser2 = await chromium.launch({ headless: true });
   const ctx2 = await browser2.newContext({
     viewport: { width: 360, height: 640 },
+    deviceScaleFactor: 3,
   });
   const page2 = await ctx2.newPage();
   await page2.goto(APP_URL, { waitUntil: 'networkidle' });
   await page2.waitForTimeout(1000);
-  // Click some provinces for the cover
   for (const name of ['北京', '上海', '广东', '四川', '浙江']) {
     const tag = page2.locator(`.province-tag:has-text("${name}")`);
     if (await tag.isVisible()) await tag.click();
@@ -97,24 +123,30 @@ async function recordVideo() {
 }
 
 async function publishVideo(videoPath, coverPath) {
-  // Get token
   console.log('Step 2: Getting token...');
   const tokenResp = await fetch(TOKEN_URL);
   const tokenData = await tokenResp.json();
   const token = tokenData.access_token;
-  if (!token) { console.error('No token!', tokenData); process.exit(1); }
-  console.log('  Token OK, expired:', tokenData.access_token_expired);
+  if (!token || tokenData.access_token_expired) {
+    console.log('  Token expired, refreshing...');
+    const refreshResp = await fetch('https://letmetry.cloud/oauth/kuaishou/refresh');
+    const refreshData = await refreshResp.json();
+    if (!refreshData.access_token) { console.error('Refresh failed:', refreshData); process.exit(1); }
+    var accessToken = refreshData.access_token;
+    console.log('  Token refreshed');
+  } else {
+    var accessToken = token;
+    console.log('  Token OK');
+  }
 
-  // Start upload
   console.log('Step 3: Starting upload...');
-  const startResp = await fetch(BASE + '/openapi/photo/start_upload?access_token=' + token + '&app_id=' + KS_APP_ID, { method: 'POST' });
+  const startResp = await fetch(BASE + '/openapi/photo/start_upload?access_token=' + accessToken + '&app_id=' + KS_APP_ID, { method: 'POST' });
   const startData = await startResp.json();
   if (startData.result !== 1) { console.error('Start upload failed:', startData); process.exit(1); }
   const uploadToken = startData.upload_token;
   const endpoint = startData.endpoint;
   console.log('  endpoint:', endpoint);
 
-  // Upload video
   console.log('Step 4: Uploading video...');
   const videoBuffer = fs.readFileSync(videoPath);
   console.log('  Size:', (videoBuffer.length / 1024 / 1024).toFixed(2), 'MB');
@@ -127,7 +159,6 @@ async function publishVideo(videoPath, coverPath) {
   if (uploadData.result !== 1) { console.error('Upload failed:', uploadData); process.exit(1); }
   console.log('  Upload OK');
 
-  // Publish
   console.log('Step 5: Publishing...');
   const coverBuffer = fs.readFileSync(coverPath);
   const boundary = '----FormBoundary' + Date.now();
@@ -151,7 +182,7 @@ async function publishVideo(videoPath, coverPath) {
   const body = Buffer.concat([coverHeader, coverBuffer, captionBuf]);
 
   const publishResp = await fetch(
-    BASE + '/openapi/photo/publish?access_token=' + token + '&app_id=' + KS_APP_ID + '&upload_token=' + uploadToken,
+    BASE + '/openapi/photo/publish?access_token=' + accessToken + '&app_id=' + KS_APP_ID + '&upload_token=' + uploadToken,
     {
       method: 'POST',
       headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary },
@@ -165,16 +196,15 @@ async function publishVideo(videoPath, coverPath) {
   const photoId = publishData.video_info?.photo_id;
   console.log('  photo_id:', photoId);
 
-  // Bind mini-app (wait 60s)
   console.log('Step 6: Waiting 60s before binding mini-app...');
   await new Promise(r => setTimeout(r, 60000));
 
   const bindParams = new URLSearchParams({
-    access_token: token,
+    access_token: accessToken,
     app_id: KS_APP_ID,
     photo_id: photoId,
     plc_mp_app_id: MINI_APP_ID,
-    plc_title: '去过哪 - 中国足迹地图',
+    plc_title: '去过哪',
     plc_mp_path: 'pages/rewardedWebview/rewardedWebview?target=quguona&showAd=true',
   });
 
