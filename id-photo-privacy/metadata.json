@@ -1,0 +1,19 @@
+{
+  "id": "id-photo-privacy",
+  "name": "证件隐私指南",
+  "description": "讨论在分享或保存身份证照片时的隐私保护方案，帮助用户比较遮挡、模糊、部分拍摄和加水印/加密等做法的利弊并收集真实偏好。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "身份证",
+    "隐私",
+    "照片保护",
+    "个人信息",
+    "安全",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "id-photo-privacy/images/mask-sensitive-info.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-29T20:00:33.689Z"
+}
