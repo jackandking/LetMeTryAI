@@ -1,0 +1,11 @@
+{
+  "id": "quguona",
+  "name": "去过哪",
+  "description": "标记你去过的中国省份，生成专属足迹地图",
+  "category": "互动",
+  "directory": "quguona",
+  "url": "quguona",
+  "image": "quguona/images/preview.svg",
+  "tags": ["地图", "互动", "分享", "旅行"],
+  "status": "active"
+}

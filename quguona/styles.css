@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0 12px;
+    color: #fff;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.map-container {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+#china-map {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#china-map .province {
+    fill: #e8e8e8;
+    stroke: #fff;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.2s ease;
+}
+
+#china-map .province:active {
+    opacity: 0.7;
+}
+
+#china-map .province.visited {
+    fill: #ff6b35;
+}
+
+#china-map .province.nanhai {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 0.3;
+    pointer-events: none;
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+
+.tooltip.visible {
+    opacity: 1;
+}
+
+.stats {
+    text-align: center;
+    padding: 16px 0;
+    color: #fff;
+}
+
+.stats-text {
+    font-size: 16px;
+}
+
+.count {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffd700;
+    display: inline-block;
+    min-width: 36px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 0 20px;
+}
+
+.btn-primary {
+    flex: 1;
+    padding: 14px 20px;
+    background: #ff6b35;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+}
+
+.btn-primary:active {
+    transform: scale(0.97);
+    background: #e55a28;
+}
+
+.btn-secondary {
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.btn-secondary:active {
+    transform: scale(0.97);
+}
+
+.result-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.result-section.hidden {
+    display: none;
+}
+
+.result-tip {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.result-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.result-section .btn-secondary {
+    color: #666;
+    border-color: #ddd;
+    width: 100%;
+}
+
+.region-list {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.region-list h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.region-group {
+    margin-bottom: 16px;
+}
+
+.region-group:last-child {
+    margin-bottom: 0;
+}
+
+.region-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.region-provinces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.province-tag {
+    padding: 6px 12px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.province-tag.visited {
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: #fff;
+}
+
+.province-tag:active {
+    transform: scale(0.95);
+}
