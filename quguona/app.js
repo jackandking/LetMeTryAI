@@ -73,10 +73,12 @@
         });
 
         document.getElementById('generate-btn').addEventListener('click', generateImage);
-        document.getElementById('clear-btn').addEventListener('click', clearAll);
+        document.getElementById('publish-btn').addEventListener('click', publishToKuaishou);
         document.getElementById('close-result').addEventListener('click', () => {
             document.getElementById('result-section').classList.add('hidden');
         });
+
+        checkPublishResult();
 
         function handleTouch(e) {
             const path = e.target.closest('.province:not(.nanhai)');
@@ -126,43 +128,81 @@
         saveState();
     }
 
-    function saveState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited]));
-        if (typeof updateKeyValueStore === 'function') {
-            const deviceId = getDeviceId();
-            try {
-                updateKeyValueStore('quguona_' + deviceId, JSON.stringify([...visited]));
-            } catch (e) {}
+    function getNickname() {
+        return (document.getElementById('nickname-input').value || '').trim();
+    }
+
+    function showPublishStatus(msg, isSuccess) {
+        const el = document.getElementById('publish-status');
+        document.getElementById('publish-msg').textContent = msg;
+        el.classList.remove('hidden', 'success');
+        if (isSuccess) el.classList.add('success');
+    }
+
+    function checkPublishResult() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('published') === 'success') {
+            showPublishStatus('发布成功！视频已发到你的快手账号', true);
+            window.history.replaceState({}, '', window.location.pathname);
+        } else if (params.get('published') === 'error') {
+            showPublishStatus('发布失败：' + (params.get('msg') || '未知错误'), false);
+            window.history.replaceState({}, '', window.location.pathname);
         }
     }
 
-    function loadState() {
+    async function publishToKuaishou() {
+        if (visited.size === 0) {
+            alert('请先标记你去过的省份');
+            return;
+        }
+
+        const nickname = getNickname() || '旅行者';
+        const btn = document.getElementById('publish-btn');
+        btn.disabled = true;
+        btn.textContent = '准备中...';
+
         try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                visited = new Set(JSON.parse(stored));
-            }
-        } catch (e) {}
-    }
+            const imageBlob = await generateImageBlob(nickname);
+            const formData = new FormData();
+            formData.append('file', imageBlob, 'map.png');
 
-    function getDeviceId() {
-        let id = localStorage.getItem('quguona_device_id');
-        if (!id) {
-            id = 'qgn_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-            localStorage.setItem('quguona_device_id', id);
+            const uploadResp = await fetch('https://letmetry.cloud/image/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const uploadData = await uploadResp.json();
+            if (!uploadData.url) throw new Error('图片上传失败');
+
+            const state = JSON.stringify({
+                image_url: uploadData.url,
+                nickname: nickname,
+                provinces: [...visited],
+                count: visited.size,
+            });
+
+            const authUrl = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
+                'state=' + encodeURIComponent(state);
+            window.location.href = authUrl;
+        } catch (e) {
+            alert('操作失败：' + e.message);
+            btn.disabled = false;
+            btn.textContent = '发布到我的快手';
         }
-        return id;
     }
 
-    function generateImage() {
+    function generateImageBlob(nickname) {
+        return new Promise((resolve) => {
+            const canvas = createMapCanvas(nickname);
+            canvas.toBlob(resolve, 'image/png');
+        });
+    }
+
+    function createMapCanvas(nickname) {
         const canvas = document.createElement('canvas');
-        const scale = 2;
         canvas.width = 750;
         canvas.height = 1000;
         const ctx = canvas.getContext('2d');
 
-        ctx.fillStyle = '#667eea';
-        ctx.fillRect(0, 0, 750, 1000);
         const grad = ctx.createLinearGradient(0, 0, 750, 1000);
         grad.addColorStop(0, '#667eea');
         grad.addColorStop(1, '#764ba2');
@@ -170,12 +210,12 @@
         ctx.fillRect(0, 0, 750, 1000);
 
         ctx.fillStyle = '#fff';
-        ctx.font = 'bold 36px -apple-system, sans-serif';
+        ctx.font = 'bold 32px -apple-system, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('我的中国足迹', 375, 60);
+        ctx.fillText((nickname || '我') + '的中国足迹', 375, 55);
 
         const mapOffsetX = 50;
-        const mapOffsetY = 90;
+        const mapOffsetY = 80;
         const mapScale = 750 / 600 * 0.85;
 
         ctx.save();
@@ -235,6 +275,40 @@
         ctx.font = '16px -apple-system, sans-serif';
         ctx.fillText('letmetryai.cn/quguona', 375, 970);
 
+        return canvas;
+    }
+
+    function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited]));
+        if (typeof updateKeyValueStore === 'function') {
+            const deviceId = getDeviceId();
+            try {
+                updateKeyValueStore('quguona_' + deviceId, JSON.stringify([...visited]));
+            } catch (e) {}
+        }
+    }
+
+    function loadState() {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                visited = new Set(JSON.parse(stored));
+            }
+        } catch (e) {}
+    }
+
+    function getDeviceId() {
+        let id = localStorage.getItem('quguona_device_id');
+        if (!id) {
+            id = 'qgn_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+            localStorage.setItem('quguona_device_id', id);
+        }
+        return id;
+    }
+
+    function generateImage() {
+        const nickname = getNickname();
+        const canvas = createMapCanvas(nickname);
         const dataUrl = canvas.toDataURL('image/png');
         const resultImg = document.getElementById('result-image');
         resultImg.src = dataUrl;
