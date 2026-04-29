@@ -164,7 +164,7 @@
         try {
             const imageBlob = await generateImageBlob(nickname);
             const formData = new FormData();
-            formData.append('file', imageBlob, 'map.png');
+            formData.append('file', imageBlob, 'quguona_' + Date.now() + '.png');
 
             const uploadResp = await fetch('https://letmetry.cloud/image/upload', {
                 method: 'POST',
