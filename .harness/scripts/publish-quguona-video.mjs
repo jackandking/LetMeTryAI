@@ -29,8 +29,7 @@ async function recordVideo() {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    viewport: { width: 375, height: 812 },
-    deviceScaleFactor: 3,
+    viewport: { width: 360, height: 640 },
     recordVideo: {
       dir: OUTPUT_DIR,
       size: { width: 1080, height: 1920 },
@@ -77,8 +76,7 @@ async function recordVideo() {
   // Take a cover screenshot separately
   const browser2 = await chromium.launch({ headless: true });
   const ctx2 = await browser2.newContext({
-    viewport: { width: 375, height: 812 },
-    deviceScaleFactor: 3,
+    viewport: { width: 360, height: 640 },
   });
   const page2 = await ctx2.newPage();
   await page2.goto(APP_URL, { waitUntil: 'networkidle' });
