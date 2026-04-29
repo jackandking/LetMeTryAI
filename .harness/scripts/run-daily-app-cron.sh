@@ -21,6 +21,34 @@ if [[ -z "$PROFILE_ID" ]]; then
     exit 1
 fi
 
+# Check profile-slots.json for scheduling (skip low-revenue profiles on off-days)
+SLOTS_FILE="$PROJECT_DIR/.automation/.local/state/profile-slots.json"
+EXTRA_SLOT="${HARNESS_EXTRA_SLOT:-}"
+if [[ -f "$SLOTS_FILE" ]]; then
+    SHOULD_RUN=$("$(dirname "$(which node 2>/dev/null || echo /usr/local/bin/node)")/node" -e "
+        const s = JSON.parse(require('fs').readFileSync('$SLOTS_FILE','utf-8'));
+        const p = s.allocation && s.allocation['$PROFILE_ID'];
+        if (!p) { console.log('yes'); process.exit(); }
+        const dow = new Date().getDay();
+        const sched = p.schedule;
+        if (sched === 'daily') { console.log('yes'); }
+        else if (sched === 'daily+alternate') { console.log('$EXTRA_SLOT' ? 'alternate' : 'yes'); }
+        else if (sched === 'alternate-odd') { console.log(dow % 2 === 1 ? 'yes' : 'skip'); }
+        else if (sched === 'alternate-even') { console.log(dow % 2 === 0 ? 'yes' : 'skip'); }
+        else { console.log('yes'); }
+    " 2>/dev/null || echo "yes")
+
+    if [[ "$SHOULD_RUN" == "alternate" ]]; then
+        DOW=$(date +%u)
+        SHOULD_RUN=$( (( DOW % 2 == 1 )) && echo "yes" || echo "skip" )
+    fi
+
+    if [[ "$SHOULD_RUN" == "skip" ]]; then
+        echo "[run-daily-app-cron] SKIP $PROFILE_ID today (profile-slots schedule)"
+        exit 0
+    fi
+fi
+
 SAFE_PROFILE_ID="$(printf '%s' "$PROFILE_ID" | tr -c 'a-zA-Z0-9-' '-')"
 LOG_DIR="$PROJECT_DIR/.harness/.local/logs/daily-app-cron"
 LOG_FILE="${HARNESS_CRON_LOG_FILE:-$LOG_DIR/${SAFE_PROFILE_ID}.log}"
