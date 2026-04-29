@@ -29,10 +29,12 @@ if [[ -f "$SLOTS_FILE" ]]; then
         const s = JSON.parse(require('fs').readFileSync('$SLOTS_FILE','utf-8'));
         const p = s.allocation && s.allocation['$PROFILE_ID'];
         if (!p) { console.log('yes'); process.exit(); }
-        const dow = new Date().getDay();
         const sched = p.schedule;
+        const isExtra = '$EXTRA_SLOT' === '1';
+        if (isExtra && sched !== 'daily+alternate') { console.log('skip'); process.exit(); }
+        const dow = new Date().getDay();
         if (sched === 'daily') { console.log('yes'); }
-        else if (sched === 'daily+alternate') { console.log('$EXTRA_SLOT' ? 'alternate' : 'yes'); }
+        else if (sched === 'daily+alternate') { console.log(isExtra ? 'alternate' : 'yes'); }
         else if (sched === 'alternate-odd') { console.log(dow % 2 === 1 ? 'yes' : 'skip'); }
         else if (sched === 'alternate-even') { console.log(dow % 2 === 0 ? 'yes' : 'skip'); }
         else { console.log('yes'); }
