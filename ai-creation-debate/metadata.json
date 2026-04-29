@@ -1,0 +1,19 @@
+{
+  "id": "ai-creation-debate",
+  "name": "创作态度投票",
+  "description": "将关于生成式 AI 在内容创作中角色的争论做成移动端图文投票，选项明确便于快速参与并鼓励说明理由。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "生成式AI",
+    "内容创作",
+    "人工智能",
+    "版权",
+    "创作态度",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ai-creation-debate/images/support-ai-assisted.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-29T01:38:59.702Z"
+}
