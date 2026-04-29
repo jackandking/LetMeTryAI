@@ -171,10 +171,11 @@
                 body: formData,
             });
             const uploadData = await uploadResp.json();
-            if (!uploadData.url) throw new Error('图片上传失败');
+            const imageUrl = uploadData.url || ('https://letmetry.cloud/' + uploadData.path);
+            if (!imageUrl || !uploadData.success) throw new Error('图片上传失败');
 
             const state = JSON.stringify({
-                image_url: uploadData.url,
+                image_url: imageUrl,
                 nickname: nickname,
                 provinces: [...visited],
                 count: visited.size,
