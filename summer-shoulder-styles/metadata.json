@@ -1,0 +1,19 @@
+{
+  "id": "summer-shoulder-styles",
+  "name": "露肩穿搭投票",
+  "description": "基于热搜的夏季露肩装趋势，列出几类常见露肩造型，帮助用户投票选择想尝试的穿搭方向（轻建议、不涉商业引导）。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "露肩",
+    "夏季",
+    "穿搭",
+    "街拍",
+    "时尚",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "summer-shoulder-styles/images/off-shoulder.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-29T01:40:54.135Z"
+}
