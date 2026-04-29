@@ -25,14 +25,9 @@ const CAPTION = `你去过中国多少个省？来标记一下你的足迹吧！
 点击左下角链接，标记你去过的省份，生成专属足迹地图！`;
 
 function findFfmpeg() {
-  try {
-    const mod = await import('ffmpeg-static');
-    return mod.default;
-  } catch {
-    const which = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' });
-    if (which.status === 0) return which.stdout.trim();
-    return 'ffmpeg';
-  }
+  const which = spawnSync('which', ['ffmpeg'], { encoding: 'utf8' });
+  if (which.status === 0) return which.stdout.trim();
+  return 'ffmpeg';
 }
 
 async function recordVideo() {
