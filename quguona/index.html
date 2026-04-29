@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>去过哪 - 中国足迹地图</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>去过哪</h1>
+            <p class="subtitle">点击省份，标记你的足迹</p>
+        </header>
+
+        <div class="map-container">
+            <svg id="china-map" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="tooltip" class="tooltip"></div>
+        </div>
+
+        <div class="stats">
+            <span class="stats-text">你去过 <span id="visited-count" class="count">0</span> / 34 个省级行政区</span>
+        </div>
+
+        <div class="actions">
+            <button id="generate-btn" class="btn-primary">生成足迹图片</button>
+            <button id="clear-btn" class="btn-secondary">清除全部</button>
+        </div>
+
+        <div id="result-section" class="result-section hidden">
+            <p class="result-tip">长按图片保存到相册</p>
+            <img id="result-image" class="result-image" alt="足迹地图">
+            <button id="close-result" class="btn-secondary">关闭</button>
+        </div>
+
+        <div class="region-list">
+            <h2>按区域选择</h2>
+            <div id="region-groups"></div>
+        </div>
+    </div>
+
+    <script src="../config.js"></script>
+    <script src="../util.js"></script>
+    <script src="china-map.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
