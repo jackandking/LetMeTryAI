@@ -274,3 +274,60 @@ body {
 .province-tag:active {
     transform: scale(0.95);
 }
+
+.copy-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.copy-dialog {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 340px;
+    width: 100%;
+    text-align: center;
+}
+
+.copy-dialog h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.copy-dialog p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.copy-dialog input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.copy-dialog .btn-primary {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.copy-dialog .btn-secondary {
+    width: 100%;
+    color: #666;
+    border-color: #ddd;
+}

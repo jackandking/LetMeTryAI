@@ -157,18 +157,49 @@
         }
 
         const nickname = getNickname() || '旅行者';
-        const btn = document.getElementById('publish-btn');
-        btn.disabled = true;
-        btn.textContent = '跳转中...';
-
         const state = JSON.stringify({
             nickname: nickname,
             provinces: [...visited],
             count: visited.size,
         });
-
-        window.location.href = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
+        const publishUrl = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
             'state=' + encodeURIComponent(state);
+
+        // In Kuaishou webview, can't navigate to external domains
+        if (typeof ks !== 'undefined') {
+            // Show copy-link UI
+            showCopyLinkDialog(publishUrl);
+            return;
+        }
+
+        const btn = document.getElementById('publish-btn');
+        btn.disabled = true;
+        btn.textContent = '跳转中...';
+        window.location.href = publishUrl;
+    }
+
+    function showCopyLinkDialog(url) {
+        var overlay = document.createElement('div');
+        overlay.className = 'copy-dialog-overlay';
+        overlay.innerHTML = '<div class="copy-dialog">' +
+            '<h3>在浏览器中完成发布</h3>' +
+            '<p>快手小程序内无法直接授权，请复制链接到手机浏览器中打开：</p>' +
+            '<input type="text" id="copy-url-input" readonly value="' + url + '">' +
+            '<button id="copy-url-btn" class="btn-primary">复制链接</button>' +
+            '<button id="close-copy-dialog" class="btn-secondary">关闭</button>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        document.getElementById('copy-url-btn').addEventListener('click', function() {
+            var input = document.getElementById('copy-url-input');
+            input.select();
+            document.execCommand('copy');
+            this.textContent = '已复制！';
+            setTimeout(function() { overlay.remove(); }, 1500);
+        });
+        document.getElementById('close-copy-dialog').addEventListener('click', function() {
+            overlay.remove();
+        });
     }
 
     function generateImageBlob(nickname) {
