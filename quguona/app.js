@@ -159,36 +159,16 @@
         const nickname = getNickname() || '旅行者';
         const btn = document.getElementById('publish-btn');
         btn.disabled = true;
-        btn.textContent = '准备中...';
+        btn.textContent = '跳转中...';
 
-        try {
-            const imageBlob = await generateImageBlob(nickname);
-            const formData = new FormData();
-            formData.append('file', imageBlob, 'quguona_' + Date.now() + '.png');
+        const state = JSON.stringify({
+            nickname: nickname,
+            provinces: [...visited],
+            count: visited.size,
+        });
 
-            const uploadResp = await fetch('https://letmetry.cloud/image/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const uploadData = await uploadResp.json();
-            const imageUrl = uploadData.url || ('https://letmetry.cloud/' + uploadData.path);
-            if (!imageUrl || !uploadData.success) throw new Error('图片上传失败');
-
-            const state = JSON.stringify({
-                image_url: imageUrl,
-                nickname: nickname,
-                provinces: [...visited],
-                count: visited.size,
-            });
-
-            const authUrl = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
-                'state=' + encodeURIComponent(state);
-            window.location.href = authUrl;
-        } catch (e) {
-            alert('操作失败：' + e.message);
-            btn.disabled = false;
-            btn.textContent = '发布到我的快手';
-        }
+        window.location.href = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
+            'state=' + encodeURIComponent(state);
     }
 
     function generateImageBlob(nickname) {
