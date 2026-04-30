@@ -267,6 +267,58 @@ function saveAccountHistory(dateStr, accountInfo, outputDir) {
     fs.appendFileSync(historyFile, JSON.stringify(record) + '\n');
 }
 
+async function fetchAdRevenue(dateStr) {
+    try {
+        const tokenResp = await fetch(KS_TOKEN_URL);
+        if (!tokenResp.ok) return null;
+        const tokenData = await tokenResp.json();
+        let token = tokenData.access_token;
+        if (!token || tokenData.access_token_expired) {
+            const refreshResp = await fetch('https://letmetry.cloud/oauth/kuaishou/refresh');
+            const refreshData = await refreshResp.json();
+            token = refreshData.access_token;
+        }
+        if (!token) return null;
+
+        const end = new Date(dateStr + 'T00:00:00Z');
+        const start = new Date(end);
+        start.setDate(start.getDate() - 7);
+
+        const resp = await fetch(`${KS_OPEN_API}/openapi/mp/developer/ad/data/query?app_id=${KS_APP_ID}&access_token=${token}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ startTime: start.getTime(), endTime: end.getTime() - 1, type: 0, page: 1, pageSize: 100 }),
+        });
+        const data = await resp.json();
+        if (data.result !== 1) {
+            log('WARN', `Ad revenue API: ${data.error_msg || data.result}`);
+            return null;
+        }
+
+        const items = data.data?.items || [];
+        let totalImpressions = 0, totalClicks = 0, totalRevenue = 0;
+        const daily = [];
+        for (const item of items) {
+            totalImpressions += item.impression || 0;
+            totalClicks += item.click || 0;
+            totalRevenue += item.costTotal || 0;
+            daily.push({ date: item.date, impressions: item.impression, clicks: item.click, revenue: item.costTotal, ecpm: item.ecpm });
+        }
+
+        return {
+            days: items.length,
+            totalImpressions,
+            totalClicks,
+            totalRevenue: +totalRevenue.toFixed(2),
+            avgEcpm: totalImpressions > 0 ? +(totalRevenue / totalImpressions * 1000).toFixed(2) : 0,
+            daily,
+        };
+    } catch (e) {
+        log('WARN', `Ad revenue fetch failed: ${e.message}`);
+        return null;
+    }
+}
+
 function formatAccountSection(accountInfo, outputDir) {
     if (!accountInfo) return '';
 
@@ -638,6 +690,7 @@ function buildEmailBody(report, adoptionReport, deltaReport, trendReport, dateSt
 • 总达人数量: ${report.summary.totalDaren.toLocaleString()}
 • 总作品数量: ${report.summary.totalWorks.toLocaleString()}
 • 整体点击率: ${report.summary.clickRate}
+${report.adRevenue ? `\n💰 广告收入 (近7天)\n• 总收入: ${report.adRevenue.totalRevenue}元\n• 展示量: ${report.adRevenue.totalImpressions.toLocaleString()}\n• 平均eCPM: ${report.adRevenue.avgEcpm}` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔥 TOP 10 曝光任务
@@ -845,6 +898,14 @@ async function main() {
         if (accountInfo) {
             log('INFO', `Account: ${accountInfo.name}, fans=${accountInfo.fan}, follow=${accountInfo.follow}`);
             saveAccountHistory(dateStr, accountInfo, CONFIG.outputDir);
+        }
+
+        // 11.5. Fetch ad revenue from Open API
+        log('INFO', 'Fetching ad revenue...');
+        const adRevenue = await fetchAdRevenue(dateStr);
+        if (adRevenue) {
+            log('INFO', `Ad revenue (7d): ${adRevenue.totalRevenue}元, impressions=${adRevenue.totalImpressions}`);
+            report.adRevenue = adRevenue;
         }
 
         // 12. Send combined email
