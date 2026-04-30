@@ -1,0 +1,19 @@
+{
+  "id": "rearview-mirror-fee",
+  "name": "后视镜维修费投票",
+  "description": "关于电动汽车后视镜损坏后的费用承担与维修选择的投票页面。通过对比厂修、保险、第三方和暂缓修理等方案，引导用户基于成本与安全作出选择，适配手机图文展示与评论分享。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电动车",
+    "后视镜",
+    "维修费",
+    "保险",
+    "车主选择",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "rearview-mirror-fee/images/pay-original.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-04-30T17:01:52.433Z"
+}
