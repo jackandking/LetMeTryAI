@@ -1,0 +1,18 @@
+{
+  "id": "long-trip-kid-essentials",
+  "name": "家长爱出行小测",
+  "description": "收集家长在长途出行中常备的随身物品，比较零食、玩具、电子设备与换洗清洁类物品，便于手机端快速阅读与投票互动，鼓励分享实用经验而非专业建议。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "长途出行",
+    "育儿工具",
+    "亲子出发",
+    "旅行清单",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "long-trip-kid-essentials/images/snacks-utensils.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-01T19:00:39.614Z"
+}
