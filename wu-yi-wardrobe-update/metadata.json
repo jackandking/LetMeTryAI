@@ -1,0 +1,19 @@
+{
+  "id": "wu-yi-wardrobe-update",
+  "name": "五一衣橱补位",
+  "description": "面向关注穿搭与生活方式的女性用户，移动端图文投票页，选项聚焦春夏交替的实用单品，便于后续内容延展与短视频素材采集，避免商业化硬推。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "衣橱更新",
+    "春夏穿搭",
+    "轻薄外套",
+    "亮色单品",
+    "配饰",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "wu-yi-wardrobe-update/images/light-jacket.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-01T11:50:34.332Z"
+}

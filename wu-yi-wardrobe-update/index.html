@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>五一后怎么给衣橱换新</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">五一后衣橱更新投票：你要添哪类单品？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">五一过后你想为衣橱加入哪类单品？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="light-jacket">
+                            <div class="card-image">
+                                <img src="images/light-jacket.svg" alt="轻薄外套搭配示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">轻薄外套</h3>
+                                <p class="option-desc">春夏交替实用，便于叠穿与应对早晚温差</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bright-color-piece">
+                            <div class="card-image">
+                                <img src="images/bright-color-piece.svg" alt="亮色单品展示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">亮色单品</h3>
+                                <p class="option-desc">用亮色点亮整体造型，提升时髦感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="casual-set">
+                            <div class="card-image">
+                                <img src="images/casual-set.svg" alt="休闲套装穿搭示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">舒适休闲套装</h3>
+                                <p class="option-desc">舒适又有型，适合日常出行与居家切换</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="accessory-upgrade">
+                            <div class="card-image">
+                                <img src="images/accessory-upgrade.svg" alt="配饰提升造型示例" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">配饰升级（包/围巾）</h3>
+                                <p class="option-desc">通过包包或围巾等配饰提升整体质感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
