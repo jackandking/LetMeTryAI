@@ -1,0 +1,19 @@
+{
+  "id": "elder-daily-health-habits",
+  "name": "爱老人 健康习惯投票",
+  "description": "邀请用户在简单选项中投票，展示常见且安全的日常保健习惯（非医疗建议），便于分享与讨论。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "健步走",
+    "太极",
+    "早睡",
+    "饮水",
+    "日常习惯",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-daily-health-habits/images/walking-exercise.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-01T11:52:12.184Z"
+}
