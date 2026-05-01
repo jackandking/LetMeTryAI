@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子长途出行随身物品投票</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">长途出行带孩子，你常用哪些随身物品？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">长途出行带孩子，你常用哪些随身物品？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="snacks-utensils">
+                            <div class="card-image">
+                                <img src="images/snacks-utensils.svg" alt="零食和儿童餐具" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">零食与餐具</h3>
+                                <p class="option-desc">宝宝零食、水杯与便携餐具，随时补充能量与口感安定。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="toys-activity-kit">
+                            <div class="card-image">
+                                <img src="images/toys-activity-kit.svg" alt="便携玩具和绘本" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">玩具与活动包</h3>
+                                <p class="option-desc">便携玩具、绘本或贴纸，安抚情绪并打发路上时间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="electronics-chargers">
+                            <div class="card-image">
+                                <img src="images/electronics-chargers.svg" alt="电子设备和充电器" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">电子设备与充电</h3>
+                                <p class="option-desc">平板/手机、耳机与充电宝，用于短时娱乐或看育儿教学视频。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hygiene-change-clothes">
+                            <div class="card-image">
+                                <img src="images/hygiene-change-clothes.svg" alt="换洗衣物和清洁用品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">换洗与清洁用品</h3>
+                                <p class="option-desc">备用衣物、湿巾、垃圾袋等，保持清洁与舒适更换便利。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
