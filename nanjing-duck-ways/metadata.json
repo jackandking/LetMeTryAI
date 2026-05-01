@@ -1,0 +1,19 @@
+{
+  "id": "nanjing-duck-ways",
+  "name": "男人宝·南京吃鸭投票",
+  "description": "以南京盐水鸭为核心，呈现冷切、配汤、夹饼与卤味四种常见/流行吃法，便于用户投票并引发美食讨论。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "南京盐水鸭",
+    "盐水鸭",
+    "鸭血粉丝汤",
+    "街头小吃",
+    "夹饼",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "nanjing-duck-ways/images/cold-sliced-salt-duck.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-01T17:00:50.110Z"
+}
