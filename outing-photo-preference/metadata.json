@@ -1,0 +1,19 @@
+{
+  "id": "outing-photo-preference",
+  "name": "出游拍照偏好投票",
+  "description": "适合手机阅读的图文投票页，围绕拍照习惯与回忆分享，内容温暖、实用，避免医疗建议和过度悲伤话题。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "出游",
+    "拍照",
+    "合影",
+    "怀旧",
+    "实用技巧",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "outing-photo-preference/images/casual-candid.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-01T18:00:43.164Z"
+}

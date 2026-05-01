@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>出游拍照偏好投票 — 爱老人</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">出游拍照你更喜欢哪种方式？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">出游拍照你更喜欢哪种方式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="casual-candid">
+                            <div class="card-image">
+                                <img src="images/casual-candid.svg" alt="在公园随手抓拍的自然照片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">随性抓拍（自然生活照）</h3>
+                                <p class="option-desc">记录自然瞬间，不用摆姿势，像日常生活的留影。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="posed-classic">
+                            <div class="card-image">
+                                <img src="images/posed-classic.svg" alt="公园里摆拍的全家合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">摆拍经典（认真构图）</h3>
+                                <p class="option-desc">提前构图、摆好姿势，讲究背景和构图，留下一张正式照片。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="family-group">
+                            <div class="card-image">
+                                <img src="images/family-group.svg" alt="一家人围坐拍合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">合家欢合照（多人互动）</h3>
+                                <p class="option-desc">以家庭合影为主，多人互动和笑容记录团聚时刻。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="scenery-focus">
+                            <div class="card-image">
+                                <img src="images/scenery-focus.svg" alt="以山水风景为主的旅行照片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">风景为主（以风景为主，人物融入）</h3>
+                                <p class="option-desc">以风景为主，人物作为点缀，适合留念景色与旅途感受。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
