@@ -1,0 +1,20 @@
+{
+  "id": "motor-race-win-style",
+  "name": "机车夺冠投票",
+  "description": "围绕赛道竞技与车手抉择，提供易读的图文选项，鼓励车迷表达偏好并在评论区展开战术讨论。页面适配手机，文案精简可分享。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "机车",
+    "赛车",
+    "夺冠",
+    "策略",
+    "技术",
+    "速度",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "motor-race-win-style/images/technical-overtake.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-02T17:00:37.592Z"
+}
