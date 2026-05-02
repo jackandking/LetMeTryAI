@@ -1,0 +1,20 @@
+{
+  "id": "wuyi-elder-relaxed-travel",
+  "name": "爱老人·轻松出行投票",
+  "description": "在五一错峰出游期间，邀请长者或家属选择更合适的轻松出行方式。选项覆盖近郊自驾、周边公园步行、小团导览和社区/居家休闲，方便收集偏好用于活动与服务优化，内容避免医疗建议与过度悲伤话题。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "五一",
+    "错峰出游",
+    "长者出行",
+    "轻松旅行",
+    "周边游",
+    "社区活动",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "wuyi-elder-relaxed-travel/images/nearby-short-drive.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-02T18:00:37.173Z"
+}
