@@ -1,0 +1,19 @@
+{
+  "id": "holiday-off-peak-travel-preference",
+  "name": "家长出行小调查",
+  "description": "面向关注亲子体验的家长，收集关于假期避开人流与行程灵活性的偏好（如周中出发、早起避峰、假期尾段出发或近郊自驾），便于制定更舒适的家庭出游计划和交流参考。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "假期出行",
+    "错峰出游",
+    "亲子旅行",
+    "家庭计划",
+    "近郊自驾",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "holiday-off-peak-travel-preference/images/weekday-off-peak-short-trip.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-02T19:00:34.967Z"
+}
