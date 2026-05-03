@@ -1,0 +1,20 @@
+{
+  "id": "elder-transport-choice",
+  "name": "爱老人出行投票",
+  "description": "本投票关注长者日常出行场景，从便捷、舒适、安全与陪同需求等角度比较电动车与传统方式，适合家庭、社区和社交媒体传播并促发讨论。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "长者出行",
+    "电动车",
+    "助行器",
+    "家庭陪同",
+    "社区服务",
+    "出行安全",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-transport-choice/images/electric-mobility.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-03T18:01:13.334Z"
+}
