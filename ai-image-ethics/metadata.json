@@ -1,0 +1,19 @@
+{
+  "id": "ai-image-ethics",
+  "name": "AI影像讨论",
+  "description": "结合近期关于AI合成影像与短视频传播的讨论，邀请用户就隐私、版权与娱乐价值进行投票并分享看法。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "AI合成影像",
+    "版权",
+    "隐私",
+    "短视频",
+    "影视技术",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ai-image-ethics/images/support-regulated-use.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-03T21:00:38.248Z"
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>AI合成影像：娱乐与责任如何平衡？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">AI合成影像的使用争议</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">面对AI合成影像在影视与短视频中的广泛使用，你更倾向哪种观点？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="support-regulated-use">
+                            <div class="card-image">
+                                <img src="images/support-regulated-use.svg" alt="支持规范使用AI合成影像" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">支持规范化使用</h3>
+                                <p class="option-desc">支持在明确授权与标注下用于创作与娱乐</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="concern-privacy-copyright">
+                            <div class="card-image">
+                                <img src="images/concern-privacy-copyright.svg" alt="担忧隐私与版权" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">担忧隐私与版权风险</h3>
+                                <p class="option-desc">更关注被合成人物的隐私与肖像权保护</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="platform-labeling-review">
+                            <div class="card-image">
+                                <img src="images/platform-labeling-review.svg" alt="平台标注与审核" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">希望平台加强标注与审核</h3>
+                                <p class="option-desc">主张平台责任，要求明显标注与内容审核机制</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
