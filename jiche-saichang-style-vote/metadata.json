@@ -1,0 +1,19 @@
+{
+  "id": "jiche-saichang-style-vote",
+  "name": "女人爱·赛场机车风",
+  "description": "面向喜爱机车风与赛道元素的女性用户，图文并茂的手机投票页，突出妆容与服饰差异，便于晒图与话题互动。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "机车风",
+    "赛场造型",
+    "穿搭",
+    "美妆",
+    "时尚穿搭",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "jiche-saichang-style-vote/images/modern-edge.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-03T20:00:35.358Z"
+}
