@@ -1,0 +1,20 @@
+{
+  "id": "electric-range-cost",
+  "name": "男人宝话题投票",
+  "description": "对比电动车续航（单次里程、续航稳定）与长期使用成本（充电、保养、折旧等），适合手机图文投票，引导用户分享出行场景与预算考量。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电动车",
+    "续航",
+    "充电",
+    "费用",
+    "购车决策",
+    "用车生活",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "electric-range-cost/images/range-priority.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-03T17:00:48.550Z"
+}

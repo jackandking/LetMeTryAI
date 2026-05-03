@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>电动车：续航 vs 费用，你更看重？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">电动车续航与费用：你更在意哪点？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在购车或换车时，你更在意电动车的续航里程还是长期使用费用？请选择符合你看法的选项。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="range-priority">
+                            <div class="card-image">
+                                <img src="images/range-priority.svg" alt="续航里程图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">续航里程</h3>
+                                <p class="option-desc">更看重一次充电能跑多远，适合常跑长途或减少充电频率的人。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cost-priority">
+                            <div class="card-image">
+                                <img src="images/cost-priority.svg" alt="使用成本图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">使用成本</h3>
+                                <p class="option-desc">更在意充电、保养和折旧等长期花费，关注买得起与养得起。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="charging-convenience">
+                            <div class="card-image">
+                                <img src="images/charging-convenience.svg" alt="充电便利图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">充电便利</h3>
+                                <p class="option-desc">更重视充电站覆盖与充电速度，影响日常通勤体验。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="performance-resale">
+                            <div class="card-image">
+                                <img src="images/performance-resale.svg" alt="性能与保值图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">性能与保值</h3>
+                                <p class="option-desc">看重驾驶体验、续航稳定性与未来保值率作为综合考量。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
