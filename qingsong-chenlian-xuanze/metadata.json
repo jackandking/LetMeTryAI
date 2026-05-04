@@ -1,0 +1,18 @@
+{
+  "id": "qingsong-chenlian-xuanze",
+  "name": "爱老人晨练投票",
+  "description": "提供多种适合老年人的晨练选项（散步、太极、椅上伸展、呼吸放松），便于根据体力与兴趣投票并在社区中交流体验与小技巧。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "晨练",
+    "健康养生",
+    "社区互动",
+    "简易运动",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "qingsong-chenlian-xuanze/images/chenjian-sanbu.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-04T18:00:39.883Z"
+}

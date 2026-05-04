@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>今天早上的轻松晨练，你选哪个？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">轻松晨练选择</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">早晨你更愿意选择哪种轻松晨练方式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chenjian-sanbu">
+                            <div class="card-image">
+                                <img src="images/chenjian-sanbu.svg" alt="老年人在小区散步" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">晨间散步</h3>
+                                <p class="option-desc">沿小区慢走，呼吸新鲜空气，节奏轻松可调</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="taiji-huanlian">
+                            <div class="card-image">
+                                <img src="images/taiji-huanlian.svg" alt="老年人练太极动作" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">太极缓练</h3>
+                                <p class="option-desc">缓慢律动，注重平衡与上肢下肢协调</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yizuo-shenzhan">
+                            <div class="card-image">
+                                <img src="images/yizuo-shenzhan.svg" alt="在椅子上做伸展的长者" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">椅上伸展</h3>
+                                <p class="option-desc">坐椅完成的轻柔伸展，适合行动不便者</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="huxi-fangsong">
+                            <div class="card-image">
+                                <img src="images/huxi-fangsong.svg" alt="做深呼吸放松的老年人" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">呼吸与放松</h3>
+                                <p class="option-desc">深呼吸与简单放松练习，帮助调整精神与节奏</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
