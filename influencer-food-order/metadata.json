@@ -1,0 +1,19 @@
+{
+  "id": "influencer-food-order",
+  "name": "女人爱 美食投票",
+  "description": "面向女性用户收集对网红推荐美食的下单意愿与动机，帮助内容策划与话题运营。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "网红美食",
+    "下单",
+    "尝鲜",
+    "消费心理",
+    "生活方式",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "influencer-food-order/images/order-now.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-04T20:00:50.377Z"
+}
