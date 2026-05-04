@@ -1,0 +1,19 @@
+{
+  "id": "decide-big-fruit-order",
+  "name": "家长爱·分果小帮手",
+  "description": "本投票聚焦家庭在收到大份网购水果时常用的决策方式（平均分、按喜好、轮流挑选/分期吃、分享给邻居等），适合手机阅读与图文展示，鼓励交流实用技巧并减少浪费；不涉及医疗建议或引发焦虑的话题。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "网购水果",
+    "分配",
+    "亲子",
+    "家庭决策",
+    "省心方法",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "decide-big-fruit-order/images/even-share.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-04T19:00:52.762Z"
+}
