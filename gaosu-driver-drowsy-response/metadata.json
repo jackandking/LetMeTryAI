@@ -1,0 +1,19 @@
+{
+  "id": "gaosu-driver-drowsy-response",
+  "name": "路上安全投票",
+  "description": "针对高速公路上遇到疑似打盹驾驶的常见反应进行投票，旨在收集用户对安全应对、提醒方式与报警倾向的偏好，适合移动端图文呈现。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "高速安全",
+    "打盹驾驶",
+    "路上应对",
+    "驾驶安全",
+    "情感关怀",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "gaosu-driver-drowsy-response/images/wake-and-suggest-replace-driver.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-05T20:00:43.698Z"
+}
