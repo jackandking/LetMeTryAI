@@ -1,0 +1,18 @@
+{
+  "id": "phone-camera-showdown",
+  "name": "手机拍照投票",
+  "description": "以消费者视角对比手机在不同拍照场景的表现（夜景/人像/广角），简短示例图+说明，便于快速投票与分享。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "手机摄影",
+    "拍照偏好",
+    "数码评测",
+    "热搜话题",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "phone-camera-showdown/images/low-light-performance.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-05T21:01:06.643Z"
+}
