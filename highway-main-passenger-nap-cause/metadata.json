@@ -1,0 +1,20 @@
+{
+  "id": "highway-main-passenger-nap-cause",
+  "name": "男人宝投票",
+  "description": "以汽车安全与社会认知为切入点，让用户在短时间内选择更符合自己判断的原因，便于手机阅读与分享。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "高速",
+    "打盹",
+    "疲劳驾驶",
+    "车内环境",
+    "行车安全",
+    "社会讨论",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "highway-main-passenger-nap-cause/images/driver-fatigue.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-05T17:00:39.230Z"
+}
