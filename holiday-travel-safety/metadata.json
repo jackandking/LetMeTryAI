@@ -1,0 +1,22 @@
+{
+  "id": "holiday-travel-safety",
+  "name": "爱老人假期安全投票",
+  "description": "为老年群体设计的手机投票页，聚焦假期出行时的实用安全关切（出行准备、途中交通、住宿与防骗、随身应急），便于收集社区经验并生成安全提示内容。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "假期",
+    "出行",
+    "安全",
+    "老年",
+    "旅行准备",
+    "防骗",
+    "住宿安全",
+    "应急联系",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "holiday-travel-safety/images/pre-trip-preparation.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-05T18:00:51.913Z"
+}
