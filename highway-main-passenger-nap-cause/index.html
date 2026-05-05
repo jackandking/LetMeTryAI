@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>高速上主副驾同时打盹，原因你怎么猜？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">高速上主副驾同时打盹，原因你怎么猜？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在高速上主副驾同时打盹，哪项是更可能的原因？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="driver-fatigue">
+                            <div class="card-image">
+                                <img src="images/driver-fatigue.svg" alt="司机疲劳导致打盹场景插图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">司机疲劳驾驶</h3>
+                                <p class="option-desc">长时间驾驶或休息不足导致驾驶人和同伴都困倦。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="meds-or-alcohol">
+                            <div class="card-image">
+                                <img src="images/meds-or-alcohol.svg" alt="药物或饮酒影响导致昏睡示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">药物或饮酒影响</h3>
+                                <p class="option-desc">药物副作用或饮酒后反应迟钝，双方都出现昏沉。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cabin-air-issue">
+                            <div class="card-image">
+                                <img src="images/cabin-air-issue.svg" alt="车内闷热空调问题示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">车内空气或温度问题</h3>
+                                <p class="option-desc">闷热、缺氧或空调不当让人容易犯困。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="contagious-sleepiness">
+                            <div class="card-image">
+                                <img src="images/contagious-sleepiness.svg" alt="乘客互相影响而打盹示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">互相影响放松警惕</h3>
+                                <p class="option-desc">一人休息、另一人放松警觉，导致双方同时打盹。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
