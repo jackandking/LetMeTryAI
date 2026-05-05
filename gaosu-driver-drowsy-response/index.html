@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>高速上遇到疑似打盹驾驶者，你会怎么做？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">高速上见到驾驶疑似打盹，你会怎么应对？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">高速上见到驾驶疑似打盹，你会怎么应对？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wake-and-suggest-replace-driver">
+                            <div class="card-image">
+                                <img src="images/wake-and-suggest-replace-driver.svg" alt="温和提醒司机靠边休息的图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">提醒并建议靠边休息或换人</h3>
+                                <p class="option-desc">靠近并温和提醒司机，建议其在安全地点停车休息或换人驾驶，优先保证休息与恢复。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="keep-distance-call-for-help">
+                            <div class="card-image">
+                                <img src="images/keep-distance-call-for-help.svg" alt="保持距离并拨打求助电话的图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">保持距离并联系路政或报警</h3>
+                                <p class="option-desc">先与可疑车辆保持安全距离，拨打路政或交警电话报告位置信息，请专业力量处置。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="pull-over-and-stop">
+                            <div class="card-image">
+                                <img src="images/pull-over-and-stop.svg" alt="靠边停车记录信息的图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">靠边记录并等待安全后上前协助</h3>
+                                <p class="option-desc">在确保自身安全的前提下靠边停车，记录车牌与情况，待安全后上前确认并提供帮助。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="avoid-and-report">
+                            <div class="card-image">
+                                <img src="images/avoid-and-report.svg" alt="避让可疑车辆并通过手机上报的图示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不直接接近，避让并事后上报</h3>
+                                <p class="option-desc">不靠近可疑车辆，主动避让并在安全后通过路况平台或交警热线上报位置与车牌。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
