@@ -1,0 +1,20 @@
+{
+  "id": "world-cup-broadcast-fee",
+  "name": "男人宝·世界杯投票",
+  "description": "围绕“世界杯转播费你怎么看？”讨论付费观看、公共转播、流媒体订阅与集体观赛等不同观看方式。页面以手机友好图文形式呈现，提供对比选项并鼓励理性讨论与分享。",
+  "category": "体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "世界杯",
+    "转播费",
+    "付费",
+    "流媒体",
+    "集体观赛",
+    "体育讨论",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "world-cup-broadcast-fee/images/pay-for-hd.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-06T17:01:09.337Z"
+}
