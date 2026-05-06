@@ -1,0 +1,19 @@
+{
+  "id": "guide-child-graffiti",
+  "name": "家长引导小帮手",
+  "description": "面向家长的投票页：在发现孩子在公共牌匾或墙面涂鸦时，可选的引导方式对比（沟通、责任、替代创作、规则管理），适合手机图文展示，强调教育与实际操作建议。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "涂鸦",
+    "亲子沟通",
+    "教育方法",
+    "责任感",
+    "创意引导",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "guide-child-graffiti/images/talk-and-clean.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-06T19:00:51.512Z"
+}
