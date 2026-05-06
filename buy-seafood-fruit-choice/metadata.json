@@ -1,0 +1,20 @@
+{
+  "id": "buy-seafood-fruit-choice",
+  "name": "爱老人购物投票",
+  "description": "针对老年受众的简洁图文投票，比较在购买海鲜与贵价水果时的常见取舍（新鲜、价格、购买频率、保鲜便利），适合手机阅读与分享。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "海鲜",
+    "贵价水果",
+    "保鲜",
+    "购物技巧",
+    "健康饮食",
+    "家庭生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "buy-seafood-fruit-choice/images/prioritize-freshness.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-06T18:00:54.882Z"
+}
