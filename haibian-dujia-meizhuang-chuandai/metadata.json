@@ -1,0 +1,20 @@
+{
+  "id": "haibian-dujia-meizhuang-chuandai",
+  "name": "海边度假美妆穿搭",
+  "description": "面向喜欢旅行与潮流的用户，用图文对比展示海边场景下的妆容与服装搭配，便于手机浏览和二次分享。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "海边",
+    "度假",
+    "美妆",
+    "穿搭",
+    "防晒",
+    "度假风",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "haibian-dujia-meizhuang-chuandai/images/ziran-qingxin-fangshai.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-06T20:00:50.769Z"
+}
