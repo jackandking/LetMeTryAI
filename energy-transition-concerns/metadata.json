@@ -1,0 +1,19 @@
+{
+  "id": "energy-transition-concerns",
+  "name": "能源转型关切投票",
+  "description": "针对普通用户对能源转型的主要关切（生活成本、就业、供电稳定、环境改善）做图文投票，页面适配手机阅读，便于社交传播与评论引导。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "能源转型",
+    "电力",
+    "生活成本",
+    "就业",
+    "环境",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "energy-transition-concerns/images/cost-and-bills.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T21:00:38.936Z"
+}
