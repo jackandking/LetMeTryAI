@@ -1,0 +1,19 @@
+{
+  "id": "ai-work-impact",
+  "name": "AI 职场投票",
+  "description": "围绕生成式 AI 在不同行业的落地与影响，手机友好的图文投票页，引导用户对各类岗位关注点投票并留下看法。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "生成式AI",
+    "职场",
+    "自动化",
+    "内容创作",
+    "客服",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ai-work-impact/images/content-creation.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T01:05:19.361Z"
+}
