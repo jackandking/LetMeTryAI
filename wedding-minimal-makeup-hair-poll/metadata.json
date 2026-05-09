@@ -1,0 +1,19 @@
+{
+  "id": "wedding-minimal-makeup-hair-poll",
+  "name": "女人爱·婚礼妆发投票",
+  "description": "收集用户在婚礼场景中对简约妆容与发型的偏好（如裸妆、光泽妆、低盘发、披肩卷发等），输出可用于穿搭与妆发示例的内容灵感与实用建议。页面为图文投票，适合手机浏览与分享。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "婚礼",
+    "简约妆",
+    "新娘发型",
+    "轻妆",
+    "婚礼妆发",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "wedding-minimal-makeup-hair-poll/images/natural-nude-low-bun.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T20:00:34.796Z"
+}

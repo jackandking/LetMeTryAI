@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>婚礼简约妆发偏好调查 - 女人爱</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">婚礼简约妆发偏好调查</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">您在婚礼上更偏好哪种简约妆发风格？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="natural-nude-makeup-low-bun">
+                            <div class="card-image">
+                                <img src="images/natural-nude-low-bun.svg" alt="自然裸妆搭配低盘发" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">自然裸妆 + 低盘发</h3>
+                                <p class="option-desc">清新低调，突出皮肤质感与温柔气质</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fresh-daily-makeup-loose-curls">
+                            <div class="card-image">
+                                <img src="images/fresh-daily-loose-curls.svg" alt="清新日常妆配披肩卷发" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">清新日常妆 + 披肩卷发</h3>
+                                <p class="option-desc">如日常妆容般自然，适合户外与轻松婚礼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="glowy-makeup-low-topknot">
+                            <div class="card-image">
+                                <img src="images/glowy-low-topknot.svg" alt="精致光泽妆配低位丸子头" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">精致光泽妆 + 低位丸子头</h3>
+                                <p class="option-desc">带光泽感的妆容更显立体，搭配低位丸子头有仪式感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vintage-soft-makeup-vintage-curls">
+                            <div class="card-image">
+                                <img src="images/vintage-soft-vintage-curls.svg" alt="复古柔和妆配经典复古卷" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古柔和妆 + 经典复古卷</h3>
+                                <p class="option-desc">复古风情，适合主题或复古风婚礼场景</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
