@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>妈妈让人放心的一面：温暖的瞬间</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">妈妈让人放心的一面：哪一种让你感到安心</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在生活中，妈妈展现哪些让你感到安心的特质？选一个并分享相关回忆或理由。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="attentive-care">
+                            <div class="card-image">
+                                <img src="images/attentive-care.svg" alt="妈妈在厨房准备饭菜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">细心照料</h3>
+                                <p class="option-desc">留意家中细节，照顾饮食与起居，让人踏实。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="steady-dependable">
+                            <div class="card-image">
+                                <img src="images/steady-dependable.svg" alt="妈妈坚定微笑的侧脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">稳重可靠</h3>
+                                <p class="option-desc">关键时刻沉稳应对，成为家人的靠山。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wise-advice">
+                            <div class="card-image">
+                                <img src="images/wise-advice.svg" alt="妈妈翻阅旧笔记或菜谱" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">经验好建议</h3>
+                                <p class="option-desc">多年生活智慧的提醒与实用小技巧，解决日常难题。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="warm-humor">
+                            <div class="card-image">
+                                <img src="images/warm-humor.svg" alt="妈妈开心地笑" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">幽默与乐观</h3>
+                                <p class="option-desc">用幽默和乐观化解紧张，让家里氛围更轻松。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
