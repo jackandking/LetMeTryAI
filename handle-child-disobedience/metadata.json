@@ -1,0 +1,19 @@
+{
+  "id": "handle-child-disobedience",
+  "name": "家长爱·亲子投票",
+  "description": "本投票收集家长在孩子不听话时的常见应对方法，侧重沟通、行为引导与情绪处理，便于手机阅读和社交分享，不涉医疗建议。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "育儿",
+    "亲子沟通",
+    "教育方法",
+    "行为管理",
+    "实用工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "handle-child-disobedience/images/patient-communication.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T01:12:04.383Z"
+}
