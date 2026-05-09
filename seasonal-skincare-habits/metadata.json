@@ -1,0 +1,19 @@
+{
+  "id": "seasonal-skincare-habits",
+  "name": "换季护肤投票",
+  "description": "结合换季和热搜中关于皮肤敏感、保湿话题，投票帮助读者比较保湿、控油、修护等日常策略的优先级。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "换季护肤",
+    "保湿",
+    "控油",
+    "修护",
+    "护肤习惯",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "seasonal-skincare-habits/images/use-hydration-serum.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T01:11:59.538Z"
+}
