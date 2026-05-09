@@ -1,0 +1,19 @@
+{
+  "id": "ai-work-attitude",
+  "name": "AI职场态度投票",
+  "description": "围绕聊天机器人、自动化工具在工作中带来的影响进行简短投票，便于用户表达对效率、监管与就业影响的态度并分享。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "AI",
+    "职场",
+    "自动化",
+    "效率",
+    "监管",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ai-work-attitude/images/accept-ai.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-09T01:12:16.993Z"
+}
