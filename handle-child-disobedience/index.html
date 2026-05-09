@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>遇到孩子不听话，你会怎么做？——家长选择</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">遇到孩子不听话，你会怎么做？常见做法投票</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">遇到孩子不听话，你会怎么做？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="patient-communication">
+                            <div class="card-image">
+                                <img src="images/patient-communication.svg" alt="父母耐心与孩子交谈" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">耐心沟通</h3>
+                                <p class="option-desc">先倾听孩子想法，再耐心解释原因与期望</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="set-boundaries-and-consequences">
+                            <div class="card-image">
+                                <img src="images/set-boundaries-and-consequences.svg" alt="家庭规则与后果示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">设立边界与后果</h3>
+                                <p class="option-desc">明确规则并说明合理后果，保持执行一致性</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="redirect-distraction">
+                            <div class="card-image">
+                                <img src="images/redirect-distraction.svg" alt="通过活动转移孩子注意力" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">转移注意力/换个活动</h3>
+                                <p class="option-desc">通过游戏或任务转移注意力，帮助情绪平复</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="brief-timeout-and-discuss">
+                            <div class="card-image">
+                                <img src="images/brief-timeout-and-discuss.svg" alt="父母与孩子冷静后交流" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短暂冷静并讨论</h3>
+                                <p class="option-desc">先短暂冷静，再与孩子讨论发生的事与改进办法</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
