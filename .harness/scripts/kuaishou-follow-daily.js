@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { chromium } from 'playwright';
 
-import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth } from './kuaishou-follow-auth.js';
+import { resolveKuaishouAuthFile, readAuthStateFile, hasLoggedInKuaishouAuth, assertAuthValid } from './kuaishou-follow-auth.js';
 import { buildPastDayRange, fetchOfficialPastDayData, formatDateInTimeZone, writeExportFile } from './kuaishou-follow-api.js';
 import { loadFollowAppConfigs } from './kuaishou-follow-config.js';
 import {
@@ -46,6 +46,8 @@ const RATE_LIMIT_KEYWORDS = [
 ];
 const INVALID_VIDEO_KEYWORDS = ['找不到该作品', '热门作品'];
 const IMAGE_POST_KEYWORDS = ['暂未支持显示图片作品'];
+const AUTH_FAILURE_KEYWORDS = ['passToken', '登录', '立即登录', '登录/注册', '授权', 'token失效'];
+const AUTH_FAILURE_URL_PATTERNS = ['passport.kuaishou.com', 'id.kuaishou.com/pass'];
 const FOLLOWED_TEXTS = new Set(['已关注', '互相关注', '回关']);
 const FOLLOW_BUTTON_TEXTS = new Set(['关注', '+关注', '＋关注', '+ 关注']);
 const RETRYABLE_REASONS = new Set(['follow-button-not-found', 'invalid-video', 'image-post', 'follow-state-not-confirmed']);
@@ -103,8 +105,10 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function detectPageCondition(text) {
+function detectPageCondition(text, url = '') {
     const bodyText = String(text || '');
+    const urlStr = String(url || '');
+
     if (INVALID_VIDEO_KEYWORDS.some(keyword => bodyText.includes(keyword))) {
         return 'invalid-video';
     }
@@ -119,6 +123,14 @@ function detectPageCondition(text) {
     }
     if (/^\s*\{"result":\s*\d/.test(bodyText)) {
         return 'not-logged-in';
+    }
+    // Detect passToken refresh failures by URL patterns
+    if (AUTH_FAILURE_URL_PATTERNS.some(pattern => urlStr.includes(pattern))) {
+        return 'not-logged-in';
+    }
+    // If body is extremely short and contains only JS, likely a failed render
+    if (bodyText.length < 100 && bodyText.includes('function')) {
+        return 'page-render-failed';
     }
     return '';
 }
@@ -244,7 +256,8 @@ async function followCandidate(page, candidate, { logsDir }) {
     await page.waitForTimeout(2500);
 
     let bodyText = await getPageBodyText(page);
-    let condition = detectPageCondition(bodyText);
+    const currentUrl = page.url();
+    let condition = detectPageCondition(bodyText, currentUrl);
     if (condition) {
         return {
             status: condition === 'rate-limited' ? 'rate-limited' : 'failed',
@@ -325,10 +338,9 @@ async function followCandidate(page, candidate, { logsDir }) {
 
 async function openFollowBrowser({ headless = true, runtimeDirs }) {
     const authFile = resolveKuaishouAuthFile(runtimeDirs.authDir, WEB_URL);
+    // Validate auth before launching browser to fail fast with clear message
+    assertAuthValid(authFile);
     const authState = readAuthStateFile(authFile);
-    if (!hasLoggedInKuaishouAuth(authState)) {
-        throw new Error(`Website auth is missing or not logged in: ${authFile}`);
-    }
 
     const browser = await chromium.launch({
         headless,
@@ -703,7 +715,7 @@ export async function runHourlyFollowWorker({
                 break;
             }
 
-            if (result.reason === 'not-logged-in') {
+            if (result.reason === 'not-logged-in' || result.reason === 'page-render-failed') {
                 const deferUntil = buildNextDayResumeAt(now, DEFAULT_REPORT_HOUR);
                 queue = deferEntireQueue(queue, deferUntil, new Date().toISOString(), 'auth-expired');
                 stopReason = 'auth-expired';
