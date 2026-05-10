@@ -168,6 +168,431 @@
 - queued: 诊断新任务 0 采用原因
 - queued: 批量处理 42 个 pending errors
 
+
+### 2026-04-26 — Auto-Evolve 运行
+
+**时间**: 2026-04-26T21:00:01.137Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 87 新达人入队（近7天）
+- Pending Errors: 3
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-26 — Auto-Evolve 运行
+
+**时间**: 2026-04-26T21:30:01.230Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 87 新达人入队（近7天）
+- Pending Errors: 3
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-27 — Auto-Evolve 运行
+
+**时间**: 2026-04-27T21:00:01.372Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 69 新达人入队（近7天）
+- Pending Errors: 4
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-27 — Auto-Evolve 运行
+
+**时间**: 2026-04-27T21:30:01.182Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 69 新达人入队（近7天）
+- Pending Errors: 4
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-28 — Auto-Evolve 运行
+
+**时间**: 2026-04-28T21:00:01.431Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 60 新达人入队（近7天）
+- Pending Errors: 6
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-28 — Auto-Evolve 运行
+
+**时间**: 2026-04-28T21:30:01.434Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 60 新达人入队（近7天）
+- Pending Errors: 6
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-29 — Auto-Evolve 运行
+
+**时间**: 2026-04-29T21:00:00.651Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 56 新达人入队（近7天）
+- Pending Errors: 6
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-04-29 — Auto-Evolve 运行
+
+**时间**: 2026-04-29T21:30:00.507Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 56 新达人入队（近7天）
+- Pending Errors: 6
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-05-01 — Auto-Evolve 运行
+
+**时间**: 2026-05-01T21:00:00.851Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 43 新达人入队（近7天）
+- Pending Errors: 9
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-05-01 — Auto-Evolve 运行
+
+**时间**: 2026-05-01T21:30:01.371Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 43 新达人入队（近7天）
+- Pending Errors: 9
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-05-02 — Auto-Evolve 运行
+
+**时间**: 2026-05-02T21:00:00.442Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 43 新达人入队（近7天）
+- Pending Errors: 10
+- Skill Broken Refs: 2
+
+**诊断**: 1 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-05-02 — Auto-Evolve 运行
+
+**时间**: 2026-05-02T21:30:01.163Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 43 新达人入队（近7天）
+- Pending Errors: 10
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 系统状态良好
+
+
+### 2026-05-03 — Auto-Evolve 运行
+
+**时间**: 2026-05-03T21:00:00.764Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 33 新达人入队（近7天）
+- Pending Errors: 12
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-03 — Auto-Evolve 运行
+
+**时间**: 2026-05-03T21:30:00.796Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 33 新达人入队（近7天）
+- Pending Errors: 12
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-04 — Auto-Evolve 运行
+
+**时间**: 2026-05-04T21:00:01.370Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 13
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-04 — Auto-Evolve 运行
+
+**时间**: 2026-05-04T21:30:00.632Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 13
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 0 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-05 — Auto-Evolve 运行
+
+**时间**: 2026-05-05T21:00:01.334Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 42 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-05 — Auto-Evolve 运行
+
+**时间**: 2026-05-05T21:30:00.901Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 42 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-06 — Auto-Evolve 运行
+
+**时间**: 2026-05-06T21:00:00.478Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-06 — Auto-Evolve 运行
+
+**时间**: 2026-05-06T21:30:00.743Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-09 — Auto-Evolve 运行
+
+**时间**: 2026-05-09T01:18:24.765Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-09 — Auto-Evolve 运行
+
+**时间**: 2026-05-09T01:18:24.673Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 32 新达人入队（近7天）
+- Pending Errors: 14
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-09 — Auto-Evolve 运行
+
+**时间**: 2026-05-09T21:00:01.064Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 39 新达人入队（近7天）
+- Pending Errors: 17
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-09 — Auto-Evolve 运行
+
+**时间**: 2026-05-09T21:30:00.893Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 39 新达人入队（近7天）
+- Pending Errors: 17
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-10 — Auto-Evolve 运行
+
+**时间**: 2026-05-10T08:26:29.397Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 47 新达人入队（近7天）
+- Pending Errors: 17
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 1 项成功
+
+**下一步**: 有高优先级问题需处理
+
 ## 下次进化聚焦
 
 **当前最可能带来收益的行动**:
