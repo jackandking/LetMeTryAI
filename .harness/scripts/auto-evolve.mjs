@@ -700,6 +700,21 @@ class Fixer {
         return { ctr: totalExp > 0 ? (totalClk / totalExp * 100) : 0, count: matched.length, exp: totalExp };
       };
 
+      // Protect core brand keywords from being added to avoid
+      const PROTECTED_KEYWORDS = {
+        nanrenbao: new Set(['男人', '社会热点', '影视娱乐', '美食生活', '美女明星', '汽车', '户外', '游戏', '收藏', '体育', '科技', '军事历史']),
+        womanai: new Set(['女人', '美妆', '时尚', '明星', '情感', '生活方式', '综艺娱乐']),
+        'parent-tools': new Set(['家长', '孩子', '亲子', '教育', '家庭', '博物馆', '历史文化']),
+        'elder-love': new Set(['老人', '养生', '健康', '怀旧', '经典', '生活'])
+      };
+      const protectedSet = PROTECTED_KEYWORDS[profileId] || new Set();
+      const isProtected = (kw) => {
+        for (const p of protectedSet) {
+          if (kw.includes(p) || p.includes(kw)) return true;
+        }
+        return false;
+      };
+
       const changes = [];
       const MAX_AVOID_ADD = 2;
       const MAX_DOMORE_ADD = 1;
@@ -714,8 +729,9 @@ class Fixer {
         }
       }
 
-      // Demote low-CTR keywords from doMore to avoid
+      // Demote low-CTR keywords from doMore to avoid (skip protected)
       for (const kw of Array.from(doMore)) {
+        if (isProtected(kw)) continue;
         const score = evaluateKeyword(kw);
         if (score && score.ctr < 0.2 && score.exp > 500) {
           doMore.delete(kw);
@@ -724,10 +740,25 @@ class Fixer {
         }
       }
 
-      // Add new low-CTR keywords to avoid
+      // Filter out non-independent keywords (e.g., "搭投" only appears in "穿搭投票")
+      const independentKeywords = new Set(Object.keys(keywordStats));
+      for (const kw of Array.from(independentKeywords)) {
+        for (const longer of Array.from(independentKeywords)) {
+          if (longer.length > kw.length && longer.includes(kw)) {
+            if (keywordStats[longer].count >= keywordStats[kw].count) {
+              independentKeywords.delete(kw);
+              break;
+            }
+          }
+        }
+      }
+
+      // Add new low-CTR keywords to avoid (skip 2-char keywords with low exposure)
       const newAvoidCandidates = [];
       for (const [kw, stats] of Object.entries(keywordStats)) {
-        if (stats.count < 2 || stats.exp < 500) continue;
+        if (!independentKeywords.has(kw)) continue;
+        const minExp = kw.length === 2 ? 2000 : 500;
+        if (stats.count < 2 || stats.exp < minExp) continue;
         if (avoid.has(kw) || doMore.has(kw)) continue;
         const ctr = stats.exp > 0 ? (stats.clk / stats.exp * 100) : 0;
         if (ctr < 0.2) newAvoidCandidates.push({ kw, ctr, count: stats.count, exp: stats.exp });
@@ -736,6 +767,7 @@ class Fixer {
       let avoidAdded = 0;
       for (const cand of newAvoidCandidates) {
         if (avoidAdded >= MAX_AVOID_ADD) break;
+        if (isProtected(cand.kw)) continue;
         avoid.add(cand.kw);
         changes.push({ action: 'add', kw: cand.kw, to: 'avoid', ctr: cand.ctr, count: cand.count });
         avoidAdded++;
@@ -744,6 +776,7 @@ class Fixer {
       // Add new high-CTR keywords to doMore
       const newDoMoreCandidates = [];
       for (const [kw, stats] of Object.entries(keywordStats)) {
+        if (!independentKeywords.has(kw)) continue;
         if (stats.count < 2 || stats.exp < 500) continue;
         if (avoid.has(kw) || doMore.has(kw)) continue;
         const ctr = stats.exp > 0 ? (stats.clk / stats.exp * 100) : 0;
