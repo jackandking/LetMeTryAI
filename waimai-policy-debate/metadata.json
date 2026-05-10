@@ -1,0 +1,19 @@
+{
+  "id": "waimai-policy-debate",
+  "name": "外卖规则速投",
+  "description": "围绕外卖服务条款、配送与赔付等日常关切，设计简短选项让用户快速投票并评论。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "外卖",
+    "规则",
+    "配送",
+    "食品安全",
+    "赔付",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "waimai-policy-debate/images/delivery-time-guarantee.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-10T21:00:44.953Z"
+}
