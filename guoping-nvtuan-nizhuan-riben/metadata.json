@@ -1,0 +1,20 @@
+{
+  "id": "guoping-nvtuan-nizhuan-riben",
+  "name": "国乒女团瞬间投票",
+  "description": "基于国乒女团对阵日本的翻盘比赛，列出4个具对比性的关键瞬间，便于图文展示并引导用户投票与留言讨论。",
+  "category": "体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "国乒",
+    "乒乓球",
+    "女团",
+    "逆转",
+    "比赛瞬间",
+    "体育投票",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "guoping-nvtuan-nizhuan-riben/images/wang-yidi-serve-comeback.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-10T17:00:41.733Z"
+}
