@@ -26,6 +26,8 @@ import {
     resolveRuntimeDir
 } from './lib/runtime-paths.js';
 import { buildUsageReport, formatEmailBody as formatAdoptionEmail } from './lib/usage-report-builder.js';
+import { requestOfficialAccessToken } from './kuaishou-follow-api.js';
+import { loadFollowAppConfigs } from './kuaishou-follow-config.js';
 
 const PROJECT_ROOT = resolveProjectRoot(import.meta.url);
 const RUNTIME_DIR = resolveRuntimeDir(import.meta.url);
@@ -195,9 +197,18 @@ function inferProfileId(source, name) {
     const direct = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
     if (direct.includes(source)) return source;
     const nameLower = (name || '').toLowerCase();
-    if (nameLower.includes('男人') || nameLower.includes('军事') || nameLower.includes('坦克') || nameLower.includes('战机') || nameLower.includes('火箭')) return 'nanrenbao';
+    // womanai: beauty, fashion, celebrity, entertainment
     if (nameLower.includes('女人') || nameLower.includes('护肤') || nameLower.includes('穿搭') || nameLower.includes('美妆') || nameLower.includes('香氛')) return 'womanai';
+    if (nameLower.includes('美人') || nameLower.includes('背影') || nameLower.includes('颜值') || nameLower.includes('女神')) return 'womanai';
+    if (nameLower.includes('综艺') || nameLower.includes('女星') || nameLower.includes('女明星') || nameLower.includes('演员')) return 'womanai';
+    if (nameLower.includes('情感') || nameLower.includes('闺蜜') || nameLower.includes('恋爱')) return 'womanai';
+    // parent-tools: education, family, museum
     if (nameLower.includes('家长') || nameLower.includes('孩子') || nameLower.includes('亲子') || nameLower.includes('书包') || nameLower.includes('阅读')) return 'parent-tools';
+    if (nameLower.includes('考古') || nameLower.includes('博物馆') || nameLower.includes('文物')) return 'parent-tools';
+    // nanrenbao: men, military, tech, cars (keep last to avoid catching museum/history which now go to parent-tools)
+    if (nameLower.includes('男人') || nameLower.includes('军事') || nameLower.includes('坦克') || nameLower.includes('战机') || nameLower.includes('火箭')) return 'nanrenbao';
+    if (nameLower.includes('汽车') || nameLower.includes('游戏') || nameLower.includes('体育')) return 'nanrenbao';
+    // elder-love
     if (nameLower.includes('老人') || nameLower.includes('养生') || nameLower.includes('广场舞') || nameLower.includes('社区')) return 'elder-love';
     return 'unknown';
 }
@@ -206,9 +217,29 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
     const perfFile = path.join(projectRoot, '.automation', '.local', 'state', 'topic-performance.jsonl');
     ensureParentDirectory(perfFile);
 
-    const records = [];
+    // Load all existing records keyed by planId (global dedup + update)
+    const recordMap = new Map();
+    if (fs.existsSync(perfFile)) {
+        const lines = fs.readFileSync(perfFile, 'utf-8').split('\n').filter(Boolean);
+        for (const line of lines) {
+            try {
+                const r = JSON.parse(line);
+                if (r.planId) {
+                    recordMap.set(String(r.planId), r);
+                }
+            } catch {
+                // ignore malformed lines
+            }
+        }
+    }
+
+    let added = 0;
+    let updated = 0;
     for (const task of report.allTasks || []) {
         if (!task.stats || task.stats.error) continue;
+        const planId = String(task.planId || '');
+        if (!planId) continue;
+
         const exposure = task.stats.组件曝光数 || 0;
         const clicks = task.stats.组件点击数 || 0;
         const daren = task.stats.已履单达人数量 || 0;
@@ -216,9 +247,15 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
         const ctr = exposure > 0 ? (clicks / exposure) : 0;
         const score = Number((ctr * 1000 + daren * 0.1 + works * 0.05).toFixed(4));
 
-        records.push({
+        if (recordMap.has(planId)) {
+            updated++;
+        } else {
+            added++;
+        }
+
+        recordMap.set(planId, {
             date: dateStr,
-            planId: String(task.planId || ''),
+            planId: planId,
             name: task.name || '',
             source: task.source || '',
             profileId: inferProfileId(task.source, task.name),
@@ -227,11 +264,12 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
         });
     }
 
-    if (records.length === 0) return;
+    if (added === 0 && updated === 0) return;
 
-    const lines = records.map(r => JSON.stringify(r)).join('\n') + '\n';
-    fs.appendFileSync(perfFile, lines, 'utf-8');
-    log('INFO', `Appended ${records.length} topic-performance record(s) to ${perfFile}`);
+    const allRecords = [...recordMap.values()];
+    const lines = allRecords.map(r => JSON.stringify(r)).join('\n') + '\n';
+    fs.writeFileSync(perfFile, lines, 'utf-8');
+    log('INFO', `Topic-performance: +${added} new, ~${updated} updated, total=${allRecords.length} records`);
 }
 
 // ─── Mini-app event tracking data ───
@@ -241,6 +279,7 @@ const EVENT_SUMMARY_URL = 'https://letmetry.cloud/api/track/summary';
 const KS_TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
 const KS_OPEN_API = 'https://open.kuaishou.com';
 const KS_APP_ID = 'ks683421244533878879';
+const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), '.local', 'state', 'kuaishou-follow', 'app-config.local.json');
 
 async function fetchAccountInfo() {
     try {
@@ -269,49 +308,102 @@ function saveAccountHistory(dateStr, accountInfo, outputDir) {
 
 async function fetchAdRevenue(dateStr) {
     try {
-        const tokenResp = await fetch(KS_TOKEN_URL);
-        if (!tokenResp.ok) return null;
-        const tokenData = await tokenResp.json();
-        let token = tokenData.access_token;
-        if (!token || tokenData.access_token_expired) {
-            const refreshResp = await fetch('https://letmetry.cloud/oauth/kuaishou/refresh');
-            const refreshData = await refreshResp.json();
-            token = refreshData.access_token;
+        let configs;
+        try {
+            configs = loadFollowAppConfigs({ configFile: KS_FOLLOW_CONFIG_FILE });
+        } catch (e) {
+            log('WARN', `Failed to load follow app configs: ${e.message}`);
+            return null;
         }
-        if (!token) return null;
 
         const end = new Date(dateStr + 'T00:00:00Z');
         const start = new Date(end);
         start.setDate(start.getDate() - 7);
 
-        const resp = await fetch(`${KS_OPEN_API}/openapi/mp/developer/ad/data/query?app_id=${KS_APP_ID}&access_token=${token}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ startTime: start.getTime(), endTime: end.getTime() - 1, type: 0, page: 1, pageSize: 100 }),
-        });
-        const data = await resp.json();
-        if (data.result !== 1) {
-            log('WARN', `Ad revenue API: ${data.error_msg || data.result}`);
+        let totalImpressions = 0, totalClicks = 0, totalRevenue = 0;
+        const dailyMap = new Map();
+        const byApp = [];
+
+        for (const cfg of configs) {
+            try {
+                const tokenPayload = await requestOfficialAccessToken({
+                    appId: cfg.appId,
+                    appSecret: cfg.appSecret,
+                });
+                const token = tokenPayload.access_token;
+
+                const resp = await fetch(
+                    `${KS_OPEN_API}/openapi/mp/developer/ad/data/query?app_id=${cfg.appId}&access_token=${token}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            startTime: start.getTime(),
+                            endTime: end.getTime() - 1,
+                            type: 0,
+                            page: 1,
+                            pageSize: 100,
+                        }),
+                    }
+                );
+                const data = await resp.json();
+                if (data.result !== 1) {
+                    log('WARN', `Ad revenue API [${cfg.profileName}]: ${data.error_msg || data.result}`);
+                    continue;
+                }
+
+                const items = data.data?.items || [];
+                let appImpressions = 0, appClicks = 0, appRevenue = 0;
+                for (const item of items) {
+                    const imp = item.impression || 0;
+                    const clk = item.click || 0;
+                    const rev = item.costTotal || 0;
+                    appImpressions += imp;
+                    appClicks += clk;
+                    appRevenue += rev;
+
+                    const key = item.date;
+                    if (!dailyMap.has(key)) {
+                        dailyMap.set(key, { date: key, impressions: 0, clicks: 0, revenue: 0 });
+                    }
+                    const d = dailyMap.get(key);
+                    d.impressions += imp;
+                    d.clicks += clk;
+                    d.revenue += rev;
+                }
+
+                totalImpressions += appImpressions;
+                totalClicks += appClicks;
+                totalRevenue += appRevenue;
+                byApp.push({
+                    appName: cfg.profileName,
+                    appId: cfg.appId,
+                    impressions: appImpressions,
+                    clicks: appClicks,
+                    revenue: +appRevenue.toFixed(2),
+                });
+                log('INFO', `Ad revenue [${cfg.profileName}]: ${appRevenue.toFixed(2)}元`);
+            } catch (e) {
+                log('WARN', `Ad revenue fetch failed [${cfg.profileName}]: ${e.message}`);
+            }
+        }
+
+        if (byApp.length === 0) {
             return null;
         }
 
-        const items = data.data?.items || [];
-        let totalImpressions = 0, totalClicks = 0, totalRevenue = 0;
-        const daily = [];
-        for (const item of items) {
-            totalImpressions += item.impression || 0;
-            totalClicks += item.click || 0;
-            totalRevenue += item.costTotal || 0;
-            daily.push({ date: item.date, impressions: item.impression, clicks: item.click, revenue: item.costTotal, ecpm: item.ecpm });
-        }
+        const daily = Array.from(dailyMap.values())
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(d => ({ ...d, revenue: +d.revenue.toFixed(2) }));
 
         return {
-            days: items.length,
+            days: daily.length,
             totalImpressions,
             totalClicks,
             totalRevenue: +totalRevenue.toFixed(2),
             avgEcpm: totalImpressions > 0 ? +(totalRevenue / totalImpressions * 1000).toFixed(2) : 0,
             daily,
+            byApp,
         };
     } catch (e) {
         log('WARN', `Ad revenue fetch failed: ${e.message}`);

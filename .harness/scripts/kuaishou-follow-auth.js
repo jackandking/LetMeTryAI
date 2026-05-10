@@ -111,3 +111,38 @@ export function checkCookieExpiry(authFile) {
         reason: ''
     };
 }
+
+/**
+ * Assert that the auth file has valid, non-expired cookies.
+ * Throws a descriptive error if auth is missing or expired.
+ */
+export function assertAuthValid(authFile) {
+    const authState = readAuthStateFile(authFile);
+    if (!authState || !Array.isArray(authState.cookies) || authState.cookies.length === 0) {
+        throw new Error(
+            `Kuaishou auth file is missing or empty: ${authFile}\n` +
+            `Fix: cd .harness && npm run kuaishou:follow -- start --url https://www.kuaishou.com`
+        );
+    }
+
+    const cookieNames = new Set(
+        authState.cookies.map(c => String(c?.name || '').trim()).filter(Boolean)
+    );
+    const hasLoginCookie = LOGIN_COOKIE_NAMES.some(name => cookieNames.has(name));
+    if (!hasLoginCookie) {
+        throw new Error(
+            `Kuaishou auth file is missing login cookies: ${authFile}\n` +
+            `Fix: cd .harness && npm run kuaishou:follow -- start --url https://www.kuaishou.com`
+        );
+    }
+
+    const expiry = checkCookieExpiry(authFile);
+    if (expiry.isExpired) {
+        throw new Error(
+            `Kuaishou auth expired (${expiry.cookieName} expired at ${expiry.expiresAt}).\n` +
+            `Fix: cd .harness && npm run kuaishou:follow -- start --url https://www.kuaishou.com`
+        );
+    }
+
+    return expiry;
+}

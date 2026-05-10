@@ -16,6 +16,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { checkCookieExpiry } from './kuaishou-follow-auth.js';
 
 const HISTORY_FILE = 'follow-history.jsonl';
 const DAILY_RUNS_DIR = 'daily-runs';
@@ -62,8 +63,13 @@ function analyzeHealth(repoRoot) {
     const historyPath = join(stateDir, HISTORY_FILE);
     const queuePath = join(stateDir, PENDING_QUEUE_FILE);
     const dailyRunsDir = join(stateDir, DAILY_RUNS_DIR);
+    const authDir = join(repoRoot, '.harness', '.local', 'auth');
 
     const cutoff = new Date(Date.now() - HOURS_WINDOW * 60 * 60 * 1000);
+
+    // 0. Pre-check: cookie expiry
+    const webAuthFile = join(authDir, 'kuaishou_www_auth.json');
+    const authExpiry = checkCookieExpiry(webAuthFile);
 
     // 1. Analyze follow-history.jsonl
     const records = readJsonLines(historyPath);
@@ -115,6 +121,14 @@ function analyzeHealth(repoRoot) {
     let level = 'healthy';
     const issues = [];
 
+    if (authExpiry.isExpired) {
+        level = 'critical';
+        issues.push(`Auth cookie 已过期 (${authExpiry.cookieName} 已于 ${authExpiry.expiresAt} 过期)。请刷新 cookie: cd .harness && npm run kuaishou:follow -- start --url https://www.kuaishou.com`);
+    } else if (authExpiry.isExpiringSoon) {
+        level = level === 'critical' ? 'critical' : 'degraded';
+        issues.push(`Auth cookie 即将过期 (${authExpiry.cookieName} 将在 ${authExpiry.ttlHours}h 后过期)。建议提前刷新。`);
+    }
+
     if (authExpiredRuns > 0 || notLoggedInFailures > 0) {
         level = 'critical';
         issues.push(`Auth 实际失效: ${authExpiredRuns} 次 auth-expired 停止, ${notLoggedInFailures} 次 not-logged-in 失败。请刷新 cookie`);
@@ -160,7 +174,8 @@ function analyzeHealth(repoRoot) {
             hourlyRunsToday: recentHourlyRuns.length,
             totalAttempted,
             totalFollowed,
-            totalFailed
+            totalFailed,
+            authExpiry
         }
     };
 }
