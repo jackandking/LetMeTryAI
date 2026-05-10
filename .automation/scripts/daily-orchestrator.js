@@ -466,9 +466,10 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         `今天是 ${currentDate}。`,
         '你要为 LetMeTryAI 的日更投票页挑选热点话题。',
         trendingContext
-            ? `参考以下热搜数据，结合该品牌定位，选出适合做投票的主题，优先关注：${preferredCategories}。`
+            ? `参考以下今日热搜数据，从中提取与品牌定位相关的「人群关注趋势」和「品类情绪」，转化为适合投票的互动话题。优先关注：${preferredCategories}。`
             : `先自己检索今天与该品牌最相关的热点或常青高传播话题，优先关注：${preferredCategories}。`,
         trendingContext ? `\n${trendingContext}\n` : '',
+        trendingContext ? `\n热搜→投票转化指南（重要，必须遵守）：\n1. 不要直接复制热搜事件本身（如政治新闻、犯罪事件、社会争议不适合做投票）。\n2. 要从热搜中读取：人们在关心什么品类、生活方式、情感话题或消费趋势？\n3. 把"事件"转化为"品类+互动"——提取热搜背后的用户兴趣点，包装成投票：\n   - 例：热搜"榴莲价格跌至1字头" → 投票"榴莲品种大比拼：你最爱哪一种？"\n   - 例：热搜"国乒女团晋级决赛" → 投票"巅峰对决：你最期待哪场较量？"\n   - 例：热搜"加速衰老的5大行为" → 投票"这些习惯你占几个？哪个最该戒掉？"\n   - 例：热搜"小伙西装夜市摆摊月入5万" → 投票"夜市美食争霸：你最馋哪一口？"\n   - 例：热搜"家长控诉Cosplay毁掉孩子" → 投票"孩子迷上二次元，你怎么看？"\n4. 政治、犯罪、灾难、争议性社会事件严禁直接引用标题，但可以提取相关的品类/生活方式/情感角度做转化。\n` : '',
         recentTopicsNote,
         constraints ? `\n选题约束（重要）：\n${constraints}\n` : '',
         '你只需要返回 JSON，不要写代码，不要创建文件，不要给解释，不要使用 Markdown 代码块。',
@@ -506,7 +507,7 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
             '- 问题和选项文案要具体生动，不要使用泛化占位内容。',
         ] : [
             '- 提供 3 个 topicCandidates。',
-            trendingContext ? '- 重要：3个候选中至少2个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。第3个候选可以结合品牌定位自由发挥。' : '',
+            trendingContext ? '- 重要：3个候选中，至少1个要从今日热搜中汲取灵感（按转化指南把热搜转化为投票话题），其余2个结合品牌常青高传播话题自由发挥。' : '',
         ]),
         '- 每个候选必须有 2-4 个 options。',
         '- appId、options.value、options.image 必须是 ASCII kebab-case 风格。',
@@ -540,7 +541,7 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
             '标题必须使用或包含该指定话题。必须生成 3-4 个与该话题高度相关的具体投票选项。',
             '问题和选项文案要具体生动，不要使用泛化占位内容。',
         ] : [
-            trendingContext ? '重要：3个候选中至少2个必须直接源自今日热搜数据，或与热搜中的事件/现象强相关。' : '',
+            trendingContext ? '重要：3个候选中，至少1个要从今日热搜中汲取灵感（按转化指南把热搜转化为投票话题），其余2个结合品牌常青高传播话题自由发挥。' : '',
         ]),
         `profileId 固定为 ${profile.id}。`,
         '返回字段只能有：profileId, reportSummary, topicCandidates。',
