@@ -616,6 +616,162 @@ class Fixer {
     return updated;
   }
 
+  // 每日选题净化：基于 CTR 数据自动优化 avoid/doMore 列表
+  optimizeTopicAvoidList() {
+    const perfFile = path.join(PROD_DIR, '.automation', '.local', 'state', 'topic-performance.jsonl');
+    if (!fs.existsSync(perfFile)) {
+      log('warn', 'Topic performance file not found, skipping topic optimization');
+      return [];
+    }
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+
+    const records = [];
+    for (const line of fs.readFileSync(perfFile, 'utf-8').split('\n').filter(Boolean)) {
+      try {
+        const r = JSON.parse(line);
+        if (!r.date || !r.planId || !r.profileId || r.profileId === 'unknown') continue;
+        if (new Date(r.date) < cutoff) continue;
+        records.push(r);
+      } catch {}
+    }
+
+    if (records.length < 10) {
+      log('info', 'Not enough topic performance data for optimization');
+      return [];
+    }
+
+    const STOP_WORDS = new Set([
+      '投票', '对比', '选择', '哪个', '大战', '之王', '排行', '排名',
+      '最棒', '最强', '最好', '第一', '超级', '终极', '巅峰',
+      '的', '了', '和', '与', '或', '是', '在', '有', '个', '为', '以', '及', '等',
+      '我们', '你们', '他们', '什么', '怎么', '如何', '为什么',
+      '这个', '那个', '这些', '那些', '这里', '那里'
+    ]);
+
+    const results = [];
+    const profileIds = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
+
+    for (const profileId of profileIds) {
+      const profilePath = path.join(REPO_DIR, '.harness', 'config', 'profiles', `${profileId}.json`);
+      if (!fs.existsSync(profilePath)) continue;
+
+      let profile;
+      try {
+        profile = JSON.parse(fs.readFileSync(profilePath, 'utf-8'));
+      } catch {
+        continue;
+      }
+
+      const avoid = new Set(profile.topicGuidelines?.avoid || []);
+      const doMore = new Set(profile.topicGuidelines?.doMore || []);
+      const profileRecords = records.filter((r) => r.profileId === profileId);
+      if (profileRecords.length < 3) continue;
+
+      const keywordStats = {};
+      for (const r of profileRecords) {
+        const name = (r.name || '').replace(/[^\u4e00-\u9fa5a-zA-Z]/g, '');
+        const exposure = r.metrics?.exposure || 0;
+        const clicks = r.metrics?.clicks || 0;
+        const keywords = new Set();
+        for (let len = 2; len <= 4; len++) {
+          for (let i = 0; i <= name.length - len; i++) {
+            const kw = name.slice(i, i + len);
+            if (STOP_WORDS.has(kw)) continue;
+            if (/^\d+$/.test(kw)) continue;
+            if (/^[a-zA-Z]+$/.test(kw) && kw.length < 3) continue;
+            keywords.add(kw);
+          }
+        }
+        for (const kw of keywords) {
+          if (!keywordStats[kw]) keywordStats[kw] = { exp: 0, clk: 0, count: 0 };
+          keywordStats[kw].exp += exposure;
+          keywordStats[kw].clk += clicks;
+          keywordStats[kw].count += 1;
+        }
+      }
+
+      const evaluateKeyword = (kw) => {
+        const matched = profileRecords.filter((r) => (r.name || '').includes(kw));
+        if (matched.length < 2) return null;
+        const totalExp = matched.reduce((s, r) => s + (r.metrics?.exposure || 0), 0);
+        const totalClk = matched.reduce((s, r) => s + (r.metrics?.clicks || 0), 0);
+        return { ctr: totalExp > 0 ? (totalClk / totalExp * 100) : 0, count: matched.length, exp: totalExp };
+      };
+
+      const changes = [];
+      const MAX_AVOID_ADD = 2;
+      const MAX_DOMORE_ADD = 1;
+
+      // Promote high-CTR keywords from avoid to doMore
+      for (const kw of Array.from(avoid)) {
+        const score = evaluateKeyword(kw);
+        if (score && score.ctr > 2.0 && score.exp > 500) {
+          avoid.delete(kw);
+          doMore.add(kw);
+          changes.push({ action: 'promote', kw, from: 'avoid', to: 'doMore', ctr: score.ctr, count: score.count });
+        }
+      }
+
+      // Demote low-CTR keywords from doMore to avoid
+      for (const kw of Array.from(doMore)) {
+        const score = evaluateKeyword(kw);
+        if (score && score.ctr < 0.2 && score.exp > 500) {
+          doMore.delete(kw);
+          avoid.add(kw);
+          changes.push({ action: 'demote', kw, from: 'doMore', to: 'avoid', ctr: score.ctr, count: score.count });
+        }
+      }
+
+      // Add new low-CTR keywords to avoid
+      const newAvoidCandidates = [];
+      for (const [kw, stats] of Object.entries(keywordStats)) {
+        if (stats.count < 2 || stats.exp < 500) continue;
+        if (avoid.has(kw) || doMore.has(kw)) continue;
+        const ctr = stats.exp > 0 ? (stats.clk / stats.exp * 100) : 0;
+        if (ctr < 0.2) newAvoidCandidates.push({ kw, ctr, count: stats.count, exp: stats.exp });
+      }
+      newAvoidCandidates.sort((a, b) => b.exp - a.exp);
+      let avoidAdded = 0;
+      for (const cand of newAvoidCandidates) {
+        if (avoidAdded >= MAX_AVOID_ADD) break;
+        avoid.add(cand.kw);
+        changes.push({ action: 'add', kw: cand.kw, to: 'avoid', ctr: cand.ctr, count: cand.count });
+        avoidAdded++;
+      }
+
+      // Add new high-CTR keywords to doMore
+      const newDoMoreCandidates = [];
+      for (const [kw, stats] of Object.entries(keywordStats)) {
+        if (stats.count < 2 || stats.exp < 500) continue;
+        if (avoid.has(kw) || doMore.has(kw)) continue;
+        const ctr = stats.exp > 0 ? (stats.clk / stats.exp * 100) : 0;
+        if (ctr > 2.0) newDoMoreCandidates.push({ kw, ctr, count: stats.count, exp: stats.exp });
+      }
+      newDoMoreCandidates.sort((a, b) => b.exp - a.exp);
+      let doMoreAdded = 0;
+      for (const cand of newDoMoreCandidates) {
+        if (doMoreAdded >= MAX_DOMORE_ADD) break;
+        doMore.add(cand.kw);
+        changes.push({ action: 'add', kw: cand.kw, to: 'doMore', ctr: cand.ctr, count: cand.count });
+        doMoreAdded++;
+      }
+
+      if (changes.length > 0) {
+        profile.topicGuidelines.avoid = Array.from(avoid);
+        profile.topicGuidelines.doMore = Array.from(doMore);
+        fs.writeFileSync(profilePath, JSON.stringify(profile, null, 2) + '\n', 'utf-8');
+        results.push({ profileId, changes });
+        log('info', `[TopicPurifier] ${profileId}: ${changes.length} changes`, {
+          changes: changes.map((c) => `${c.action} "${c.kw}" ${c.to || c.from + '→' + c.to} (CTR ${c.ctr?.toFixed(2)}%)`)
+        });
+      }
+    }
+
+    return results;
+  }
+
   run() {
     if (MODE !== 'full' && MODE !== 'fix') {
       log('info', '=== ACT 阶段跳过（mode 不是 full/fix）===');
@@ -625,6 +781,10 @@ class Fixer {
     log('info', '=== ACT 阶段 ===');
     this.fixBrokenSkillReferences();
     this.updateLearningStatus();
+    const topicResults = this.optimizeTopicAvoidList();
+    if (topicResults.length > 0) {
+      this.results.push({ action: 'topic_purifier', status: 'success', profiles: topicResults });
+    }
     return this.results;
   }
 }
@@ -703,16 +863,30 @@ class Reporter {
     // 修复结果
     if (this.fixResults.length > 0) {
       lines.push('⚡ 自动修复');
-      const successFixes = this.fixResults.filter((r) => r.status === 'success');
-      lines.push(`  • 成功: ${successFixes.length} 项`);
-      for (const r of successFixes) {
-        lines.push(`    ✓ ${r.action}: ${r.file}`);
+      const successFixes = this.fixResults.filter((r) => r.status === 'success' && r.action !== 'topic_purifier');
+      if (successFixes.length > 0) {
+        lines.push(`  • 成功: ${successFixes.length} 项`);
+        for (const r of successFixes) {
+          lines.push(`    ✓ ${r.action}: ${r.file || ''}`);
+        }
       }
       const failedFixes = this.fixResults.filter((r) => r.status === 'failed');
       if (failedFixes.length > 0) {
         lines.push(`  • 失败: ${failedFixes.length} 项`);
         for (const r of failedFixes) {
-          lines.push(`    ✗ ${r.action}: ${r.file} — ${r.error}`);
+          lines.push(`    ✗ ${r.action}: ${r.file || ''} — ${r.error}`);
+        }
+      }
+      // Topic Purifier results
+      const topicPurifier = this.fixResults.find((r) => r.action === 'topic_purifier' && r.status === 'success');
+      if (topicPurifier) {
+        lines.push('  • 选题净化器');
+        for (const profile of topicPurifier.profiles || []) {
+          lines.push(`    📊 ${profile.profileId}: ${profile.changes.length} 个调整`);
+          for (const c of profile.changes) {
+            const arrow = c.action === 'promote' ? '↑' : c.action === 'demote' ? '↓' : c.to === 'avoid' ? '🚫' : '✅';
+            lines.push(`      ${arrow} ${c.action === 'promote' ? `${c.kw} avoid→doMore` : c.action === 'demote' ? `${c.kw} doMore→avoid` : `${c.kw} → ${c.to}`} (CTR ${c.ctr?.toFixed(2)}%, ${c.count} tasks)`);
+          }
         }
       }
       lines.push('');
@@ -835,6 +1009,28 @@ Examples:
   // Phase 4: Report
   const reporter = new Reporter(data, diagnosis, fixResults, knowledgeIndex);
   reporter.run();
+
+  // Auto-commit topic purifier changes
+  const topicPurifierResult = fixResults.find((r) => r.action === 'topic_purifier' && r.status === 'success');
+  if (topicPurifierResult) {
+    log('info', '检测到选题净化器修改，尝试自动提交');
+    const gitAdd = spawnSync('git', ['add', '.harness/config/profiles/'], { cwd: REPO_DIR, encoding: 'utf8' });
+    if (gitAdd.status === 0) {
+      const gitCommit = spawnSync('git', ['commit', '-m', `auto: topic purifier ${DATE_STR}`], { cwd: REPO_DIR, encoding: 'utf8' });
+      if (gitCommit.status === 0) {
+        const gitPush = spawnSync('git', ['push'], { cwd: REPO_DIR, encoding: 'utf8' });
+        if (gitPush.status === 0) {
+          log('info', '选题净化器 profile 更新已推送');
+        } else {
+          log('warn', 'Git push failed', { stderr: gitPush.stderr?.slice(0, 200) });
+        }
+      } else {
+        log('info', 'Git commit: nothing to commit or failed', { stderr: gitCommit.stderr?.slice(0, 200) });
+      }
+    } else {
+      log('warn', 'Git add failed', { stderr: gitAdd.stderr?.slice(0, 200) });
+    }
+  }
 
   log('info', 'Auto-Evolve 完成');
 }
