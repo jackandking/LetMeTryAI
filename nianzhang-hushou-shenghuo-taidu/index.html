@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>年长女性的护手与生活态度调查 — 护手习惯与日常选择</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">年长女性的护手与生活态度调查</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">在日常生活中，您更倾向于哪种护手方式？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="everyday-delicate-care">
+                            <div class="card-image">
+                                <img src="images/everyday-delicate-care.svg" alt="每天使用护手霜的双手" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">每天细致护理</h3>
+                                <p class="option-desc">每天清洁并使用护手霜或护手油，注重步骤与坚持。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="periodic-repair-care">
+                            <div class="card-image">
+                                <img src="images/periodic-repair-care.svg" alt="用修复手膜护理双手" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">集中修复护理</h3>
+                                <p class="option-desc">遇到干燥或问题时集中做修复护理，如手膜或修复霜。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="minimal-moisturize">
+                            <div class="card-image">
+                                <img src="images/minimal-moisturize.svg" alt="涂抹护手霜的简约双手" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">简约保湿派</h3>
+                                <p class="option-desc">以基础保湿为主，日常简单涂抹即可，不讲究步骤。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ritual-lifestyle-care">
+                            <div class="card-image">
+                                <img src="images/ritual-lifestyle-care.svg" alt="在茶桌旁护理双手的慢生活场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">生活仪式感派</h3>
+                                <p class="option-desc">把护手当成生活仪式，配合音乐或茶饮享受护理时光。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

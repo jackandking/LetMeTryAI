@@ -1,0 +1,20 @@
+{
+  "id": "nianzhang-hushou-shenghuo-taidu",
+  "name": "年长女性护手态度调查",
+  "description": "面向年长女性，调研日常护手频率、偏好方法（保湿、修复、仪式化等）及护手与生活质感的关联。页面以清晰图片 + 简短说明为主，便于手机阅读与社交传播，鼓励用户留言分享小技巧与感受。",
+  "category": "美妆护肤",
+  "profileId": "womanai",
+  "keywords": [
+    "护手",
+    "年长女性",
+    "生活态度",
+    "保湿",
+    "手部护理",
+    "仪式感",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "nianzhang-hushou-shenghuo-taidu/images/everyday-delicate-care.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-11T20:00:47.193Z"
+}
