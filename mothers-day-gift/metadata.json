@@ -1,0 +1,11 @@
+{
+  "id": "mothers-day-gift",
+  "name": "母亲节礼物大作战",
+  "description": "今年母亲节，你准备送妈妈什么礼物？来投票看看大家的选择！",
+  "category": "生活方式",
+  "directory": "mothers-day-gift",
+  "url": "mothers-day-gift",
+  "image": "mothers-day-gift/images/flower-cake.svg",
+  "tags": ["投票", "母亲节", "礼物", "生活方式", "情感"],
+  "status": "active"
+}

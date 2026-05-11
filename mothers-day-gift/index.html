@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <title>母亲节礼物大作战</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">母亲节礼物大作战</h1>
+        </header>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">今年母亲节，你准备送妈妈什么礼物？来投票看看大家的选择！</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="flower-cake">
+                            <div class="card-image"><img src="images/flower-cake.svg" alt="鲜花蛋糕" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">鲜花/蛋糕</h3>
+                                <p class="option-desc">经典浪漫，仪式感满满</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="skincare-cosmetics">
+                            <div class="card-image"><img src="images/skincare-cosmetics.svg" alt="护肤品化妆品" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">护肤品/化妆品</h3>
+                                <p class="option-desc">让妈妈永葆青春</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="jewelry">
+                            <div class="card-image"><img src="images/jewelry.svg" alt="珠宝首饰" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">珠宝/首饰</h3>
+                                <p class="option-desc">一份可以珍藏的心意</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="red-envelope">
+                            <div class="card-image"><img src="images/red-envelope.svg" alt="红包现金" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">红包/现金</h3>
+                                <p class="option-desc">简单粗暴，妈妈自己买</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="handmade">
+                            <div class="card-image"><img src="images/handmade.svg" alt="亲手做的礼物" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">亲手做的礼物</h3>
+                                <p class="option-desc">独一无二，心意无价</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="womanai" value="travel">
+                            <div class="card-image"><img src="images/travel.svg" alt="带妈妈出游" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">带妈妈出游</h3>
+                                <p class="option-desc">陪伴是最好的礼物</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div class="result" id="result">
+                <div class="loading-state"><div class="spinner"></div><p>正在汇总实时投票结果...</p></div>
+            </div>
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+        <footer class="page-footer">
+            <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+        </footer>
+    </div>
+</body>
+</html>

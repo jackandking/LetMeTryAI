@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#e67e22"/>
+  <circle cx="100" cy="85" r="40" fill="#fff"/>
+  <text x="100" y="95" text-anchor="middle" fill="#e67e22" font-size="36">✂️</text>
+  <text x="100" y="155" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">亲手做的礼物</text>
+</svg>
