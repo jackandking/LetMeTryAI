@@ -1,0 +1,19 @@
+{
+  "id": "huamei-single-piece-vote",
+  "name": "话梅单颗价选择",
+  "description": "当话梅以单颗高价出售时，消费者会如何抉择？通过对比选项收集用户偏好与消费心态，便于社交传播与后续讨论。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "话梅",
+    "零食",
+    "消费选择",
+    "食品价格",
+    "生活投票",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "huamei-single-piece-vote/images/buy-single-try.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-11T17:00:50.777Z"
+}
