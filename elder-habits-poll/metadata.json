@@ -1,0 +1,20 @@
+{
+  "id": "elder-habits-poll",
+  "name": "爱老人投票",
+  "description": "围绕长者作息、饮食与日常活动偏好设计的图文投票页，适合手机阅读，用于收集生活习惯倾向以供家庭、社区参考（非医疗建议）。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "长者习惯",
+    "作息",
+    "饮食",
+    "日常运动",
+    "社交生活",
+    "养老生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-habits-poll/images/regular-routine.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-11T18:01:05.278Z"
+}
