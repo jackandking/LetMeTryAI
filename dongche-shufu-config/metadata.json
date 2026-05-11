@@ -1,0 +1,19 @@
+{
+  "id": "dongche-shufu-config",
+  "name": "动车旅行舒适配置选择",
+  "description": "为家长提供在动车上提升孩子舒适度与出行便利的配置对比，涵盖休息、餐饮、娱乐与收纳四类实用方案，适合手机阅读与短时间决策。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "动车旅行",
+    "舒适配置",
+    "亲子出行",
+    "实用工具",
+    "家长参考",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "dongche-shufu-config/images/window-seat-neck-pillow.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-11T19:00:47.576Z"
+}
