@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <title>谁是中国女乒历史第一人？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">谁是中国女乒历史第一人？</h1>
+        </header>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">世乒赛国乒女团刚夺7连冠！如果只能选一位，谁是你心中的中国女乒历史一姐？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="deng-yaping">
+                            <div class="card-image"><img src="images/deng-yaping.svg" alt="邓亚萍" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">邓亚萍</h3>
+                                <p class="option-desc">初代大魔王，18个世界冠军，奥运双冠</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="wang-nan">
+                            <div class="card-image"><img src="images/wang-nan.svg" alt="王楠" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">王楠</h3>
+                                <p class="option-desc">24个世界冠军，三代大满贯，全能战士</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="zhang-yining">
+                            <div class="card-image"><img src="images/zhang-yining.svg" alt="张怡宁" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">张怡宁</h3>
+                                <p class="option-desc">双圈大满贯，退役时无敌手，冷面杀手</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="sun-yingsha">
+                            <div class="card-image"><img src="images/sun-yingsha.svg" alt="孙颖莎" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">孙颖莎</h3>
+                                <p class="option-desc">新生代领军人物，刚率团夺7连冠</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div class="result" id="result">
+                <div class="loading-state"><div class="spinner"></div><p>正在汇总实时投票结果...</p></div>
+            </div>
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+        <footer class="page-footer">
+            <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+        </footer>
+    </div>
+</body>
+</html>

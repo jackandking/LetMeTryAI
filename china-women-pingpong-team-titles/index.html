@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <title>中国女乒世乒赛团体冠军知多少</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">中国女乒世乒赛团体冠军知多少</h1>
+        </header>
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">中国女乒刚实现世乒赛7连冠！你知道她们历史上总共拿过多少次世乒赛团体冠军吗？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="under-20">
+                            <div class="card-image"><img src="images/option-under-20.svg" alt="20次以下" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">20次以下</h3>
+                                <p class="option-desc">我觉得不到20次</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="20-to-22">
+                            <div class="card-image"><img src="images/option-20-22.svg" alt="20-22次" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">20-22次</h3>
+                                <p class="option-desc">应该在20到22次之间</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="23-to-25">
+                            <div class="card-image"><img src="images/option-23-25.svg" alt="23-25次" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">23-25次</h3>
+                                <p class="option-desc">我猜是23到25次</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="nanrenbao" value="over-26">
+                            <div class="card-image"><img src="images/option-over-26.svg" alt="26次以上" loading="lazy"></div>
+                            <div class="card-content">
+                                <h3 class="option-title">26次以上</h3>
+                                <p class="option-desc">肯定超过26次，绝对统治</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div class="result" id="result">
+                <div class="loading-state"><div class="spinner"></div><p>正在汇总实时投票结果...</p></div>
+            </div>
+            <button class="show-result-btn" style="display:none;" id="showResultBtn" onclick="showAd()">查看实时票选结果</button>
+        </main>
+        <footer class="page-footer">
+            <div class="more" id="more"><a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a></div>
+        </footer>
+    </div>
+</body>
+</html>
