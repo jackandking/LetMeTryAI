@@ -518,6 +518,40 @@ function generateReport(tasks) {
         .sort((a, b) => (b.stats.已履单达人数量 || 0) - (a.stats.已履单达人数量 || 0))
         .slice(0, 10);
 
+    // ─── CTR Analysis ───
+    const ctrByApp = {};
+    for (const t of withData) {
+        const app = t.miniAppName || 'unknown';
+        if (!ctrByApp[app]) ctrByApp[app] = { exposure: 0, clicks: 0, count: 0 };
+        ctrByApp[app].exposure += t.stats.组件曝光数 || 0;
+        ctrByApp[app].clicks += t.stats.组件点击数 || 0;
+        ctrByApp[app].count++;
+    }
+    const ctrByAppList = Object.entries(ctrByApp)
+        .map(([app, d]) => ({
+            app,
+            exposure: d.exposure,
+            clicks: d.clicks,
+            count: d.count,
+            ctr: d.exposure > 0 ? ((d.clicks / d.exposure) * 100).toFixed(3) : '0.000'
+        }))
+        .sort((a, b) => b.exposure - a.exposure);
+
+    const highExposureLowCtr = [...withData]
+        .filter(t => (t.stats.组件曝光数 || 0) > 10000)
+        .map(t => ({ ...t, ctrVal: (t.stats.组件曝光数 || 0) > 0 ? (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 0) : 0 }))
+        .filter(t => t.ctrVal < 0.002)
+        .sort((a, b) => b.stats.组件曝光数 - a.stats.组件曝光数)
+        .slice(0, 10);
+
+    const ctrBuckets = {
+        zero: withData.filter(t => (t.stats.组件曝光数 || 0) > 0 && (t.stats.组件点击数 || 0) === 0).length,
+        low: withData.filter(t => { const c = (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 1); return c > 0 && c < 0.001; }).length,
+        mid: withData.filter(t => { const c = (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 1); return c >= 0.001 && c < 0.005; }).length,
+        good: withData.filter(t => { const c = (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 1); return c >= 0.005 && c < 0.01; }).length,
+        high: withData.filter(t => { const c = (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 1); return c >= 0.01; }).length
+    };
+
     return {
         summary: {
             totalTasks: tasks.length,
@@ -530,6 +564,9 @@ function generateReport(tasks) {
         },
         topByExposure,
         topByDaren,
+        ctrByApp: ctrByAppList,
+        highExposureLowCtr,
+        ctrBuckets,
         allTasks: tasks
     };
 }
@@ -801,12 +838,36 @@ ${report.adRevenue ? `\n💰 广告收入 (近7天)\n• 总收入: ${report.adR
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${report.topByExposure.map((t, i) => `${i + 1}. [${t.planId}] ${t.name}\n   曝光: ${t.stats.组件曝光数} | 点击: ${t.stats.组件点击数 || 'N/A'} | 达人: ${t.stats.已履单达人数量 || 'N/A'}`).join('\n')}`;
 
+    // ─── CTR Analysis Section ───
+    const ctrSection = report.ctrByApp?.length ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 CTR 深度分析
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+整体CTR: ${report.summary.clickRate}
+
+CTR分布:
+• CTR=0%: ${report.ctrBuckets?.zero || 0} 个
+• 0-0.1%: ${report.ctrBuckets?.low || 0} 个
+• 0.1-0.5%: ${report.ctrBuckets?.mid || 0} 个
+• 0.5-1%: ${report.ctrBuckets?.good || 0} 个
+• >1%: ${report.ctrBuckets?.high || 0} 个
+
+按小程序CTR:
+${report.ctrByApp.map(a => `• ${a.app}: ${a.ctr}% | ${a.count}个任务 | 曝光${a.exposure.toLocaleString()} 点击${a.clicks.toLocaleString()}`).join('\n')}
+
+⚠️ 高曝光低CTR预警（曝光>1万, CTR<0.2%）:
+${report.highExposureLowCtr?.length ? report.highExposureLowCtr.map((t, i) => {
+    const ctr = t.stats.组件曝光数 > 0 ? ((t.stats.组件点击数 / t.stats.组件曝光数) * 100).toFixed(2) : '0.00';
+    return `${i + 1}. [${t.planId}] ${t.name} | ${t.miniAppName || ''}\n   曝光:${t.stats.组件曝光数.toLocaleString()} 点击:${t.stats.组件点击数} CTR:${ctr}%`;
+}).join('\n') : '(今日无)'}` : '';
+
     const deltaSection = formatDeltaEmail(deltaReport, trendReport);
     const adoptionSection = formatAdoptionEmail(adoptionReport);
     const eventSection = formatEventSection(eventSummary);
     const accountSection = formatAccountSection(accountInfo, CONFIG.outputDir);
 
     return `${rawSection}
+${ctrSection}
 ${accountSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
