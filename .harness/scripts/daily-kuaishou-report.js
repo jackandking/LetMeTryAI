@@ -552,6 +552,12 @@ function generateReport(tasks) {
         high: withData.filter(t => { const c = (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 1); return c >= 0.01; }).length
     };
 
+    const topByCtr = [...withData]
+        .filter(t => (t.stats.组件曝光数 || 0) > 0)
+        .map(t => ({ ...t, ctrVal: (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 0) }))
+        .sort((a, b) => b.ctrVal - a.ctrVal)
+        .slice(0, 10);
+
     return {
         summary: {
             totalTasks: tasks.length,
@@ -567,6 +573,7 @@ function generateReport(tasks) {
         ctrByApp: ctrByAppList,
         highExposureLowCtr,
         ctrBuckets,
+        topByCtr,
         allTasks: tasks
     };
 }
@@ -854,6 +861,12 @@ CTR分布:
 
 按小程序CTR:
 ${report.ctrByApp.map(a => `• ${a.app}: ${a.ctr}% | ${a.count}个任务 | 曝光${a.exposure.toLocaleString()} 点击${a.clicks.toLocaleString()}`).join('\n')}
+
+🏆 TOP10 高CTR任务:
+${report.topByCtr?.length ? report.topByCtr.map((t, i) => {
+    const ctr = t.stats.组件曝光数 > 0 ? ((t.stats.组件点击数 / t.stats.组件曝光数) * 100).toFixed(2) : '0.00';
+    return `${i + 1}. ${t.name} | ${t.miniAppName || ''}\n   曝光:${t.stats.组件曝光数.toLocaleString()} 点击:${t.stats.组件点击数} CTR:${ctr}%`;
+}).join('\n') : '(今日无)'}
 
 ⚠️ 高曝光低CTR预警（曝光>1万, CTR<0.2%）:
 ${report.highExposureLowCtr?.length ? report.highExposureLowCtr.map((t, i) => {
