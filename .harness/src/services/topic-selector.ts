@@ -77,7 +77,14 @@ ${topicHint ? `重要：你必须围绕这个指定话题生成投票页面：�
 - appId、options.value、options.image 必须是 ASCII kebab-case
 - 标题、appName、question、description 中绝对禁止出现以下极限词：最、第一、唯一、极致、绝对、顶级、史上、全网。含有任意一个极限词的候选将被视为无效。
 - 适合手机阅读的图文投票页
-- 避免低俗、侵权、血腥、政治敏感、医疗误导`;
+- 避免低俗、侵权、血腥、政治敏感、医疗误导
+- 高点击率标题公式（必须遵守，直接影响任务曝光效益）：
+  1. 【好奇心驱动】用"镇馆之宝/真相/之谜/揭秘"等词汇，如"考古博物馆的镇馆之宝"(CTR 3.95%)。
+  2. 【视觉冲击】美女/颜值类用"背影杀/惊艳/绝美"等画面感词汇，如"美人背影杀"(CTR 5.43%)。
+  3. 【痛点冲突】用"你遇到过/千万别/避雷"等引发共鸣，如"孩子叛逆期：这些话千万别说"。
+  4. 【具体对比】军事科技类用"中国/国产+A vs B"，如"中国军用无人机 vs 美国"。
+  5. 【严禁泛词】避免标题以"投票/选择"结尾，如"经典老歌投票"(CTR 0.08%)是失败案例。
+  6. 【严禁攻略体】避免"轻松/攻略/指南/如何/教你"等软文风格标题(CTR普遍<0.2%)。`;
 }
 
 export function parseTopicSelectionResponse(content: unknown): TopicSelectionResult {
@@ -290,6 +297,8 @@ function scoreCandidate(
   profilePerformance: number = 0
 ): number {
   let score = 0;
+  const title = candidate.title || '';
+  const titleLower = title.toLowerCase();
 
   // Category preference (30 points)
   const catIndex = profile.preferredCategories.indexOf(candidate.category);
@@ -316,6 +325,40 @@ function scoreCandidate(
     );
   });
   if (avoidMatch) score -= 20;
+
+  // ─── CTR-oriented title scoring (up to 40 points) ───
+  // Curiosity-driven titles (high CTR pattern): 镇馆之宝/真相/之谜/揭秘
+  if (/镇馆之宝|国宝|真相|之谜|揭秘|秘密|你不知道/.test(title)) {
+    score += 15;
+  }
+  // Visual impact titles (high CTR pattern)
+  if (/美人|美女|颜值|女神|背影|惊艳|绝美/.test(title)) {
+    score += 12;
+  }
+  // Pain point / practical titles with specific conflict
+  if (/你遇到过|你中过|千万别|避雷|翻车|翻车现场/.test(title)) {
+    score += 10;
+  }
+  // Contrast with specific objects (A vs B style)
+  if (/vs|对决|对比|PK|pk|争霸|大战/.test(title) && title.length < 20) {
+    score += 8;
+  }
+  // National pride (military/tech topics)
+  if (/中国|国产|国产/.test(title) && /战机|无人机|芯片|航母|坦克/.test(title)) {
+    score += 10;
+  }
+  // Penalty: generic "vote/choose" titles (low CTR pattern)
+  if (/投票$|选择$/.test(title)) {
+    score -= 15;
+  }
+  // Penalty: guide/tutorial style titles (low CTR pattern)
+  if (/轻松|攻略|指南|如何|怎么|教你|带你/.test(title)) {
+    score -= 12;
+  }
+  // Penalty: overly broad / vague titles
+  if (/未来|之王|之最|大全/.test(title)) {
+    score -= 10;
+  }
 
   // Option count bonus (up to 10 points)
   score += Math.min(candidate.options.length * 3, 10);
