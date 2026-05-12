@@ -1,0 +1,19 @@
+{
+  "id": "waimai-price-issues",
+  "name": "外卖糟心清单",
+  "description": "把外卖涨价的常见问题做成图文投票页，用户可快速选择并补充经历，利于引导讨论与高互动。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "外卖",
+    "涨价",
+    "配送",
+    "消费体验",
+    "生活投票",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "waimai-price-issues/images/late-delivery.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-12T21:00:56.660Z"
+}
