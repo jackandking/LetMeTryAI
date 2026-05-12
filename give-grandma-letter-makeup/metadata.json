@@ -1,0 +1,20 @@
+{
+  "id": "give-grandma-letter-makeup",
+  "name": "阿嬷情书妆容榜",
+  "description": "基于电影《给阿嬷的情书》角色妆容，图文展示淡雅、清新与惊艳三种造型细节，方便手机端快速投票与讨论，适合美妆与明星话题传播。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "给阿嬷的情书",
+    "电影妆容",
+    "复古妆",
+    "惊艳妆",
+    "妆容对比",
+    "明星造型",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "give-grandma-letter-makeup/images/danya-fugu-nv-zhu.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-12T20:00:41.970Z"
+}
