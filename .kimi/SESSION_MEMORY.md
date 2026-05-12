@@ -49,6 +49,17 @@
   - `queueAdded`: 加入 follow 队列的达人
   - **新任务采用**: 需要看具体视频挂载到了哪个任务路径
 
+### [DEC-20260510-001] 默认数据源：prod 目录
+- **决策**: **所有业务分析、数据查询、性能评估，默认使用 `/Users/weiping/prod/LetMeTryAI/` 的数据**
+- **原因**: 
+  - dev (`/Users/weiping/LetMeTryAI/`) 是本地开发环境，数据可能不完整或过期
+  - newharness (`/Users/weiping/newharness/LetMeTryAI/`) 是自动化测试/实验环境，数据可能不可靠
+  - prod (`/Users/weiping/prod/LetMeTryAI/`) 是生产环境，cron 任务在此运行，数据最真实
+- **规则**: 
+  - 当用户问"最近数据/表现/CTR/任务"等业务问题时，**直接读取 prod 目录**，不再询问
+  - 开发/调试代码时才使用 dev/newharness 目录
+  - 修改文件时仍按 AGENTS.md 规则：dev → commit → push → prod pull
+
 ## 待办事项
 
 ### 进行中
@@ -127,6 +138,12 @@
 - ~~**真正问题**: 新发布的任务几乎无人采用~~ ❌ **已修正**：新任务需1个工作日审核，发布当天0采用是正常行为
 - **学习**: 调研前必须先验证数据采集链路（目录、时效性、指标口径）
 - **关键发现**: 4/21 发布新任务后，14 个新达人视频中 13 个挂载历史任务，1 个挂载 4/19 任务，0 个挂载当天新任务
+
+### 2026-05-12 — 为 quguona 发布星火计划分销任务
+- **操作**: 使用 `publish-kuaishou-api.js` (nanrenbao 模板 #165805) 为 quguona 创建分销任务
+- **结果**: Plan ID `401325`，名称"去过哪"，状态 1（进入审核）
+- **测试任务**: Plan ID `401314`（appId=quguona-test，页面不存在），需手动删除
+- **差异**: quguona 是单一页面足迹地图工具，不需要纳入每日选题流程，只需一个长期任务
 
 ### 2026-04-24 — 观测发现：快手任务存在"待上线"状态
 - **观测**: womanai `class-reunion-makeup-vote` (planId: 313566) 的快手平台状态变化：
