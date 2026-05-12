@@ -523,6 +523,14 @@ export function buildTopicSelectionPrompt({ profile, currentDate, recentTopics, 
         '- 避免低俗、侵权、血腥、政治敏感、医疗误导。',
         '- 标题和appName中禁止使用极限词：最、第一、唯一、极致、绝对、顶级、史上、全网（快手审核会拒绝）。如需表达程度，用「更」「哪款」「你选谁」等替代。',
         '- appName中禁止出现特殊符号（如 - | / \\ @ # $ % 等），快手会拒绝发布。',
+        '- 高点击率标题公式（基于历史数据，必须遵守）：',
+        '  1. 【具体对比】用"A vs B"、"TOP5"、"排行榜"，避免泛词"投票""选择"。',
+        '     差：经典老歌投票 → 好：邓丽君 vs 王菲：谁更经典？',
+        '  2. 【强视觉冲击】美女/颜值类用"背影杀""半遮面"等画面感词汇。',
+        '  3. 【实用痛点】家长/老人话题用具体问题，如"孩子叛逆期：这些话千万别说"。',
+        '  4. 【国家/情感共鸣】军事科技类必须加入"中国/国产"，如"中国无人机 vs 美国"。',
+        '  5. 【疑问/冲突】用问号结尾，引发好奇心，如"机器狗上战场：是福还是祸？"。',
+        '  6. 【避免泛词】严禁"XX投票""XX选择"等平淡标题，必须有具体对象或冲突点。',
         ...profileNotes,
         `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
     ].join('\n') + getPromptSuffix(profile.id);
@@ -556,6 +564,7 @@ export function buildFallbackTopicSelectionPrompt({ profile, currentDate, recent
         '每个 topicCandidates 元素必须包含：appId, title, pageTitle, appName, summary, description, question, category, format, keywords, signals, qualities, riskFlags, options。',
         '每个 options 元素必须包含：label, value, caption, alt, image。',
         'appId、value、image 只能用 ASCII 字母数字和连字符。',
+        '- 高点击率标题公式：用"A vs B""TOP5"具体对比替代泛词"投票"；军事科技类加"中国/国产"；用问号结尾引发好奇；避免"XX投票""XX选择"等平淡标题。',
         ...profileNotes,
         `品牌画像摘要：id=${profile.id}, name=${profile.name}, audience=${profile.audience || '男性用户'}, preferredCategories=${JSON.stringify(profile.preferredCategories || [])}, preferredFormats=${JSON.stringify(profile.preferredFormats || [])}`
     ].join('\n');
