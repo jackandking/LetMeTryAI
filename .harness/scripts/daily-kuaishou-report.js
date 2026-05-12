@@ -553,7 +553,7 @@ function generateReport(tasks) {
     };
 
     const topByCtr = [...withData]
-        .filter(t => (t.stats.组件曝光数 || 0) > 0)
+        .filter(t => (t.stats.组件曝光数 || 0) > 500)
         .map(t => ({ ...t, ctrVal: (t.stats.组件点击数 || 0) / (t.stats.组件曝光数 || 0) }))
         .sort((a, b) => b.ctrVal - a.ctrVal)
         .slice(0, 10);
