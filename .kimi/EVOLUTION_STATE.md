@@ -651,3 +651,78 @@
 2. 诊断新任务 0 采用原因（直接影响北极星指标）
 3. 修复 pending errors（系统稳定性）
 
+
+### 2026-05-10 — Auto-Evolve 运行
+
+**时间**: 2026-05-10T21:00:00.526Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 47 新达人入队（近7天）
+- Pending Errors: 18
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 1 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-10 — Auto-Evolve 运行
+
+**时间**: 2026-05-10T21:30:00.488Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 47 新达人入队（近7天）
+- Pending Errors: 18
+- Skill Broken Refs: 2
+
+**诊断**: 3 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-11 — Auto-Evolve 运行
+
+**时间**: 2026-05-11T21:00:00.720Z
+**模式**: full
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 46 新达人入队（近7天）
+- Pending Errors: 19
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 1 个机会
+
+**自动修复**: 1 项成功
+
+**下一步**: 有高优先级问题需处理
+
+
+### 2026-05-11 — Auto-Evolve 运行
+
+**时间**: 2026-05-11T21:30:00.864Z
+**模式**: report
+**观测结果**:
+- DailyAppAgent: 4 个 profile 有数据
+- Kuaishou Follow: 46 新达人入队（近7天）
+- Pending Errors: 19
+- Skill Broken Refs: 2
+
+**诊断**: 2 个问题, 1 个机会
+
+**自动修复**: 0 项成功
+
+**下一步**: 有高优先级问题需处理
+
+## 下次进化聚焦
+
+**当前最可能带来收益的行动**:
+1. 修正 auto-evolve 数据源（影响所有后续决策的准确性）
+2. 诊断新任务 0 采用原因（直接影响北极星指标）
+3. 修复 pending errors（系统稳定性）
+
