@@ -1,0 +1,20 @@
+{
+  "id": "child-safety-public-class",
+  "name": "孩子安全公开课",
+  "description": "面向家长的图文投票页，对比交通安全、陌生人防范、居家火灾撤离与数字隐私四类技能的实用性，便于制定家庭训练与课堂内容。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "安全教育",
+    "亲子教育",
+    "交通安全",
+    "防拐防骗",
+    "火灾逃生",
+    "数字隐私",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-safety-public-class/images/traffic-safety.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-12T23:42:11.587Z"
+}
