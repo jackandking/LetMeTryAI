@@ -21,6 +21,23 @@ if [[ -z "$PROFILE_ID" ]]; then
     exit 1
 fi
 
+# Map profile ID to manual queue key
+MANUAL_KEY="$PROFILE_ID"
+case "$PROFILE_ID" in
+    nanrenbao) MANUAL_KEY="man" ;;
+    womanai) MANUAL_KEY="woman" ;;
+    parent-tools) MANUAL_KEY="parent" ;;
+    elder-love) MANUAL_KEY="elder" ;;
+esac
+MANUAL_QUEUE_FILE="$PROJECT_DIR/.harness/.local/state/topics/${MANUAL_KEY}-manual-topics.txt"
+HAS_MANUAL=false
+if [[ -f "$MANUAL_QUEUE_FILE" ]] && [[ -s "$MANUAL_QUEUE_FILE" ]]; then
+    # Check if there's at least one non-empty line
+    if grep -q '[^[:space:]]' "$MANUAL_QUEUE_FILE" 2>/dev/null; then
+        HAS_MANUAL=true
+    fi
+fi
+
 # Check profile-slots.json for scheduling (skip low-revenue profiles on off-days)
 SLOTS_FILE="$PROJECT_DIR/.automation/.local/state/profile-slots.json"
 EXTRA_SLOT="${HARNESS_EXTRA_SLOT:-}"
@@ -46,8 +63,12 @@ if [[ -f "$SLOTS_FILE" ]]; then
     fi
 
     if [[ "$SHOULD_RUN" == "skip" ]]; then
-        echo "[run-daily-app-cron] SKIP $PROFILE_ID today (profile-slots schedule)"
-        exit 0
+        if [[ "$HAS_MANUAL" == "true" ]]; then
+            echo "[run-daily-app-cron] OVERRIDE skip for $PROFILE_ID — manual queue has pending topics"
+        else
+            echo "[run-daily-app-cron] SKIP $PROFILE_ID today (profile-slots schedule)"
+            exit 0
+        fi
     fi
 fi
 
