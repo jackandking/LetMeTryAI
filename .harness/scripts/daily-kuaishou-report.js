@@ -193,9 +193,19 @@ async function fetchAllStats(tasks, cookies) {
 
 // ─── Topic Performance persistence ───
 
-function inferProfileId(source, name) {
+function inferProfileId(source, name, miniAppName) {
+    // Priority 1: miniAppName is the most reliable brand indicator
+    const miniAppLower = (miniAppName || '').toLowerCase();
+    if (miniAppLower.includes('男人宝')) return 'nanrenbao';
+    if (miniAppLower.includes('女人宝')) return 'womanai';
+    if (miniAppLower.includes('老人') || miniAppLower.includes('爱老人')) return 'elder-love';
+    if (miniAppLower.includes('家长') || miniAppLower.includes('博物馆')) return 'parent-tools';
+
+    // Priority 2: direct source match
     const direct = ['nanrenbao', 'womanai', 'parent-tools', 'elder-love'];
     if (direct.includes(source)) return source;
+
+    // Priority 3: fallback to name-based heuristic
     const nameLower = (name || '').toLowerCase();
     // womanai: beauty, fashion, celebrity, entertainment
     if (nameLower.includes('女人') || nameLower.includes('护肤') || nameLower.includes('穿搭') || nameLower.includes('美妆') || nameLower.includes('香氛')) return 'womanai';
@@ -258,7 +268,9 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
             planId: planId,
             name: task.name || '',
             source: task.source || '',
-            profileId: inferProfileId(task.source, task.name),
+            miniAppName: task.miniAppName || '',
+            status: task.status || '',
+            profileId: inferProfileId(task.source, task.name, task.miniAppName),
             metrics: { exposure, clicks, daren, works },
             score
         });
