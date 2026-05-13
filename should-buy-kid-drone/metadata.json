@@ -1,0 +1,21 @@
+{
+  "id": "should-buy-kid-drone",
+  "name": "家长讨论：孩子和无人机",
+  "description": "在品牌大牌促销下，家长常在“趁便宜买”与“安全/兴趣评估”之间纠结。本投票针对预算、学习价值、监管需求与替代方案，帮助家长快速看到社区倾向并获得实用参考。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "无人机",
+    "降价",
+    "育儿选择",
+    "STEM",
+    "安全监管",
+    "家庭预算",
+    "亲子活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "should-buy-kid-drone/images/buy-now.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-13T19:00:39.117Z"
+}
