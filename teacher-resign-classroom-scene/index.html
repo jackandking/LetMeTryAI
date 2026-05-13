@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>老师写下千字辞职信 — 你先看到哪个画面？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">老师写下千字辞职信，教室里哪个画面会先浮现？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">老师写下千字辞职信，教室里哪个画面会先浮现？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="blackboard-farewell">
+                            <div class="card-image">
+                                <img src="images/blackboard-farewell.svg" alt="老师在黑板上写下告别的话" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">黑板告别字</h3>
+                                <p class="option-desc">黑板角落里老师潦草写下的一句告别话，粉笔字斑驳又熟悉。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="students-teary">
+                            <div class="card-image">
+                                <img src="images/students-teary.svg" alt="学生愣在座位上低头或眼含泪光" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">学生泪目瞬间</h3>
+                                <p class="option-desc">全班一片静默，几张熟悉的面孔先露出愣住或眼含泪光的表情。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="podium-photo-award">
+                            <div class="card-image">
+                                <img src="images/podium-photo-award.svg" alt="讲台上摆放的旧照片和奖状" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">讲台的老照片</h3>
+                                <p class="option-desc">讲台一角的老照片、奖状或教案被一并看见，瞬间涌出多年回忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="desk-drawer-letter">
+                            <div class="card-image">
+                                <img src="images/desk-drawer-letter.svg" alt="折叠的辞职信藏在课桌抽屉里" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">课桌抽屉的信</h3>
+                                <p class="option-desc">打开抽屉看到那封折了好几次的信，字迹熟悉又带些陌生感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
