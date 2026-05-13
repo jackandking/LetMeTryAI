@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_URL = 'https://daren.kuaishou.com';
-const AUTH_FILE = '/Users/weiping/.runtime/kuaishou_auth.json';
+const AUTH_FILE = '/Users/weiping/prod/LetMeTryAI/.harness/.local/auth/kuaishou_auth.json';
 const REPORT_FILE = '/Users/weiping/prod/LetMeTryAI/.harness/.local/exports/metrics/kuaishou/daily/kuaishou_report_2026-05-12.json';
 
 function parseArgs() {
