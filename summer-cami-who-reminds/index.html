@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>夏天穿吊带出门，你更想被谁温柔提醒？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">夏天穿吊带出门，你更想被谁温柔提醒？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">夏天穿吊带出门，你更想被谁温柔提醒？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="gui-mi">
+                            <div class="card-image">
+                                <img src="images/gui-mi.svg" alt="闺蜜温柔提醒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">闺蜜</h3>
+                                <p class="option-desc">闺蜜式提醒：笑着提醒你别走光，氛围轻松不尴尬</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nan-you">
+                            <div class="card-image">
+                                <img src="images/nan-you.svg" alt="男友温柔提醒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">男友</h3>
+                                <p class="option-desc">男友式提醒：体贴又直接，让你瞬间安心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ma-ma">
+                            <div class="card-image">
+                                <img src="images/ma-ma.svg" alt="妈妈温柔提醒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">妈妈</h3>
+                                <p class="option-desc">妈妈式提醒：唠叨中带关心，照顾周到</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="kind-stranger">
+                            <div class="card-image">
+                                <img src="images/kind-stranger.svg" alt="好心路人温柔提醒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">好心路人</h3>
+                                <p class="option-desc">陌生好心人：一句意外的善意提醒，既贴心又暖心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
