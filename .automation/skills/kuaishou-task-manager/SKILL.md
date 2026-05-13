@@ -19,14 +19,14 @@ Batch operations for Kuaishou distribution tasks (星火计划分销任务).
 
 ## Script
 
-`scripts/batch-stop-tasks.js`
+`scripts/batch-stop-tasks.cjs`
 
 ## Usage
 
 ### Stop specific tasks by plan ID
 
 ```bash
-node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.js \
+node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.cjs \
   --plan-ids 326043,313564,338732 \
   --execute
 ```
@@ -34,7 +34,7 @@ node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.js \
 ### Dry-run: preview what would be stopped
 
 ```bash
-node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.js \
+node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.cjs \
   --ctr-below 0.1 \
   --days-old 14
 ```
@@ -42,7 +42,7 @@ node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.js \
 ### Execute: stop all tasks matching criteria
 
 ```bash
-node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.js \
+node .agents/skills/kuaishou-task-manager/scripts/batch-stop-tasks.cjs \
   --ctr-below 0.1 \
   --days-old 14 \
   --brand "老人爱" \
