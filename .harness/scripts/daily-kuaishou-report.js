@@ -291,7 +291,7 @@ const EVENT_SUMMARY_URL = 'https://letmetry.cloud/api/track/summary';
 const KS_TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
 const KS_OPEN_API = 'https://open.kuaishou.com';
 const KS_APP_ID = 'ks683421244533878879';
-const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), '.local', 'state', 'kuaishou-follow', 'app-config.local.json');
+const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), 'state', 'kuaishou-follow', 'app-config.local.json');
 
 async function fetchAccountInfo() {
     try {
@@ -318,8 +318,26 @@ function saveAccountHistory(dateStr, accountInfo, outputDir) {
     fs.appendFileSync(historyFile, JSON.stringify(record) + '\n');
 }
 
+function loadCronEnv() {
+    const cronEnvPath = path.join(resolveRuntimeDir(import.meta.url), 'state', 'kuaishou-follow', 'cron.env');
+    if (fs.existsSync(cronEnvPath)) {
+        const content = fs.readFileSync(cronEnvPath, 'utf-8');
+        content.split('\n').forEach(line => {
+            const idx = line.indexOf('=');
+            if (idx > 0) {
+                const key = line.substring(0, idx).trim();
+                const value = line.substring(idx + 1).trim();
+                if (key && !process.env[key]) {
+                    process.env[key] = value;
+                }
+            }
+        });
+    }
+}
+
 async function fetchAdRevenue(dateStr) {
     try {
+        loadCronEnv();
         let configs;
         try {
             configs = loadFollowAppConfigs({ configFile: KS_FOLLOW_CONFIG_FILE });
