@@ -3,6 +3,7 @@
  * Will be removed after 2026-05-01.
  */
 import path from 'path';
+import fs from 'fs';
 
 export const SUCCESS_MESSAGE_PATTERN = /(成功|已发布|已提交|创建成功|发布成功)/;
 export const ERROR_MESSAGE_PATTERN = /(失败|错误|请选择|请填写|不能为空|未通过|异常)/;
@@ -41,7 +42,14 @@ export function isSubmissionErrorSignal(messageText = '') {
 }
 
 export function resolveAuthFilePath(authFile = process.env.KUAISHOU_AUTH_FILE) {
-    return typeof authFile === 'string' && authFile.trim()
-        ? path.resolve(authFile.trim())
-        : path.resolve(process.cwd(), '.automation', '.local', 'auth', 'kuaishou_auth.json');
+    if (typeof authFile === 'string' && authFile.trim()) {
+        return path.resolve(authFile.trim());
+    }
+    // Prefer .runtime/kuaishou_auth.json (used by kuaishou-login skill)
+    const runtimePath = path.resolve(process.cwd(), '.runtime', 'kuaishou_auth.json');
+    if (fs.existsSync(runtimePath)) {
+        return runtimePath;
+    }
+    // Fallback to legacy path
+    return path.resolve(process.cwd(), '.automation', '.local', 'auth', 'kuaishou_auth.json');
 }
