@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>为孩子选对书 - 家长爱</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #667eea;
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+        }
+        header p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 0;
+        }
+        .tagline {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+        .lists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .list-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .list-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+        .list-card .target-tag {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .list-card h3 {
+            color: #667eea;
+            margin: 0 0 15px 0;
+            font-size: 1.4em;
+        }
+        .book-preview {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .book-preview img {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .list-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .list-card ul li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .list-card ul li::before {
+            content: "📖";
+            position: absolute;
+            left: 0;
+        }
+        .back-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .lists-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 为孩子选对书</h1>
+            <p>按年级和性别精选，每份书单只推荐3本经典</p>
+            <span class="tagline">宁缺毋滥 · 本本值得反复读</span>
+        </header>
+
+        <div class="lists-grid">
+            <div class="list-card" onclick="openList('grade1-boy')">
+                <span class="target-tag">一年级 · 男孩</span>
+                <h3>在笑声中学会规则</h3>
+                <div class="book-preview">
+                    <img src="https://img1.doubanio.com/view/subject/s/public/s2668457.jpg" alt="大卫不可以">
+                    <img src="https://img9.doubanio.com/view/subject/s/public/s28005356.jpg" alt="神奇校车">
+                    <img src="https://img2.doubanio.com/view/subject/s/public/s10186573.jpg" alt="小猪唏哩呼噜">
+                </div>
+                <ul>
+                    <li>调皮男孩的成长必修课</li>
+                    <li>科学也可以很好玩</li>
+                    <li>中国原创经典童话</li>
+                </ul>
+            </div>
+
+            <div class="list-card" onclick="openList('grade2-girl')">
+                <span class="target-tag">二年级 · 女孩</span>
+                <h3>学会爱与独立</h3>
+                <div class="book-preview">
+                    <img src="https://img1.doubanio.com/view/subject/s/public/s1073435.jpg" alt="猜猜我有多爱你">
+                    <img src="https://img9.doubanio.com/view/subject/s/public/s29009891.jpg" alt="不一样的卡梅拉">
+                    <img src="https://img2.doubanio.com/view/subject/s/public/s4141383.jpg" alt="蝴蝶豌豆花">
+                </div>
+                <ul>
+                    <li>爱的表达是软实力</li>
+                    <li>勇敢追梦的小母鸡</li>
+                    <li>感受中文诗歌之美</li>
+                </ul>
+            </div>
+
+            <div class="list-card" onclick="openList('age8-boy')">
+                <span class="target-tag">8岁 · 男孩</span>
+                <h3>激发探索与思考</h3>
+                <div class="book-preview">
+                    <img src="https://img2.doubanio.com/view/subject/s/public/s29768509.jpg" alt="昆虫记">
+                    <img src="https://img1.doubanio.com/view/subject/s/public/s1067911.jpg" alt="窗边的小豆豆">
+                    <img src="https://img9.doubanio.com/view/subject/s/public/s1086045.jpg" alt="草房子">
+                </div>
+                <ul>
+                    <li>观察一只虫，读懂自然</li>
+                    <li>被理解才能长成自己</li>
+                    <li>中国儿童文学巅峰</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="back-section">
+            <a href="../index.html" class="back-btn">← 返回家长爱首页</a>
+        </div>
+
+        <footer>
+            <p>家长爱 · 让每一次陪伴都有意义</p>
+        </footer>
+    </div>
+
+    <script>
+        function openList(listId) {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: '/pages/rewardedWebview/rewardedWebview?target=parent-tools/book-recommend/' + listId + '&showAd=true'
+                });
+            } else {
+                window.location.href = listId + '/index.html';
+            }
+        }
+    </script>
+</body>
+</html>

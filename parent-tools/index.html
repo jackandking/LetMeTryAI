@@ -224,6 +224,16 @@
         </div>
 
         <div class="activities-grid">
+            <div class="activity-card" onclick="openBookRecommend()" style="cursor:pointer;">
+                <span class="category">阅读成长</span>
+                <h3>📚 为孩子选对书</h3>
+                <div style="width:100%;height:160px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:4em;">📚</div>
+                <ul>
+                    <li>按年级+性别精准匹配</li>
+                    <li>每份书单只精选3本经典</li>
+                    <li>宁缺毋滥，本本值得反复读</li>
+                </ul>
+            </div>
             <div class="activity-card">
                 <span class="category">视频投票</span>
                 <h3>教爸爸带男娃</h3>
@@ -472,5 +482,16 @@
         })();
     </script>
 
+    <script>
+        function openBookRecommend() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: '/pages/rewardedWebview/rewardedWebview?target=parent-tools/book-recommend&showAd=true'
+                });
+            } else {
+                window.location.href = 'book-recommend/index.html';
+            }
+        }
+    </script>
 </body>
 </html>
