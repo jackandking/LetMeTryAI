@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子去天坛：哪种画面最有吸引力</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子去天坛，哪个画面更能吸引他？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子去天坛，哪个画面更能吸引他？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qinian-hall-running">
+                            <div class="card-image">
+                                <img src="images/qinian-hall-running.svg" alt="孩子在祈年殿前跑跳，表情兴奋" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">祈年殿前奔跑玩耍</h3>
+                                <p class="option-desc">在宏伟的祈年殿前自由奔跑、跳跃的快乐瞬间</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="echo-wall-play">
+                            <div class="card-image">
+                                <img src="images/echo-wall-play.svg" alt="孩子在回音壁边喊话，观看回声反应" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">回音墙喊话玩回声</h3>
+                                <p class="option-desc">站在回音壁边喊话，听到奇妙回声的惊喜体验</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="carving-closeup-explore">
+                            <div class="card-image">
+                                <img src="images/carving-closeup-explore.svg" alt="孩子靠近天坛檐角和彩绘，专注观察" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">檐角彩绘与石狮特写</h3>
+                                <p class="option-desc">靠近观察古檐彩绘、石狮纹饰，像小小探险家</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="lawn-kite-picnic">
+                            <div class="card-image">
+                                <img src="images/lawn-kite-picnic.svg" alt="家庭在天坛草坪放风筝并野餐，气氛轻松" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">草坪放风筝与亲子野餐</h3>
+                                <p class="option-desc">在广阔草坪上放风筝或铺开野餐垫的温馨画面</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

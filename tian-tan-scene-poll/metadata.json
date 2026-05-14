@@ -1,0 +1,19 @@
+{
+  "id": "tian-tan-scene-poll",
+  "name": "天坛亲子画面对比",
+  "description": "在天坛公园常见的四种亲子画面中做对比：建筑奔跑、回音墙玩声、古檐细节探险、草坪放风筝/野餐，便于产生讨论与分享。",
+  "category": "家庭活动",
+  "profileId": "parent-tools",
+  "keywords": [
+    "天坛",
+    "亲子活动",
+    "博物馆探索",
+    "画面感",
+    "亲子互动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "tian-tan-scene-poll/images/qinian-hall-running.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-14T19:00:52.770Z"
+}
