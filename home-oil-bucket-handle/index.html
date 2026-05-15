@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家里开了桶食用油，你会怎么处理？</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家里开了桶食用油，你会怎么处理？分装、放阳台还是优先用？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">家里开了桶食用油，你会怎么处理？选出最常做的那种。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fen-zhuang-xiao-ping">
+                            <div class="card-image">
+                                <img src="images/fen-zhuang-xiao-ping.svg" alt="分装食用油小瓶" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">分装小瓶，方便取用</h3>
+                                <p class="option-desc">把大桶油分装成小瓶，拿取方便，避免频繁打开大桶。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yuan-tong-mi-feng">
+                            <div class="card-image">
+                                <img src="images/yuan-tong-mi-feng.svg" alt="原桶密封放置" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">原桶密封，放阴凉避光处</h3>
+                                <p class="option-desc">不着急用完，保持原包装密封并放在阴凉干燥处保存。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="you-xian-yong-wan">
+                            <div class="card-image">
+                                <img src="images/you-xian-yong-wan.svg" alt="厨房使用食用油" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">优先用完，做菜时先用这桶</h3>
+                                <p class="option-desc">把刚开的油放到常用位置，做菜优先消耗，减少长期存放。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fen-gei-jia-ren">
+                            <div class="card-image">
+                                <img src="images/fen-gei-jia-ren.svg" alt="送人食用油小样" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">分给家人或邻居一起用</h3>
+                                <p class="option-desc">一次分给亲友共用，避免家中长时间闲置浪费。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

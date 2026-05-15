@@ -1,0 +1,19 @@
+{
+  "id": "hot-drama-night-snack",
+  "name": "剧中夜宵",
+  "description": "结合热播剧热议，设定夜宵场景供用户代入投票，强调画面与氛围，不涉及真实人物名字。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "热播剧",
+    "夜宵",
+    "男主",
+    "场景感",
+    "颜值",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "hot-drama-night-snack/images/warm-neighbor-boy.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-14T21:01:07.397Z"
+}
