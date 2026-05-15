@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>去天坛拍照，你更想哪个古风画面？4种上镜画面对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">去天坛拍照，你更想哪个古风画面？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">去天坛拍照，你更想哪个古风画面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="gong-ting-shinv-bei-ying">
+                            <div class="card-image">
+                                <img src="images/gong-ting-shinv-bei-ying.svg" alt="宫廷仕女背影在祈年殿前" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宫廷仕女背影</h3>
+                                <p class="option-desc">一袭云裳，倚栏回眸或缓步而过，背影带出古典韵味。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yan-xia-xie-yang-wu-qun">
+                            <div class="card-image">
+                                <img src="images/yan-xia-xie-yang-wu-qun.svg" alt="檐下斜阳下裙摆飞扬的古风人像" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">檐下斜阳舞裙</h3>
+                                <p class="option-desc">夕阳斜照，裙摆飞扬，檐角剪影充满诗意与动态感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chang-lang-dui-ying-ping-lan">
+                            <div class="card-image">
+                                <img src="images/chang-lang-dui-ying-ping-lan.svg" alt="长廊中倚栏对影的古风人像" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长廊对影凭栏</h3>
+                                <p class="option-desc">长廊深处，光影交错，倚栏凝望或对影相随，画面更有故事感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qi-nian-dian-qian-jing-zuo">
+                            <div class="card-image">
+                                <img src="images/qi-nian-dian-qian-jing-zuo.svg" alt="祈年殿前静坐的古风人像" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">祈年殿前静坐</h3>
+                                <p class="option-desc">祈年殿前低座静谧，仪式感强，适合静态美照与脸部特写。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

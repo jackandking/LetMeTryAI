@@ -1,0 +1,20 @@
+{
+  "id": "baoshi-color-makeup",
+  "name": "女人爱·宝石色妆",
+  "description": "以宝石色为灵感的眼妆与唇妆对比，展示不同风格的色彩应用与场景搭配，方便用户凭照片直观投票并分享理由。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "宝石色",
+    "眼妆",
+    "唇妆",
+    "妆容对比",
+    "约会妆",
+    "视觉冲击",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "baoshi-color-makeup/images/emerald-electric-eye.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-14T22:00:38.497Z"
+}
