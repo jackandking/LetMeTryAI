@@ -3,12 +3,15 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
+import readline from 'readline';
 import { ensureParentDirectory } from './runtime-paths.js';
 import {
   resolveAuthFilePath,
   isSubmissionErrorSignal,
   isSubmissionSuccessSignal,
-  validateTaskName
+  validateTaskName,
+  PROFILE_SOURCE_TASKS,
+  validateBrandPathConsistency
 } from './publish-kuaishou-task-utils.js';
 
 // Configuration
@@ -16,6 +19,8 @@ const SOURCE_TASK_ID = process.env.SOURCE_TASK_ID || '165805'; // The ID of the 
 // Direct URL to recreate the task - bypasses the list view and menu clicks!
 const BASE_URL = `https://daren.kuaishou.com/distribution-plan-create/recreate/${SOURCE_TASK_ID}`;
 const AUTH_FILE = resolveAuthFilePath();
+
+
 const WAIT_AFTER_FINISH_MS = Math.max(0, Number.parseInt(process.env.PUBLISH_WAIT_FOR_MANUAL_MS || '0', 10) || 0);
 const SUBMISSION_CONFIRM_TIMEOUT_MS = Math.max(3000, Number.parseInt(process.env.PUBLISH_CONFIRM_TIMEOUT_MS || '15000', 10) || 15000);
 const HEADLESS = process.env.HEADLESS !== 'false';
@@ -81,6 +86,48 @@ async function sendFailureEmail(appId, appName, screenshotPath, htmlPath, errorM
   });
 }
 
+// ─── Interactive confirmation (Layer 3: manual publish safeguard) ───
+
+async function confirmPublish(appId, appName, profileId, sourceTaskId) {
+  // Skip confirmation in non-interactive environments (CI, cron, harness)
+  if (!process.stdin.isTTY || process.env.PUBLISH_NON_INTERACTIVE === 'true') {
+    return true;
+  }
+
+  const brandNames = {
+    'parent-tools': '家长爱',
+    'nanrenbao': '男人宝',
+    'womanai': '女人爱',
+    'elder-love': '爱老人'
+  };
+  const brandName = brandNames[profileId] || profileId;
+
+  console.log('\n' + '═'.repeat(50));
+  console.log(' ⚠️  即将发布快手任务，请确认品牌是否正确');
+  console.log('═'.repeat(50));
+  console.log(` 任务名称: ${appName}`);
+  console.log(` App路径:  ${appId}`);
+  console.log(` 品牌:     ${brandName} (${profileId})`);
+  console.log(` 模板ID:   ${sourceTaskId}`);
+  console.log('═'.repeat(50));
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const answer = await new Promise(resolve => {
+    rl.question(' 确认发布? (yes/no): ', resolve);
+  });
+  rl.close();
+
+  if (answer.trim().toLowerCase() !== 'yes') {
+    console.log('⚠️ 发布已取消');
+    return false;
+  }
+  return true;
+}
+
 async function readFirstVisibleText(locator) {
   const count = await locator.count().catch(() => 0);
   if (count === 0) {
@@ -143,6 +190,21 @@ async function main() {
     process.exit(1);
   }
   const [appId, appName, appDesc] = args;
+
+  // Brand-Path consistency check (CRITICAL: prevents mounting on wrong mini-app)
+  const profileId = Object.keys(PROFILE_SOURCE_TASKS).find(k => PROFILE_SOURCE_TASKS[k] === SOURCE_TASK_ID) || 'unknown';
+  const brandCheck = validateBrandPathConsistency(appId, profileId);
+  if (!brandCheck.valid) {
+    console.error(`❌ ${brandCheck.message}`);
+    console.error('Fix: SOURCE_TASK_ID=<correct-template-id> node publish-kuaishou-task.js ...');
+    process.exit(1);
+  }
+
+  // Interactive confirmation (Layer 3: manual publish safeguard)
+  const confirmed = await confirmPublish(appId, appName, profileId, SOURCE_TASK_ID);
+  if (!confirmed) {
+    process.exit(0);
+  }
 
   // Validate task name for forbidden words before launching browser
   const nameCheck = validateTaskName(appName);

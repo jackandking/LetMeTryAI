@@ -18,6 +18,28 @@ const PROFILE_SOURCE_TASKS: Record<string, string> = {
 const BASE_URL = 'https://daren.kuaishou.com';
 const DELAY_MS = { min: 300, max: 800 };
 
+// ─── Brand-Path consistency guard ───
+const PROFILE_PATH_PREFIXES: Record<string, string[]> = {
+  'parent-tools': ['parent-tools/'],
+  'nanrenbao': ['nanrenbao/'],
+  'womanai': ['womanai/'],
+  'elder-love': ['elder-love/'],
+};
+
+function validateBrandPathConsistency(appId: string, profileId: string): { valid: boolean; message?: string } {
+  for (const [brand, prefixes] of Object.entries(PROFILE_PATH_PREFIXES)) {
+    for (const prefix of prefixes) {
+      if (appId.startsWith(prefix) && profileId !== brand) {
+        return {
+          valid: false,
+          message: `BRAND_MISMATCH: appId "${appId}" starts with "${prefix}" but profileId is "${profileId}" (expected "${brand}"). This would mount the task on the WRONG mini-app!`,
+        };
+      }
+    }
+  }
+  return { valid: true };
+}
+
 function getLatestReportPath(): string | null {
   const reportDir = join(PATHS.projectRoot, '.harness', '.local', 'exports', 'metrics', 'kuaishou', 'daily');
   if (!existsSync(reportDir)) {
@@ -83,6 +105,13 @@ export class KuaishouPublisher {
       // 0. Deduplication (check original name first)
       if (isAlreadyPublished(this.config.appName)) {
         return { success: true };
+      }
+
+      // Brand-Path consistency check (CRITICAL: prevents mounting on wrong mini-app)
+      const brandCheck = validateBrandPathConsistency(this.config.appId, this.config.profileId);
+      if (!brandCheck.valid) {
+        logger.error('Brand-Path mismatch', { message: brandCheck.message });
+        return { success: false, error: brandCheck.message };
       }
 
       this.config.appName = this.sanitizeAppName(this.config.appName);
