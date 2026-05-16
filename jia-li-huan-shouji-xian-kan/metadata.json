@@ -1,0 +1,21 @@
+{
+  "id": "jia-li-huan-shouji-xian-kan",
+  "name": "家长爱·换手机先看啥",
+  "description": "面向家长：在给家里换新手机时，常常因为使用场景不同而优先关注相机、续航、屏幕或价位。页面通过生活化画面与简短说明，降低决策焦虑并促成互动讨论。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "换手机",
+    "家庭决策",
+    "育儿场景",
+    "相机",
+    "续航",
+    "屏幕",
+    "预算",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "jia-li-huan-shouji-xian-kan/images/xiangji-xian-kan.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-16T19:00:58.667Z"
+}
