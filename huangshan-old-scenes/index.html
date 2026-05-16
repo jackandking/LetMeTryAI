@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>去黄山你会想起哪个老画面？回忆画面速选</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">去黄山你会想起哪个老画面？哪一幕更触动你的回忆</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">去黄山你会想起哪个老画面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yingkesong-photo">
+                            <div class="card-image">
+                                <img src="images/yingkesong-photo.svg" alt="迎客松下的合影，老照片风" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">迎客松下的合影</h3>
+                                <p class="option-desc">在迎客松下，全家挤在一张老胶片合影</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cable-car-cloud-sea">
+                            <div class="card-image">
+                                <img src="images/cable-car-cloud-sea.svg" alt="缆车上俯瞰云海，白雾翻涌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">坐缆车俯瞰云海</h3>
+                                <p class="option-desc">坐缆车慢慢升高，云海像棉被一样铺开</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sunrise-silhouette-pines">
+                            <div class="card-image">
+                                <img src="images/sunrise-silhouette-pines.svg" alt="日出时的背影与松林，光影剪影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">日出时的背影与松林</h3>
+                                <p class="option-desc">天刚亮，人影在金色光柱里与松树剪影合成画面</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-tour-group">
+                            <div class="card-image">
+                                <img src="images/old-tour-group.svg" alt="老旅行团排队登山，怀旧场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老旅行团排队登山</h3>
+                                <p class="option-desc">戴草帽、拄拐杖的旅行团排成一队慢慢上山</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
