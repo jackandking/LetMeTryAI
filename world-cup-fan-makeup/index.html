@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>看世界杯你会怎么打扮？哪种球迷妆更带感</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">看世界杯你会怎么打扮？哪种球迷妆更带感</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看世界杯你会怎么打扮？哪种球迷妆更带感？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="flag-facepaint">
+                            <div class="card-image">
+                                <img src="images/flag-facepaint.svg" alt="国旗脸彩妆示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">国旗脸彩妆</h3>
+                                <p class="option-desc">脸部画上国家色彩，现场感十足</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nude-jersey">
+                            <div class="card-image">
+                                <img src="images/nude-jersey.svg" alt="低调球衣裸妆示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">低调球衣＋裸妆</h3>
+                                <p class="option-desc">球衣为主，妆容清新不抢眼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="glitter-smoky-bold-lip">
+                            <div class="card-image">
+                                <img src="images/glitter-smoky-bold-lip.svg" alt="亮片烟熏眼妆与红唇示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">亮片烟熏＋抢眼口红</h3>
+                                <p class="option-desc">眼妆亮片吸睛，唇色拉满气场</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="korean-vintage-cute-fan">
+                            <div class="card-image">
+                                <img src="images/korean-vintage-cute-fan.svg" alt="复古韩系球迷妆示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古韩系可爱球迷妆</h3>
+                                <p class="option-desc">腮红与细眼线，甜美又带感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
