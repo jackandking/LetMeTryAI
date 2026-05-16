@@ -1,0 +1,20 @@
+{
+  "id": "summer-movie-preference",
+  "name": "大片偏好",
+  "description": "把暑期档影片元素与视觉海报感结合，四个类型选项（特效/情感/喜剧/悬疑），易引起争论和转发。适配大图展示与短文案引导评论。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "影视",
+    "暑期档",
+    "特效",
+    "情感",
+    "喜剧",
+    "悬疑",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "summer-movie-preference/images/effects-heavy.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-16T21:01:03.237Z"
+}

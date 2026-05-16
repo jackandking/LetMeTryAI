@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>暑期大片偏好对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">暑期看大片，你更想看哪种类型？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">暑期看大片，你更想看哪种类型？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="effects-heavy">
+                            <div class="card-image">
+                                <img src="images/effects-heavy.svg" alt="特效大片海报" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">特效炸裂</h3>
+                                <p class="option-desc">看大片爱被画面震撼，特效越炸越带感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="emotion-driven">
+                            <div class="card-image">
+                                <img src="images/emotion-driven.svg" alt="情感片海报" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">情感打动</h3>
+                                <p class="option-desc">更想被故事和情绪打动，哭点共鸣那种</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="comedy-relief">
+                            <div class="card-image">
+                                <img src="images/comedy-relief.svg" alt="喜剧海报" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">喜剧解压</h3>
+                                <p class="option-desc">想看轻松搞笑，笑完心情好出场</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mystery-thriller">
+                            <div class="card-image">
+                                <img src="images/mystery-thriller.svg" alt="悬疑片海报" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">悬疑烧脑</h3>
+                                <p class="option-desc">喜欢推理和反转，观影后还想讨论剧情</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
