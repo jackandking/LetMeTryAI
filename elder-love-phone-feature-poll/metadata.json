@@ -1,0 +1,20 @@
+{
+  "id": "elder-love-phone-feature-poll",
+  "name": "换手机看重什么",
+  "description": "图文投票页，面向爱老人用户，围绕换手机时更实用的功能：续航、听感、屏幕与操作易用性。每项配短说明，便于手机阅读与一键投票。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "换手机",
+    "老年手机",
+    "续航",
+    "大屏",
+    "听力",
+    "易用",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-love-phone-feature-poll/images/long-battery.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-16T18:00:38.334Z"
+}
