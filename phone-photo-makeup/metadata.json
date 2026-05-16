@@ -1,0 +1,19 @@
+{
+  "id": "phone-photo-makeup",
+  "name": "手机拍照妆挑选",
+  "description": "面向喜欢用手机记录日常的女性，展示自然裸光、玻璃肌、高对比镜头感与艺术滤镜妆四种手机拍照友好妆容，配图说明场景与氛围，适合社交分享与讨论。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "手机拍照妆",
+    "手机直拍",
+    "玻璃肌",
+    "自然裸妆",
+    "镜头感",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "phone-photo-makeup/images/natural-nude.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-16T20:00:39.346Z"
+}
