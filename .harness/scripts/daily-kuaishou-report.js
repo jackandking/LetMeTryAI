@@ -223,6 +223,69 @@ function inferProfileId(source, name, miniAppName) {
     return 'unknown';
 }
 
+// ─── Layer 4: Cross-check brand mismatch (content vs mini-app) ───
+
+function inferExpectedBrandByName(name) {
+    const nameLower = (name || '').toLowerCase();
+    // parent-tools: education, books, family
+    if (nameLower.includes('书单') || nameLower.includes('家长') || nameLower.includes('孩子') || nameLower.includes('亲子') || nameLower.includes('书包') || nameLower.includes('阅读')) return 'parent-tools';
+    if (nameLower.includes('考古') || nameLower.includes('博物馆') || nameLower.includes('文物')) return 'parent-tools';
+    // womanai: beauty, fashion, celebrity
+    if (nameLower.includes('护肤') || nameLower.includes('穿搭') || nameLower.includes('美妆') || nameLower.includes('香氛')) return 'womanai';
+    if (nameLower.includes('美人') || nameLower.includes('背影') || nameLower.includes('颜值') || nameLower.includes('女神')) return 'womanai';
+    if (nameLower.includes('综艺') || nameLower.includes('女星') || nameLower.includes('女明星') || nameLower.includes('演员')) return 'womanai';
+    if (nameLower.includes('情感') || nameLower.includes('闺蜜') || nameLower.includes('恋爱')) return 'womanai';
+    // nanrenbao: men, military, tech, cars
+    if (nameLower.includes('军事') || nameLower.includes('坦克') || nameLower.includes('战机') || nameLower.includes('火箭')) return 'nanrenbao';
+    if (nameLower.includes('汽车') || nameLower.includes('游戏') || nameLower.includes('体育')) return 'nanrenbao';
+    // elder-love
+    if (nameLower.includes('养生') || nameLower.includes('广场舞') || nameLower.includes('社区')) return 'elder-love';
+    return null; // no strong signal
+}
+
+function getActualBrandByMiniApp(miniAppName) {
+    const lower = (miniAppName || '').toLowerCase();
+    if (lower.includes('男人宝')) return 'nanrenbao';
+    if (lower.includes('女人宝') || lower.includes('女人爱')) return 'womanai';
+    if (lower.includes('老人') || lower.includes('爱老人')) return 'elder-love';
+    if (lower.includes('家长') || lower.includes('博物馆')) return 'parent-tools';
+    return null;
+}
+
+function crossCheckBrandMismatch(report) {
+    const alerts = [];
+    const brandNames = {
+        'parent-tools': '家长爱',
+        'nanrenbao': '男人宝',
+        'womanai': '女人爱',
+        'elder-love': '爱老人'
+    };
+
+    for (const task of report.allTasks || []) {
+        const expected = inferExpectedBrandByName(task.name);
+        const actual = getActualBrandByMiniApp(task.miniAppName);
+        if (expected && actual && expected !== actual) {
+            alerts.push({
+                planId: task.planId,
+                name: task.name,
+                expectedBrand: brandNames[expected] || expected,
+                actualBrand: brandNames[actual] || actual,
+                miniAppName: task.miniAppName,
+                severity: 'CRITICAL'
+            });
+        }
+    }
+
+    if (alerts.length > 0) {
+        log('WARN', `⚠️ BRAND MISMATCH DETECTED: ${alerts.length} task(s) mounted on wrong mini-app!`);
+        for (const a of alerts) {
+            log('WARN', `  [${a.severity}] ${a.name} (Plan ${a.planId}): expected ${a.expectedBrand}, actual ${a.actualBrand}`);
+        }
+    }
+
+    return alerts;
+}
+
 function appendTopicPerformance(report, dateStr, projectRoot) {
     const perfFile = path.join(projectRoot, '.automation', '.local', 'state', 'topic-performance.jsonl');
     ensureParentDirectory(perfFile);
@@ -1043,6 +1106,10 @@ async function main() {
         log('INFO', `  Total Exposure: ${report.summary.totalExposure.toLocaleString()}`);
         log('INFO', `  Total Clicks: ${report.summary.totalClicks.toLocaleString()}`);
         log('INFO', `  Click Rate: ${report.summary.clickRate}`);
+
+        // 4.5. Cross-check brand mismatch (Layer 4: post-publish validation)
+        const brandAlerts = crossCheckBrandMismatch(report);
+        report.brandAlerts = brandAlerts;
 
         // 5. Save results
         const filename = saveResults(report, dateStr);

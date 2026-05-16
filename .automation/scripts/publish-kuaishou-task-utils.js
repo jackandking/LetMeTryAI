@@ -53,3 +53,32 @@ export function resolveAuthFilePath(authFile = process.env.KUAISHOU_AUTH_FILE) {
     // Fallback to legacy path
     return path.resolve(process.cwd(), '.automation', '.local', 'auth', 'kuaishou_auth.json');
 }
+
+// ─── Brand configuration (shared across all publish scripts) ───
+export const PROFILE_SOURCE_TASKS = {
+    nanrenbao: '165805',
+    'elder-love': '183044',
+    'parent-tools': '186229',
+    womanai: '188816'
+};
+
+export const PROFILE_PATH_PREFIXES = {
+    'parent-tools': ['parent-tools/'],
+    'nanrenbao': ['nanrenbao/'],
+    'womanai': ['womanai/'],
+    'elder-love': ['elder-love/']
+};
+
+export function validateBrandPathConsistency(appId, profileId) {
+    for (const [brand, prefixes] of Object.entries(PROFILE_PATH_PREFIXES)) {
+        for (const prefix of prefixes) {
+            if (appId.startsWith(prefix) && profileId !== brand) {
+                return {
+                    valid: false,
+                    message: `BRAND_MISMATCH: appId "${appId}" starts with "${prefix}" but PROFILE_ID is "${profileId}" (expected "${brand}"). This would mount the task on the WRONG mini-app!`
+                };
+            }
+        }
+    }
+    return { valid: true };
+}

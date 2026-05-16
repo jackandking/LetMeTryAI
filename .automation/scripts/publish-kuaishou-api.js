@@ -23,20 +23,18 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import readline from 'readline';
 import {
     resolveKuaishouAuthFile,
     resolveRuntimeDir,
     ensureDirectory
 } from './runtime-paths.js';
-import { validateTaskName, sanitizeTaskName } from './publish-kuaishou-task-utils.js';
-
-// ─── Profile → Source Task mapping ───
-const PROFILE_SOURCE_TASKS = {
-    nanrenbao: '165805',
-    'elder-love': '183044',
-    'parent-tools': '186229',
-    womanai: '188816'
-};
+import {
+    validateTaskName,
+    sanitizeTaskName,
+    PROFILE_SOURCE_TASKS,
+    validateBrandPathConsistency
+} from './publish-kuaishou-task-utils.js';
 
 // ─── Config ───
 const PROFILE_ID = process.env.PROFILE_ID || 'nanrenbao';
@@ -72,6 +70,48 @@ function extractCookieHeader() {
         process.exit(1);
     }
     return cookies;
+}
+
+// ─── Interactive confirmation (Layer 3: manual publish safeguard) ───
+
+async function confirmPublish(appId, appName, profileId, sourceTaskId) {
+    // Skip confirmation in non-interactive environments (CI, cron, harness)
+    if (!process.stdin.isTTY || process.env.PUBLISH_NON_INTERACTIVE === 'true') {
+        return true;
+    }
+
+    const brandNames = {
+        'parent-tools': '家长爱',
+        'nanrenbao': '男人宝',
+        'womanai': '女人爱',
+        'elder-love': '爱老人'
+    };
+    const brandName = brandNames[profileId] || profileId;
+
+    console.log('\n' + '═'.repeat(50));
+    console.log(' ⚠️  即将发布快手任务，请确认品牌是否正确');
+    console.log('═'.repeat(50));
+    console.log(` 任务名称: ${appName}`);
+    console.log(` App路径:  ${appId}`);
+    console.log(` 品牌:     ${brandName} (${profileId})`);
+    console.log(` 模板ID:   ${sourceTaskId}`);
+    console.log('═'.repeat(50));
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    const answer = await new Promise(resolve => {
+        rl.question(' 确认发布? (yes/no): ', resolve);
+    });
+    rl.close();
+
+    if (answer.trim().toLowerCase() !== 'yes') {
+        log('WARN', '发布已取消');
+        return false;
+    }
+    return true;
 }
 
 // ─── HTTP helpers ───
@@ -214,7 +254,21 @@ async function main() {
     log('INFO', `Profile: ${PROFILE_ID}`);
     log('INFO', `Template: ${SOURCE_TASK_ID}`);
 
-    // 1. Local validation
+    // 1. Brand-Path consistency check (CRITICAL: prevents mounting on wrong mini-app)
+    const brandCheck = validateBrandPathConsistency(appId, PROFILE_ID);
+    if (!brandCheck.valid) {
+        log('ERROR', brandCheck.message);
+        log('ERROR', 'Fix: PROFILE_ID=<correct-brand> node publish-kuaishou-api.js ...');
+        process.exit(1);
+    }
+
+    // 2. Interactive confirmation (Layer 3: manual publish safeguard)
+    const confirmed = await confirmPublish(appId, appName, PROFILE_ID, SOURCE_TASK_ID);
+    if (!confirmed) {
+        process.exit(0);
+    }
+
+    // 3. Task name validation
     const nameCheck = validateTaskName(appName);
     if (!nameCheck.valid) {
         log('ERROR', nameCheck.message);
