@@ -1,0 +1,19 @@
+{
+  "id": "china-energy-satellite-launch",
+  "name": "能源卫星画面投票",
+  "description": "围绕中国能源卫星升空的四个视角：推进器近景、太阳能阵列展开、卫星轨道俯瞰夜间电网、地面指挥庆祝。短图文投票页易于手机阅读与配图传播，强化国家科技自豪感与视觉吸引。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "能源卫星",
+    "航天",
+    "画面对比",
+    "科技自豪",
+    "发射瞬间",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "china-energy-satellite-launch/images/engine-flame.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-16T17:01:00.466Z"
+}
