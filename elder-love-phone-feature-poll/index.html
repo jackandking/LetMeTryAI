@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>换手机你更看重哪个功能？给长辈的使用角度来选</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">换手机你更看重哪个功能？电池、声音还是操作简单？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">换手机你更看重哪个功能？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="long-battery">
+                            <div class="card-image">
+                                <img src="images/long-battery.svg" alt="电池图标和长时间使用场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">电池续航长</h3>
+                                <p class="option-desc">一天不用充电也能安心外出，省心省力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="loud-clear-sound">
+                            <div class="card-image">
+                                <img src="images/loud-clear-sound.svg" alt="扬声器图标与通话场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">声音大且清晰</h3>
+                                <p class="option-desc">通话和铃声听得清楚，不怕漏接重要电话。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="big-screen-easy-read">
+                            <div class="card-image">
+                                <img src="images/big-screen-easy-read.svg" alt="大屏幕和放大文字示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">屏幕大字好看</h3>
+                                <p class="option-desc">屏幕大、字更清楚，看信息和视频更舒服。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="simple-ops-large-buttons">
+                            <div class="card-image">
+                                <img src="images/simple-ops-large-buttons.svg" alt="大按键和简单界面示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">操作简单按键大</h3>
+                                <p class="option-desc">界面清晰、按键明显，上手快不易出错。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
