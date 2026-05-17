@@ -1,0 +1,19 @@
+{
+  "id": "guochan-ev-buy",
+  "name": "通勤电动车比选",
+  "description": "把热门电动车以通勤场景对比，强调续航、充电便利和体验画面，适合图文+短动图展示。",
+  "category": "汽车",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电动车",
+    "通勤",
+    "国产",
+    "续航",
+    "充电",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "guochan-ev-buy/images/byd-seal.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-17T21:00:53.558Z"
+}
