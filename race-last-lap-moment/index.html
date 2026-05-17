@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>赛车最后一圈的画面，你记得哪一幕？回忆赛道瞬间</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">赛车更后一圈的画面，你记得哪一幕？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">回想那场赛车的决胜圈，你记得哪个画面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="overtake-final-straight">
+                            <div class="card-image">
+                                <img src="images/overtake-final-straight.svg" alt="冲刺超越瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冲刺超越</h3>
+                                <p class="option-desc">在终点线前突然超越，紧张又让人热血。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="finish-line-celebration">
+                            <div class="card-image">
+                                <img src="images/finish-line-celebration.svg" alt="冲线庆祝场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冲线庆祝</h3>
+                                <p class="option-desc">车手冲线举臂、团队欢庆，画面充满喜悦与团队感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="last-lap-incident">
+                            <div class="card-image">
+                                <img src="images/last-lap-incident.svg" alt="决胜圈擦碰瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">擦碰惊险</h3>
+                                <p class="option-desc">决胜圈的擦碰或小翻车，既惊险又常被大家反复回忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="crowd-cheer-finish">
+                            <div class="card-image">
+                                <img src="images/crowd-cheer-finish.svg" alt="观众欢呼与旗帜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看台欢呼</h3>
+                                <p class="option-desc">看台上挥旗欢呼、全场氛围沸腾，像是和家人一起看的记忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

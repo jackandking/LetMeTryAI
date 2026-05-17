@@ -1,0 +1,20 @@
+{
+  "id": "race-last-lap-moment",
+  "name": "赛道回忆录",
+  "description": "带画面感的手机投票页：以赛道终局的几种典型瞬间为选项，引导用户回忆观赛场景并发表评论、讲旧事，适合社区互动与情感共鸣。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "赛车",
+    "怀旧",
+    "赛道",
+    "回忆",
+    "画面感",
+    "决胜圈",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "race-last-lap-moment/images/overtake-final-straight.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-17T18:01:13.719Z"
+}
