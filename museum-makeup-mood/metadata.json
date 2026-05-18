@@ -1,0 +1,20 @@
+{
+  "id": "museum-makeup-mood",
+  "name": "博物馆妆感",
+  "description": "在博物馆的光影与色块里，哪种妆更能营造氛围感？提供暖铜、纯白、重彩、冷烟熏四种场景化妆效图文对比，手机浏览友好，强调视觉冲击与场景想象。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "博物馆色",
+    "妆容",
+    "暖光妆",
+    "烟熏妆",
+    "艺术妆",
+    "视觉冲击",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "museum-makeup-mood/images/warm-bronze-glow.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-18T20:00:46.162Z"
+}
