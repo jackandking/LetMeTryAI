@@ -1,0 +1,19 @@
+{
+  "id": "museum-treasure-wish-see",
+  "name": "博物馆镇馆之宝",
+  "description": "以画面感强的馆藏为选项，让用户在想象中走近文物与背后故事，适合配大图和短句解说。",
+  "category": "历史文化",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "博物馆",
+    "镇馆之宝",
+    "文物",
+    "视觉冲击",
+    "展览场景",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "museum-treasure-wish-see/images/qin-shi-huang-terracotta-army.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-18T17:00:49.997Z"
+}
