@@ -1,0 +1,19 @@
+{
+  "id": "cosmic-makeup-pick",
+  "name": "宇宙感妆Pick",
+  "description": "三款带有宇宙元素的妆容对比（银色星尘 / 梦幻极光 / 深空烟熏），适合短图文展示与主播式解说，引导用户凭直觉pick并分享理由。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "宇宙妆",
+    "光感妆",
+    "星辰",
+    "妆容对比",
+    "颜值",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "cosmic-makeup-pick/images/silver-stardust.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-19T20:00:51.410Z"
+}

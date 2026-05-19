@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>宇宙感妆你会pick哪款？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">宇宙感妆你会pick哪款？惊艳背影还是梦幻极光？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">宇宙感妆你会pick哪款？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="silver-stardust">
+                            <div class="card-image">
+                                <img src="images/silver-stardust.svg" alt="银色星尘妆容，金属光泽和细碎亮片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">银色星尘</h3>
+                                <p class="option-desc">镜面金属光＋细闪，冷调未来感，适合夜晚出街的科幻感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="aurora-dream">
+                            <div class="card-image">
+                                <img src="images/aurora-dream.svg" alt="梦幻极光妆容，粉紫绿珠光渐变" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">梦幻极光</h3>
+                                <p class="option-desc">渐变珠光＋柔和色调，粉紫绿交织出仙气与梦幻感的光晕。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="deep-space-smokey">
+                            <div class="card-image">
+                                <img src="images/deep-space-smokey.svg" alt="深空烟熏妆容，深色烟熏和星点亮片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">深空烟熏</h3>
+                                <p class="option-desc">深色烟熏＋点缀星点亮片，神秘又有层次，适合戏剧感造型。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
