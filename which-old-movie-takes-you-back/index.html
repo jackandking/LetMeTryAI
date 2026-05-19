@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>哪部老电影能把你带回年轻时候？回忆影院</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">哪部老电影能把你带回年轻时候？哪一幕会把你带回去？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">哪部老电影能把你带回年轻时候？回忆里的哪一幕会把你带回去？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="xiao-cheng-zhi-chun">
+                            <div class="card-image">
+                                <img src="images/xiao-cheng-zhi-chun.svg" alt="小城之春 风格老街巷画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">小城之春</h3>
+                                <p class="option-desc">老街小巷、细雨斜风，那种温柔又有点哀愁的家乡画面</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yi-jiang-chun-shui">
+                            <div class="card-image">
+                                <img src="images/yi-jiang-chun-shui.svg" alt="一江春水向东流 家庭与离别画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">一江春水向东流</h3>
+                                <p class="option-desc">家人离别与坚持的故事，带出战争年代的家庭记忆</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tian-mi-mi">
+                            <div class="card-image">
+                                <img src="images/tian-mi-mi.svg" alt="甜蜜蜜 街头与合唱画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">甜蜜蜜</h3>
+                                <p class="option-desc">90年代街头与老歌，像年轻恋情的温暖回放</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="long-men-ke-zhan">
+                            <div class="card-image">
+                                <img src="images/long-men-ke-zhan.svg" alt="龙门客栈 江湖与客栈热闹场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">龙门客栈</h3>
+                                <p class="option-desc">江湖热闹、刀光与义气，唤起那会儿看电影的兴奋记忆</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
