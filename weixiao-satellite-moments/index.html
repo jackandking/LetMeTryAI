@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>国产“微笑”卫星：哪个瞬间更让你热血沸腾？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">国产“微笑”卫星上天，哪个瞬间更让你热血沸腾？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看到国产“微笑”卫星上天，你觉得哪个瞬间更让你热血沸腾？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="liftoff-through-cloud">
+                            <div class="card-image">
+                                <img src="images/liftoff-through-cloud.svg" alt="火箭升空穿云的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">升空穿云</h3>
+                                <p class="option-desc">火箭冲破云层、白烟撕裂天际，那一秒热血上头。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="stage-separation-orbit">
+                            <div class="card-image">
+                                <img src="images/stage-separation-orbit.svg" alt="舱段分离与进入轨道示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">舱段分离入轨</h3>
+                                <p class="option-desc">第一级脱离、卫星进入预定轨道，使命正式进入太空节奏。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="solar-array-deploy">
+                            <div class="card-image">
+                                <img src="images/solar-array-deploy.svg" alt="太阳能翼展开反射阳光的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">太阳翼展开</h3>
+                                <p class="option-desc">太阳能翼缓缓展开，阳光照亮机体，画面充满科技美感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="first-smile-image">
+                            <div class="card-image">
+                                <img src="images/first-smile-image.svg" alt="卫星回传的首张带微笑意象的地球照片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">首张“微笑”回传</h3>
+                                <p class="option-desc">卫星回传首张带“微笑”意象的地球图像，瞬间让人激动又有仪式感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
