@@ -1,0 +1,20 @@
+{
+  "id": "weixiao-satellite-moments",
+  "name": "微笑卫星瞬间",
+  "description": "围绕国产“微笑”卫星发射、展开与首张回传画面，用4个具有视觉冲击力的瞬间做投票对比，适合手机图文展示与短评引导。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "国产",
+    "微笑卫星",
+    "航天",
+    "发射瞬间",
+    "回传照片",
+    "热血",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "weixiao-satellite-moments/images/liftoff-through-cloud.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-19T17:01:05.006Z"
+}
