@@ -1,0 +1,20 @@
+{
+  "id": "kids-satellite-curiosity",
+  "name": "家长爱·亲子好奇",
+  "description": "用亲切问句把注意力放在孩子的真实好奇心上，提供可对比的四类问题方向，便于家长观察孩子兴趣并引导科普对话。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "卫星",
+    "发射",
+    "好奇心",
+    "亲子",
+    "科普",
+    "太空",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-satellite-curiosity/images/appearance-flight-principle.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-19T19:00:44.682Z"
+}
