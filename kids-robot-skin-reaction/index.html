@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子看到“有皮肤”的机器人，他们会怎么反应？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子看到“有皮肤”的机器人会怎么想？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果孩子看到有皮肤的机器人，他们会怎么想？（选一个最贴近的反应）</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="curious-approach">
+                            <div class="card-image">
+                                <img src="images/curious-approach.svg" alt="孩子好奇地靠近机器人" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">好奇想靠近</h3>
+                                <p class="option-desc">觉得新奇，想摸一摸或问它问题，充满探索欲。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="weird-and-scared">
+                            <div class="card-image">
+                                <img src="images/weird-and-scared.svg" alt="孩子对机器人感到害怕" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">有点害怕</h3>
+                                <p class="option-desc">感觉不真实或有些可怕，会退后或喊家长来看看。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="see-as-human-friend">
+                            <div class="card-image">
+                                <img src="images/see-as-human-friend.svg" alt="孩子把机器人当朋友" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当成会说话的朋友</h3>
+                                <p class="option-desc">把它当作会说话的伙伴，想和它玩或聊天。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="indifferent-ignore">
+                            <div class="card-image">
+                                <img src="images/indifferent-ignore.svg" alt="孩子对机器人无感并继续玩耍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不太在意，继续玩别的</h3>
+                                <p class="option-desc">没太大兴趣，继续自己的活动或玩具。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

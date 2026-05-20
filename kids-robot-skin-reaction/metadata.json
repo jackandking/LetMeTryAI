@@ -1,0 +1,20 @@
+{
+  "id": "kids-robot-skin-reaction",
+  "name": "孩子眼中的“有皮肤”机器人",
+  "description": "围绕孩子对拟人化机器人的直观反应设计对比选项，兼顾教育讨论点（情感认知、科学想象、社交边界）和家庭互动建议，适合移动端快读与评论引导。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "机器人",
+    "拟人化",
+    "好奇心",
+    "情感教育",
+    "家庭互动",
+    "科技启蒙",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-robot-skin-reaction/images/curious-approach.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-20T19:00:51.291Z"
+}
