@@ -1,0 +1,21 @@
+{
+  "id": "robot-skin-makeup",
+  "name": "仿真肌妆感实验室",
+  "description": "通过四种常见的‘仿真肌’妆效视觉样片，让用户一目了然地比较水光、哑光、裸妆与镜面光效果，适配手机竖屏图文页与短视频卡片。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "仿真肌",
+    "水光",
+    "哑光",
+    "裸妆",
+    "高光",
+    "视觉冲击",
+    "美人颜值",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "robot-skin-makeup/images/robot-water-glow.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-20T20:00:44.583Z"
+}
