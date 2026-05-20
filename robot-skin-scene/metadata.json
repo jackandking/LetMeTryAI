@@ -1,0 +1,20 @@
+{
+  "id": "robot-skin-scene",
+  "name": "机器人皮肤场景",
+  "description": "以生活化场景对比机器人拟人化的视觉和情感冲击，贴合男人宝对科技、视觉冲击与生活趣味的偏好，便于手机图文呈现与高互动。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "机器人",
+    "皮肤",
+    "场景",
+    "未来生活",
+    "视觉冲击",
+    "拟人",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "robot-skin-scene/images/mall-service-robot.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-20T17:01:06.910Z"
+}
