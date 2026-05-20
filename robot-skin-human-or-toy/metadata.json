@@ -1,0 +1,20 @@
+{
+  "id": "robot-skin-human-or-toy",
+  "name": "爱老人好奇屋",
+  "description": "移动端图文投票，配对比插画（真人化外观 vs 玩具化造型），引导长辈回忆经典科幻或聊家庭中对“拟人物”的感受，适合社交分享与评论。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "机器人",
+    "拟人",
+    "怀旧",
+    "科幻",
+    "家庭话题",
+    "好奇心",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "robot-skin-human-or-toy/images/more-human.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-20T18:00:40.988Z"
+}
