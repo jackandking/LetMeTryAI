@@ -1,0 +1,19 @@
+{
+  "id": "movie-night-food",
+  "name": "夜宵热选",
+  "description": "结合追剧/看球场景的美食投票页，画面感强、选项带诱惑性文案，适合手机滑动投票和社交传播。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "夜宵",
+    "深夜美食",
+    "追剧",
+    "看球",
+    "宵夜选择",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "movie-night-food/images/kao-chuan.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-21T21:01:03.834Z"
+}
