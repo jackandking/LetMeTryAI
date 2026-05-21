@@ -1,0 +1,21 @@
+{
+  "id": "sleeping-behavior-worry",
+  "name": "睡眠小调查",
+  "description": "面向爱老人品牌的图文投票页，通过对比打鼾、翻身、夜起与梦话等常见睡眠行为，唤起共鸣并促成健康养生或生活习惯的讨论，页面适合手机阅读与分享。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "睡眠",
+    "打鼾",
+    "半夜起夜",
+    "翻身",
+    "梦话",
+    "老人生活",
+    "养生",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "sleeping-behavior-worry/images/light-snoring.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-21T18:00:56.704Z"
+}
