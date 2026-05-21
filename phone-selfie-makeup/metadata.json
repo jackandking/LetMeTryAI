@@ -1,0 +1,20 @@
+{
+  "id": "phone-selfie-makeup",
+  "name": "你还在用哪款自拍妆",
+  "description": "以“手机越来越贵”为切入点，召集用户在轻透、滤镜、裸妆与高光立体四种自拍妆风格中选择并分享拍照体验，便于产生评论与晒图互动。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "自拍妆",
+    "手机摄影",
+    "人像美颜",
+    "轻妆",
+    "滤镜妆",
+    "高光修容",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "phone-selfie-makeup/images/qingtou-kongqi.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-21T20:00:47.798Z"
+}
