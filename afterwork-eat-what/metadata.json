@@ -1,0 +1,19 @@
+{
+  "id": "afterwork-eat-what",
+  "name": "下班吃啥",
+  "description": "针对上班族的下班就餐场景，用直白问句触发选择冲动，选项覆盖外卖、自煮与社交就餐，便于配图与短文案吸引点击。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "下班",
+    "外卖",
+    "下厨",
+    "社交吃饭",
+    "美食",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "afterwork-eat-what/images/takeout-easy.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-21T17:02:02.748Z"
+}
