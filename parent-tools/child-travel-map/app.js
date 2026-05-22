@@ -185,51 +185,98 @@ async function initiatePayment() {
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> 正在创建订单...';
 
+    // 页面级诊断日志（不依赖 vConsole）
+    function diag(msg) {
+        console.log(msg);
+        const debug = document.getElementById('debug-info');
+        if (debug) debug.textContent = (debug.textContent || '').slice(-200) + ' | ' + msg;
+    }
+    diag('[pay] start');
+
     try {
-        const res = await fetch(`${API_BASE}/api/pay/create-order`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        // 用 XMLHttpRequest 代替 fetch（某些 webview 更稳定）
+        const data = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.timeout = 10000;
+            xhr.open('POST', API_BASE + '/api/pay/create-order', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    diag('[pay] xhr status=' + xhr.status);
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try { resolve(JSON.parse(xhr.responseText)); }
+                        catch (e) { reject(new Error('JSON parse: ' + e.message)); }
+                    } else {
+                        reject(new Error('HTTP ' + xhr.status));
+                    }
+                }
+            };
+            xhr.onerror = () => reject(new Error('XHR error'));
+            xhr.ontimeout = () => reject(new Error('XHR timeout'));
+            xhr.send(JSON.stringify({
                 openid: openid,
                 productId: PRODUCT_ID,
                 productName: PRODUCT_NAME,
                 amount: AMOUNT
-            })
+            }));
         });
-        const data = await res.json();
 
+        diag('[pay] resp=' + (data.success ? 'OK' : 'FAIL'));
         if (!data.success) {
             throw new Error(data.error || '创建订单失败');
         }
 
         const order = data.data;
-        console.log('[pay] Order created:', order.orderId);
+        diag('[pay] order=' + order.orderId);
 
         const hasKs = typeof ks !== 'undefined';
         const hasKsPay = hasKs && typeof ks.pay === 'function';
         const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
         const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
+        const hasPostMessage = hasKs && ks.miniProgram && typeof ks.miniProgram.postMessage === 'function';
 
-        console.log('[pay] Environment:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo });
+        diag('[pay] nav=' + (hasNavigateTo ? 'Y' : 'N') + ' msg=' + (hasPostMessage ? 'Y' : 'N'));
+
+        const currentUrl = window.location.href.split('?')[0];
+        const returnUrl = currentUrl + '?paid=1';
 
         if (hasNavigateTo) {
-            // 小程序：跳转原生支付页
-            if (hasKs && ks.setStorageSync) {
-                ks.setStorageSync('__pay_order', JSON.stringify({
-                    orderId: order.orderId,
-                    productId: PRODUCT_ID,
-                    productName: PRODUCT_NAME,
-                    amount: AMOUNT
-                }));
+            diag('[pay] goto /pages/pay/pay');
+            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&appId=' + encodeURIComponent(order.appId) +
+                '&prepayId=' + encodeURIComponent(order.prepayId) +
+                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
+                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
+                '&sign=' + encodeURIComponent(order.sign) +
+                '&returnUrl=' + encodeURIComponent(returnUrl);
+            try {
+                ks.miniProgram.navigateTo({ url: payUrl });
+                diag('[pay] navigateTo ok');
+            } catch (e) {
+                diag('[pay] nav ERR=' + e.message);
+                throw e;
             }
-            const currentUrl = window.location.href.split('?')[0];
-            const returnUrl = currentUrl + '?paid=1';
-            ks.miniProgram.navigateTo({
-                url: `/pages/pay/pay?originalUrl=${encodeURIComponent(returnUrl)}&orderId=${order.orderId}`
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成精美足迹图';
+        } else if (hasPostMessage) {
+            diag('[pay] postMessage');
+            ks.miniProgram.postMessage({
+                type: 'REQUEST_PAYMENT',
+                data: {
+                    orderId: order.orderId,
+                    appId: order.appId,
+                    prepayId: order.prepayId,
+                    nonceStr: order.nonceStr,
+                    timeStamp: order.timeStamp,
+                    sign: order.sign,
+                    returnUrl: returnUrl
+                }
             });
+            diag('[pay] postMessage ok');
             btn.disabled = false;
             btn.innerHTML = '✨ 生成精美足迹图';
         } else if (hasKsPay) {
+            diag('[pay] ks.pay');
             ks.pay({
                 orderInfo: {
                     appId: order.appId,
@@ -239,16 +286,18 @@ async function initiatePayment() {
                     sign: order.sign
                 },
                 success: () => {
-                    localStorage.setItem('__child_map_paid', '1');
+                    diag('[pay] ks.pay success');
                     setTimeout(() => generateImage(), 300);
                 },
                 fail: (err) => {
+                    diag('[pay] ks.pay fail=' + (err.errMsg || ''));
                     alert('支付未完成: ' + (err.errMsg || '请重试'));
                     btn.disabled = false;
                     btn.innerHTML = '✨ 生成精美足迹图';
                 }
             });
         } else if (hasMiniProgram) {
+            diag('[pay] requestPayment');
             ks.miniProgram.requestPayment({
                 appId: order.appId,
                 prepayId: order.prepayId,
@@ -256,26 +305,25 @@ async function initiatePayment() {
                 timeStamp: order.timeStamp,
                 sign: order.sign,
                 success: () => {
-                    localStorage.setItem('__child_map_paid', '1');
+                    diag('[pay] requestPayment success');
                     setTimeout(() => generateImage(), 300);
                 },
                 fail: (err) => {
+                    diag('[pay] requestPayment fail=' + (err.errMsg || ''));
                     alert('支付未完成: ' + (err.errMsg || '请重试'));
                     btn.disabled = false;
                     btn.innerHTML = '✨ 生成精美足迹图';
                 }
             });
         } else {
-            // 浏览器：模拟支付直接生成（开发测试）
-            console.log('[pay] Browser mode: mock payment');
-            localStorage.setItem('__child_map_paid', '1');
+            diag('[pay] browser mock');
             generateImage();
             btn.disabled = false;
             btn.innerHTML = '✨ 生成精美足迹图';
         }
     } catch (err) {
-        console.error('[pay] Error:', err);
-        alert('支付初始化失败: ' + err.message);
+        diag('[pay] ERR=' + err.name + ':' + err.message);
+        alert('支付初始化失败[' + err.name + ']: ' + err.message);
         btn.disabled = false;
         btn.innerHTML = '✨ 生成精美足迹图';
     }
