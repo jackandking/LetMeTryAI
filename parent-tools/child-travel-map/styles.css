@@ -1,0 +1,232 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    min-height: 100vh;
+    color: #333;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+/* Header */
+.header { text-align: center; padding: 20px 0 16px; }
+.header h1 { font-size: 1.5em; color: #2c3e50; margin-bottom: 6px; }
+.subtitle { color: #7f8c8d; font-size: 0.9em; }
+
+/* Cards */
+.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.card h3 { font-size: 1em; color: #2c3e50; margin-bottom: 12px; }
+
+/* Map */
+.map-card { padding: 12px; }
+.map-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 83%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    overflow: hidden;
+}
+#china-map {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+#china-map .province {
+    fill: rgba(255,255,255,0.25);
+    stroke: rgba(255,255,255,0.5);
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.2s;
+}
+#china-map .province.visited {
+    fill: #ff6b35;
+}
+#china-map .province.nanhai {
+    fill: none;
+    stroke: rgba(255,255,255,0.3);
+}
+#china-map .province:hover {
+    fill: rgba(255,255,255,0.5);
+}
+#china-map .province.visited:hover {
+    fill: #ff8555;
+}
+.tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+.tooltip.visible { opacity: 1; }
+
+/* Stats */
+.stats-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+}
+.stats-bar strong { color: #ff6b35; font-size: 1.2em; }
+.btn-clear {
+    background: #f0f0f0;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: #888;
+    cursor: pointer;
+}
+
+/* Region groups */
+.region-groups { display: flex; flex-direction: column; gap: 10px; }
+.region-group {}
+.region-name {
+    font-size: 0.8em;
+    color: #7f8c8d;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+.region-provinces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.province-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    background: #f0f2f5;
+    color: #666;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+.province-tag.visited {
+    background: #ff6b35;
+    color: #fff;
+    border-color: #ff6b35;
+}
+
+/* Form */
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+.text-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.95em;
+    outline: none;
+    -webkit-appearance: none;
+}
+.text-input:focus { border-color: #667eea; }
+.age-input { flex: 0 0 70px; text-align: center; }
+
+/* Generate section */
+.generate-section {
+    text-align: center;
+    padding: 20px 0 30px;
+}
+.btn-generate {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    border-radius: 28px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-generate:active { transform: scale(0.97); }
+.btn-generate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.generate-hint {
+    color: #999;
+    font-size: 0.8em;
+    margin-top: 8px;
+}
+.generate-price {
+    color: #ff6b35;
+    font-size: 0.85em;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+/* Result */
+.result-tip {
+    text-align: center;
+    color: #667eea;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+.result-image {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 12px;
+}
+.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 10px;
+    font-size: 0.9em;
+    color: #666;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #aaa;
+    font-size: 0.8em;
+}
+.footer a { color: #667eea; text-decoration: none; }
+
+/* Utility */
+.hidden { display: none !important; }
+.loading {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Debug */
+#debug-info {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.8); color: #0f0;
+    padding: 6px; font-size: 10px; z-index: 9999;
+    text-align: center;
+}
