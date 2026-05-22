@@ -251,9 +251,19 @@ async function unlockReport() {
         }
 
         const order = data.data;
+        console.log('[pay] Order created:', order.orderId);
 
-        // 2. 调起快手支付
-        if (typeof ks !== 'undefined' && ks.pay) {
+        // 2. 检测支付环境
+        const hasKs = typeof ks !== 'undefined';
+        const hasKsPay = hasKs && typeof ks.pay === 'function';
+        const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
+
+        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram });
+
+        // 3. 调起支付
+        if (hasKsPay) {
+            // 方式1：ks.pay 原生调起
+            console.log('[pay] Using ks.pay');
             ks.pay({
                 orderInfo: {
                     appId: order.appId,
@@ -263,13 +273,34 @@ async function unlockReport() {
                     sign: order.sign
                 },
                 success: (res) => {
-                    console.log('支付成功:', res);
-                    // 等待回调或直接显示报告
-                    setTimeout(() => showFullReport(order.orderId), 1000);
+                    console.log('[pay] ks.pay success:', res);
+                    setTimeout(() => showFullReport(order.orderId), 500);
                 },
                 fail: (err) => {
-                    console.error('支付失败:', err);
-                    alert('支付未完成，请重试');
+                    console.error('[pay] ks.pay fail:', err);
+                    alert('支付未完成: ' + (err.errMsg || '请重试'));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '🔓 立即解锁完整报告';
+                    }
+                }
+            });
+        } else if (hasMiniProgram) {
+            // 方式2：webview 桥接 ks.miniProgram.requestPayment
+            console.log('[pay] Using ks.miniProgram.requestPayment');
+            ks.miniProgram.requestPayment({
+                appId: order.appId,
+                prepayId: order.prepayId,
+                nonceStr: order.nonceStr,
+                timeStamp: order.timeStamp,
+                sign: order.sign,
+                success: (res) => {
+                    console.log('[pay] miniProgram payment success:', res);
+                    setTimeout(() => showFullReport(order.orderId), 500);
+                },
+                fail: (err) => {
+                    console.error('[pay] miniProgram payment fail:', err);
+                    alert('支付未完成: ' + (err.errMsg || '请重试'));
                     if (btn) {
                         btn.disabled = false;
                         btn.innerHTML = '🔓 立即解锁完整报告';
@@ -277,9 +308,28 @@ async function unlockReport() {
                 }
             });
         } else {
-            // Mock 模式：模拟支付成功
-            console.log('[mock] ks.pay not available, simulating payment success');
-            setTimeout(() => showFullReport(order.orderId), 1500);
+            // 方式3：模拟支付（浏览器或非小程序环境）
+            console.log('[pay] No ks API available, showing mock payment dialog');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🔓 立即解锁完整报告';
+            }
+
+            // 显示模拟支付弹窗
+            const confirmed = confirm('【测试模式】\n\n当前环境未检测到快手支付 API。\n\n点击「确定」模拟支付成功，\n点击「取消」取消支付。');
+            if (confirmed) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '处理中...';
+                }
+                // 模拟调用支付回调
+                fetch(`${API_BASE}/api/pay/notify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ out_order_no: order.orderId, result: 'SUCCESS' })
+                }).catch(() => {});
+                setTimeout(() => showFullReport(order.orderId), 800);
+            }
         }
     } catch (err) {
         console.error('解锁失败:', err);
