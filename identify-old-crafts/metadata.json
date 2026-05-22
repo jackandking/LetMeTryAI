@@ -1,0 +1,19 @@
+{
+  "id": "identify-old-crafts",
+  "name": "认出老手艺",
+  "description": "展示木匠、织布、剪纸、制陶等老手艺图片，鼓励用户识别并分享自己的回忆，适合爱老人品牌的怀旧与生活场景。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "老手艺",
+    "怀旧",
+    "手工",
+    "乡村记忆",
+    "家庭生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "identify-old-crafts/images/mu-jiang-sunmao.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-22T18:00:39.269Z"
+}
