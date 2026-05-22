@@ -140,13 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasKs = typeof ks !== 'undefined';
     const hasKsPay = hasKs && typeof ks.pay === 'function';
     const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
-    console.log('[init] Environment:', { hasKs, hasKsPay, hasMiniProgram, userAgent: navigator.userAgent.substring(0, 50) });
+    const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
+    console.log('[init] Environment:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo, userAgent: navigator.userAgent.substring(0, 50) });
 
     // 在页面底部添加调试信息（仅开发阶段显示）
     const debugInfo = document.createElement('div');
     debugInfo.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:#0f0;padding:8px;font-size:11px;z-index:9999;text-align:center;';
     debugInfo.id = 'debug-info';
-    debugInfo.innerHTML = `环境: ks=${hasKs ? '✅' : '❌'} pay=${hasKsPay ? '✅' : '❌'} mini=${hasMiniProgram ? '✅' : '❌'} | 点击关闭`;
+    debugInfo.innerHTML = `环境: ks=${hasKs ? '✅' : '❌'} pay=${hasKsPay ? '✅' : '❌'} nav=${hasNavigateTo ? '✅' : '❌'} | 点击关闭`;
     debugInfo.onclick = () => debugInfo.remove();
     document.body.appendChild(debugInfo);
 
@@ -271,12 +272,36 @@ async function unlockReport() {
         const hasKs = typeof ks !== 'undefined';
         const hasKsPay = hasKs && typeof ks.pay === 'function';
         const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
+        const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
 
-        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram });
+        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo });
 
-        // 3. 调起支付
-        if (hasKsPay) {
-            // 方式1：ks.pay 原生调起
+        // 3. 调起支付 - 优先级：navigateTo 跳转小程序原生支付页 > ks.pay > requestPayment > 模拟
+        if (hasNavigateTo) {
+            // 方式1（推荐）：小程序 webview 跳转原生支付页
+            console.log('[pay] Using ks.miniProgram.navigateTo → /pages/pay/pay');
+            // 保存订单信息到 storage，支付页回调时读取
+            if (hasKs && ks.setStorageSync) {
+                ks.setStorageSync('__pay_order', JSON.stringify({
+                    orderId: order.orderId,
+                    productId: PRODUCT_ID,
+                    productName: PRODUCT_NAME,
+                    amount: AMOUNT
+                }));
+            }
+            // 构造返回 URL：当前页 + ?paid=1
+            const currentUrl = window.location.href.split('?')[0];
+            const returnUrl = currentUrl + '?paid=1';
+            ks.miniProgram.navigateTo({
+                url: `/pages/pay/pay?originalUrl=${encodeURIComponent(returnUrl)}&orderId=${order.orderId}`
+            });
+            // 跳转后恢复按钮（用户取消返回时）
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🔓 立即解锁完整报告';
+            }
+        } else if (hasKsPay) {
+            // 方式2：ks.pay 原生调起
             console.log('[pay] Using ks.pay');
             ks.pay({
                 orderInfo: {
@@ -300,7 +325,7 @@ async function unlockReport() {
                 }
             });
         } else if (hasMiniProgram) {
-            // 方式2：webview 桥接 ks.miniProgram.requestPayment
+            // 方式3：webview 桥接 ks.miniProgram.requestPayment
             console.log('[pay] Using ks.miniProgram.requestPayment');
             ks.miniProgram.requestPayment({
                 appId: order.appId,
