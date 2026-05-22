@@ -136,6 +136,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
 
+    // 环境检测调试
+    const hasKs = typeof ks !== 'undefined';
+    const hasKsPay = hasKs && typeof ks.pay === 'function';
+    const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
+    console.log('[init] Environment:', { hasKs, hasKsPay, hasMiniProgram, userAgent: navigator.userAgent.substring(0, 50) });
+
+    // 在页面底部添加调试信息（仅开发阶段显示）
+    const debugInfo = document.createElement('div');
+    debugInfo.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:#0f0;padding:8px;font-size:11px;z-index:9999;text-align:center;';
+    debugInfo.id = 'debug-info';
+    debugInfo.innerHTML = `环境: ks=${hasKs ? '✅' : '❌'} pay=${hasKsPay ? '✅' : '❌'} mini=${hasMiniProgram ? '✅' : '❌'} | 点击关闭`;
+    debugInfo.onclick = () => debugInfo.remove();
+    document.body.appendChild(debugInfo);
+
     renderQuestion();
     updateProgress();
 });
