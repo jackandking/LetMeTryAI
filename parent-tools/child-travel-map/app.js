@@ -18,24 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
 
-    // 环境检测：深度探测 ks 对象的所有可用方法
+    // 环境检测：深度探测所有桥接对象
     const hasKs = typeof ks !== 'undefined';
-    let ksInfo = { hasKs };
+    const hasKSJSBridge = typeof window.KSJSBridge !== 'undefined';
+    let ksInfo = { hasKs, hasKSJSBridge };
     if (hasKs) {
         ksInfo.pay = typeof ks.pay;
         ksInfo.miniProgram = typeof ks.miniProgram;
         ksInfo.ready = typeof ks.ready;
         ksInfo.config = typeof ks.config;
-        ksInfo.getUserInfo = typeof ks.getUserInfo;
         if (ks.miniProgram) {
             ksInfo.mp_navigateTo = typeof ks.miniProgram.navigateTo;
             ksInfo.mp_postMessage = typeof ks.miniProgram.postMessage;
             ksInfo.mp_requestPayment = typeof ks.miniProgram.requestPayment;
-            ksInfo.mp_getEnv = typeof ks.miniProgram.getEnv;
         }
-        // 探测 window 上的其他桥接对象
-        ksInfo.KSJSBridge = typeof window.KSJSBridge;
-        ksInfo.webkit = typeof window.webkit;
+    }
+    if (hasKSJSBridge) {
+        const ksb = window.KSJSBridge;
+        ksInfo.ksb_call = typeof ksb.call;
+        ksInfo.ksb_ready = typeof ksb.ready;
+        ksInfo.ksb_navigateTo = typeof ksb.navigateTo;
+        ksInfo.ksb_postMessage = typeof ksb.postMessage;
     }
     console.log('[init] ksInfo:', ksInfo);
 
@@ -251,13 +254,55 @@ async function initiatePayment() {
         const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
         const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
         const hasPostMessage = hasKs && ks.miniProgram && typeof ks.miniProgram.postMessage === 'function';
+        const hasKSJSBridge = typeof window.KSJSBridge !== 'undefined';
+        const hasKsbNavigateTo = hasKSJSBridge && typeof window.KSJSBridge.navigateTo === 'function';
+        const hasKsbCall = hasKSJSBridge && typeof window.KSJSBridge.call === 'function';
 
-        diag('[pay] nav=' + (hasNavigateTo ? 'Y' : 'N') + ' msg=' + (hasPostMessage ? 'Y' : 'N'));
+        diag('[pay] nav=' + (hasNavigateTo ? 'Y' : 'N') + ' msg=' + (hasPostMessage ? 'Y' : 'N') +
+             ' ksb=' + (hasKSJSBridge ? 'Y' : 'N') + ' ksbNav=' + (hasKsbNavigateTo ? 'Y' : 'N'));
 
         const currentUrl = window.location.href.split('?')[0];
         const returnUrl = currentUrl + '?paid=1';
 
-        if (hasNavigateTo) {
+        if (hasKsbNavigateTo) {
+            // 方式0：KSJSBridge.navigateTo（快手 JSSDK）
+            diag('[pay] KSJSBridge.navigateTo');
+            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&appId=' + encodeURIComponent(order.appId) +
+                '&prepayId=' + encodeURIComponent(order.prepayId) +
+                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
+                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
+                '&sign=' + encodeURIComponent(order.sign) +
+                '&returnUrl=' + encodeURIComponent(returnUrl);
+            try {
+                window.KSJSBridge.navigateTo({ url: payUrl });
+                diag('[pay] ksb navigateTo ok');
+            } catch (e) {
+                diag('[pay] ksb nav ERR=' + e.message);
+                throw e;
+            }
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成精美足迹图';
+        } else if (hasKsbCall) {
+            // 方式0b：KSJSBridge.call('navigateTo', ...)
+            diag('[pay] KSJSBridge.call navigateTo');
+            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&appId=' + encodeURIComponent(order.appId) +
+                '&prepayId=' + encodeURIComponent(order.prepayId) +
+                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
+                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
+                '&sign=' + encodeURIComponent(order.sign) +
+                '&returnUrl=' + encodeURIComponent(returnUrl);
+            try {
+                window.KSJSBridge.call('navigateTo', { url: payUrl });
+                diag('[pay] ksb call ok');
+            } catch (e) {
+                diag('[pay] ksb call ERR=' + e.message);
+                throw e;
+            }
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成精美足迹图';
+        } else if (hasNavigateTo) {
             diag('[pay] goto /pages/pay/pay');
             const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
                 '&appId=' + encodeURIComponent(order.appId) +
