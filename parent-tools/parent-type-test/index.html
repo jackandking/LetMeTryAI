@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测测你是哪种家长类型 - 家长爱</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 测测你是哪种家长类型</h1>
+            <p>5道题，探索你的育儿风格，解锁专属分析报告</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="card">
+            <div id="question-container"></div>
+        </div>
+
+        <!-- Brief Result (before payment) -->
+        <div id="brief-result" class="card hidden"></div>
+
+        <!-- Full Report (after payment) -->
+        <div id="full-report" class="card hidden"></div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 家长爱 | <a href="/parent-tools/">返回首页</a></p>
+        </div>
+    </div>
+
+    <script src="app.js?v=1"></script>
+</body>
+</html>
