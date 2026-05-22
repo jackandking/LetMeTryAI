@@ -273,35 +273,51 @@ async function unlockReport() {
         const hasKsPay = hasKs && typeof ks.pay === 'function';
         const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
         const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
+        const hasPostMessage = hasKs && ks.miniProgram && typeof ks.miniProgram.postMessage === 'function';
 
-        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo });
+        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo, hasPostMessage });
 
-        // 3. 调起支付 - 优先级：navigateTo 跳转小程序原生支付页 > ks.pay > requestPayment > 模拟
+        // 构造返回 URL：当前页 + ?paid=1
+        const currentUrl = window.location.href.split('?')[0];
+        const returnUrl = currentUrl + '?paid=1';
+
+        // 3. 调起支付 - 优先级：navigateTo > postMessage > ks.pay > requestPayment > 模拟
         if (hasNavigateTo) {
             // 方式1（推荐）：小程序 webview 跳转原生支付页
             console.log('[pay] Using ks.miniProgram.navigateTo → /pages/pay/pay');
-            // 保存订单信息到 storage，支付页回调时读取
-            if (hasKs && ks.setStorageSync) {
-                ks.setStorageSync('__pay_order', JSON.stringify({
-                    orderId: order.orderId,
-                    productId: PRODUCT_ID,
-                    productName: PRODUCT_NAME,
-                    amount: AMOUNT
-                }));
+            const payUrl = `/pages/pay/pay?orderId=${order.orderId}` +
+                `&appId=${order.appId}` +
+                `&prepayId=${order.prepayId}` +
+                `&nonceStr=${order.nonceStr}` +
+                `&timeStamp=${order.timeStamp}` +
+                `&sign=${encodeURIComponent(order.sign)}` +
+                `&returnUrl=${encodeURIComponent(returnUrl)}`;
+            ks.miniProgram.navigateTo({ url: payUrl });
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🔓 立即解锁完整报告';
             }
-            // 构造返回 URL：当前页 + ?paid=1
-            const currentUrl = window.location.href.split('?')[0];
-            const returnUrl = currentUrl + '?paid=1';
-            ks.miniProgram.navigateTo({
-                url: `/pages/pay/pay?originalUrl=${encodeURIComponent(returnUrl)}&orderId=${order.orderId}`
+        } else if (hasPostMessage) {
+            // 方式2：通过 postMessage 让 rewardedWebview 中转跳转到支付页
+            console.log('[pay] Using ks.miniProgram.postMessage → rewardedWebview');
+            ks.miniProgram.postMessage({
+                type: 'REQUEST_PAYMENT',
+                data: {
+                    orderId: order.orderId,
+                    appId: order.appId,
+                    prepayId: order.prepayId,
+                    nonceStr: order.nonceStr,
+                    timeStamp: order.timeStamp,
+                    sign: order.sign,
+                    returnUrl: returnUrl
+                }
             });
-            // 跳转后恢复按钮（用户取消返回时）
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '🔓 立即解锁完整报告';
             }
         } else if (hasKsPay) {
-            // 方式2：ks.pay 原生调起
+            // 方式3：ks.pay 原生调起
             console.log('[pay] Using ks.pay');
             ks.pay({
                 orderInfo: {
@@ -325,7 +341,7 @@ async function unlockReport() {
                 }
             });
         } else if (hasMiniProgram) {
-            // 方式3：webview 桥接 ks.miniProgram.requestPayment
+            // 方式4：webview 桥接 ks.miniProgram.requestPayment
             console.log('[pay] Using ks.miniProgram.requestPayment');
             ks.miniProgram.requestPayment({
                 appId: order.appId,
