@@ -18,16 +18,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
 
-    // 环境检测
+    // 环境检测：深度探测 ks 对象的所有可用方法
     const hasKs = typeof ks !== 'undefined';
-    const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
-    console.log('[init] Environment:', { hasKs, hasNavigateTo, ua: navigator.userAgent.substring(0, 50) });
+    let ksInfo = { hasKs };
+    if (hasKs) {
+        ksInfo.pay = typeof ks.pay;
+        ksInfo.miniProgram = typeof ks.miniProgram;
+        ksInfo.ready = typeof ks.ready;
+        ksInfo.config = typeof ks.config;
+        ksInfo.getUserInfo = typeof ks.getUserInfo;
+        if (ks.miniProgram) {
+            ksInfo.mp_navigateTo = typeof ks.miniProgram.navigateTo;
+            ksInfo.mp_postMessage = typeof ks.miniProgram.postMessage;
+            ksInfo.mp_requestPayment = typeof ks.miniProgram.requestPayment;
+            ksInfo.mp_getEnv = typeof ks.miniProgram.getEnv;
+        }
+        // 探测 window 上的其他桥接对象
+        ksInfo.KSJSBridge = typeof window.KSJSBridge;
+        ksInfo.webkit = typeof window.webkit;
+    }
+    console.log('[init] ksInfo:', ksInfo);
 
     // debug bar
     const debug = document.getElementById('debug-info');
     if (debug) {
         debug.style.display = 'block';
-        debug.textContent = `env: ks=${hasKs ? 'Y' : 'N'} nav=${hasNavigateTo ? 'Y' : 'N'} | tap to hide`;
+        const infoStr = Object.entries(ksInfo).map(([k, v]) => k + '=' + v).join(' ');
+        debug.textContent = infoStr + ' | tap to hide';
         debug.onclick = () => debug.style.display = 'none';
     }
 
