@@ -169,15 +169,14 @@ function onGenerateClick() {
         return;
     }
 
-    // 检查是否已付费（URL 参数或本地标记）
+    // 检查是否已付费：URL 参数 paid=1 表示支付已回调
     const urlParams = new URLSearchParams(window.location.search);
-    const isPaid = urlParams.get('paid') === '1' || localStorage.getItem('__child_map_paid') === '1';
-
-    if (isPaid) {
+    if (urlParams.get('paid') === '1') {
         generateImage();
-    } else {
-        initiatePayment();
+        return;
     }
+
+    initiatePayment();
 }
 
 // ===== 支付流程（复用 parent-type-test 逻辑）=====
