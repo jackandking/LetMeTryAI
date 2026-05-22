@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>孩子去过哪些地方 - 家长爱</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🗺️ 孩子去过哪些地方</h1>
+            <p class="subtitle">点击省份标记孩子的足迹，生成专属旅行地图</p>
+        </div>
+
+        <!-- Map Preview -->
+        <div class="card map-card">
+            <div class="map-container">
+                <svg id="china-map" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div id="tooltip" class="tooltip"></div>
+            </div>
+            <div class="stats-bar">
+                <span>已点亮 <strong id="visited-count">0</strong> / 34 个省级行政区</span>
+                <button class="btn-clear" onclick="clearAll()">清空</button>
+            </div>
+        </div>
+
+        <!-- Region Selector -->
+        <div class="card">
+            <h3>📍 按区域选择</h3>
+            <div id="region-groups" class="region-groups"></div>
+        </div>
+
+        <!-- Child Info -->
+        <div class="card">
+            <h3>👶 宝贝信息</h3>
+            <div class="form-row">
+                <input type="text" id="child-name" class="text-input" placeholder="孩子昵称（显示在地图上）" maxlength="10">
+                <input type="number" id="child-age" class="text-input age-input" placeholder="年龄" min="0" max="18">
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="generate-section">
+            <button id="generate-btn" class="btn-generate" onclick="onGenerateClick()">
+                ✨ 生成精美足迹图
+            </button>
+            <p class="generate-hint">生成高清图片，可保存到相册分享</p>
+            <p class="generate-price">¥1.00 解锁生成</p>
+        </div>
+
+        <!-- Result Image (hidden until generated) -->
+        <div id="result-section" class="card hidden">
+            <p class="result-tip">👇 长按图片保存到相册</p>
+            <img id="result-image" class="result-image" alt="足迹地图">
+            <button class="btn-secondary" onclick="closeResult()">关闭</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 家长爱 | <a href="/parent-tools/">返回首页</a></p>
+        </div>
+    </div>
+
+    <!-- Debug info -->
+    <div id="debug-info" style="display:none"></div>
+
+    <script src="china-map.js"></script>
+    <script src="app.js?v=1"></script>
+</body>
+</html>
