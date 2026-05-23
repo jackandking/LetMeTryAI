@@ -271,47 +271,26 @@ async function unlockReport() {
         // 2. 检测支付环境
         const hasKs = typeof ks !== 'undefined';
         const hasKsPay = hasKs && typeof ks.pay === 'function';
-        const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
-        const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
-        const hasPostMessage = hasKs && ks.miniProgram && typeof ks.miniProgram.postMessage === 'function';
+        const hasNavigateTo = hasKs && typeof ks.navigateTo === 'function';
 
-        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo, hasPostMessage });
+        console.log('[pay] Environment check:', { hasKs, hasKsPay, hasNavigateTo });
 
         // 构造返回 URL：当前页 + ?paid=1
         const currentUrl = window.location.href.split('?')[0];
         const returnUrl = currentUrl + '?paid=1';
 
-        // 3. 调起支付 - 优先级：navigateTo > postMessage > ks.pay > requestPayment > 模拟
+        // 3. 调起支付 - 优先级：ks.navigateTo > ks.pay > 模拟
         if (hasNavigateTo) {
-            // 方式1（推荐）：小程序 webview 跳转原生支付页
-            console.log('[pay] Using ks.miniProgram.navigateTo → /pages/pay/pay');
-            const payUrl = `/pages/pay/pay?orderId=${order.orderId}` +
-                `&appId=${order.appId}` +
-                `&prepayId=${order.prepayId}` +
-                `&nonceStr=${order.nonceStr}` +
-                `&timeStamp=${order.timeStamp}` +
-                `&sign=${encodeURIComponent(order.sign)}` +
-                `&returnUrl=${encodeURIComponent(returnUrl)}`;
-            ks.miniProgram.navigateTo({ url: payUrl });
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '🔓 立即解锁完整报告';
-            }
-        } else if (hasPostMessage) {
-            // 方式2：通过 postMessage 让 rewardedWebview 中转跳转到支付页
-            console.log('[pay] Using ks.miniProgram.postMessage → rewardedWebview');
-            ks.miniProgram.postMessage({
-                type: 'REQUEST_PAYMENT',
-                data: {
-                    orderId: order.orderId,
-                    appId: order.appId,
-                    prepayId: order.prepayId,
-                    nonceStr: order.nonceStr,
-                    timeStamp: order.timeStamp,
-                    sign: order.sign,
-                    returnUrl: returnUrl
-                }
-            });
+            // 方式1：ks.navigateTo 跳转到小程序原生支付页（快手 webview 中可用）
+            console.log('[pay] Using ks.navigateTo → /pages/pay/pay');
+            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&appId=' + encodeURIComponent(order.appId) +
+                '&prepayId=' + encodeURIComponent(order.prepayId) +
+                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
+                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
+                '&sign=' + encodeURIComponent(order.sign) +
+                '&returnUrl=' + encodeURIComponent(returnUrl);
+            ks.navigateTo({ url: payUrl });
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '🔓 立即解锁完整报告';
