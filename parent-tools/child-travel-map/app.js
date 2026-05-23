@@ -178,22 +178,84 @@ function onGenerateClick() {
 async function initiatePayment() {
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> 准备中...';
+    btn.innerHTML = '<span class="loading"></span> 正在创建订单...';
 
-    // 快手 webview 中 ks.miniProgram 不存在，支付由小程序端按钮处理
-    saveState();
+    try {
+        const res = await fetch(`${API_BASE}/api/pay/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                openid: openid,
+                productId: PRODUCT_ID,
+                productName: PRODUCT_NAME,
+                amount: AMOUNT
+            })
+        });
+        const data = await res.json();
 
-    // 显示提示
-    let tip = document.querySelector('.miniapp-pay-tip');
-    if (!tip) {
-        tip = document.createElement('div');
-        tip.className = 'miniapp-pay-tip';
-        tip.innerHTML = '👇 请点击小程序底部<br><strong>"生成足迹图（¥1）"</strong>按钮完成支付';
-        document.querySelector('.generate-section').appendChild(tip);
+        if (!data.success) {
+            throw new Error(data.error || '创建订单失败');
+        }
+
+        const order = data.data;
+        console.log('[pay] Order created:', order.orderId);
+
+        // 检测 ks.navigateTo（快手 webview 中直接挂在 ks 上，不在 miniProgram 下）
+        const hasKs = typeof ks !== 'undefined';
+        const hasNavigateTo = hasKs && typeof ks.navigateTo === 'function';
+        const hasKsPay = hasKs && typeof ks.pay === 'function';
+
+        console.log('[pay] env:', { hasKs, hasNavigateTo, hasKsPay });
+
+        const currentUrl = window.location.href.split('?')[0];
+        const returnUrl = currentUrl + '?paid=1';
+
+        if (hasNavigateTo) {
+            // 方式1：ks.navigateTo 跳转到小程序原生支付页
+            console.log('[pay] Using ks.navigateTo → /pages/pay/pay');
+            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&appId=' + encodeURIComponent(order.appId) +
+                '&prepayId=' + encodeURIComponent(order.prepayId) +
+                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
+                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
+                '&sign=' + encodeURIComponent(order.sign) +
+                '&returnUrl=' + encodeURIComponent(returnUrl);
+            ks.navigateTo({ url: payUrl });
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成精美足迹图';
+        } else if (hasKsPay) {
+            // 方式2：ks.pay 直接调起
+            console.log('[pay] Using ks.pay');
+            ks.pay({
+                orderInfo: {
+                    appId: order.appId,
+                    prepayId: order.prepayId,
+                    nonceStr: order.nonceStr,
+                    timeStamp: order.timeStamp,
+                    sign: order.sign
+                },
+                success: () => {
+                    setTimeout(() => generateImage(), 300);
+                },
+                fail: (err) => {
+                    alert('支付未完成: ' + (err.errMsg || '请重试'));
+                    btn.disabled = false;
+                    btn.innerHTML = '✨ 生成精美足迹图';
+                }
+            });
+        } else {
+            // 浏览器：直接生成
+            console.log('[pay] Browser mock');
+            generateImage();
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成精美足迹图';
+        }
+    } catch (err) {
+        console.error('[pay] Error:', err);
+        alert('支付初始化失败: ' + err.message);
+        btn.disabled = false;
+        btn.innerHTML = '✨ 生成精美足迹图';
     }
-
-    btn.disabled = false;
-    btn.innerHTML = '✨ 生成精美足迹图';
 }
 
 // ===== Canvas 图片生成 =====
