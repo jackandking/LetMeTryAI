@@ -1,0 +1,19 @@
+{
+  "id": "emergency-first-action",
+  "name": "遇到突发事故会先做什么",
+  "description": "手机友好图文投票页，配合客厅、马路、商场等场景插图。侧重收集领先反应与决策倾向，不提供具体医疗建议，适合引导家庭讨论与防范意识提升。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "应急",
+    "老年人",
+    "家庭安全",
+    "突发情况",
+    "急救电话",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "emergency-first-action/images/call-emergency.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-23T18:01:16.092Z"
+}
