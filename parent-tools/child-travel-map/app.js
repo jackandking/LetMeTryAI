@@ -18,36 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
 
-    // 环境检测：深度探测所有桥接对象
-    const hasKs = typeof ks !== 'undefined';
-    const hasKSJSBridge = typeof window.KSJSBridge !== 'undefined';
-    let ksInfo = { hasKs, hasKSJSBridge };
-    if (hasKs) {
-        ksInfo.pay = typeof ks.pay;
-        ksInfo.miniProgram = typeof ks.miniProgram;
-        ksInfo.ready = typeof ks.ready;
-        ksInfo.config = typeof ks.config;
-        if (ks.miniProgram) {
-            ksInfo.mp_navigateTo = typeof ks.miniProgram.navigateTo;
-            ksInfo.mp_postMessage = typeof ks.miniProgram.postMessage;
-            ksInfo.mp_requestPayment = typeof ks.miniProgram.requestPayment;
-        }
-    }
-    if (hasKSJSBridge) {
-        const ksb = window.KSJSBridge;
-        ksInfo.ksb_call = typeof ksb.call;
-        ksInfo.ksb_ready = typeof ksb.ready;
-        ksInfo.ksb_navigateTo = typeof ksb.navigateTo;
-        ksInfo.ksb_postMessage = typeof ksb.postMessage;
-    }
-    console.log('[init] ksInfo:', ksInfo);
-
     // debug bar
     const debug = document.getElementById('debug-info');
     if (debug) {
         debug.style.display = 'block';
-        const infoStr = Object.entries(ksInfo).map(([k, v]) => k + '=' + v).join(' ');
-        debug.textContent = infoStr + ' | tap to hide';
+        debug.textContent = '点击生成后，请使用小程序底部按钮完成支付 | tap to hide';
         debug.onclick = () => debug.style.display = 'none';
     }
 
@@ -203,192 +178,22 @@ function onGenerateClick() {
 async function initiatePayment() {
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> 正在创建订单...';
+    btn.innerHTML = '<span class="loading"></span> 准备中...';
 
-    // 页面级诊断日志（不依赖 vConsole）
-    function diag(msg) {
-        console.log(msg);
-        const debug = document.getElementById('debug-info');
-        if (debug) debug.textContent = (debug.textContent || '').slice(-200) + ' | ' + msg;
+    // 快手 webview 中 ks.miniProgram 不存在，支付由小程序端按钮处理
+    saveState();
+
+    // 显示提示
+    let tip = document.querySelector('.miniapp-pay-tip');
+    if (!tip) {
+        tip = document.createElement('div');
+        tip.className = 'miniapp-pay-tip';
+        tip.innerHTML = '👇 请点击小程序底部<br><strong>"生成足迹图（¥1）"</strong>按钮完成支付';
+        document.querySelector('.generate-section').appendChild(tip);
     }
-    diag('[pay] start');
 
-    try {
-        // 用 XMLHttpRequest 代替 fetch（某些 webview 更稳定）
-        const data = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.timeout = 10000;
-            xhr.open('POST', API_BASE + '/api/pay/create-order', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    diag('[pay] xhr status=' + xhr.status);
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        try { resolve(JSON.parse(xhr.responseText)); }
-                        catch (e) { reject(new Error('JSON parse: ' + e.message)); }
-                    } else {
-                        reject(new Error('HTTP ' + xhr.status));
-                    }
-                }
-            };
-            xhr.onerror = () => reject(new Error('XHR error'));
-            xhr.ontimeout = () => reject(new Error('XHR timeout'));
-            xhr.send(JSON.stringify({
-                openid: openid,
-                productId: PRODUCT_ID,
-                productName: PRODUCT_NAME,
-                amount: AMOUNT
-            }));
-        });
-
-        diag('[pay] resp=' + (data.success ? 'OK' : 'FAIL'));
-        if (!data.success) {
-            throw new Error(data.error || '创建订单失败');
-        }
-
-        const order = data.data;
-        diag('[pay] order=' + order.orderId);
-
-        const hasKs = typeof ks !== 'undefined';
-        const hasKsPay = hasKs && typeof ks.pay === 'function';
-        const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
-        const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
-        const hasPostMessage = hasKs && ks.miniProgram && typeof ks.miniProgram.postMessage === 'function';
-        const hasKSJSBridge = typeof window.KSJSBridge !== 'undefined';
-        const hasKsbNavigateTo = hasKSJSBridge && typeof window.KSJSBridge.navigateTo === 'function';
-        const hasKsbCall = hasKSJSBridge && typeof window.KSJSBridge.call === 'function';
-
-        diag('[pay] nav=' + (hasNavigateTo ? 'Y' : 'N') + ' msg=' + (hasPostMessage ? 'Y' : 'N') +
-             ' ksb=' + (hasKSJSBridge ? 'Y' : 'N') + ' ksbNav=' + (hasKsbNavigateTo ? 'Y' : 'N'));
-
-        const currentUrl = window.location.href.split('?')[0];
-        const returnUrl = currentUrl + '?paid=1';
-
-        if (hasKsbNavigateTo) {
-            // 方式0：KSJSBridge.navigateTo（快手 JSSDK）
-            diag('[pay] KSJSBridge.navigateTo');
-            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
-                '&appId=' + encodeURIComponent(order.appId) +
-                '&prepayId=' + encodeURIComponent(order.prepayId) +
-                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
-                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
-                '&sign=' + encodeURIComponent(order.sign) +
-                '&returnUrl=' + encodeURIComponent(returnUrl);
-            try {
-                window.KSJSBridge.navigateTo({ url: payUrl });
-                diag('[pay] ksb navigateTo ok');
-            } catch (e) {
-                diag('[pay] ksb nav ERR=' + e.message);
-                throw e;
-            }
-            btn.disabled = false;
-            btn.innerHTML = '✨ 生成精美足迹图';
-        } else if (hasKsbCall) {
-            // 方式0b：KSJSBridge.call('navigateTo', ...)
-            diag('[pay] KSJSBridge.call navigateTo');
-            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
-                '&appId=' + encodeURIComponent(order.appId) +
-                '&prepayId=' + encodeURIComponent(order.prepayId) +
-                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
-                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
-                '&sign=' + encodeURIComponent(order.sign) +
-                '&returnUrl=' + encodeURIComponent(returnUrl);
-            try {
-                window.KSJSBridge.call('navigateTo', { url: payUrl });
-                diag('[pay] ksb call ok');
-            } catch (e) {
-                diag('[pay] ksb call ERR=' + e.message);
-                throw e;
-            }
-            btn.disabled = false;
-            btn.innerHTML = '✨ 生成精美足迹图';
-        } else if (hasNavigateTo) {
-            diag('[pay] goto /pages/pay/pay');
-            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
-                '&appId=' + encodeURIComponent(order.appId) +
-                '&prepayId=' + encodeURIComponent(order.prepayId) +
-                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
-                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
-                '&sign=' + encodeURIComponent(order.sign) +
-                '&returnUrl=' + encodeURIComponent(returnUrl);
-            try {
-                ks.miniProgram.navigateTo({ url: payUrl });
-                diag('[pay] navigateTo ok');
-            } catch (e) {
-                diag('[pay] nav ERR=' + e.message);
-                throw e;
-            }
-            btn.disabled = false;
-            btn.innerHTML = '✨ 生成精美足迹图';
-        } else if (hasPostMessage) {
-            diag('[pay] postMessage');
-            ks.miniProgram.postMessage({
-                type: 'REQUEST_PAYMENT',
-                data: {
-                    orderId: order.orderId,
-                    appId: order.appId,
-                    prepayId: order.prepayId,
-                    nonceStr: order.nonceStr,
-                    timeStamp: order.timeStamp,
-                    sign: order.sign,
-                    returnUrl: returnUrl
-                }
-            });
-            diag('[pay] postMessage ok');
-            btn.disabled = false;
-            btn.innerHTML = '✨ 生成精美足迹图';
-        } else if (hasKsPay) {
-            diag('[pay] ks.pay');
-            ks.pay({
-                orderInfo: {
-                    appId: order.appId,
-                    prepayId: order.prepayId,
-                    nonceStr: order.nonceStr,
-                    timeStamp: order.timeStamp,
-                    sign: order.sign
-                },
-                success: () => {
-                    diag('[pay] ks.pay success');
-                    setTimeout(() => generateImage(), 300);
-                },
-                fail: (err) => {
-                    diag('[pay] ks.pay fail=' + (err.errMsg || ''));
-                    alert('支付未完成: ' + (err.errMsg || '请重试'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✨ 生成精美足迹图';
-                }
-            });
-        } else if (hasMiniProgram) {
-            diag('[pay] requestPayment');
-            ks.miniProgram.requestPayment({
-                appId: order.appId,
-                prepayId: order.prepayId,
-                nonceStr: order.nonceStr,
-                timeStamp: order.timeStamp,
-                sign: order.sign,
-                success: () => {
-                    diag('[pay] requestPayment success');
-                    setTimeout(() => generateImage(), 300);
-                },
-                fail: (err) => {
-                    diag('[pay] requestPayment fail=' + (err.errMsg || ''));
-                    alert('支付未完成: ' + (err.errMsg || '请重试'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✨ 生成精美足迹图';
-                }
-            });
-        } else {
-            diag('[pay] browser mock');
-            generateImage();
-            btn.disabled = false;
-            btn.innerHTML = '✨ 生成精美足迹图';
-        }
-    } catch (err) {
-        diag('[pay] ERR=' + err.name + ':' + err.message);
-        alert('支付初始化失败[' + err.name + ']: ' + err.message);
-        btn.disabled = false;
-        btn.innerHTML = '✨ 生成精美足迹图';
-    }
+    btn.disabled = false;
+    btn.innerHTML = '✨ 生成精美足迹图';
 }
 
 // ===== Canvas 图片生成 =====
