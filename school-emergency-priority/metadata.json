@@ -1,0 +1,19 @@
+{
+  "id": "school-emergency-priority",
+  "name": "家长爱 · 校园突发应对",
+  "description": "场景化投票页面，列出在校突发情况下常见的四类应对：向老师求助、自我保护并撤离、大声呼救并说明位置、用手机联系家长或当地紧急电话。适合手机图文展示，引导家长在真实场景中优先教会孩子的实用技能。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "校园安全",
+    "应急技能",
+    "亲子教育",
+    "自救",
+    "求助",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "school-emergency-priority/images/ask-teacher.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-23T19:01:11.034Z"
+}

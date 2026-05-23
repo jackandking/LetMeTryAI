@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子在学校遇到突发情况：你会先教TA哪件事？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子在学校遇到突发情况，你会先教TA哪件事？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子在学校遇到突发情况，你会先教TA哪件事？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ask-teacher">
+                            <div class="card-image">
+                                <img src="images/ask-teacher.svg" alt="孩子向老师求助" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先找老师或值班成人</h3>
+                                <p class="option-desc">教孩子马上告诉附近的老师或值班大人，请求成人来处理与引导。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="self-evacuate">
+                            <div class="card-image">
+                                <img src="images/self-evacuate.svg" alt="孩子躲避保护自己" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先跑开/躲避并保护自己</h3>
+                                <p class="option-desc">教孩子迅速离开危险区域、躲到安全位置，优先保护身体安全再寻求帮助。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="shout-and-locate">
+                            <div class="card-image">
+                                <img src="images/shout-and-locate.svg" alt="孩子呼救并指位置" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先大声呼救并说明位置</h3>
+                                <p class="option-desc">教孩子大声呼救并简短说出所处位置或发生了什么，吸引周围人的注意与支援。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="call-parent-or-emergency">
+                            <div class="card-image">
+                                <img src="images/call-parent-or-emergency.svg" alt="孩子用手机求助" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先用手机联系家长或紧急电话</h3>
+                                <p class="option-desc">教孩子迅速用手机联系家长或拨打当地紧急电话，保持通话并汇报情况。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
