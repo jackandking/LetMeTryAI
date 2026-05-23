@@ -1,0 +1,19 @@
+{
+  "id": "movie-backshot-shock",
+  "name": "背影杀观察",
+  "description": "选取具有强烈画面感的演员背影或海报风格（少年感/硬汉感/反差笑容），以大图展示并引导用户基于视觉印象投票和留言，提升停留与二次传播。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "背影杀",
+    "海报",
+    "预告",
+    "颜值",
+    "影视",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "movie-backshot-shock/images/young-charm-backshot.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-23T21:01:43.532Z"
+}
