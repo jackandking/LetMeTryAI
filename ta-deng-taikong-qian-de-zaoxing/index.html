@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>她登太空前的造型，你更pick哪套？4套风格盘点</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">她登太空前的造型，你更pick哪套？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">她登太空前的造型，你更pick哪套？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="future-warrior-glam">
+                            <div class="card-image">
+                                <img src="images/future-warrior-glam.svg" alt="金属太空服与银色眼妆" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">未来战姬</h3>
+                                <p class="option-desc">金属质感太空服配银色烟熏眼妆和镜面高光，酷感十足的科技风。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="space-fairy">
+                            <div class="card-image">
+                                <img src="images/space-fairy.svg" alt="雾面粉彩长裙与轻纱披风" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">太空仙女</h3>
+                                <p class="option-desc">雾面粉彩长裙与轻纱披风，水光肌与柔和腮红，梦幻温柔的太空仙气。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="professional-crew">
+                            <div class="card-image">
+                                <img src="images/professional-crew.svg" alt="简约连体服与干净妆容" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">职业机组</h3>
+                                <p class="option-desc">简约连体服与干净低调妆容，利落发型和微光肌，稳重又有未来感的专业风。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="retro-goddess">
+                            <div class="card-image">
+                                <img src="images/retro-goddess.svg" alt="怀旧波浪卷与红唇" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古女神</h3>
+                                <p class="option-desc">怀旧波浪卷、猫眼眼线与红唇，搭配带复古元素的头盔细节，复古与华丽并存。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
