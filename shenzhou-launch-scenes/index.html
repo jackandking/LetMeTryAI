@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>神舟发射时哪个画面把你看呆了？来看图选一张</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">神舟发射时哪个画面把你看呆了？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">神舟发射时哪个画面把你看呆了？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ignition-flame">
+                            <div class="card-image">
+                                <img src="images/ignition-flame.svg" alt="点火瞬间火焰冲天" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">点火瞬间·火焰冲天</h3>
+                                <p class="option-desc">火箭底部火焰喷薄而出，地面光影震撼，瞬间画面冲击力十足。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="stage-separation">
+                            <div class="card-image">
+                                <img src="images/stage-separation.svg" alt="分离瞬间火花烟雾" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">分离瞬间·火花与烟雾</h3>
+                                <p class="option-desc">各级分离时金属与火花划过天际，节奏感强且充满动感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="smoke-trail">
+                            <div class="card-image">
+                                <img src="images/smoke-trail.svg" alt="尾迹划过蓝天" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">尾迹划天·白色长龙</h3>
+                                <p class="option-desc">蓝天里拖出长长白色尾迹，画面延展感强，带来壮阔视觉。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="astronaut-closeup">
+                            <div class="card-image">
+                                <img src="images/astronaut-closeup.svg" alt="航天员近景表情" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">航天员/指挥近景·表情瞬间</h3>
+                                <p class="option-desc">发射前后航天员或指挥官的近景表情，人与科技交织的动人瞬间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
