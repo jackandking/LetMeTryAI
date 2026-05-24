@@ -1,0 +1,19 @@
+{
+  "id": "rocket-flame-answers",
+  "name": "家长爱·火箭问答",
+  "description": "围绕孩子提出的“火箭为什么会喷出那么大的火焰？”这一亲子现场问题，设计对比选项：用生活比喻让孩子看得懂、用简化科学给出准确轮廓、用小实验让孩子亲眼观察。适合图文移动页，激发好奇和后续互动练习。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "火箭",
+    "科普",
+    "亲子问答",
+    "物理解释",
+    "互动实验",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "rocket-flame-answers/images/metaphor-story.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-24T19:00:56.718Z"
+}
