@@ -1,0 +1,18 @@
+{
+  "id": "celebrity-late-night-bites",
+  "name": "明星夜宵图鉴",
+  "description": "挑选几种常见的夜宵场景（炸鸡啤酒、火锅海鲜、便当冷面），配明星风格的场景图，引导用户按画面和氛围做选择，便于社交流量传播。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "明星夜宵",
+    "深夜美食",
+    "视觉食欲",
+    "夜市",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "celebrity-late-night-bites/images/chicken-beer.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-24T21:01:22.879Z"
+}
