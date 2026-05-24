@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>看航天发射，你被哪个画面打动？ | 爱老人</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">看航天发射，你被哪个画面打动？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看航天发射，你被哪个画面打动？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ignition-blaze">
+                            <div class="card-image">
+                                <img src="images/ignition-blaze.svg" alt="火箭点火升空时的火光与浓烟" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">点火升空的火光与浓烟</h3>
+                                <p class="option-desc">火焰冲天、白烟翻涌，那一刻震撼心跳。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fairing-separation">
+                            <div class="card-image">
+                                <img src="images/fairing-separation.svg" alt="整流罩分离的慢动作画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">整流罩分离时的慢动作</h3>
+                                <p class="option-desc">护罩抛离、裸露核心，像电影里的慢镜头。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="astronaut-wave">
+                            <div class="card-image">
+                                <img src="images/astronaut-wave.svg" alt="航天员在驾驶舱里微笑并挥手的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">航天员驾驶舱里的微笑与挥手</h3>
+                                <p class="option-desc">舱内表情、挥手致意，温暖又亲切的瞬间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="booster-landing">
+                            <div class="card-image">
+                                <img src="images/booster-landing.svg" alt="助推器回收着陆的壮观画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">一级助推器回收落地的壮观</h3>
+                                <p class="option-desc">助推器精准降落，科技与诗意同在。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
