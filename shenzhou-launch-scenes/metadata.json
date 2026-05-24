@@ -1,0 +1,21 @@
+{
+  "id": "shenzhou-launch-scenes",
+  "name": "神舟画面盘点",
+  "description": "用口语化问题对比发射现场的画面：点火火焰、分离瞬间、尾迹划天、航天员/指挥中心近景，配图与短文提升点击与分享率。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "神舟",
+    "发射",
+    "火箭",
+    "航天",
+    "画面",
+    "视觉",
+    "国之骄傲",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "shenzhou-launch-scenes/images/ignition-flame.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-24T17:01:31.206Z"
+}
