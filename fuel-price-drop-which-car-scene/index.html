@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>燃油车大降价：哪个买车画面更打动你？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">燃油车大降价，哪个买车画面更打动你？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">燃油车大降价，哪个买车画面更打动你？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="take-key-moment">
+                            <div class="card-image">
+                                <img src="images/take-key-moment.svg" alt="顾客在4S店拿到新车钥匙的瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">拿钥匙那刻</h3>
+                                <p class="option-desc">销售递钥匙，金属钥匙在阳光下闪光，你忍不住笑出声</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="drive-out-to-feast">
+                            <div class="card-image">
+                                <img src="images/drive-out-to-feast.svg" alt="新车驶出4S店驶向餐厅的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">驶出店门去吃大餐</h3>
+                                <p class="option-desc">办完手续后一路开着新车直奔老地方，吃一顿庆祝大餐</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="see-lower-fuel-price">
+                            <div class="card-image">
+                                <img src="images/see-lower-fuel-price.svg" alt="车主在加油站看着油价牌露出微笑" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">加油时看见油价降</h3>
+                                <p class="option-desc">路过加油站，油价比预期低很多，那一刻觉得更划算</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="save-for-offroad-trip">
+                            <div class="card-image">
+                                <img src="images/save-for-offroad-trip.svg" alt="几辆越野车在山路上穿行的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">省下钱去越野撒欢</h3>
+                                <p class="option-desc">把降价省下的钱投入周末越野，和兄弟们开着车撒欢</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
