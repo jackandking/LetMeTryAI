@@ -1,0 +1,19 @@
+{
+  "id": "kids-homework-type",
+  "name": "家长爱：作业风格观察",
+  "description": "围绕孩子做作业的行为与场景设计4个可选项，适合手机滑动阅读，帮助家长快速投票并看到不同作业风格的特点与育儿提示。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "作业习惯",
+    "亲子教育",
+    "学习方法",
+    "家庭生活",
+    "育儿痛点",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-homework-type/images/copying-style.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-25T19:00:47.523Z"
+}
