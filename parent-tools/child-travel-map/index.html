@@ -62,9 +62,12 @@
 
         <!-- Result Image (hidden until generated) -->
         <div id="result-section" class="card hidden">
-            <p class="result-tip">👇 长按图片保存到相册</p>
+            <p class="result-tip">👇 优先点“保存到相册”，长按预览仅作兜底</p>
             <p id="result-status" class="result-status">图片生成后会自动上传，便于在快手里预览保存</p>
             <img id="result-image" class="result-image" alt="足迹地图">
+            <button id="save-to-album-btn" class="btn-generate hidden" onclick="saveGeneratedImageToAlbum()">
+                💾 保存到相册
+            </button>
             <button id="preview-save-btn" class="btn-generate hidden" onclick="previewGeneratedImage()">
                 📱 在快手中预览并长按保存
             </button>
