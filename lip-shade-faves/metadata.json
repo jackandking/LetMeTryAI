@@ -1,0 +1,18 @@
+{
+  "id": "lip-shade-faves",
+  "name": "唇色小选",
+  "description": "针对日常出街/约会场景的唇色偏好投票，配合近景唇妆图，移动端阅读体验佳，帮助引发美妆话题讨论与种草互动。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "唇色",
+    "口红",
+    "出街妆",
+    "日常妆容",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "lip-shade-faves/images/orange-sun-lip.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-26T20:03:15.270Z"
+}
