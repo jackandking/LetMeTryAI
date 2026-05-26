@@ -7,7 +7,7 @@
 const API_BASE = 'https://letmetry.cloud';
 const PRODUCT_ID = 'child-travel-map';
 const PRODUCT_NAME = '孩子足迹地图生成';
-const AMOUNT = 100; // 1元 = 100分
+const AMOUNT = 1; // 1分，方便测试
 const STORAGE_KEY = 'child_travel_map_v1';
 const paymentBridge = window.ChildTravelMapPaymentBridge || {};
 const imageUploadHelper = window.ChildTravelMapImageUpload || {};
