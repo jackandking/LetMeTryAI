@@ -1,0 +1,19 @@
+{
+  "id": "ju-hui-dian-cai",
+  "name": "聚会点菜选哪道",
+  "description": "用朋友聚会的具体场景触发选择冲动，选项可配菜肴美食图，适合手机滑动投票与评论互动。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "聚会",
+    "下饭菜",
+    "烤肉",
+    "火锅",
+    "分享",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ju-hui-dian-cai/images/chi-huo-guo.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-26T21:01:24.423Z"
+}
