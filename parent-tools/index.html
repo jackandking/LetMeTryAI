@@ -234,16 +234,6 @@
                     <li><strong style="color:#ff6b35">¥1.00 生成专属足迹图</strong></li>
                 </ul>
             </div>
-            <div class="activity-card" onclick="openParentTypeTest()" style="cursor:pointer;">
-                <span class="category">育儿测试</span>
-                <h3>🎯 测测你是哪种家长类型</h3>
-                <div style="width:100%;height:160px;background:linear-gradient(135deg,#ff6b6b,#feca57);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:4em;">🎯</div>
-                <ul>
-                    <li>5道题探索你的育儿风格</li>
-                    <li>解锁专属分析报告和建议</li>
-                    <li><strong style="color:#ff6b6b">¥1.00 解锁完整报告</strong></li>
-                </ul>
-            </div>
             <div class="activity-card" onclick="openBookRecommend()" style="cursor:pointer;">
                 <span class="category">阅读成长</span>
                 <h3>📚 为孩子选对书</h3>
@@ -503,16 +493,6 @@
     </script>
 
     <script>
-        function openParentTypeTest() {
-            if (typeof ks !== 'undefined' && ks.navigateTo) {
-                ks.navigateTo({
-                    url: '/pages/rewardedWebview/rewardedWebview?target=parent-tools/parent-type-test'
-                });
-            } else {
-                window.location.href = 'parent-type-test/index.html';
-            }
-        }
-
         function openBookRecommend() {
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
