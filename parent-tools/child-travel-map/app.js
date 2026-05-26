@@ -238,11 +238,13 @@ async function generateImage() {
         const resultSection = document.getElementById('result-section');
         const resultImg = document.getElementById('result-image');
         const resultStatus = document.getElementById('result-status');
+        const saveBtn = document.getElementById('save-to-album-btn');
         const previewBtn = document.getElementById('preview-save-btn');
         resultImg.src = dataUrl;
         resultSection.classList.remove('hidden');
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         uploadedImageUrl = '';
+        if (saveBtn) saveBtn.classList.add('hidden');
         if (previewBtn) previewBtn.classList.add('hidden');
         if (resultStatus) resultStatus.textContent = '正在上传高清图片，上传完成后可在快手中预览保存';
 
@@ -253,7 +255,10 @@ async function generateImage() {
             uploadedImageUrl = uploadResult.imageUrl;
 
             if (resultStatus) {
-                resultStatus.textContent = '图片已上传，点击下方按钮可在快手中预览并长按保存';
+                resultStatus.textContent = '图片已上传，优先点“保存到相册”；若保存失败，再用预览页长按保存';
+            }
+            if (saveBtn) {
+                saveBtn.classList.remove('hidden');
             }
             if (previewBtn) {
                 previewBtn.classList.remove('hidden');
@@ -424,6 +429,63 @@ function previewGeneratedImage() {
     }
 
     window.open(uploadedImageUrl, '_blank');
+}
+
+async function saveGeneratedImageToAlbum() {
+    if (!uploadedImageUrl) {
+        alert('图片还未上传完成，请稍后再试');
+        return;
+    }
+
+    if (typeof ks === 'undefined' ||
+        typeof ks.downloadFile !== 'function' ||
+        typeof ks.saveImageToPhotosAlbum !== 'function') {
+        alert('当前环境不支持直接保存，请点击“在快手中预览并长按保存”');
+        return;
+    }
+
+    const saveBtn = document.getElementById('save-to-album-btn');
+    const resultStatus = document.getElementById('result-status');
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = '⏳ 正在保存...';
+    }
+    if (resultStatus) {
+        resultStatus.textContent = '正在下载图片并保存到相册...';
+    }
+
+    try {
+        const downloadRes = await new Promise((resolve, reject) => {
+            ks.downloadFile({
+                url: uploadedImageUrl,
+                success: resolve,
+                fail: reject
+            });
+        });
+
+        const filePath = downloadRes.tempFilePath || downloadRes.apFilePath || downloadRes.filePath;
+        if (!filePath) {
+            throw new Error('未获取到本地图片路径');
+        }
+
+        await ks.saveImageToPhotosAlbum({ filePath });
+
+        if (resultStatus) {
+            resultStatus.textContent = '已保存到相册，请到系统相册查看';
+        }
+        alert('图片已保存到相册');
+    } catch (err) {
+        console.error('[save-image] Error:', err);
+        if (resultStatus) {
+            resultStatus.textContent = '保存失败，请改用“在快手中预览并长按保存”';
+        }
+        alert('保存失败：' + (err.errMsg || err.message || '请改用预览长按保存'));
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = '💾 保存到相册';
+        }
+    }
 }
 
 // ===== 本地存储 =====
