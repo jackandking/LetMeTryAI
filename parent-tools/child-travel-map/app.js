@@ -9,9 +9,12 @@ const PRODUCT_ID = 'child-travel-map';
 const PRODUCT_NAME = '孩子足迹地图生成';
 const AMOUNT = 100; // 1元 = 100分
 const STORAGE_KEY = 'child_travel_map_v1';
+const paymentBridge = window.ChildTravelMapPaymentBridge || {};
+const imageUploadHelper = window.ChildTravelMapImageUpload || {};
 
 let visited = new Set();
 let openid = '';
+let uploadedImageUrl = '';
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
 
     // 如果 URL 带 paid=1，自动触发生成
-    if (urlParams.get('paid') === '1') {
+    if (paymentBridge.shouldAutoGenerate && paymentBridge.shouldAutoGenerate(window.location.search)) {
         setTimeout(() => generateImage(), 500);
     }
 });
@@ -174,75 +177,39 @@ function onGenerateClick() {
     initiatePayment();
 }
 
-// ===== 支付流程（复用 parent-type-test 逻辑）=====
+// ===== 支付流程：H5 跳转原生支付页，支付后回跳当前 H5 =====
 async function initiatePayment() {
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> 正在创建订单...';
+    btn.innerHTML = '<span class="loading"></span> 正在打开支付页...';
 
     try {
-        const res = await fetch(`${API_BASE}/api/pay/create-order`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                openid: openid,
-                productId: PRODUCT_ID,
-                productName: PRODUCT_NAME,
-                amount: AMOUNT
-            })
-        });
-        const data = await res.json();
-
-        if (!data.success) {
-            throw new Error(data.error || '创建订单失败');
-        }
-
-        const order = data.data;
-        console.log('[pay] Order created:', order.orderId);
-
-        // 检测 ks.navigateTo（快手 webview 中直接挂在 ks 上，不在 miniProgram 下）
         const hasKs = typeof ks !== 'undefined';
         const hasNavigateTo = hasKs && typeof ks.navigateTo === 'function';
-        const hasKsPay = hasKs && typeof ks.pay === 'function';
-
-        console.log('[pay] env:', { hasKs, hasNavigateTo, hasKsPay });
-
-        const currentUrl = window.location.href.split('?')[0];
-        const returnUrl = currentUrl + '?paid=1';
+        console.log('[pay] env:', { hasKs, hasNavigateTo });
 
         if (hasNavigateTo) {
-            // 方式1：ks.navigateTo 跳转到小程序原生支付页
-            console.log('[pay] Using ks.navigateTo → /pages/pay/pay');
-            const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
-                '&appId=' + encodeURIComponent(order.appId) +
-                '&prepayId=' + encodeURIComponent(order.prepayId) +
-                '&nonceStr=' + encodeURIComponent(order.nonceStr) +
-                '&timeStamp=' + encodeURIComponent(order.timeStamp) +
-                '&sign=' + encodeURIComponent(order.sign) +
-                '&returnUrl=' + encodeURIComponent(returnUrl);
+            saveState();
+
+            const returnUrl = paymentBridge.buildReturnUrl
+                ? paymentBridge.buildReturnUrl(window.location.href, { paid: 1, payment: 'wechat' })
+                : `${window.location.href.split('?')[0]}?paid=1&payment=wechat`;
+            const payUrl = paymentBridge.buildNativePayUrl
+                ? paymentBridge.buildNativePayUrl({
+                    openid,
+                    productId: PRODUCT_ID,
+                    quantity: 1,
+                    totalAmount: AMOUNT,
+                    subject: PRODUCT_NAME,
+                    body: '解锁高清足迹图',
+                    returnUrl
+                })
+                : `${API_BASE}/pages/pay/pay`;
+
+            console.log('[pay] Using ks.navigateTo → native pay page', { payUrl, returnUrl });
             ks.navigateTo({ url: payUrl });
             btn.disabled = false;
             btn.innerHTML = '✨ 生成精美足迹图';
-        } else if (hasKsPay) {
-            // 方式2：ks.pay 直接调起
-            console.log('[pay] Using ks.pay');
-            ks.pay({
-                orderInfo: {
-                    appId: order.appId,
-                    prepayId: order.prepayId,
-                    nonceStr: order.nonceStr,
-                    timeStamp: order.timeStamp,
-                    sign: order.sign
-                },
-                success: () => {
-                    setTimeout(() => generateImage(), 300);
-                },
-                fail: (err) => {
-                    alert('支付未完成: ' + (err.errMsg || '请重试'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✨ 生成精美足迹图';
-                }
-            });
         } else {
             // 浏览器：直接生成
             console.log('[pay] Browser mock');
@@ -259,7 +226,7 @@ async function initiatePayment() {
 }
 
 // ===== Canvas 图片生成 =====
-function generateImage() {
+async function generateImage() {
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> 正在生成...';
@@ -270,9 +237,30 @@ function generateImage() {
 
         const resultSection = document.getElementById('result-section');
         const resultImg = document.getElementById('result-image');
+        const resultStatus = document.getElementById('result-status');
+        const previewBtn = document.getElementById('preview-save-btn');
         resultImg.src = dataUrl;
         resultSection.classList.remove('hidden');
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        uploadedImageUrl = '';
+        if (previewBtn) previewBtn.classList.add('hidden');
+        if (resultStatus) resultStatus.textContent = '正在上传高清图片，上传完成后可在快手中预览保存';
+
+        if (imageUploadHelper.uploadImageFile && imageUploadHelper.dataUrlToFile && imageUploadHelper.generateUuidFilename) {
+            const filename = imageUploadHelper.generateUuidFilename('png');
+            const file = await imageUploadHelper.dataUrlToFile(dataUrl, filename);
+            const uploadResult = await imageUploadHelper.uploadImageFile(file, `${API_BASE}/image/upload`);
+            uploadedImageUrl = uploadResult.imageUrl;
+
+            if (resultStatus) {
+                resultStatus.textContent = '图片已上传，点击下方按钮可在快手中预览并长按保存';
+            }
+            if (previewBtn) {
+                previewBtn.classList.remove('hidden');
+            }
+        } else if (resultStatus) {
+            resultStatus.textContent = '图片已生成。当前环境不支持自动上传，请长按图片尝试保存';
+        }
 
         btn.disabled = false;
         btn.innerHTML = '✨ 重新生成';
@@ -419,6 +407,23 @@ function createMapCanvas() {
 
 function closeResult() {
     document.getElementById('result-section').classList.add('hidden');
+}
+
+function previewGeneratedImage() {
+    if (!uploadedImageUrl) {
+        alert('图片还未上传完成，请稍后再试');
+        return;
+    }
+
+    if (typeof ks !== 'undefined' && typeof ks.previewImage === 'function') {
+        ks.previewImage({
+            urls: [uploadedImageUrl],
+            current: uploadedImageUrl
+        });
+        return;
+    }
+
+    window.open(uploadedImageUrl, '_blank');
 }
 
 // ===== 本地存储 =====

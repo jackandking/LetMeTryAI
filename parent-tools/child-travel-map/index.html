@@ -63,7 +63,11 @@
         <!-- Result Image (hidden until generated) -->
         <div id="result-section" class="card hidden">
             <p class="result-tip">👇 长按图片保存到相册</p>
+            <p id="result-status" class="result-status">图片生成后会自动上传，便于在快手里预览保存</p>
             <img id="result-image" class="result-image" alt="足迹地图">
+            <button id="preview-save-btn" class="btn-generate hidden" onclick="previewGeneratedImage()">
+                📱 在快手中预览并长按保存
+            </button>
             <button class="btn-secondary" onclick="closeResult()">关闭</button>
         </div>
 
@@ -77,6 +81,8 @@
     <div id="debug-info" style="display:none"></div>
 
     <script src="china-map.js"></script>
+    <script src="payment-bridge.js"></script>
+    <script src="image-upload-helper.js"></script>
     <script src="app.js?v=3"></script>
 </body>
 </html>
