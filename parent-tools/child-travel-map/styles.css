@@ -201,11 +201,20 @@ body {
     font-size: 0.9em;
     margin-bottom: 10px;
 }
+.result-status {
+    text-align: center;
+    color: #666;
+    font-size: 0.85em;
+    margin-bottom: 10px;
+}
 .result-image {
     width: 100%;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     margin-bottom: 12px;
+}
+#result-section button + button {
+    margin-top: 10px;
 }
 .btn-secondary {
     display: block;
