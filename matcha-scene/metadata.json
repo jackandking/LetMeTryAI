@@ -1,0 +1,21 @@
+{
+  "id": "matcha-scene",
+  "name": "抹茶画面对比",
+  "description": "从咖啡馆拿铁、和风茶室传统抹茶、精致抹茶甜点到清爽抹茶冰品四种场景出发，针对视觉与场景偏好做快速选择，便于配图吸睛与高互动。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "抹茶",
+    "拿铁",
+    "和风",
+    "甜点",
+    "冰品",
+    "画面感",
+    "美食",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "matcha-scene/images/matcha-latte.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-26T17:00:59.253Z"
+}
