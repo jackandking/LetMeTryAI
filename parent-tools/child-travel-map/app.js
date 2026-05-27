@@ -255,7 +255,7 @@ async function generateImage() {
             uploadedImageUrl = uploadResult.imageUrl;
 
             if (resultStatus) {
-                resultStatus.textContent = '图片已上传，优先点“保存到相册”；若保存失败，再用预览页长按保存';
+                resultStatus.textContent = '图片已上传，点“保存到相册”会唤起快手原生保存；失败时再用预览长按保存';
             }
             if (saveBtn) {
                 saveBtn.classList.remove('hidden');
@@ -437,10 +437,8 @@ async function saveGeneratedImageToAlbum() {
         return;
     }
 
-    if (typeof ks === 'undefined' ||
-        typeof ks.downloadFile !== 'function' ||
-        typeof ks.saveImageToPhotosAlbum !== 'function') {
-        alert('当前环境不支持直接保存，请点击“在快手中预览并长按保存”');
+    if (typeof ks === 'undefined') {
+        window.open(uploadedImageUrl, '_blank');
         return;
     }
 
@@ -451,17 +449,44 @@ async function saveGeneratedImageToAlbum() {
         saveBtn.textContent = '⏳ 正在保存...';
     }
     if (resultStatus) {
-        resultStatus.textContent = '正在下载图片并保存到相册...';
+        resultStatus.textContent = '正在准备保存...';
     }
 
     try {
-        const downloadRes = await new Promise((resolve, reject) => {
-            ks.downloadFile({
-                url: uploadedImageUrl,
-                success: resolve,
-                fail: reject
-            });
+    if (typeof ks !== 'undefined' &&
+        typeof ks.navigateTo === 'function' &&
+        paymentBridge &&
+        typeof paymentBridge.buildNativeImageSaveUrl === 'function') {
+        const returnUrl = paymentBridge.buildReturnUrl
+            ? paymentBridge.buildReturnUrl(window.location.href, {})
+            : window.location.href;
+        const saveUrl = paymentBridge.buildNativeImageSaveUrl({
+            imageUrl: uploadedImageUrl,
+            returnUrl
         });
+
+        if (resultStatus) {
+            resultStatus.textContent = '正在打开快手原生保存页...';
+        }
+        ks.navigateTo({ url: saveUrl });
+        return;
+    }
+
+    if (typeof ks.downloadFile !== 'function' || typeof ks.saveImageToPhotosAlbum !== 'function') {
+        throw new Error('当前环境暂不支持直接保存，请改用预览长按保存');
+    }
+
+    if (resultStatus) {
+        resultStatus.textContent = '正在下载图片并保存到相册...';
+    }
+
+    const downloadRes = await new Promise((resolve, reject) => {
+        ks.downloadFile({
+            url: uploadedImageUrl,
+            success: resolve,
+            fail: reject
+        });
+    });
 
         const filePath = downloadRes.tempFilePath || downloadRes.apFilePath || downloadRes.filePath;
         if (!filePath) {
