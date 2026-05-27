@@ -24,7 +24,7 @@ function parseArgs(argv) {
         forceAppId: null,
         force: false,
         dryRun: false,
-        cooldownDays: 7
+        cooldownDays: 90
     };
 
     for (let index = 0; index < argv.length; index += 1) {
