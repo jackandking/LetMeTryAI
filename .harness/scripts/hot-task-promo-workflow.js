@@ -174,7 +174,8 @@ export function loadProcessedTaskLog(logPath = HOT_TASK_PROMO_PATHS.processedLog
 }
 
 export function hasSuccessfulPromotion(record, { appId, reportDate, now = new Date(), cooldownDays = 0 }) {
-    if (record.status !== 'sent' || record.appId !== appId) {
+    const successStatuses = new Set(['sent', 'images_generated']);
+    if (!successStatuses.has(record.status) || record.appId !== appId) {
         return false;
     }
 
