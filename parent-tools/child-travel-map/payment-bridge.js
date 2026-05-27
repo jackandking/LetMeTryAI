@@ -1,6 +1,7 @@
 (function (globalScope) {
     const APP_ORIGIN = 'https://letmetryai.cn';
     const MINIAPP_PAY_PATH = '/pages/pay/pay';
+    const MINIAPP_IMAGE_SAVE_PATH = '/pages/save-image/save-image';
 
     function buildReturnUrl(locationHref, params = {}) {
         const currentUrl = new URL(locationHref, APP_ORIGIN);
@@ -43,6 +44,20 @@
         return `${MINIAPP_PAY_PATH}?${query.toString()}`;
     }
 
+    function buildNativeImageSaveUrl(payload) {
+        const {
+            imageUrl,
+            returnUrl
+        } = payload;
+
+        const query = new URLSearchParams({
+            imageUrl: imageUrl || '',
+            returnUrl: returnUrl || ''
+        });
+
+        return `${MINIAPP_IMAGE_SAVE_PATH}?${query.toString()}`;
+    }
+
     function normalizeReturnTarget(returnUrl) {
         if (!returnUrl) return null;
         const parsed = new URL(returnUrl, APP_ORIGIN);
@@ -58,8 +73,10 @@
     const exported = {
         APP_ORIGIN,
         MINIAPP_PAY_PATH,
+        MINIAPP_IMAGE_SAVE_PATH,
         buildReturnUrl,
         buildNativePayUrl,
+        buildNativeImageSaveUrl,
         normalizeReturnTarget,
         shouldAutoGenerate
     };
