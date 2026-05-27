@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>化妆品潮湿了你怎么收？日常处理哪个更靠谱</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">化妆品潮湿了你怎么收？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">化妆品潮湿了你会怎么收着或处理？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="paper-towel-air-dry">
+                            <div class="card-image">
+                                <img src="images/paper-towel-air-dry.svg" alt="用纸巾吸干化妆品并放在通风处风干" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">纸巾吸干 + 自然风干</h3>
+                                <p class="option-desc">先用纸巾按压吸走表面水分，放阴凉通风处晾干再继续使用。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="desiccant-rice">
+                            <div class="card-image">
+                                <img src="images/desiccant-rice.svg" alt="把化妆品放入密封袋内与干燥剂同放吸潮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">放干燥剂或米袋密封吸潮</h3>
+                                <p class="option-desc">将小样或粉饼放密封袋，加干燥剂或米袋吸潮24小时再拿出。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="low-heat-blow-dry">
+                            <div class="card-image">
+                                <img src="images/low-heat-blow-dry.svg" alt="用吹风机低温档吹干化妆品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">低温吹风机快速吹干</h3>
+                                <p class="option-desc">用吹风机低温档保持一定距离吹干，速度快但要注意温度。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="throw-away-replace">
+                            <div class="card-image">
+                                <img src="images/throw-away-replace.svg" alt="直接把潮湿的化妆品丢弃更换新的" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">直接丢掉换新的</h3>
+                                <p class="option-desc">担心变质或卫生问题，觉得安全第一就直接扔掉换新。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

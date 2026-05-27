@@ -1,0 +1,20 @@
+{
+  "id": "makeup-wet-how-store",
+  "name": "潮湿化妆品你怎么收",
+  "description": "在潮湿天气或意外泼水后，用户会选择吸干、吸潮、防护还是直接更换？面向爱美女性的实用短投票，适合移动端图文展示和互动讨论。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "化妆品",
+    "潮湿",
+    "收纳",
+    "吸潮",
+    "护肤",
+    "处理方法",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "makeup-wet-how-store/images/paper-towel-air-dry.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-27T20:01:04.401Z"
+}
