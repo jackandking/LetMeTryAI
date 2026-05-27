@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>衣服受潮了你会先怎么处理？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">衣服受潮了你先做啥？晒一晒、烘一烘还是直接洗？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">衣服受潮了你先做啥？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sun-dry">
+                            <div class="card-image">
+                                <img src="images/sun-dry.svg" alt="人在阳台上把衣服挂在晾衣杆上晒太阳的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">阳台/窗边晾一阵</h3>
+                                <p class="option-desc">放窗边或阳台透风、晒干，省心又省电。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="use-dryer">
+                            <div class="card-image">
+                                <img src="images/use-dryer.svg" alt="手拿吹风机对着衣领吹干或烘干机转动的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">用吹风机或烘干机</h3>
+                                <p class="option-desc">快速干燥，尤其赶时间出门时最实用。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="rewash">
+                            <div class="card-image">
+                                <img src="images/rewash.svg" alt="把衣服放进洗衣机开始洗涤的特写画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">赶紧重新洗一遍并脱水</h3>
+                                <p class="option-desc">觉得有味道或担心发霉就直接重洗更安心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dehumidify-store">
+                            <div class="card-image">
+                                <img src="images/dehumidify-store.svg" alt="除湿机出风口或把衣服放进干衣柜的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">放除湿/暖气柜吸潮</h3>
+                                <p class="option-desc">用除湿机或放进干衣柜，保守做法更稳妥。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
