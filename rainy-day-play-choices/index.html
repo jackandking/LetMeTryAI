@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>雨天宅家：你会跟孩子怎么玩？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">连续下雨孩子只能待家里，你选哪种玩法？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">连续下雨孩子只能待家里，你选哪种玩法？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mini-museum-corner">
+                            <div class="card-image">
+                                <img src="images/mini-museum-corner.svg" alt="孩子在家里的迷你博物馆讲解小展品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">迷你博物馆角</h3>
+                                <p class="option-desc">把家里布置成小展厅：每个房间出一件“镇馆之宝”，孩子当讲解员探索历史与艺术。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="science-experiments">
+                            <div class="card-image">
+                                <img src="images/science-experiments.svg" alt="孩子与家长一起做简单科学实验" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">科学小实验</h3>
+                                <p class="option-desc">做安全的家庭科学实验：气球火箭、简易电路、颜色混合，培养好奇心与动手能力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="indoor-sports-challenge">
+                            <div class="card-image">
+                                <img src="images/indoor-sports-challenge.svg" alt="家庭在客厅搭建室内运动挑战赛道" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">室内运动挑战</h3>
+                                <p class="option-desc">创意体能赛道与小游戏：跳格子、沙包投准、家庭瑜伽，既消耗精力又好玩。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="puppet-theater">
+                            <div class="card-image">
+                                <img src="images/puppet-theater.svg" alt="孩子与家长表演自制木偶剧" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手工剧场</h3>
+                                <p class="option-desc">和孩子一起做道具、写小剧本，演个家庭小剧场，锻炼表达与想象力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
