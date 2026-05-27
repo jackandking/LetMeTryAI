@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>潮湿天家里你在意哪点？家中潮湿引发的4个问题</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">潮湿天家里你在意哪点？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">潮湿天家里你在意哪点？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="clothes-damp-smell">
+                            <div class="card-image">
+                                <img src="images/clothes-damp-smell.svg" alt="潮湿导致衣物发霉和异味" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">衣服和被褥潮臭</h3>
+                                <p class="option-desc">衣服晾不干、被子发潮有味，晾晒成日常烦恼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mold-on-walls-furniture">
+                            <div class="card-image">
+                                <img src="images/mold-on-walls-furniture.svg" alt="墙面发霉和家具受潮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">墙面／家具发霉变色</h3>
+                                <p class="option-desc">墙角、木柜长斑，老家具受潮变形让人心疼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="slippery-floors-safety">
+                            <div class="card-image">
+                                <img src="images/slippery-floors-safety.svg" alt="潮湿天地面湿滑的危险" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">地面湿滑有摔倒风险</h3>
+                                <p class="option-desc">地板潮湿容易滑倒，家里老人走路更让人担心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="stuffy-air-breathing">
+                            <div class="card-image">
+                                <img src="images/stuffy-air-breathing.svg" alt="房间空气闷和潮湿霉味" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">室内闷湿有霉味</h3>
+                                <p class="option-desc">屋里空气闷、霉味难散，想通风又怕更潮</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
