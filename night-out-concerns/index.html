@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>晚上出门你更担心哪种情况？城市安全小测</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">晚上出门你更担心哪种情况?</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">晚上出门你最担心下面哪种情况?</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="phone-theft">
+                            <div class="card-image">
+                                <img src="images/phone-theft.svg" alt="手机被盗场景插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手机被盗/遭小偷</h3>
+                                <p class="option-desc">手机被抢或放包不见，走路也心慌</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dark-street">
+                            <div class="card-image">
+                                <img src="images/dark-street.svg" alt="昏暗巷道插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">夜路光线暗</h3>
+                                <p class="option-desc">路灯少、巷子阴暗，走路没安全感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="stranger-approach">
+                            <div class="card-image">
+                                <img src="images/stranger-approach.svg" alt="路上被搭讪场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">被陌生人搭讪</h3>
+                                <p class="option-desc">被陌生人搭话或尾随让人尴尬</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="transport-delay">
+                            <div class="card-image">
+                                <img src="images/transport-delay.svg" alt="地铁晚点示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">交通工具临时晚点</h3>
+                                <p class="option-desc">地铁/公交/共享单车临时无法使用的窘境</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
