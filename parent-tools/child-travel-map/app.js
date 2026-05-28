@@ -9,7 +9,9 @@ const PRODUCT_ID = 'child-travel-map';
 const PRODUCT_NAME = '孩子足迹地图生成';
 const AMOUNT = 1; // 1分，方便测试
 const STORAGE_KEY = 'child_travel_map_v1';
+const PAID_SESSION_KEY = 'child_travel_map_paid_v1';
 const paymentBridge = window.ChildTravelMapPaymentBridge || {};
+const paidSessionHelper = window.ChildTravelMapPaidSession || {};
 const imageUploadHelper = window.ChildTravelMapImageUpload || {};
 
 let visited = new Set();
@@ -20,6 +22,7 @@ let uploadedImageUrl = '';
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
+    syncPaidSessionFromUrl();
 
     // debug bar
     const debug = document.getElementById('debug-info');
@@ -35,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStats();
     bindEvents();
 
-    // 如果 URL 带 paid=1，自动触发生成
-    if (paymentBridge.shouldAutoGenerate && paymentBridge.shouldAutoGenerate(window.location.search)) {
+    // 如果 URL 带 paid=1，或本地仍持有最近一次支付成功状态，自动触发生成
+    if (shouldAutoGenerateAfterPayment()) {
         setTimeout(() => generateImage(), 500);
     }
 });
@@ -167,9 +170,7 @@ function onGenerateClick() {
         return;
     }
 
-    // 检查是否已付费：URL 参数 paid=1 表示支付已回调
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('paid') === '1') {
+    if (hasRecentPaidSession()) {
         generateImage();
         return;
     }
@@ -534,6 +535,52 @@ function loadState() {
             if (data.childAge) document.getElementById('child-age').value = data.childAge;
         }
     } catch (e) {}
+}
+
+function syncPaidSessionFromUrl() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('paid') !== '1') {
+            return;
+        }
+
+        const session = paidSessionHelper.createPaidSession
+            ? paidSessionHelper.createPaidSession({
+                orderId: params.get('orderId') || ''
+            })
+            : {
+                paid: true,
+                orderId: params.get('orderId') || '',
+                paidAt: Date.now()
+            };
+
+        localStorage.setItem(PAID_SESSION_KEY, JSON.stringify(session));
+    } catch (e) {}
+}
+
+function hasRecentPaidSession() {
+    try {
+        const raw = localStorage.getItem(PAID_SESSION_KEY);
+        if (!raw) return false;
+
+        const data = JSON.parse(raw);
+        if (paidSessionHelper.isPaidSessionActive) {
+            return paidSessionHelper.isPaidSessionActive(data);
+        }
+        if (!data || data.paid !== true || !data.paidAt) return false;
+        const age = Date.now() - Number(data.paidAt);
+        return age >= 0 && age <= 30 * 60 * 1000;
+    } catch (e) {
+        return false;
+    }
+}
+
+function shouldAutoGenerateAfterPayment() {
+    if (paymentBridge.shouldAutoGenerate && paymentBridge.shouldAutoGenerate(window.location.search)) {
+        return true;
+    }
+
+    return hasRecentPaidSession();
 }
 
 // 输入变化时自动保存
