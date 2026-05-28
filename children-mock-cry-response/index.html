@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子模考被压哭了，你会怎么说？家长安慰话术对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子模考被压哭了，你会怎么说？哪句更能缓和情绪</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子模考被压哭了，你会怎么说？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="empathy-hug">
+                            <div class="card-image">
+                                <img src="images/empathy-hug.svg" alt="父母温柔拥抱安慰哭泣的孩子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先抱抱并共情</h3>
+                                <p class="option-desc">抱抱并说："知道你很努力，哭出来也可以，我在这儿。"</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="praise-effort">
+                            <div class="card-image">
+                                <img src="images/praise-effort.svg" alt="家长与孩子坐下说话并记录要点" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">肯定努力并鼓励下一步</h3>
+                                <p class="option-desc">肯定付出："这次很辛苦，但你的努力看得见，我们可以一起找下次改进点。"</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="calm-solve">
+                            <div class="card-image">
+                                <img src="images/calm-solve.svg" alt="家长和孩子一起做深呼吸冷静情绪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先冷静陪伴再解决</h3>
+                                <p class="option-desc">先让孩子平复："先深呼吸，我们先放松五分钟，再一起看看问题。"</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="let-cry-then-treat">
+                            <div class="card-image">
+                                <img src="images/let-cry-then-treat.svg" alt="家长牵着孩子去散步或吃点心缓解情绪" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">允许发泄并用小奖励结束</h3>
+                                <p class="option-desc">允许情绪："想哭就哭，哭完我们去散步/吃点喜欢的东西再聊。"</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
