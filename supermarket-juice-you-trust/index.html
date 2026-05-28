@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>超市果汁你更信哪种？老人常见选购类型速览</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">超市果汁你更信哪种？瓶装、现打、浓缩还是果味饮料？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">超市果汁你更信哪种？选出你平时更放心买的类型：</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bottled-pure-juice">
+                            <div class="card-image">
+                                <img src="images/bottled-pure-juice.svg" alt="瓶装纯果汁瓶装图片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">瓶装纯果汁</h3>
+                                <p class="option-desc">标注为 100% 果汁的瓶装饮品，便于保存、随手买</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="concentrate-reconstituted">
+                            <div class="card-image">
+                                <img src="images/concentrate-reconstituted.svg" alt="浓缩还原果汁包装图片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">浓缩还原果汁</h3>
+                                <p class="option-desc">由浓缩果汁还原而成，口味稳定、价格通常更亲民</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fresh-made-juice">
+                            <div class="card-image">
+                                <img src="images/fresh-made-juice.svg" alt="超市现打果汁杯图片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">超市现打/现做</h3>
+                                <p class="option-desc">现场现榨或现调，口感更鲜但保存期短、需立即饮用</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fruit-flavored-drink">
+                            <div class="card-image">
+                                <img src="images/fruit-flavored-drink.svg" alt="果味饮料罐图片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">果味饮料/加糖</h3>
+                                <p class="option-desc">以果味为主的饮料，可能含糖或添加剂，口感甜但非纯果汁</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

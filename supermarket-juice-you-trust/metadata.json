@@ -1,0 +1,21 @@
+{
+  "id": "supermarket-juice-you-trust",
+  "name": "果汁你更信哪种",
+  "description": "邀请用户在超市常见的四类果汁中选出更信赖的类型，配简短说明帮助判断来源、口感与保存，适合图文手机投票页。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "果汁",
+    "超市",
+    "选购",
+    "保存",
+    "健康",
+    "老人",
+    "饮品",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "supermarket-juice-you-trust/images/bottled-pure-juice.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-28T18:00:38.132Z"
+}
