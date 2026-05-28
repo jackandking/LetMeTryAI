@@ -1,0 +1,19 @@
+{
+  "id": "night-out-concerns",
+  "name": "夜出关心啥",
+  "description": "围绕都市夜间出行的真实场景展开投票，选项用画面感文案与配图增强共鸣，适合引导讨论与评论。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "夜出",
+    "城市安全",
+    "共享单车",
+    "地铁",
+    "外卖",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "night-out-concerns/images/phone-theft.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-28T21:00:49.243Z"
+}
