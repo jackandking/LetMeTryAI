@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>50万预算约会开哪辆车更撩？宝马 vs 蔚来</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">50万预算，开哪种车去约会更撩？宝马的稳成熟感还是蔚来的未来感</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">50万预算，开哪种车去约会更撩？宝马的稳成熟感还是蔚来的未来感？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bmw-steady-mature">
+                            <div class="card-image">
+                                <img src="images/bmw-steady-mature.svg" alt="宝马车侧面低调优雅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宝马：稳成熟感</h3>
+                                <p class="option-desc">绅士路线，低调有质感，适合优雅晚餐与见家人场景</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nio-future-tech">
+                            <div class="card-image">
+                                <img src="images/nio-future-tech.svg" alt="蔚来车夜晚灯光未来感" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">蔚来：未来科技感</h3>
+                                <p class="option-desc">科技氛围强，智能互动和灯光效果更有惊喜感，适合潮玩式约会</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sporty-coupe">
+                            <div class="card-image">
+                                <img src="images/sporty-coupe.svg" alt="跑车侧身动感瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">跑车风：瞬间视觉冲击</h3>
+                                <p class="option-desc">造型与动力带来强烈视觉效果，短程惊艳登场更能吸睛</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
