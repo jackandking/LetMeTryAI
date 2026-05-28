@@ -124,7 +124,7 @@ async function fetchAllTasks(cookies) {
             distributionPlanId: ''
         }, cookies);
 
-        const tasks = result.dataList || [];
+        const tasks = (result.dataList || []).filter(t => t.status !== '待结束');
         allTasks.push(...tasks);
         log('INFO', `  Page ${pageNum}: ${tasks.length} tasks (total: ${allTasks.length}/${result.total})`);
 
