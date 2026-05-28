@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>创作者成就名片</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    color: #fff;
+}
+.container { max-width: 430px; margin: 0 auto; padding: 20px 16px 40px; }
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 24px 0 16px;
+}
+.avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+.avatar {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.2);
+}
+.level-badge {
+    position: absolute;
+    bottom: -4px; left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.level-badge.bronze { background: linear-gradient(90deg, #cd7f32, #e8a87c); color: #fff; }
+.level-badge.silver { background: linear-gradient(90deg, #a0a0a0, #d0d0d0); color: #333; }
+.level-badge.gold { background: linear-gradient(90deg, #daa520, #ffd700); color: #333; }
+.level-badge.platinum { background: linear-gradient(90deg, #3eb489, #5eebb5); color: #fff; }
+.level-badge.diamond { background: linear-gradient(90deg, #4facfe, #00f2fe); color: #fff; }
+
+.nickname { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+.stat-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 14px 4px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+.stat-value { font-size: 20px; font-weight: 700; color: #4facfe; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* Best Works */
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.section-title::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: linear-gradient(180deg, #4facfe, #00f2fe);
+    border-radius: 2px;
+}
+
+.works-list { display: flex; flex-direction: column; gap: 12px; }
+.work-card {
+    display: flex;
+    gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+}
+.work-card:active { transform: scale(0.98); }
+.work-cover {
+    width: 90px; height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.1);
+}
+.work-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.work-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.work-stats { display: flex; gap: 14px; font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+.work-stats span { display: flex; align-items: center; gap: 4px; }
+
+/* Footer CTA */
+.footer-cta {
+    margin-top: 28px;
+    text-align: center;
+}
+.btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border: none;
+    border-radius: 28px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.btn-primary:active { opacity: 0.85; }
+.footer-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 10px;
+}
+
+.loading, .error {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="loading">加载中...</div>
+</div>
+
+<script>
+const API_BASE = 'https://letmetry.cloud/api';
+
+function fmtNum(n) {
+    if (n >= 10000) return (n / 10000).toFixed(1) + 'w';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+    return String(n);
+}
+
+async function loadCard() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const openId = urlParams.get('id') || 'creator_003';
+    const app = document.getElementById('app');
+
+    try {
+        const res = await fetch(`${API_BASE}/creator/card/${openId}`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        render(data.data);
+    } catch (err) {
+        app.innerHTML = `<div class="error">加载失败: ${err.message}</div>`;
+    }
+}
+
+function render(c) {
+    const worksHtml = (c.bestWorks || []).map(w => `
+        <a class="work-card" href="${w.videoUrl}" target="_blank" rel="noopener">
+            <img class="work-cover" src="${w.coverUrl || ''}" alt="" loading="lazy" onerror="this.style.display='none'">
+            <div class="work-info">
+                <div class="work-title">${w.title}</div>
+                <div class="work-stats">
+                    <span>▶ ${fmtNum(w.playCnt || 0)}</span>
+                    <span>♥ ${fmtNum(w.likeCnt || 0)}</span>
+                </div>
+            </div>
+        </a>
+    `).join('');
+
+    document.getElementById('app').innerHTML = `
+        <div class="header">
+            <div class="avatar-wrap">
+                <img class="avatar" src="${c.avatar || ''}" alt="" onerror="this.style.display='none'">
+                <span class="level-badge ${c.level}">${c.levelName}</span>
+            </div>
+            <div class="nickname">${c.nickname}</div>
+            <div class="subtitle">星火计划认证创作者</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">${fmtNum(c.totalWorks)}</div>
+                <div class="stat-label">作品</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${fmtNum(c.totalPlays)}</div>
+                <div class="stat-label">播放</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${fmtNum(c.totalLikes)}</div>
+                <div class="stat-label">点赞</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${fmtNum(c.totalComments)}</div>
+                <div class="stat-label">评论</div>
+            </div>
+        </div>
+
+        <div class="section-title">最佳作品</div>
+        <div class="works-list">${worksHtml || '<div style="color:rgba(255,255,255,0.4);font-size:13px;padding:20px;text-align:center;">暂无作品数据</div>'}</div>
+
+        <div class="footer-cta">
+            <a class="btn-primary" href="/creator-leaderboard/">🏆 查看本群创作者排行</a>
+            <div class="footer-note">数据每日更新 · 更新时间: ${new Date(c.updatedAt).toLocaleString('zh-CN')}</div>
+        </div>
+    `;
+}
+
+loadCard();
+</script>
+</body>
+</html>

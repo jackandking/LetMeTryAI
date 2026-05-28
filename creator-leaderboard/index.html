@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>创作者排行榜</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    color: #fff;
+}
+.container { max-width: 430px; margin: 0 auto; padding: 20px 16px 40px; }
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 16px 0 8px;
+}
+.group-name { font-size: 20px; font-weight: 700; }
+.group-info { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* Top 3 Podium */
+.podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0 28px;
+    padding: 0 10px;
+}
+.podium-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.podium-item.rank-1 { order: 2; }
+.podium-item.rank-2 { order: 1; }
+.podium-item.rank-3 { order: 3; }
+
+.podium-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid transparent;
+}
+.podium-item.rank-1 .podium-avatar { width: 72px; height: 72px; border-color: #ffd700; }
+.podium-item.rank-2 .podium-avatar { border-color: #c0c0c0; }
+.podium-item.rank-3 .podium-avatar { border-color: #cd7f32; }
+
+.podium-rank {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    margin: -12px 0 6px;
+    position: relative; z-index: 1;
+}
+.rank-1 .podium-rank { background: #ffd700; color: #333; }
+.rank-2 .podium-rank { background: #c0c0c0; color: #333; }
+.rank-3 .podium-rank { background: #cd7f32; color: #fff; }
+
+.podium-name { font-size: 13px; font-weight: 600; max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.podium-plays { font-size: 12px; color: #4facfe; margin-top: 2px; }
+
+/* List */
+.list-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.list-title::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: linear-gradient(180deg, #4facfe, #00f2fe);
+    border-radius: 2px;
+}
+
+.rank-list { display: flex; flex-direction: column; gap: 8px; }
+.rank-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 10px 14px;
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s;
+}
+.rank-item:active { background: rgba(255,255,255,0.1); }
+
+.rank-num {
+    width: 28px; text-align: center;
+    font-size: 15px; font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+}
+.rank-item.top .rank-num { color: #ffd700; }
+
+.rank-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.1);
+}
+
+.rank-info { flex: 1; min-width: 0; }
+.rank-name { font-size: 14px; font-weight: 600; }
+.rank-level { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+.rank-plays {
+    text-align: right;
+    flex-shrink: 0;
+}
+.rank-plays-value { font-size: 15px; font-weight: 700; color: #4facfe; }
+.rank-plays-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* Sort tabs */
+.sort-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0 16px;
+    overflow-x: auto;
+}
+.sort-tab {
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+.sort-tab.active {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Footer */
+.footer-cta {
+    margin-top: 28px;
+    text-align: center;
+}
+.btn-outline {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 28px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-outline:active { background: rgba(255,255,255,0.08); }
+
+.loading, .error {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="loading">加载中...</div>
+</div>
+
+<script>
+const API_BASE = 'https://letmetry.cloud/api';
+
+function fmtNum(n) {
+    if (n >= 10000) return (n / 10000).toFixed(1) + 'w';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+    return String(n);
+}
+
+let currentSort = 'totalPlays';
+
+async function loadLeaderboard(sortBy = 'totalPlays') {
+    const app = document.getElementById('app');
+    try {
+        const res = await fetch(`${API_BASE}/creator/leaderboard?sortBy=${sortBy}&limit=50`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        render(data);
+    } catch (err) {
+        app.innerHTML = `<div class="error">加载失败: ${err.message}</div>`;
+    }
+}
+
+function render(data) {
+    const list = data.data;
+    const top3 = list.slice(0, 3);
+    const rest = list.slice(3);
+
+    const sortLabels = {
+        totalPlays: '播放量',
+        totalLikes: '点赞数',
+        totalWorks: '作品数',
+        totalComments: '评论数'
+    };
+
+    const tabsHtml = Object.entries(sortLabels).map(([key, label]) => `
+        <button class="sort-tab ${key === currentSort ? 'active' : ''}" data-sort="${key}">${label}</button>
+    `).join('');
+
+    const podiumHtml = top3.map((c, i) => {
+        const rank = i + 1;
+        return `
+            <div class="podium-item rank-${rank}">
+                <img class="podium-avatar" src="${c.avatar || ''}" alt="" onerror="this.style.display='none'">
+                <div class="podium-rank">${rank}</div>
+                <div class="podium-name">${c.nickname}</div>
+                <div class="podium-plays">${fmtNum(c[currentSort] || 0)}</div>
+            </div>
+        `;
+    }).join('');
+
+    const listHtml = rest.map((c, i) => `
+        <a class="rank-item ${i < 2 ? 'top' : ''}" href="/creator-card/?id=${c.openId}">
+            <div class="rank-num">${i + 4}</div>
+            <img class="rank-avatar" src="${c.avatar || ''}" alt="" onerror="this.style.display='none'">
+            <div class="rank-info">
+                <div class="rank-name">${c.nickname}</div>
+                <div class="rank-level">${c.levelName}</div>
+            </div>
+            <div class="rank-plays">
+                <div class="rank-plays-value">${fmtNum(c[currentSort] || 0)}</div>
+                <div class="rank-plays-label">${sortLabels[currentSort]}</div>
+            </div>
+        </a>
+    `).join('');
+
+    document.getElementById('app').innerHTML = `
+        <div class="header">
+            <div class="group-name">${data.groupName}</div>
+            <div class="group-info">${data.totalCreators} 位创作者 · 数据每日更新</div>
+        </div>
+
+        <div class="podium">${podiumHtml}</div>
+
+        <div class="sort-tabs">${tabsHtml}</div>
+
+        <div class="list-title">排行榜</div>
+        <div class="rank-list">${listHtml}</div>
+
+        <div class="footer-cta">
+            <a class="btn-outline" href="/creator-card/">📇 查看我的成就名片</a>
+        </div>
+    `;
+
+    document.querySelectorAll('.sort-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            currentSort = tab.dataset.sort;
+            loadLeaderboard(currentSort);
+        });
+    });
+}
+
+loadLeaderboard('totalPlays');
+</script>
+</body>
+</html>
