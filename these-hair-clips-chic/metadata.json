@@ -1,0 +1,20 @@
+{
+  "id": "these-hair-clips-chic",
+  "name": "发卡气质盘点",
+  "description": "移动端图文投票页，展示 4 款常见发卡的佩戴氛围（温柔/复古/简约/甜美），鼓励用户凭画面感选出更有气质的那款并分享理由。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "发卡",
+    "发饰",
+    "气质",
+    "珍珠",
+    "贝壳色",
+    "金属发夹",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "these-hair-clips-chic/images/pearl-barrette.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-29T20:00:44.613Z"
+}
