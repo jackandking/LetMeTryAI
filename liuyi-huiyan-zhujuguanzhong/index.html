@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>六一汇演：孩子上台还是看台？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">六一汇演，你家娃是主角还是观众？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">六一汇演，你家娃是主角还是观众？请选择符合你家情况的场景。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tai-shang-xiao-zhujue">
+                            <div class="card-image">
+                                <img src="images/tai-shang-xiao-zhujue.svg" alt="孩子在舞台上表演笑容灿烂" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">台上小主角</h3>
+                                <p class="option-desc">孩子主动争上台，表演自信，经常排练和示范动作。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jinzhang-dan-yuanyi-changshi">
+                            <div class="card-image">
+                                <img src="images/jinzhang-yuanyi-changshi.svg" alt="孩子上台前握着家长的手显得紧张" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">紧张但愿意尝试</h3>
+                                <p class="option-desc">上台会紧张，但愿意试一次，靠家长鼓励更放松。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="geng-xihuan-dang-guanzhong">
+                            <div class="card-image">
+                                <img src="images/geng-xihuan-dang-guanzhong.svg" alt="孩子在观众席专注观看表演" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">更喜欢当观众</h3>
+                                <p class="option-desc">孩子更爱看别人表演，不习惯当众表现，更享受观赏氛围。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="houtai-mumo-zhichi">
+                            <div class="card-image">
+                                <img src="images/houtai-mumo-zhichi.svg" alt="孩子在后台整理服装帮忙" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">在后台默默支持</h3>
+                                <p class="option-desc">不常上台，但愿意做幕后帮手或负责道具、陪练等支持工作。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
