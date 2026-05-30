@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>空气炸锅用纸：省事还是多余？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">空气炸锅用纸，你会用吗？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">空气炸锅用纸，你会用吗？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="always-use-paper">
+                            <div class="card-image">
+                                <img src="images/always-use-paper.svg" alt="空气炸锅用纸 每次都用" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">每次都用</h3>
+                                <p class="option-desc">每次放食材都铺纸，省事且不粘锅，清洁更快。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="use-when-greasy">
+                            <div class="card-image">
+                                <img src="images/use-when-greasy.svg" alt="遇到油多时使用空气炸锅用纸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">遇到油多或易粘就用</h3>
+                                <p class="option-desc">只有在油多或粘性食物时才铺，兼顾口感与清洁。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="use-foil-or-oil">
+                            <div class="card-image">
+                                <img src="images/use-foil-or-oil.svg" alt="使用铝箔或刷油代替空气炸锅用纸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不用纸，改用铝箔或刷薄油</h3>
+                                <p class="option-desc">不铺纸，改铺铝箔或直接刷薄油，追求炸得更脆的口感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="never-use-paper">
+                            <div class="card-image">
+                                <img src="images/never-use-paper.svg" alt="从不使用空气炸锅用纸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">从不用（觉得浪费或担心安全）</h3>
+                                <p class="option-desc">不使用，用后常规清洗，担心浪费或对安全有疑虑。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
