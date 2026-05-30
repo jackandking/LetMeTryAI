@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>定制旗袍穿上身，你被哪款惊艳到？挑一件让你心动的</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">定制旗袍穿上身，你被哪款惊艳到？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">定制旗袍穿上身，你被哪款惊艳到？选出最让你多看几眼的一款</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="yuebai-xiuhua-kuan">
+                            <div class="card-image">
+                                <img src="images/yuebai-xiuhua-kuan.svg" alt="月白刺绣旗袍侧面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">月白绣花款</h3>
+                                <p class="option-desc">月白丝绸配细腻刺绣，肩线利落，镜头下温柔优雅。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="anhong-sirong-gudian-kuan">
+                            <div class="card-image">
+                                <img src="images/anhong-sirong-gudian-kuan.svg" alt="暗红丝绒旗袍正面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">暗红丝绒古典款</h3>
+                                <p class="option-desc">暗红丝绒质感与立领设计，复古戏剧感强，晚宴镜头感十足。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="gailiang-modeng-duanxiu-kuan">
+                            <div class="card-image">
+                                <img src="images/gailiang-modeng-duanxiu-kuan.svg" alt="改良短袖旗袍侧面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">改良摩登短袖款</h3>
+                                <p class="option-desc">改良裁剪更显身形曲线，短袖清爽适合日常与午后约会。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mibai-wenyi-yinhua-kuan">
+                            <div class="card-image">
+                                <img src="images/mibai-wenyi-yinhua-kuan.svg" alt="米白印花旗袍近拍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">米白文艺印花款</h3>
+                                <p class="option-desc">棉麻混纺与淡雅印花，午后茶室风格，温柔且接地气。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
