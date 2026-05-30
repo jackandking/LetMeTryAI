@@ -1,0 +1,19 @@
+{
+  "id": "beauty-backview",
+  "name": "美人背影榜",
+  "description": "以背影画面为核心的视觉投票页，选项提供不同风格场景（街头、长裙、运动、职场），便于配图和短视频片段吸引滑动投票。",
+  "category": "美女明星",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "背影杀",
+    "回头率",
+    "时尚",
+    "街拍",
+    "长裙",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "beauty-backview/images/flowing-dress.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-30T21:01:17.841Z"
+}
