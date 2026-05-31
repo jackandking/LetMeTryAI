@@ -13,6 +13,10 @@ import { buildParentRevenueCopilotArgs, writeAgentCopilotContext, startParentRev
 
 const __filename = fileURLToPath(import.meta.url);
 
+function sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 function readFlag(flagName, defaultValue = null) {
     const index = process.argv.indexOf(flagName);
     if (index < 0) {
@@ -58,6 +62,16 @@ export function runParentRevenueTick() {
     return getAgentTeamStatus({ fromUrl: import.meta.url });
 }
 
+export async function runParentRevenueSessionLoop(options = {}) {
+    const intervalMs = Number.isFinite(options.intervalMs) ? options.intervalMs : 5000;
+    const signal = options.signal;
+
+    while (!signal?.aborted) {
+        runParentRevenueTick();
+        await sleep(intervalMs);
+    }
+}
+
 function recordSessionState(intervalMs) {
     const stateDir = resolveAgentStateDir(import.meta.url);
     writeJsonAtomic(path.join(stateDir, 'parent-revenue-session.json'), {
@@ -82,11 +96,12 @@ if (process.argv[1] === __filename) {
     if (!process.argv.includes('--no-kickoff')) {
         ensureParentRevenueKickoff();
     }
+    const initialStatus = runParentRevenueTick();
     recordSessionState(intervalMs);
     const context = writeAgentCopilotContext(import.meta.url, 'parent-revenue');
 
     if (process.argv.includes('--prepare-only')) {
-        const status = formatAgentTeamStatus(getAgentTeamStatus({ fromUrl: import.meta.url }));
+        const status = formatAgentTeamStatus(initialStatus);
         console.log(JSON.stringify({
             briefPath: context.briefPath,
             handoffPath: context.handoffPath,
@@ -96,9 +111,27 @@ if (process.argv[1] === __filename) {
         }, null, 2));
         process.exit(0);
     } else if (process.stdin.isTTY) {
+        const controller = new AbortController();
+        process.on('SIGINT', () => controller.abort());
+        process.on('SIGTERM', () => controller.abort());
+        const loopPromise = runParentRevenueSessionLoop({
+            intervalMs,
+            signal: controller.signal
+        }).catch(error => {
+            console.error(error);
+            process.exitCode = 1;
+        });
         const { child } = startParentRevenueCopilot({ fromUrl: import.meta.url });
+        child.on('error', error => {
+            controller.abort();
+            console.error(error);
+            process.exit(1);
+        });
         child.on('exit', code => {
-            process.exit(code ?? 0);
+            controller.abort();
+            Promise.resolve(loopPromise).finally(() => {
+                process.exit(code ?? process.exitCode ?? 0);
+            });
         });
     } else {
         const copilot = buildParentRevenueCopilotArgs({ fromUrl: import.meta.url });

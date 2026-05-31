@@ -151,4 +151,34 @@ describe('agent-team vertical slice', () => {
         expect(parentState.targetMetric).toBe('parent-tools average daily revenue > RMB 100');
         expect(parentState.latestTask.payload.focusArea).toBe('payment-conversion');
     });
+
+    it('dedupes repeated decision requests for the same parent revenue task', () => {
+        const duplicateRequest = () => createEnvelope({
+            type: 'decision.request',
+            from: 'parent-revenue',
+            to: 'manager',
+            taskId: 'task-dup',
+            requiresDecision: 'manager',
+            scopePaths: ['parent-tools/child-travel-map'],
+            payload: {
+                action: 'publish',
+                writable: true,
+                sideEffect: true,
+                tags: ['writes-repo']
+            }
+        });
+
+        enqueueJson(resolveAgentInboxDir(import.meta.url, 'manager'), duplicateRequest());
+        enqueueJson(resolveAgentInboxDir(import.meta.url, 'manager'), duplicateRequest());
+
+        runManagerOnce({ fromUrl: import.meta.url });
+
+        const managerApprovals = readDirectoryJson(resolveAgentApprovalDir(import.meta.url, 'manager'));
+        const parentRevenueInbox = readDirectoryJson(resolveAgentInboxDir(import.meta.url, 'parent-revenue'));
+        const events = readDirectoryJson(resolveAgentEventDir(import.meta.url));
+
+        expect(managerApprovals.filter(entry => entry.taskId === 'task-dup' && entry.action === 'publish')).toHaveLength(1);
+        expect(parentRevenueInbox.filter(entry => entry.type === 'decision.approved' && entry.taskId === 'task-dup')).toHaveLength(1);
+        expect(events.some(entry => entry.type === 'decision.duplicate')).toBe(true);
+    });
 });

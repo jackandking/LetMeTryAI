@@ -156,7 +156,8 @@ What the launcher does:
 2. ensures a kickoff task exists
 3. writes shared Copilot context files under `.automation/.local/agent-team/context/`
 4. reuses a stable Copilot session id/name for `parent-revenue`
-5. starts `copilot --autopilot` in the repo so the visible terminal session itself is the AI agent
+5. keeps the `manager -> parent-revenue -> manager` runtime loop draining while the session is open
+6. starts `copilot --autopilot` in the repo so the visible terminal session itself is the AI agent
 
 Shared-context files:
 
