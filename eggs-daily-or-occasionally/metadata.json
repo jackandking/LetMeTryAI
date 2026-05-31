@@ -1,0 +1,19 @@
+{
+  "id": "eggs-daily-or-occasionally",
+  "name": "吃蛋日常话题",
+  "description": "用轻松口语化问句切入，提供真实场景化选项（每日元气早餐 / 偶尔搭配 / 很少吃替代），激发用户分享习惯、配方与理由，便于配图与评论互动。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "鸡蛋",
+    "早餐习惯",
+    "饮食选择",
+    "日常生活",
+    "女人爱",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "eggs-daily-or-occasionally/images/eat-everyday.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-31T20:00:30.233Z"
+}
