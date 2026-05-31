@@ -1,0 +1,20 @@
+{
+  "id": "nightlife-pick",
+  "name": "夜生活选择器",
+  "description": "四种典型夜生活场景：街边烧烤、精酿小酒吧、深夜食堂、电竞网咖。画面感强，便于配图吸引点击与社交讨论。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "夜生活",
+    "下班",
+    "烧烤",
+    "精酿",
+    "深夜食堂",
+    "电竞",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "nightlife-pick/images/bbq-street.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-31T21:00:43.308Z"
+}
