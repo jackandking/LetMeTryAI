@@ -107,11 +107,74 @@ Cron entries follow this pattern:
 | `DAILY_LOG_DIR` | Override orchestrator log dir | `.automation/.local/logs/daily-orchestrator/` |
 | `DAILY_PROFILE_ID` | Brand profile to run | `nanrenbao` |
 
+## Agent Team Runtime
+
+The repository now includes a file-backed multi-agent runtime for manager/worker coordination.
+
+- **Config**: `.automation/config/agent-team.json`
+- **Per-agent missions**: `.automation/config/agent-missions/*.json`
+- **Shared runtime modules**: `.automation/shared/agent-team/`
+- **Entry scripts**:
+  - `.automation/scripts/agent-manager.js`
+  - `.automation/scripts/agent-worker.js`
+  - `.automation/scripts/agent-watch.js`
+- **Runtime artifacts**: `.automation/.local/agent-team/`
+
+Key conventions:
+
+1. **Never let multiple writable agents share one live checkout** — use isolated workspaces/worktrees plus scope leases.
+2. **All agent communication is file-backed** — inbox/outbox, approvals, events, heartbeats, and workspace leases are runtime artifacts.
+3. **Boss-gated actions stay pending** in `.automation/.local/agent-team/approvals/boss/` until explicitly approved.
+4. **Manager-approved repo work** may be executed by workers inside leased workspaces created from the same repo baseline.
+
+Minimal CLI examples:
+
+```bash
+node .automation/scripts/agent-manager.js init
+node .automation/scripts/agent-manager.js run-once
+node .automation/scripts/agent-worker.js run-once --agent scout
+node .automation/scripts/agent-watch.js
+```
+
+### Parent Revenue Session
+
+`parent-revenue` now uses **GitHub Copilot CLI as its AI engine**.
+
+Main launchers:
+
+```bash
+# Launch in the current terminal
+node .automation/scripts/start-parent-revenue-session.js
+
+# Open a visible Terminal tab that launches the same session
+node .automation/scripts/open-parent-revenue-copilot-tab.js
+```
+
+What the launcher does:
+
+1. initializes agent-team runtime if needed
+2. ensures a kickoff task exists
+3. writes shared Copilot context files under `.automation/.local/agent-team/context/`
+4. reuses a stable Copilot session id/name for `parent-revenue`
+5. starts `copilot --autopilot` in the repo so the visible terminal session itself is the AI agent
+
+Shared-context files:
+
+- `.automation/.local/agent-team/context/parent-revenue-brief.md`
+- `.automation/.local/agent-team/context/parent-revenue-handoff.md`
+- `.automation/.local/agent-team/state/parent-revenue-copilot-session.json`
+
+From another shell, you can enqueue a message for the agent to pick up:
+
+```bash
+node .automation/scripts/agent-send.js --to parent-revenue --message "Focus on payment conversion" --focus payment-conversion
+```
+
 ## What Does NOT Belong Here
 
 - Website HTML/CSS/JS (stays at repo root)
 - Website utility modules (`util/`)
 - Website-dev scripts (`scripts/setup-mcp.sh`, `scripts/build-and-commit-mcp.sh`)
 - Website documentation (`docs/`)
-- Test files (`tests/`, `*.test.js`)
+- Website-wide test suites that belong with product code (`tests/`, app-level test folders)
 - `package.json`, `node_modules/`

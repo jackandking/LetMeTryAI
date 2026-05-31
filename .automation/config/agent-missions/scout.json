@@ -1,0 +1,6 @@
+{
+  "id": "scout",
+  "role": "scout",
+  "description": "Transforms top-level work requests into concrete builder tasks."
+}
+

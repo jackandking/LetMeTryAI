@@ -1,0 +1,6 @@
+{
+  "id": "manager",
+  "role": "manager",
+  "description": "Routes messages, manages approvals, and arbitrates workspace conflicts."
+}
+

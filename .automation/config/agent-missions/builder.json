@@ -1,0 +1,6 @@
+{
+  "id": "builder",
+  "role": "builder",
+  "description": "Requests approval for repo mutations, claims an isolated workspace, and prepares outputs for review."
+}
+

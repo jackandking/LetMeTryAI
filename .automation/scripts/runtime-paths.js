@@ -6,13 +6,33 @@ function normalizeDirectory(directoryPath) {
     return path.resolve(directoryPath);
 }
 
+function findProjectRoot(startDirectory) {
+    let currentDirectory = normalizeDirectory(startDirectory);
+
+    while (true) {
+        if (
+            fs.existsSync(path.join(currentDirectory, '.git')) ||
+            (fs.existsSync(path.join(currentDirectory, 'package.json')) &&
+                fs.existsSync(path.join(currentDirectory, '.automation')))
+        ) {
+            return currentDirectory;
+        }
+
+        const parentDirectory = path.dirname(currentDirectory);
+        if (parentDirectory === currentDirectory) {
+            return normalizeDirectory(startDirectory);
+        }
+        currentDirectory = parentDirectory;
+    }
+}
+
 export function resolveProjectRoot(fromUrl) {
     if (typeof process.env.PROJECT_DIR === 'string' && process.env.PROJECT_DIR.trim()) {
         return normalizeDirectory(process.env.PROJECT_DIR.trim());
     }
 
     if (typeof fromUrl === 'string' && fromUrl.startsWith('file:')) {
-        return path.resolve(path.dirname(fileURLToPath(fromUrl)), '../..');
+        return findProjectRoot(path.dirname(fileURLToPath(fromUrl)));
     }
 
     throw new Error('resolveProjectRoot requires import.meta.url when PROJECT_DIR is not set');
