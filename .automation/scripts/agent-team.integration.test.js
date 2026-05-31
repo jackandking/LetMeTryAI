@@ -10,6 +10,7 @@ import {
     resolveAgentArchiveDir,
     resolveAgentEventDir,
     resolveAgentInboxDir,
+    resolveAgentOutboxDir,
     resolveAgentStateDir,
     resolveAgentWorkspaceLeaseDir
 } from '../shared/agent-team/runtime-paths.js';
@@ -150,6 +151,42 @@ describe('agent-team vertical slice', () => {
         expect(bossApprovals).toHaveLength(0);
         expect(parentState.targetMetric).toBe('parent-tools average daily revenue > RMB 100');
         expect(parentState.latestTask.payload.focusArea).toBe('payment-conversion');
+    });
+
+    it('completes the full manager and parent-revenue approval roundtrip without pending mailbox backlog', () => {
+        enqueueJson(resolveAgentInboxDir(import.meta.url, 'manager'), createEnvelope({
+            type: 'task.start',
+            from: 'boss',
+            to: 'manager',
+            taskId: 'task-parent-roundtrip',
+            scopePaths: ['parent-tools/child-travel-map'],
+            payload: {
+                targetAgent: 'parent-revenue',
+                title: 'Diagnose parent-tools revenue',
+                focusArea: 'payment-conversion',
+                proposedAction: 'publish',
+                summary: 'Review payment conversion and request manager approval for the next publish step.'
+            }
+        }));
+
+        runManagerOnce({ fromUrl: import.meta.url });
+        runWorkerOnce({ fromUrl: import.meta.url, agentId: 'parent-revenue' });
+        runManagerOnce({ fromUrl: import.meta.url });
+        runWorkerOnce({ fromUrl: import.meta.url, agentId: 'parent-revenue' });
+        runManagerOnce({ fromUrl: import.meta.url });
+
+        const managerApprovals = readDirectoryJson(resolveAgentApprovalDir(import.meta.url, 'manager'));
+        const parentInbox = readDirectoryJson(resolveAgentInboxDir(import.meta.url, 'parent-revenue'));
+        const parentOutbox = readDirectoryJson(resolveAgentOutboxDir(import.meta.url, 'parent-revenue'));
+        const parentArchive = readDirectoryJson(resolveAgentArchiveDir(import.meta.url, 'parent-revenue'));
+        const parentState = JSON.parse(fs.readFileSync(path.join(resolveAgentStateDir(import.meta.url), 'parent-revenue.json'), 'utf-8'));
+
+        expect(managerApprovals.filter(entry => entry.taskId === 'task-parent-roundtrip' && entry.action === 'publish')).toHaveLength(1);
+        expect(parentInbox).toHaveLength(0);
+        expect(parentOutbox).toHaveLength(0);
+        expect(parentArchive.filter(entry => entry.type === 'status.update')).toHaveLength(2);
+        expect(parentState.latestTask.type).toBe('decision.approved');
+        expect(parentState.latestApprovedAction).toBe('publish');
     });
 
     it('dedupes repeated decision requests for the same parent revenue task', () => {
