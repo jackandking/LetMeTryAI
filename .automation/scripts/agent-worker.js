@@ -72,6 +72,36 @@ function writeAgentState(fromUrl, agentId, payload) {
     return writeJsonAtomic(path.join(stateDir, `${agentId}.json`), payload);
 }
 
+function prepareWritableWorkspace(context, agentConfig, inboundMessage) {
+    if (!inboundMessage.payload?.writable) {
+        return { lease: null, error: null };
+    }
+
+    if (!Array.isArray(inboundMessage.scopePaths) || inboundMessage.scopePaths.length === 0) {
+        return {
+            lease: null,
+            error: 'Writable parent-revenue actions require non-empty scopePaths for isolated workspace routing.'
+        };
+    }
+
+    try {
+        const lease = acquireWorkspaceLease({
+            fromUrl: context.fromUrl,
+            agentId: agentConfig.id,
+            taskId: inboundMessage.taskId,
+            scopePaths: inboundMessage.scopePaths,
+            writable: true,
+            baseRef: inboundMessage.payload?.baseRef || context.teamConfig.defaultBaseRef || 'HEAD'
+        });
+        return { lease, error: null };
+    } catch (error) {
+        return {
+            lease: null,
+            error: error instanceof Error ? error.message : String(error)
+        };
+    }
+}
+
 function createDecisionRequest(agentId, inboundMessage, action = 'edit-repo') {
     return createEnvelope({
         type: 'decision.request',
@@ -241,11 +271,18 @@ function handleParentRevenueMessage(context, agentConfig, inboundMessage) {
         if (approvedDecisionFingerprint && existingState.latestApprovedDecisionFingerprint === approvedDecisionFingerprint) {
             return 0;
         }
-        writeAgentState(context.fromUrl, agentConfig.id, {
+        const { lease, error: workspaceError } = prepareWritableWorkspace(context, agentConfig, inboundMessage);
+        const nextState = {
             ...statePayload,
             latestApprovedAction: inboundMessage.payload?.action || null,
-            latestApprovedDecisionFingerprint: approvedDecisionFingerprint
-        });
+            latestApprovedDecisionFingerprint: approvedDecisionFingerprint,
+            latestWorkspaceError: workspaceError,
+            activeWorkspaceId: lease?.workspaceId || null,
+            activeWorkspacePath: lease?.workspacePath || null,
+            activeWorkspaceTaskId: lease?.taskId || null
+        };
+
+        writeAgentState(context.fromUrl, agentConfig.id, nextState);
         emitOutboxMessage(context.fromUrl, agentConfig.id, createEnvelope({
             type: 'status.update',
             from: agentConfig.id,
@@ -254,8 +291,14 @@ function handleParentRevenueMessage(context, agentConfig, inboundMessage) {
             inReplyTo: inboundMessage.id,
             scopePaths: inboundMessage.scopePaths,
             payload: {
-                summary: `Parent revenue action approved: ${inboundMessage.payload?.action || 'unspecified'}`,
-                approvedAction: inboundMessage.payload?.action || null
+                summary: workspaceError
+                    ? `Parent revenue action approved but workspace blocked: ${workspaceError}`
+                    : `Parent revenue action approved: ${inboundMessage.payload?.action || 'unspecified'}`,
+                approvedAction: inboundMessage.payload?.action || null,
+                workspaceId: lease?.workspaceId || null,
+                workspacePath: lease?.workspacePath || null,
+                workspaceStatus: workspaceError ? 'blocked' : (lease ? 'active' : 'not-required'),
+                workspaceError
             }
         }));
         return 1;

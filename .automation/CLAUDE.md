@@ -126,6 +126,7 @@ Key conventions:
 2. **All agent communication is file-backed** — inbox/outbox, approvals, events, heartbeats, and workspace leases are runtime artifacts.
 3. **Boss-gated actions stay pending** in `.automation/.local/agent-team/approvals/boss/` until explicitly approved.
 4. **Manager-approved repo work** may be executed by workers inside leased workspaces created from the same repo baseline.
+5. **`parent-revenue` writable approvals must lease an isolated workspace before execution**; if `scopePaths` are missing or the lease cannot be acquired, it must report a blocked status instead of touching the main checkout.
 
 Minimal CLI examples:
 
