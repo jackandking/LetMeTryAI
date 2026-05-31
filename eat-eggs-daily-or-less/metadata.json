@@ -1,0 +1,20 @@
+{
+  "id": "eat-eggs-daily-or-less",
+  "name": "家中吃蛋习惯",
+  "description": "面向关心长辈饮食与健康的家庭用户，页面通过图文和场景化选项呈现长辈吃蛋的常见做法，便于手机阅读与社交互动。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "鸡蛋",
+    "老年饮食",
+    "养生",
+    "早餐",
+    "家庭生活",
+    "习惯",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "eat-eggs-daily-or-less/images/eat-one-daily.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-05-31T18:00:28.032Z"
+}
