@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from 'child_process';
-import { ensureParentRevenueKickoff, runParentRevenueTick } from './start-parent-revenue-session.js';
+import { ensureParentRevenueKickoff, runParentRevenueSessionLoop, runParentRevenueTick } from './start-parent-revenue-session.js';
 import { resolveAgentContextDir, resolveAgentStateDir } from '../shared/agent-team/runtime-paths.js';
 
 function runGit(cwd, args) {
@@ -79,5 +79,23 @@ describe('start-parent-revenue-session', () => {
         expect(parsed.sessionName).toBe('parent-revenue');
         expect(fs.existsSync(path.join(contextDir, 'parent-revenue-brief.md'))).toBe(true);
         expect(fs.existsSync(path.join(contextDir, 'parent-revenue-handoff.md'))).toBe(true);
+    });
+
+    it('keeps draining the parent revenue runtime loop while the session is open', async () => {
+        ensureParentRevenueKickoff({ force: true });
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 40);
+
+        await runParentRevenueSessionLoop({
+            intervalMs: 5,
+            signal: controller.signal
+        });
+
+        clearTimeout(timer);
+
+        const statePath = path.join(resolveAgentStateDir(import.meta.url), 'parent-revenue.json');
+        const state = JSON.parse(fs.readFileSync(statePath, 'utf-8'));
+
+        expect(state.latestTask.taskId).toBe('parent-revenue-kickoff');
     });
 });

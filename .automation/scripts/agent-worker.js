@@ -16,6 +16,7 @@ import {
 import { createEnvelope, DECISION_LEVELS } from '../shared/agent-team/protocol.js';
 import { acquireWorkspaceLease } from '../shared/agent-team/workspace-manager.js';
 import { archiveClaimedJson, claimNextJson, enqueueJson, readJsonFile, writeJsonAtomic } from '../shared/agent-team/file-queue.js';
+import { buildDecisionFingerprint } from '../shared/agent-team/idempotency.js';
 import { initializeAgentTeam } from './agent-manager.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,6 +56,14 @@ function writeHeartbeat(fromUrl, agentId) {
 
 function emitOutboxMessage(fromUrl, agentId, envelope) {
     return enqueueJson(resolveAgentOutboxDir(fromUrl, agentId), envelope, { prefix: envelope.type });
+}
+
+function readAgentState(fromUrl, agentId) {
+    const statePath = path.join(resolveAgentStateDir(fromUrl), `${agentId}.json`);
+    if (!fs.existsSync(statePath)) {
+        return null;
+    }
+    return JSON.parse(fs.readFileSync(statePath, 'utf-8'));
 }
 
 function writeAgentState(fromUrl, agentId, payload) {
@@ -168,7 +177,18 @@ function handleReviewMessage(context, agentConfig, inboundMessage) {
 
 function handleParentRevenueMessage(context, agentConfig, inboundMessage) {
     const missionConfig = context.missionConfigs[agentConfig.mission] || {};
+    const existingState = readAgentState(context.fromUrl, agentConfig.id) || {};
+    const proposedAction = typeof inboundMessage.payload?.proposedAction === 'string'
+        ? inboundMessage.payload.proposedAction.trim()
+        : '';
+    const requestedDecisionFingerprint = proposedAction
+        ? buildDecisionFingerprint(inboundMessage, { type: 'decision.request', action: proposedAction, to: 'manager' })
+        : null;
+    const approvedDecisionFingerprint = inboundMessage.type === 'decision.approved'
+        ? buildDecisionFingerprint(inboundMessage)
+        : null;
     const statePayload = {
+        ...existingState,
         agentId: agentConfig.id,
         mission: agentConfig.mission,
         updatedAt: new Date().toISOString(),
@@ -204,20 +224,27 @@ function handleParentRevenueMessage(context, agentConfig, inboundMessage) {
             }
         }));
 
-        if (typeof inboundMessage.payload?.proposedAction === 'string' && inboundMessage.payload.proposedAction.trim()) {
+        if (requestedDecisionFingerprint && existingState.latestRequestedDecisionFingerprint !== requestedDecisionFingerprint) {
+            statePayload.latestRequestedDecisionFingerprint = requestedDecisionFingerprint;
             emitOutboxMessage(context.fromUrl, agentConfig.id, createDecisionRequest(
                 agentConfig.id,
                 inboundMessage,
-                inboundMessage.payload.proposedAction.trim()
+                proposedAction
             ));
         }
+
+        writeAgentState(context.fromUrl, agentConfig.id, statePayload);
         return 1;
     }
 
     if (inboundMessage.type === 'decision.approved') {
+        if (approvedDecisionFingerprint && existingState.latestApprovedDecisionFingerprint === approvedDecisionFingerprint) {
+            return 0;
+        }
         writeAgentState(context.fromUrl, agentConfig.id, {
             ...statePayload,
-            latestApprovedAction: inboundMessage.payload?.action || null
+            latestApprovedAction: inboundMessage.payload?.action || null,
+            latestApprovedDecisionFingerprint: approvedDecisionFingerprint
         });
         emitOutboxMessage(context.fromUrl, agentConfig.id, createEnvelope({
             type: 'status.update',

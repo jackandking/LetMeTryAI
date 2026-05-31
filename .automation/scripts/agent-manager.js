@@ -24,6 +24,7 @@ import {
 } from '../shared/agent-team/protocol.js';
 import { archiveClaimedJson, claimNextJson, enqueueJson, readJsonFile, writeJsonAtomic } from '../shared/agent-team/file-queue.js';
 import { classifyDecision } from '../shared/agent-team/decision-policy.js';
+import { buildDecisionFingerprint, claimIdempotencyKey } from '../shared/agent-team/idempotency.js';
 import { releaseWorkspaceLease } from '../shared/agent-team/workspace-manager.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -94,6 +95,27 @@ function handleDecisionRequest(fromUrl, teamConfig, envelope) {
         writable: envelope.payload?.writable,
         requiresDecision: envelope.requiresDecision
     }, teamConfig.decisionPolicy, teamConfig.agentDecisionPolicies?.[envelope.from]);
+    const fingerprint = buildDecisionFingerprint(envelope);
+    const idempotencyClaim = claimIdempotencyKey(fromUrl, 'decision-request', fingerprint, {
+        messageId: envelope.id,
+        taskId: envelope.taskId,
+        from: envelope.from,
+        action: envelope.payload?.action || null,
+        decisionLevel: classification.decisionLevel
+    });
+
+    if (!idempotencyClaim.claimed) {
+        emitEvent(fromUrl, 'decision.duplicate', {
+            messageId: envelope.id,
+            taskId: envelope.taskId,
+            from: envelope.from,
+            action: envelope.payload?.action || null,
+            decisionLevel: classification.decisionLevel,
+            existingClaim: idempotencyClaim.record
+        });
+        return classification.decisionLevel;
+    }
+
     const approvalRequest = createApprovalRequest(envelope, classification);
 
     if (classification.decisionLevel === DECISION_LEVELS.BOSS) {
