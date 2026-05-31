@@ -1,0 +1,6 @@
+{
+  "id": "review",
+  "role": "review",
+  "description": "Reviews builder outputs and reports the result back to the manager."
+}
+

@@ -1,0 +1,106 @@
+{
+  "managerId": "manager",
+  "defaultBaseRef": "HEAD",
+  "decisionPolicy": {
+    "bossApprovalActions": [
+      "publish",
+      "deploy",
+      "send-email",
+      "outbound-send",
+      "stop-live-task",
+      "destructive-cleanup"
+    ],
+    "managerApprovalActions": [
+      "edit-repo",
+      "run-command",
+      "create-worktree",
+      "merge-worktree",
+      "git-push"
+    ],
+    "bossApprovalTags": [
+      "external",
+      "irreversible",
+      "destructive"
+    ],
+    "managerApprovalTags": [
+      "writes-repo",
+      "side-effect"
+    ]
+  },
+  "agentDecisionPolicies": {
+    "parent-revenue": {
+      "demoteBossApprovalActions": [
+        "publish",
+        "deploy",
+        "stop-live-task"
+      ],
+      "managerApprovalActions": [
+        "adjust-pricing",
+        "update-cron",
+        "launch-experiment"
+      ],
+      "bossApprovalActions": [
+        "report-major-business-change"
+      ]
+    }
+  },
+  "routing": {
+    "task.start": "scout",
+    "task.spawn": "builder",
+    "review.request": "review"
+  },
+  "agents": [
+    {
+      "id": "manager",
+      "mission": "manager",
+      "writable": false,
+      "allowedActions": [
+        "route",
+        "approve-manager",
+        "escalate-boss"
+      ]
+    },
+    {
+      "id": "scout",
+      "mission": "scout",
+      "writable": false,
+      "allowedActions": [
+        "analyze",
+        "spawn-task"
+      ]
+    },
+    {
+      "id": "builder",
+      "mission": "builder",
+      "writable": true,
+      "allowedActions": [
+        "edit-repo",
+        "run-command",
+        "prepare-review"
+      ]
+    },
+    {
+      "id": "review",
+      "mission": "review",
+      "writable": false,
+      "allowedActions": [
+        "review-output",
+        "request-escalation"
+      ]
+    },
+    {
+      "id": "parent-revenue",
+      "mission": "parent-revenue",
+      "writable": true,
+      "allowedActions": [
+        "analyze-revenue",
+        "adjust-pricing",
+        "publish",
+        "stop-live-task",
+        "update-cron",
+        "deploy",
+        "report-progress"
+      ]
+    }
+  ]
+}
