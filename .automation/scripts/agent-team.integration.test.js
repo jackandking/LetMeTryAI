@@ -34,6 +34,14 @@ function readDirectoryJson(directoryPath) {
         .map(fileName => JSON.parse(fs.readFileSync(path.join(directoryPath, fileName), 'utf-8')));
 }
 
+function readGitStatus(cwd) {
+    const result = spawnSync('git', ['status', '--short'], { cwd, encoding: 'utf-8' });
+    if (result.status !== 0) {
+        throw new Error(result.stderr || result.stdout);
+    }
+    return result.stdout.trim();
+}
+
 describe('agent-team vertical slice', () => {
     let tempDir;
     let repoDir;
@@ -46,7 +54,9 @@ describe('agent-team vertical slice', () => {
         fs.mkdirSync(path.join(repoDir, '.automation', 'config', 'agent-missions'), { recursive: true });
         fs.mkdirSync(path.join(repoDir, '.automation', 'config'), { recursive: true });
         fs.mkdirSync(path.join(repoDir, 'src'), { recursive: true });
+        fs.mkdirSync(path.join(repoDir, 'parent-tools', 'child-travel-map'), { recursive: true });
         fs.writeFileSync(path.join(repoDir, 'src', 'index.js'), 'export const ready = true;\n', 'utf-8');
+        fs.writeFileSync(path.join(repoDir, 'parent-tools', 'child-travel-map', 'app.js'), 'export const ready = true;\n', 'utf-8');
 
         const sourceConfigDir = path.resolve('.automation/config');
         fs.cpSync(sourceConfigDir, path.join(repoDir, '.automation', 'config'), { recursive: true });
@@ -180,6 +190,7 @@ describe('agent-team vertical slice', () => {
         const parentOutbox = readDirectoryJson(resolveAgentOutboxDir(import.meta.url, 'parent-revenue'));
         const parentArchive = readDirectoryJson(resolveAgentArchiveDir(import.meta.url, 'parent-revenue'));
         const parentState = JSON.parse(fs.readFileSync(path.join(resolveAgentStateDir(import.meta.url), 'parent-revenue.json'), 'utf-8'));
+        const workspaceLeases = readDirectoryJson(resolveAgentWorkspaceLeaseDir(import.meta.url));
 
         expect(managerApprovals.filter(entry => entry.taskId === 'task-parent-roundtrip' && entry.action === 'publish')).toHaveLength(1);
         expect(parentInbox).toHaveLength(0);
@@ -187,6 +198,37 @@ describe('agent-team vertical slice', () => {
         expect(parentArchive.filter(entry => entry.type === 'status.update')).toHaveLength(2);
         expect(parentState.latestTask.type).toBe('decision.approved');
         expect(parentState.latestApprovedAction).toBe('publish');
+        expect(parentState.activeWorkspaceId).toBeTruthy();
+        expect(parentState.activeWorkspacePath).toContain(path.join('workspace-roots', parentState.activeWorkspaceId));
+        expect(workspaceLeases.filter(entry => entry.agentId === 'parent-revenue' && entry.taskId === 'task-parent-roundtrip' && entry.status === 'active')).toHaveLength(1);
+        expect(readGitStatus(repoDir)).toBe('');
+    });
+
+    it('blocks writable parent-revenue approvals without scope paths instead of touching the main worktree', () => {
+        enqueueJson(resolveAgentInboxDir(import.meta.url, 'parent-revenue'), createEnvelope({
+            type: 'decision.approved',
+            from: 'manager',
+            to: 'parent-revenue',
+            taskId: 'task-parent-noscope',
+            payload: {
+                action: 'edit-repo',
+                writable: true,
+                baseRef: 'HEAD'
+            }
+        }));
+
+        runWorkerOnce({ fromUrl: import.meta.url, agentId: 'parent-revenue' });
+
+        const parentState = JSON.parse(fs.readFileSync(path.join(resolveAgentStateDir(import.meta.url), 'parent-revenue.json'), 'utf-8'));
+        const parentOutbox = readDirectoryJson(resolveAgentOutboxDir(import.meta.url, 'parent-revenue'));
+        const workspaceLeases = readDirectoryJson(resolveAgentWorkspaceLeaseDir(import.meta.url));
+
+        expect(parentState.latestWorkspaceError).toContain('scopePaths');
+        expect(parentState.activeWorkspaceId).toBe(null);
+        expect(parentOutbox).toHaveLength(1);
+        expect(parentOutbox[0].payload.workspaceStatus).toBe('blocked');
+        expect(workspaceLeases).toHaveLength(0);
+        expect(readGitStatus(repoDir)).toBe('');
     });
 
     it('dedupes repeated decision requests for the same parent revenue task', () => {
