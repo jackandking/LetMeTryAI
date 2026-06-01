@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>黄仁勋×宇树的1.8米人形机器人，你会在哪遇见它？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">黄仁勋联手宇树造1.8米人形机器人，你会在哪个场景遇到它？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">黄仁勋联手宇树造1.8米人形机器人，你会在哪个场景遇到它？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tech-expo-demo">
+                            <div class="card-image">
+                                <img src="images/tech-expo-demo.svg" alt="1.8米人形机器人在科技展台演示" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">科技展台现场演示</h3>
+                                <p class="option-desc">在大会展台前，它向媒体和观众展示行走与互动，现场人潮围观拍照。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="shopping-mall-demo">
+                            <div class="card-image">
+                                <img src="images/shopping-mall-demo.svg" alt="机器人在商场中庭与人合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">商场中庭体验店</h3>
+                                <p class="option-desc">商场中庭的体验区里，它和路人合影、做互动表演吸引顾客驻足。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fancy-restaurant">
+                            <div class="card-image">
+                                <img src="images/fancy-restaurant.svg" alt="机器人在高端餐厅侍候点餐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高端餐厅的服务员</h3>
+                                <p class="option-desc">在高端餐厅里它当侍者递菜、上酒，带来科技感十足的就餐画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="outdoor-cafe">
+                            <div class="card-image">
+                                <img src="images/outdoor-cafe.svg" alt="机器人在露天咖啡馆陪坐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">露天咖啡馆街角</h3>
+                                <p class="option-desc">街角咖啡馆旁静静坐着，成为路人的谈资和社交话题，画面既美又奇怪。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
