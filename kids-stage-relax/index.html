@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子上台紧张的安抚方式</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子上台紧张，你会怎么帮她放松？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子上台紧张，你会怎么帮她放松？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="deep-breathing-relax">
+                            <div class="card-image">
+                                <img src="images/deep-breathing-relax.svg" alt="孩子做深呼吸放松" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">深呼吸＋放松身体</h3>
+                                <p class="option-desc">陪她做几次深呼吸，轻揉肩背，让身体先放松下来。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tell-joke-distract">
+                            <div class="card-image">
+                                <img src="images/tell-joke-distract.svg" alt="家长逗孩子笑" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">讲笑话或聊轻松话题</h3>
+                                <p class="option-desc">用幽默或短故事转移注意力，缓和紧张情绪。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quick-rehearsal-praise">
+                            <div class="card-image">
+                                <img src="images/quick-rehearsal-praise.svg" alt="家长和孩子快速排练" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短排练＋鼓励肯定</h3>
+                                <p class="option-desc">和她再快速演练一遍台词并给出肯定，增强自信感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="lucky-charm-comfort">
+                            <div class="card-image">
+                                <img src="images/lucky-charm-comfort.svg" alt="孩子握着小幸运物" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">递小幸运物安抚</h3>
+                                <p class="option-desc">给她一个小物件（幸运物/手帕）作为安全感的依靠。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

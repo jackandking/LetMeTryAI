@@ -1,0 +1,19 @@
+{
+  "id": "kids-stage-relax",
+  "name": "台上小勇气",
+  "description": "面向家长的轻量投票页：通过深呼吸、幽默转移、短排练或小幸运物等具体做法，让用户投出更常用的安抚方式并分享自己的经验。",
+  "category": "情感",
+  "profileId": "womanai",
+  "keywords": [
+    "亲子",
+    "上台",
+    "紧张疏导",
+    "安抚",
+    "表演焦虑",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "kids-stage-relax/images/deep-breathing-relax.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-01T20:00:50.409Z"
+}
