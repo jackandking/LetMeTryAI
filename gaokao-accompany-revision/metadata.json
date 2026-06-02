@@ -1,0 +1,19 @@
+{
+  "id": "gaokao-accompany-revision",
+  "name": "家长爱·高考陪读",
+  "description": "围绕高考前的陪读方式设计投票，提供制定计划、做题讲解、情绪支持、请老师补短板等具体场景选项，便于家长对比自己常用的方法并分享理由。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "高考陪读",
+    "复习方法",
+    "亲子沟通",
+    "考试备考",
+    "情绪管理",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "gaokao-accompany-revision/images/make-study-plan.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-02T19:00:56.396Z"
+}

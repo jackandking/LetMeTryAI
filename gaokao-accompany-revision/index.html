@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>高考陪读：你怎么陪孩子复习</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">高考前你会怎么陪孩子复习？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">高考前你会怎么陪孩子复习？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="make-study-plan">
+                            <div class="card-image">
+                                <img src="images/make-study-plan.svg" alt="制定复习计划" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">制定复习计划</h3>
+                                <p class="option-desc">和孩子一起列天/周计划，按科目拆任务并监督执行。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="do-practice-with-explanation">
+                            <div class="card-image">
+                                <img src="images/do-practice-with-explanation.svg" alt="做题并讲解错题" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">做题即时讲解</h3>
+                                <p class="option-desc">陪孩子做真题或套题，遇到难题现场讲解并整理错题本。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="emotional-support-and-breaks">
+                            <div class="card-image">
+                                <img src="images/emotional-support-and-breaks.svg" alt="情绪支持与放松" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">情绪支持与放松</h3>
+                                <p class="option-desc">安排短休息、散步或简单活动，帮孩子缓解焦虑、恢复注意力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hire-tutor-for-weak-subjects">
+                            <div class="card-image">
+                                <img src="images/hire-tutor-for-weak-subjects.svg" alt="请老师强化薄弱科目" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">请老师强化薄弱科目</h3>
+                                <p class="option-desc">针对薄弱科目请老师或线上辅导，集中攻克短板。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
