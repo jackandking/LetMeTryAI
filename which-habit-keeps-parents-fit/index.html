@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>想不发福，爸妈更靠哪个日常习惯?</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">想不发福，爸妈更靠哪个日常习惯?</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">想不发福，爸妈更靠哪个日常习惯?</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="light-dinner">
+                            <div class="card-image">
+                                <img src="images/light-dinner.svg" alt="老人吃一碗清淡晚饭" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">晚饭清淡少量</h3>
+                                <p class="option-desc">晚饭吃清淡、少碳水，习惯早吃不过晚点心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="daily-walking">
+                            <div class="card-image">
+                                <img src="images/daily-walking.svg" alt="老人在小区散步" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">每天饭后散步</h3>
+                                <p class="option-desc">饭后散步20–30分钟，换上鞋子在小区走一圈</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="regular-housework">
+                            <div class="card-image">
+                                <img src="images/regular-housework.svg" alt="老人打扫房间做家务" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">常做家务动起来</h3>
+                                <p class="option-desc">经常做家务、打扫菜市场搬菜，上下身都动起来</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cut-snacks">
+                            <div class="card-image">
+                                <img src="images/cut-snacks.svg" alt="老年人拿着一小碗坚果" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">控制零食甜点</h3>
+                                <p class="option-desc">少吃零食和甜点，用水果或坚果当加餐</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
