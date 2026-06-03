@@ -1,0 +1,19 @@
+{
+  "id": "parent-museum-treasure",
+  "name": "家长爱·博物馆寻宝",
+  "description": "针对家庭博物馆参观场景，选出几类能迅速抓住孩子注意力的镇馆之宝（考古类、自然类、工艺类、服饰类），适合手机图文投票页，能引发家长分享导览方法与讲故事的讨论。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "亲子",
+    "镇馆之宝",
+    "历史科普",
+    "家庭活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "parent-museum-treasure/images/terra-cotta-warriors.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-03T19:00:53.513Z"
+}
