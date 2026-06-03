@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子逛博物馆：先看哪件镇馆之宝？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子逛博物馆，你会先看哪件镇馆之宝？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子逛博物馆，你会先看哪件镇馆之宝？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="terra-cotta-warriors">
+                            <div class="card-image">
+                                <img src="images/terra-cotta-warriors.svg" alt="兵马俑展览侧面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">兵马俑</h3>
+                                <p class="option-desc">站在高大的兵马俑前，孩子能想象古代战士的阵列与故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dinosaur-skeleton">
+                            <div class="card-image">
+                                <img src="images/dinosaur-skeleton.svg" alt="博物馆中展出的恐龙骨架" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">恐龙骨架</h3>
+                                <p class="option-desc">高耸的恐龙骨架直观展示远古生物体型，孩子看了会惊呼。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="blue-and-white-porcelain">
+                            <div class="card-image">
+                                <img src="images/blue-and-white-porcelain.svg" alt="青花瓷近景特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">青花瓷</h3>
+                                <p class="option-desc">细腻的青花纹样适合和孩子一起观察图案与制作工艺。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="imperial-robe">
+                            <div class="card-image">
+                                <img src="images/imperial-robe.svg" alt="宫廷服饰绣工细节" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宫廷服饰</h3>
+                                <p class="option-desc">华丽的宫廷服饰能引发孩子对历史人物、礼仪和色彩的想象。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
