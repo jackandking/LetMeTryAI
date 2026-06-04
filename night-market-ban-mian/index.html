@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>深夜拌面比一比 · 路边摊味觉场景</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">深夜吃面，你更想冲哪家摊那碗拌面？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">现在深夜路边有四碗拌面，你会先去吃哪一碗？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="la-you-ban-mian">
+                            <div class="card-image">
+                                <img src="images/la-you-ban-mian.svg" alt="辣油拌面特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">辣油拌面</h3>
+                                <p class="option-desc">香辣油泼、酥脆葱花，吃起来带劲儿</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hua-sheng-jiang-ban-mian">
+                            <div class="card-image">
+                                <img src="images/hua-sheng-jiang-ban-mian.svg" alt="花生酱拌面碗景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">花生酱拌面</h3>
+                                <p class="option-desc">浓郁花生香、绵软面条，暖胃又香甜</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="suan-cai-ban-mian">
+                            <div class="card-image">
+                                <img src="images/suan-cai-ban-mian.svg" alt="酸菜拌面配料" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">酸菜拌面</h3>
+                                <p class="option-desc">酸脆开胃配热汤，适合重口味爱好者</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zha-jiang-ban-mian">
+                            <div class="card-image">
+                                <img src="images/zha-jiang-ban-mian.svg" alt="炸酱拌面拌匀画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">炸酱拌面</h3>
+                                <p class="option-desc">咸香酱料拌匀每一根面条，很有满足感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
