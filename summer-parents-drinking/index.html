@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>夏天爸妈喝水，你更认同哪种？ 家里常见喝水习惯对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">夏天爸妈喝水，你更认同哪种？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">夏天爸妈喝水，你更认同哪种？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chang-wen-bai-kai-shui">
+                            <div class="card-image">
+                                <img src="images/chang-wen-bai-kai-shui.svg" alt="常温白开水杯" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">常温白开水</h3>
+                                <p class="option-desc">觉得常温踏实，习惯把白开水放凉再喝。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bing-zhen-leng-shui">
+                            <div class="card-image">
+                                <img src="images/bing-zhen-leng-shui.svg" alt="冰镇冷水杯" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冰镇冷水</h3>
+                                <p class="option-desc">偏爱冰凉口感，喝了感觉清爽提神。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="re-kai-shui-fang-liang">
+                            <div class="card-image">
+                                <img src="images/re-kai-shui-fang-liang.svg" alt="热开水冷却杯" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">热开水放凉到温度再喝</h3>
+                                <p class="option-desc">煮好放凉到合适温度再喝，注重卫生与习惯。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jia-ningmeng-honey">
+                            <div class="card-image">
+                                <img src="images/jia-ningmeng-honey.svg" alt="柠檬水杯" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">加点柠檬或蜂蜜调味</h3>
+                                <p class="option-desc">喜欢在水里加点味道，更容易让长辈多喝水。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
