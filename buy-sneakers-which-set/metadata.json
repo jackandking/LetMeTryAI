@@ -1,0 +1,21 @@
+{
+  "id": "buy-sneakers-which-set",
+  "name": "男人宝·鞋选",
+  "description": "围绕“买运动鞋，你更吃哪一套？”展开，提供品牌潮款、性价比、跑步性能和颜值百搭四种场景化选项，配图文展示，便于快投快分享。",
+  "category": "体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "运动鞋",
+    "买鞋",
+    "潮流",
+    "性价比",
+    "跑步",
+    "颜值",
+    "搭配",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "buy-sneakers-which-set/images/brand-trend.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-04T17:03:28.337Z"
+}
