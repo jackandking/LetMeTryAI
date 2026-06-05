@@ -334,7 +334,7 @@
     
     <div class="container">
         <div id="loading">正在加载榜单...</div>
-        <div id="no-images">暂无榜单数据，敬请期待！</div>
+        <div id="no-images">内容安全审核中，榜单暂未开放展示。</div>
         <div id="top10Gallery" class="top10-gallery"></div>
 
         <!-- Call to Action Section -->
@@ -400,8 +400,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC LIMIT 10',
-                        params: []
+                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC LIMIT 10',
+                        params: ['approved']
                     })
                 });
 
