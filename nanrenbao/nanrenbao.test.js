@@ -2,6 +2,13 @@
  * Integration tests for nanrenbao (男人宝) feature
  */
 
+import { createRequire } from 'module';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 describe('nanrenbao 男人宝 Integration Tests', () => {
     describe('Page Structure', () => {
         it('should have required HTML files', () => {
@@ -32,9 +39,9 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
             // Check for required elements
             expect(content).toContain('男人宝');
             expect(content).toContain('欣赏美女');
-            expect(content).toContain('上传美女');
+            expect(content).toContain('上传美女（维护中）');
             expect(content).toContain('appreciate.html');
-            expect(content).toContain('upload.html');
+            expect(content).toContain('上传入口暂时关闭');
         });
 
         it('should have proper HTML structure in appreciate.html', () => {
@@ -56,12 +63,11 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
             const content = fs.readFileSync(uploadPath, 'utf-8');
 
             // Check for required elements
-            expect(content).toContain('上传美女');
+            expect(content).toContain('上传美女（维护中）');
             expect(content).toContain('imageUrl');
-            expect(content).toContain('API_ENDPOINTS.MYSQL_INSERT');
-            expect(content).toContain('eb118-file.cdn.bcebos.com');
-            expect(content).toContain('.myqcloud.com');
-            expect(content).toContain('.byteimg.com');
+            expect(content).toContain('window.API_ENDPOINTS.MYSQL_QUERY');
+            expect(content).toContain('整改公告');
+            expect(content).toContain('UPLOAD_DISABLED');
         });
     });
 
@@ -101,7 +107,7 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
 
             // Check for proper API endpoint usage
             expect(appreciateContent).toContain('MYSQL_QUERY');
-            expect(uploadContent).toContain('MYSQL_INSERT');
+            expect(uploadContent).toContain('MYSQL_QUERY');
         });
     });
 
@@ -109,8 +115,8 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
         it('should enforce HTTPS in upload validation', () => {
             const fs = require('fs');
             const path = require('path');
-            const uploadPath = path.join(__dirname, 'upload.html');
-            const content = fs.readFileSync(uploadPath, 'utf-8');
+            const validatorPath = path.join(__dirname, 'url-validator.js');
+            const content = fs.readFileSync(validatorPath, 'utf-8');
 
             // Check for HTTPS validation
             expect(content).toContain("protocol !== 'https:'");
@@ -120,12 +126,12 @@ describe('nanrenbao 男人宝 Integration Tests', () => {
         it('should validate allowed domains', () => {
             const fs = require('fs');
             const path = require('path');
-            const uploadPath = path.join(__dirname, 'upload.html');
-            const content = fs.readFileSync(uploadPath, 'utf-8');
+            const validatorPath = path.join(__dirname, 'url-validator.js');
+            const content = fs.readFileSync(validatorPath, 'utf-8');
 
             // Check for domain validation
             expect(content).toContain('allowedDomains');
-            expect(content).toContain('不支持的图片来源域名');
+            expect(content).toContain('不支持的图片来源');
         });
 
         it('should include Baidu analytics', () => {
