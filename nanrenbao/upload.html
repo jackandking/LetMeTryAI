@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上传美女 - 男人宝</title>
+    <title>上传美女（维护中） - 男人宝</title>
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
@@ -159,6 +159,26 @@
             font-size: 0.9em;
         }
 
+        .maintenance-banner {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffe69c;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .maintenance-banner strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.05em;
+        }
+
+        .upload-form.is-disabled .upload-control {
+            display: none;
+        }
+
         .preview-area {
             margin-top: 20px;
             display: none;
@@ -312,7 +332,7 @@
 <body>
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
-        <h1>上传美女</h1>
+        <h1>上传美女（维护中）</h1>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
@@ -324,8 +344,12 @@
     
     <div class="container">
         <div class="upload-form">
+            <div class="maintenance-banner" id="maintenanceBanner">
+                <strong>整改公告</strong>
+                因图片内容安全审查整改，上传功能暂时关闭。整改完成并补齐审核流程后再恢复开放。
+            </div>
             <form id="uploadForm">
-                <div class="form-group">
+                <div class="form-group upload-control">
                     <label for="imageUrl">图片URL地址：</label>
                     <input 
                         type="url" 
@@ -335,9 +359,9 @@
                     >
                 </div>
 
-                <div class="upload-or-divider">— 或者选择本地图片 —</div>
+                <div class="upload-or-divider upload-control">— 或者选择本地图片 —</div>
 
-                <div class="form-group">
+                <div class="form-group upload-control">
                     <label>本地图片上传：</label>
                     <div class="file-upload-row">
                         <input type="file" id="localFileInput" accept="image/*" style="display:none">
@@ -347,7 +371,7 @@
                     <div class="compress-hint">📦 本地图片将自动压缩至500KB以内，适合手机浏览</div>
                 </div>
 
-                <div class="allowed-domains" style="background-color: #e8f5e9; border: 1px solid #4caf50;">
+                <div class="allowed-domains upload-control" style="background-color: #e8f5e9; border: 1px solid #4caf50;">
                     <h3>💎 积分获取方式：</h3>
                     <ul>
                         <li>每日访问：+10 积分</li>
@@ -356,11 +380,11 @@
                     </ul>
                 </div>
 
-                <div class="preview-area" id="previewArea">
+                <div class="preview-area upload-control" id="previewArea">
                     <img id="previewImage" alt="预览图片">
                 </div>
 
-                <button type="submit" class="submit-btn" id="submitBtn">提交上传</button>
+                <button type="submit" class="submit-btn upload-control" id="submitBtn">提交上传</button>
             </form>
 
             <div id="message" class="message"></div>
@@ -372,6 +396,9 @@
     </footer>
 
     <script>
+        const UPLOAD_DISABLED = true;
+        const UPLOAD_DISABLED_MESSAGE = '上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
+
         // Initialize points system
         const pointsInfo = PointsSystem.initialize();
         const pointsValueElement = document.getElementById('pointsValue');
@@ -585,9 +612,19 @@
         // Submit form
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
+        const uploadFormCard = document.querySelector('.upload-form');
+
+        if (UPLOAD_DISABLED) {
+            uploadFormCard.classList.add('is-disabled');
+        }
 
         uploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+
+            if (UPLOAD_DISABLED) {
+                showMessage(UPLOAD_DISABLED_MESSAGE, 'error');
+                return;
+            }
 
             const urlValue = imageUrlInput.value.trim();
 

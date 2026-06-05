@@ -380,7 +380,7 @@
         <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <div style="font-size: 1.1em; font-weight: bold; color: #2e7d32; margin-bottom: 8px;">💎 积分说明</div>
             <div style="font-size: 0.9em; color: #1b5e20; line-height: 1.6;">
-                <strong>获取积分：</strong>每日访问+10分 | 上传图片+10分/张 | 看广告+3~10分<br>
+                <strong>获取积分：</strong>每日访问+10分 | 看广告+3~10分<br>
                 <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
             </div>
         </div>
@@ -557,7 +557,7 @@
             if (!viewStatus.canView) {
                 showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
                 setTimeout(() => {
-                    showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 上传图片+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE}分`);
+                    showPointsNotification(`💡 获取积分方式：每日访问+${PointsSystem.POINTS_CONFIG.DAILY_VISIT}分 | 看广告获取额外积分`);
                 }, 3500);
                 return;
             }
