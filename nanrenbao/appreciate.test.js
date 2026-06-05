@@ -2,6 +2,10 @@
  * Tests for nanrenbao appreciate page with blur effect and modal
  */
 
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
 describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
   describe('Image Blur Effect', () => {
     it('should have blur overlay on images', () => {
@@ -44,28 +48,29 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
     it('should have modal HTML structure', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       
-      expect(html).toContain('<div id="imageModal" class="modal">');
+      expect(html).toContain('<div id="imageModal" class="modal" style="display:none;">');
+      expect(html).toContain('fullImageModal');
       expect(html).toContain('modal-close');
-      expect(html).toContain('modal-content');
+      expect(html).toContain('fullImageModalImg');
     });
 
     it('should have showModal function', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
-      expect(html).toContain('function showModal(imageUrl)');
-      expect(html).toContain('modal.style.display = \'block\'');
-      expect(html).toContain('modalImg.src = imageUrl');
+      expect(html).toContain('function showFullImage(url)');
+      expect(html).toContain('fullModal.style.display = \'flex\'');
+      expect(html).toContain('fullImg.src = url');
     });
 
     it('should have closeModal function', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
-      expect(html).toContain('function closeModal()');
-      expect(html).toContain('modal.style.display = \'none\'');
+      expect(html).toContain('function hideFullImage()');
+      expect(html).toContain('fullModal.style.display = \'none\'');
     });
 
     it('should prevent body scrolling when modal is open', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('document.body.style.overflow = \'hidden\'');
-      expect(html).toContain('document.body.style.overflow = \'auto\'');
+      expect(html).toContain('document.body.style.overflow = \'\'');
     });
   });
 
@@ -78,13 +83,12 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
 
     it('should close modal on close button click', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
-      expect(html).toContain('closeBtn.onclick = closeModal');
+      expect(html).toContain('onclick="hideFullImage()"');
     });
 
     it('should close modal when clicking outside image', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
-      expect(html).toContain('modal.onclick = function(event)');
-      expect(html).toContain('event.target === modal');
+      expect(html).toContain('class="full-image-modal" onclick="hideFullImage()"');
     });
 
     it('should close modal with Escape key', () => {
@@ -149,7 +153,7 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('async function loadImages()');
       expect(html).toContain('window.API_ENDPOINTS.MYSQL_QUERY');
-      expect(html).toContain('SELECT id, image_url, created_at FROM beauty_images');
+      expect(html).toContain("SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ?");
     });
 
     it('should handle image load errors', () => {

@@ -398,6 +398,7 @@
     <script>
         const UPLOAD_DISABLED = true;
         const UPLOAD_DISABLED_MESSAGE = '上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
+        const REVIEW_PENDING_STATUS = 'pending';
 
         // Initialize points system
         const pointsInfo = PointsSystem.initialize();
@@ -693,8 +694,11 @@
                     return;
                 }
 
-                // Image doesn't exist, proceed with upload
-                submitBtn.textContent = '上传中...';
+                // Image doesn't exist, proceed with submission
+                submitBtn.textContent = '提交审核中...';
+
+                const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                const sourceType = localFile ? 'local_file' : 'url';
                 
                 // Insert into database
                 const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
@@ -703,8 +707,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        sql: 'INSERT INTO beauty_images (image_url, created_at) VALUES (?, ?)',
-                        params: [url, new Date().toISOString().slice(0, 19).replace('T', ' ')]
+                        sql: 'INSERT INTO beauty_images (image_url, created_at, review_status, submitted_at, source_type) VALUES (?, ?, ?, ?, ?)',
+                        params: [url, now, REVIEW_PENDING_STATUS, now, sourceType]
                     })
                 });
 
@@ -715,12 +719,8 @@
                 const result = await response.json();
                 
                 if (result.affectedRows > 0) {
-                    // Award upload points
-                    const newTotal = PointsSystem.awardUploadPoints();
-                    updatePointsDisplay();
-                    
-                    showMessage(`上传成功！获得 ${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE} 积分`, 'success');
-                    showPointsNotification(`🎁 上传奖励！+${PointsSystem.POINTS_CONFIG.UPLOAD_IMAGE} 积分`);
+                    showMessage('提交成功！图片已进入审核队列，审核通过后才会展示并发放积分。', 'success');
+                    showPointsNotification('🛡️ 内容审核中，审核通过后发放上传积分');
                     
                     uploadForm.reset();
                     localFile = null;
@@ -730,14 +730,14 @@
                     
                     // Redirect to appreciate page after 2 seconds
                     setTimeout(() => {
-                        window.location.href = 'appreciate.html';
+                        window.location.href = 'index.html';
                     }, 2000);
                 } else {
-                    throw new Error('上传失败');
+                    throw new Error('提交审核失败');
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                showMessage('上传失败，请稍后重试', 'error');
+                showMessage('提交审核失败，请稍后重试', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = '提交上传';

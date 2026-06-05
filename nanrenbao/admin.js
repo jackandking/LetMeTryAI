@@ -11,14 +11,60 @@ const manageState = {
     query: ''
 };
 
+function buildReviewWhere(filter) {
+    let where = 'WHERE 1=1';
+    if (filter === 'visible') where += " AND deleted = 0 AND review_status = 'approved'";
+    if (filter === 'deleted') where += ' AND deleted = 1';
+    if (filter === 'pending') where += " AND review_status = 'pending'";
+    if (filter === 'approved') where += " AND review_status = 'approved'";
+    if (filter === 'rejected') where += " AND review_status = 'rejected'";
+    return where;
+}
+
+function formatReviewStatus(row) {
+    const reviewStatus = row.review_status || 'pending';
+    const reviewLabelMap = {
+        pending: '<span style="color:#ff9800; font-weight:bold;">待审核</span>',
+        approved: '<span style="color:#4caf50; font-weight:bold;">已通过</span>',
+        rejected: '<span style="color:#f44336; font-weight:bold;">已驳回</span>'
+    };
+    const visibilityLabel = row.deleted
+        ? '<span style="color:#9e9e9e;">已隐藏</span>'
+        : '<span style="color:#2196f3;">可展示</span>';
+    return `${reviewLabelMap[reviewStatus] || reviewLabelMap.pending}<br>${visibilityLabel}`;
+}
+
+function resetManageSelections() {
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    if (selectAllCheckbox) {
+        selectAllCheckbox.checked = false;
+    }
+}
+
+async function updateReviewStatus(ids, status, reason = null) {
+    const placeholders = ids.map(() => '?').join(',');
+    const sql = `UPDATE beauty_images
+        SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
+        WHERE id IN (${placeholders})`;
+    const params = [status, reason, 'admin-panel', ...ids];
+    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql, params })
+    });
+    if (!resp.ok) {
+        const txt = await resp.text().catch(() => '');
+        throw new Error(`审核操作失败: ${resp.status} ${resp.statusText} ${txt}`);
+    }
+    return resp.json();
+}
+
 /**
  * Fetch images for management table
  */
 async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', query = '') {
     // Build SQL with basic filtering and pagination
-    let where = 'WHERE 1=1';
-    if (filter === 'visible') where = 'WHERE deleted = 0';
-    if (filter === 'deleted') where = 'WHERE deleted = 1';
+    let where = buildReviewWhere(filter);
 
     if (query && query.trim()) {
         const q = query.trim();
@@ -32,7 +78,7 @@ async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', quer
     }
 
     const offset = (page - 1) * perPage;
-    const sql = `SELECT SQL_CALC_FOUND_ROWS id, image_url, view_count, created_at, deleted FROM beauty_images ${where} ORDER BY created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
+    const sql = `SELECT SQL_CALC_FOUND_ROWS id, image_url, view_count, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by, source_type, submitted_at FROM beauty_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
 
     const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
         method: 'POST',
@@ -73,9 +119,12 @@ function renderManageTable(rows, page, perPage, total) {
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
             <td style="padding:8px;">${row.view_count || 0}</td>
-            <td style="padding:8px;">${row.deleted ? '<span style="color:#f44336; font-weight:bold;">已删除</span>' : '<span style="color:#4caf50;">可见</span>'}</td>
+            <td style="padding:8px;">${formatReviewStatus(row)}</td>
+            <td style="padding:8px;">${row.review_reason || '-'}</td>
             <td style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${row.image_url}">查看</button>
+                ${row.review_status === 'approved' ? '' : `<button class="btn-secondary" data-action="approve" data-id="${row.id}" data-url="${row.image_url}">审核通过</button>`}
+                ${row.review_status === 'rejected' ? '' : `<button class="btn-secondary" data-action="reject" data-id="${row.id}" data-url="${row.image_url}">驳回</button>`}
                 <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}" data-url="${row.image_url}">${row.deleted ? '取消删除' : '标记删除'}</button>
                 <button class="btn-secondary" data-action="permadelete" data-id="${row.id}">永久删除</button>
             </td>
@@ -125,6 +174,22 @@ async function performAction(action, id, imageUrl) {
             });
             const json = await resp.json();
             addLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
+            await loadManagePage();
+            return;
+        }
+
+        if (action === 'approve') {
+            const json = await updateReviewStatus([id], 'approved', null);
+            addLog(`approve id=${id} result: ${JSON.stringify(json)}`, 'info');
+            await loadManagePage();
+            return;
+        }
+
+        if (action === 'reject') {
+            const reason = prompt('请输入驳回原因（将记录到审核备注）', '待补充人工审核说明');
+            if (reason === null) return;
+            const json = await updateReviewStatus([id], 'rejected', reason.trim() || '待补充人工审核说明');
+            addLog(`reject id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadManagePage();
             return;
         }
@@ -188,7 +253,7 @@ function attachManageHandlers() {
         const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
         const json = await resp.json();
         addLog('批量隐藏: ' + JSON.stringify(json), 'info');
-        document.getElementById('selectAllCheckbox').checked = false;
+        resetManageSelections();
         loadManagePage();
     };
 
@@ -201,7 +266,26 @@ function attachManageHandlers() {
         const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
         const json = await resp.json();
         addLog('批量展示: ' + JSON.stringify(json), 'info');
-        document.getElementById('selectAllCheckbox').checked = false;
+        resetManageSelections();
+        loadManagePage();
+    };
+    document.getElementById('bulkApproveBtn').onclick = async () => {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        if (!confirm(`确认将 ${ids.length} 项审核通过吗？`)) return;
+        const json = await updateReviewStatus(ids, 'approved', null);
+        addLog('批量通过: ' + JSON.stringify(json), 'info');
+        resetManageSelections();
+        loadManagePage();
+    };
+    document.getElementById('bulkRejectBtn').onclick = async () => {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        const reason = prompt('请输入批量驳回原因', '待补充人工审核说明');
+        if (reason === null) return;
+        const json = await updateReviewStatus(ids, 'rejected', reason.trim() || '待补充人工审核说明');
+        addLog('批量驳回: ' + JSON.stringify(json), 'info');
+        resetManageSelections();
         loadManagePage();
     };
     document.getElementById('bulkUndeleteBtn').onclick = async () => {
