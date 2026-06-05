@@ -2,6 +2,10 @@
  * Tests for Back View Killer feature
  */
 
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
 describe('Back View Killer Schema', () => {
     it('should have correct table structure', () => {
         const fs = require('fs');
@@ -43,11 +47,12 @@ describe('Back View Killer Main Page', () => {
         expect(content).toContain('flip-card-back');
     });
 
-    it('should have upload button in header', () => {
+    it('should show maintenance state for upload entry in header', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer.html', 'utf8');
-        expect(content).toContain('back-view-killer-upload.html');
-        expect(content).toContain('上传');
+        expect(content).toContain('backviewUploadMaintenance');
+        expect(content).toContain('上传维护中');
+        expect(content).not.toContain('href="back-view-killer-upload.html"');
     });
 
     it('should have points system integration', () => {
@@ -103,11 +108,12 @@ describe('Back View Killer Upload Page', () => {
         expect(content).toContain('正面照片');
     });
 
-    it('should show 20 points reward', () => {
+    it('should show maintenance notice on upload page', () => {
         const fs = require('fs');
         const content = fs.readFileSync('./nanrenbao/back-view-killer-upload.html', 'utf8');
-        expect(content).toContain('20');
-        expect(content).toContain('积分');
+        expect(content).toContain('整改公告');
+        expect(content).toContain('上传功能暂时关闭');
+        expect(content).toContain('UPLOAD_DISABLED');
     });
 
     it('should have preview functionality', () => {

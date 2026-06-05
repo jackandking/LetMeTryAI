@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上传背影杀 - 男人宝</title>
+    <title>上传背影杀（维护中） - 男人宝</title>
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
@@ -112,6 +112,26 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .maintenance-banner {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffe69c;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .maintenance-banner strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.05em;
+        }
+
+        .upload-form.is-disabled .upload-control {
+            display: none;
         }
 
         .form-group {
@@ -319,7 +339,7 @@
 <body>
     <header>
         <a href="back-view-killer.html" class="nav-back">← 返回</a>
-        <h1>上传背影杀</h1>
+        <h1>上传背影杀（维护中）</h1>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
@@ -329,12 +349,12 @@
     <div id="pointsNotification" class="points-notification"></div>
     
     <div class="container">
-        <div class="reward-box">
+        <div class="reward-box upload-control">
             <div class="title">🎁 上传奖励</div>
             <div class="amount">+20 积分</div>
         </div>
 
-        <div class="info-box">
+        <div class="info-box upload-control">
             <div class="title">📋 上传说明</div>
             <div class="content">
                 • 需要上传两张图片：一张背影照片和一张正面照片<br>
@@ -345,12 +365,16 @@
         </div>
 
         <form class="upload-form" id="uploadForm">
-            <div class="form-group">
+            <div class="maintenance-banner" id="maintenanceBanner">
+                <strong>整改公告</strong>
+                因图片内容安全审查整改，背影杀上传功能暂时关闭。整改完成并补齐审核流程后再恢复开放。
+            </div>
+            <div class="form-group upload-control">
                 <label>上传模式</label>
                 <label style="font-weight:normal; margin-right:10px;"><input type="radio" name="uploadMode" value="two"> 两张9:16图片（分别为背影和正面，可输入URL或选择本地文件）</label>
                 <label style="font-weight:normal;"><input type="radio" name="uploadMode" value="split" checked> 一张18:16图片（只需一张宽图自动切成两半，可输入URL或选择本地文件）</label>
             </div>
-            <div class="form-group">
+            <div class="form-group upload-control">
                 <label for="backImageUrl">背影照片 *</label>
                 <input 
                     type="url" 
@@ -366,7 +390,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group upload-control">
                 <label for="frontImageUrl">正面照片 *</label>
                 <input 
                     type="url" 
@@ -382,7 +406,7 @@
                 </div>
             </div>
 
-            <div class="preview-container">
+            <div class="preview-container upload-control">
                 <div class="preview-box">
                     <h3>背影预览</h3>
                     <div id="backPreview" class="no-preview">在上方输入背影图片链接后，这里将显示预览</div>
@@ -394,11 +418,11 @@
                     <canvas id="frontCanvas" style="display:none; width:100%; height:auto; border-radius:8px;"></canvas>
                 </div>
             </div>
-            <div style="text-align:center; margin:12px 0;">
+            <div class="upload-control" style="text-align:center; margin:12px 0;">
                 <button type="button" id="swapBtn" class="submit-btn" style="width:auto; padding:8px 14px;">↔ 互换左右</button>
             </div>
 
-            <div class="form-group" style="margin-top: 30px;">
+            <div class="form-group upload-control" style="margin-top: 30px;">
                 <button type="submit" class="submit-btn" id="submitBtn">
                     📤 提交上传（获得 20 积分）
                 </button>
@@ -411,6 +435,9 @@
     </footer>
 
     <script>
+        const UPLOAD_DISABLED = true;
+        const UPLOAD_DISABLED_MESSAGE = '背影杀上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
+
         const pointsInfo = PointsSystem.initialize();
         const pointsValueElement = document.getElementById('pointsValue');
         const pointsNotification = document.getElementById('pointsNotification');
@@ -877,8 +904,17 @@
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
 
+        if (UPLOAD_DISABLED) {
+            uploadForm.classList.add('is-disabled');
+        }
+
         uploadForm.addEventListener('submit', async function(event) {
             event.preventDefault();
+
+            if (UPLOAD_DISABLED) {
+                showPointsNotification(`⚠️ ${UPLOAD_DISABLED_MESSAGE}`);
+                return;
+            }
 
             const mode = getUploadMode();
             let backImageUrl = backImageInput.value.trim();

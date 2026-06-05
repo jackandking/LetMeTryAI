@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS beauty_images (
 -- ALTER TABLE beauty_images ADD INDEX idx_review_status (review_status);
 -- ALTER TABLE beauty_images ADD INDEX idx_review_deleted (review_status, deleted);
 -- UPDATE beauty_images SET submitted_at = created_at WHERE submitted_at IS NULL;
+-- UPDATE beauty_images SET review_status = 'approved', review_reason = '整改前存量内容恢复展示', reviewed_at = NOW(), reviewed_by = 'migration-backfill' WHERE source_type = 'legacy' AND review_status = 'pending';
 
 -- Example queries for the application:
 
