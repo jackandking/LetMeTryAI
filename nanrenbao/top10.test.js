@@ -2,6 +2,11 @@
  * Tests for top10.html - Top 10 Beauties Page
  */
 
+import { createRequire } from 'module';
+import { API_ENDPOINTS, BASE_URL } from '../util/config.js';
+
+const require = createRequire(import.meta.url);
+
 describe('Top 10 Beauties Page Tests', () => {
   describe('Page Structure', () => {
     it('should have correct page title', () => {
@@ -23,28 +28,28 @@ describe('Top 10 Beauties Page Tests', () => {
 
   describe('Database Query', () => {
     it('should query top 10 images by view count', () => {
-      const sql = 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC LIMIT 10';
+    const sql = "SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = 'approved' ORDER BY view_count DESC, created_at DESC LIMIT 10";
       
       // Verify SQL includes proper ordering
-      expect(sql).toContain('ORDER BY view_count DESC');
-      expect(sql).toContain('LIMIT 10');
-    });
+    expect(sql).toContain("review_status = 'approved'");
+    expect(sql).toContain('ORDER BY view_count DESC');
+    expect(sql).toContain('LIMIT 10');
+  });
 
     it('should use correct API endpoint for database query', () => {
-      const { API_ENDPOINTS } = require('../config.js');
-      
       expect(API_ENDPOINTS).toHaveProperty('MYSQL_QUERY');
       expect(API_ENDPOINTS.MYSQL_QUERY).toBe('https://letmetry.cloud/mysql/query');
     });
 
     it('should use sql parameter for query', () => {
       const requestBody = {
-        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images ORDER BY view_count DESC, created_at DESC LIMIT 10',
-        params: []
+        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC LIMIT 10',
+        params: ['approved']
       };
       
       expect(requestBody).toHaveProperty('sql');
       expect(requestBody.sql).toContain('SELECT');
+      expect(requestBody.params).toEqual(['approved']);
     });
   });
 
@@ -102,16 +107,12 @@ describe('Top 10 Beauties Page Tests', () => {
 
   describe('Configuration Usage', () => {
     it('should use centralized BASE_URL configuration', () => {
-      const { BASE_URL } = require('../config.js');
-      
       expect(BASE_URL).toBe('https://letmetry.cloud');
       expect(BASE_URL).not.toContain('letmetryai.cn');
     });
 
     it('should use centralized API_ENDPOINTS configuration', () => {
-      const { API_ENDPOINTS } = require('../config.js');
-      
-      expect(API_ENDPOINTS.MYSQL_QUERY).toContain(require('../config.js').BASE_URL);
+      expect(API_ENDPOINTS.MYSQL_QUERY).toContain(BASE_URL);
     });
   });
 
