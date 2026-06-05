@@ -91,6 +91,17 @@
             transform: translateY(-2px);
         }
 
+        .upload-btn.disabled {
+            background: linear-gradient(135deg, #bdbdbd 0%, #e0e0e0 100%);
+            color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .upload-btn.disabled:hover {
+            transform: none;
+        }
+
         .points-display {
             position: absolute;
             right: 20px;
@@ -411,7 +422,7 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>背影杀 💃</h1>
-        <a href="back-view-killer-upload.html" class="upload-btn">📤 上传</a>
+        <div class="upload-btn disabled" id="backviewUploadMaintenance">📤 上传维护中</div>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
