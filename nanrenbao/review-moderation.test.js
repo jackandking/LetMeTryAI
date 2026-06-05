@@ -28,6 +28,8 @@ describe('Nanrenbao review moderation workflow', () => {
     expect(content).toContain('ADD COLUMN review_status');
     expect(content).toContain('UPDATE beauty_images');
     expect(content).toContain('submitted_at = created_at');
+    expect(content).toContain("source_type = 'legacy' AND review_status = 'pending'");
+    expect(content).toContain('migration-backfill');
   });
 
   it('should restrict public appreciate queries to approved images', () => {
