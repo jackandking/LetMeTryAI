@@ -2,6 +2,10 @@
  * Tests for duplicate image upload detection
  */
 
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
 describe('Upload Duplicate Detection', () => {
   describe('Duplicate Check Query', () => {
     it('should check for existing image URL before upload', () => {
