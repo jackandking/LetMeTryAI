@@ -83,19 +83,20 @@ describe('Upload Duplicate Detection', () => {
   });
 
   describe('Upload Flow After Duplicate Check', () => {
-    it('should change button text to "上传中..." after duplicate check passes', () => {
+    it('should change button text to "提交审核中..." after duplicate check passes', () => {
       const fs = require('fs');
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
       
-      // After duplicate check passes, should show "上传中..."
-      expect(content).toContain('submitBtn.textContent = \'上传中...\'');
+      // After duplicate check passes, should show "提交审核中..."
+      expect(content).toContain('submitBtn.textContent = \'提交审核中...\'');
     });
 
-    it('should use INSERT query with parameters', () => {
+    it('should insert new uploads as pending review', () => {
       const fs = require('fs');
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
       
-      expect(content).toContain('INSERT INTO beauty_images (image_url, created_at) VALUES (?, ?)');
+      expect(content).toContain('INSERT INTO beauty_images (image_url, created_at, review_status, submitted_at, source_type) VALUES (?, ?, ?, ?, ?)');
+      expect(content).toContain('REVIEW_PENDING_STATUS');
     });
 
     it('should check affectedRows for successful insert', () => {
@@ -125,25 +126,12 @@ describe('Upload Duplicate Detection', () => {
   });
 
   describe('Points Award Logic', () => {
-    it('should only award points if upload is successful', () => {
+    it('should not award points during submission because approval is required first', () => {
       const fs = require('fs');
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
-      
-      // Points should be awarded after checking affectedRows > 0
-      const pointsAwardSection = content.match(/if \(result\.affectedRows > 0\)[\s\S]*?PointsSystem\.awardUploadPoints\(\)/);
-      expect(pointsAwardSection).toBeTruthy();
-    });
 
-    it('should not award points for duplicate uploads', () => {
-      const fs = require('fs');
-      const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
-      
-      // Duplicate check should return before reaching points award
-      const flow = content.indexOf('该图片已存在');
-      const pointsAward = content.indexOf('PointsSystem.awardUploadPoints()');
-      
-      expect(flow).toBeLessThan(pointsAward);
-      expect(content).toContain('return;'); // Returns before points award
+      expect(content).not.toContain('PointsSystem.awardUploadPoints()');
+      expect(content).toContain('审核通过后才会展示并发放积分');
     });
   });
 
@@ -172,7 +160,7 @@ describe('Upload Duplicate Detection', () => {
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
       
       expect(content).toContain('检查中...');
-      expect(content).toContain('上传中...');
+      expect(content).toContain('提交审核中...');
       expect(content).toContain('提交上传');
     });
 

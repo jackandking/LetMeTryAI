@@ -431,6 +431,9 @@
                 <div style="margin-top:8px; display:flex; gap:8px;">
                     <select id="filterSelect" style="padding:8px; border-radius:6px; border:1px solid #ddd;">
                         <option value="all">显示全部</option>
+                        <option value="pending">仅显示待审核</option>
+                        <option value="approved">仅显示已通过</option>
+                        <option value="rejected">仅显示已驳回</option>
                         <option value="visible">仅显示可见</option>
                         <option value="deleted">仅显示已标记删除</option>
                     </select>
@@ -443,6 +446,8 @@
                     <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                         <div id="manageStats">加载中...</div>
                         <div>
+                            <button class="btn-secondary" id="bulkApproveBtn">批量通过</button>
+                            <button class="btn-secondary" id="bulkRejectBtn">批量驳回</button>
                             <button class="btn-secondary" id="bulkHideBtn">批量隐藏</button>
                             <button class="btn-secondary" id="bulkShowBtn">批量展示</button>
                             <button class="btn-secondary" id="bulkUndeleteBtn">批量取消删除</button>
@@ -457,8 +462,9 @@
                                             <th style="padding:8px; width:60px;">ID</th>
                                             <th style="padding:8px;">缩略图 / URL</th>
                                             <th style="padding:8px; width:120px;">查看数</th>
-                                            <th style="padding:8px; width:120px;">状态</th>
-                                            <th style="padding:8px; width:240px;">操作</th>
+                                            <th style="padding:8px; width:180px;">审核 / 展示状态</th>
+                                            <th style="padding:8px; width:160px;">审核备注</th>
+                                            <th style="padding:8px; width:320px;">操作</th>
                                         </tr>
                             </thead>
                             <tbody id="imagesTbody"></tbody>

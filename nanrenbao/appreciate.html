@@ -390,7 +390,7 @@
             <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
         <div id="loading">正在加载图片...</div>
-        <div id="no-images">暂无图片，快去上传吧！</div>
+        <div id="no-images">内容安全审核中，暂未开放展示，请稍后再来查看。</div>
         <div id="gallery" class="gallery"></div>
     </div>
 
@@ -615,9 +615,9 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        // Only return images that are not marked deleted
-                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 ORDER BY view_count DESC, created_at DESC',
-                        params: []
+                        // Only return approved images that are not marked deleted
+                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC',
+                        params: ['approved']
                     })
                 });
 
