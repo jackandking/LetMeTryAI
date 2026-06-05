@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>24年后夺冠，你当年在哪儿看球？回忆你的看球瞬间</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">24年后夺冠，你当年在哪儿看球？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">24年后夺冠，你当年是在哪儿看球的？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="at-home-with-family">
+                            <div class="card-image">
+                                <img src="images/at-home-with-family.svg" alt="家人围坐电视看球的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家里和家人一起</h3>
+                                <p class="option-desc">在客厅里跟家人围着电视，看球时的欢笑或落泪都在这一刻</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="community-square-screen">
+                            <div class="card-image">
+                                <img src="images/community-square-screen.svg" alt="社区广场大屏前看球的人群" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">广场或社区大屏</h3>
+                                <p class="option-desc">和邻居们在广场大屏前看球，热闹又接地气</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="restaurant-teahouse">
+                            <div class="card-image">
+                                <img src="images/restaurant-teahouse.svg" alt="茶馆或小饭店里看球的长辈" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">饭店或茶馆里</h3>
+                                <p class="option-desc">在饭店或茶馆一边喝茶一边看球，边吃边聊的氛围很有生活感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="friends-fan-gathering">
+                            <div class="card-image">
+                                <img src="images/friends-fan-gathering.svg" alt="朋友聚在一起看球庆祝的场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">朋友家或球迷聚会</h3>
+                                <p class="option-desc">和老友或球迷在一起看球，大家一起讨论、起哄、庆祝或落寞</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
