@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>夏夜夜宵对比：烧烤、麻辣烫、凉面该选谁</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">夏夜没胃口？这些夜宵你会选哪个？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">夏天的夜里，你肚子饿会选哪个夜宵？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="summer-night-snack-bbq">
+                            <div class="card-image">
+                                <img src="images/summer-night-snack-bbq.svg" alt="烧烤摊上烤串的近景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">烧烤串串</h3>
+                                <p class="option-desc">烟火气十足，边喝啤酒边撸串</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="summer-night-snack-malatang">
+                            <div class="card-image">
+                                <img src="images/summer-night-snack-malatang.svg" alt="热气腾腾的麻辣烫碗" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">麻辣烫/冒菜</h3>
+                                <p class="option-desc">辣味暖胃，夜里特别带劲</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="summer-night-snack-liangmian">
+                            <div class="card-image">
+                                <img src="images/summer-night-snack-liangmian.svg" alt="拌好的凉面配料特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">清爽凉面</h3>
+                                <p class="option-desc">清爽不腻，夏夜解暑好选择</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="summer-night-snack-fruit">
+                            <div class="card-image">
+                                <img src="images/summer-night-snack-fruit.svg" alt="夜市上的水果串盘" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">水果/轻食小吃</h3>
+                                <p class="option-desc">想轻一点就来点水果或小吃</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

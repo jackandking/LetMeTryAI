@@ -1,0 +1,19 @@
+{
+  "id": "summer-night-snack",
+  "name": "夏夜夜宵榜",
+  "description": "面向喜欢夜宵和街头美食的男性用户，画面感强（烤串烟火、麻辣汤面、清爽凉面），适合图文并茂的投票页与短描述互动。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "夜宵",
+    "夏天",
+    "烧烤",
+    "麻辣烫",
+    "凉面",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "summer-night-snack/images/summer-night-snack-bbq.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-06T21:01:09.365Z"
+}
