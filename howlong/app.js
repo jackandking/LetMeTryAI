@@ -7,8 +7,8 @@
  * Configuration object for question and options
  */
 const questionConfig = {
-    title: "你能坚持多久？",
-    question: "和视频中的美女啪啪你能坚持多久？",
+    title: "你会停留多久？",
+    question: "刷到感兴趣的视频，你通常会停留多久？",
     options: [
         { value: "1", label: "10秒以下" },
         { value: "2", label: "1分钟以上" },
@@ -16,7 +16,7 @@ const questionConfig = {
         { value: "4", label: "10分钟以上" },
         { value: "5", label: "30分钟以上" }
     ],
-    storageKey: "howlong1.data"
+    storageKey: "howlong2.data"
 };
 
 /**
@@ -47,20 +47,6 @@ function logEvent(event, data = {}) {
             body: JSON.stringify(payload),
             keepalive: true
         }).catch(() => {});
-    }
-}
-
-/**
- * Initializes the application
- */
-function initializeApp() {
-    try {
-        checkUrlParameters();
-        setupEventTracking();
-        initializeVoteData();
-        setupPageContent();
-    } catch (error) {
-        console.error('Error initializing app:', error);
     }
 }
 
@@ -287,8 +273,8 @@ function showResult(voteData) {
     }
 
     // Clear and set up result container
-    resultDiv.innerHTML = "<h2>全网用户统计结果</h2>";
-    resultDiv.innerHTML += "<p style='text-align:center;color:#666;margin-bottom:20px;'>以下是所有参与用户的真实数据统计</p>";
+    resultDiv.innerHTML = "<h2>本页用户投票统计</h2>";
+    resultDiv.innerHTML += "<p style='text-align:center;color:#666;margin-bottom:20px;'>以下是本页参与用户的累计投票统计</p>";
 
     // Create bar chart
     const barChart = createBarChart(voteData);
@@ -409,6 +395,7 @@ function handleResultDisplay() {
 function initializeApp() {
     try {
         checkUrlParameters();
+        setupEventTracking();
         initializeVoteData();
         setupPageContent();
         handleResultDisplay();
