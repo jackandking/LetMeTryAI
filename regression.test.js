@@ -1,4 +1,5 @@
 // regression.test.js - Regression tests to ensure changes don't break existing functionality
+import fs from 'node:fs';
 import { API_ENDPOINTS, BASE_URL, getImageUrl } from './util/config.js';
 import {
   APPROVED_STATUS,
@@ -175,6 +176,20 @@ describe('Regression Tests - Domain to IP Migration', () => {
 
       expect(duplicateLookup).toContain('deleted');
       expect(reactivateSql).toContain('SET deleted = 0');
+    });
+  });
+
+  describe('Regression Tests - HowLong Compliance Remediation', () => {
+    it('should keep the published howlong route while removing risky copy', () => {
+      const howlongSource = fs.readFileSync(new URL('./howlong/app.js', import.meta.url), 'utf8');
+      const howlongHtml = fs.readFileSync(new URL('./howlong/index.html', import.meta.url), 'utf8');
+
+      expect(howlongSource).toContain('result_page_id=howlong');
+      expect(howlongSource).toContain('storageKey: "howlong2.data"');
+      expect(howlongSource).toContain('刷到感兴趣的视频，你通常会停留多久？');
+      expect(howlongSource).not.toContain('啪啪');
+      expect(howlongSource).not.toContain('美女');
+      expect(howlongHtml).not.toContain('看更多美女');
     });
   });
 });
