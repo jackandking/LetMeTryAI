@@ -1,0 +1,19 @@
+{
+  "id": "beauty-backview-killer",
+  "name": "美人背影杀",
+  "description": "结合今日热搜中明星红毯/街拍的背影造型元素，呈现4种典型美人背影形象，强调妆发与服装轮廓的视觉冲击，适合插图展示与短句引导投票。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "背影杀",
+    "美妆",
+    "红毯",
+    "颜值",
+    "视觉冲击",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "beauty-backview-killer/images/red-gown-long-hair.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-06T20:01:10.672Z"
+}
