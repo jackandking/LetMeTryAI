@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子坐飞机，哪种省钱又轻松？家长常用4种策略对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子坐飞机，哪种省钱又轻松的策略？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子坐飞机，你更倾向哪种既省钱又相对轻松的做法？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="early-booking-weekdays">
+                            <div class="card-image">
+                                <img src="images/early-booking-weekdays.svg" alt="家长和孩子在机场候机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">提前买平日早鸟</h3>
+                                <p class="option-desc">提前几周买平日或早鸟票，票价更低，孩子作息更稳定，计划性强。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="last-minute-deals">
+                            <div class="card-image">
+                                <img src="images/last-minute-deals.svg" alt="显示促销价的机票" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">抢促销/临近出票</h3>
+                                <p class="option-desc">等促销或临近降价再下单，可能省不少，但改签或无座的风险较高。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="transfer-and-offpeak">
+                            <div class="card-image">
+                                <img src="images/transfer-and-offpeak.svg" alt="家庭在转机休息区" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">转机或错峰出行</h3>
+                                <p class="option-desc">选转机或非高峰航班通常更便宜，但旅程更长，需要安排中转休息。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="miles-points">
+                            <div class="card-image">
+                                <img src="images/miles-points.svg" alt="信用卡与里程票示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">用里程或积分换票</h3>
+                                <p class="option-desc">用里程/信用卡积分换座位或加购服务，能节省现金并减轻带娃负担（需提前准备）。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
