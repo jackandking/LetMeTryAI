@@ -1,0 +1,19 @@
+{
+  "id": "gaokao-moments",
+  "name": "高考现场回忆",
+  "description": "以高考考场中的典型现场瞬间为主题，提供可视化选项（配图＋短文案），鼓励用户回忆、投票并在评论区讲经验与避雷故事，易产生高互动。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "高考",
+    "考场",
+    "现场瞬间",
+    "高三回忆",
+    "避雷",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "gaokao-moments/images/forgot-admission-ticket.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-07T17:01:05.853Z"
+}
