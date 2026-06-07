@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上传美女（维护中） - 男人宝</title>
+    <title>上传美女 - 男人宝</title>
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
@@ -332,7 +332,7 @@
 <body>
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
-        <h1>上传美女（维护中）</h1>
+        <h1>上传美女</h1>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
@@ -344,9 +344,9 @@
     
     <div class="container">
         <div class="upload-form">
-            <div class="maintenance-banner" id="maintenanceBanner">
-                <strong>整改公告</strong>
-                因图片内容安全审查整改，上传功能暂时关闭。整改完成并补齐审核流程后再恢复开放。
+            <div class="maintenance-banner" id="maintenanceBanner" style="display:none;">
+                <strong>内部使用</strong>
+                此页面仅供内部管理使用，不对外公开链接。
             </div>
             <form id="uploadForm">
                 <div class="form-group upload-control">
@@ -396,7 +396,7 @@
     </footer>
 
     <script>
-        const UPLOAD_DISABLED = true;
+        const UPLOAD_DISABLED = false;
         const UPLOAD_DISABLED_MESSAGE = '上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
         const REVIEW_PENDING_STATUS = 'pending';
 
