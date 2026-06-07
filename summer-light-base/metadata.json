@@ -1,0 +1,18 @@
+{
+  "id": "summer-light-base",
+  "name": "夏日轻薄底妆",
+  "description": "结合夏日热感与清透诉求，用小图示展示水光/无感/持妆三种底妆质地，适合短图+简短文案的投票页。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "夏日底妆",
+    "轻薄",
+    "水光",
+    "清透",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "summer-light-base/images/water-glow-base.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-07T20:00:50.979Z"
+}
