@@ -1,0 +1,18 @@
+{
+  "id": "dare-self-driving",
+  "name": "无人驾驶投票",
+  "description": "围绕自动驾驶信任与体验的短投票，适合带图对比场景（路测、车内视角、乘客表情）",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "自动驾驶",
+    "出行",
+    "科技信任",
+    "短视频场景",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "dare-self-driving/images/ride-now.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-07T21:01:23.238Z"
+}
