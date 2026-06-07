@@ -1,0 +1,20 @@
+{
+  "id": "gaokao-day-parent-actions",
+  "name": "家长爱·高考那天",
+  "description": "面向家长的轻互动投票页：比较陪考、等待、在家准备和只发鼓励消息四种常见做法，适合手机阅读、配图与短文说明，便于产生讨论和实用建议分享。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "高考",
+    "陪考",
+    "家长",
+    "备考日",
+    "亲子沟通",
+    "营养餐",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "gaokao-day-parent-actions/images/accompany-child-to-exam.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-07T19:00:29.716Z"
+}
