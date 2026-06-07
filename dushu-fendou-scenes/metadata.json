@@ -1,0 +1,20 @@
+{
+  "id": "dushu-fendou-scenes",
+  "name": "怀念读书时光",
+  "description": "图文投票页展示四种典型读书奋斗画面（台灯夜读、黑板朗读、走廊讨论、清晨自习），鼓励长辈回忆故事并留下短述。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "怀旧",
+    "读书",
+    "奋斗",
+    "台灯",
+    "教室",
+    "自习",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "dushu-fendou-scenes/images/desk-lamp-scribble.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-07T18:01:04.796Z"
+}
