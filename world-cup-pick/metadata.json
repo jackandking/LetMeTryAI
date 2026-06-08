@@ -1,0 +1,18 @@
+{
+  "id": "world-cup-pick",
+  "name": "世界杯阵营",
+  "description": "2026年世界杯火热来袭，巴西、阿根廷、德国、法国，你心里站哪队？",
+  "category": "体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "世界杯",
+    "足球",
+    "2026",
+    "体育",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "world-cup-pick/images/brazil-flag.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-08T17:06:23.381Z"
+}
