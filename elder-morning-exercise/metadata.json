@@ -1,0 +1,19 @@
+{
+  "id": "elder-morning-exercise",
+  "name": "晨练偏好",
+  "description": "围绕早晨活动场景（散步 / 太极 / 广场舞 / 居家舒展），图文友好、适合手机阅读，便于用户标注自家习惯并留言交流。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "晨练",
+    "太极",
+    "广场舞",
+    "散步",
+    "老年生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-morning-exercise/images/morning-walk.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-08T18:01:24.078Z"
+}
