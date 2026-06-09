@@ -1,0 +1,20 @@
+{
+  "id": "child-sleep-habit-priority",
+  "name": "睡眠习惯偏好",
+  "description": "孩子睡眠习惯，你家更看重哪个？规律作息、睡够时长、安稳不醒、自己入睡，快来选一选",
+  "category": "亲子生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "睡眠",
+    "育儿",
+    "习惯",
+    "亲子",
+    "规律作息",
+    "自主入睡",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-sleep-habit-priority/images/regular-schedule.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-09T19:01:30.294Z"
+}
