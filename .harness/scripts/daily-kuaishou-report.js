@@ -1077,13 +1077,28 @@ async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateS
 
 // ─── Main ───
 
+function parseDateArg() {
+    const idx = process.argv.indexOf('--date');
+    if (idx !== -1 && process.argv[idx + 1]) {
+        const candidate = process.argv[idx + 1];
+        if (/^\d{4}-\d{2}-\d{2}$/.test(candidate)) {
+            return candidate;
+        }
+    }
+    return null;
+}
+
 async function main() {
     const startTime = Date.now();
-    const today = new Date();
+    const dateOverride = parseDateArg();
+    const today = dateOverride ? new Date(dateOverride + 'T00:00:00Z') : new Date();
     const dateStr = today.toISOString().split('T')[0];
 
     log('INFO', '========================================');
     log('INFO', `Daily Kuaishou Report - ${dateStr}`);
+    if (dateOverride) {
+        log('INFO', `Date override: ${dateOverride}`);
+    }
     log('INFO', '========================================');
 
     try {
