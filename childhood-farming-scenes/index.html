@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>国产农机走向世界，你小时候见过哪种耕作场景？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">国产农机走向世界，你小时候见过哪种耕作场景？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你小时候见过哪种耕作场景？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ox-plow">
+                            <div class="card-image">
+                                <img src="images/ox-plow.svg" alt="老牛拉犁耕田插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老牛拉犁耕田</h3>
+                                <p class="option-desc">老牛慢悠悠地走，犁铧翻起黄褐色的土，尘土里全是熟悉的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="walking-tractor">
+                            <div class="card-image">
+                                <img src="images/walking-tractor.svg" alt="手扶拖拉机耕田插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手扶拖拉机突突跑</h3>
+                                <p class="option-desc">柴油机一响，黑烟一冒，突突突地就能把一块地翻完。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="combine-harvester">
+                            <div class="card-image">
+                                <img src="images/combine-harvester.svg" alt="联合收割机割麦插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">联合收割机割麦</h3>
+                                <p class="option-desc">金黄麦浪里，收割机开过留下一排排麦茬，麦粒哗哗流进袋子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="rice-planting">
+                            <div class="card-image">
+                                <img src="images/rice-planting.svg" alt="水牛稻田插秧插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">水牛稻田插秧</h3>
+                                <p class="option-desc">弯着腰把秧苗插进水田，身后留下一行行整齐的绿，腰酸却踏实。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
