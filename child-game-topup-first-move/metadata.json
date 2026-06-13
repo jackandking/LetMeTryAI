@@ -1,0 +1,19 @@
+{
+  "id": "child-game-topup-first-move",
+  "name": "家长爱",
+  "description": "孩子偷偷给游戏充值，家长的应对方式会直接影响教育和亲子关系。来投一票，看看其他家长的选择。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "孩子充值游戏",
+    "家庭教育",
+    "亲子沟通",
+    "游戏充值",
+    "家长应对",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-game-topup-first-move/images/talk-calmly.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-13T00:50:30.439Z"
+}
