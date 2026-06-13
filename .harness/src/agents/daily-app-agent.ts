@@ -443,8 +443,18 @@ export class DailyAppAgent {
         return { next: 'done', data: { ...state.data, reportSent: false, shadowMode: true } };
       }
 
+      // Only send email when publish failed or previous steps errored.
+      // Successful daily app runs are logged silently to reduce inbox noise.
+      if (published === true && !publishError) {
+        logger.info('Daily app published successfully; skipping success email', {
+          appId: topic.appId,
+          planId: planId || 'N/A',
+        });
+        return { next: 'done', data: { ...state.data, reportSent: false, publishSuccess: true } };
+      }
+
       const toEmail = process.env.DAILY_REPORT_TO || 'jackandking@163.com';
-      const subject = `[LetMeTryAI] Daily app published: ${topic.appName}`;
+      const subject = `[LetMeTryAI] Daily app publish failed: ${topic.appName}`;
       const body = [
         `Profile: ${this.profileId}`,
         `App ID: ${topic.appId}`,
@@ -455,19 +465,19 @@ export class DailyAppAgent {
         `Kuaishou Publish Status: ${published ? 'Success' : 'Failed'}`,
         publishError ? `Publish Error: ${publishError}` : '',
       ].join('\n');
-      
+
       const reportDir = join(PATHS.harnessRuntimeDir, 'daily-reports');
       if (!existsSync(reportDir)) {
         await this.ensureDir(reportDir);
       }
       const bodyFile = join(reportDir, `${topic.appId}-report.txt`);
       writeFileSync(bodyFile, body, 'utf-8');
-      
+
       const scriptPath = join(PATHS.projectRoot, '.harness', 'scripts', 'send-daily-report.py');
       await this.runCommand('python3', [scriptPath, subject, toEmail, bodyFile]);
-      
+
       logger.info('Report email sent', { toEmail, subject });
-      
+
       return { next: 'done', data: { ...state.data, reportSent: true } };
     });
   }
