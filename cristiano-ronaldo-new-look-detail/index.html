@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>C罗新造型亮相，哪个细节更吸睛？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">C罗新造型亮相，哪个细节更吸睛？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">C罗新造型亮相，哪个细节更吸睛？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hairstyle-change">
+                            <div class="card-image">
+                                <img src="images/hairstyle-change.svg" alt="C罗新发型造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">发型变化</h3>
+                                <p class="option-desc">这款发型有没有让你眼前一亮？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="beard-style">
+                            <div class="card-image">
+                                <img src="images/beard-style.svg" alt="C罗新胡须风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">胡须风格</h3>
+                                <p class="option-desc">胡须一换，气质马上不同。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="accessories-detail">
+                            <div class="card-image">
+                                <img src="images/accessories-detail.svg" alt="C罗新造型耳饰配饰" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">耳饰/配饰</h3>
+                                <p class="option-desc">小配饰往往是整体造型的点睛之笔。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="outfit-footwear">
+                            <div class="card-image">
+                                <img src="images/outfit-footwear.svg" alt="C罗新造型服装鞋履" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">服装/鞋履</h3>
+                                <p class="option-desc">整体look的搭配细节也很加分。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
