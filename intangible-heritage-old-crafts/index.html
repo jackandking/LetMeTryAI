@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>非遗里的老手艺，哪个让你想起小时候？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">非遗里的老手艺，哪个让你想起小时候？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">非遗里的老手艺，哪个让你想起小时候？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sugar-painting">
+                            <div class="card-image">
+                                <img src="images/sugar-painting.svg" alt="糖画老手艺插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">糖画</h3>
+                                <p class="option-desc">小时候校门口转一勺糖稀，转出龙就能开心一整天</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="paper-cutting">
+                            <div class="card-image">
+                                <img src="images/paper-cutting.svg" alt="剪纸老手艺插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">剪纸</h3>
+                                <p class="option-desc">过年时奶奶剪的红窗花，贴满窗户才算有年味</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bamboo-weaving">
+                            <div class="card-image">
+                                <img src="images/bamboo-weaving.svg" alt="竹编老手艺插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">竹编</h3>
+                                <p class="option-desc">爷爷编的竹篮、簸箕，装过自家晒的干货和牵挂</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dough-figurine">
+                            <div class="card-image">
+                                <img src="images/dough-figurine.svg" alt="捏面人老手艺插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">捏面人</h3>
+                                <p class="option-desc">庙会上一块面团捏出孙悟空，舍不得吃也舍不得丢</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
