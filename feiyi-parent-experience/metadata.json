@@ -1,0 +1,19 @@
+{
+  "id": "feiyi-parent-experience",
+  "name": "非遗亲子体验",
+  "description": "用投票带孩子发现身边的非遗魅力，从皮影、剪纸、戏曲、民乐中选出想先体验的一项，开启亲子文化探索。",
+  "category": "亲子文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "非遗",
+    "亲子",
+    "传统文化",
+    "手工体验",
+    "家庭教育",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "feiyi-parent-experience/images/shadow-puppet-play.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-13T19:00:28.442Z"
+}
