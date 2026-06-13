@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>张雪机车反超夺冠名场面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">张雪机车极限反超夺冠，哪个画面更让你上头？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">张雪机车极限反超夺冠，哪个画面更让你上头？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="corner-knee-down-smoke">
+                            <div class="card-image">
+                                <img src="images/corner-knee-down.svg" alt="弯道贴地压弯轮胎冒烟画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">弯道贴地压弯，轮胎冒烟</h3>
+                                <p class="option-desc">弯道贴地压弯，轮胎冒烟</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="straight-thruster-tail-light">
+                            <div class="card-image">
+                                <img src="images/straight-thruster-overtake.svg" alt="直线冲刺反超绝杀画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">直线油门全开，尾灯绝杀</h3>
+                                <p class="option-desc">直线油门全开，尾灯绝杀</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="rainy-slide-save-control">
+                            <div class="card-image">
+                                <img src="images/rainy-slide-save.svg" alt="雨天湿滑路面极限救车画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">雨天湿滑救车，控车封神</h3>
+                                <p class="option-desc">雨天湿滑救车，控车封神</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="final-lap-outside-overtake">
+                            <div class="card-image">
+                                <img src="images/final-lap-overtake.svg" alt="最后一圈外道超车夺冠画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">末圈外道超车，一剑封喉</h3>
+                                <p class="option-desc">末圈外道超车，一剑封喉</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
