@@ -1,0 +1,19 @@
+{
+  "id": "parent-museum-treasures",
+  "name": "博物馆寻宝",
+  "description": "带孩子逛博物馆，哪类镇馆之宝让他眼前一亮？从青铜重器到恐龙化石，看看孩子更被哪类文物吸引。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "镇馆之宝",
+    "亲子",
+    "历史文化",
+    "好奇心",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "parent-museum-treasures/images/bronze-treasures.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-14T19:00:38.577Z"
+}
