@@ -1,0 +1,20 @@
+{
+  "id": "618-gear-upgrade",
+  "name": "618装备清单",
+  "description": "618期间，看看大家更想把钱花在手机、电脑、耳机还是游戏机上。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "618",
+    "数码",
+    "手机",
+    "电脑",
+    "耳机",
+    "游戏机",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "618-gear-upgrade/images/smartphone.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-14T21:01:25.101Z"
+}
