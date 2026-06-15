@@ -3,13 +3,13 @@
  */
 
 const questionConfig = {
-    title: '这些老农具，你还记得几个？',
-    question: '下面这些老农具，你还记得几个？',
+    title: '老家这些农具，你还记得几样？',
+    question: '下面这些农具，你还记得几样？',
     options: [
+        { value: 'hoe', label: '锄头' },
         { value: 'winnowing-fan', label: '风车' },
         { value: 'stone-mill', label: '石磨' },
-        { value: 'wooden-plow', label: '犁' },
-        { value: 'harrow-rake', label: '耙' }
+        { value: 'bamboo-hat', label: '斗笠' }
     ],
     storageKey: 'old_farm_tools_memory.data'
 };
@@ -218,7 +218,7 @@ function showResult(latestVoteData) {
     const resultDiv = document.getElementById('result');
     if (!resultDiv) return;
 
-    resultDiv.innerHTML = '<h2>这些老农具，你还记得几个？结果</h2>';
+    resultDiv.innerHTML = '<h2>老家这些农具，你还记得几样？结果</h2>';
     resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);

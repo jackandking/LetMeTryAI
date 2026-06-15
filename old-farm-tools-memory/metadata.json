@@ -1,19 +1,20 @@
 {
   "id": "old-farm-tools-memory",
-  "name": "老农具记忆馆",
-  "description": "来认一认这些曾经天天见的老农具，看看你还记得几个，找回属于田间地头的美好记忆。",
+  "name": "老家农具记忆",
+  "description": "翻开老家记忆，这些熟悉的农具你还记得几样？一起来找找当年的乡村时光。",
   "category": "怀旧回忆",
   "profileId": "elder-love",
   "keywords": [
-    "老农具",
+    "农具",
+    "老家",
     "怀旧",
-    "乡村记忆",
-    "农耕生活",
-    "回忆",
+    "乡村",
+    "记忆",
+    "农耕",
     "投票",
     "爱老人"
   ],
-  "coverImage": "old-farm-tools-memory/images/winnowing-fan.svg",
+  "coverImage": "old-farm-tools-memory/images/hoe.svg",
   "generatedFrom": "fighter-jets",
-  "generatedAt": "2026-06-13T00:49:23.421Z"
+  "generatedAt": "2026-06-15T18:00:49.727Z"
 }
