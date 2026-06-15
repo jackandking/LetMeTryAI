@@ -1,0 +1,19 @@
+{
+  "id": "red-carpet-heartbeat",
+  "name": "红毯心动时刻",
+  "description": "看看这届红毯造型里，哪种风格更容易让你一眼心动。",
+  "category": "明星造型",
+  "profileId": "womanai",
+  "keywords": [
+    "红毯",
+    "明星造型",
+    "心动",
+    "颜值",
+    "时尚",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "red-carpet-heartbeat/images/cool-queen-style.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-15T20:01:12.793Z"
+}
