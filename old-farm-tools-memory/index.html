@@ -14,7 +14,7 @@
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
-    <title>这些老农具，你还记得几个？</title>
+    <title>老家这些农具，你还记得几样？</title>
     <script src="../util.js"></script>
     <script src="app.js?v=2"></script>
     <link rel="stylesheet" href="styles.css">
@@ -22,22 +22,34 @@
 <body>
     <div class="container">
         <header class="page-header">
-            <h1 id="pageTitle">这些老农具，你还记得几个？</h1>
+            <h1 id="pageTitle">老家这些农具，你还记得几样？</h1>
         </header>
 
         <main>
             <form id="questionnaire">
                 <div class="question" id="questionArea">
-                    <p id="questionText" class="question-text">下面这些老农具，你还记得几个？</p>
+                    <p id="questionText" class="question-text">下面这些农具，你还记得几样？</p>
                     <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hoe">
+                            <div class="card-image">
+                                <img src="images/hoe.svg" alt="传统锄头农具" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">锄头</h3>
+                                <p class="option-desc">翻地除草，田里最常见的老伙计</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
                         <label class="option-card">
                             <input type="radio" name="equipment" value="winnowing-fan">
                             <div class="card-image">
-                                <img src="images/winnowing-fan.svg" alt="传统木制风车老农具" loading="lazy">
+                                <img src="images/winnowing-fan.svg" alt="传统风车农具" loading="lazy">
                             </div>
                             <div class="card-content">
                                 <h3 class="option-title">风车</h3>
-                                <p class="option-desc">摇一摇就能把糠和米粒分开，晒谷场上离不开它。</p>
+                                <p class="option-desc">摇动手柄，谷子糠皮分得一清二楚</p>
                             </div>
                             <div class="check-indicator">✓</div>
                         </label>
@@ -45,35 +57,23 @@
                         <label class="option-card">
                             <input type="radio" name="equipment" value="stone-mill">
                             <div class="card-image">
-                                <img src="images/stone-mill.svg" alt="老石磨农具" loading="lazy">
+                                <img src="images/stone-mill.svg" alt="传统石磨农具" loading="lazy">
                             </div>
                             <div class="card-content">
                                 <h3 class="option-title">石磨</h3>
-                                <p class="option-desc">一圈圈推出来的豆浆、米粉，是小时候熟悉的味道。</p>
+                                <p class="option-desc">一圈圈推磨，豆浆面粉都带着香味</p>
                             </div>
                             <div class="check-indicator">✓</div>
                         </label>
 
                         <label class="option-card">
-                            <input type="radio" name="equipment" value="wooden-plow">
+                            <input type="radio" name="equipment" value="bamboo-hat">
                             <div class="card-image">
-                                <img src="images/wooden-plow.svg" alt="木犁老农具" loading="lazy">
+                                <img src="images/bamboo-hat.svg" alt="传统斗笠农具" loading="lazy">
                             </div>
                             <div class="card-content">
-                                <h3 class="option-title">犁</h3>
-                                <p class="option-desc">牛拉人扶，翻开沉睡一冬的泥土，春耕就从这里开始。</p>
-                            </div>
-                            <div class="check-indicator">✓</div>
-                        </label>
-
-                        <label class="option-card">
-                            <input type="radio" name="equipment" value="harrow-rake">
-                            <div class="card-image">
-                                <img src="images/harrow-rake.svg" alt="铁耙老农具" loading="lazy">
-                            </div>
-                            <div class="card-content">
-                                <h3 class="option-title">耙</h3>
-                                <p class="option-desc">犁完地后再用它把土块打碎耙平，为播种铺好一张软床。</p>
+                                <h3 class="option-title">斗笠</h3>
+                                <p class="option-desc">遮阳挡雨，挂在屋檐下的旧时光</p>
                             </div>
                             <div class="check-indicator">✓</div>
                         </label>
