@@ -1,0 +1,19 @@
+{
+  "id": "world-cup-magic-moment",
+  "name": "世界杯神仙画面",
+  "description": "一起回忆世界杯上那些让人屏住呼吸、反复回看的神仙画面，选出更戳中你的那一刻。",
+  "category": "综艺娱乐",
+  "profileId": "womanai",
+  "keywords": [
+    "世界杯",
+    "神仙画面",
+    "颜值",
+    "绝杀",
+    "足球",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "world-cup-magic-moment/images/last-second-goal.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-17T20:00:42.594Z"
+}
