@@ -1,0 +1,19 @@
+{
+  "id": "robot-desert-tech-scenes",
+  "name": "家长爱科技体验",
+  "description": "机器人治沙漠上热搜，暑假你会带娃去体验哪种科技场景？选出你更想带孩子去的科技体验地。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "机器人治沙漠",
+    "暑假带娃",
+    "科技体验",
+    "亲子教育",
+    "博物馆",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "robot-desert-tech-scenes/images/desert-robot-base.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-17T19:00:45.992Z"
+}
