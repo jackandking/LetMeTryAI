@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>夏天被蜱虫叮了，你头一个反应是啥？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">夏天被蜱虫叮了，你头一个反应是啥？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">夏天被蜱虫叮了，你头一个反应是啥？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="panic-pull-by-hand">
+                            <div class="card-image">
+                                <img src="images/panic-pull-by-hand.svg" alt="慌了神想用手硬拔的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">慌了神，想用手硬拔</h3>
+                                <p class="option-desc">心里一急，下意识就想把虫子揪出来。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="disinfect-first">
+                            <div class="card-image">
+                                <img src="images/disinfect-first.svg" alt="先消毒再处理的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先消毒，再慢慢处理</h3>
+                                <p class="option-desc">先拿碘酒或酒精擦一擦，冷静了再动手。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tweezers-vertical">
+                            <div class="card-image">
+                                <img src="images/tweezers-vertical.svg" alt="用镊子垂直夹出蜱虫的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">用镊子垂直夹出来</h3>
+                                <p class="option-desc">找个干净镊子，顺着虫身垂直往上夹。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="go-to-hospital">
+                            <div class="card-image">
+                                <img src="images/go-to-hospital.svg" alt="选择去医院处理的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不敢乱动，直接去医院</h3>
+                                <p class="option-desc">自己不折腾，交给医生最放心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
