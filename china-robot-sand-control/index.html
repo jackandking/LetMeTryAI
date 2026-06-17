@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>中国机器人开始治沙，这操作你怎么看？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">中国机器人开始治沙，这操作你怎么看？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">中国机器人开始治沙，你站哪一派？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tech-pride-green-oasis">
+                            <div class="card-image">
+                                <img src="images/tech-pride-green-oasis.svg" alt="机器人治沙让沙漠变绿洲的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">科技牛，沙漠变绿洲</h3>
+                                <p class="option-desc">国产机器人进沙漠，效率拉满，绿洲可期</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cost-practical-concern">
+                            <div class="card-image">
+                                <img src="images/cost-practical-concern.svg" alt="机器人治沙成本账的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看着酷，成本是硬伤</h3>
+                                <p class="option-desc">治沙面积大，维护烧钱，真划算吗？</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="green-mountains-support">
+                            <div class="card-image">
+                                <img src="images/green-mountains-support.svg" alt="沙漠绿洲生态价值的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">绿水青山就是金山银山</h3>
+                                <p class="option-desc">生态账比经济账更值，长远看稳赚</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="traditional-planting-better">
+                            <div class="card-image">
+                                <img src="images/traditional-planting-better.svg" alt="传统植树治沙的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">还是老法子更踏实</h3>
+                                <p class="option-desc">机器人再牛，也替代不了树和人</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
