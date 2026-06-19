@@ -1,0 +1,19 @@
+{
+  "id": "space-workout-experience",
+  "name": "太空健身挑战",
+  "description": "体验宇航员在空间站的健身方式，投票选出你想尝试的太空训练项目。",
+  "category": "科技",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "太空",
+    "健身",
+    "宇航员",
+    "空间站",
+    "失重",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "space-workout-experience/images/treadmill-harness-run.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-19T17:01:02.678Z"
+}
