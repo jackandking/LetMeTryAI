@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>42元头绳你会买吗</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">42元一根的头绳火出圈，你会为这种颜值单品买单吗</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">42元一根的头绳火出圈，你会为这种颜值单品买单吗？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="buy-it-yes">
+                            <div class="card-image">
+                                <img src="images/buy-it-yes.svg" alt="愿意为颜值头绳买单" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">颜值即正义，买它</h3>
+                                <p class="option-desc">好看就值得，戴手上也开心，为心情买单</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="buy-if-stunning">
+                            <div class="card-image">
+                                <img src="images/buy-if-stunning.svg" alt="看设计决定是否购买" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看设计，心动就入手</h3>
+                                <p class="option-desc">设计特别才会考虑，普通款直接跳过</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="price-too-high">
+                            <div class="card-image">
+                                <img src="images/price-too-high.svg" alt="觉得42元头绳太贵" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">42元太贵，9.9更香</h3>
+                                <p class="option-desc">头绳而已，没必要花这么多，平价也很美</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="no-practical-first">
+                            <div class="card-image">
+                                <img src="images/no-practical-first.svg" alt="不购买注重实用" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不买单，实用优先</h3>
+                                <p class="option-desc">再好看也不如便宜耐用，丢了不心疼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
