@@ -1,0 +1,19 @@
+{
+  "id": "shaokao-tan-bidian",
+  "name": "烧烤摊必点快乐源泉",
+  "description": "夏日烧烤摊必点美食投票，选出你的快乐源泉。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "烧烤",
+    "夜宵",
+    "啤酒",
+    "夏天",
+    "美食",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "shaokao-tan-bidian/images/yangrou-chuan.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-21T21:00:54.224Z"
+}
