@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>辽宁这座800年辽塔，石缝里为啥总钻出长蛇？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">辽宁这座800年辽塔，石缝里为啥总钻出长蛇？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你觉得辽塔石缝里为啥总钻出长蛇？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="habitat-theory">
+                            <div class="card-image">
+                                <img src="images/habitat-theory.svg" alt="古塔砖缝冬暖夏凉适合蛇栖息" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">生态栖息说</h3>
+                                <p class="option-desc">古塔砖缝冬暖夏凉，像天然洞穴，蛇钻进去安家避寒避暑。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="legend-theory">
+                            <div class="card-image">
+                                <img src="images/legend-theory.svg" alt="民间传说蛇是守护古塔的灵物" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">民间传说说</h3>
+                                <p class="option-desc">老辈人说蛇是镇塔守护的灵物，守在塔里保佑一方平安。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="structure-theory">
+                            <div class="card-image">
+                                <img src="images/structure-theory.svg" alt="古塔塔身破损缝隙多蛇易藏身" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">建筑结构说</h3>
+                                <p class="option-desc">辽塔历经800年风雨，塔身破损缝隙多，正好成了蛇藏身的通道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="food-theory">
+                            <div class="card-image">
+                                <img src="images/food-theory.svg" alt="塔周围食物丰富吸引蛇前来" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">食物来源说</h3>
+                                <p class="option-desc">塔周围鸟鼠虫子多，蛇被食物吸引，钻进石缝里捕猎觅食。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
