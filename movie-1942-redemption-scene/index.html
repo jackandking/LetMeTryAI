@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>哪场戏让《一九四二》口碑翻红了？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">哪场戏让《一九四二》口碑翻红了？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">哪场戏更戳中你？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="exodus-long-take">
+                            <div class="card-image">
+                                <img src="images/exodus-long-take.svg" alt="一九四二逃荒长镜头画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">逃荒长镜头</h3>
+                                <p class="option-desc">黑压压的逃荒队伍一眼望不到头，老东家牵着毛驴走在人群里，那个镜头把乱世里普通人的无力感全拍出来了。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="huazhi-trades-herself">
+                            <div class="card-image">
+                                <img src="images/huazhi-trades-herself.svg" alt="一九四二花枝卖身换粮场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">花枝换粮</h3>
+                                <p class="option-desc">徐帆演的花枝为了一袋小米把自己卖了，临走前跟栓柱说'我跟你睡过，不亏'，这场戏看一次哭一次。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ending-foster-girl">
+                            <div class="card-image">
+                                <img src="images/ending-foster-girl.svg" alt="一九四二结尾老东家与孤女画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">结尾遇孤女</h3>
+                                <p class="option-desc">老东家走到尽头，碰到同样没了家人的小女孩，两人相依为命往南走，那个回望让观众忽然懂了什么叫'活着'。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chiang-report-scene">
+                            <div class="card-image">
+                                <img src="images/chiang-report-scene.svg" alt="一九四二重庆看灾情报告场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">重庆看报告</h3>
+                                <p class="option-desc">蒋介石在办公室里看到河南灾情的报告，镜头没给一句台词，却把一个时代的决策与人性冲突全压在那几张纸上了。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
