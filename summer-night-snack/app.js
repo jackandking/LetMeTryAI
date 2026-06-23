@@ -3,13 +3,13 @@
  */
 
 const questionConfig = {
-    title: '夏夜没胃口？这些夜宵你会选哪个？',
-    question: '夏天的夜里，你肚子饿会选哪个夜宵？',
+    title: '夏天宵夜你常点啥？',
+    question: '炎炎夏日，宵夜你最想吃什么？',
     options: [
-        { value: 'summer-night-snack-bbq', label: '烧烤串串' },
-        { value: 'summer-night-snack-malatang', label: '麻辣烫/冒菜' },
-        { value: 'summer-night-snack-liangmian', label: '清爽凉面' },
-        { value: 'summer-night-snack-fruit', label: '水果/轻食小吃' }
+        { value: 'spicy-crayfish', label: '麻辣小龙虾' },
+        { value: 'lamb-skewers', label: '炭烤羊肉串' },
+        { value: 'iced-draft-beer', label: '冰镇扎啤' },
+        { value: 'cold-edamame', label: '凉拌毛豆' }
     ],
     storageKey: 'summer_night_snack.data'
 };
@@ -218,7 +218,7 @@ function showResult(latestVoteData) {
     const resultDiv = document.getElementById('result');
     if (!resultDiv) return;
 
-    resultDiv.innerHTML = '<h2>夏夜没胃口？这些夜宵你会选哪个？结果</h2>';
+    resultDiv.innerHTML = '<h2>夏天宵夜你常点啥？结果</h2>';
     resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);
