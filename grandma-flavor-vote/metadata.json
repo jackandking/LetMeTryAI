@@ -1,0 +1,19 @@
+{
+  "id": "grandma-flavor-vote",
+  "name": "外婆味道",
+  "description": "回忆里外婆的拿手菜，哪一种味道让你一想就馋？快来投一票。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "外婆",
+    "味道",
+    "怀旧",
+    "美食",
+    "记忆",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "grandma-flavor-vote/images/hong-shao-rou.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-23T18:00:53.287Z"
+}
