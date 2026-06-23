@@ -1,0 +1,19 @@
+{
+  "id": "hidden-face-type-vote",
+  "name": "隐藏款长相心动榜",
+  "description": "来Pick一种让你心动的隐藏款长相类型，看看清冷、甜盐、复古港风、淡颜系哪种更受欢迎。",
+  "category": "美人颜值投票",
+  "profileId": "womanai",
+  "keywords": [
+    "隐藏款长相",
+    "心动颜值",
+    "美人投票",
+    "长相风格",
+    "颜值讨论",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "hidden-face-type-vote/images/cool-distance-beauty.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-23T20:00:46.488Z"
+}
