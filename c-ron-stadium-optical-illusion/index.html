@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>C罗这张球场照骗过好多人，你第一眼看到啥？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">C罗这张球场照骗过好多人，你领先眼看到啥？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">这张球场照，你领先眼看到的是？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ronaldo-playing-match">
+                            <div class="card-image">
+                                <img src="images/ronaldo-playing-match.svg" alt="C罗在球场上奔跑比赛" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">C罗本人在比赛</h3>
+                                <p class="option-desc">看起来就是他在带球冲刺，气场全开</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ball-kid-holding-board">
+                            <div class="card-image">
+                                <img src="images/ball-kid-holding-board.svg" alt="场边举牌的球童背影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">场边举牌的球童</h3>
+                                <p class="option-desc">身材和球衣让人误以为是C罗</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="billboard-poster">
+                            <div class="card-image">
+                                <img src="images/billboard-poster.svg" alt="球场边的C罗海报广告" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">广告牌上的海报</h3>
+                                <p class="option-desc">原来是巨幅海报太逼真了</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bench-player-standing">
+                            <div class="card-image">
+                                <img src="images/bench-player-standing.svg" alt="替补席站着的球员" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">替补席站着的球员</h3>
+                                <p class="option-desc">远看他的队友或替补球员</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
