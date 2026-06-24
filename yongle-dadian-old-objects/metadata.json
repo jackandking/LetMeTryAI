@@ -1,0 +1,23 @@
+{
+  "id": "yongle-dadian-old-objects",
+  "name": "老物件回忆投票",
+  "description": "《永乐大典》回家了，您家里还留着哪种老物件？翻翻柜子里的老照片、搪瓷缸、粮票或老物件，一起找回当年的生活记忆。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "永乐大典",
+    "老物件",
+    "怀旧",
+    "回忆",
+    "长辈",
+    "老照片",
+    "粮票",
+    "搪瓷缸",
+    "收音机",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "yongle-dadian-old-objects/images/old-photos-albums.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-24T18:00:42.851Z"
+}
