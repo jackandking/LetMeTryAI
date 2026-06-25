@@ -1,0 +1,20 @@
+{
+  "id": "ai-face-aversion-check",
+  "name": "AI脸反感度测试",
+  "description": "刷到AI脸时你是什么反应？秒划走、有点别扭、无所谓还是觉得挺好看？投出你的真实感受。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "AI脸",
+    "AI主播",
+    "AI网红",
+    "生理性厌恶",
+    "审美疲劳",
+    "虚拟人",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ai-face-aversion-check/images/already-annoyed.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-25T17:00:48.834Z"
+}

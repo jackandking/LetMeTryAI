@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你对AI脸产生生理性厌恶了吗？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你对AI脸产生生理性厌恶了吗？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你刷到AI脸时，真实反应是？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="already-annoyed">
+                            <div class="card-image">
+                                <img src="images/already-annoyed.svg" alt="已经对AI脸感到厌烦的用户" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">已经厌烦</h3>
+                                <p class="option-desc">看到就秒划走，不想再看到同一张脸</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="slightly-awkward">
+                            <div class="card-image">
+                                <img src="images/slightly-awkward.svg" alt="觉得AI脸有点别扭的用户" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">有点别扭</h3>
+                                <p class="option-desc">能认出是AI，看着总觉得哪里不对劲</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dont-care">
+                            <div class="card-image">
+                                <img src="images/dont-care.svg" alt="对AI脸无所谓的用户" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">无所谓</h3>
+                                <p class="option-desc">不影响我看内容，好看就行</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="actually-like">
+                            <div class="card-image">
+                                <img src="images/actually-like.svg" alt="喜欢AI脸的用户" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">还挺喜欢</h3>
+                                <p class="option-desc">精致不塌房，比真人还养眼</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
