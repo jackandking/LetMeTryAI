@@ -1,0 +1,20 @@
+{
+  "id": "ai-face-vs-real-face",
+  "name": "耐看脸大拷问",
+  "description": "AI脸和真人脸，哪种更耐看？用投票表达你的审美立场。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "AI脸",
+    "真人脸",
+    "颜值",
+    "耐看",
+    "美女",
+    "审美",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "ai-face-vs-real-face/images/ai-model-face.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-25T20:00:42.728Z"
+}
