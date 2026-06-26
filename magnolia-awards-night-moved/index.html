@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>白玉兰颁奖夜感动瞬间</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">白玉兰颁奖夜，谁的获奖瞬间更打动你？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">白玉兰颁奖夜，谁的获奖瞬间更打动你？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="veteran-actor-tearful">
+                            <div class="card-image">
+                                <img src="images/veteran-actor-tearful.svg" alt="实力派演员含泪领奖" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">厚积薄发的实力派</h3>
+                                <p class="option-desc">多年沉淀终于圆梦，领奖时哽咽难言，让人看到了坚持的重量</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="newcomer-breakthrough">
+                            <div class="card-image">
+                                <img src="images/newcomer-breakthrough.svg" alt="新生代演员惊喜获奖" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">逆袭突围的新生代</h3>
+                                <p class="option-desc">从配角到领奖台，年轻面孔上的惊喜与坚定，写满了后来居上的故事</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="behind-scenes-creator">
+                            <div class="card-image">
+                                <img src="images/behind-scenes-creator.svg" alt="幕后创作者登台领奖" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">幕后创作者的荣光</h3>
+                                <p class="option-desc">导演、编剧或制片人登台那一刻，掌声属于不被看见的幕后英雄</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cast-reunion-honor">
+                            <div class="card-image">
+                                <img src="images/cast-reunion-honor.svg" alt="剧组重聚温情领奖" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">同台致敬的温情时刻</h3>
+                                <p class="option-desc">老搭档或剧组重聚颁奖台，一句话、一个拥抱，把回忆杀拉满</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
