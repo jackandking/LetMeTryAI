@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爷爷奶奶那辈高考记忆</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">爷爷奶奶那辈高考，哪件事让你印象深刻？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">爷爷奶奶那辈高考，哪件事让你印象深刻？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="lamp-night-study">
+                            <div class="card-image">
+                                <img src="images/lamp-night-study.svg" alt="煤油灯下备考的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">挑灯夜读</h3>
+                                <p class="option-desc">煤油灯下复习到深夜，眼皮打架也不敢睡。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="long-journey-exam">
+                            <div class="card-image">
+                                <img src="images/long-journey-exam.svg" alt="翻山越岭赶考的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">翻山赶考</h3>
+                                <p class="option-desc">天没亮就出发，走几十里山路才到考场。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="outdoor-exam-site">
+                            <div class="card-image">
+                                <img src="images/outdoor-exam-site.svg" alt="露天简易考场的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">露天考场</h3>
+                                <p class="option-desc">在操场或祠堂里考试，一块木板就是课桌。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="admission-letter-moment">
+                            <div class="card-image">
+                                <img src="images/admission-letter-moment.svg" alt="收到录取通知书的插画" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">录取喜讯</h3>
+                                <p class="option-desc">邮递员骑车送来大红信封，全村人都来道喜。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
