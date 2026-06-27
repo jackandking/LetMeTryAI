@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>小时候哪段记忆，让现在日子更有奔头？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">小时候哪段记忆，让现在日子更有奔头？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">小时候哪段记忆，让现在日子更有奔头？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="parent-listened-once">
+                            <div class="card-image">
+                                <img src="images/parent-listened-once.svg" alt="父母认真倾听孩子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">被父母认真听一次</h3>
+                                <p class="option-desc">那次你没被敷衍，委屈被接住，后来再难过也敢说出来。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="first-small-win">
+                            <div class="card-image">
+                                <img src="images/first-small-win.svg" alt="孩子独立完成小事" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">独立完成一件小事</h3>
+                                <p class="option-desc">第一次自己修好玩具、做完作业，原来“我可以”这种感觉能记很久。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="summer-friends-play">
+                            <div class="card-image">
+                                <img src="images/summer-friends-play.svg" alt="小伙伴夏天玩耍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">和小伙伴疯玩的夏天</h3>
+                                <p class="option-desc">没有补习班的下午，疯跑、流汗、笑得脸疼，那是纯粹的自由。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="elder-old-story">
+                            <div class="card-image">
+                                <img src="images/elder-old-story.svg" alt="长辈讲述老故事" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长辈讲的一个老故事</h3>
+                                <p class="option-desc">爷爷讲的故事里藏着勇气和道理，长大后遇到坎，会突然想起。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
