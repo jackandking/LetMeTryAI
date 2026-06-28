@@ -1,0 +1,20 @@
+{
+  "id": "natural-makeup-preference",
+  "name": "自然妆容心动榜",
+  "description": "AI滤镜脸看腻了？来 pick 让你一眼心动的自然妆容风格，选出更适合自己的日常妆容。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "自然妆容",
+    "白开水妆",
+    "伪素颜",
+    "日杂妆",
+    "气血感妆容",
+    "美妆投票",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "natural-makeup-preference/images/water-makeup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-28T20:00:28.381Z"
+}
