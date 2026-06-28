@@ -1,0 +1,19 @@
+{
+  "id": "world-cup-favorite-2026",
+  "name": "世界杯你看好谁",
+  "description": "2026年世界杯冠军归属投票，看看大家更看好哪支热门球队。",
+  "category": "体育",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "世界杯",
+    "足球",
+    "冠军",
+    "2026",
+    "体育",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "world-cup-favorite-2026/images/argentina.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-28T21:00:41.684Z"
+}
