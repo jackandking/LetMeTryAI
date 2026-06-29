@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>酒店“24小时退房”来了，您住店图啥服务？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">酒店“24小时退房”来了，您住店图啥服务？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">您出门住酒店，更看重哪项服务？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quiet-sleep">
+                            <div class="card-image">
+                                <img src="images/quiet-sleep.svg" alt="安静的酒店房间和舒适的床" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安静好眠</h3>
+                                <p class="option-desc">房间安静、床品舒服，睡个好觉才踏实</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="thoughtful-service">
+                            <div class="card-image">
+                                <img src="images/thoughtful-service.svg" alt="酒店服务员热情帮助老人" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">贴心服务</h3>
+                                <p class="option-desc">随叫随到、态度热情，像家人一样放心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="elderly-friendly">
+                            <div class="card-image">
+                                <img src="images/elderly-friendly.svg" alt="酒店房间里的适老化扶手" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">适老设施</h3>
+                                <p class="option-desc">防滑扶手、明亮灯光、进出方便少摔跤</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="clear-value">
+                            <div class="card-image">
+                                <img src="images/clear-value.svg" alt="清晰的酒店账单和合理价格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">实惠清楚</h3>
+                                <p class="option-desc">价格实在、收费透明，不花冤枉钱</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
