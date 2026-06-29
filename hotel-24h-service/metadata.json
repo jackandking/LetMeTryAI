@@ -1,0 +1,19 @@
+{
+  "id": "hotel-24h-service",
+  "name": "爱老人住店服务选",
+  "description": "围绕酒店24小时退房新服务，聊聊长辈住店在意哪些细节，选出您认可的贴心服务。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "酒店",
+    "24小时退房",
+    "老人出行",
+    "住店服务",
+    "适老化",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "hotel-24h-service/images/quiet-sleep.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-29T18:00:48.668Z"
+}
