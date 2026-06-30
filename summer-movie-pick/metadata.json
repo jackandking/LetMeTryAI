@@ -1,0 +1,19 @@
+{
+  "id": "summer-movie-pick",
+  "name": "暑期电影站",
+  "description": "暑期档电影投票，选出你想进影院追的那类大片。",
+  "category": "影视娱乐",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "暑期档",
+    "电影",
+    "观影",
+    "大片",
+    "娱乐",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "summer-movie-pick/images/domestic-action.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-30T21:01:14.541Z"
+}
