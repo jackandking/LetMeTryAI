@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>西瓜价格大跳水，今夏哪种吃法更过瘾？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">西瓜价格大跳水，今夏哪种吃法更过瘾？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">西瓜价格大跳水，今夏哪种吃法更过瘾？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chilled-scoop">
+                            <div class="card-image">
+                                <img src="images/chilled-scoop.svg" alt="冰镇西瓜球" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冰镇挖着吃</h3>
+                                <p class="option-desc">冰镇后挖成球，一口一块清甜爆汁。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="watermelon-soda">
+                            <div class="card-image">
+                                <img src="images/watermelon-soda.svg" alt="西瓜气泡饮品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">西瓜气泡饮</h3>
+                                <p class="option-desc">西瓜捣碎加气泡水，爽感直接翻倍。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="watermelon-shaved-ice">
+                            <div class="card-image">
+                                <img src="images/watermelon-shaved-ice.svg" alt="西瓜绵绵冰" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">西瓜绵绵冰</h3>
+                                <p class="option-desc">冻西瓜打成绵密冰沙，解暑又过瘾。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="salty-dip">
+                            <div class="card-image">
+                                <img src="images/salty-dip.svg" alt="酸梅粉蘸西瓜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">酸梅粉蘸西瓜</h3>
+                                <p class="option-desc">西瓜切块蘸酸梅粉，咸甜交织很上头。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
