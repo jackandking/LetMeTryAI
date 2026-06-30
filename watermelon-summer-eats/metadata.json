@@ -1,0 +1,19 @@
+{
+  "id": "watermelon-summer-eats",
+  "name": "西瓜吃法大赏",
+  "description": "今夏西瓜便宜了，你更喜欢哪种吃法？冰镇直吃、气泡特饮、绵绵冰还是蘸粉尝鲜，来投一票。",
+  "category": "美食生活",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "西瓜",
+    "夏天",
+    "吃法",
+    "美食",
+    "消暑",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "watermelon-summer-eats/images/chilled-scoop.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-06-30T17:00:44.871Z"
+}
