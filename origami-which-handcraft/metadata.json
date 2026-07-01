@@ -1,0 +1,19 @@
+{
+  "id": "origami-which-handcraft",
+  "name": "家长爱手作倾向",
+  "description": "针对孩子对折纸高度投入，比较家长在艺术深化、实用改造、创客延展或社交展示四类手作引导上的偏好及理由。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "折纸",
+    "手作",
+    "亲子",
+    "育儿",
+    "创造力",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "origami-which-handcraft/images/art-origami.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-01T19:00:40.293Z"
+}
