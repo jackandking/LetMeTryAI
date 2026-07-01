@@ -1,0 +1,21 @@
+{
+  "id": "ev-gb-renewal-priority",
+  "name": "买车先看哪点",
+  "description": "围绕“电动车国标换新”场景设计，比较购车关注点：安全合规、续航电池、充电便捷、售后保障。适合图文+配图的手机投票页，标题口语化、画面感强，触发讨论型评论。",
+  "category": "社会热点",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "电动车",
+    "国标",
+    "购车",
+    "续航",
+    "安全",
+    "充电",
+    "售后",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "ev-gb-renewal-priority/images/safety-brakes.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-01T17:02:08.590Z"
+}
