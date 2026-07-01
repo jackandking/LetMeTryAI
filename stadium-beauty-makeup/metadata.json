@@ -1,0 +1,19 @@
+{
+  "id": "stadium-beauty-makeup",
+  "name": "球场美人妆",
+  "description": "针对球赛场景的美妆画像：阳光、逆光、夜场灯光下的妆容效果对比，适合图文+短语音/字幕的手机投票页。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "球场妆容",
+    "赛场美人",
+    "背影杀",
+    "烟熏妆",
+    "高光",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "stadium-beauty-makeup/images/natural-dewy.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-01T20:01:10.789Z"
+}
