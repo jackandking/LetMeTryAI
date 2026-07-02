@@ -3,13 +3,12 @@
  */
 
 const questionConfig = {
-    title: '暑期档哪部电影值得追？',
-    question: '这个夏天，哪类电影让你想冲进影院？',
+    title: '暑期档哪种类型的电影你想进影院看？',
+    question: '这个暑期你更想在影院看哪种类型的片子？',
     options: [
-        { value: 'domestic-action', label: '国产动作片' },
-        { value: 'hollywood-sci-fi', label: '好莱坞科幻' },
-        { value: 'suspense-crime', label: '悬疑犯罪片' },
-        { value: 'comedy-family', label: '喜剧合家欢' }
+        { value: 'guochan-military-action', label: '国产军事动作片' },
+        { value: 'hollywood-action', label: '好莱坞商业动作片' },
+        { value: 'sci-fi-mystery', label: '脑洞科幻悬疑片' }
     ],
     storageKey: 'summer_movie_pick.data'
 };
@@ -218,7 +217,7 @@ function showResult(latestVoteData) {
     const resultDiv = document.getElementById('result');
     if (!resultDiv) return;
 
-    resultDiv.innerHTML = '<h2>暑期档哪部电影值得追？结果</h2>';
+    resultDiv.innerHTML = '<h2>暑期档哪种类型的电影你想进影院看？结果</h2>';
     resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);
