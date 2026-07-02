@@ -1,0 +1,20 @@
+{
+  "id": "sleep-together-or-separate",
+  "name": "睡眠画面",
+  "description": "针对情侣/夫妻的睡眠习惯做直观对比，页面以场景化文案与视觉图吸引点击，便于社交分享与讨论。",
+  "category": "生活趣味",
+  "profileId": "nanrenbao",
+  "keywords": [
+    "同床",
+    "分床",
+    "睡眠习惯",
+    "情侣生活",
+    "睡眠质量",
+    "生活趣味",
+    "投票",
+    "男人宝"
+  ],
+  "coverImage": "sleep-together-or-separate/images/same-bed.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-02T17:01:09.085Z"
+}
