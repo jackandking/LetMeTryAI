@@ -1,19 +1,19 @@
 {
   "id": "summer-movie-pick",
-  "name": "暑期电影站",
-  "description": "暑期档电影投票，选出你想进影院追的那类大片。",
+  "name": "暑期看哪类片",
+  "description": "聚焦暑期档观影场景，列出几类带劲的院线片画面与观影体验，便于用户用画面感和代入感投票与留言。",
   "category": "影视娱乐",
   "profileId": "nanrenbao",
   "keywords": [
     "暑期档",
-    "电影",
-    "观影",
-    "大片",
-    "娱乐",
+    "院线",
+    "动作",
+    "科幻",
+    "观影偏好",
     "投票",
     "男人宝"
   ],
-  "coverImage": "summer-movie-pick/images/domestic-action.svg",
+  "coverImage": "summer-movie-pick/images/guochan-military-action.svg",
   "generatedFrom": "fighter-jets",
-  "generatedAt": "2026-06-30T21:01:14.541Z"
+  "generatedAt": "2026-07-02T21:01:29.378Z"
 }
