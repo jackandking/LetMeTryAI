@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你和伴侣是同床还是分床睡？看看大家的真实习惯</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你和伴侣是同床还是分床睡？揭秘老夫妻的睡眠选择</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你和伴侣是同床还是分床睡？请选择最贴近的一项</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="always-same-bed">
+                            <div class="card-image">
+                                <img src="images/always-same-bed.svg" alt="两人并排躺在一张床上背影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">一直同床</h3>
+                                <p class="option-desc">一直同床，喜欢靠着或抱着入睡</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="same-bed-separated">
+                            <div class="card-image">
+                                <img src="images/same-bed-separated.svg" alt="同一张床上各自方向的枕头和被子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">同床但分开睡姿</h3>
+                                <p class="option-desc">同一张床但各自有独立睡姿和被窝</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="separate-beds">
+                            <div class="card-image">
+                                <img src="images/separate-beds.svg" alt="并排两张小床的温馨房间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长期分床</h3>
+                                <p class="option-desc">有各自床铺，保持独立睡眠空间</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sometimes-separate">
+                            <div class="card-image">
+                                <img src="images/sometimes-separate.svg" alt="夜间各自床铺的温暖灯光" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">偶尔分床</h3>
+                                <p class="option-desc">视情况轮流或临时分床，灵活安排</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
