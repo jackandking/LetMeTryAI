@@ -1,0 +1,19 @@
+{
+  "id": "ai-yanyi-makeup-emotion",
+  "name": "AI演戏妆感辨真",
+  "description": "把“妆”当表情看：对比湿润泪眼、干净光感唇与戏剧浓妆，问用户哪种更像真实情绪，适合短图+大字手机页面。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "AI妆容",
+    "明星妆容",
+    "情绪妆",
+    "妆容对比",
+    "视觉冲击",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "ai-yanyi-makeup-emotion/images/wet-tearlook.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-02T20:00:51.371Z"
+}
