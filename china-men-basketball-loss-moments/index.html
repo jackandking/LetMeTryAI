@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>看中国男篮输给日本，哪个赛场瞬间让你最有感觉？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">看中国男篮输给日本，球场哪个画面更触动你？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看中国男篮输给日本，球场哪个画面更触动你？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="captain-sitting-alone">
+                            <div class="card-image">
+                                <img src="images/captain-sitting-alone.svg" alt="队长坐在场边低头沉思" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">队长孤坐场边</h3>
+                                <p class="option-desc">队长独自坐在场边，低头沉思的那一刻</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fans-applauding">
+                            <div class="card-image">
+                                <img src="images/fans-applauding.svg" alt="看台球迷为球队鼓掌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">球迷久久鼓掌</h3>
+                                <p class="option-desc">赛后看台上球迷仍站起为球队鼓掌</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="opponent-celebration">
+                            <div class="card-image">
+                                <img src="images/opponent-celebration.svg" alt="日本球员拥抱庆祝瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">对方庆祝瞬间</h3>
+                                <p class="option-desc">日本球员拥抱庆祝进球的高光瞬间</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bench-comfort">
+                            <div class="card-image">
+                                <img src="images/bench-comfort.svg" alt="替补席上安慰队友的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">替补席互相安慰</h3>
+                                <p class="option-desc">替补队员上前搀扶、安慰落寞的队友</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
