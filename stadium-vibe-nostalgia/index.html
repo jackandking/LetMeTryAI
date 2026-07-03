@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>看球时你会怀念哪种球场氛围？说说你的回忆画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">看球时你会怀念哪种球场氛围？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看球时你会怀念哪种球场氛围？回想一下当年的画面哪种最戳你？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="roaring-cheers">
+                            <div class="card-image">
+                                <img src="images/roaring-cheers.svg" alt="人声鼎沸的看台" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">人声鼎沸、整场呐喊</h3>
+                                <p class="option-desc">全场一起高声呐喊，喊队名、跟着节奏鼓掌，热闹又热血的现场感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="singalongs-and-flags">
+                            <div class="card-image">
+                                <img src="images/singalongs-and-flags.svg" alt="球迷合唱挥旗场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老歌伴唱、挥旗合唱</h3>
+                                <p class="option-desc">球迷一边唱着熟悉的老歌，一边挥旗合唱，像回到年轻的周末聚会。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="family-corner">
+                            <div class="card-image">
+                                <img src="images/family-corner.svg" alt="家庭看球温馨场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">带家人看球的温馨角落</h3>
+                                <p class="option-desc">慢节奏看球，陪孙辈吃零食聊天，像一次小小的家庭出游，温暖又自在。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quiet-tactical">
+                            <div class="card-image">
+                                <img src="images/quiet-tactical.svg" alt="安静专注观赛的看台" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安静专注、听解说看战术</h3>
+                                <p class="option-desc">少言但专注，盯着比赛细节，听解说讨论战术的沉浸式观赛体验。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

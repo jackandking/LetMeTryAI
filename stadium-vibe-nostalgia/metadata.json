@@ -1,0 +1,19 @@
+{
+  "id": "stadium-vibe-nostalgia",
+  "name": "看球怀旧圈",
+  "description": "面向爱老人品牌的移动图文投票页，通过对比不同球场氛围（呐喊、合唱、家庭角、安静观赛）引发怀旧回忆与家庭场景共鸣，鼓励用户分享故事与配图。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "看球",
+    "怀旧",
+    "球场氛围",
+    "家庭",
+    "老歌",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "stadium-vibe-nostalgia/images/roaring-cheers.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-03T18:01:18.372Z"
+}
