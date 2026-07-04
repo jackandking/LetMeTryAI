@@ -1,0 +1,19 @@
+{
+  "id": "summer-safe-fun-plan",
+  "name": "家长爱暑假安排",
+  "description": "为手机投票页准备的元数据：围绕安全与趣味的暑假周程对比，场景具体、便于家长想象与分享经验。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "暑假安排",
+    "亲子活动",
+    "安全育儿",
+    "暑期计划",
+    "博物馆探索",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "summer-safe-fun-plan/images/daily-short-classes.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-04T19:00:52.657Z"
+}
