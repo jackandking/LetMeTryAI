@@ -116,19 +116,22 @@ HOME=$HOME_DIR
 0 6 * * * cd "$PROD_DIR" && KUAISHOU_EMAIL_TO="$EMAIL" "$PROD_DIR/.harness/scripts/run-daily-report.sh"
 
 # Daily Topic Selection - pre-select topics before app creation
-5 0 * * * cd "$PROD_DIR" && .harness/scripts/run-topic-selector.sh nanrenbao
+# STOPPED: nanrenbao投票类发布已停用 (2026-06-13)
+# 5 0 * * * cd "$PROD_DIR" && .harness/scripts/run-topic-selector.sh nanrenbao
 10 0 * * * cd "$PROD_DIR" && .harness/scripts/run-topic-selector.sh elder-love
 15 0 * * * cd "$PROD_DIR" && .harness/scripts/run-topic-selector.sh parent-tools
 20 0 * * * cd "$PROD_DIR" && .harness/scripts/run-topic-selector.sh womanai
 
 # Daily App Run - 4 profiles (primary slots)
-0 1 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-app-cron.sh nanrenbao
+# STOPPED: nanrenbao投票类发布已停用 (2026-06-13)
+# 0 1 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-app-cron.sh nanrenbao
 0 2 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-app-cron.sh elder-love
 0 3 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-app-cron.sh parent-tools
 0 4 * * * cd "$PROD_DIR" && .harness/scripts/run-daily-app-cron.sh womanai
 
 # Extra slots for high-revenue profiles (controlled by profile-slots.json)
-0 5 * * * cd "$PROD_DIR" && HARNESS_EXTRA_SLOT=1 .harness/scripts/run-daily-app-cron.sh nanrenbao
+# STOPPED: nanrenbao投票类发布已停用 (2026-06-13)
+# 0 5 * * * cd "$PROD_DIR" && HARNESS_EXTRA_SLOT=1 .harness/scripts/run-daily-app-cron.sh nanrenbao
 0 6 * * * cd "$PROD_DIR" && HARNESS_EXTRA_SLOT=1 .harness/scripts/run-daily-app-cron.sh womanai
 
 # Hot Task - AI image generation for top task - 11:00
