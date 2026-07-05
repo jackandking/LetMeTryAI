@@ -1,0 +1,19 @@
+{
+  "id": "fan-hat-walk",
+  "name": "风扇帽散步选哪款",
+  "description": "以老人日常散步为场景，比较轻薄透气帽、内置电风扇帽、太阳能小扇帽与手持风扇+宽檐帽的使用体验，侧重易用性、舒适度和防晒降温，适合图文手机投票页展示。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "风扇帽",
+    "散步",
+    "夏日降温",
+    "老人穿搭",
+    "防晒透气",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "fan-hat-walk/images/breathable-hat.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-05T18:00:49.796Z"
+}
