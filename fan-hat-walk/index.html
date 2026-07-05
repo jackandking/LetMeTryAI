@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>风扇帽这么火，你会戴哪种去散步？4款实用对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">风扇帽这么火，你会戴哪种去散步？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">风扇帽这么火，你会戴哪种去散步？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="breathable-hat">
+                            <div class="card-image">
+                                <img src="images/breathable-hat.svg" alt="轻薄透气帽" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">轻薄透气帽（无风扇）</h3>
+                                <p class="option-desc">网眼面料，超轻透气，戴着不闷汗，适合短程散步</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="built-in-fan-hat">
+                            <div class="card-image">
+                                <img src="images/built-in-fan-hat.svg" alt="内置风扇的帽子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">内置微风扇帽（电池式）</h3>
+                                <p class="option-desc">帽檐内藏小风扇，一键开关，微风持续更凉爽</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="solar-fan-hat">
+                            <div class="card-image">
+                                <img src="images/solar-fan-hat.svg" alt="太阳能风扇帽" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">太阳能小风扇帽</h3>
+                                <p class="option-desc">白天散步可边走边充电，不用频繁换电池</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="handheld-fan-with-hat">
+                            <div class="card-image">
+                                <img src="images/handheld-fan-with-hat.svg" alt="手持风扇与宽檐帽" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手持小风扇配宽檐帽</h3>
+                                <p class="option-desc">宽檐防晒+手持风扇更灵活，按需直吹降温</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
