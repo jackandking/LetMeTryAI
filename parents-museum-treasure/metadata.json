@@ -1,0 +1,19 @@
+{
+  "id": "parents-museum-treasure",
+  "name": "家长爱·博物馆游",
+  "description": "面向带孩子的家长，页面用图文对比四类典型镇馆之宝（恐龙化石、古玉、名画、青铜器），每项配短句画面感文案，方便手机滑动、快速投票并引发亲子讲解话题。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "亲子活动",
+    "镇馆之宝",
+    "历史文化",
+    "家庭教育",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "parents-museum-treasure/images/dinosaur-fossil.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-05T19:00:57.315Z"
+}
