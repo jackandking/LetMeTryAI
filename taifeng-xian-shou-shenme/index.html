@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>台风天你家先收哪样？——家庭防风物品优先级</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">台风天你家先收哪样？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">台风天来临，你家会先把哪样收进屋里或固定好？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="potted-plants">
+                            <div class="card-image">
+                                <img src="images/potted-plants.svg" alt="花盆和盆栽收进屋" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">花盆与盆栽</h3>
+                                <p class="option-desc">把花盆搬进屋里或固定，避免被吹翻砸到窗户。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="drying-laundry">
+                            <div class="card-image">
+                                <img src="images/drying-laundry.svg" alt="晾晒衣物收起" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">晾晒中的衣物/被子</h3>
+                                <p class="option-desc">赶快把阳台上的衣被收进屋里，防止被淋湿或吹走。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="balcony-furniture">
+                            <div class="card-image">
+                                <img src="images/balcony-furniture.svg" alt="阳台小家具收纳" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">阳台小家具与杂物</h3>
+                                <p class="option-desc">折叠椅、花架、小桌子等先收回或绑好，减少飘移风险。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bicycles-e-bikes">
+                            <div class="card-image">
+                                <img src="images/bicycles-e-bikes.svg" alt="自行车电动车收好" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">自行车 / 电动车</h3>
+                                <p class="option-desc">把车移到车库或用布罩加固定，防止被吹倒或刮伤。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
