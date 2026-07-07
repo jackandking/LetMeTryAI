@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>遇到龙卷风，家里你先做哪样？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">遇到龙卷风，家里你先做哪样？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">遇到龙卷风，家里你先做哪样？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dai-qu-dixia-shi">
+                            <div class="card-image">
+                                <img src="images/dai-qu-dixia-shi.svg" alt="地下室避难" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先带大家去地下室或避难间</h3>
+                                <p class="option-desc">若家有地下室或避难间，先把老人带下去，远离窗户与外墙，蹲低护头。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="duo-ru-nei-shi">
+                            <div class="card-image">
+                                <img src="images/duo-ru-nei-shi.svg" alt="无窗内室避险" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">躲到房屋中央的无窗内室（如卫生间）</h3>
+                                <p class="option-desc">选择房屋中央、窗少的内侧房间蹲低抱头，减少被飞物伤及的风险。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zuan-jiaju-xia">
+                            <div class="card-image">
+                                <img src="images/zuan-jiaju-xia.svg" alt="家具下避险" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">钻到结实家具下并用枕被护头</h3>
+                                <p class="option-desc">躲在结实桌子或床边，用枕头或毯子护住头部，减少碎片伤害。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jiti-zhongxin-fangjian">
+                            <div class="card-image">
+                                <img src="images/jiti-zhongxin-fangjian.svg" alt="家庭集中避险" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">把家人集中到同一安全房间并互相照应</h3>
+                                <p class="option-desc">迅速把家人、行动不便者集中到内侧安全房间，互相帮助并携带手电与重要物品。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
