@@ -1,0 +1,20 @@
+{
+  "id": "xiayu-leiyu-kid-where",
+  "name": "家长爱·雨天待哪儿",
+  "description": "围绕雨天安全与陪伴场景设计 3-4 个对比选项，帮助家长分享孩子遇暴雨时的常见去向与看护方式，兼顾安全提示与生活画面感。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "下大雨",
+    "雷雨",
+    "家庭安全",
+    "育儿场景",
+    "陪伴方式",
+    "避雨",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "xiayu-leiyu-kid-where/images/livingroom-with-parents.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-07T19:01:19.368Z"
+}
