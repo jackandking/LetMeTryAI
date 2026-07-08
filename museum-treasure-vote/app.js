@@ -3,13 +3,13 @@
  */
 
 const questionConfig = {
-    title: '带孩子去博物馆，想看哪样镇馆之宝？',
-    question: '带孩子去博物馆，你最想让孩子看哪个镇馆之宝？',
+    title: '考古出土的镇馆之宝，你带孩子更想看哪个？',
+    question: '考古出土的镇馆之宝，你带孩子更想看哪个？',
     options: [
-        { value: 'dinosaur-fossil', label: '巨型恐龙化石' },
-        { value: 'ancient-ceramics', label: '古代精美陶瓷' },
-        { value: 'masterpiece-painting', label: '传世名画与肖像' },
-        { value: 'interactive-exhibit', label: '互动体验展区' }
+        { value: 'terracotta-warrior', label: '兵马俑' },
+        { value: 'han-bronze-mirror', label: '汉代铜镜' },
+        { value: 'dunhuang-mural', label: '敦煌彩绘壁画' },
+        { value: 'shipwreck-treasure', label: '沉船出水的珍宝' }
     ],
     storageKey: 'museum_treasure_vote.data'
 };
@@ -218,7 +218,7 @@ function showResult(latestVoteData) {
     const resultDiv = document.getElementById('result');
     if (!resultDiv) return;
 
-    resultDiv.innerHTML = '<h2>带孩子去博物馆，想看哪样镇馆之宝？结果</h2>';
+    resultDiv.innerHTML = '<h2>考古出土的镇馆之宝，你带孩子更想看哪个？结果</h2>';
     resultDiv.innerHTML += '<p class="result-subtitle">基于实时数据统计</p>';
 
     const barChart = createBarChart(latestVoteData);
