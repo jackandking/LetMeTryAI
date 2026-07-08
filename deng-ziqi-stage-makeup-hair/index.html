@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>邓紫棋舞台上，你更爱哪种妆发？来看4种舞台造型</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">邓紫棋舞台上，你更爱哪种妆发？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">邓紫棋舞台上，你更爱哪种妆发？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="shining-highlight-big-waves">
+                            <div class="card-image">
+                                <img src="images/shining-highlight-big-waves.svg" alt="邓紫棋闪耀高光大波浪发型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">闪耀高光＋大波浪</h3>
+                                <p class="option-desc">灯光下高光和长波浪营造出飘逸且有光感的舞台气场</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="clean-nude-makeup-sleek-ponytail">
+                            <div class="card-image">
+                                <img src="images/clean-nude-makeup-sleek-ponytail.svg" alt="邓紫棋干净裸妆利落马尾" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">干净裸妆＋利落马尾</h3>
+                                <p class="option-desc">淡雅底妆搭配高位马尾，简洁利落更显气质与舞台节奏感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="smoky-eye-short-cut">
+                            <div class="card-image">
+                                <img src="images/smoky-eye-short-cut.svg" alt="邓紫棋烟熏眼短发" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">烟熏眼＋短发利落感</h3>
+                                <p class="option-desc">戏剧化的烟熏眼线放大眼部表现，短发则更显锋利舞台态度</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="pink-girl-braids">
+                            <div class="card-image">
+                                <img src="images/pink-girl-braids.svg" alt="邓紫棋粉色妆容编发" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">粉色少女感＋编发</h3>
+                                <p class="option-desc">甜美粉色妆容配轻松编发，带来温柔少女的舞台画面感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
