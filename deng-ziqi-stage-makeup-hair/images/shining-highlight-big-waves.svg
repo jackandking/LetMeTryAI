@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="grad-0" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f4e79"/>
+      <stop offset="100%" stop-color="#4f8fba"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="480" rx="32" fill="url(#grad-0)"/>
+  <circle cx="600" cy="90" r="60" fill="rgba(255,255,255,0.12)"/>
+  <circle cx="110" cy="390" r="80" fill="rgba(255,255,255,0.08)"/>
+  <text x="50%" y="44%" text-anchor="middle" font-size="44" font-family="Arial,Helvetica,sans-serif" fill="#ffffff" font-weight="700">闪耀高光＋大波浪</text>
+  <text x="50%" y="58%" text-anchor="middle" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="rgba(255,255,255,0.92)">LetMeTryAI Voting Option</text>
+</svg>
