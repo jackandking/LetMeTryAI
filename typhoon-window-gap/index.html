@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>台风天窗户留缝：你会堵严还是留点缝通风？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">台风天，家里窗户留条缝你会怎么做？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">台风天，家里窗户留条缝你会怎么做？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="seal-window-gap">
+                            <div class="card-image">
+                                <img src="images/seal-window-gap.svg" alt="把窗缝用布或胶条堵严" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">把缝彻底堵好</h3>
+                                <p class="option-desc">用胶条/防水布把缝封起来，目标是防风防雨、稳妥安稳睡觉。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="small-gap-with-barrier">
+                            <div class="card-image">
+                                <img src="images/small-gap-with-barrier.svg" alt="留小缝并在外面加塑料布挡雨" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">留小缝并加挡水</h3>
+                                <p class="option-desc">保留约1–2厘米通气，外侧用塑料布或挡板挡雨，兼顾少许通风与防水。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="close-and-secure">
+                            <div class="card-image">
+                                <img src="images/close-and-secure.svg" alt="关闭窗户并整理窗边物品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">关窗并检查固定物</h3>
+                                <p class="option-desc">把窗关严，收走窗边易被吹动的物品，检查窗框密封与固定情况。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="leave-and-ask-neighbor">
+                            <div class="card-image">
+                                <img src="images/leave-and-ask-neighbor.svg" alt="离开窗边并请求邻居帮助查看外面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先离开窗边求助邻居</h3>
+                                <p class="option-desc">若担心外面情况，先离开窗边并请邻居或家人协助查看或处理外部风险。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
