@@ -1,19 +1,19 @@
 {
   "id": "museum-treasure-vote",
-  "name": "带孩子逛博物馆",
-  "description": "面向家长和孩子的轻互动投票页：将恐龙化石、古代陶瓷、传世名画与互动展区以画面感选项呈现，便于在手机上快速投票与讨论孩子的兴趣点。",
+  "name": "家长爱·博物馆寻宝",
+  "description": "为家长与孩子准备的图文投票页，把考古出土的几件代表性镇馆之宝以生动画面和短说明呈现，适合在参观前做引导、在家里做亲子话题交流，侧重好奇心与历史故事启发。",
   "category": "历史文化",
   "profileId": "parent-tools",
   "keywords": [
     "博物馆",
-    "镇馆之宝",
+    "考古",
     "亲子活动",
-    "历史文化",
-    "儿童好奇心",
+    "历史故事",
+    "好奇心",
     "投票",
     "家长爱"
   ],
-  "coverImage": "museum-treasure-vote/images/dinosaur-fossil.svg",
+  "coverImage": "museum-treasure-vote/images/terracotta-warrior.svg",
   "generatedFrom": "fighter-jets",
-  "generatedAt": "2026-05-17T19:00:31.141Z"
+  "generatedAt": "2026-07-08T19:00:42.018Z"
 }
