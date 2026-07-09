@@ -1,0 +1,19 @@
+{
+  "id": "home-fire-which-to-secure-first",
+  "name": "家长爱家庭安全",
+  "description": "以家庭日常场景为切入，比较几类常见易燃物并给出先收建议，便于家长快速判断和讨论，页面适配手机阅读和图文展示。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "家庭安全",
+    "防火",
+    "育儿实用",
+    "收纳优先级",
+    "紧急应对",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "home-fire-which-to-secure-first/images/kitchen-stove.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-09T19:01:08.749Z"
+}
