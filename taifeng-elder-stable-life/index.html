@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>台风天，你会怎么帮家中老人稳住生活？家里实用对策</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">台风天，你会怎么帮家中老人稳住生活？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">台风来临时，你会选哪种方式帮家中老人稳住生活？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="secure-doors-windows">
+                            <div class="card-image">
+                                <img src="images/secure-doors-windows.svg" alt="加固门窗示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">加固门窗</h3>
+                                <p class="option-desc">用胶带、挡风条或临时加固窗户门框，减少进风和飞物破坏。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="prepare-3day-kit">
+                            <div class="card-image">
+                                <img src="images/prepare-3day-kit.svg" alt="三日生活包物资" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">备好三日生活包</h3>
+                                <p class="option-desc">准备3天食水、充电宝、手电、手套和重要证件，放在触手可及处。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="move-to-safe-room">
+                            <div class="card-image">
+                                <img src="images/move-to-safe-room.svg" alt="室内安全区示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安置到室内安全区</h3>
+                                <p class="option-desc">把老人移到远离窗户的房间，布置床铺、被褥和娱乐陪伴，减少恐慌。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="temporary-relocation">
+                            <div class="card-image">
+                                <img src="images/temporary-relocation.svg" alt="转移到避风场所" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短期转移到亲友或避风处</h3>
+                                <p class="option-desc">如情况严重，联系亲友或社区避风点短期转移，确保有人陪护和通行保障。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
