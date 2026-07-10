@@ -1,0 +1,20 @@
+{
+  "id": "typhoon-night-power-out-elder",
+  "name": "台风夜老人应急物品",
+  "description": "以台风夜停电为场景，比较照明、续电、保暖与食水四类应急物品，帮助家庭了解老人夜间优先需求并引发讨论与分享。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "台风",
+    "停电",
+    "老人",
+    "应急物品",
+    "夜间照明",
+    "家庭安全",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "typhoon-night-power-out-elder/images/flashlight-batteries.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-10T18:00:55.576Z"
+}
