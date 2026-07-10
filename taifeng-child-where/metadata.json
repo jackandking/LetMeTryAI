@@ -1,0 +1,19 @@
+{
+  "id": "taifeng-child-where",
+  "name": "家长爱·台风小问",
+  "description": "面向家长的图文投票页：通过对比“留在家里/去亲友家/社区避难点/订酒店”四种常见做法，快速收集群体偏好并引导分享自身应急经验。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "台风避险",
+    "亲子安全",
+    "家庭应急",
+    "避难点",
+    "家长抉择",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "taifeng-child-where/images/stay-home.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-10T19:00:49.730Z"
+}
