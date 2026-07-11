@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>台风天头发还能看？哪款发型更能站住场面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">台风天头发还能看？哪款发型更能站住场面：惊艳背影还是稳妥收拢？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">台风天头发还能看？在暴风里你更能接受哪款发型站住场面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="high-top-bun">
+                            <div class="card-image">
+                                <img src="images/high-top-bun.svg" alt="高位丸子头示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高位丸子头</h3>
+                                <p class="option-desc">高位丸子＋束发带，强力收拢发丝，背影也有气场，出门最稳妥。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="low-sleek-ponytail">
+                            <div class="card-image">
+                                <img src="images/low-sleek-ponytail.svg" alt="紧贴低马尾示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">紧贴低马尾</h3>
+                                <p class="option-desc">紧贴头皮的低马尾，贴合风向不乱飞，适合通勤和骑车场景。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="shoulder-waves">
+                            <div class="card-image">
+                                <img src="images/shoulder-waves.svg" alt="披肩大波浪示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">披肩大波浪（定型）</h3>
+                                <p class="option-desc">披肩大波浪配防风雾，随风仍保留线条感，拍照有动感背影杀。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="air-bangs-short">
+                            <div class="card-image">
+                                <img src="images/air-bangs-short.svg" alt="短发加空气刘海示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短发＋空气刘海</h3>
+                                <p class="option-desc">短发易干易整理，空气刘海柔和脸型，风里更好“复位”。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
