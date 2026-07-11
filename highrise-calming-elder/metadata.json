@@ -1,0 +1,19 @@
+{
+  "id": "highrise-calming-elder",
+  "name": "爱老人安抚小问",
+  "description": "面向手机的图文投票页，聚焦高楼晃动时老人情绪与安抚偏好：操作性强、易理解、避免医疗建议，便于家属参考居家照护与情绪陪伴策略。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "高楼晃动",
+    "老人安抚",
+    "家庭照护",
+    "情绪陪伴",
+    "实用场景",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "highrise-calming-elder/images/hold-handrail-sit.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-11T18:00:36.605Z"
+}
