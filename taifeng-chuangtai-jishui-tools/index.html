@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>台风天窗积水应急：哪个小工具更省心？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">台风天窗台积水，哪个小工具更实用？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">台风天窗台积水，哪个小工具更实用？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="window-squeegee">
+                            <div class="card-image">
+                                <img src="images/window-squeegee.svg" alt="窗台刮水器实物图，配水槽设计" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">窗台刮水器（带水槽）</h3>
+                                <p class="option-desc">一刷即干，适合薄层积水与临时清理，操作省力不弄湿手。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="absorbent-sponge">
+                            <div class="card-image">
+                                <img src="images/absorbent-sponge.svg" alt="超吸水海绵吸水示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">超吸水海绵/吸水垫</h3>
+                                <p class="option-desc">高吸水能一次拧干多次使用，适合窄缝和窗台角落吸水。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mini-submersible-pump">
+                            <div class="card-image">
+                                <img src="images/mini-submersible-pump.svg" alt="迷你抽水泵工作中照片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">迷你潜水抽水泵（充电）</h3>
+                                <p class="option-desc">效率高，连续抽干深水区，但需充电且携带成本略高。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="drainage-seal-strip">
+                            <div class="card-image">
+                                <img src="images/drainage-seal-strip.svg" alt="引流密封条安装示意图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">引流密封条/防水胶条</h3>
+                                <p class="option-desc">长期预防方案，把水引离窗台或封堵漏点，适合经常遇水的窗户。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
