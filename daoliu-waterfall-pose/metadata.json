@@ -1,0 +1,20 @@
+{
+  "id": "daoliu-waterfall-pose",
+  "name": "倒流瀑布电影感pose",
+  "description": "在倒流瀑布前尝试不同拍照pose，投票选出你觉得更有电影感的姿态，附短文案与示例图，便于用户模仿与二次创作。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "倒流瀑布",
+    "电影感",
+    "拍照pose",
+    "背影杀",
+    "回眸",
+    "视觉冲击",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "daoliu-waterfall-pose/images/back-dress-sway.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-12T20:00:28.305Z"
+}
