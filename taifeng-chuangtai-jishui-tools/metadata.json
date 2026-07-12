@@ -1,0 +1,19 @@
+{
+  "id": "taifeng-chuangtai-jishui-tools",
+  "name": "台风窗台救急小帮手",
+  "description": "台风来临时，窗台积水既影响家居也可能带来隐患。通过简单对比吸水刮、水海绵、迷你抽水泵和引流密封条，帮助家长判断哪种工具在不同场景更实用并分享家庭使用经验。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "台风",
+    "窗台",
+    "积水",
+    "家庭应急",
+    "家长实用",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "taifeng-chuangtai-jishui-tools/images/window-squeegee.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-12T19:00:51.970Z"
+}
