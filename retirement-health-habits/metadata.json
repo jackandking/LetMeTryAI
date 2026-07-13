@@ -1,0 +1,20 @@
+{
+  "id": "retirement-health-habits",
+  "name": "爱老人 健康习惯选择",
+  "description": "以退休后可长期坚持的日常习惯为核心，提供场景化、对比明显的选项，便于长辈和家庭成员快速投票并分享理由。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "退休生活",
+    "健康习惯",
+    "早晨散步",
+    "拉伸太极",
+    "均衡饮食",
+    "社交活动",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "retirement-health-habits/images/morning-walk.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-13T18:00:56.935Z"
+}
