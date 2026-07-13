@@ -1,0 +1,19 @@
+{
+  "id": "kids-learn-ai-start-methods",
+  "name": "家长爱·AI起步对比",
+  "description": "面向手机阅读的图文投票页面，比较图形化编程、工具驱动、项目实战与思维基础四种孩子学AI的起步方式，场景化说明优缺点，帮助家长在实际日常中做出选择。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "AI启蒙",
+    "编程入门",
+    "亲子活动",
+    "项目实战",
+    "思维训练",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-learn-ai-start-methods/images/block-based-programming.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-13T19:00:48.398Z"
+}
