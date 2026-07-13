@@ -1,0 +1,19 @@
+{
+  "id": "ai-huan-zhuang-natural-filter",
+  "name": "AI换妆自然感对比",
+  "description": "手机图文投票页，展示同一人脸应用三款AI换妆滤镜的并排对比图，提示用户关注肤质纹理、光泽与细节保留来投票，适合社交传播。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "AI换妆",
+    "滤镜对比",
+    "自然感",
+    "美妆",
+    "人像修图",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "ai-huan-zhuang-natural-filter/images/natural-nude-filter.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-13T20:00:43.864Z"
+}
