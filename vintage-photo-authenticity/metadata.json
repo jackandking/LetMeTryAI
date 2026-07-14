@@ -1,0 +1,19 @@
+{
+  "id": "vintage-photo-authenticity",
+  "name": "老照片真伪鉴别",
+  "description": "图文投票页展示几张典型老照片细节，鼓励用户按直觉判断真假并讨论破绽位置，适合手机阅读与社交转发。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "老照片",
+    "真假鉴别",
+    "怀旧",
+    "细节观察",
+    "回忆讨论",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "vintage-photo-authenticity/images/looks-authentic.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-14T18:00:38.386Z"
+}
