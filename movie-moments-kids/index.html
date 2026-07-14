@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带娃看电影：孩子会回味哪个桥段？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带娃看电影，哪个桥段会让孩子一直回味？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带娃看电影，哪个桥段会让孩子一直回味？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="warm-hug-scene">
+                            <div class="card-image">
+                                <img src="images/warm-hug-scene.svg" alt="父母抱着孩子的温暖瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温馨拥抱</h3>
+                                <p class="option-desc">父母温柔抱起孩子，画面安静又有安全感，孩子回忆里有家的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="funny-gag-moment">
+                            <div class="card-image">
+                                <img src="images/funny-gag-moment.svg" alt="电影中搞笑角色逗笑孩子的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">搞笑神来一脚</h3>
+                                <p class="option-desc">一个意外的笑点让全家大笑，孩子会反复模仿那句台词或动作。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hero-rescue-scene">
+                            <div class="card-image">
+                                <img src="images/hero-rescue-scene.svg" alt="英雄救助他人的激动场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">英雄救援</h3>
+                                <p class="option-desc">主人公勇救同伴的紧张一刻，让孩子记住勇气和牺牲的小细节。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="magical-musical-scene">
+                            <div class="card-image">
+                                <img src="images/magical-musical-scene.svg" alt="绚丽舞台和角色歌舞的奇幻画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">奇幻歌舞</h3>
+                                <p class="option-desc">色彩与旋律交织的奇幻段落，孩子会哼起旋律、念起画面细节。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
