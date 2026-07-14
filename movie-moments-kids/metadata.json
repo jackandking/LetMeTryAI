@@ -1,0 +1,19 @@
+{
+  "id": "movie-moments-kids",
+  "name": "带娃看电影小趣",
+  "description": "面向家长的图文投票页，用具体场景（温馨、搞笑、英雄、奇幻）对比，帮助发现孩子容易记住的观影元素，适合手机浏览与社交分享。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "带娃看电影",
+    "亲子回忆",
+    "观影瞬间",
+    "情绪记忆",
+    "家庭活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "movie-moments-kids/images/warm-hug-scene.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-07-14T19:00:45.814Z"
+}
