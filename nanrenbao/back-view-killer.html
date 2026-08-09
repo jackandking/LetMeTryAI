@@ -725,14 +725,14 @@
                         cardEl.onclick = async function() {
                             // 后宫激活后自动收录且无需再花积分
                             if (window.isHaremActivated && window.isHaremActivated()) {
-                                if (window.addHaremImage) window.addHaremImage(item.front_image_url);
+                                if (window.addHaremImage) window.addHaremImage(rawFrontUrl);
                                 if (PointsSystem && typeof PointsSystem.markBackViewViewedById === 'function') {
                                     await PointsSystem.markBackViewViewedById(item.id);
                                 }
-                                showFullImage(item.front_image_url);
+                                showFullImage(rawFrontUrl);
                                 return;
                             }
-                            flipCard(this, item.id, item.back_image_url, item.front_image_url);
+                            flipCard(this, item.id, rawBackUrl, rawFrontUrl);
                         };
 
                         // Attach delete handler (small X), prevent propagation to flip
