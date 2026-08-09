@@ -503,8 +503,25 @@
         const fullModal = document.getElementById('fullImageModal');
         const fullImg = document.getElementById('fullImageModalImg');
 
+        // Keep existing database records unchanged while serving legacy image
+        // paths from the new backend host.
+        function normalizeStoredImageUrl(imageUrl) {
+            if (typeof imageUrl !== 'string') return imageUrl;
+            try {
+                const url = new URL(imageUrl, window.location.origin);
+                if (url.hostname === 'letmetry.cloud') {
+                    url.protocol = 'https:';
+                    url.hostname = 'museumcheck.cn';
+                    return url.toString();
+                }
+            } catch (error) {
+                // Keep malformed or relative values unchanged.
+            }
+            return imageUrl;
+        }
+
         // Update blur overlay for unlocked image
-        function updateBlurOverlay(imageUrl) {
+        function updateBlurOverlay(imageUrl, sourceImageUrl = imageUrl) {
             // Find the gallery item with this image URL
             const galleryItems = document.querySelectorAll('.gallery-item');
             function normalize(u) {
@@ -528,7 +545,7 @@
 
                 const blurOverlay = item.querySelector('.blur-overlay');
                 if (!blurOverlay) return;
-                const viewStatus = PointsSystem.canViewImage(imageUrl);
+                const viewStatus = PointsSystem.canViewImage(sourceImageUrl);
                 if (!viewStatus.needsPayment) {
                     // Update to unlocked state
                     blurOverlay.innerHTML = `<div style="font-size: 0.9em;">已解锁 ${viewStatus.daysLeft} 天</div>`;
@@ -539,21 +556,21 @@
             });
         }
 
-        async function showModal(imageUrl) {
+        async function showModal(imageUrl, sourceImageUrl = imageUrl) {
             // 后宫激活后，自动收录图片且无需再花积分
             if (window.isHaremActivated && window.isHaremActivated()) {
                 if (window.addHaremImage) window.addHaremImage(imageUrl);
                 if (PointsSystem && typeof PointsSystem.markImageViewed === 'function') {
-                    await PointsSystem.markImageViewed(imageUrl);
+                    await PointsSystem.markImageViewed(sourceImageUrl);
                 }
-                updateBlurOverlay(imageUrl);
+                updateBlurOverlay(imageUrl, sourceImageUrl);
                 // Show fullscreen image for better viewing experience
                 showFullImage(imageUrl);
                 return;
             }
 
             // Check if user can view the image
-            const viewStatus = PointsSystem.canViewImage(imageUrl);
+            const viewStatus = PointsSystem.canViewImage(sourceImageUrl);
             if (!viewStatus.canView) {
                 showPointsNotification(`❌ 积分不足！需要 ${PointsSystem.POINTS_CONFIG.VIEW_IMAGE} 积分查看图片`);
                 setTimeout(() => {
@@ -562,7 +579,7 @@
                 return;
             }
             // Process the view (deduct points if needed)
-            const result = await PointsSystem.viewImage(imageUrl);
+            const result = await PointsSystem.viewImage(sourceImageUrl);
             if (!result.success) {
                 showPointsNotification(`❌ ${result.message}`);
                 return;
@@ -575,7 +592,7 @@
             updatePointsDisplay();
             if (result.pointsSpent > 0) {
                 showPointsNotification(`💎 ${result.message}`);
-                updateBlurOverlay(imageUrl);
+                updateBlurOverlay(imageUrl, sourceImageUrl);
             }
             showFullImage(imageUrl);
         }
@@ -632,6 +649,8 @@
                 if (data && data.length > 0) {
                     data.forEach(item => {
                         try {
+                            const sourceImageUrl = item.image_url;
+                            const imageUrl = normalizeStoredImageUrl(sourceImageUrl);
                             const div = document.createElement('div');
                             div.className = 'gallery-item';
                             
@@ -639,12 +658,12 @@
                             imageWrapper.className = 'image-wrapper';
                             
                             const img = document.createElement('img');
-                            img.src = item.image_url;
+                            img.src = imageUrl;
                             img.alt = '美女图片';
                             img.onerror = function() {
                                 // 图片加载失败时隐藏整个图片容器
                                 div.style.display = 'none';
-                                console.log('图片加载失败，已隐藏:', item.image_url);
+                                console.log('图片加载失败，已隐藏:', imageUrl);
                             };
                             
                             const blurOverlay = document.createElement('div');
@@ -652,7 +671,7 @@
                             
                             // Check if image has been viewed
                             try {
-                                const viewStatus = PointsSystem.canViewImage(item.image_url);
+                                const viewStatus = PointsSystem.canViewImage(sourceImageUrl);
                                 const viewCount = item.view_count || 0;
                                 const viewCountText = viewCount > 0 ? `<div style="font-size: 0.7em; margin-top: 3px; opacity: 0.8;">🔥 ${viewCount}人已看</div>` : '';
                                 
@@ -688,7 +707,7 @@
                                     const ok = window.confirm('确认消耗 ' + PointsSystem.POINTS_CONFIG.DELETE_IMAGE + ' 积分将该图片标记为删除吗？');
                                     if (!ok) return;
                                     try {
-                                        const res = await PointsSystem.deleteImage(item.image_url);
+                                        const res = await PointsSystem.deleteImage(sourceImageUrl);
                                         updatePointsDisplay();
                                         showPointsNotification(res.message || (res.success ? '已标记为删除' : '删除失败'));
                                         if (res.success) div.style.display = 'none';
@@ -705,7 +724,7 @@
                                 div.onclick = function() {
                                     // Mark as viewed for prioritization
                                     PointsSystem.markImageIdAsViewed(item.id, 'beauty');
-                                    showModal(item.image_url);
+                                    showModal(imageUrl, sourceImageUrl);
                                 };
 
                                 gallery.appendChild(div);
