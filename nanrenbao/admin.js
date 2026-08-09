@@ -1,4 +1,4 @@
-// admin.js - Batch upload functionality for nanrenbao admin panel
+// admin.js - Moderation and content management for the nanrenbao admin panel
 import { API_ENDPOINTS } from '../util/config.js';
 import { validateImageUrl } from './url-validator.esm.js';
 
@@ -7,7 +7,7 @@ const manageState = {
     page: 1,
     perPage: 20,
     totalPages: 1,
-    filter: 'all',
+    filter: 'pending',
     query: ''
 };
 
@@ -30,8 +30,16 @@ function formatReviewStatus(row) {
     };
     const visibilityLabel = row.deleted
         ? '<span style="color:#9e9e9e;">已隐藏</span>'
-        : '<span style="color:#2196f3;">可展示</span>';
+        : reviewStatus === 'approved'
+            ? '<span style="color:#2196f3;">可展示</span>'
+            : '<span style="color:#9e9e9e;">不展示</span>';
     return `${reviewLabelMap[reviewStatus] || reviewLabelMap.pending}<br>${visibilityLabel}`;
+}
+
+function formatSubmissionMeta(row) {
+    const source = row.source_type === 'local_file' ? '本地上传' : '存量内容';
+    const submittedAt = row.submitted_at || row.created_at || '-';
+    return `${source}<br><span style="font-size:0.85em; color:#666;">${submittedAt}</span>`;
 }
 
 function resetManageSelections() {
@@ -120,6 +128,7 @@ function renderManageTable(rows, page, perPage, total) {
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
             <td style="padding:8px;">${row.view_count || 0}</td>
             <td style="padding:8px;">${formatReviewStatus(row)}</td>
+            <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
             <td style="padding:8px;">${row.review_reason || '-'}</td>
             <td style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${row.image_url}">查看</button>
@@ -623,7 +632,7 @@ const backviewManageState = {
     page: 1,
     perPage: 20,
     totalPages: 1,
-    filter: 'all',
+    filter: 'pending',
     query: ''
 };
 
@@ -659,7 +668,7 @@ async function fetchBackviewImagesForManage(page = 1, perPage = 20, filter = 'al
     }
 
     const offset = (page - 1) * perPage;
-    const sql = `SELECT SQL_CALC_FOUND_ROWS id, back_image_url, front_image_url, click_count, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by FROM back_view_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
+    const sql = `SELECT SQL_CALC_FOUND_ROWS id, back_image_url, front_image_url, click_count, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by, source_type, submitted_at FROM back_view_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
 
     const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
         method: 'POST',
@@ -701,7 +710,8 @@ function renderBackviewManageTable(rows, page, perPage, total) {
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.back_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.front_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
             <td style="padding:8px;">${row.click_count || 0}</td>
-            <td style="padding:8px;">${row.review_status === 'approved' ? '<span style="color:#4caf50; font-weight:bold;">审核通过</span>' : row.review_status === 'rejected' ? '<span style="color:#f44336; font-weight:bold;">已驳回</span>' : '<span style="color:#ff9800; font-weight:bold;">待审核</span>'}<br>${row.deleted ? '<span style="color:#f44336;">已隐藏</span>' : '<span style="color:#4caf50;">可见</span>'}</td>
+            <td style="padding:8px;">${formatReviewStatus(row)}</td>
+            <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
             <td style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-back-url="${row.back_image_url}" data-front-url="${row.front_image_url}">查看</button>
                 ${row.review_status === 'approved' ? '' : '<button class="btn-secondary" data-action="approve" data-id="' + row.id + '">审核通过</button>'}
@@ -736,6 +746,20 @@ async function loadBackviewManagePage() {
     }
 }
 
+async function updateBackviewReviewStatus(ids, status, reason = null) {
+    const placeholders = ids.map(() => '?').join(',');
+    const sql = `UPDATE back_view_images
+        SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
+        WHERE id IN (${placeholders})`;
+    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql, params: [status, reason, 'admin-panel', ...ids] })
+    });
+    if (!resp.ok) throw new Error(`背影杀审核失败: HTTP ${resp.status}`);
+    return resp.json();
+}
+
 async function performBackviewAction(action, id, backUrl, frontUrl) {
     try {
         if (action === 'view') {
@@ -766,16 +790,8 @@ async function performBackviewAction(action, id, backUrl, frontUrl) {
                 if (reason === null) return;
                 reason = reason.trim() || '待补充人工审核说明';
             }
-            const sql = `UPDATE back_view_images
-                SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
-                WHERE id = ?`;
-            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sql, params: [action === 'approve' ? 'approved' : 'rejected', reason, 'admin-panel', id] })
-            });
-            if (!resp.ok) throw new Error(`背影杀审核失败: HTTP ${resp.status}`);
-            addBackviewLog(`${action} id=${id} result: ${JSON.stringify(await resp.json())}`, 'info');
+            const json = await updateBackviewReviewStatus([id], action === 'approve' ? 'approved' : 'rejected', reason);
+            addBackviewLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadBackviewManagePage();
             return;
         }
@@ -846,6 +862,27 @@ function attachBackviewManageHandlers() {
         });
         return ids;
     }
+
+    document.getElementById('backviewBulkApproveBtn').onclick = async () => {
+        const ids = getBackviewSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        if (!confirm(`确认将 ${ids.length} 项审核通过吗？`)) return;
+        const json = await updateBackviewReviewStatus(ids, 'approved', null);
+        addBackviewLog('批量通过: ' + JSON.stringify(json), 'info');
+        document.getElementById('backviewSelectAllCheckbox').checked = false;
+        loadBackviewManagePage();
+    };
+
+    document.getElementById('backviewBulkRejectBtn').onclick = async () => {
+        const ids = getBackviewSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        const reason = prompt('请输入批量驳回原因', '待补充人工审核说明');
+        if (reason === null) return;
+        const json = await updateBackviewReviewStatus(ids, 'rejected', reason.trim() || '待补充人工审核说明');
+        addBackviewLog('批量驳回: ' + JSON.stringify(json), 'info');
+        document.getElementById('backviewSelectAllCheckbox').checked = false;
+        loadBackviewManagePage();
+    };
 
     document.getElementById('backviewBulkHideBtn').onclick = async () => {
         const ids = getBackviewSelectedIds();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - 批量上传 - 男人宝</title>
+    <title>管理后台 - 内容审核 - 男人宝</title>
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
@@ -355,7 +355,7 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>🔧 管理后台</h1>
-        <p>批量上传与管理图片</p>
+        <p>审核用户投稿并管理展示状态</p>
     </header>
 
     <div class="container">
@@ -370,6 +370,11 @@
 
             <!-- Beauty Images Tab -->
             <div id="beautyTab" class="tab-content active">
+                <div class="info-box" style="margin-bottom:20px;">
+                    <strong>审核工作台</strong><br>
+                    用户从前台选择本地图片投稿后，会先进入“待审核”。审核通过后才会在前台展示；驳回或隐藏的内容不会展示。
+                </div>
+                <div id="legacyBeautyUrlUpload" style="display:none" aria-hidden="true">
                 <h2 class="section-title">批量上传URL (美女图片)</h2>
             
             <div class="form-group">
@@ -424,6 +429,7 @@
                 <div class="log-container" id="logContainer"></div>
             </div>
             
+                </div>
             <h2 class="section-title" style="margin-top: 30px;">管理所有图片</h2>
             <div class="form-group">
                 <label for="searchInput">搜索 / 过滤</label>
@@ -431,7 +437,7 @@
                 <div style="margin-top:8px; display:flex; gap:8px;">
                     <select id="filterSelect" style="padding:8px; border-radius:6px; border:1px solid #ddd;">
                         <option value="all">显示全部</option>
-                        <option value="pending">仅显示待审核</option>
+                        <option value="pending" selected>仅显示待审核</option>
                         <option value="approved">仅显示已通过</option>
                         <option value="rejected">仅显示已驳回</option>
                         <option value="visible">仅显示可见</option>
@@ -463,6 +469,7 @@
                                             <th style="padding:8px;">缩略图 / URL</th>
                                             <th style="padding:8px; width:120px;">查看数</th>
                                             <th style="padding:8px; width:180px;">审核 / 展示状态</th>
+                                            <th style="padding:8px; width:140px;">来源 / 提交时间</th>
                                             <th style="padding:8px; width:160px;">审核备注</th>
                                             <th style="padding:8px; width:320px;">操作</th>
                                         </tr>
@@ -480,6 +487,11 @@
 
             <!-- Back View Killer Tab -->
             <div id="backviewTab" class="tab-content">
+                <div class="info-box" style="margin-bottom:20px;">
+                    <strong>背影杀审核工作台</strong><br>
+                    背影杀投稿同样只接受前台本地文件上传，审核通过后才会展示并发放积分奖励。
+                </div>
+                <div id="legacyBackviewUrlUpload" style="display:none" aria-hidden="true">
                 <h2 class="section-title">批量上传URL (背影杀图片)</h2>
                 
                 <div class="form-group">
@@ -534,6 +546,7 @@
                     <div class="log-container" id="backviewLogContainer"></div>
                 </div>
                 
+                </div>
                 <h2 class="section-title" style="margin-top: 30px;">管理所有背影杀图片</h2>
                 <div class="form-group">
                     <label for="backviewSearchInput">搜索 / 过滤</label>
@@ -542,7 +555,7 @@
                         <select id="backviewFilterSelect" style="padding:8px; border-radius:6px; border:1px solid #ddd;">
                             <option value="all">显示全部</option>
                             <option value="visible">仅显示已审核可见</option>
-                            <option value="pending">仅显示待审核</option>
+                            <option value="pending" selected>仅显示待审核</option>
                             <option value="approved">仅显示审核通过</option>
                             <option value="rejected">仅显示已驳回</option>
                             <option value="deleted">仅显示已标记删除</option>
@@ -556,6 +569,8 @@
                     <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                         <div id="backviewManageStats">加载中...</div>
                         <div>
+                            <button class="btn-secondary" id="backviewBulkApproveBtn">批量通过</button>
+                            <button class="btn-secondary" id="backviewBulkRejectBtn">批量驳回</button>
                             <button class="btn-secondary" id="backviewBulkHideBtn">批量隐藏</button>
                             <button class="btn-secondary" id="backviewBulkShowBtn">批量展示</button>
                             <button class="btn-secondary" id="backviewBulkUndeleteBtn">批量取消删除</button>
@@ -572,6 +587,7 @@
                                             <th style="padding:8px;">正面缩略图 / URL</th>
                                             <th style="padding:8px; width:100px;">点击数</th>
                                             <th style="padding:8px; width:180px;">审核 / 展示状态</th>
+                                            <th style="padding:8px; width:140px;">来源 / 提交时间</th>
                                             <th style="padding:8px; width:240px;">操作</th>
                                         </tr>
                             </thead>
