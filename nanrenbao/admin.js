@@ -11,6 +11,23 @@ const manageState = {
     query: ''
 };
 
+// Keep database records unchanged while serving legacy image paths from the
+// current backend host in thumbnails and preview links.
+function normalizeStoredImageUrl(imageUrl) {
+    if (typeof imageUrl !== 'string') return imageUrl;
+    try {
+        const url = new URL(imageUrl, window.location.origin);
+        if (url.hostname === 'letmetry.cloud') {
+            url.protocol = 'https:';
+            url.hostname = 'museumcheck.cn';
+            return url.toString();
+        }
+    } catch (error) {
+        // Keep malformed or relative values unchanged.
+    }
+    return imageUrl;
+}
+
 function buildReviewWhere(filter) {
     let where = 'WHERE 1=1';
     if (filter === 'visible') where += " AND deleted = 0 AND review_status = 'approved'";
@@ -122,19 +139,20 @@ function renderManageTable(rows, page, perPage, total) {
 
     rows.forEach(row => {
         const tr = document.createElement('tr');
+        const displayUrl = normalizeStoredImageUrl(row.image_url);
         tr.innerHTML = `
             <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="row-checkbox" data-id="${row.id}" /></td>
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${displayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
             <td style="padding:8px;">${row.view_count || 0}</td>
             <td style="padding:8px;">${formatReviewStatus(row)}</td>
             <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
             <td style="padding:8px;">${row.review_reason || '-'}</td>
             <td style="padding:8px;">
-                <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${row.image_url}">查看</button>
-                ${row.review_status === 'approved' ? '' : `<button class="btn-secondary" data-action="approve" data-id="${row.id}" data-url="${row.image_url}">审核通过</button>`}
-                ${row.review_status === 'rejected' ? '' : `<button class="btn-secondary" data-action="reject" data-id="${row.id}" data-url="${row.image_url}">驳回</button>`}
-                <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}" data-url="${row.image_url}">${row.deleted ? '取消删除' : '标记删除'}</button>
+                <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${displayUrl}">查看</button>
+                ${row.review_status === 'approved' ? '' : `<button class="btn-secondary" data-action="approve" data-id="${row.id}" data-url="${displayUrl}">审核通过</button>`}
+                ${row.review_status === 'rejected' ? '' : `<button class="btn-secondary" data-action="reject" data-id="${row.id}" data-url="${displayUrl}">驳回</button>`}
+                <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}" data-url="${displayUrl}">${row.deleted ? '取消删除' : '标记删除'}</button>
                 <button class="btn-secondary" data-action="permadelete" data-id="${row.id}">永久删除</button>
             </td>
         `;
@@ -704,16 +722,18 @@ function renderBackviewManageTable(rows, page, perPage, total) {
 
     rows.forEach(row => {
         const tr = document.createElement('tr');
+        const backDisplayUrl = normalizeStoredImageUrl(row.back_image_url);
+        const frontDisplayUrl = normalizeStoredImageUrl(row.front_image_url);
         tr.innerHTML = `
             <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="backview-row-checkbox" data-id="${row.id}" /></td>
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.back_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.front_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${backDisplayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${frontDisplayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
             <td style="padding:8px;">${row.click_count || 0}</td>
             <td style="padding:8px;">${formatReviewStatus(row)}</td>
             <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
             <td style="padding:8px;">
-                <button class="btn-primary" data-action="view" data-back-url="${row.back_image_url}" data-front-url="${row.front_image_url}">查看</button>
+                <button class="btn-primary" data-action="view" data-back-url="${backDisplayUrl}" data-front-url="${frontDisplayUrl}">查看</button>
                 ${row.review_status === 'approved' ? '' : '<button class="btn-secondary" data-action="approve" data-id="' + row.id + '">审核通过</button>'}
                 ${row.review_status === 'rejected' ? '' : '<button class="btn-secondary" data-action="reject" data-id="' + row.id + '">驳回</button>'}
                 <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}">${row.deleted ? '取消删除' : '标记删除'}</button>
