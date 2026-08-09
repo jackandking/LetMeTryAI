@@ -644,16 +644,18 @@
             const loading = document.getElementById('loading');
             const gallery = document.getElementById('gallery');
             const noImages = document.getElementById('no-images');
+            const cacheBuster = Date.now();
 
             try {
                 const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
                     },
                     body: JSON.stringify({
                         // Only return approved images that are not marked deleted
-                        sql: 'SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC',
+                        sql: `SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC /* gallery-${cacheBuster} */`,
                         params: ['approved']
                     })
                 });
