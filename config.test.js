@@ -26,7 +26,7 @@ describe('Global Configuration', () => {
     });
 
     it('should use the correct domain', () => {
-      expect(window.BASE_URL).toBe('https://letmetry.cloud');
+      expect(window.BASE_URL).toBe('https://museumcheck.cn');
     });
   });
 

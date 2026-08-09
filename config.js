@@ -2,7 +2,7 @@
 // This provides the same functionality as util/config.js but for direct use in HTML script tags
 
 // Base URL for API and image resources
-window.BASE_URL = 'https://letmetry.cloud';
+window.BASE_URL = 'https://museumcheck.cn';
 
 /**
  * TESTING MODE: Enable MySQL API mocking for testing when connection fails

@@ -109,6 +109,10 @@ function increaseHaremCapacity(by) {
 function renderHaremImages() {
   const list = document.getElementById('harem-images');
   const empty = document.getElementById('harem-empty');
+  // Gallery pages load this shared script for auto-collection but do not
+  // contain the harem page's image-list elements.
+  if (!list || !empty) return;
+
   const imgs = getHaremImages();
   const capEl = document.getElementById('harem-capacity');
   const expandBtn = document.getElementById('harem-expand');
@@ -146,6 +150,11 @@ function renderHaremImages() {
 // 激活按钮逻辑
 function setupActivateBtn() {
   const btn = document.getElementById('activate-harem');
+  // This shared script is also loaded by pages that only use the harem
+  // integration (for example, the gallery). Those pages do not render the
+  // activation controls, so there is nothing to initialize here.
+  if (!btn) return;
+
   if (isHaremActivated()) {
     // hide activation UI when already activated
     if (btn) btn.style.display = 'none';
@@ -190,6 +199,10 @@ function updateHaremCountDisplay(count) {
 
 // 加载并显示激活计数
 function loadHaremActivationCount() {
+  // The gallery does not load the KV configuration helpers used by the
+  // dedicated harem page, so skip the optional counter there.
+  if (typeof getConfig !== 'function') return;
+
   getHaremActivationCount(function(count) {
     updateHaremCountDisplay(count);
   });
