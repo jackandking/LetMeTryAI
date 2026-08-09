@@ -650,14 +650,18 @@
             const loading = document.getElementById('loading');
             const gallery = document.getElementById('gallery');
             const noImages = document.getElementById('no-images');
+            const cacheBuster = Date.now();
 
             try {
                 const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
                     body: JSON.stringify({
                         // Exclude logically deleted entries
-                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 AND review_status = ? ORDER BY click_count DESC, created_at DESC',
+                        sql: `SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 AND review_status = ? ORDER BY click_count DESC, created_at DESC /* gallery-${cacheBuster} */`,
                         params: ['approved']
                     })
                 });
