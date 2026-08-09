@@ -565,6 +565,15 @@
             return imageUrl;
         }
 
+        function shuffleImages(images) {
+            const shuffled = images.slice();
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         async function flipCard(cardElement, imageId, backImageUrl, frontImageUrl) {
             if (flippedCards.has(imageId)) {
                 // Already flipped, just toggle display; hide fullscreen if closing
@@ -666,17 +675,9 @@
                 let data = await response.json();
                 loading.style.display = 'none';
 
-                // Sort: unseen images first
+                // Shuffle on every load so popularity does not determine exposure order.
                 if (data && data.length > 0) {
-                    // Debug: 输出排序前的状态
-                    const viewedIds = PointsSystem.hasViewedImageId ? 
-                        data.map(item => ({id: item.id, viewed: PointsSystem.hasViewedImageId(item.id, 'backview')})) : [];
-                    console.log('[Debug] 排序前 - 已看状态:', viewedIds);
-                    
-                    data = PointsSystem.sortImagesByViewedStatus(data, 'id', 'backview');
-                    
-                    // Debug: 输出排序后的顺序
-                    console.log('[Debug] 排序后 - 图片ID顺序:', data.map(item => item.id));
+                    data = shuffleImages(data);
                 }
 
                 if (data && data.length > 0) {

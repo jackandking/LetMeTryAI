@@ -540,6 +540,15 @@
             return imageUrl;
         }
 
+        function shuffleImages(images) {
+            const shuffled = images.slice();
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         // Update blur overlay for unlocked image
         function updateBlurOverlay(imageUrl, sourceImageUrl = imageUrl) {
             // Find the gallery item with this image URL
@@ -662,9 +671,9 @@
                 let data = await response.json();
                 loading.style.display = 'none';
 
-                // Sort: unseen images first
+                // Shuffle on every load so popularity does not determine exposure order.
                 if (data && data.length > 0) {
-                    data = PointsSystem.sortImagesByViewedStatus(data, 'id', 'beauty');
+                    data = shuffleImages(data);
                 }
 
                 if (data && data.length > 0) {
