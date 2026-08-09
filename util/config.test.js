@@ -13,7 +13,7 @@ describe('Configuration Module', () => {
     });
 
     it('should use the correct domain', () => {
-      expect(BASE_URL).toBe('https://letmetry.cloud');
+      expect(BASE_URL).toBe('https://museumcheck.cn');
     });
   });
 

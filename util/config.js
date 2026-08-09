@@ -10,7 +10,7 @@
 // Centralized configuration for API and resource URLs
 
 // Base URL for API and image resources
-export const BASE_URL = 'https://letmetry.cloud';
+export const BASE_URL = 'https://museumcheck.cn';
 
 // API endpoints
 export const API_ENDPOINTS = {

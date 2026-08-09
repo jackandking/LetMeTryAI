@@ -314,7 +314,7 @@ const PointsSystem = (function() {
      */
     async function incrementViewCount(imageUrl) {
         const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+            MYSQL_QUERY: 'https://museumcheck.cn/mysql/query'
         };
 
         const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
@@ -365,7 +365,7 @@ const PointsSystem = (function() {
      */
     async function markImageDeletedInDB(imageUrl) {
         const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+            MYSQL_QUERY: 'https://museumcheck.cn/mysql/query'
         };
 
         // First try exact-match update
@@ -447,7 +447,7 @@ const PointsSystem = (function() {
      */
     async function markBackViewDeletedById(id) {
         const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+            MYSQL_QUERY: 'https://museumcheck.cn/mysql/query'
         };
 
         const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
@@ -475,7 +475,7 @@ const PointsSystem = (function() {
         setViewedImages(viewedImages);
 
         try {
-            const API_ENDPOINTS = window.API_ENDPOINTS || { MYSQL_QUERY: 'https://letmetry.cloud/mysql/query' };
+            const API_ENDPOINTS = window.API_ENDPOINTS || { MYSQL_QUERY: 'https://museumcheck.cn/mysql/query' };
             await fetch(API_ENDPOINTS.MYSQL_QUERY, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
