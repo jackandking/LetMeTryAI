@@ -655,10 +655,7 @@
             try {
                 const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         // Exclude logically deleted entries
                         sql: `SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 AND review_status = ? ORDER BY click_count DESC, created_at DESC /* gallery-${cacheBuster} */`,
