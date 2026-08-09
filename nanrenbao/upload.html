@@ -349,17 +349,7 @@
                 此页面仅供内部管理使用，不对外公开链接。
             </div>
             <form id="uploadForm">
-                <div class="form-group upload-control">
-                    <label for="imageUrl">图片URL地址：</label>
-                    <input 
-                        type="url" 
-                        id="imageUrl" 
-                        name="imageUrl" 
-                        placeholder="请输入图片URL地址（https://...）"
-                    >
-                </div>
-
-                <div class="upload-or-divider upload-control">— 或者选择本地图片 —</div>
+                <input type="hidden" id="imageUrl" name="imageUrl">
 
                 <div class="form-group upload-control">
                     <label>本地图片上传：</label>
@@ -397,7 +387,7 @@
 
     <script>
         const UPLOAD_DISABLED = false;
-        const UPLOAD_DISABLED_MESSAGE = '上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
+        const UPLOAD_DISABLED_MESSAGE = '上传功能暂时关闭，请稍后重试。';
         const REVIEW_PENDING_STATUS = 'pending';
 
         // Initialize points system
@@ -627,18 +617,17 @@
                 return;
             }
 
-            const urlValue = imageUrlInput.value.trim();
-
-            // Must have either a local file or a URL
-            if (!localFile && !urlValue) {
-                showMessage('请输入图片URL或选择本地图片', 'error');
+            // Only local files are accepted. The image service generates the
+            // stored URL after the file upload completes.
+            if (!localFile) {
+                showMessage('请选择本地图片后再提交', 'error');
                 return;
             }
 
             // Disable submit button
             submitBtn.disabled = true;
 
-            let url = urlValue;
+            let url = '';
 
             // --- Local file upload path ---
             if (localFile) {
@@ -655,15 +644,6 @@
                 } catch (err) {
                     console.error('Local file upload error:', err);
                     showMessage('本地图片上传失败：' + (err.message || '请稍后重试'), 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '提交上传';
-                    return;
-                }
-            } else {
-                // Validate URL
-                const validation = isValidImageUrl(url);
-                if (!validation.valid) {
-                    showMessage(validation.error, 'error');
                     submitBtn.disabled = false;
                     submitBtn.textContent = '提交上传';
                     return;
@@ -698,7 +678,7 @@
                 submitBtn.textContent = '提交审核中...';
 
                 const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                const sourceType = localFile ? 'local_file' : 'url';
+                const sourceType = 'local_file';
                 
                 // Insert into database
                 const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {

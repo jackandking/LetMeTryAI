@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上传背影杀（维护中） - 男人宝</title>
+    <title>上传背影杀 - 男人宝</title>
     <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <script src="../config.js"></script>
@@ -339,7 +339,7 @@
 <body>
     <header>
         <a href="back-view-killer.html" class="nav-back">← 返回</a>
-        <h1>上传背影杀（维护中）</h1>
+        <h1>上传背影杀</h1>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
@@ -358,31 +358,26 @@
             <div class="title">📋 上传说明</div>
             <div class="content">
                 • 需要上传两张图片：一张背影照片和一张正面照片<br>
-                • 支持直接输入图片链接（URL）或选择本地文件上传<br>
+                • 仅支持选择本地文件上传<br>
                 • 本地文件上传时会自动压缩至500KB以内（400–500KB），适合手机浏览<br>
-                • 上传成功后立即获得 20 积分奖励
+                • 上传后进入人工审核，审核通过后展示并发放 20 积分奖励
             </div>
         </div>
 
         <form class="upload-form" id="uploadForm">
             <div class="maintenance-banner" id="maintenanceBanner">
-                <strong>整改公告</strong>
-                因图片内容安全审查整改，背影杀上传功能暂时关闭。整改完成并补齐审核流程后再恢复开放。
+                <strong>审核说明</strong>
+                图片上传后不会立即展示，需人工审核通过后才会公开。
             </div>
             <div class="form-group upload-control">
                 <label>上传模式</label>
-                <label style="font-weight:normal; margin-right:10px;"><input type="radio" name="uploadMode" value="two"> 两张9:16图片（分别为背影和正面，可输入URL或选择本地文件）</label>
-                <label style="font-weight:normal;"><input type="radio" name="uploadMode" value="split" checked> 一张18:16图片（只需一张宽图自动切成两半，可输入URL或选择本地文件）</label>
+                <label style="font-weight:normal; margin-right:10px;"><input type="radio" name="uploadMode" value="two"> 两张9:16本地图片（分别为背影和正面）</label>
+                <label style="font-weight:normal;"><input type="radio" name="uploadMode" value="split" checked> 一张18:16本地图片（自动切成两半）</label>
             </div>
             <div class="form-group upload-control">
-                <label for="backImageUrl">背影照片 *</label>
-                <input 
-                    type="url" 
-                    id="backImageUrl" 
-                    name="backImageUrl" 
-                    placeholder="https://example.com/back-image.jpg"
-                >
-                <div class="hint">输入背影照片URL，或点击下方按钮选择本地文件（自动压缩）</div>
+                <label for="backFileInput">背影照片 *</label>
+                <input type="hidden" id="backImageUrl" name="backImageUrl">
+                <div class="hint">请选择本地背影照片（自动压缩）</div>
                 <div class="file-upload-row">
                     <input type="file" id="backFileInput" accept="image/*" style="display:none">
                     <button type="button" id="backFileBtn" class="file-btn">📁 选择本地文件</button>
@@ -391,14 +386,9 @@
             </div>
 
             <div class="form-group upload-control">
-                <label for="frontImageUrl">正面照片 *</label>
-                <input 
-                    type="url" 
-                    id="frontImageUrl" 
-                    name="frontImageUrl" 
-                    placeholder="https://example.com/front-image.jpg"
-                >
-                <div class="hint">输入正面照片URL，或点击下方按钮选择本地文件（自动压缩）</div>
+                <label for="frontFileInput">正面照片 *</label>
+                <input type="hidden" id="frontImageUrl" name="frontImageUrl">
+                <div class="hint">请选择本地正面照片（自动压缩）</div>
                 <div class="file-upload-row">
                     <input type="file" id="frontFileInput" accept="image/*" style="display:none">
                     <button type="button" id="frontFileBtn" class="file-btn">📁 选择本地文件</button>
@@ -435,8 +425,8 @@
     </footer>
 
     <script>
-        const UPLOAD_DISABLED = true;
-        const UPLOAD_DISABLED_MESSAGE = '背影杀上传功能整改中，暂时关闭，审核流程补齐后恢复开放。';
+        const UPLOAD_DISABLED = false;
+        const UPLOAD_DISABLED_MESSAGE = '上传功能暂时关闭，请稍后重试。';
 
         const pointsInfo = PointsSystem.initialize();
         const pointsValueElement = document.getElementById('pointsValue');
@@ -920,38 +910,17 @@
             let backImageUrl = backImageInput.value.trim();
             let frontImageUrl = frontImageInput.value.trim();
 
-            // Validate: back image needs either URL or local file
+            // Only local files are accepted.
             const hasBackFile = !!backLocalFile;
-            const hasBackUrl = !!backImageUrl;
-            if (!hasBackFile && !hasBackUrl) {
-                showPointsNotification('❌ 请输入背影照片链接或选择本地文件');
+            if (!hasBackFile) {
+                showPointsNotification('❌ 请选择背影本地文件');
                 return;
-            }
-            if (!hasBackFile && hasBackUrl) {
-                const backValidation = window.isValidImageUrl(backImageUrl);
-                if (!backValidation.valid) {
-                    showPointsNotification('❌ 背影图片链接格式不正确：' + backValidation.error);
-                    return;
-                }
             }
 
             if (mode === 'two') {
                 const hasFrontFile = !!frontLocalFile;
-                const hasFrontUrl = !!frontImageUrl;
-                if (!hasFrontFile && !hasFrontUrl) {
-                    showPointsNotification('❌ 请输入正面照片链接或选择本地文件');
-                    return;
-                }
-                if (!hasFrontFile && hasFrontUrl) {
-                    const frontValidation = window.isValidImageUrl(frontImageUrl);
-                    if (!frontValidation.valid) {
-                        showPointsNotification('❌ 正面图片链接格式不正确：' + frontValidation.error);
-                        return;
-                    }
-                }
-                // If both are URLs, check they're not the same
-                if (!hasBackFile && !frontLocalFile && backImageUrl === frontImageUrl) {
-                    showPointsNotification('❌ 背影和正面不能使用相同的图片');
+                if (!hasFrontFile) {
+                    showPointsNotification('❌ 请选择正面本地文件');
                     return;
                 }
             }
@@ -1054,8 +1023,8 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        sql: 'INSERT INTO back_view_images (back_image_url, front_image_url) VALUES (?, ?)',
-                        params: [backImageUrl, frontImageUrl]
+                        sql: 'INSERT INTO back_view_images (back_image_url, front_image_url, review_status, submitted_at, source_type) VALUES (?, ?, ?, ?, ?)',
+                        params: [backImageUrl, frontImageUrl, 'pending', new Date().toISOString().slice(0, 19).replace('T', ' '), 'local_file']
                     })
                 });
                 if (!insertResponse.ok) {
@@ -1065,10 +1034,7 @@
                 }
 
                 const BACK_VIEW_UPLOAD_POINTS = 20;
-                PointsSystem.addPoints(BACK_VIEW_UPLOAD_POINTS);
-                updatePointsDisplay();
-
-                showPointsNotification(`🎉 上传成功！获得 ${BACK_VIEW_UPLOAD_POINTS} 积分`);
+                showPointsNotification('🛡️ 已提交审核，审核通过后展示并发放积分');
 
                 // Reset form and local file state
                 uploadForm.reset();

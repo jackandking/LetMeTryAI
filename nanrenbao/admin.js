@@ -642,8 +642,11 @@ const backviewState = {
  */
 async function fetchBackviewImagesForManage(page = 1, perPage = 20, filter = 'all', query = '') {
     let where = 'WHERE 1=1';
-    if (filter === 'visible') where = 'WHERE deleted = 0';
+    if (filter === 'visible') where = "WHERE deleted = 0 AND review_status = 'approved'";
     if (filter === 'deleted') where = 'WHERE deleted = 1';
+    if (filter === 'pending') where = "WHERE review_status = 'pending'";
+    if (filter === 'approved') where = "WHERE review_status = 'approved'";
+    if (filter === 'rejected') where = "WHERE review_status = 'rejected'";
 
     if (query && query.trim()) {
         const q = query.trim();
@@ -656,7 +659,7 @@ async function fetchBackviewImagesForManage(page = 1, perPage = 20, filter = 'al
     }
 
     const offset = (page - 1) * perPage;
-    const sql = `SELECT SQL_CALC_FOUND_ROWS id, back_image_url, front_image_url, click_count, created_at, deleted FROM back_view_images ${where} ORDER BY created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
+    const sql = `SELECT SQL_CALC_FOUND_ROWS id, back_image_url, front_image_url, click_count, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by FROM back_view_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
 
     const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
         method: 'POST',
@@ -698,9 +701,11 @@ function renderBackviewManageTable(rows, page, perPage, total) {
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.back_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
             <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${row.front_image_url}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
             <td style="padding:8px;">${row.click_count || 0}</td>
-            <td style="padding:8px;">${row.deleted ? '<span style="color:#f44336; font-weight:bold;">已删除</span>' : '<span style="color:#4caf50;">可见</span>'}</td>
+            <td style="padding:8px;">${row.review_status === 'approved' ? '<span style="color:#4caf50; font-weight:bold;">审核通过</span>' : row.review_status === 'rejected' ? '<span style="color:#f44336; font-weight:bold;">已驳回</span>' : '<span style="color:#ff9800; font-weight:bold;">待审核</span>'}<br>${row.deleted ? '<span style="color:#f44336;">已隐藏</span>' : '<span style="color:#4caf50;">可见</span>'}</td>
             <td style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-back-url="${row.back_image_url}" data-front-url="${row.front_image_url}">查看</button>
+                ${row.review_status === 'approved' ? '' : '<button class="btn-secondary" data-action="approve" data-id="' + row.id + '">审核通过</button>'}
+                ${row.review_status === 'rejected' ? '' : '<button class="btn-secondary" data-action="reject" data-id="' + row.id + '">驳回</button>'}
                 <button class="btn-secondary" data-action="${row.deleted ? 'undelete' : 'delete'}" data-id="${row.id}">${row.deleted ? '取消删除' : '标记删除'}</button>
                 <button class="btn-secondary" data-action="permadelete" data-id="${row.id}">永久删除</button>
             </td>
@@ -750,6 +755,27 @@ async function performBackviewAction(action, id, backUrl, frontUrl) {
             });
             const json = await resp.json();
             addBackviewLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
+            await loadBackviewManagePage();
+            return;
+        }
+
+        if (action === 'approve' || action === 'reject') {
+            let reason = null;
+            if (action === 'reject') {
+                reason = prompt('请输入驳回原因', '待补充人工审核说明');
+                if (reason === null) return;
+                reason = reason.trim() || '待补充人工审核说明';
+            }
+            const sql = `UPDATE back_view_images
+                SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
+                WHERE id = ?`;
+            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql, params: [action === 'approve' ? 'approved' : 'rejected', reason, 'admin-panel', id] })
+            });
+            if (!resp.ok) throw new Error(`背影杀审核失败: HTTP ${resp.status}`);
+            addBackviewLog(`${action} id=${id} result: ${JSON.stringify(await resp.json())}`, 'info');
             await loadBackviewManagePage();
             return;
         }
