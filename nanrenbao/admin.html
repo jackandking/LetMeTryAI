@@ -541,7 +541,10 @@
                     <div style="margin-top:8px; display:flex; gap:8px;">
                         <select id="backviewFilterSelect" style="padding:8px; border-radius:6px; border:1px solid #ddd;">
                             <option value="all">显示全部</option>
-                            <option value="visible">仅显示可见</option>
+                            <option value="visible">仅显示已审核可见</option>
+                            <option value="pending">仅显示待审核</option>
+                            <option value="approved">仅显示审核通过</option>
+                            <option value="rejected">仅显示已驳回</option>
                             <option value="deleted">仅显示已标记删除</option>
                         </select>
                         <button class="btn-primary" id="backviewRefreshBtn">刷新列表</button>
@@ -568,7 +571,7 @@
                                             <th style="padding:8px;">背影缩略图 / URL</th>
                                             <th style="padding:8px;">正面缩略图 / URL</th>
                                             <th style="padding:8px; width:100px;">点击数</th>
-                                            <th style="padding:8px; width:100px;">状态</th>
+                                            <th style="padding:8px; width:180px;">审核 / 展示状态</th>
                                             <th style="padding:8px; width:240px;">操作</th>
                                         </tr>
                             </thead>

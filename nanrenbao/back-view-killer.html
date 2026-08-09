@@ -422,7 +422,7 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>背影杀 💃</h1>
-        <div class="upload-btn disabled" id="backviewUploadMaintenance">📤 上传维护中</div>
+        <a class="upload-btn" href="back-view-killer-upload.html">📤 上传背影杀</a>
         <div class="points-display">
             <span class="points-icon">💎</span>
             <span id="pointsValue">0</span> 分
@@ -657,8 +657,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         // Exclude logically deleted entries
-                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 ORDER BY click_count DESC, created_at DESC',
-                        params: []
+                        sql: 'SELECT id, back_image_url, front_image_url, click_count FROM back_view_images WHERE deleted = 0 AND review_status = ? ORDER BY click_count DESC, created_at DESC',
+                        params: ['approved']
                     })
                 });
 
