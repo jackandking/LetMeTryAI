@@ -399,12 +399,12 @@
             <div class="preview-container upload-control">
                 <div class="preview-box">
                     <h3>背影预览</h3>
-                    <div id="backPreview" class="no-preview">在上方输入背影图片链接后，这里将显示预览</div>
+                    <div id="backPreview" class="no-preview">选择本地背影照片后，这里将显示预览</div>
                     <canvas id="backCanvas" style="display:none; width:100%; height:auto; border-radius:8px;"></canvas>
                 </div>
                 <div class="preview-box">
                     <h3>正面预览</h3>
-                    <div id="frontPreview" class="no-preview">在上方输入正面图片链接后，这里将显示预览</div>
+                    <div id="frontPreview" class="no-preview">选择本地正面照片后，这里将显示预览</div>
                     <canvas id="frontCanvas" style="display:none; width:100%; height:auto; border-radius:8px;"></canvas>
                 </div>
             </div>
@@ -831,8 +831,8 @@
             }
             const mode = getUploadMode();
             if (!url) {
-                backPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
-                frontPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
+                backPreview.innerHTML = '<div class="no-preview">请选择有效的本地图片文件</div>';
+                frontPreview.innerHTML = '<div class="no-preview">请选择有效的本地图片文件</div>';
                 backCanvas.style.display = 'none';
                 frontCanvas.style.display = 'none';
                 return;
@@ -886,7 +886,7 @@
                     frontPreview.innerHTML = `<div class="no-preview">${validation.error}</div>`;
                 }
             } else {
-                frontPreview.innerHTML = '<div class="no-preview">请输入有效的图片链接</div>';
+                frontPreview.innerHTML = '<div class="no-preview">请选择有效的本地图片文件</div>';
             }
         });
 
@@ -1046,8 +1046,8 @@
                 frontFileNameEl.textContent = '未选择文件';
                 backFileNameEl.className = 'file-name';
                 frontFileNameEl.className = 'file-name';
-                backPreview.innerHTML = '<div class="no-preview">在上方输入背影图片链接后，这里将显示预览</div>';
-                frontPreview.innerHTML = '<div class="no-preview">在上方输入正面图片链接后，这里将显示预览</div>';
+                backPreview.innerHTML = '<div class="no-preview">选择本地背影照片后，这里将显示预览</div>';
+                frontPreview.innerHTML = '<div class="no-preview">选择本地正面照片后，这里将显示预览</div>';
                 backCanvas.style.display = 'none';
                 frontCanvas.style.display = 'none';
 
