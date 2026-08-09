@@ -24,6 +24,16 @@
         pointsElement.textContent = PointsSystem.getPoints();
     }
 
+    async function readJson(response) {
+        const text = await response.text();
+        if (!text) return {};
+        try {
+            return JSON.parse(text);
+        } catch (error) {
+            throw new Error(`支付服务返回了无效响应（HTTP ${response.status}）`);
+        }
+    }
+
     function renderPackages() {
         packagesElement.innerHTML = PACKAGES.map((item, index) => `
             <button class="package${index === 0 ? ' selected' : ''}" type="button"
@@ -55,6 +65,11 @@
 
     async function createOrder() {
         if (!selectedPackage) return;
+        const userUuid = PointsSystem.getUserInfo().uuid;
+        if (!userUuid) {
+            showMessage('用户信息尚未准备好，请刷新页面后重试', 'error');
+            return;
+        }
         payButton.disabled = true;
         showMessage('正在创建订单，请稍候……', 'info');
         try {
@@ -62,11 +77,11 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    userUuid: PointsSystem.getUserInfo().uuid,
+                    userUuid,
                     packageId: selectedPackage.id
                 })
             });
-            const result = await response.json();
+            const result = await readJson(response);
             if (!response.ok || !result.paymentUrl) {
                 throw new Error(result.message || '支付服务暂未就绪，请稍后再试');
             }
@@ -82,20 +97,25 @@
         if (!orderNo) return;
 
         const userUuid = PointsSystem.getUserInfo().uuid;
+        if (!userUuid) {
+            showMessage('用户信息尚未准备好，请刷新页面后重试', 'error');
+            return;
+        }
         showMessage('已返回支付页面，正在确认订单……', 'info');
         for (let attempt = 0; attempt < 12; attempt += 1) {
             try {
                 const url = `${API_ENDPOINTS.PAYMENT_QUERY_ORDER}/${encodeURIComponent(orderNo)}?userUuid=${encodeURIComponent(userUuid)}`;
                 const response = await fetch(url);
-                if (response.status === 404) throw new Error('订单不存在或已过期');
-                const order = await response.json();
+                const order = await readJson(response);
+                if (!response.ok) throw new Error(order.message || '订单查询失败');
                 if (order.status === 'PAID') {
                     const claimResponse = await fetch(`${API_ENDPOINTS.PAYMENT_QUERY_ORDER}/${encodeURIComponent(orderNo)}/claim`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ userUuid })
                     });
-                    const claim = await claimResponse.json();
+                    const claim = await readJson(claimResponse);
+                    if (!claimResponse.ok) throw new Error(claim.message || '积分领取失败');
                     if (claim.credited) {
                         PointsSystem.addPoints(Number(claim.points));
                         updateBalance();
