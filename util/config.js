@@ -25,7 +25,9 @@ export const API_ENDPOINTS = {
   MYSQL_GET_BY_ID: `${BASE_URL}/mysql/getById`,
   MYSQL_INSERT: `${BASE_URL}/mysql/insert`,
   MYSQL_UPDATE: `${BASE_URL}/mysql/update`,
-  MYSQL_DELETE: `${BASE_URL}/mysql/delete`
+  MYSQL_DELETE: `${BASE_URL}/mysql/delete`,
+  PAYMENT_CREATE_ORDER: `${BASE_URL}/payment/alipay/create-order`,
+  PAYMENT_QUERY_ORDER: `${BASE_URL}/payment/order`
 };
 
 // Helper function to get image URL

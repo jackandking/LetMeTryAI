@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>充值积分 - 男人宝</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    <script src="../config.js"></script>
+    <script src="points-system.js"></script>
+    <style>
+        :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; background: linear-gradient(135deg, #667eea, #764ba2); color: #263238; }
+        header { position: relative; padding: 24px 20px; text-align: center; background: rgba(255, 255, 255, 0.96); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12); }
+        h1 { margin: 0; color: #5967d9; font-size: 1.8rem; }
+        .back-link { position: absolute; left: 20px; top: 26px; color: #5967d9; text-decoration: none; }
+        .balance { margin: 8px 0 0; color: #667; }
+        .balance strong { color: #5967d9; font-size: 1.3rem; }
+        main { width: min(680px, calc(100% - 32px)); margin: 28px auto; }
+        .panel { padding: 24px; border-radius: 20px; background: rgba(255, 255, 255, 0.96); box-shadow: 0 12px 30px rgba(37, 24, 86, 0.22); }
+        .intro { margin: 0 0 20px; color: #667; line-height: 1.6; }
+        .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .package { padding: 18px 10px; border: 2px solid #e4e7ff; border-radius: 14px; background: #fff; color: #3949ab; cursor: pointer; text-align: center; transition: 0.2s ease; }
+        .package:hover, .package.selected { border-color: #667eea; background: #f1f3ff; transform: translateY(-2px); }
+        .package .points { display: block; font-size: 1.25rem; font-weight: 700; }
+        .package .price { display: block; margin-top: 6px; color: #d58b00; font-size: 1.05rem; }
+        .pay-button { width: 100%; margin-top: 24px; padding: 14px; border: 0; border-radius: 12px; background: linear-gradient(135deg, #1677ff, #0958d9); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .pay-button:disabled { background: #b8becb; cursor: not-allowed; }
+        .message { display: none; margin-top: 16px; padding: 12px 14px; border-radius: 10px; line-height: 1.5; }
+        .message.info { display: block; background: #eef4ff; color: #2454a6; }
+        .message.error { display: block; background: #fff1f0; color: #b42318; }
+        .notice { margin-top: 20px; color: #7b8192; font-size: 0.85rem; line-height: 1.6; }
+        @media (max-width: 520px) { .packages { grid-template-columns: 1fr; } .back-link { position: static; display: block; margin-bottom: 10px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="back-link" href="index.html">← 返回</a>
+        <h1>充值积分</h1>
+        <p class="balance">当前余额：<strong id="pointsValue">0</strong> 分</p>
+    </header>
+    <main>
+        <section class="panel" aria-labelledby="recharge-title">
+            <h2 id="recharge-title">选择积分套餐</h2>
+            <p class="intro">积分仅限男人宝站内使用，不支持提现或转让。付款成功后，系统会在支付宝异步通知确认后入账。</p>
+            <div class="packages" id="packages" role="radiogroup" aria-label="积分套餐"></div>
+            <button class="pay-button" id="payButton" type="button" disabled>请选择套餐</button>
+            <div class="message" id="message" role="status" aria-live="polite"></div>
+            <p class="notice">支付页面由支付宝提供。请勿关闭支付页面；如果已经付款但积分未到账，请保留订单号联系客服。</p>
+        </section>
+    </main>
+    <script src="recharge.js"></script>
+</body>
+</html>
