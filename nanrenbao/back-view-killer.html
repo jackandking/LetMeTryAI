@@ -548,6 +548,23 @@
         // Track flipped cards using image pair IDs
         const flippedCards = new Set();
 
+        // Keep database records unchanged while serving legacy image paths
+        // from the museumcheck backend.
+        function normalizeStoredImageUrl(imageUrl) {
+            if (typeof imageUrl !== 'string') return imageUrl;
+            try {
+                const url = new URL(imageUrl, window.location.origin);
+                if (url.hostname === 'letmetry.cloud') {
+                    url.protocol = 'https:';
+                    url.hostname = 'museumcheck.cn';
+                    return url.toString();
+                }
+            } catch (error) {
+                // Keep malformed or relative values unchanged.
+            }
+            return imageUrl;
+        }
+
         async function flipCard(cardElement, imageId, backImageUrl, frontImageUrl) {
             if (flippedCards.has(imageId)) {
                 // Already flipped, just toggle display; hide fullscreen if closing
@@ -682,8 +699,8 @@
 
                         // Use escaped URLs for security
                         // 不再 escapeHtml，直接用原始 URL，避免带参数的图片无法预览
-                        const rawBackUrl = item.back_image_url;
-                        const rawFrontUrl = item.front_image_url;
+                        const rawBackUrl = normalizeStoredImageUrl(item.back_image_url);
+                        const rawFrontUrl = normalizeStoredImageUrl(item.front_image_url);
                         const safeClickCount = parseInt(item.click_count) || 0;
                         const safeDaysLeft = parseInt(viewStatus.daysLeft) || 0;
 
