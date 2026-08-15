@@ -22,9 +22,41 @@ document.querySelectorAll('.level-tab').forEach((tab) => {
     });
 });
 
+const EVENT_ENDPOINT = 'https://museumcheck.cn/api/track';
+
+function logEvent(event, data = {}) {
+    const payload = {
+        event,
+        appId: 'ai-child-lab',
+        timestamp: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        ...data
+    };
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        navigator.sendBeacon(EVENT_ENDPOINT, JSON.stringify(payload));
+    } else if (typeof fetch !== 'undefined') {
+        fetch(EVENT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(() => {});
+    }
+}
+
 document.querySelector('#bookingForm').addEventListener('submit', (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    const formData = new FormData(form);
+    const booking = {
+        age: formData.get('age'),
+        interest: formData.get('interest'),
+        time: formData.get('time'),
+        name: formData.get('name'),
+        contact: formData.get('contact'),
+        message: formData.get('message')
+    };
+    logEvent('booking_submit', { booking });
     const success = document.querySelector('#formSuccess');
     success.classList.add('is-visible');
     form.querySelector('button').textContent = '预约已提交 ✓';
