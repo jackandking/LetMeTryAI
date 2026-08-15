@@ -2,12 +2,12 @@
 // This tests the global config.js file that sets window variables
 
 describe('Global Configuration', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     // Mock window object for Node.js environment
     global.window = {};
     
     // Load the config script
-    require('./config.js');
+    await import('./config.js');
   });
 
   afterAll(() => {
@@ -48,7 +48,9 @@ describe('Global Configuration', () => {
         'MYSQL_GET_BY_ID',
         'MYSQL_INSERT',
         'MYSQL_UPDATE',
-        'MYSQL_DELETE'
+        'MYSQL_DELETE',
+        'PAYMENT_CREATE_ORDER',
+        'PAYMENT_QUERY_ORDER'
       ];
 
       requiredEndpoints.forEach(endpoint => {

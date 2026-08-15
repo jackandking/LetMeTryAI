@@ -20,6 +20,7 @@
 # Ignore nanrenbao/image/data/test/backup files
 nanrenbao/backup_*.json
 nanrenbao/*.test.js
+!nanrenbao/recharge.test.js
 nanrenbao/*.testoutput
 nanrenbao/*.bak
 nanrenbao/*.local.js
