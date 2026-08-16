@@ -1,0 +1,19 @@
+{
+  "id": "kids-street-seat-safety",
+  "name": "家长爱·带娃出门座驾",
+  "description": "移动端图文投票页，对比推车、车载座椅、拖挂式儿童车与儿童电动车在不同场景（逛街、短途骑行、步行街）下的安全性与便利性，帮助家长分享实际体验与使用场景。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "儿童座驾",
+    "出行安全",
+    "推车",
+    "自行车座椅",
+    "亲子出行",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-street-seat-safety/images/five-point-stroller.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-16T19:00:40.872Z"
+}
