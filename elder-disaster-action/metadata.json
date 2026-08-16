@@ -1,0 +1,19 @@
+{
+  "id": "elder-disaster-action",
+  "name": "爱老人家居避险",
+  "description": "模拟地震、火灾等家庭突发场景，收集大家认为老人应先采取的实际动作，帮助传播应急常识与家庭预案准备。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "灾害应对",
+    "老人安全",
+    "家庭避险",
+    "应急准备",
+    "居家安全",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-disaster-action/images/protect-head.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-16T18:01:45.054Z"
+}
