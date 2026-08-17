@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>放学回来孩子饿，你会给他哪种快手晚饭？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">放学回来孩子饿，你会给他哪种快手晚饭？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">放学回来孩子饿，你会给他哪种快手晚饭？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="reheat-leftovers">
+                            <div class="card-image">
+                                <img src="images/reheat-leftovers.svg" alt="微波炉里加热菜饭的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家里加热剩菜</h3>
+                                <p class="option-desc">把昨晚剩菜微波或回锅加热，配一碗汤，省时又有热度感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quick-noodles">
+                            <div class="card-image">
+                                <img src="images/quick-noodles.svg" alt="热气腾腾的汤面碗" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">快手面/汤面</h3>
+                                <p class="option-desc">一锅面或汤面，几分钟出餐，暖胃又能边吃边聊放学见闻。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sandwich-fruit">
+                            <div class="card-image">
+                                <img src="images/sandwich-fruit.svg" alt="摆盘好的三明治和水果切片" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">三明治+水果</h3>
+                                <p class="option-desc">吐司夹蛋或火腿，配切好的水果，适合外带或边做边陪孩子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="healthy-takeout">
+                            <div class="card-image">
+                                <img src="images/healthy-takeout.svg" alt="外卖便当或便利店轻食包装" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">点外卖/便利店轻食</h3>
+                                <p class="option-desc">附近外卖或便利店的健康便当/沙拉，省事但注意营养搭配。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
