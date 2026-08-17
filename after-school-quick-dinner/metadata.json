@@ -1,0 +1,19 @@
+{
+  "id": "after-school-quick-dinner",
+  "name": "放学快手晚饭",
+  "description": "目标用户为有学龄儿童的家长。场景：放学回家孩子饿、家长忙于做饭或接着做其他事。页面以图片+简短场景文案呈现 2–4 个对比选项，便于分享与评论，能触发实用建议交换与亲子时间讨论。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "放学晚饭",
+    "快手晚餐",
+    "亲子时刻",
+    "育儿日常",
+    "家庭生活",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "after-school-quick-dinner/images/reheat-leftovers.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-17T19:00:40.455Z"
+}
