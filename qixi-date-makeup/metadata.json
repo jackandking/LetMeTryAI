@@ -1,0 +1,20 @@
+{
+  "id": "qixi-date-makeup",
+  "name": "七夕约会妆",
+  "description": "面向节日约会场景的图文投票页，强调画面感与情境代入（近景人像、唇眼细节），方便用户快速判断并分享给闺蜜。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "七夕",
+    "约会妆",
+    "裸妆",
+    "烟熏",
+    "玫瑰",
+    "珠光",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "qixi-date-makeup/images/qixi-clean-nude.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-18T20:00:41.033Z"
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>七夕约会妆：哪种画面更撩人</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">七夕约会你会画哪种妆？清新、温柔还是小性感的那一款？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">七夕约会你会画哪种妆？选出最符合你约会氛围的那一款。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qixi-clean-nude">
+                            <div class="card-image">
+                                <img src="images/qixi-clean-nude.svg" alt="清新裸妆近照，自然透亮皮肤与淡橘色唇" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">清新透亮裸妆</h3>
+                                <p class="option-desc">自然透亮底妆+淡雅橘色唇，适合白天约会的温柔感画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qixi-rose-soft">
+                            <div class="card-image">
+                                <img src="images/qixi-rose-soft.svg" alt="温柔玫瑰粉妆，粉色腮红与玫瑰色唇形特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温柔玫瑰粉</h3>
+                                <p class="option-desc">粉感腮红与柔和玫瑰唇，打造暖心浪漫的约会氛围。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qixi-smoky-allure">
+                            <div class="card-image">
+                                <img src="images/qixi-smoky-allure.svg" alt="魅惑烟熏眼妆，深色眼影与浓密睫毛特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">魅惑烟熏眼妆</h3>
+                                <p class="option-desc">微烟熏眼线+饱和睫毛，夜晚约会的微醺魅力画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="qixi-pearl-glam">
+                            <div class="card-image">
+                                <img src="images/qixi-pearl-glam.svg" alt="珠光高光妆，灯光下闪耀的皮肤与唇部光泽" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">精致珠光闪亮</h3>
+                                <p class="option-desc">局部珠光高光与亮泽唇，捕捉灯光下的惊艳背影杀。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
