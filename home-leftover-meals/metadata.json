@@ -1,0 +1,18 @@
+{
+  "id": "home-leftover-meals",
+  "name": "家里剩饭处理",
+  "description": "围绕家中剩饭的保存与再利用，呈现几种常见做法的利弊与适用场景，适合手机图文投票页，引导家长分享真实做法与小技巧。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "剩饭处理",
+    "食物保存",
+    "家庭生活",
+    "育儿实用",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "home-leftover-meals/images/reheat-eat.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-18T19:00:56.110Z"
+}
