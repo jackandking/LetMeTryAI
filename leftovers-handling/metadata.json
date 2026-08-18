@@ -1,0 +1,19 @@
+{
+  "id": "leftovers-handling",
+  "name": "家里的剩菜怎么处理",
+  "description": "面向老年人家庭的图文投票页，比较常见的剩菜处理方式（留冰箱、当晚吃完、改造新菜、分装冷冻），强调生活场景与操作便捷，便于手机阅读和评论互动。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "剩菜",
+    "节约",
+    "家庭生活",
+    "健康饮食",
+    "老人日常",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "leftovers-handling/images/keep-in-fridge.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-18T18:00:23.996Z"
+}
