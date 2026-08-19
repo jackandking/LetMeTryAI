@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你小时候家里开的哪款老车？翻开记忆相册</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你小时候家里开的哪款老车？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你小时候家里开的哪款老车？选出你家的那一辆，并说一句回忆。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dazhong-santana">
+                            <div class="card-image">
+                                <img src="images/dazhong-santana.svg" alt="大众桑塔纳 老车 侧面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">大众桑塔纳</h3>
+                                <p class="option-desc">老式家用车，载着全家去郊游的时光</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hongqi-classic">
+                            <div class="card-image">
+                                <img src="images/hongqi-classic.svg" alt="红旗 老式轿车 正面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">红旗老轿车</h3>
+                                <p class="option-desc">长辈眼中的体面座驾，回家路有庄重感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="beetle-classic">
+                            <div class="card-image">
+                                <img src="images/beetle-classic.svg" alt="甲壳虫 老式小车 侧面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">甲壳虫（老式小车）</h3>
+                                <p class="option-desc">圆圆小车像玩具，院子里孩子们围着看</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="minivan-breadvan">
+                            <div class="card-image">
+                                <img src="images/minivan-breadvan.svg" alt="面包车 老式微面 后视图" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">面包车/微面</h3>
+                                <p class="option-desc">装满菜和年货，过年回家少不了它的忙碌身影</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
