@@ -1,0 +1,20 @@
+{
+  "id": "five-hours-camera-shoot",
+  "name": "排队五小时拍大片",
+  "description": "手机友好图文投票页：以“买到相机后先拍什么”为场景，用城市背光、日系柔光、胶片复古、时尚高饱和四类上镜风格激发好奇与视觉冲击，便于用户代入并转发讨论。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "上镜大片",
+    "相机",
+    "街拍",
+    "人像",
+    "胶片",
+    "背影杀",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "five-hours-camera-shoot/images/city-backlight.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-19T20:00:57.611Z"
+}
