@@ -1,0 +1,19 @@
+{
+  "id": "college-checkin-what-to-bring",
+  "name": "家长爱·报到必带物",
+  "description": "针对新生报到场景设定的图文投票页，选项对比生活必需、学习资料、家乡慰问与陪伴/生活费，便于产生讨论与经验互换。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "送孩子上大学",
+    "报到",
+    "行李",
+    "家长建议",
+    "生活必需",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "college-checkin-what-to-bring/images/bedding-and-essentials.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-19T19:00:29.159Z"
+}

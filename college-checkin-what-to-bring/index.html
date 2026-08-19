@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>送孩子上大学｜报到那天你会带什么？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">送孩子上大学，报到那天你会带什么去？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">送孩子上大学，报到那天你会带哪样东西去？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bedding-and-essentials">
+                            <div class="card-image">
+                                <img src="images/bedding-and-essentials.svg" alt="被子和床上用品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">生活床品</h3>
+                                <p class="option-desc">被子、床单、洗漱包，先把宿舍铺好让孩子安心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="documents-and-stationery">
+                            <div class="card-image">
+                                <img src="images/documents-and-stationery.svg" alt="证件与学习用品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">证件与学习用品</h3>
+                                <p class="option-desc">身份证、录取通知书、笔记本、常用教材与笔，报到办事利落</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hometown-snacks">
+                            <div class="card-image">
+                                <img src="images/hometown-snacks.svg" alt="家乡小吃" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家乡小吃</h3>
+                                <p class="option-desc">家乡零食或特产，暖心又能缓解想家情绪</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="companionship-and-cash">
+                            <div class="card-image">
+                                <img src="images/companionship-and-cash.svg" alt="陪伴和生活费" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">陪伴+生活费</h3>
+                                <p class="option-desc">父母陪同报到并留点生活费，安心更重要</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
