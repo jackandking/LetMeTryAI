@@ -1,0 +1,21 @@
+{
+  "id": "when-to-retire",
+  "name": "退休心声",
+  "description": "围绕退休时间的生活场景与心愿设计，选项带画面感（陪伴、社区、继续工作、随缘），便于长辈和子女互动、生成短文配图。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "退休",
+    "晚年规划",
+    "家庭生活",
+    "健康养生",
+    "陪伴",
+    "代际沟通",
+    "场景化",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "when-to-retire/images/early-retire.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-20T18:01:06.825Z"
+}
