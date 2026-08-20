@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你心里想什么时候退休？家庭与健康的想象</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你心里想什么时候退休？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你心里想什么时候退休？请选择与你想法接近的一项</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="early-retire">
+                            <div class="card-image">
+                                <img src="images/early-retire.svg" alt="老人牵着孙子在海边散步" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">提前退休（55岁前）</h3>
+                                <p class="option-desc">结束职场，陪伴家人、旅游或做多年想做的事，早享受生活节奏。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="regular-retire">
+                            <div class="card-image">
+                                <img src="images/regular-retire.svg" alt="老人和邻居在社区晨练" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">按常规退休（60-65岁）</h3>
+                                <p class="option-desc">按计划退休，参加社区活动、照顾孙辈或和老友聚会，生活有固定节奏。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="work-until-feel">
+                            <div class="card-image">
+                                <img src="images/work-until-feel.svg" alt="成熟老人专注地在工作岗位上" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">感觉合适再退休</h3>
+                                <p class="option-desc">继续工作带来成就感，等不想忙了、身体允许时再考虑退下来。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="no-plan">
+                            <div class="card-image">
+                                <img src="images/no-plan.svg" alt="老人坐在窗前看书品茶" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">没固定计划 / 随缘</h3>
+                                <p class="option-desc">没有具体年龄，按家庭需要或生活状态灵活调整，随遇而安。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
