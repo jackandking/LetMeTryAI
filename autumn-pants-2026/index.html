@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>今年秋裤你还会穿吗？家里/出门怎么选</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">今年秋裤你还会穿吗？出门还是只在家穿？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">今年秋裤你还会穿吗？更常在哪种场景穿？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wear-outside">
+                            <div class="card-image">
+                                <img src="images/wear-outside.svg" alt="外出穿秋裤示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">外出也穿</h3>
+                                <p class="option-desc">天气冷、想暖和，出门也穿秋裤不在乎束缚感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-only">
+                            <div class="card-image">
+                                <img src="images/home-only.svg" alt="家里穿秋裤舒适场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">只在家穿</h3>
+                                <p class="option-desc">追求外观轻薄，但在家里会穿来保暖和舒适。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="never-wear">
+                            <div class="card-image">
+                                <img src="images/never-wear.svg" alt="不穿秋裤的轻薄造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不穿秋裤</h3>
+                                <p class="option-desc">更喜欢薄款或层次搭配，不把秋裤作为常规单品。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="depends-on-situation">
+                            <div class="card-image">
+                                <img src="images/depends-on-situation.svg" alt="根据场合决定是否穿秋裤" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看场合再决定</h3>
+                                <p class="option-desc">根据温度与造型决定：室内穿、外出视天气而定。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
