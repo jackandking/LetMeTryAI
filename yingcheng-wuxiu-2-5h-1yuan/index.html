@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>影城午睡2.5小时只要1元多，你会去体验吗？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">影城午睡2.5小时只要1元多，你会去体验吗？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">如果附近影城推出2.5小时只要1元多的午睡体验，你会怎么选？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="go-now">
+                            <div class="card-image">
+                                <img src="images/go-now.svg" alt="人在影厅躺椅上舒服午睡的背影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">立刻去体验</h3>
+                                <p class="option-desc">省钱又能安心小睡，周末就去试一次！</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="decide-after-seeing">
+                            <div class="card-image">
+                                <img src="images/decide-after-seeing.svg" alt="安静整洁的影厅与躺椅特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看环境再决定</h3>
+                                <p class="option-desc">要是安静、座椅和卫生都行就去，不然算了。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="curious-but-wont">
+                            <div class="card-image">
+                                <img src="images/curious-but-wont.svg" alt="用手机看别人分享影城午睡体验的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">好奇但不会去</h3>
+                                <p class="option-desc">觉得有趣但怕被打扰或不够私密，只想围观别人的体验。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="not-going-awkward">
+                            <div class="card-image">
+                                <img src="images/not-going-awkward.svg" alt="观众在座位上显得有些尴尬的侧影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">不会去，太尴尬</h3>
+                                <p class="option-desc">不习惯公共场合睡觉，还是在家更舒服。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
