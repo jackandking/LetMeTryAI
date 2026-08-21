@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>鸡蛋涨价了，早餐你都怎么安排？｜家长爱</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">鸡蛋涨价了，早餐你都怎么安排？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">鸡蛋涨价了，早餐你都怎么安排？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tofu-substitute">
+                            <div class="card-image">
+                                <img src="images/tofu-substitute.svg" alt="豆制品替代早餐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">改用豆制品或奶制品替代</h3>
+                                <p class="option-desc">用豆腐、豆浆或牛奶补充蛋白，做豆腐脑、豆浆配包子，既省钱又稳营养。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="reduce-egg-plus-veggies">
+                            <div class="card-image">
+                                <img src="images/reduce-egg-plus-veggies.svg" alt="少量鸡蛋搭配蔬菜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">鸡蛋用量减少并搭配蔬菜谷物</h3>
+                                <p class="option-desc">把鸡蛋份量减半，配蔬菜和全谷物（吐司/粥），饱腹感足且更均衡。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="batch-prep-eggs">
+                            <div class="card-image">
+                                <img src="images/batch-prep-eggs.svg" alt="批量制作蛋类早餐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">周末批量预制蛋类早点</h3>
+                                <p class="option-desc">周末做蛋饼或蒸蛋分装冰箱保存，工作日微波加热即食，节省时间与成本。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="no-egg-quickbreakfast">
+                            <div class="card-image">
+                                <img src="images/no-egg-quickbreakfast.svg" alt="无蛋快手早餐" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">改选无蛋快手早餐或外卖</h3>
+                                <p class="option-desc">临时改吃包子、粥、豆浆油条或可信赖外卖，灵活应对短期涨价。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
