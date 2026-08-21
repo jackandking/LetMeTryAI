@@ -1,0 +1,20 @@
+{
+  "id": "rainy-day-power-spark",
+  "name": "爱老人安全问一问",
+  "description": "下雨天室内潮湿容易引发电路问题；通过生活化投票了解大家遇到跳闸或电火花时的领先反应，兼顾安全提示与情感共鸣，适合移动端图文投票页。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "下雨天",
+    "跳闸",
+    "电火花",
+    "家庭安全",
+    "老人安全",
+    "应急处理",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "rainy-day-power-spark/images/cut-main-power-wait.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-21T18:00:45.914Z"
+}
