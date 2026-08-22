@@ -1,0 +1,20 @@
+{
+  "id": "wakeup-makeup",
+  "name": "醒肤妆灵感",
+  "description": "针对早晨犯困或熬夜脸色暗沉场景，展示日常提亮、精致眼妆、高光水光三类醒肤妆的视觉效果并引导投票。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "醒肤妆",
+    "提亮",
+    "眼妆",
+    "高光",
+    "水光肌",
+    "气色",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "wakeup-makeup/images/daily-bright-light-makeup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-22T20:01:07.277Z"
+}
