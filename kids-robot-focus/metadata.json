@@ -1,0 +1,19 @@
+{
+  "id": "kids-robot-focus",
+  "name": "家长爱·机器人关注清单",
+  "description": "当孩子迷上机器人，家长通常在“能学到什么”“动手能力”“安全可控”与“社交互动”间权衡。本投票帮助家长快速表达优先侧重点并触发育儿经验分享。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "机器人",
+    "编程启蒙",
+    "动手能力",
+    "安全可控",
+    "亲子活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-robot-focus/images/learning-ability.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-22T19:00:47.558Z"
+}
