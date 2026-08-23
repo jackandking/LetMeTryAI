@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>明星剪短发后，你更爱哪种气场？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">明星剪短发后，你更爱哪种气场？惊艳短发还是温柔气质？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">明星剪短发后，你更爱哪种气场？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bold-chic">
+                            <div class="card-image">
+                                <img src="images/bold-chic.svg" alt="明星短发展现率性硬朗气场" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">率性硬朗</h3>
+                                <p class="option-desc">利落短发+利爪眉，职场与街头都很有气场</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="soft-feminine">
+                            <div class="card-image">
+                                <img src="images/soft-feminine.svg" alt="明星短发展现温柔淑女优雅气场" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温柔淑女</h3>
+                                <p class="option-desc">轻柔刘海与弧度，约会感十足的温柔氛围</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cool-glam">
+                            <div class="card-image">
+                                <img src="images/cool-glam.svg" alt="明星短发展现冷艳高冷气场" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冷艳高冷</h3>
+                                <p class="option-desc">冷色系妆 + 硬朗短发，神秘又带距离感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="playful-cute">
+                            <div class="card-image">
+                                <img src="images/playful-cute.svg" alt="明星短发展现俏皮可爱气场" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">俏皮可爱</h3>
+                                <p class="option-desc">轻快刘海+蓬松造型，活力与亲和力并存</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
