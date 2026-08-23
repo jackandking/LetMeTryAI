@@ -1,0 +1,19 @@
+{
+  "id": "museum-treasure-choices",
+  "name": "带娃看镇馆之宝",
+  "description": "为家长推荐适合带孩子看的博物馆镇馆之宝类型，提供对比选项与画面化文案，便于手机浏览与分享。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "亲子",
+    "镇馆之宝",
+    "历史",
+    "科普",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "museum-treasure-choices/images/ancient-artifacts.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-23T19:00:27.614Z"
+}
