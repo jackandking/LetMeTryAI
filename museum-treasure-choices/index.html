@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子去博物馆：哪类镇馆之宝更能吸引孩子？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子去博物馆，你想看哪类镇馆之宝？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子去博物馆，你想看哪类镇馆之宝？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ancient-artifacts">
+                            <div class="card-image">
+                                <img src="images/ancient-artifacts.svg" alt="青铜器与陶俑展柜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">古代文物（青铜、陶俑）</h3>
+                                <p class="option-desc">沉稳的青铜器与陶俑，讲故事时光，让孩子听历史里的“人物”故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="art-treasures">
+                            <div class="card-image">
+                                <img src="images/art-treasures.svg" alt="名画与瓷器近拍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">艺术珍品（名画、瓷器）</h3>
+                                <p class="option-desc">色彩与纹样的细节，培养孩子审美，适合慢看慢聊的亲子时刻。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="natural-fossils">
+                            <div class="card-image">
+                                <img src="images/natural-fossils.svg" alt="恐龙化石骨架" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">自然化石（恐龙、标本）</h3>
+                                <p class="option-desc">巨大的恐龙骨架与真实标本，现场的视觉冲击最能点燃孩子好奇心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="science-exhibits">
+                            <div class="card-image">
+                                <img src="images/science-exhibits.svg" alt="互动科技展览装置" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">科技展品（航天、古代发明）</h3>
+                                <p class="option-desc">模型与互动装置，让孩子动手体验发明与科学的“怎么做”的乐趣。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
