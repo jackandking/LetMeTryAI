@@ -1,0 +1,19 @@
+{
+  "id": "celebrity-short-hair-vibe",
+  "name": "短发气场验票",
+  "description": "移动端图文投票页，使用明星短发造型照片对比，配简短场景化文案（如职场、约会、街拍），鼓励用户基于气场直觉投票并留言理由。",
+  "category": "明星",
+  "profileId": "womanai",
+  "keywords": [
+    "短发",
+    "明星",
+    "气场",
+    "颜值",
+    "造型",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "celebrity-short-hair-vibe/images/bold-chic.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-23T20:00:30.849Z"
+}
