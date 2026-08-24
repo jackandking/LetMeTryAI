@@ -1,0 +1,19 @@
+{
+  "id": "grade1-no-written-homework",
+  "name": "家长爱：书面作业讨论",
+  "description": "针对小学一年级是否可以减少书面作业的话题，设计对比选项（支持/担心/看老师安排/短期试行），适合家长在手机上快速投票并在评论区交流具体场景与做法。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "一年级",
+    "书面作业",
+    "家庭教育",
+    "写作训练",
+    "亲子沟通",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "grade1-no-written-homework/images/support-let-kids-relax.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-24T19:00:37.701Z"
+}

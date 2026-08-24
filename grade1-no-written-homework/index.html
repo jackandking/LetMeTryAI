@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>一年级作业现状：支持还是担心？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">一年级真不用写书面作业？你支持还是有点担心？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">一年级真不用写书面作业？你支持还是有点担心？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="support-let-kids-relax">
+                            <div class="card-image">
+                                <img src="images/support-let-kids-relax.svg" alt="孩子在公园读书的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">支持，让孩子轻松学</h3>
+                                <p class="option-desc">更重视兴趣和阅读，减少纸笔负担。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="worry-foundation">
+                            <div class="card-image">
+                                <img src="images/worry-foundation.svg" alt="家长在桌前辅导孩子写字" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">有点担心，怕基础不足</h3>
+                                <p class="option-desc">担心书写与表达能力落下，希望保留一定练习。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="depends-school-arrangement">
+                            <div class="card-image">
+                                <img src="images/depends-school-arrangement.svg" alt="老师在黑板上说明作业安排" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">看学校安排，要平衡</h3>
+                                <p class="option-desc">如果有替代练习和评价方式，可以接受调整。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="trial-observe">
+                            <div class="card-image">
+                                <img src="images/trial-observe.svg" alt="家长和孩子一起做观察记录" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短期试行，观察效果</h3>
+                                <p class="option-desc">先试几周再评估孩子的阅读与写作变化。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
