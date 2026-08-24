@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>《我爱我家》里的哪些桥段让你笑着怀念？回到那些好笑的家常瞬间</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">《我爱我家》里的哪些桥段让你笑着怀念？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">《我爱我家》里的哪些桥段让你笑着怀念？哪一幕常在你脑海里回放？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dad-remote-scramble">
+                            <div class="card-image">
+                                <img src="images/dad-remote-scramble.svg" alt="爸妈抢遥控器的搞笑场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">爸妈抢遥控的客厅小争执</h3>
+                                <p class="option-desc">遥控器在手，电视口味大战，笑中带熟悉感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hallway-neighbor-chatter">
+                            <div class="card-image">
+                                <img src="images/hallway-neighbor-chatter.svg" alt="楼道邻居打趣聊天的场面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">楼道里互相打听八卦的邻居段子</h3>
+                                <p class="option-desc">电梯口的闲聊和段子，让人一听就笑出声</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="family-dinner-awkward-gag">
+                            <div class="card-image">
+                                <img src="images/family-dinner-awkward-gag.svg" alt="饭桌上亲戚互怼后变成笑料的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家宴上尴尬变笑点的亲戚时刻</h3>
+                                <p class="option-desc">饭桌上的误会和插科打诨，既尴尬又暖心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="livingroom-singalong">
+                            <div class="card-image">
+                                <img src="images/livingroom-singalong.svg" alt="家人围在电视前合唱的温馨画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">客厅围着电视合唱的小曲儿</h3>
+                                <p class="option-desc">全家学着唱、跟着哼的温馨场景，笑着又想重复</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
