@@ -1,0 +1,19 @@
+{
+  "id": "movie-makeup-3h",
+  "name": "妆间小抉择",
+  "description": "移动端图文投票页，围绕长片观影时妆容处理的真实选择，结合补妆/控油/卸妆等实用场景，适合插入短图与步骤提示提升互动时长。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "电影妆容",
+    "持妆",
+    "补妆",
+    "控油",
+    "卸妆",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "movie-makeup-3h/images/hold-makeup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-24T20:00:33.004Z"
+}

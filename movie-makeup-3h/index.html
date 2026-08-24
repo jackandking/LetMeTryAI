@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>坐3小时电影，妆还不脱你会怎么做？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">坐3小时电影，妆还不脱你会怎么做？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">坐3小时电影，妆还不脱你会怎么做？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hold-makeup">
+                            <div class="card-image">
+                                <img src="images/hold-makeup.svg" alt="坚持不补妆的女生" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">坚持不补</h3>
+                                <p class="option-desc">不想麻烦，靠定妆和无感底妆撑到散场。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="blot-only">
+                            <div class="card-image">
+                                <img src="images/blot-only.svg" alt="用吸油纸控油" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">只吸油不补色</h3>
+                                <p class="option-desc">用吸油纸/粉扑按一按，保持清爽但不厚重。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quick-touchup">
+                            <div class="card-image">
+                                <img src="images/quick-touchup.svg" alt="镜前快速补妆" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">快速补一手</h3>
+                                <p class="option-desc">去下洗手间快速补口红/粉底，回座位更有面子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="remove-makeup">
+                            <div class="card-image">
+                                <img src="images/remove-makeup.svg" alt="卸妆后的自然脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">干脆卸掉</h3>
+                                <p class="option-desc">觉得闷就卸掉，舒服观影更重要，回家再重妆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
