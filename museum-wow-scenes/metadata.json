@@ -1,0 +1,19 @@
+{
+  "id": "museum-wow-scenes",
+  "name": "博物馆哇瞬",
+  "description": "面向家长的图文投票页，通过4个具象场景对比，帮助家长发现更能吸引孩子注意力的博物馆体验点，便于在参观前做亲子活动参考。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "亲子",
+    "惊叹画面",
+    "互动体验",
+    "教育活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "museum-wow-scenes/images/dinosaur-skeleton.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-25T19:00:35.404Z"
+}
