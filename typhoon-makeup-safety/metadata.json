@@ -1,0 +1,20 @@
+{
+  "id": "typhoon-makeup-safety",
+  "name": "台风妆小心机",
+  "description": "移动端图文投票页，围绕台风出行的妆容取舍：防水持妆、轻薄无妆感、重点局部防护，或干脆素颜配防护装备，兼顾实用性与视觉代入感，易引发评论与分享。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "台风天",
+    "防水妆",
+    "轻妆",
+    "素颜",
+    "出门妆",
+    "生活方式",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "typhoon-makeup-safety/images/full-waterproof-makeup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-25T20:01:51.721Z"
+}
