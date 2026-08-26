@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>大雨山路遇险，给爸妈带哪样更能安心？——实用随身对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">大雨山路遇险，给爸妈带哪样更能安心？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">遇到大雨山路遇险，给爸妈带哪样随身物品，你觉得更让人放心？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="power-bank">
+                            <div class="card-image">
+                                <img src="images/power-bank.svg" alt="移动电源与充电线放在车内" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">大容量移动电源＋充电线</h3>
+                                <p class="option-desc">保证手机有电，随时能联系、导航或叫援助，保持父母与家人联络畅通。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="rain-blanket">
+                            <div class="card-image">
+                                <img src="images/rain-blanket.svg" alt="折叠保暖毯与雨披叠放" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">防水保暖毯＋轻便雨披</h3>
+                                <p class="option-desc">短时间避雨保暖，替爸妈挡风淋雨并保温，减少受寒与焦虑感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="torch-warning">
+                            <div class="card-image">
+                                <img src="images/torch-warning.svg" alt="手电筒与反光警示三角牌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">强光手电＋反光警示牌</h3>
+                                <p class="option-desc">夜间或能见度低时照明并提醒过路车辆，提升可见性与现场自救能力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="car-emergency-kit">
+                            <div class="card-image">
+                                <img src="images/car-emergency-kit.svg" alt="车载急救与修理工具包" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">车载应急救援包（工具绳具）</h3>
+                                <p class="option-desc">含简单修补、牵引绳与工具，能在车受困时做临时处理，降低等待压力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
