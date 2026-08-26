@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>雪糕里咬到异物你会怎么办？女生都怎么处理</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">雪糕里咬到异物你会怎么办？你会怎么反应</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">雪糕里咬到异物你会怎么办？选一个符合你的做法</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="photo-complain-return">
+                            <div class="card-image">
+                                <img src="images/photo-complain-return.svg" alt="拍照投诉并退货" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">拍照投诉并退货</h3>
+                                <p class="option-desc">马上拍照留证据，联系商家或平台要求退货或退款</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="spit-and-refuse">
+                            <div class="card-image">
+                                <img src="images/spit-and-refuse.svg" alt="当场吐出并停吃" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">当场吐出并停吃</h3>
+                                <p class="option-desc">把异物吐掉当场停吃，优先保障安全再决定下一步</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="post-and-warn">
+                            <div class="card-image">
+                                <img src="images/post-and-warn.svg" alt="拍照发圈提醒朋友" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">拍照发圈提醒朋友</h3>
+                                <p class="option-desc">拍照记录并发朋友圈或笔记，提醒朋友并征求大家意见</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="discard-and-ignore">
+                            <div class="card-image">
+                                <img src="images/discard-and-ignore.svg" alt="直接丢掉雪糕" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">直接丢掉不再理</h3>
+                                <p class="option-desc">觉得麻烦或不想闹，直接丢掉雪糕当场结束这件事</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
