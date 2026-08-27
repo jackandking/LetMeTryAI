@@ -1,0 +1,20 @@
+{
+  "id": "boyfriend-vibe",
+  "name": "男友感话题",
+  "description": "移动端图文投票页，使用场景化文案与美感图片（背影、微笑、拥抱、烛光）呈现四种男友气质，短句+画面感增强停留与分享欲。",
+  "category": "情感",
+  "profileId": "womanai",
+  "keywords": [
+    "男友感",
+    "心动类型",
+    "情感话题",
+    "暖男",
+    "浪漫",
+    "安全感",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "boyfriend-vibe/images/nuan-nan-bei-ying-sha.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-27T20:00:55.903Z"
+}
