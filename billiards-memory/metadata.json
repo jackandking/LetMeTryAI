@@ -1,0 +1,19 @@
+{
+  "id": "billiards-memory",
+  "name": "忆起台球时光",
+  "description": "移动端图文投票页，围绕“小时候和爸妈看台球比赛”的怀旧场景设计，画面感强、易触发评论和分享，适合爱老人品牌的情感运营。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "怀旧",
+    "台球",
+    "家庭",
+    "亲子回忆",
+    "画面感",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "billiards-memory/images/cue-strike.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-27T18:00:35.806Z"
+}
