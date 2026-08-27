@@ -1,0 +1,19 @@
+{
+  "id": "kids-try-sports",
+  "name": "孩子爱运动选项",
+  "description": "以孩子观看运动员的具体动作场景为触点，提供4个对比选项（足球/游泳/体操/篮球），帮助家长快速发现孩子的运动倾向并获得育儿场景灵感。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "亲子",
+    "运动启蒙",
+    "兴趣培养",
+    "家庭活动",
+    "场景观察",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-try-sports/images/football.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-27T19:00:36.640Z"
+}
