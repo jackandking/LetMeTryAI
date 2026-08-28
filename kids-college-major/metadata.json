@@ -1,0 +1,19 @@
+{
+  "id": "kids-college-major",
+  "name": "孩子上大学专业倾向",
+  "description": "围绕“孩子上大学想学哪类专业？”，从就业导向、兴趣导向、人文社科与交叉前沿四个角度展开，适合手机图文投票页，引导家长结合孩子性格与家庭规划选择并讨论。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "大学专业",
+    "升学",
+    "职业规划",
+    "兴趣 vs 就业",
+    "家长讨论",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-college-major/images/practical-stem.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-28T19:00:55.781Z"
+}
