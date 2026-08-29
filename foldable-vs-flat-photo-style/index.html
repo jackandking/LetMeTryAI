@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>折叠屏拍照 vs 直板手机：哪种上镜风格更圈粉？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">折叠屏拍照和直板手机，你更被哪种上镜风格圈粉？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">折叠屏拍照和直板手机，你更被哪种上镜风格圈粉？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="foldable-soft-glow">
+                            <div class="card-image">
+                                <img src="images/foldable-soft-glow.svg" alt="温柔高光上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温柔高光派</h3>
+                                <p class="option-desc">折叠屏微倾斜+虚化，肤质被高光衬出柔和感，像杂志封面那样温柔上镜。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="foldable-art-composition">
+                            <div class="card-image">
+                                <img src="images/foldable-art-composition.svg" alt="艺术构图上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">艺术构图派</h3>
+                                <p class="option-desc">折叠屏的翻折/镜像构图制造创意画面，侧脸与反射形成高级感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="slab-natural-clear">
+                            <div class="card-image">
+                                <img src="images/slab-natural-clear.svg" alt="自然清透上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">自然清透派</h3>
+                                <p class="option-desc">直板手机正脸取景、光线通透，妆容与肤色看起来清新自然，日常好看。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="slab-vivid-impact">
+                            <div class="card-image">
+                                <img src="images/slab-vivid-impact.svg" alt="鲜艳冲击上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">鲜艳冲击派</h3>
+                                <p class="option-desc">直板手机色彩饱和、对比强烈，背景和妆容一同带来视觉冲击力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
