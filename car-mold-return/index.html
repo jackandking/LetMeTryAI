@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>车停两年回家发现车内发霉，你会怎么处理？哪个反应更像你</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">车停两年回家发现车内发霉，你会怎么处理？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">车停两年回家发现车内发霉，你会怎么处理？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="deep-clean-and-sun">
+                            <div class="card-image">
+                                <img src="images/deep-clean-and-sun.svg" alt="打开车门晾晒并擦洗车内表面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">彻底清洁并晾晒</h3>
+                                <p class="option-desc">自己动手：清洗可拆物、用阳光晾晒、通风去潮（适合轻微霉斑）。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="professional-mold-service">
+                            <div class="card-image">
+                                <img src="images/professional-mold-service.svg" alt="专业人员使用设备处理车内霉菌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">请专业除霉消毒</h3>
+                                <p class="option-desc">交给专业团队彻底清洁消毒，适合霉斑严重或有健康顾虑的情况。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="replace-upholstery">
+                            <div class="card-image">
+                                <img src="images/replace-upholstery.svg" alt="新的坐垫替换旧的霉变坐垫" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">替换受潮的坐垫和布物</h3>
+                                <p class="option-desc">直接更换或丢弃霉变的软物件，保留车体，避免反复发霉。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="air-and-cover-odor">
+                            <div class="card-image">
+                                <img src="images/air-and-cover-odor.svg" alt="车门打开通风并放置除味包" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先通风暂时遮味观察</h3>
+                                <p class="option-desc">短期通风加除味/香氛遮盖，观察是否好转再决定是否进一步处理。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

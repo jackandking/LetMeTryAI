@@ -1,0 +1,19 @@
+{
+  "id": "car-mold-return",
+  "name": "车内发霉处理选项",
+  "description": "场景：车子停放多年回家发现车内霉斑与异味。设计对比选项，帮助收集处理偏好（自助清理、专业处理、替换受损物品或暂时通风应对），便于后续做科普与安全提示。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "车内发霉",
+    "除霉",
+    "家庭生活",
+    "老年实用",
+    "通风清洁",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "car-mold-return/images/deep-clean-and-sun.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-29T18:00:45.278Z"
+}
