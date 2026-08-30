@@ -1,0 +1,19 @@
+{
+  "id": "museum-treasures-pick",
+  "name": "家长爱·博物馆之旅",
+  "description": "为家长和孩子设计的手机投票页，通过对比恐龙骨架、青铜器、敦煌壁画、宫廷服饰四类镇馆之宝，激发历史文化好奇与现场观展期待。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "镇馆之宝",
+    "亲子活动",
+    "历史文化",
+    "带娃出游",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "museum-treasures-pick/images/tyrannosaurus-skeleton.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-08-30T19:01:04.964Z"
+}
