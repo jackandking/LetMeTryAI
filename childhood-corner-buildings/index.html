@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>小时候街角那些老建筑，你更怀念哪种？回忆里的画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">小时候街角那些老建筑，你更怀念哪种？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">小时候街角那些老建筑，你更怀念哪种？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="corner-shop-grocery">
+                            <div class="card-image">
+                                <img src="images/corner-shop-grocery.svg" alt="老式小卖部门面与货架" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">小卖部／杂货铺</h3>
+                                <p class="option-desc">门口摆着零食架，老板喊你拿瓶汽水的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="brick-wood-courtyard">
+                            <div class="card-image">
+                                <img src="images/brick-wood-courtyard.svg" alt="老院落阳光下的晒衣绳和石阶" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">砖木老院落</h3>
+                                <p class="option-desc">院里晒衣、石阶、老树和邻居坐着闲聊的温暖画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-barbershop">
+                            <div class="card-image">
+                                <img src="images/old-barbershop.svg" alt="老式理发店内的木椅和镜子" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老式理发店</h3>
+                                <p class="option-desc">转动的招牌和木椅上理发匠的熟悉身影与谈天声。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-cinema-theatre">
+                            <div class="card-image">
+                                <img src="images/old-cinema-theatre.svg" alt="旧电影院门口的灯箱与布帘" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">旧电影院／文化戏院</h3>
+                                <p class="option-desc">昏黄灯光、布帘和电影票被撕开的细微声响。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
