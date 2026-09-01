@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子班级超80人，爸妈你会怎么应对？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子班级超80人，爸妈你会怎么应对？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子班级超80人，爸妈你会怎么应对？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="request-split-class">
+                            <div class="card-image">
+                                <img src="images/request-split-class.svg" alt="家长在学校办公室与老师沟通分班" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">向校方反映、争取分班或增师资</h3>
+                                <p class="option-desc">主动和学校沟通，要求分班或增加教师与助教资源，争取小班化教学。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="keep-and-home-tutoring">
+                            <div class="card-image">
+                                <img src="images/keep-and-home-tutoring.svg" alt="家长在家与孩子一起做作业辅导" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">接受现状、在家强化学习计划</h3>
+                                <p class="option-desc">不变动学校安排，但在家制定学习计划、陪读或请家教弥补课堂不足。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="parent-organized-groups">
+                            <div class="card-image">
+                                <img src="images/parent-organized-groups.svg" alt="几位家长在教室外讨论组织辅导小组" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">组织家长小组或轮流辅导</h3>
+                                <p class="option-desc">家长自发分组轮流辅导或请志愿家长组织主题学习小组，互助分担教育压力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="change-school-or-extra-classes">
+                            <div class="card-image">
+                                <img src="images/change-school-or-extra-classes.svg" alt="家长为孩子报名小班课程场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">评估转校或报名小班兴趣班减负</h3>
+                                <p class="option-desc">权衡换学校或为孩子报名小班/兴趣班以获得更个性化指导与练习。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
