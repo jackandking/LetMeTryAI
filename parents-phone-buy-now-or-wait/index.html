@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>爸妈换手机：现在买还是等等？场景对比帮你判断</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">爸妈换手机：现在买还是等等？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你会怎么决定：爸妈现在换手机，还是先等等/不换？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="buy-now-big-screen-simple">
+                            <div class="card-image">
+                                <img src="images/buy-now-big-screen-simple.svg" alt="大屏简洁老人手机示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">现在换：买大屏简机</h3>
+                                <p class="option-desc">选一台大屏、字大、音量大、按键或简洁界面，立刻降低使用门槛。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="buy-now-smart-preconfig">
+                            <div class="card-image">
+                                <img src="images/buy-now-smart-preconfig.svg" alt="为父母预设好功能的智能手机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">现在换：买智能并预设功能</h3>
+                                <p class="option-desc">买较新智能机，帮设置一键拨号、家人共享、紧急联系人与语音快捷方式。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wait-for-better-model-or-sale">
+                            <div class="card-image">
+                                <img src="images/wait-for-better-model-or-sale.svg" alt="等待促销或新款手机的购物场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">等等：等更懂老人的机型或降价</h3>
+                                <p class="option-desc">观察市场几周到几个月，等推出更适配老年场景的新机或遇到促销再下单。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="keep-current-teach-and-optimize">
+                            <div class="card-image">
+                                <img src="images/keep-current-teach-and-optimize.svg" alt="在家教父母用手机的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先不换：教会用并优化当前手机</h3>
+                                <p class="option-desc">暂时不换机，调整字体/图标、放大设置并教会常用操作，减少适应成本。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
