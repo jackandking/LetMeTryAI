@@ -1,0 +1,20 @@
+{
+  "id": "parents-phone-buy-now-or-wait",
+  "name": "爸妈换手机决定器",
+  "description": "面向为父母做数码决策的子女，提供4种现实可选方案的情景化对比：立刻换机（大屏/智能配置）、立刻换机（简洁老人机）、等等再换（等更合适或降价）、不换先教会使用。适合图文投票页，引发共鸣与经验分享。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "换手机",
+    "老人手机",
+    "大屏",
+    "简洁界面",
+    "家庭决策",
+    "陪伴",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "parents-phone-buy-now-or-wait/images/buy-now-big-screen-simple.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-01T18:00:50.398Z"
+}
