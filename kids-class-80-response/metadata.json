@@ -1,0 +1,20 @@
+{
+  "id": "kids-class-80-response",
+  "name": "家长爱课堂",
+  "description": "当班级人数超80人时，家长常在“争取分班/在家补课/组建家长小组/考虑转校”之间权衡。此页用场景化选项帮助家长快速表达首选策略并看见他人态度。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "班级规模",
+    "分班",
+    "家庭辅导",
+    "家长互助",
+    "转学",
+    "教育实用",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-class-80-response/images/request-split-class.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-01T19:00:52.277Z"
+}
