@@ -1,0 +1,19 @@
+{
+  "id": "new-term-three-tasks",
+  "name": "新学期日常三件事",
+  "description": "针对开学期家长场景，将“检查作业并辅导 / 亲子共读 / 规划作息并做情绪沟通”作为每日三件事的对比投票，适合手机图文页面，标题直接提问、画面感强，便于高点击与讨论。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "新学期",
+    "作业辅导",
+    "亲子阅读",
+    "时间管理",
+    "情绪沟通",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "new-term-three-tasks/images/check-homework.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-03T19:00:58.886Z"
+}
