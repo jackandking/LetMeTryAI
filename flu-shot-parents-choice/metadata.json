@@ -1,0 +1,19 @@
+{
+  "id": "flu-shot-parents-choice",
+  "name": "给爸妈的流感针小调查",
+  "description": "适合手机阅读的图文投票页；用具体场景与画面感呈现家庭决策，侧重健康养生与家庭生活，不做医疗建议，仅呈现常见选择。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "流感针",
+    "老人健康",
+    "家庭决定",
+    "秋冬防护",
+    "陪同接种",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "flu-shot-parents-choice/images/accompany-and-book.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-03T18:01:26.544Z"
+}
