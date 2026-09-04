@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>赛场镜头感盘点：谁的造型更吸睛</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">女篮球场上谁的造型更有镜头感？赛场瞬间你更心动谁</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">女篮球场上谁的造型更有镜头感？选出你心动的赛场瞬间</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="short-hair-sporty">
+                            <div class="card-image">
+                                <img src="images/short-hair-sporty.svg" alt="短发女篮球员跃起投篮的利落瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">短发利落+运动感</h3>
+                                <p class="option-desc">利落短发搭配清爽妆容，动作线条更有力量感，镜头感强。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="high-ponytail-elegant">
+                            <div class="card-image">
+                                <img src="images/high-ponytail-elegant.svg" alt="高马尾女篮球员投篮侧面发丝飞扬" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高马尾飘逸+动感</h3>
+                                <p class="option-desc">高马尾随动作飘起，发丝与姿态制造动感画面，吸睛且具有冲击力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="long-hair-soft-glow">
+                            <div class="card-image">
+                                <img src="images/long-hair-soft-glow.svg" alt="长发女篮球员投篮后回望的柔美表情" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长发披肩+柔光美感</h3>
+                                <p class="option-desc">长发披肩配柔和妆容与光影，营造温柔且惊艳的赛场镜头感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="minimal-makeup-natural">
+                            <div class="card-image">
+                                <img src="images/minimal-makeup-natural.svg" alt="简约妆容女篮球员在赛场上的专注神情" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">简约淡妆+自然力</h3>
+                                <p class="option-desc">简约淡妆与真实表情，让镜头捕捉到自然气场与真实美感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "id": "women-basketball-look",
+  "name": "镜头感女篮造型",
+  "description": "通过赛场抓拍风格的图文展示（发型、妆容、背影与动作），引导用户以画面感评判谁更有镜头吸引力，便于转发与评论。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "女篮",
+    "造型",
+    "镜头感",
+    "发型",
+    "妆容",
+    "赛场瞬间",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "women-basketball-look/images/short-hair-sporty.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-04T20:00:45.863Z"
+}
