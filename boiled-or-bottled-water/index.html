@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>烧水喝 vs 桶装水：家里哪种更适合老人日常？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">烧水喝还是买桶装水？家里你怎么选，省钱又放心？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">烧水喝还是买桶装水？家里你怎么选？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="boil-water">
+                            <div class="card-image">
+                                <img src="images/boil-water.svg" alt="烧开水倒入杯中" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">烧开水喝</h3>
+                                <p class="option-desc">家里煮开后放温开水，经济又方便，适合习惯自己掌控用水温度的家庭。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bottled-water">
+                            <div class="card-image">
+                                <img src="images/bottled-water.svg" alt="搬运桶装水到家" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">买桶装水</h3>
+                                <p class="option-desc">定期换桶、直接接水，省去处理烦恼，送水上门对行动不便的长辈很友好。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="filter-plus-storage">
+                            <div class="card-image">
+                                <img src="images/filter-plus-storage.svg" alt="家用净水器与水箱" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">净水器+储水</h3>
+                                <p class="option-desc">安装净水器并配储水箱，出水稳定且取水方便，适合注重长期便利的家庭。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

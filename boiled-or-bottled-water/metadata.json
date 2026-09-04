@@ -1,0 +1,19 @@
+{
+  "id": "boiled-or-bottled-water",
+  "name": "家里喝水习惯",
+  "description": "通过真实家居画面比较“烧开水”“买桶装水”“净水器+储水”三种方案，侧重便利性、费用和操作难度，便于老人及照护者投票与留言讨论。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "饮水习惯",
+    "烧水",
+    "桶装水",
+    "净水器",
+    "老人生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "boiled-or-bottled-water/images/boil-water.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-04T18:00:45.394Z"
+}
