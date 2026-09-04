@@ -1,0 +1,19 @@
+{
+  "id": "heavy-rain-prepare",
+  "name": "家长爱·暴雨小帮手",
+  "description": "围绕暴雨到来时家庭的优先准备项设计，选项具备画面感与可操作性，便于家长快速投票并在评论区分享细节与经验。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "暴雨",
+    "家庭安全",
+    "应急准备",
+    "孩子",
+    "生活小技巧",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "heavy-rain-prepare/images/prepare-power-light.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-04T19:00:52.199Z"
+}
