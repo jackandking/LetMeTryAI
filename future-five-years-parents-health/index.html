@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>未来五年，爸妈的健康生活你更在意啥？来选出你最关心的场景</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">未来五年，爸妈的健康生活你更在意啥？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">未来五年，爸妈的健康生活你更在意哪一方面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nutrition-meals-support">
+                            <div class="card-image">
+                                <img src="images/nutrition-meals-support.svg" alt="老人享用营养饭菜的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">营养和吃得稳定</h3>
+                                <p class="option-desc">按时吃营养餐、口味合适、有人安排菜谱和热饭到家。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="regular-checkups-chronic-care">
+                            <div class="card-image">
+                                <img src="images/regular-checkups-chronic-care.svg" alt="家庭陪同去体检的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">定期体检与慢病管理</h3>
+                                <p class="option-desc">有体检提醒、用药随访和慢病随访，让健康状况可控。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="daily-activity-mobility-safety">
+                            <div class="card-image">
+                                <img src="images/daily-activity-mobility-safety.svg" alt="老人室内散步与扶手的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">日常活动与行动安全</h3>
+                                <p class="option-desc">保持活动量、家里防滑扶手、出门走动不怕摔倒，行动更自如。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mental-companionship-social-life">
+                            <div class="card-image">
+                                <img src="images/mental-companionship-social-life.svg" alt="老人和家人聊天、参加社区活动的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">心理陪伴与社交生活</h3>
+                                <p class="option-desc">常有陪伴、聊家常、参加邻里活动，心情更轻松不孤单。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
