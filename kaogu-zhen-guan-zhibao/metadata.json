@@ -1,20 +1,19 @@
 {
   "id": "kaogu-zhen-guan-zhibao",
-  "name": "家长爱·博物馆之旅",
-  "description": "针对家长的亲子出行场景设计，展示四类具有视觉冲击或故事感的考古展品（陶俑、壁画、青铜器、玉器），每项配短句画面化描述，便于孩子观察与讲故事式引导，兼顾历史科普与亲子互动。",
+  "name": "家长爱·博物馆小惊喜",
+  "description": "在考古展里挑出适合亲子观展的镇馆之宝，配上具体画面化的观展引导，帮助家长选择能立刻吸引孩子注意并能延伸讲故事或互动的展品。",
   "category": "历史文化",
   "profileId": "parent-tools",
   "keywords": [
     "考古",
     "博物馆",
-    "亲子游",
-    "镇馆之宝",
-    "历史科普",
     "亲子活动",
+    "镇馆之宝",
+    "带娃看展",
     "投票",
     "家长爱"
   ],
-  "coverImage": "kaogu-zhen-guan-zhibao/images/bing-ma-yong.svg",
+  "coverImage": "kaogu-zhen-guan-zhibao/images/qing-tong-ben-ma.svg",
   "generatedFrom": "fighter-jets",
-  "generatedAt": "2026-05-31T19:00:46.293Z"
+  "generatedAt": "2026-09-05T19:00:33.415Z"
 }
