@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你被哪个蛇精造型惊到了？4款反差造型直观对比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你被哪个蛇精造型惊到了？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">哪一款蛇精造型让你当场惊到说不出话？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="stage-fox-snake">
+                            <div class="card-image">
+                                <img src="images/stage-fox-snake.svg" alt="舞台狐媚风妆容特写：浓烟熏眼和尖下巴轮廓" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">舞台狐媚风</h3>
+                                <p class="option-desc">夸张烟熏眼＋尖下巴，舞台感十足，戏剧化表情强化眼神攻击力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cold-highlight-face">
+                            <div class="card-image">
+                                <img src="images/cold-highlight-face.svg" alt="冷艳高光脸妆：锐利眉型与强烈高光" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">冷艳高光脸</h3>
+                                <p class="option-desc">锐利眉眼＋高光塑形，冷冽质感像镜面雕刻般冷艳。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vintage-oil-snake">
+                            <div class="card-image">
+                                <img src="images/vintage-oil-snake.svg" alt="复古油画感妆容：厚重修容与复古色彩" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古油画感</h3>
+                                <p class="option-desc">厚重修容＋油画质感肤色，带点复古戏剧的视觉错位感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="cute-contrast-snake">
+                            <div class="card-image">
+                                <img src="images/cute-contrast-snake.svg" alt="反差可爱派妆容：甜美腮红与锋利眼线并存" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">反差可爱派</h3>
+                                <p class="option-desc">童颜配极致腮红与锋利眼线，甜美与妖媚的奇妙混搭反差。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
