@@ -1,0 +1,19 @@
+{
+  "id": "revisit-old-photo-places",
+  "name": "怀旧重游",
+  "description": "手机友好的图文投票页，通过老照片场景（街巷、电影院、河堤、菜市场）触发亲情与怀旧话题，鼓励用户留言讲述回忆，增强社区互动与留存。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "怀旧",
+    "家庭",
+    "老照片",
+    "重游",
+    "亲情",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "revisit-old-photo-places/images/old-home-alley.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-06T18:00:33.837Z"
+}
