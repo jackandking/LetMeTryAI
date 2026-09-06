@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带爸妈重游老照片里的那些地方</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">老照片里那些地方，你会带爸妈重游哪一处？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">老照片里那些地方，你会带爸妈重游哪一处？选一个最想去的场景并说说原因。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-home-alley">
+                            <div class="card-image">
+                                <img src="images/old-home-alley.svg" alt="老家小巷的拐角与红砖墙" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老家小巷</h3>
+                                <p class="option-desc">推开熟悉的门面，闻到街角串串摊的烟火味，带爸妈走回小时候的巷子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-cinema">
+                            <div class="card-image">
+                                <img src="images/old-cinema.svg" alt="老电影院的霓虹招牌与红色座椅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老电影院/戏院</h3>
+                                <p class="option-desc">买一张怀旧票，坐在暗厅里看父母年轻时也看过的电影，重温旧时光的光影。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="riverside-park-bench">
+                            <div class="card-image">
+                                <img src="images/riverside-park-bench.svg" alt="河边公园的长椅与垂柳" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">河边公园长椅</h3>
+                                <p class="option-desc">河风轻拂、垂柳摇曳，带爸妈坐在当年的长椅上聊那些年发生的小事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="old-market">
+                            <div class="card-image">
+                                <img src="images/old-market.svg" alt="热闹的老菜市场摊位与菜篮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老菜市场/集市</h3>
+                                <p class="option-desc">穿过人群、听到熟悉吆喝声，一起逛回小时候常去的买菜摊位，尝尝记忆里的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
