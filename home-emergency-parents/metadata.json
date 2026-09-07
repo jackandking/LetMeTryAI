@@ -1,0 +1,19 @@
+{
+  "id": "home-emergency-parents",
+  "name": "居家应急准备",
+  "description": "手机友好图文投票页：以断水断电的具体场景为画面感，比较四类常见应急物资（备用饮用水 / 移动电源 / 应急照明 / 应急食品），帮助用户与父母讨论优先准备项。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "应急物资",
+    "停水停电",
+    "老人家庭",
+    "居家准备",
+    "生活技巧",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "home-emergency-parents/images/reserve-water.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-07T18:00:33.195Z"
+}
