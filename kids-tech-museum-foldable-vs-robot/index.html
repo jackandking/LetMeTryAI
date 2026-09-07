@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子逛科技馆：折叠手机展还是机器人互动，先看哪个更合适？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子逛科技馆，先看折叠手机展还是机器人互动？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子逛科技馆，先看折叠手机展还是机器人互动？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="foldable-phone-first">
+                            <div class="card-image">
+                                <img src="images/foldable-phone-exhibit.svg" alt="孩子在折叠手机展前观察手机外形" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先看折叠手机展（静态观察）</h3>
+                                <p class="option-desc">适合孩子好奇数码外形、喜欢近距离看展品的场景，拍照留念也方便。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="robot-interaction-first">
+                            <div class="card-image">
+                                <img src="images/robot-interaction-area.svg" alt="孩子在机器人互动区与机器人互动" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先去机器人互动区（动手体验）</h3>
+                                <p class="option-desc">适合好动或爱玩互动装置的孩子，能立刻参与体验、释放精力。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="follow-child-interest">
+                            <div class="card-image">
+                                <img src="images/follow-child-interest.svg" alt="家长牵着孩子在展馆中随性行走" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">按孩子兴趣随性走（跟着TA）</h3>
+                                <p class="option-desc">观察孩子先被哪块吸引，顺着兴趣看，避免行程硬性安排。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quick-scan-then-return">
+                            <div class="card-image">
+                                <img src="images/quick-scan-then-return.svg" alt="家庭快速走过多个展区进行初步浏览" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先都快速看一圈再回访喜欢的展区</h3>
+                                <p class="option-desc">先快速扫展找到孩子最感兴趣的点，再回去深入体验或拍照。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "id": "kids-tech-museum-foldable-vs-robot",
+  "name": "亲子科技馆逛展小抉择",
+  "description": "适合家庭短途出游场景：对比科技馆内的静态展（折叠手机）与沉浸式互动（机器人），帮助家长根据孩子年龄、兴趣与时间做决定。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "科技馆",
+    "亲子活动",
+    "折叠手机",
+    "机器人",
+    "育儿决策",
+    "馆内行程",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-tech-museum-foldable-vs-robot/images/foldable-phone-exhibit.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-07T19:01:10.392Z"
+}
