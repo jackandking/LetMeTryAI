@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>生孩子不花钱了，你会把省下的钱先用在哪儿？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">生孩子不花钱了，你会把省下的钱先用在哪儿？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">生孩子不花钱了，你会把省下的钱先用在哪儿？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="education-invest">
+                            <div class="card-image">
+                                <img src="images/sheng-hai-education.svg" alt="孩子上兴趣班的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">孩子教育（补习 / 兴趣班）</h3>
+                                <p class="option-desc">先给孩子报兴趣班或补习，让他学新技能、准备将来。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="family-travel">
+                            <div class="card-image">
+                                <img src="images/sheng-hai-family-travel.svg" alt="一家人在旅游景点合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家庭旅行 / 亲子活动</h3>
+                                <p class="option-desc">把钱用在一次全家旅行或常态亲子活动，留下共同回忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-savings">
+                            <div class="card-image">
+                                <img src="images/sheng-hai-home-savings.svg" alt="存钱罐与房屋模型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">存起来 / 还房贷或买房</h3>
+                                <p class="option-desc">先存下当作长期计划（买房、还贷或教育基金），更稳妥。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="daily-needs">
+                            <div class="card-image">
+                                <img src="images/sheng-hai-daily-needs.svg" alt="宝宝用品摆放画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">日常花销 / 宝宝用品</h3>
+                                <p class="option-desc">优先补足日常需求：好点的奶粉、车座、育儿用品更实用。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
