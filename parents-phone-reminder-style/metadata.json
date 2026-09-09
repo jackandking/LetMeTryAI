@@ -1,0 +1,19 @@
+{
+  "id": "parents-phone-reminder-style",
+  "name": "爸妈看手机提醒样式",
+  "description": "对比角落红点带数字、纯红点徽章、屏幕横幅文字、以及语音+图标四种提醒样式，帮助家庭判断哪种更顺眼、更亲切、更易理解。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "老人手机提醒",
+    "长者友好",
+    "提醒样式",
+    "视觉设计",
+    "家庭生活",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "parents-phone-reminder-style/images/red-dot-with-count.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-09T18:00:51.700Z"
+}
