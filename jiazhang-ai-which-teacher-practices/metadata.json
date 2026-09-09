@@ -1,0 +1,20 @@
+{
+  "id": "jiazhang-ai-which-teacher-practices",
+  "name": "家长爱老师观感",
+  "description": "通过对比老师在上课目标、作业讲评、家校沟通与鼓励独立性等做法，收集家长偏好，生成短图文投票页。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "老师做法",
+    "家长视角",
+    "课堂",
+    "作业反馈",
+    "家校沟通",
+    "育儿工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "jiazhang-ai-which-teacher-practices/images/clear-class-goals.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-09T19:01:01.906Z"
+}
