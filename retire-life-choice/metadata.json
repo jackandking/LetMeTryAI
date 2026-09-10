@@ -1,0 +1,19 @@
+{
+  "id": "retire-life-choice",
+  "name": "退休生活画卷",
+  "description": "以具体场景描绘不同退休生活方式（田园慢生活、城市邻里、与子女同住、旅行式退休），侧重画面感与日常实用性，避免医疗建议和负面情绪，适合手机图文投票页。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "退休生活",
+    "养老方式",
+    "日常画面",
+    "健康养生",
+    "家庭",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "retire-life-choice/images/garden-slow-life.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-10T18:00:31.427Z"
+}
