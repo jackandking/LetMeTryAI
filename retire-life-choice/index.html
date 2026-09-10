@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>以后退休生活你更想过哪种？生活方式画面比一比</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">以后退休生活你更想过哪种？院子种花慢日子，还是天天出门跟邻居聊？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">以后退休生活你更想过哪种？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="garden-slow-life">
+                            <div class="card-image">
+                                <img src="images/garden-slow-life.svg" alt="老人院子种花晒太阳" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">田园慢生活</h3>
+                                <p class="option-desc">在自家小院种花养菜，下午晒太阳、看书、和邻居坐着聊天</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="urban-neighborhood-life">
+                            <div class="card-image">
+                                <img src="images/urban-neighborhood-life.svg" alt="城市公园散步的老人" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">城市邻里活跃</h3>
+                                <p class="option-desc">住在热闹小区，每天出门散步、参加社区活动和兴趣班</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="live-with-children">
+                            <div class="card-image">
+                                <img src="images/live-with-children.svg" alt="多代同堂的家庭场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">和孩子一起生活</h3>
+                                <p class="option-desc">和子女同住，帮带孙儿或一起做家常事，享受天伦之乐</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="travel-style-retirement">
+                            <div class="card-image">
+                                <img src="images/travel-style-retirement.svg" alt="老年夫妇在旅途中观景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">旅行式退休</h3>
+                                <p class="option-desc">以短期旅行和民宿为常态，换风景、看世界、保持好奇心</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
