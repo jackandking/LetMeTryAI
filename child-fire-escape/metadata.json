@@ -1,0 +1,19 @@
+{
+  "id": "child-fire-escape",
+  "name": "家长爱火灾逃生",
+  "description": "在家中发生火灾时，家长在短时间内的首要动作极其关键。本投票把常见应对策略做成对比选项，便于家长反思、学习并交流实用逃生优先级与细节。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "火灾",
+    "安全教育",
+    "逃生",
+    "家庭应急",
+    "孩子安全",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-fire-escape/images/carry-child-evacuate.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-10T19:01:00.538Z"
+}

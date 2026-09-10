@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>孩子遇到火灾，你会先做哪件事？— 家长应急选择</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">孩子遇到火灾，你会先做哪件事？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">孩子遇到火灾，你会先做哪件事？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="carry-child-evacuate">
+                            <div class="card-image">
+                                <img src="images/carry-child-evacuate.svg" alt="父母抱起孩子撤离火场" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">抱起孩子立即撤离</h3>
+                                <p class="option-desc">把孩子抱起走出房间，第一时间脱离火源再处理其它事</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="alert-and-evacuate-others">
+                            <div class="card-image">
+                                <img src="images/alert-and-evacuate-others.svg" alt="家长喊叫并牵孩子离开" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先通知并疏散其他人</h3>
+                                <p class="option-desc">大声喊醒并带走家人，确保多人同时安全撤离</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="use-fire-extinguisher-or-isolate">
+                            <div class="card-image">
+                                <img src="images/use-fire-extinguisher-or-isolate.svg" alt="手持灭火器对准燃烧处" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">找灭火器或隔离火源</h3>
+                                <p class="option-desc">视火势快速取灭火器或用湿布隔离，争取短暂控制火势</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="call-119-then-guide-child">
+                            <div class="card-image">
+                                <img src="images/call-119-then-guide-child.svg" alt="手机拨打紧急电话并带孩子撤离" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">先拨打119并指引孩子逃生</h3>
+                                <p class="option-desc">先拨打119求援，同时按最近安全路线引导孩子撤离</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
