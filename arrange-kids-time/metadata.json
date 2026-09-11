@@ -1,0 +1,19 @@
+{
+  "id": "arrange-kids-time",
+  "name": "家长爱·陪娃时间安排",
+  "description": "面向关注亲子时间管理与实用育儿工具的家长，比较每日高质量陪伴、碎片化多次陪伴、周末沉浸陪伴与把家务变教学的四种安排方案，便于触发共鸣与经验分享。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "陪娃时间",
+    "亲子互动",
+    "时间管理",
+    "家庭生活",
+    "育儿策略",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "arrange-kids-time/images/daily-focused-half-hour.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-11T19:00:32.051Z"
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>一天像不够用，你会怎么安排陪娃时间？四种陪伴场景</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">一天像不够用，你会怎么安排陪娃时间？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">一天像不够用，你会怎么安排陪娃时间？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="daily-focused-half-hour">
+                            <div class="card-image">
+                                <img src="images/daily-focused-half-hour.svg" alt="家长和孩子共读" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">每日高质半小时</h3>
+                                <p class="option-desc">每天固定抽出30–45分钟，无手机、专注做一件事（讲故事/共读/专注游戏）。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fragmented-short-sessions">
+                            <div class="card-image">
+                                <img src="images/fragmented-short-sessions.svg" alt="家长在车上和孩子互动" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">碎片化多次陪伴</h3>
+                                <p class="option-desc">利用晨起、接送、睡前等零散时间做5–15分钟互动，累计情感连接与技能练习。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="weekend-extended-day">
+                            <div class="card-image">
+                                <img src="images/weekend-extended-day.svg" alt="一家人在博物馆参观" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">周末长陪伴日</h3>
+                                <p class="option-desc">平日较忙但周末安排半天或一天外出（博物馆/郊游/手作），做沉浸式体验与深度交流。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="integrated-chores-as-teaching">
+                            <div class="card-image">
+                                <img src="images/integrated-chores-as-teaching.svg" alt="父母和孩子一起做饭" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">边做家务边教学</h3>
+                                <p class="option-desc">把做饭、收拾变成陪伴课堂：分配小任务、边做边讲解，让日常成为成长机会。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
