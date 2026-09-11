@@ -1,0 +1,19 @@
+{
+  "id": "morning-3-minute-makeup",
+  "name": "3分钟美妆",
+  "description": "早晨时间有限的真实场景化投票页，4 种快手妆容选项，文案直白口语化，图像突出面部关键部位（气垫、眼线、腮红、遮瑕），适合社交分享与评论引导。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "早晨妆容",
+    "快手化妆",
+    "气垫裸妆",
+    "精致眼妆",
+    "腮红唇釉",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "morning-3-minute-makeup/images/cushion-nude.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-11T20:00:34.318Z"
+}
