@@ -1,0 +1,19 @@
+{
+  "id": "new-phone-first-check",
+  "name": "换机先看什么",
+  "description": "在换新手机的瞬间，用户往往先被哪个细节吸引？通过对自拍效果、机身外观、夜拍画质与续航充电的对比，激发讨论与分享，页面适配手机阅读并突出视觉样张。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "换手机",
+    "自拍",
+    "手机外观",
+    "夜拍",
+    "续航",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "new-phone-first-check/images/selfie-effect.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-12T20:00:36.800Z"
+}
