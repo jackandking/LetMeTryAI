@@ -1,0 +1,19 @@
+{
+  "id": "classroom-memory-corner",
+  "name": "教室回忆角",
+  "description": "把小时候的教室改造成老人活动室，四处皆有熟悉的画面：靠窗的课桌、讲台前的视角、书柜旁的安静角落或窗台外的操场景致。通过选座投票引发回忆故事与互动分享，适合图文移动端呈现。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "怀旧",
+    "教室",
+    "粉笔味",
+    "回忆",
+    "老人活动室",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "classroom-memory-corner/images/window-desk.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-12T18:00:43.267Z"
+}
