@@ -1,0 +1,20 @@
+{
+  "id": "el-nino-emergency-items",
+  "name": "家长爱·应急准备",
+  "description": "手机友好图文投票页，围绕厄尔尼诺导致的停电、断水、降温等家庭紧急场景，提供4个对比性应急物品选项，每个选项含短说明与配图，便于家长快速投票并在评论区分享自家经验。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "厄尔尼诺",
+    "应急物品",
+    "家庭准备",
+    "育儿",
+    "停电断水",
+    "备灾",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "el-nino-emergency-items/images/water-storage.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-12T19:00:45.366Z"
+}

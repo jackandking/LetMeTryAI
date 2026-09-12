@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>厄尔尼诺来了，家里先准备哪样应急物品？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">厄尔尼诺来了，家里先准备哪样应急物品？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">厄尔尼诺来了，家里先准备哪样应急物品？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="water-storage">
+                            <div class="card-image">
+                                <img src="images/water-storage.svg" alt="储水桶和净水瓶" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">储水与饮用水</h3>
+                                <p class="option-desc">断水时能保证孩子和全家有安全饮用水。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="baby-formula-dry-food">
+                            <div class="card-image">
+                                <img src="images/baby-formula-dry-food.svg" alt="奶粉罐与儿童干粮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宝宝奶粉与儿童干粮</h3>
+                                <p class="option-desc">有婴幼儿的家庭优先，解决喂养与短期能量供给。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="power-lighting">
+                            <div class="card-image">
+                                <img src="images/power-lighting.svg" alt="充电宝和手电筒" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">充电宝与手电照明</h3>
+                                <p class="option-desc">停电时保证手机续航、夜间照明与安全感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="warm-bedding-shelter">
+                            <div class="card-image">
+                                <img src="images/warm-bedding-shelter.svg" alt="被褥和折叠帐篷" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">保暖被褥与临时帐篷</h3>
+                                <p class="option-desc">遇冷雨或临时避难时，能为孩子和家人保温休息。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
