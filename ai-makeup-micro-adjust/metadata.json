@@ -1,0 +1,19 @@
+{
+  "id": "ai-makeup-micro-adjust",
+  "name": "AI妆容微调讨论",
+  "description": "手机友好图文投票，围绕AI修图的利弊与上镜效果展开，鼓励用户基于生活场景（约会、面试、日常）选择态度并分享理由。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "AI修图",
+    "微调妆容",
+    "上镜",
+    "自然妆",
+    "颜值对比",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "ai-makeup-micro-adjust/images/yes-natural-enhance.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-13T20:00:32.835Z"
+}
