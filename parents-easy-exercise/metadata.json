@@ -1,0 +1,20 @@
+{
+  "id": "parents-easy-exercise",
+  "name": "陪爸妈动起来",
+  "description": "面向子女与居家照护者的手机投票页，用具体场景画面感对比4种低强度锻炼（散步、椅子体操、太极、园艺/家务），便于共鸣与选择。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "爸妈锻炼",
+    "老人运动",
+    "居家健身",
+    "太极",
+    "散步",
+    "椅子体操",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "parents-easy-exercise/images/morning-walk.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-13T18:00:51.076Z"
+}
