@@ -1,0 +1,19 @@
+{
+  "id": "help-ads-on-elder-phone",
+  "name": "家长爱 - 帮老人清广告",
+  "description": "收集家长在帮父母处理手机广告弹窗时的真实做法：从远程设置、手把手教学，到安装清理工具或更换简洁机，帮助其他家长快速找到可尝试的方案。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "老人手机",
+    "广告弹窗",
+    "亲情互助",
+    "手机设置",
+    "实用工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "help-ads-on-elder-phone/images/remote-setup.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-14T19:00:39.904Z"
+}
