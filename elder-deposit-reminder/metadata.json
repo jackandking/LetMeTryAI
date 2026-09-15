@@ -1,0 +1,19 @@
+{
+  "id": "elder-deposit-reminder",
+  "name": "爱老人投票",
+  "description": "针对老人定期存款到期忘取的常见场景，比较几种提醒与处理方式（电话、上门、委托、银行提醒），便于家庭成员快速投票、分享经验与留言备忘。页面适配手机，图文并茂，聚焦实用操作与情感关怀。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "定期存款",
+    "老人",
+    "提醒",
+    "家庭",
+    "银行卡",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-deposit-reminder/images/phone-call-remind.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-15T18:00:41.807Z"
+}
