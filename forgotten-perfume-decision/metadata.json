@@ -1,0 +1,19 @@
+{
+  "id": "forgotten-perfume-decision",
+  "name": "香氛小抉择",
+  "description": "围绕家中长时间未用的香水处理方式设计的投票页，包含留存、改造、送人与丢弃四类生活化选项，强调画面感与情感理由，便于用户在手机上快速浏览并参与。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "香水",
+    "香氛",
+    "留存",
+    "改造",
+    "生活方式",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "forgotten-perfume-decision/images/throw-away.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-15T20:00:48.457Z"
+}
