@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>机场又困又饿，你的旅行妆怎么救场？4种救场妆</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">机场又困又饿，你的旅行妆怎么救场？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">机场又困又饿，你的旅行妆怎么救场？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="focus-lip-eye">
+                            <div class="card-image">
+                                <img src="images/focus-lip-eye.svg" alt="机场候机，用鲜亮唇色和细眼线提神的女性侧脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">重点补唇眼</h3>
+                                <p class="option-desc">先补一个鲜亮唇色和细眼线，嘴巴和眼睛有看点就不显疲惫。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hydration-tint">
+                            <div class="card-image">
+                                <img src="images/hydration-tint.svg" alt="候机座椅上补水喷雾与轻薄底妆的近景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">轻薄润色保湿</h3>
+                                <p class="option-desc">一层润色隔离+补水喷雾，让底妆轻薄又不显干，适合饥饿脸。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="highlight-refresh">
+                            <div class="card-image">
+                                <img src="images/highlight-refresh.svg" alt="用高光和腮红在脸颊与鼻梁提亮的妆容细节" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高光提神法</h3>
+                                <p class="option-desc">局部高光+腮红提亮面部立体度，瞬间看起来精神又有光泽。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="minimal-conceal">
+                            <div class="card-image">
+                                <img src="images/minimal-conceal.svg" alt="使用遮瑕和定妆粉快速遮盖疲态的手部动作" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">简约遮瑕速妆</h3>
+                                <p class="option-desc">用遮瑕点重点掩盖黑眼圈+定妆粉，配个自然眉形，快速出门不显累。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
