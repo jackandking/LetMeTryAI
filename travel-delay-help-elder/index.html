@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>出门旅行遇到延误，你更希望得到哪种帮忙？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">出门旅行遇到延误，你更希望得到哪种帮忙？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">出门旅行遇到延误，你更希望得到哪种帮忙？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="help-rebook-refund">
+                            <div class="card-image">
+                                <img src="images/help-rebook-refund.svg" alt="帮忙改签或退票" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">帮我改签或退票</h3>
+                                <p class="option-desc">帮忙联系车/机票改签或退票，省去排队和电话奔波。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="food-and-essentials">
+                            <div class="card-image">
+                                <img src="images/food-and-essentials.svg" alt="送餐与日用品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">买饭送水和日用品</h3>
+                                <p class="option-desc">有人送餐、买药或水，让人在候车室也能安心休息。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="arrange-rest-accommodation">
+                            <div class="card-image">
+                                <img src="images/arrange-rest-accommodation.svg" alt="安排临时休息或住宿" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安排临时休息或住宿</h3>
+                                <p class="option-desc">帮找最近的休息处或临时住处，优先考虑安全和舒适。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="contact-family-and-accompany">
+                            <div class="card-image">
+                                <img src="images/contact-family-and-accompany.svg" alt="联系家人并陪伴" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">联系家人并有人陪伴</h3>
+                                <p class="option-desc">帮忙通知家人并有人陪伴，聊聊天、安抚情绪更踏实。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
