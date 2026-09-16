@@ -1,0 +1,21 @@
+{
+  "id": "travel-delay-help-elder",
+  "name": "延误时的帮手",
+  "description": "面向爱老人用户的手机图文投票页，比较在旅行延误时更实在的帮助方式（改签/送餐/临时休息/联系家人并陪伴），强调画面场景与情感安抚，便于分享与讨论。",
+  "category": "实用生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "旅行延误",
+    "老人出行",
+    "实用帮忙",
+    "陪伴",
+    "改签",
+    "临时住宿",
+    "送餐",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "travel-delay-help-elder/images/help-rebook-refund.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-16T18:00:35.785Z"
+}
