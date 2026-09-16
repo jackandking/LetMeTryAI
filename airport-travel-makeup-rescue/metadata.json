@@ -1,0 +1,19 @@
+{
+  "id": "airport-travel-makeup-rescue",
+  "name": "旅行救妆",
+  "description": "移动端图文投票：在机场疲惫又饥饿的画面下，四种实用救场妆方案供用户选出自己的首选并分享心得。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "旅行妆",
+    "机场补妆",
+    "熬夜救场",
+    "补水提神",
+    "轻妆",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "airport-travel-makeup-rescue/images/focus-lip-eye.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-16T20:00:39.848Z"
+}
