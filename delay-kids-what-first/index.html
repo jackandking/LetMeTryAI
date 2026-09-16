@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>地铁/大巴延误时，带娃你先拿啥稳住场面？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子出门遇延误，你会先准备哪样东西？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子出门遇延误，你会先准备哪样东西？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="snacks-drinks">
+                            <div class="card-image">
+                                <img src="images/snacks-drinks.svg" alt="零食和水" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">零食与水</h3>
+                                <p class="option-desc">饿了先填肚子，情绪也更好。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="books-toys">
+                            <div class="card-image">
+                                <img src="images/books-toys.svg" alt="绘本和玩具" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">可携绘本与小玩具</h3>
+                                <p class="option-desc">分散注意力，让等待变得安静可控。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="power-bank">
+                            <div class="card-image">
+                                <img src="images/power-bank.svg" alt="充电宝与备用手机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">充电宝与备用手机</h3>
+                                <p class="option-desc">保证通讯与影音，随时查信息和安顿孩子。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wipes-change">
+                            <div class="card-image">
+                                <img src="images/wipes-change.svg" alt="换洗与清洁用品" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">换洗与清洁用品</h3>
+                                <p class="option-desc">孩子弄脏或受凉时能快速应对，减少尴尬。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

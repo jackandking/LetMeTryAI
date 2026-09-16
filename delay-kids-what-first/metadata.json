@@ -1,0 +1,18 @@
+{
+  "id": "delay-kids-what-first",
+  "name": "带娃延误应急包",
+  "description": "手机端图文投票页；在等待延误的真实场景下，对比四类常见应急物品，帮助家长分享优先策略并互相学习。",
+  "category": "实用工具",
+  "profileId": "parent-tools",
+  "keywords": [
+    "出行延误",
+    "带孩子",
+    "应急准备",
+    "亲子出行",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "delay-kids-what-first/images/snacks-drinks.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-16T19:00:48.744Z"
+}
