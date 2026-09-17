@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你结婚那天怀念哪一幕？说说你的回忆画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你结婚那天怀念哪一幕？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你结婚那天怀念哪一幕？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="father-walk-aisle">
+                            <div class="card-image">
+                                <img src="images/father-walk-aisle.svg" alt="父亲牵着新娘的手走过礼堂" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">父亲牵手送你入场</h3>
+                                <p class="option-desc">父亲把你的手交到另一半手里，既温暖又带着不舍。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="first-look">
+                            <div class="card-image">
+                                <img src="images/first-look.svg" alt="新人第一次四目相对的瞬间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">第一次看见对方的眼神</h3>
+                                <p class="option-desc">那一眼的惊喜与笑意，像电影里的定格画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="family-toast">
+                            <div class="card-image">
+                                <img src="images/family-toast.svg" alt="婚宴上亲友举杯喧闹热闹" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宴席上全家举杯欢笑</h3>
+                                <p class="option-desc">长辈们举杯祝福，热闹的笑声和亲切的寒暄让人暖心。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="group-photo-with-elders">
+                            <div class="card-image">
+                                <img src="images/group-photo-with-elders.svg" alt="婚礼上和父母及长辈的合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">和长辈一起拍的那张合影</h3>
+                                <p class="option-desc">老照片里全家挤在一起的合影，年代感和亲情同在。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
