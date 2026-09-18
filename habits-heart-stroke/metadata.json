@@ -1,0 +1,20 @@
+{
+  "id": "habits-heart-stroke",
+  "name": "爱老人健康一问",
+  "description": "以通俗问句切入，列举可对比的日常习惯（久坐、重口味、熬夜压力、抽烟喝酒），适合手机图文投票页并配短 caption 引导进一步科普或家庭讨论（不做具体医疗建议）。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "心梗",
+    "脑梗",
+    "心血管",
+    "健康养生",
+    "老年生活",
+    "生活习惯",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "habits-heart-stroke/images/jusu-shao-dong.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-18T18:00:50.230Z"
+}

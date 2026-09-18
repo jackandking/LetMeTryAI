@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>哪些日常习惯跟心梗脑梗有关？几个生活场景可别忽视</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">哪些日常习惯跟心梗脑梗有关？你平时注意到哪些</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">哪些日常习惯跟心梗脑梗有关？在下面场景中选出你最担心或家里人常有的那些（可多选）</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jusu-shao-dong">
+                            <div class="card-image">
+                                <img src="images/jusu-shao-dong.svg" alt="老人久坐看电视" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">久坐少动（整天坐着看电视或不爱活动）</h3>
+                                <p class="option-desc">整日坐着、上下楼少，常感觉腿脚发沉或走不动。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zhong-kouwei-yinshi">
+                            <div class="card-image">
+                                <img src="images/zhong-kouwei-yinshi.svg" alt="咸菜与油炸食物特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">重口味饮食（咸、油、外卖多）</h3>
+                                <p class="option-desc">饭菜偏咸或油炸外卖多，平时爱吃重口味。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="aoye-ya-li">
+                            <div class="card-image">
+                                <img src="images/aoye-ya-li.svg" alt="老人半夜看手机失眠" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">熬夜少眠与长期精神压力</h3>
+                                <p class="option-desc">经常晚睡、睡眠浅或长期烦心事，白天精神不稳。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="xiyan-xujiu">
+                            <div class="card-image">
+                                <img src="images/xiyan-xujiu.svg" alt="烟酒放在桌上的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">吸烟或过量饮酒（社交或独自饮酒）</h3>
+                                <p class="option-desc">长期抽烟或饮酒较多，有时在家里或聚会常见。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
