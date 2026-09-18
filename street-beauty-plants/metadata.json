@@ -1,0 +1,19 @@
+{
+  "id": "street-beauty-plants",
+  "name": "街头绿植心动",
+  "description": "在城市街头偶遇高颜值植物的画面感投票页，适合图文并茂的手机端展示，鼓励用户在‘抱回家/拍照/考量条件’之间快速选择并分享理由。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "街头植物",
+    "室内绿植",
+    "颜值植物",
+    "带回家",
+    "拍照留念",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "street-beauty-plants/images/bring-home.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-18T20:00:42.552Z"
+}
