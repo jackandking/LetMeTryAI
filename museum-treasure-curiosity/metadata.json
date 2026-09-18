@@ -1,0 +1,19 @@
+{
+  "id": "museum-treasure-curiosity",
+  "name": "家长爱·博物小探",
+  "description": "面向家长的图文投票页，用具体展品场景引导讨论与亲子探访灵感。",
+  "category": "博物馆文化探索",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "镇馆之宝",
+    "亲子活动",
+    "好奇心",
+    "家庭出游",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "museum-treasure-curiosity/images/dinosaur-skeleton.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-18T19:00:53.879Z"
+}
