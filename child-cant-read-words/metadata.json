@@ -1,0 +1,19 @@
+{
+  "id": "child-cant-read-words",
+  "name": "家长爱 · 认字优先选",
+  "description": "面向学龄前/低年级孩子的识字困惑，提供家长常见的四种首选处理方法（家庭教学、视力检查、图画引导、游戏化工具），适合手机图文投票页面与后续讨论说明页。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "认字",
+    "早教",
+    "亲子互动",
+    "阅读兴趣",
+    "家庭工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-cant-read-words/images/point-and-read.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-19T19:00:27.979Z"
+}
