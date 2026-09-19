@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>看亚运开幕式，你更怀念哪种老式文艺表演？回忆场景</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">看亚运开幕式，你更怀念哪种老式文艺表演？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看亚运开幕式，你更怀念哪种老式文艺表演？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jing-ju">
+                            <div class="card-image">
+                                <img src="images/jing-ju.svg" alt="京剧演员在台上表演" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">京剧唱段</h3>
+                                <p class="option-desc">锣鼓一响、旦角台步，仿佛回到老戏院的红灯下。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="minzu-wu">
+                            <div class="card-image">
+                                <img src="images/minzu-wu.svg" alt="群舞演员身着民族服装" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">民族舞表演</h3>
+                                <p class="option-desc">色彩服饰、群舞翻飞，像村晚或广场晚会的热闹场面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="za-ji">
+                            <div class="card-image">
+                                <img src="images/za-ji.svg" alt="杂技演员在高空表演" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">杂技绝技</h3>
+                                <p class="option-desc">空中翻转与顶碗瞬间，掌声与惊呼交织的惊险瞬间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="he-chang">
+                            <div class="card-image">
+                                <img src="images/he-chang.svg" alt="老年合唱团在台上演唱" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">合唱大联唱</h3>
+                                <p class="option-desc">多人合声，熟悉旋律让全场跟着拍手，温暖又亲切。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
