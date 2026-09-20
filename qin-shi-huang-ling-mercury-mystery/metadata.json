@@ -1,0 +1,20 @@
+{
+  "id": "qin-shi-huang-ling-mercury-mystery",
+  "name": "家长爱·历史好奇",
+  "description": "面向家长与孩子的移动投票页，围绕“秦始皇陵的水银之谜”设计4个对比选项，每个选项都是孩子可能产生的直观好奇点，配图文说明便于滑动浏览与讨论。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "秦始皇陵",
+    "水银",
+    "考古",
+    "博物馆",
+    "亲子",
+    "好奇心",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "qin-shi-huang-ling-mercury-mystery/images/how-much-mercury.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-20T19:00:32.279Z"
+}
