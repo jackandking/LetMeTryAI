@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>不吸烟也查出肺结节？哪个生活细节更让你担心</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">更近很多不吸烟的人也查出肺结节，你会更在意哪个生活细节？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">更近很多不吸烟的人也查出肺结节，你会更在意哪个生活细节？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="secondhand-smoke">
+                            <div class="card-image">
+                                <img src="images/secondhand-smoke.svg" alt="窗边有烟雾和茶杯的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家中二手烟</h3>
+                                <p class="option-desc">家里亲戚或子女偶尔在室内抽烟，屋里常有烟味</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-renovation-formaldehyde">
+                            <div class="card-image">
+                                <img src="images/home-renovation-formaldehyde.svg" alt="带着阳光的客厅有搬新家具的情景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">新装修残留</h3>
+                                <p class="option-desc">刚装修或添了新家具，房间有刺鼻气味、通风不够</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="urban-air-pollution">
+                            <div class="card-image">
+                                <img src="images/urban-air-pollution.svg" alt="城市街道有雾霾和车流的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">长期雾霾/尾气</h3>
+                                <p class="option-desc">常年住在车辆多或雾霾严重的街区，外出空气浑浊</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="frequent-grilled-smoked-foods">
+                            <div class="card-image">
+                                <img src="images/frequent-grilled-smoked-foods.svg" alt="餐桌上有烧烤和烟雾的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">常吃烟熏/烧烤</h3>
+                                <p class="option-desc">喜欢吃烧烤、熏制食品或频繁油炸，餐桌是常态</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
