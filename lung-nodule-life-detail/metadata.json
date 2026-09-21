@@ -1,0 +1,19 @@
+{
+  "id": "lung-nodule-life-detail",
+  "name": "爱老人问一问",
+  "description": "面向关注健康的中老年与家庭照护者，通过具体生活场景对比（被动吸烟、装修甲醛、空气污染、饮食烟熏类）激发讨论与分享，适合图文展现和留言互动。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "肺结节",
+    "二手烟",
+    "装修甲醛",
+    "空气污染",
+    "养生常识",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "lung-nodule-life-detail/images/secondhand-smoke.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-21T18:00:33.626Z"
+}
