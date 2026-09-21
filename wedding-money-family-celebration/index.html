@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>结婚发钱，带孩子的家庭庆祝你会怎么安排？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">结婚发钱，带孩子的家庭庆祝你会怎么安排？带娃去热闹还是在家静静庆祝？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">结婚发钱，带孩子的家庭庆祝你会怎么安排？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bring-kids-to-wedding">
+                            <div class="card-image">
+                                <img src="images/bring-kids-to-wedding.svg" alt="全家参加婚礼，孩子穿礼服送花" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">带孩子参加婚礼</h3>
+                                <p class="option-desc">全家一起去，让孩子穿礼服、参与小环节，现场拍照留念，感受热闹氛围。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="adult-only-with-grandparents">
+                            <div class="card-image">
+                                <img src="images/adult-only-with-grandparents.svg" alt="孩子由爷奶在家照看，夫妻参加婚礼" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">夫妻到场，孩子交给长辈</h3>
+                                <p class="option-desc">夫妻参加婚礼，孩子由爷奶或保姆照看，晚些时间短聚或回家团圆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-parenting-party">
+                            <div class="card-image">
+                                <img src="images/home-parenting-party.svg" alt="家庭在家举办亲子派对，气球和蛋糕" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">留在家办亲子派对</h3>
+                                <p class="option-desc">不去现场，在家办小型主题派对，做游戏、拍家庭照，让孩子也成为当天主角。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quiet-celebration-save-education">
+                            <div class="card-image">
+                                <img src="images/quiet-celebration-save-education.svg" alt="父母把红包存入孩子教育账户" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">低调庆祝并存入教育金</h3>
+                                <p class="option-desc">选择简单庆祝，把红包或礼金存入孩子教育/储蓄账户，或用作家庭短途旅行基金。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
