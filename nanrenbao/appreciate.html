@@ -692,6 +692,7 @@
                             const imageUrl = normalizeStoredImageUrl(sourceImageUrl);
                             const div = document.createElement('div');
                             div.className = 'gallery-item';
+                            div.id = 'img-' + item.id; // 深链锚点：审核后可 #img-<id> 直达此卡片
                             
                             const imageWrapper = document.createElement('div');
                             imageWrapper.className = 'image-wrapper';
