@@ -1,0 +1,19 @@
+{
+  "id": "child-watch-volleyball-team-sport",
+  "name": "家长爱·体育启蒙",
+  "description": "围绕孩子观看女排时的视觉印象与情绪反应，提供具体团队运动场景对比（配合、跳跃、奔跑、策略），便于家长通过投票发现孩子兴趣并引发讨论。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "女排",
+    "团队运动",
+    "亲子活动",
+    "体育启蒙",
+    "场景感",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "child-watch-volleyball-team-sport/images/volleyball.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-22T19:00:51.330Z"
+}
