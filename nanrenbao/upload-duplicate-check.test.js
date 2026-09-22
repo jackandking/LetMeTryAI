@@ -136,21 +136,24 @@ describe('Upload Duplicate Detection', () => {
   });
 
   describe('API Endpoint Usage', () => {
-    it('should use MYSQL_QUERY instead of MYSQL_INSERT', () => {
+    it('should use MYSQL_QUERY for the read-only duplicate check and MYSQL_INSERT for the write', () => {
       const fs = require('fs');
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
-      
-      // Should use MYSQL_QUERY for both check and insert
-      const queryEndpoints = content.match(/window\.API_ENDPOINTS\.MYSQL_QUERY/g);
-      expect(queryEndpoints).toBeTruthy();
-      expect(queryEndpoints.length).toBeGreaterThanOrEqual(2);
+
+      // Duplicate check is a read-only SELECT -> MYSQL_QUERY is the correct endpoint.
+      expect(content).toContain('API_ENDPOINTS.MYSQL_QUERY');
+      // The insert must go through the dedicated insert endpoint.
+      // (MYSQL_QUERY is SELECT-only since the P0 security fix on 2026-09-06, so sending
+      //  an INSERT there returns 403 and breaks uploads.)
+      expect(content).toContain('API_ENDPOINTS.MYSQL_INSERT');
     });
 
-    it('should not use deprecated MYSQL_INSERT endpoint', () => {
+    it('should send the insert as { table, data } to MYSQL_INSERT, not raw SQL to MYSQL_QUERY', () => {
       const fs = require('fs');
       const content = fs.readFileSync('./nanrenbao/upload.html', 'utf8');
-      
-      expect(content).not.toContain('API_ENDPOINTS.MYSQL_INSERT');
+
+      expect(content).toContain("table: 'beauty_images'");
+      expect(content).not.toContain('INSERT INTO beauty_images');
     });
   });
 
