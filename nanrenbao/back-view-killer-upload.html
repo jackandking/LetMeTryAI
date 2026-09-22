@@ -1018,13 +1018,20 @@
                     return;
                 }
 
-                // Insert into database
-                const insertResponse = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                // Insert into database via the dedicated insert endpoint.
+                // NOTE: /mysql/query is SELECT-only (P0 security fix 2026-09-06), so writes MUST use MYSQL_INSERT.
+                const insertResponse = await fetch(window.API_ENDPOINTS.MYSQL_INSERT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        sql: 'INSERT INTO back_view_images (back_image_url, front_image_url, review_status, submitted_at, source_type) VALUES (?, ?, ?, ?, ?)',
-                        params: [backImageUrl, frontImageUrl, 'pending', new Date().toISOString().slice(0, 19).replace('T', ' '), 'local_file']
+                        table: 'back_view_images',
+                        data: {
+                            back_image_url: backImageUrl,
+                            front_image_url: frontImageUrl,
+                            review_status: 'pending',
+                            submitted_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                            source_type: 'local_file'
+                        }
                     })
                 });
                 if (!insertResponse.ok) {

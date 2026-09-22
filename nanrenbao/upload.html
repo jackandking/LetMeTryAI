@@ -681,14 +681,21 @@
                 const sourceType = 'local_file';
                 
                 // Insert into database
-                const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
+                // Use the dedicated insert endpoint; /mysql/query is SELECT-only (P0 security fix 2026-09-06)
+                const response = await fetch(window.API_ENDPOINTS.MYSQL_INSERT, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        sql: 'INSERT INTO beauty_images (image_url, created_at, review_status, submitted_at, source_type) VALUES (?, ?, ?, ?, ?)',
-                        params: [url, now, REVIEW_PENDING_STATUS, now, sourceType]
+                        table: 'beauty_images',
+                        data: {
+                            image_url: url,
+                            created_at: now,
+                            review_status: REVIEW_PENDING_STATUS,
+                            submitted_at: now,
+                            source_type: sourceType
+                        }
                     })
                 });
 
@@ -698,7 +705,8 @@
 
                 const result = await response.json();
                 
-                if (result.affectedRows > 0) {
+                // MYSQL_INSERT returns { insertId }; legacy MYSQL_QUERY returned { affectedRows }.
+                if (result && (result.insertId !== undefined || result.affectedRows > 0)) {
                     showMessage('提交成功！图片已进入审核队列，审核通过后才会展示并发放积分。', 'success');
                     showPointsNotification('🛡️ 内容审核中，审核通过后发放上传积分');
                     
