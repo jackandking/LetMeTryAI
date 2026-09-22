@@ -705,6 +705,7 @@
 
                             const cardEl = document.createElement('div');
                             cardEl.className = 'flip-card';
+                            cardEl.id = 'img-' + item.id; // 深链锚点：审核后可 #img-<id> 直达此卡片
                         
                         const viewKey = `back_view_${item.id}`;
                         const viewStatus = PointsSystem.canViewImage(viewKey);
