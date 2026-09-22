@@ -566,9 +566,9 @@
             if (typeof imageUrl !== 'string') return imageUrl;
             try {
                 const url = new URL(imageUrl, window.location.origin);
-                if (url.hostname === 'letmetry.cloud') {
+                if (url.hostname === 'letmetry.cn' || url.hostname === 'museumcheck.cn') {
                     url.protocol = 'https:';
-                    url.hostname = 'museumcheck.cn';
+                    url.hostname = 'letmetry.cn';
                     return url.toString();
                 }
             } catch (error) {

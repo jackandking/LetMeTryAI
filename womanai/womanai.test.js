@@ -182,21 +182,21 @@ describe('WomanAI Integration Tests', () => {
         it('should use centralized configuration in HTML', () => {
             // Mock window object for testing
             const mockWindow = {
-                BASE_URL: 'https://letmetry.cloud',
+                BASE_URL: 'https://letmetry.cn',
                 API_ENDPOINTS: {
-                    MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+                    MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
                 }
             };
 
-            expect(mockWindow.BASE_URL).toBe('https://letmetry.cloud');
+            expect(mockWindow.BASE_URL).toBe('https://letmetry.cn');
             expect(mockWindow.API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
         });
 
         it('should generate correct API URLs', () => {
-            const baseUrl = 'https://letmetry.cloud';
+            const baseUrl = 'https://letmetry.cn';
             const queryEndpoint = baseUrl + '/mysql/query';
 
-            expect(queryEndpoint).toBe('https://letmetry.cloud/mysql/query');
+            expect(queryEndpoint).toBe('https://letmetry.cn/mysql/query');
         });
     });
 

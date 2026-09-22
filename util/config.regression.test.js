@@ -14,7 +14,7 @@ describe('Configuration Regression Tests', () => {
       expect(BASE_URL).toMatch(/^https:\/\/[a-zA-Z0-9.-]+$/);
       expect(BASE_URL).not.toContain(';');
       expect(BASE_URL).not.toMatch(/['"]{2,}/); // No doubled quotes
-      expect(BASE_URL).toBe('https://letmetry.cloud');
+      expect(BASE_URL).toBe('https://letmetry.cn');
     });
 
     it('should load AI utilities module without syntax errors', () => {
@@ -24,7 +24,7 @@ describe('Configuration Regression Tests', () => {
 
     it('should have valid AI chat endpoint configuration', () => {
       expect(API_ENDPOINT).toBe(API_ENDPOINTS.AI_CHAT);
-      expect(API_ENDPOINT).toBe('https://letmetry.cloud/ai/chat');
+      expect(API_ENDPOINT).toBe('https://letmetry.cn/ai/chat');
       expect(API_ENDPOINT).toMatch(/^https:\/\/[a-zA-Z0-9.-]+\/ai\/chat$/);
     });
   });
@@ -108,7 +108,7 @@ describe('Configuration Regression Tests', () => {
     it('should use the correct endpoint in sendChatMessage', () => {
       // Verify that the AI utilities module uses the correct endpoint
       expect(API_ENDPOINT).toBe(API_ENDPOINTS.AI_CHAT);
-      expect(API_ENDPOINT).toContain('letmetry.cloud');
+      expect(API_ENDPOINT).toContain('letmetry.cn');
       expect(API_ENDPOINT).toContain('/ai/chat');
     });
   });

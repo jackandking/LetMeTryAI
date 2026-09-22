@@ -56,7 +56,7 @@ When a user unlocks an image (spends points), the system:
 **API Call:**
 
 ```javascript
-POST https://letmetry.cloud/mysql/query
+POST https://letmetry.cn/mysql/query
 Content-Type: application/json
 
 {
@@ -70,7 +70,7 @@ Content-Type: application/json
 Images are now queried with view_count and sorted by popularity:
 
 ```javascript
-POST https://letmetry.cloud/mysql/query
+POST https://letmetry.cn/mysql/query
 Content-Type: application/json
 
 {
@@ -245,4 +245,4 @@ For issues or questions:
 - Check test file: `nanrenbao/view-count.test.js`
 - Review schema: `nanrenbao/database-schema.sql`
 - Migration script: `nanrenbao/migrate-add-view-count.sql`
-- API documentation: https://letmetry.cloud/api-docs
+- API documentation: https://letmetry.cn/api-docs

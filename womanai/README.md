@@ -59,7 +59,7 @@ CREATE TABLE handsome_images (
 
 - `API_ENDPOINTS.MYSQL_QUERY`: 数据库查询（用于 SELECT, INSERT, UPDATE, DELETE）
 
-**重要**: 所有数据库操作都使用 `/mysql/query` 端点。详见 API 文档：https://letmetry.cloud/api-docs
+**重要**: 所有数据库操作都使用 `/mysql/query` 端点。详见 API 文档：https://letmetry.cn/api-docs
 
 ## 使用指南
 
@@ -90,7 +90,7 @@ CREATE TABLE handsome_images (
 项目使用全局配置文件 `config.js`：
 
 ```javascript
-const BASE_URL = 'https://letmetry.cloud';
+const BASE_URL = 'https://letmetry.cn';
 const API_ENDPOINTS = {
     MYSQL_QUERY: BASE_URL + '/mysql/query',
     MYSQL_INSERT: BASE_URL + '/mysql/insert',
@@ -132,7 +132,7 @@ open http://localhost:8000/womanai/
 在任何页面URL后添加 `?debug=true` 启用VConsole移动调试工具：
 
 ```
-https://letmetry.cloud/womanai/appreciate.html?debug=true
+https://letmetry.cn/womanai/appreciate.html?debug=true
 ```
 
 ## 设计主题

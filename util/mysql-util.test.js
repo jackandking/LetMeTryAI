@@ -40,7 +40,7 @@ describe('MySQL Utilities', () => {
       queryDatabase('SELECT 1', [], (error, result) => {
         const fetchCall = fetch.mock.calls[0];
         expect(fetchCall[0]).toBe(API_ENDPOINTS.MYSQL_QUERY);
-        expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
+        expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cn');
         expect(API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
         done();
       });
@@ -210,7 +210,7 @@ describe('MySQL Utilities', () => {
 
       mysqlEndpoints.forEach(endpoint => {
         expect(API_ENDPOINTS[endpoint]).toBeDefined();
-        expect(API_ENDPOINTS[endpoint]).toContain('letmetry.cloud');
+        expect(API_ENDPOINTS[endpoint]).toContain('letmetry.cn');
         expect(API_ENDPOINTS[endpoint]).toContain('/mysql/');
         expect(API_ENDPOINTS[endpoint]).not.toContain('letmetryai.cn');
       });

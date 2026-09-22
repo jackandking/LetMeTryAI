@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const API = 'https://letmetry.cloud/mysql/query';
+const API = 'https://letmetry.cn/mysql/query';
 
 async function run() {
   console.log('Querying sample rows from beauty_images...');

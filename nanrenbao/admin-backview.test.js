@@ -60,7 +60,7 @@ describe('Nanrenbao Admin - Back View Killer Management', () => {
   describe('Configuration', () => {
     it('should use centralized MySQL QUERY endpoint for back_view_images', () => {
       expect(API_ENDPOINTS.MYSQL_QUERY).toBeDefined();
-      expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
+      expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cn');
       expect(API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
     });
 
@@ -391,7 +391,7 @@ https://example.com/back2.jpg,https://example.com/front2.jpg
 
     it('should use centralized configuration consistently', () => {
       expect(API_ENDPOINTS.MYSQL_QUERY).not.toContain('letmetryai.cn');
-      expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
+      expect(API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cn');
       expect(API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
     });
 

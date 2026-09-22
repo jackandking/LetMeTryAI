@@ -2,7 +2,7 @@
  * 测测你是哪种家长类型 - 家长爱支付测试
  */
 
-const API_BASE = 'https://letmetry.cloud';
+const API_BASE = 'https://letmetry.cn';
 const PRODUCT_ID = 'parent-type-test';
 const PRODUCT_NAME = '测测你是哪种家长类型';
 const AMOUNT = 100; // 1元 = 100分

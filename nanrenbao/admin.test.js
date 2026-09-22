@@ -41,7 +41,7 @@ describe('Nanrenbao Admin - Batch Upload', () => {
   describe('Configuration', () => {
     it('should use centralized MySQL endpoint', () => {
       expect(API_ENDPOINTS.MYSQL_INSERT).toBeDefined();
-      expect(API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cloud');
+      expect(API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cn');
       expect(API_ENDPOINTS.MYSQL_INSERT).toContain('/mysql/insert');
     });
 
@@ -513,7 +513,7 @@ https://example.com/image2.png`;
 
     it('should use centralized configuration consistently', () => {
       expect(API_ENDPOINTS.MYSQL_INSERT).not.toContain('letmetryai.cn');
-      expect(API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cloud');
+      expect(API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cn');
       expect(API_ENDPOINTS.MYSQL_INSERT).not.toContain('/lws/');
     });
   });

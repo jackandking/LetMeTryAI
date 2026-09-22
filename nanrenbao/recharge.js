@@ -13,7 +13,7 @@
     const pointsElement = document.getElementById('pointsValue');
     const payButton = document.getElementById('payButton');
     const messageElement = document.getElementById('message');
-    const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
+    const EVENT_ENDPOINT = 'https://letmetry.cn/api/track';
     const INTENT_STORAGE_KEY = 'nanrenbao_payment_intents';
     let selectedPackage = null;
 

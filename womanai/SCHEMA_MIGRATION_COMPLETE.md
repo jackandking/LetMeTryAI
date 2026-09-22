@@ -5,7 +5,7 @@
 **Date**: 2026-01-02  
 **Status**: ✅ **SUCCESSFULLY APPLIED**
 
-The schema migration for the `handsome_images` table has been successfully applied to the production database at `letmetry.cloud`.
+The schema migration for the `handsome_images` table has been successfully applied to the production database at `letmetry.cn`.
 
 ## Changes Applied
 
@@ -30,33 +30,33 @@ The schema migration for the `handsome_images` table has been successfully appli
 
 ```bash
 # Verify columns
-curl -s -X POST "https://letmetry.cloud/mysql/query" \
+curl -s -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"SHOW COLUMNS FROM handsome_images WHERE Field IN ('\''view_count'\'', '\''deleted'\'')"}' | jq '.'
 
 # Verify indexes
-curl -s -X POST "https://letmetry.cloud/mysql/query" \
+curl -s -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"SHOW INDEX FROM handsome_images WHERE Key_name IN ('\''idx_view_count'\'', '\''idx_image_url'\'')"}' | jq '.'
 ```
 
 ## Migration Details
 
-The migration was applied using direct curl commands to the letmetry.cloud MySQL API:
+The migration was applied using direct curl commands to the letmetry.cn MySQL API:
 
 ```bash
 # Step 1: Add view_count column
-curl -X POST "https://letmetry.cloud/mysql/query" \
+curl -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"ALTER TABLE handsome_images ADD COLUMN view_count INT DEFAULT 0 NOT NULL COMMENT '\''Number of times this image has been unlocked/viewed'\''"}'
 
 # Step 2: Add deleted column
-curl -X POST "https://letmetry.cloud/mysql/query" \
+curl -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"ALTER TABLE handsome_images ADD COLUMN deleted TINYINT(1) DEFAULT 0 NOT NULL COMMENT '\''Logical delete flag: 0=visible,1=deleted'\''"}'
 
 # Step 3: Add index on view_count
-curl -X POST "https://letmetry.cloud/mysql/query" \
+curl -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"ALTER TABLE handsome_images ADD INDEX idx_view_count (view_count)"}'
 ```
@@ -87,8 +87,8 @@ The womanai appreciate page can now:
 
 ## Database Connection
 
-- **Host**: letmetry.cloud
-- **API Endpoint**: https://letmetry.cloud/mysql/query
+- **Host**: letmetry.cn
+- **API Endpoint**: https://letmetry.cn/mysql/query
 - **Database**: (default database)
 - **Table**: handsome_images
 
@@ -98,12 +98,12 @@ To rollback these changes (NOT RECOMMENDED unless there's an issue):
 
 ```bash
 # Remove columns
-curl -X POST "https://letmetry.cloud/mysql/query" \
+curl -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"ALTER TABLE handsome_images DROP COLUMN view_count, DROP COLUMN deleted"}'
 
 # Remove index
-curl -X POST "https://letmetry.cloud/mysql/query" \
+curl -X POST "https://letmetry.cn/mysql/query" \
     -H "Content-Type: application/json" \
     -d '{"sql":"ALTER TABLE handsome_images DROP INDEX idx_view_count"}'
 ```

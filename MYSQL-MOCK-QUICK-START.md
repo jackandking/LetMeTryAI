@@ -6,7 +6,7 @@
 
 #### 1. 通过URL参数（推荐用于测试）
 ```
-https://letmetry.cloud/womanai/appreciate.html?mock=true
+https://letmetry.cn/womanai/appreciate.html?mock=true
 ```
 
 #### 2. 在config.js中设置（全局启用）

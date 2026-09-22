@@ -5,7 +5,7 @@
  * Run this script once to set up the database schema.
  */
 
-const BASE_URL = 'https://letmetry.cloud';
+const BASE_URL = 'https://letmetry.cn';
 const API_ENDPOINTS = {
     MYSQL_QUERY: `${BASE_URL}/mysql/query`
 };

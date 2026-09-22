@@ -70,7 +70,7 @@ describe('nanrenbao recharge payment flow', () => {
         await flushPromises();
 
         expect(fetch).toHaveBeenCalledWith(
-            'https://letmetry.cloud/api/track',
+            'https://letmetry.cn/api/track',
             expect.objectContaining({
                 method: 'POST',
                 body: expect.stringContaining('"event":"payment_intent"')

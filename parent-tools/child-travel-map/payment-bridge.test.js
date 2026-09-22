@@ -56,12 +56,12 @@ describe('child-travel-map payment bridge', () => {
 
     it('builds native image save url with uploaded image and return target', () => {
         const result = buildNativeImageSaveUrl({
-            imageUrl: 'https://letmetry.cloud/uploads/test-map.png',
+            imageUrl: 'https://letmetry.cn/uploads/test-map.png',
             returnUrl: 'https://letmetryai.cn/parent-tools/child-travel-map/?paid=1'
         });
 
         expect(result).toContain('/pages/save-image/save-image?');
-        expect(result).toContain('imageUrl=https%3A%2F%2Fletmetry.cloud%2Fuploads%2Ftest-map.png');
+        expect(result).toContain('imageUrl=https%3A%2F%2Fletmetry.cn%2Fuploads%2Ftest-map.png');
         expect(result).toContain(
             'returnUrl=https%3A%2F%2Fletmetryai.cn%2Fparent-tools%2Fchild-travel-map%2F%3Fpaid%3D1'
         );

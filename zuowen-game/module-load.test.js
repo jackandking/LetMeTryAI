@@ -36,7 +36,7 @@ describe('Zuowen Game Module Loading', () => {
       // Test that BASE_URL doesn't have the syntax error that was causing issues
       expect(config.BASE_URL).not.toContain(';');
       expect(config.BASE_URL).toMatch(/^https:\/\/[a-zA-Z0-9.-]+$/);
-      expect(config.BASE_URL).toBe('https://letmetry.cloud');
+      expect(config.BASE_URL).toBe('https://letmetry.cn');
     }).not.toThrow();
   });
 });

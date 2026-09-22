@@ -127,7 +127,7 @@ describe('Usage Example: How to Enable Mock Mode', () => {
         // window.ENABLE_MYSQL_MOCK = true;
         
         // Method 2: Via URL parameter
-        // https://letmetry.cloud/womanai/appreciate.html?mock=true
+        // https://letmetry.cn/womanai/appreciate.html?mock=true
         
         // When enabled, any API call that fails with ERR_CONNECTION_RESET
         // will automatically use mock data instead

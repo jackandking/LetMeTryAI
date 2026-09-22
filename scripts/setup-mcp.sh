@@ -4,7 +4,7 @@
 # LetMeTry MCP Server Setup Script
 # 
 # This script sets up the LetMeTry MySQL MCP Server for GitHub Copilot
-# No API key is required - the server connects directly to letmetry.cloud
+# No API key is required - the server connects directly to letmetry.cn
 #
 # Usage: ./scripts/setup-mcp.sh
 ###############################################################################
@@ -75,5 +75,5 @@ echo "   - 'Show me the latest 10 images from beauty_images table'"
 echo "   - 'Query the beauty_images table'"
 echo "   - 'Get the schema for beauty_images table'"
 echo ""
-echo -e "${YELLOW}Note: No API key is required. The server connects directly to letmetry.cloud${NC}"
+echo -e "${YELLOW}Note: No API key is required. The server connects directly to letmetry.cn${NC}"
 echo ""

@@ -4,7 +4,7 @@ An MCP (Model Context Protocol) server that provides MySQL database operations f
 
 ## 🌟 Features
 
-- **No API Key Required**: Direct connection to letmetry.cloud without authentication
+- **No API Key Required**: Direct connection to letmetry.cn without authentication
 - **GitHub Copilot Integration**: Use natural language to query and manage MySQL database
 - **Multiple Operation Modes**: Support for raw SQL queries and convenience wrappers
 - **Built-in Schema Information**: Get table schemas and structure information
@@ -254,7 +254,7 @@ The MCP server implements multiple layers of security:
 
 ### No API Key Required
 
-- The server connects directly to the public letmetry.cloud endpoint
+- The server connects directly to the public letmetry.cn endpoint
 - No authentication tokens or API keys needed
 - Simplifies setup and deployment
 
@@ -278,7 +278,7 @@ The MCP server implements multiple layers of security:
 1. Check the SQL syntax is correct
 2. Verify table and column names match the schema
 3. Review error messages in the MCP server output
-4. Test queries directly at https://letmetry.cloud/mysql/query
+4. Test queries directly at https://letmetry.cn/mysql/query
 
 ## 📝 Example Workflows
 
@@ -334,4 +334,4 @@ MIT License - see main project LICENSE file for details
 - [MCP Protocol Documentation](https://modelcontextprotocol.io)
 - [GitHub Copilot Documentation](https://docs.github.com/copilot)
 - [LetMeTryAI Main Repository](https://github.com/jackandking/LetMeTryAI)
-- [API Endpoint](https://letmetry.cloud/mysql/query)
+- [API Endpoint](https://letmetry.cn/mysql/query)

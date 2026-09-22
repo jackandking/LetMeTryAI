@@ -7,7 +7,7 @@ describe('Beauty Image URL Validator', () => {
                 'https://eb118-file.cdn.bcebos.com/image.jpg',
                 'https://example.myqcloud.com/photo.png',
                 'https://cdn.byteimg.com/avatar.gif',
-                'https://letmetry.cloud/images/beauty.jpg',
+                'https://letmetry.cn/images/beauty.jpg',
                 'https://img.qpic.cn/test.jpg',
                 'https://cdn.klingai.com/test.jpg'
             ];

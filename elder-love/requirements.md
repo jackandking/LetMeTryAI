@@ -59,7 +59,7 @@
 ### WebView集成
 - 当前已实现：`elder-love/index.html` 独立页面
 - 可直接通过WebView方式集成到小程序中
-- 访问路径：`https://letmetry.cloud/elder-love/`
+- 访问路径：`https://letmetry.cn/elder-love/`
 
 ### 小程序特定需求
 1. **分享功能**

@@ -84,7 +84,7 @@ npm run test:watch
 ## Key Test Scenarios
 
 ### Configuration System
-✅ BASE_URL uses correct domain (letmetry.cloud)  
+✅ BASE_URL uses correct domain (letmetry.cn)  
 ✅ All API endpoints use centralized configuration  
 ✅ No hardcoded letmetryai.cn references  
 ✅ Helper functions generate consistent URLs  
@@ -155,7 +155,7 @@ describe('New Feature', () => {
   it('should not use hardcoded URLs', () => {
     const result = newFunction();
     expect(result).not.toContain('letmetryai.cn');
-    expect(result).toContain('letmetry.cloud');
+    expect(result).toContain('letmetry.cn');
   });
 });
 ```

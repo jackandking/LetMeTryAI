@@ -44,7 +44,7 @@ describe('File Utility Functions', () => {
 
       const fetchCall = fetch.mock.calls[0];
       expect(fetchCall[0]).toBe(API_ENDPOINTS.FILE_UPLOAD);
-      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('letmetry.cloud');
+      expect(API_ENDPOINTS.FILE_UPLOAD).toContain('letmetry.cn');
       expect(API_ENDPOINTS.FILE_UPLOAD).toContain('/file/upload');
     });
 
@@ -183,7 +183,7 @@ describe('File Utility Functions', () => {
       // Verify that all functions use the centralized configuration
       const configValues = Object.values(API_ENDPOINTS);
       configValues.forEach(endpoint => {
-        expect(endpoint).toContain('letmetry.cloud');
+        expect(endpoint).toContain('letmetry.cn');
         expect(endpoint).not.toContain('letmetryai.cn');
       });
     });

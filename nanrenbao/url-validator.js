@@ -5,7 +5,7 @@
         '.bcebos.com',
         '.myqcloud.com',
         '.byteimg.com',
-        'letmetry.cloud',
+        'letmetry.cn',
         '.qpic.cn',
         '.klingai.com'
     ];

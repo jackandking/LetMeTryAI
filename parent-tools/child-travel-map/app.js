@@ -4,7 +4,7 @@
  * 付费：生成高清 Canvas 图片
  */
 
-const API_BASE = 'https://letmetry.cloud';
+const API_BASE = 'https://letmetry.cn';
 const PRODUCT_ID = 'child-travel-map';
 const PRODUCT_NAME = '孩子足迹地图生成';
 const AMOUNT = 1; // 1分，方便测试

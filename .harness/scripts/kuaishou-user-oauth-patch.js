@@ -12,7 +12,7 @@ app.get('/oauth/kuaishou/user-authorize', (req, res) => {
         return res.status(400).json({ error: 'Missing state parameter' });
     }
 
-    const redirectUri = encodeURIComponent('https://letmetry.cloud/oauth/kuaishou/user-callback');
+    const redirectUri = encodeURIComponent('https://letmetry.cn/oauth/kuaishou/user-callback');
     const scope = 'user_info,user_video_publish';
     const authUrl = `https://open.kuaishou.com/oauth2/authorize?client_id=${KUAISHOU_APP_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${encodeURIComponent(state)}`;
 

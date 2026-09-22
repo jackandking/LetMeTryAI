@@ -2,7 +2,7 @@
 # Apply schema migration for womanai handsome_images table using curl
 # Adds view_count and deleted columns with proper indexes
 
-API="https://letmetry.cloud/mysql/query"
+API="https://letmetry.cn/mysql/query"
 
 echo "🚀 Starting womanai handsome_images schema migration"
 echo "============================================================"

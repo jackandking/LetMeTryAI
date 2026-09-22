@@ -1,6 +1,6 @@
 {
   "database": {
-    "mysqlQueryEndpoint": "https://letmetry.cloud/mysql/query",
+    "mysqlQueryEndpoint": "https://letmetry.cn/mysql/query",
     "imagesTable": "handsome_images",
     "generatedImagesTable": "womanai_generated_images"
   },

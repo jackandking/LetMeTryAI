@@ -8,18 +8,18 @@
 
 - **平台**: open.kuaishou.com
 - **网页应用**: 试试看（App ID: `ks683421244533878879`）
-- **Token 存储**: `letmetry.cloud:/root/letmetry_web_service/kuaishou_token.json`
+- **Token 存储**: `letmetry.cn:/root/letmetry_web_service/kuaishou_token.json`
 - **access_token**: 48 小时有效
 - **refresh_token**: 180 天有效（约到 2026-10 过期）
 
-### Token 管理接口（部署在 letmetry.cloud）
+### Token 管理接口（部署在 letmetry.cn）
 
 | 接口 | 说明 |
 |------|------|
-| `GET https://letmetry.cloud/oauth/kuaishou/token` | 查看当前 token |
-| `GET https://letmetry.cloud/oauth/kuaishou/refresh` | 刷新 token |
+| `GET https://letmetry.cn/oauth/kuaishou/token` | 查看当前 token |
+| `GET https://letmetry.cn/oauth/kuaishou/refresh` | 刷新 token |
 
-> 注意：letmetry.cloud 只能从 192.168.1.6（wdev/prod/auto 所在机器）访问，ydev 无法直连。
+> 注意：letmetry.cn 只能从 192.168.1.6（wdev/prod/auto 所在机器）访问，ydev 无法直连。
 
 ---
 

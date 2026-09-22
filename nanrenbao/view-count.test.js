@@ -195,7 +195,7 @@ describe('View Count System', () => {
             
             assert(code.includes('MYSQL_QUERY'), 
                 'Should use MYSQL_QUERY endpoint');
-            assert(code.includes('https://letmetry.cloud/mysql/query'), 
+            assert(code.includes('https://letmetry.cn/mysql/query'), 
                 'Should have correct endpoint URL as fallback');
         });
     });

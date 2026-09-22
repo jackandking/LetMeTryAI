@@ -90,7 +90,7 @@ ks.pay({
 });
 ```
 
-### 4.2 后端：支付接口（部署到 letmetry.cloud）
+### 4.2 后端：支付接口（部署到 letmetry.cn）
 
 ```javascript
 // 预下单
@@ -108,7 +108,7 @@ POST /api/pay/notify
 |---|---|
 | 小程序 appId | `ks703405968097659757` |
 | appSecret | `MxSn0454Ecd126PL6Ktr3g`（来自 cron.env） |
-| 支付回调地址 | `https://letmetry.cloud/api/pay/notify` |
+| 支付回调地址 | `https://letmetry.cn/api/pay/notify` |
 | 结算账户 | 待配置（北京南路科技有限公司对公/对私账户） |
 
 ---
@@ -126,7 +126,7 @@ POST /api/pay/notify
 
 ## 六、审核通过后的行动清单
 
-- [ ] 配置支付回调地址（letmetry.cloud）
+- [ ] 配置支付回调地址（letmetry.cn）
 - [ ] 配置结算银行卡
 - [ ] 开发「测测你是哪种家长」测试页面（5 道题）
 - [ ] 开发简略结果 → 付费解锁 → 完整报告 的交互流程

@@ -9,7 +9,7 @@ describe('WomanAI VConsole Integration', () => {
     describe('Debug Mode Activation', () => {
         it('should load VConsole when debug=true parameter is present', () => {
             // Simulate URL with debug parameter
-            const mockUrl = 'https://letmetry.cloud/womanai/appreciate.html?debug=true';
+            const mockUrl = 'https://letmetry.cn/womanai/appreciate.html?debug=true';
             const urlParams = new URLSearchParams('?debug=true');
             const debugMode = urlParams.get('debug') === 'true';
             
@@ -17,7 +17,7 @@ describe('WomanAI VConsole Integration', () => {
         });
 
         it('should not load VConsole without debug parameter', () => {
-            const mockUrl = 'https://letmetry.cloud/womanai/appreciate.html';
+            const mockUrl = 'https://letmetry.cn/womanai/appreciate.html';
             const urlParams = new URLSearchParams('');
             const debugMode = urlParams.get('debug') === 'true';
             

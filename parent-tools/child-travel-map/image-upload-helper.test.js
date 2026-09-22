@@ -39,12 +39,12 @@ describe('child-travel-map image upload helper', () => {
     });
 
     it('extracts direct url from upload response', () => {
-        expect(extractImageUrlFromResponse({ url: 'https://letmetry.cloud/images/test.png' }))
-            .toBe('https://letmetry.cloud/images/test.png');
+        expect(extractImageUrlFromResponse({ url: 'https://letmetry.cn/images/test.png' }))
+            .toBe('https://letmetry.cn/images/test.png');
     });
 
     it('extracts path-based url from upload response', () => {
         expect(extractImageUrlFromResponse({ path: '/images/test.png' }))
-            .toBe('https://letmetry.cloud/images/test.png');
+            .toBe('https://letmetry.cn/images/test.png');
     });
 });

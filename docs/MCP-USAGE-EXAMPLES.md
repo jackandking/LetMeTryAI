@@ -282,7 +282,7 @@ Specify how you want results ordered:
 **Solution:**
 1. Simplify your query
 2. Add LIMIT to large result sets
-3. Check network connection to letmetry.cloud
+3. Check network connection to letmetry.cn
 
 ---
 

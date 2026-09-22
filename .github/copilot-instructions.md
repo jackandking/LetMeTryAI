@@ -108,7 +108,7 @@ describe('Configuration Changes', () => {
   });
 
   it('should use correct base URL', () => {
-    expect(BASE_URL).toBe('https://letmetry.cloud');
+    expect(BASE_URL).toBe('https://letmetry.cn');
     Object.values(API_ENDPOINTS).forEach(endpoint => {
       expect(endpoint).toStartWith(BASE_URL);
     });
@@ -134,7 +134,7 @@ describe('Frontend Integration', () => {
 
   it('should generate correct URLs for frontend use', () => {
     const imageUrl = window.getImageUrl('images/test.jpg');
-    expect(imageUrl).toBe('https://letmetry.cloud/images/test.jpg');
+    expect(imageUrl).toBe('https://letmetry.cn/images/test.jpg');
   });
 });
 ```
@@ -233,7 +233,7 @@ When reviewing code changes:
 ### API Documentation Reference
 
 **Always refer to the official API documentation for correct usage:**
-- **API Docs URL**: https://letmetry.cloud/api-docs
+- **API Docs URL**: https://letmetry.cn/api-docs
 - Check this documentation for the latest API endpoints, parameters, and response formats
 - All API operations should follow the patterns defined in the API docs
 
@@ -244,7 +244,7 @@ When reviewing code changes:
 ```javascript
 // ✅ CORRECT: Use /mysql/query for ALL database operations
 const API_ENDPOINTS = {
-    MYSQL_QUERY: 'https://letmetry.cloud/mysql/query',  // Use for SELECT, INSERT, UPDATE, DELETE
+    MYSQL_QUERY: 'https://letmetry.cn/mysql/query',  // Use for SELECT, INSERT, UPDATE, DELETE
     // Note: MYSQL_INSERT is deprecated, always use MYSQL_QUERY
 };
 ```
@@ -307,7 +307,7 @@ const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
 
 ### API Best Practices
 
-1. **Check API Docs First**: Always consult https://letmetry.cloud/api-docs before implementing new features
+1. **Check API Docs First**: Always consult https://letmetry.cn/api-docs before implementing new features
 2. **Use Centralized Config**: Reference API_ENDPOINTS from config.js
 3. **Error Handling**: Always handle API errors gracefully
 4. **SQL Injection Prevention**: Use parameterized queries or proper escaping
@@ -319,7 +319,7 @@ const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
 describe('API Integration Tests', () => {
   it('should use MYSQL_QUERY endpoint for database operations', () => {
     const endpoint = API_ENDPOINTS.MYSQL_QUERY;
-    expect(endpoint).toBe('https://letmetry.cloud/mysql/query');
+    expect(endpoint).toBe('https://letmetry.cn/mysql/query');
   });
 
   it('should send queries in correct format with sql parameter', async () => {
@@ -354,7 +354,7 @@ This project has a MySQL MCP (Model Context Protocol) server configured for data
 
 ### Available Database Tools
 
-The MCP server provides direct MySQL access to `letmetry.cloud` database:
+The MCP server provides direct MySQL access to `letmetry.cn` database:
 
 **Query Operations:**
 ```
@@ -413,7 +413,7 @@ When creating GitHub Issues that require database operations:
 - **Location**: `mcp-servers/letmetry-mysql/`
 - **Config**: `.vscode/settings.json` and `.github/copilot-mcp.json`
 - **Setup**: Run `./scripts/setup-mcp.sh` to build
-- **No API Key Required**: Direct connection to letmetry.cloud
+- **No API Key Required**: Direct connection to letmetry.cn
 
 ---
 

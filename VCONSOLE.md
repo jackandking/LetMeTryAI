@@ -10,9 +10,9 @@
 
 ### 示例
 
-- `https://letmetry.cloud/nanrenbao/index.html?debug=true`
-- `https://letmetry.cloud/eraser/index.html?debug=true`
-- `https://letmetry.cloud/index.html?debug=true`
+- `https://letmetry.cn/nanrenbao/index.html?debug=true`
+- `https://letmetry.cn/eraser/index.html?debug=true`
+- `https://letmetry.cn/index.html?debug=true`
 
 ## 功能特性
 
