@@ -119,7 +119,7 @@ cat apps-metadata.json | grep '"id"'
 
 ## Resources
 
-- **API Documentation**: https://letmetry.cloud/api-docs
+- **API Documentation**: https://letmetry.cn/api-docs
 - **Testing Guide**: `./TESTING.md`
 - **Copilot Instructions**: `./.github/copilot-instructions.md`
 - **MCP Server README**: `./mcp-servers/letmetry-mysql/README.md`

@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 const APP_ID = 'ks683421244533878879';
-const TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
+const TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
 const BASE = 'https://open.kuaishou.com';
 
 const VIDEO_DIR = '.harness/.local/hot-task-video/nostalgia-classic-songs';

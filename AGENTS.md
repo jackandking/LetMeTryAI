@@ -5,7 +5,7 @@
 LetMeTryAI is a modern, responsive web application platform featuring interactive mini-apps, games, and utilities. The project follows a centralized configuration architecture with comprehensive testing infrastructure.
 
 **Live Site**: https://letmetryai.cn  
-**API Base URL**: https://letmetry.cloud
+**API Base URL**: https://letmetry.cn
 
 ## Technology Stack
 
@@ -433,7 +433,7 @@ cat apps-metadata.json | grep '"id"'
 
 ## Resources
 
-- **API Documentation**: https://letmetry.cloud/api-docs
+- **API Documentation**: https://letmetry.cn/api-docs
 - **Testing Guide**: `./TESTING.md`
 - **Copilot Instructions**: `./.github/copilot-instructions.md`
 - **MCP Server README**: `./mcp-servers/letmetry-mysql/README.md`

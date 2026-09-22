@@ -349,9 +349,9 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
 
 // ─── Mini-app event tracking data ───
 
-const EVENT_SUMMARY_URL = 'https://letmetry.cloud/api/track/summary';
+const EVENT_SUMMARY_URL = 'https://letmetry.cn/api/track/summary';
 
-const KS_TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
+const KS_TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
 const KS_OPEN_API = 'https://open.kuaishou.com';
 const KS_APP_ID = 'ks683421244533878879';
 const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), 'state', 'kuaishou-follow', 'app-config.local.json');

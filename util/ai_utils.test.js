@@ -23,7 +23,7 @@ describe('AI Utilities', () => {
     });
 
     it('should use correct domain and path', () => {
-      expect(API_ENDPOINT).toBe('https://letmetry.cloud/ai/chat');
+      expect(API_ENDPOINT).toBe('https://letmetry.cn/ai/chat');
       expect(API_ENDPOINT).toContain('/ai/chat');
       expect(API_ENDPOINT).not.toContain('letmetryai.cn');
     });
@@ -147,7 +147,7 @@ describe('AI Utilities', () => {
   describe('Configuration Integration', () => {
     it('should not use hardcoded endpoints', () => {
       expect(API_ENDPOINT).not.toContain('letmetryai.cn');
-      expect(API_ENDPOINT).toContain('letmetry.cloud');
+      expect(API_ENDPOINT).toContain('letmetry.cn');
     });
 
     it('should maintain HTTPS protocol', () => {

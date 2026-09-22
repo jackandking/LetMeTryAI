@@ -34,7 +34,7 @@ Step 4: Deploy   → Copy to images/ directory, update HTML, git push
 ### Step 1: Search via API
 
 ```bash
-curl -sX POST "https://letmetry.cloud/image/search" \
+curl -sX POST "https://letmetry.cn/image/search" \
   -H "Content-Type: application/json" \
   -d '{"keyword":"书名 封面","count":3}'
 ```

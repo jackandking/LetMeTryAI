@@ -35,13 +35,13 @@ describe('Lure Fishing Feature Tests', () => {
     
     // Mock window.API_ENDPOINTS
     window.API_ENDPOINTS = {
-      FILE_UPLOAD: 'https://letmetry.cloud/file/upload',
-      IMAGE_UPLOAD: 'https://letmetry.cloud/image/upload',
-      MYSQL_INSERT: 'https://letmetry.cloud/mysql/insert',
-      MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+      FILE_UPLOAD: 'https://letmetry.cn/file/upload',
+      IMAGE_UPLOAD: 'https://letmetry.cn/image/upload',
+      MYSQL_INSERT: 'https://letmetry.cn/mysql/insert',
+      MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
     };
     
-    window.BASE_URL = 'https://letmetry.cloud';
+    window.BASE_URL = 'https://letmetry.cn';
   });
   
   afterEach(() => {
@@ -50,19 +50,19 @@ describe('Lure Fishing Feature Tests', () => {
   
   describe('Configuration Integration', () => {
     it('should use centralized API endpoints for image upload', () => {
-      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('letmetry.cloud');
+      expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('letmetry.cn');
       expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toContain('/image/upload');
     });
     
     it('should use centralized API endpoints for MySQL operations', () => {
-      expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cloud');
+      expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cn');
       expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain('/mysql/insert');
-      expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cloud');
+      expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('letmetry.cn');
       expect(window.API_ENDPOINTS.MYSQL_QUERY).toContain('/mysql/query');
     });
     
     it('should use centralized BASE_URL for image construction', () => {
-      expect(window.BASE_URL).toBe('https://letmetry.cloud');
+      expect(window.BASE_URL).toBe('https://letmetry.cn');
     });
     
     it('should not use old domain', () => {
@@ -229,7 +229,7 @@ describe('Lure Fishing Feature Tests', () => {
       // Note: image/upload API does not support targetPath parameter
       const endpoint = window.API_ENDPOINTS.IMAGE_UPLOAD;
       expect(endpoint).toContain('/image/upload');
-      expect(endpoint).toBe('https://letmetry.cloud/image/upload');
+      expect(endpoint).toBe('https://letmetry.cn/image/upload');
     });
   });
   
@@ -278,8 +278,8 @@ describe('Lure Fishing Feature Tests', () => {
       const record = { photo_url: 'test.jpg' };
       const photoUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
       
-      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
-      expect(photoUrl).toContain('https://letmetry.cloud');
+      expect(photoUrl).toBe('https://letmetry.cn/images/test.jpg');
+      expect(photoUrl).toContain('https://letmetry.cn');
       expect(photoUrl).toContain('/images/');
     });
     
@@ -296,7 +296,7 @@ describe('Lure Fishing Feature Tests', () => {
       const record = { photo_url: 'test.jpg' };
       const photoUrl = encodeURI(`${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`);
       
-      expect(photoUrl).toBe('https://letmetry.cloud/images/test.jpg');
+      expect(photoUrl).toBe('https://letmetry.cn/images/test.jpg');
     });
   });
   
@@ -518,7 +518,7 @@ describe('Lure Fishing Regression Tests', () => {
   });
   
   it('should maintain centralized configuration pattern', () => {
-    expect(window.BASE_URL).toBe('https://letmetry.cloud');
+    expect(window.BASE_URL).toBe('https://letmetry.cn');
     expect(window.API_ENDPOINTS.FILE_UPLOAD).toContain(window.BASE_URL);
     expect(window.API_ENDPOINTS.MYSQL_INSERT).toContain(window.BASE_URL);
   });
@@ -552,15 +552,15 @@ describe('Bug Fix: Photo URL Path Handling', () => {
     const record = { photo_url: 'file-123456.jpg' };
     const displayUrl = `${window.BASE_URL}/${PHOTO_URL_PREFIX}${record.photo_url}`;
     
-    expect(displayUrl).toBe('https://letmetry.cloud/images/file-123456.jpg');
+    expect(displayUrl).toBe('https://letmetry.cn/images/file-123456.jpg');
     expect(displayUrl).toContain('/images/');
   });
   
   it('should use images/ prefix according to upload API design', () => {
     // According to API design, uploaded images are accessed via /images/ prefix
     const testCases = [
-      { filename: 'photo.jpg', expected: 'https://letmetry.cloud/images/photo.jpg' },
-      { filename: 'file-1234567890.png', expected: 'https://letmetry.cloud/images/file-1234567890.png' },
+      { filename: 'photo.jpg', expected: 'https://letmetry.cn/images/photo.jpg' },
+      { filename: 'file-1234567890.png', expected: 'https://letmetry.cn/images/file-1234567890.png' },
     ];
     
     testCases.forEach(({ filename, expected }) => {
@@ -572,7 +572,7 @@ describe('Bug Fix: Photo URL Path Handling', () => {
   it('should not use targetPath parameter in image upload', () => {
     // Note: image/upload API does not support targetPath parameter
     // Files are uploaded to a default location and accessed via /images/ prefix
-    expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toBe('https://letmetry.cloud/image/upload');
+    expect(window.API_ENDPOINTS.IMAGE_UPLOAD).toBe('https://letmetry.cn/image/upload');
   });
 });
 

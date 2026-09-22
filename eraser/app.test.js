@@ -8,7 +8,7 @@ import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 beforeEach(() => {
     // Set up window configuration
     global.window = global.window || {};
-    global.window.BASE_URL = 'https://letmetry.cloud';
+    global.window.BASE_URL = 'https://letmetry.cn';
     global.window.API_ENDPOINTS = {
         AI_CHAT: `${global.window.BASE_URL}/ai/chat`,
         FILE_UPLOAD: `${global.window.BASE_URL}/file/upload`,

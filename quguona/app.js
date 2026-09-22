@@ -162,7 +162,7 @@
             provinces: [...visited],
             count: visited.size,
         });
-        const publishUrl = 'https://letmetry.cloud/oauth/kuaishou/user-authorize?' +
+        const publishUrl = 'https://letmetry.cn/oauth/kuaishou/user-authorize?' +
             'state=' + encodeURIComponent(state);
 
         // In Kuaishou webview, can't navigate to external domains

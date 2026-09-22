@@ -60,7 +60,7 @@ node init-back-view-killer-db.js
 **Method C: Direct SQL (For Database Admins)**
 ```bash
 # Run the SQL schema file directly
-mysql -h letmetry.cloud -u username -p database_name < nanrenbao/back-view-killer-schema.sql
+mysql -h letmetry.cn -u username -p database_name < nanrenbao/back-view-killer-schema.sql
 ```
 
 ### 2. Access the Feature
@@ -202,7 +202,7 @@ Potential improvements for future versions:
 
 For issues or questions:
 1. Check the test suite: `nanrenbao/back-view-killer.test.js`
-2. Review the API documentation: https://letmetry.cloud/api-docs
+2. Review the API documentation: https://letmetry.cn/api-docs
 3. Check browser console for error messages
 4. Verify database initialization completed successfully
 

@@ -14,7 +14,7 @@ const questionConfig = {
 };
 
 let voteData = {};
-const EVENT_ENDPOINT = 'https://letmetry.cloud/api/track';
+const EVENT_ENDPOINT = 'https://letmetry.cn/api/track';
 const pageStartTime = Date.now();
 
 function logEvent(event, data = {}) {

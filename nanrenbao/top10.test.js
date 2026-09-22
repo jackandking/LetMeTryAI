@@ -38,7 +38,7 @@ describe('Top 10 Beauties Page Tests', () => {
 
     it('should use correct API endpoint for database query', () => {
       expect(API_ENDPOINTS).toHaveProperty('MYSQL_QUERY');
-      expect(API_ENDPOINTS.MYSQL_QUERY).toBe('https://letmetry.cloud/mysql/query');
+      expect(API_ENDPOINTS.MYSQL_QUERY).toBe('https://letmetry.cn/mysql/query');
     });
 
     it('should use sql parameter for query', () => {
@@ -107,7 +107,7 @@ describe('Top 10 Beauties Page Tests', () => {
 
   describe('Configuration Usage', () => {
     it('should use centralized BASE_URL configuration', () => {
-      expect(BASE_URL).toBe('https://letmetry.cloud');
+      expect(BASE_URL).toBe('https://letmetry.cn');
       expect(BASE_URL).not.toContain('letmetryai.cn');
     });
 

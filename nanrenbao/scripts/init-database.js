@@ -12,8 +12,8 @@ async function initDatabase() {
     console.log(sql);
     console.log('\n---\n');
 
-    // 调用 letmetry.cloud API
-    const response = await fetch('https://letmetry.cloud/mysql/query', {
+    // 调用 letmetry.cn API
+    const response = await fetch('https://letmetry.cn/mysql/query', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

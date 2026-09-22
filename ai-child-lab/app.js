@@ -22,7 +22,7 @@ document.querySelectorAll('.level-tab').forEach((tab) => {
     });
 });
 
-const EVENT_ENDPOINT = 'https://museumcheck.cn/api/track';
+const EVENT_ENDPOINT = 'https://letmetry.cn/api/track';
 
 function logEvent(event, data = {}) {
     const payload = {

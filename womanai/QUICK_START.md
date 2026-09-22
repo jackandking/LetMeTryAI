@@ -39,10 +39,10 @@ womanai/
 
 ### 3. 访问应用
 
-- 主页: https://letmetry.cloud/womanai/
-- 欣赏: https://letmetry.cloud/womanai/appreciate.html
-- 上传: https://letmetry.cloud/womanai/upload.html
-- 管理: https://letmetry.cloud/womanai/admin.html
+- 主页: https://letmetry.cn/womanai/
+- 欣赏: https://letmetry.cn/womanai/appreciate.html
+- 上传: https://letmetry.cn/womanai/upload.html
+- 管理: https://letmetry.cn/womanai/admin.html
 
 ## 🎨 设计特点
 
@@ -90,7 +90,7 @@ womanai/
 在任何页面URL后添加 `?debug=true`:
 
 \`\`\`
-https://letmetry.cloud/womanai/appreciate.html?debug=true
+https://letmetry.cn/womanai/appreciate.html?debug=true
 \`\`\`
 
 这将加载VConsole移动调试工具。
@@ -115,7 +115,7 @@ npm test
 
 ### API 文档
 
-所有 API 操作请参考官方文档：https://letmetry.cloud/api-docs
+所有 API 操作请参考官方文档：https://letmetry.cn/api-docs
 
 **重要**: API 使用 `sql` 参数，不是 `query`！
 

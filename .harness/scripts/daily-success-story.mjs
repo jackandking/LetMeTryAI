@@ -30,7 +30,7 @@ const OUTPUT_DIR = join(HARNESS_DIR, '.local', 'success-stories');
 const DEDUP_FILE = join(OUTPUT_DIR, 'featured-videos.json');
 
 const KS_APP_ID = 'ks683421244533878879';
-const KS_TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
+const KS_TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
 const KS_BASE = 'https://open.kuaishou.com';
 
 const PROFILE_NAMES = {

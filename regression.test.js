@@ -18,7 +18,7 @@ describe('Regression Tests - Domain to IP Migration', () => {
 
     it('should use domain in all API endpoints', () => {
       Object.values(API_ENDPOINTS).forEach(endpoint => {
-        expect(endpoint).toContain('letmetry.cloud');
+        expect(endpoint).toContain('letmetry.cn');
       });
     });
 
@@ -68,9 +68,9 @@ describe('Regression Tests - Domain to IP Migration', () => {
     it('should maintain URL structure after centralization', () => {
       // Test that centralized config produces same URLs as hardcoded ones would
       const testCases = [
-        { path: 'images/zhirou.jpg', expected: 'https://letmetry.cloud/images/zhirou.jpg' },
-        { path: '/images/WechatIMG366.jpg', expected: 'https://letmetry.cloud/images/WechatIMG366.jpg' },
-        { path: 'images/0911/2571726056378_.pic.jpg', expected: 'https://letmetry.cloud/images/0911/2571726056378_.pic.jpg' }
+        { path: 'images/zhirou.jpg', expected: 'https://letmetry.cn/images/zhirou.jpg' },
+        { path: '/images/WechatIMG366.jpg', expected: 'https://letmetry.cn/images/WechatIMG366.jpg' },
+        { path: 'images/0911/2571726056378_.pic.jpg', expected: 'https://letmetry.cn/images/0911/2571726056378_.pic.jpg' }
       ];
 
       testCases.forEach(({ path, expected }) => {

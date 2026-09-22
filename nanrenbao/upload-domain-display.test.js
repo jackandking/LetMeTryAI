@@ -58,7 +58,7 @@ describe('Upload Supported Domains Display', () => {
         'eb118-file.cdn.bcebos.com',
         '*.myqcloud.com',
         '*.byteimg.com',
-        'letmetry.cloud',
+        'letmetry.cn',
         '*.qpic.cn',
         '*.klingai.com'
       ];

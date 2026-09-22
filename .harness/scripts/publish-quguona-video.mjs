@@ -14,7 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_URL = 'https://letmetryai.cn/quguona/';
 const KS_APP_ID = 'ks683421244533878879';
 const MINI_APP_ID = 'ks655273748878573030';
-const TOKEN_URL = 'https://letmetry.cloud/oauth/kuaishou/token';
+const TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
 const BASE = 'https://open.kuaishou.com';
 const OUTPUT_DIR = path.join(__dirname, '../.local/hot-task-video/quguona');
 
@@ -118,7 +118,7 @@ async function publishVideo(videoPath, coverPath) {
   const token = tokenData.access_token;
   if (!token || tokenData.access_token_expired) {
     console.log('  Token expired, refreshing...');
-    const refreshResp = await fetch('https://letmetry.cloud/oauth/kuaishou/refresh');
+    const refreshResp = await fetch('https://letmetry.cn/oauth/kuaishou/refresh');
     const refreshData = await refreshResp.json();
     if (!refreshData.access_token) { console.error('Refresh failed:', refreshData); process.exit(1); }
     var accessToken = refreshData.access_token;

@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const API = 'https://letmetry.cloud/mysql/query';
+const API = 'https://letmetry.cn/mysql/query';
 
 async function run() {
   const sql = "ALTER TABLE beauty_images ADD COLUMN deleted TINYINT(1) DEFAULT 0 NOT NULL COMMENT 'Logical delete flag: 0=visible,1=deleted'";

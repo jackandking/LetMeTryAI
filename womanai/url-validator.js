@@ -10,7 +10,7 @@ const ALLOWED_DOMAINS = [
     'eb118-file.cdn.bcebos.com',
     '.myqcloud.com',
     '.byteimg.com',
-    'letmetry.cloud',
+    'letmetry.cn',
     '.qpic.cn',
     'xiaohongshu.com',
     'zhihu.com',

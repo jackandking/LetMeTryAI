@@ -18,11 +18,11 @@
     function extractImageUrlFromResponse(json) {
         if (!json) return null;
         if (json.url) return json.url;
-        if (json.path) return json.path.startsWith('http') ? json.path : `https://letmetry.cloud${json.path.startsWith('/') ? '' : '/'}${json.path}`;
+        if (json.path) return json.path.startsWith('http') ? json.path : `https://letmetry.cn${json.path.startsWith('/') ? '' : '/'}${json.path}`;
         if (json.data && json.data.url) return json.data.url;
         if (json.data && json.data.path) {
             const path = json.data.path;
-            return path.startsWith('http') ? path : `https://letmetry.cloud${path.startsWith('/') ? '' : '/'}${path}`;
+            return path.startsWith('http') ? path : `https://letmetry.cn${path.startsWith('/') ? '' : '/'}${path}`;
         }
         for (const value of Object.values(json)) {
             if (typeof value === 'string' && value.startsWith('http')) return value;

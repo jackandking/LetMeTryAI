@@ -56,7 +56,7 @@
 - `eb118-file.cdn.bcebos.com`
 - `*.myqcloud.com`
 - `*.byteimg.com`
-- `letmetry.cloud`
+- `letmetry.cn`
 - `*.qpic.cn`
 
 ## 技术架构 (Architecture)
@@ -94,7 +94,7 @@ nanrenbao/
 
 ## 访问方式 (Access)
 
-直接访问: `https://letmetry.cloud/nanrenbao/`
+直接访问: `https://letmetry.cn/nanrenbao/`
 
 注意：本功能不在主页显示入口卡片，仅供直接访问。
 

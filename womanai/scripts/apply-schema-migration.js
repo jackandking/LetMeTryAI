@@ -4,7 +4,7 @@
  * Adds view_count and deleted columns with proper indexes
  */
 
-const API = 'https://letmetry.cloud/mysql/query';
+const API = 'https://letmetry.cn/mysql/query';
 
 async function executeSQL(sql, description) {
   console.log(`\n${description}...`);

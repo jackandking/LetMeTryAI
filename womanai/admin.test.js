@@ -122,10 +122,10 @@ https://example.com/image2.jpg
 
         it('should use correct API endpoint for insert', () => {
             const mockApiEndpoints = {
-                MYSQL_QUERY: 'https://letmetry.cloud/mysql/query'
+                MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
             };
 
-            expect(mockApiEndpoints.MYSQL_QUERY).toBe('https://letmetry.cloud/mysql/query');
+            expect(mockApiEndpoints.MYSQL_QUERY).toBe('https://letmetry.cn/mysql/query');
             expect(mockApiEndpoints.MYSQL_QUERY).toContain('/mysql/query');
         });
 

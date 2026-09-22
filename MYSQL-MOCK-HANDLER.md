@@ -20,7 +20,7 @@ window.ENABLE_MYSQL_MOCK = true;
 
 ### Method 2: Via URL Parameter
 ```
-https://letmetry.cloud/womanai/appreciate.html?mock=true
+https://letmetry.cn/womanai/appreciate.html?mock=true
 ```
 
 Once enabled, all fetch calls to the MySQL API that fail will automatically use mock data.
@@ -113,7 +113,7 @@ Original errors will be re-thrown if mock mode is not enabled.
 ## Examples
 
 ### Womanai Appreciate Page
-When visiting: `https://letmetry.cloud/womanai/appreciate.html?mock=true`
+When visiting: `https://letmetry.cn/womanai/appreciate.html?mock=true`
 - If API is unavailable, mock data will be displayed automatically
 - No code changes needed
 - Perfect for offline testing or CI/CD pipelines
