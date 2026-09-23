@@ -1,0 +1,21 @@
+{
+  "id": "hypertension-vaccine-question",
+  "name": "降压疫苗问邻里",
+  "description": "非医疗建议，仅为收集大家对“能管数月的降压疫苗”哪些信息更感兴趣（安全、副作用、维持时长、费用与报销、是否适合家中长辈）。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "降压疫苗",
+    "高血压",
+    "副作用",
+    "有效时长",
+    "费用",
+    "适用人群",
+    "老年关怀",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "hypertension-vaccine-question/images/side-effects.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-23T18:00:28.160Z"
+}
