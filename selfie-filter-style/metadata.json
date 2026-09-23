@@ -1,0 +1,20 @@
+{
+  "id": "selfie-filter-style",
+  "name": "自拍滤镜心选",
+  "description": "图文投票页展示清新日系、温柔奶油、高级冷艳和复古胶片四类滤镜示例，配短句引导用户说明场景偏好，适合社交分享与评论互动。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "自拍",
+    "滤镜",
+    "日系",
+    "奶油感",
+    "胶片",
+    "颜值",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "selfie-filter-style/images/qing-xin-ri-xi.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-23T20:00:28.441Z"
+}
