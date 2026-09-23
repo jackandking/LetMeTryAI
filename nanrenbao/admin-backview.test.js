@@ -154,27 +154,27 @@ https://example.com/back2.jpg,https://example.com/front2.jpg
   });
 
   describe('Database Insert Operations', () => {
-    it('should use MYSQL_QUERY endpoint with INSERT statement', async () => {
+    it('should use MYSQL_INSERT endpoint with {table, data} body (not raw SQL on the read-only MYSQL_QUERY)', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ insertId: 123 })
       });
-      
+
       const backUrl = 'https://example.com/back.jpg';
       const frontUrl = 'https://example.com/front.jpg';
-      const sql = 'INSERT INTO back_view_images (back_image_url, front_image_url, created_at) VALUES (?, ?, ?)';
-      
-      await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+      const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+      await fetch(API_ENDPOINTS.MYSQL_INSERT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sql,
-          params: [backUrl, frontUrl, '2025-01-01 00:00:00']
+          table: 'back_view_images',
+          data: { back_image_url: backUrl, front_image_url: frontUrl, created_at: createdAt }
         })
       });
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
-        API_ENDPOINTS.MYSQL_QUERY,
+        API_ENDPOINTS.MYSQL_INSERT,
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }

@@ -66,22 +66,69 @@ function resetManageSelections() {
     }
 }
 
-async function updateReviewStatus(ids, status, reason = null) {
-    const placeholders = ids.map(() => '?').join(',');
-    const sql = `UPDATE beauty_images
-        SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
-        WHERE id IN (${placeholders})`;
-    const params = [status, reason, 'admin-panel', ...ids];
-    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+// --- Admin write helpers: use dedicated CRUD endpoints, NOT raw SQL on the
+// read-only MYSQL_QUERY. (P0 2026-09-06 locked /mysql/query to SELECT-only.) ---
+async function mysqlUpdate(table, id, data) {
+    const resp = await fetch(API_ENDPOINTS.MYSQL_UPDATE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql, params })
+        body: JSON.stringify({ table, id, data })
     });
     if (!resp.ok) {
         const txt = await resp.text().catch(() => '');
-        throw new Error(`审核操作失败: ${resp.status} ${resp.statusText} ${txt}`);
+        throw new Error(`更新失败: ${resp.status} ${resp.statusText} ${txt}`);
     }
     return resp.json();
+}
+
+async function mysqlDelete(table, id) {
+    const resp = await fetch(API_ENDPOINTS.MYSQL_DELETE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ table, id })
+    });
+    if (!resp.ok) {
+        const txt = await resp.text().catch(() => '');
+        throw new Error(`删除失败: ${resp.status} ${resp.statusText} ${txt}`);
+    }
+    return resp.json();
+}
+
+async function mysqlUpdateMany(table, ids, data) {
+    const results = [];
+    for (const id of ids) results.push(await mysqlUpdate(table, id, data));
+    return results;
+}
+
+async function mysqlDeleteMany(table, ids) {
+    const results = [];
+    for (const id of ids) results.push(await mysqlDelete(table, id));
+    return results;
+}
+
+// Read-only helper to collect ids for "all deleted" bulk ops.
+async function fetchIdsWhere(table, whereSql) {
+    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql: `SELECT id FROM ${table} ${whereSql}`, params: [] })
+    });
+    if (!resp.ok) {
+        const txt = await resp.text().catch(() => '');
+        throw new Error(`查询失败: ${resp.status} ${resp.statusText} ${txt}`);
+    }
+    const rows = await resp.json();
+    return Array.isArray(rows) ? rows.map(r => r.id) : [];
+}
+
+async function updateReviewStatus(ids, status, reason = null) {
+    const data = {
+        review_status: status,
+        review_reason: reason,
+        reviewed_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        reviewed_by: 'admin-panel'
+    };
+    return mysqlUpdateMany('beauty_images', ids, data);
 }
 
 /**
@@ -193,13 +240,7 @@ async function performAction(action, id, imageUrl) {
 
         if (action === 'delete' || action === 'undelete') {
             const setVal = action === 'delete' ? 1 : 0;
-            const sql = 'UPDATE beauty_images SET deleted = ? WHERE id = ?';
-            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sql, params: [setVal, id] })
-            });
-            const json = await resp.json();
+            const json = await mysqlUpdate('beauty_images', id, { deleted: setVal });
             addLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadManagePage();
             return;
@@ -223,13 +264,7 @@ async function performAction(action, id, imageUrl) {
 
         if (action === 'permadelete') {
             if (!confirm('确认永久删除？操作不可恢复')) return;
-            const sql = 'DELETE FROM beauty_images WHERE id = ?';
-            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sql, params: [id] })
-            });
-            const json = await resp.json();
+            const json = await mysqlDelete('beauty_images', id);
             addLog(`permadelete id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadManagePage();
             return;
@@ -275,11 +310,8 @@ function attachManageHandlers() {
         const ids = getSelectedIds();
         if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
         if (!confirm(`确认将 ${ids.length} 项标记为隐藏（deleted=1）？`)) return;
-        const placeholders = ids.map(() => '?').join(',');
-        const sql = `UPDATE beauty_images SET deleted = 1 WHERE id IN (${placeholders})`;
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
-        const json = await resp.json();
-        addLog('批量隐藏: ' + JSON.stringify(json), 'info');
+        await mysqlUpdateMany('beauty_images', ids, { deleted: 1 });
+        addLog('批量隐藏: 完成', 'info');
         resetManageSelections();
         loadManagePage();
     };
@@ -288,11 +320,8 @@ function attachManageHandlers() {
         const ids = getSelectedIds();
         if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
         if (!confirm(`确认将 ${ids.length} 项标记为展示（deleted=0）？`)) return;
-        const placeholders = ids.map(() => '?').join(',');
-        const sql = `UPDATE beauty_images SET deleted = 0 WHERE id IN (${placeholders})`;
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
-        const json = await resp.json();
-        addLog('批量展示: ' + JSON.stringify(json), 'info');
+        await mysqlUpdateMany('beauty_images', ids, { deleted: 0 });
+        addLog('批量展示: 完成', 'info');
         resetManageSelections();
         loadManagePage();
     };
@@ -317,18 +346,18 @@ function attachManageHandlers() {
     };
     document.getElementById('bulkUndeleteBtn').onclick = async () => {
         if (!confirm('确认批量取消删除（将 deleted=0）吗？')) return;
-        const sql = 'UPDATE beauty_images SET deleted = 0 WHERE deleted = 1';
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
-        const json = await resp.json();
-        addLog('批量取消删除: ' + JSON.stringify(json), 'info');
+        const ids = await fetchIdsWhere('beauty_images', 'WHERE deleted = 1');
+        if (ids.length === 0) { showAlert('没有已删除的记录', 'warning'); return; }
+        await mysqlUpdateMany('beauty_images', ids, { deleted: 0 });
+        addLog('批量取消删除: 完成', 'info');
         loadManagePage();
     };
     document.getElementById('bulkDeleteBtn').onclick = async () => {
         if (!confirm('确认批量永久删除页面上所有已选/已标记的数据？')) return;
-        const sql = 'DELETE FROM beauty_images WHERE deleted = 1';
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
-        const json = await resp.json();
-        addLog('批量永久删除: ' + JSON.stringify(json), 'info');
+        const ids = await fetchIdsWhere('beauty_images', 'WHERE deleted = 1');
+        if (ids.length === 0) { showAlert('没有已删除的记录', 'warning'); return; }
+        await mysqlDeleteMany('beauty_images', ids);
+        addLog('批量永久删除: 完成', 'info');
         loadManagePage();
     };
 }
@@ -767,17 +796,13 @@ async function loadBackviewManagePage() {
 }
 
 async function updateBackviewReviewStatus(ids, status, reason = null) {
-    const placeholders = ids.map(() => '?').join(',');
-    const sql = `UPDATE back_view_images
-        SET review_status = ?, review_reason = ?, reviewed_at = NOW(), reviewed_by = ?
-        WHERE id IN (${placeholders})`;
-    const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql, params: [status, reason, 'admin-panel', ...ids] })
-    });
-    if (!resp.ok) throw new Error(`背影杀审核失败: HTTP ${resp.status}`);
-    return resp.json();
+    const data = {
+        review_status: status,
+        review_reason: reason,
+        reviewed_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        reviewed_by: 'admin-panel'
+    };
+    return mysqlUpdateMany('back_view_images', ids, data);
 }
 
 async function performBackviewAction(action, id, backUrl, frontUrl) {
@@ -791,13 +816,7 @@ async function performBackviewAction(action, id, backUrl, frontUrl) {
 
         if (action === 'delete' || action === 'undelete') {
             const setVal = action === 'delete' ? 1 : 0;
-            const sql = 'UPDATE back_view_images SET deleted = ? WHERE id = ?';
-            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sql, params: [setVal, id] })
-            });
-            const json = await resp.json();
+            const json = await mysqlUpdate('back_view_images', id, { deleted: setVal });
             addBackviewLog(`${action} id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadBackviewManagePage();
             return;
@@ -818,13 +837,7 @@ async function performBackviewAction(action, id, backUrl, frontUrl) {
 
         if (action === 'permadelete') {
             if (!confirm('确认永久删除？操作不可恢复')) return;
-            const sql = 'DELETE FROM back_view_images WHERE id = ?';
-            const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sql, params: [id] })
-            });
-            const json = await resp.json();
+            const json = await mysqlDelete('back_view_images', id);
             addBackviewLog(`permadelete id=${id} result: ${JSON.stringify(json)}`, 'info');
             await loadBackviewManagePage();
             return;
@@ -908,11 +921,8 @@ function attachBackviewManageHandlers() {
         const ids = getBackviewSelectedIds();
         if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
         if (!confirm(`确认将 ${ids.length} 项标记为隐藏（deleted=1）？`)) return;
-        const placeholders = ids.map(() => '?').join(',');
-        const sql = `UPDATE back_view_images SET deleted = 1 WHERE id IN (${placeholders})`;
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
-        const json = await resp.json();
-        addBackviewLog('批量隐藏: ' + JSON.stringify(json), 'info');
+        await mysqlUpdateMany('back_view_images', ids, { deleted: 1 });
+        addBackviewLog('批量隐藏: 完成', 'info');
         document.getElementById('backviewSelectAllCheckbox').checked = false;
         loadBackviewManagePage();
     };
@@ -921,30 +931,27 @@ function attachBackviewManageHandlers() {
         const ids = getBackviewSelectedIds();
         if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
         if (!confirm(`确认将 ${ids.length} 项标记为展示（deleted=0）？`)) return;
-        const placeholders = ids.map(() => '?').join(',');
-        const sql = `UPDATE back_view_images SET deleted = 0 WHERE id IN (${placeholders})`;
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: ids }) });
-        const json = await resp.json();
-        addBackviewLog('批量展示: ' + JSON.stringify(json), 'info');
+        await mysqlUpdateMany('back_view_images', ids, { deleted: 0 });
+        addBackviewLog('批量展示: 完成', 'info');
         document.getElementById('backviewSelectAllCheckbox').checked = false;
         loadBackviewManagePage();
     };
 
     document.getElementById('backviewBulkUndeleteBtn').onclick = async () => {
         if (!confirm('确认批量取消删除（将 deleted=0）吗？')) return;
-        const sql = 'UPDATE back_view_images SET deleted = 0 WHERE deleted = 1';
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
-        const json = await resp.json();
-        addBackviewLog('批量取消删除: ' + JSON.stringify(json), 'info');
+        const ids = await fetchIdsWhere('back_view_images', 'WHERE deleted = 1');
+        if (ids.length === 0) { showAlert('没有已删除的记录', 'warning'); return; }
+        await mysqlUpdateMany('back_view_images', ids, { deleted: 0 });
+        addBackviewLog('批量取消删除: 完成', 'info');
         loadBackviewManagePage();
     };
 
     document.getElementById('backviewBulkDeleteBtn').onclick = async () => {
         if (!confirm('确认批量永久删除页面上所有已选/已标记的数据？')) return;
-        const sql = 'DELETE FROM back_view_images WHERE deleted = 1';
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sql, params: [] }) });
-        const json = await resp.json();
-        addBackviewLog('批量永久删除: ' + JSON.stringify(json), 'info');
+        const ids = await fetchIdsWhere('back_view_images', 'WHERE deleted = 1');
+        if (ids.length === 0) { showAlert('没有已删除的记录', 'warning'); return; }
+        await mysqlDeleteMany('back_view_images', ids);
+        addBackviewLog('批量永久删除: 完成', 'info');
         loadBackviewManagePage();
     };
 }
@@ -1058,17 +1065,16 @@ function parseBackviewUrlPairs(input) {
  */
 async function insertBackviewImagePair(backUrl, frontUrl) {
     try {
-        const sql = 'INSERT INTO back_view_images (back_image_url, front_image_url, created_at) VALUES (?, ?, ?)';
         const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        
-        const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+
+        const response = await fetch(API_ENDPOINTS.MYSQL_INSERT, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sql,
-                params: [backUrl, frontUrl, createdAt]
+                table: 'back_view_images',
+                data: { back_image_url: backUrl, front_image_url: frontUrl, created_at: createdAt }
             })
         });
 
