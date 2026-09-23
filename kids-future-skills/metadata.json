@@ -1,0 +1,19 @@
+{
+  "id": "kids-future-skills",
+  "name": "家长爱能力盘点",
+  "description": "面向家长的图文投票页，聚焦孩子成长后实用能力的对比：生活自理、沟通情绪、学习力与解决问题力。每个选项配短句场景说明，便于引发共鸣与评论，适合在教育和亲子社群传播。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "成长能力",
+    "独立",
+    "情绪管理",
+    "学习力",
+    "解决问题",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-future-skills/images/independent-living.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-23T19:00:36.440Z"
+}
