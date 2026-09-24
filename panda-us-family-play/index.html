@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子认识熊猫的三种亲子玩法</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">熊猫要去美国，带孩子怎么一起认识它们？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">熊猫要去美国，带孩子怎么一起认识它们？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zoo-live-guide">
+                            <div class="card-image">
+                                <img src="images/zoo-live-guide.svg" alt="孩子在动物园近距离观察熊猫" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">动物园近距观察</h3>
+                                <p class="option-desc">带孩子去有熊猫的动物园，现场看、听保育员讲故事，把行为和习性看清楚。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="museum-exhibit-tour">
+                            <div class="card-image">
+                                <img src="images/museum-exhibit-tour.svg" alt="博物馆里的熊猫展览柜" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">博物馆文化展</h3>
+                                <p class="option-desc">参观博物馆或专题展，用文物、图片和模型讲熊猫的历史与保护故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-ar-play">
+                            <div class="card-image">
+                                <img src="images/home-ar-play.svg" alt="孩子在家用AR和绘本认识熊猫" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">居家互动体验</h3>
+                                <p class="option-desc">在家用绘本、手工和AR互动复现熊猫场景，边做边讲有画面感的故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

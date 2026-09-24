@@ -1,0 +1,21 @@
+{
+  "id": "panda-us-family-play",
+  "name": "家长爱·熊猫亲子",
+  "description": "基于熊猫赴美背景，提供动物园实地、博物馆文化和居家互动三种场景化体验，适合移动端图文展示与投票互动，能触发家长讨论育儿场景与资源选择。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "熊猫",
+    "亲子活动",
+    "博物馆",
+    "动物园",
+    "绘本",
+    "AR",
+    "科普",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "panda-us-family-play/images/zoo-live-guide.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-24T19:00:32.761Z"
+}
