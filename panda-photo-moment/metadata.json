@@ -1,0 +1,19 @@
+{
+  "id": "panda-photo-moment",
+  "name": "熊猫出国合照瞬间",
+  "description": "图文投票页，展示熊猫在国外四种可爱姿态的场景照，用户选出更想合影的萌态并可一键分享，适合手机浏览与社交传播。",
+  "category": "综艺娱乐",
+  "profileId": "womanai",
+  "keywords": [
+    "熊猫",
+    "萌宠",
+    "合照",
+    "出国趣事",
+    "画面感",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "panda-photo-moment/images/rolling-ball.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-24T20:01:05.609Z"
+}
