@@ -1,0 +1,19 @@
+{
+  "id": "ni-jia-de-yuebing-jiyi",
+  "name": "家长爱·中秋家味",
+  "description": "面向家长的轻量互动页，通过几种常见月饼场景对比，激发回忆与家庭话题分享，适合手机阅读与社交转发。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "中秋",
+    "月饼",
+    "家庭记忆",
+    "亲子",
+    "节日传统",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "ni-jia-de-yuebing-jiyi/images/home-handmade-mooncakes.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-25T19:00:25.284Z"
+}
