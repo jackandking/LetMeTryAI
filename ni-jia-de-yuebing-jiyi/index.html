@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>你家的月饼记忆是哪一种？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">你家的月饼记忆是哪一种？哪种味道把你带回童年？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你家的月饼记忆是哪一种？选一个最像你家节日场景的答案。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-handmade-mooncakes">
+                            <div class="card-image">
+                                <img src="images/home-handmade-mooncakes.svg" alt="手工月饼在木桌上切开散发馅料" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家里手工月饼</h3>
+                                <p class="option-desc">奶奶或父母在厨房手工制作，馅香皮软，整个家都飘着味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="store-gift-box">
+                            <div class="card-image">
+                                <img src="images/store-gift-box.svg" alt="封好的礼盒月饼摆放在餐桌上" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">精美礼盒月饼</h3>
+                                <p class="option-desc">商店礼盒、漂亮包装，节日里当做正式的仪式感呈现。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="modern-creative-mooncakes">
+                            <div class="card-image">
+                                <img src="images/modern-creative-mooncakes.svg" alt="色彩鲜艳的创意月饼切面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">创意新口味月饼</h3>
+                                <p class="option-desc">抹茶、芒果等新潮口味，和孩子一起尝新鲜、拍照分享。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="mooncake-as-snack">
+                            <div class="card-image">
+                                <img src="images/mooncake-as-snack.svg" alt="随手掰开的月饼与茶杯近景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">随手当零食的月饼</h3>
+                                <p class="option-desc">没太多仪式感，平时当零食随手掰一块就吃，常见且亲切。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
