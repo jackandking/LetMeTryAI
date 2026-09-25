@@ -1,0 +1,20 @@
+{
+  "id": "home-mid-autumn-mooncake",
+  "name": "家里中秋味道",
+  "description": "图文式投票页，通过几种经典月饼口味的画面化描述，触发中秋家庭回忆与评论分享，便于长辈和子女互动。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "中秋",
+    "月饼",
+    "怀旧",
+    "家庭",
+    "味道",
+    "老人",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "home-mid-autumn-mooncake/images/dou-sha.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-25T18:01:03.834Z"
+}
