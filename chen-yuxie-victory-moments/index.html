@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>陈妤颉夺冠那刻：你被哪个瞬间击中了？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">陈妤颉夺冠那刻，你被哪个瞬间击中了？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">陈妤颉夺冠那刻，你被哪个瞬间击中了？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tear-eyed-glance">
+                            <div class="card-image">
+                                <img src="images/tear-eyed-glance.svg" alt="陈妤颉含泪感动的面部特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">泪目神情</h3>
+                                <p class="option-desc">眼含泪光、真情流露的瞬间，瞬间牵动心绪</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="radiant-smile">
+                            <div class="card-image">
+                                <img src="images/radiant-smile.svg" alt="陈妤颉夺冠后灿烂笑容的正面照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">灿烂笑颜</h3>
+                                <p class="option-desc">夺冠时的阳光笑容，温暖又治愈</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="steadfast-gaze">
+                            <div class="card-image">
+                                <img src="images/steadfast-gaze.svg" alt="陈妤颉胜利时坚定注视的侧脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">坚定回望</h3>
+                                <p class="option-desc">握紧拳头、目光坚定回望观众的那一瞥</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fist-pump">
+                            <div class="card-image">
+                                <img src="images/fist-pump.svg" alt="陈妤颉在舞台上挥拳庆祝的全身照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">台上庆祝姿态</h3>
+                                <p class="option-desc">挥手或握拳庆祝的动作，充满能量与画面感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
