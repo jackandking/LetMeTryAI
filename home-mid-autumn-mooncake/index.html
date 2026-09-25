@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家里中秋，你怀念哪种月饼味道？老味道回忆</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家里中秋，你怀念哪种月饼味道？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">家里中秋，你怀念哪种月饼味道？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="dou-sha">
+                            <div class="card-image">
+                                <img src="images/dou-sha.svg" alt="豆沙月饼切面，红豆沙馅" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">豆沙月饼</h3>
+                                <p class="option-desc">热腾腾的豆沙，甜而不腻，像奶奶端上桌的家味。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="lian-rong">
+                            <div class="card-image">
+                                <img src="images/lian-rong.svg" alt="莲蓉月饼圆整切面，细腻馅料" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">莲蓉月饼</h3>
+                                <p class="option-desc">莲蓉细腻配一杯清茶，是客厅里慢慢聊往事的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="xian-dan-huang">
+                            <div class="card-image">
+                                <img src="images/xian-dan-huang.svg" alt="咸蛋黄月饼切面，蛋黄流沙" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">咸蛋黄月饼</h3>
+                                <p class="option-desc">流沙咸蛋黄香浓，带着节日的热闹与孩子们的欢笑记忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wu-ren">
+                            <div class="card-image">
+                                <img src="images/wu-ren.svg" alt="五仁月饼切面，坚果馅料" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">五仁月饼</h3>
+                                <p class="option-desc">坚果与果仁的混杂香，像旧街市里买来的那份朴实口感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
