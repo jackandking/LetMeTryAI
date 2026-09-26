@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>带孩子逛博物馆：哪个镇馆之宝会让他惊呼？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子逛博物馆，哪个镇馆之宝会让他惊呼？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子逛博物馆，哪个镇馆之宝会让他惊呼？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="moving-dinosaur-model">
+                            <div class="card-image">
+                                <img src="images/moving-dinosaur-model.svg" alt="孩子注视仿真恐龙模型，张口惊呼的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">会动的恐龙模型（仿真互动）</h3>
+                                <p class="option-desc">巨大的骨架+仿真声效，像要活过来一样。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="giant-mural-handscroll">
+                            <div class="card-image">
+                                <img src="images/giant-mural-handscroll.svg" alt="父母和孩子在长卷前指着画中场景交流" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">古代壁画或长卷（超大画面）</h3>
+                                <p class="option-desc">一眼看到整幅长卷的细节，画面故事感强。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="bronze-ritual-ding">
+                            <div class="card-image">
+                                <img src="images/bronze-ritual-ding.svg" alt="孩子伸手比对青铜鼎的巨大体积" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">青铜大鼎（恢弘造型）</h3>
+                                <p class="option-desc">厚重的金属光泽与复杂纹饰，带来历史震撼感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="famille-rose-vase">
+                            <div class="card-image">
+                                <img src="images/famille-rose-vase.svg" alt="孩子靠近展柜盯着彩绘瓷瓶的细部" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">粉彩花瓶（精致彩绘）</h3>
+                                <p class="option-desc">细腻彩绘和鲜艳配色，吸引孩子盯看细节。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
