@@ -1,0 +1,19 @@
+{
+  "id": "kids-museum-treasure",
+  "name": "博物馆惊呼宝物",
+  "description": "移动端友好图文投票页，选项强调具体场景与视觉细节，适合作为亲子出游前的互动预热与分享话题。",
+  "category": "历史文化",
+  "profileId": "parent-tools",
+  "keywords": [
+    "博物馆",
+    "亲子活动",
+    "镇馆之宝",
+    "孩子好奇心",
+    "家庭出游",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-museum-treasure/images/moving-dinosaur-model.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-26T19:00:38.561Z"
+}
