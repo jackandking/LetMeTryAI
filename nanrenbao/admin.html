@@ -662,5 +662,31 @@
             }
         })();
     </script>
+
+    <!-- Lightbox: click a thumbnail to preview the full image -->
+    <style>
+      #lrLightbox{display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.88);
+        align-items:center; justify-content:center; padding:20px; cursor:zoom-out;}
+      #lrLightbox.open{display:flex;}
+      #lrLightbox img{max-width:96vw; max-height:92vh; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,.6);}
+      #lrLightbox .lr-close{position:absolute; top:14px; right:22px; color:#fff; font-size:34px; line-height:1;
+        cursor:pointer; opacity:.85;} #lrLightbox .lr-close:hover{opacity:1;}
+    </style>
+    <div id="lrLightbox"><span class="lr-close" id="lrClose">&times;</span><img id="lrLightboxImg" src="" alt="大图预览" /></div>
+    <script>
+        (function(){
+            var lb=document.getElementById('lrLightbox'), lbImg=document.getElementById('lrLightboxImg'),
+                close=document.getElementById('lrClose');
+            window.openLightbox=function(url){
+                if(!url) return;
+                lbImg.src=url; lb.classList.add('open');
+                document.body.style.overflow='hidden';
+            };
+            function hide(){ lb.classList.remove('open'); lbImg.src=''; document.body.style.overflow=''; }
+            close.addEventListener('click',function(e){ e.stopPropagation(); hide(); });
+            lb.addEventListener('click',hide);
+            document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
+        })();
+    </script>
 </body>
 </html>

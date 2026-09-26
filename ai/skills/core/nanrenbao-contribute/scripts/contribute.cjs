@@ -40,7 +40,9 @@ async function uploadLocalFile(filePath) {
   const r = await fetch(UPLOAD_EP, { method: 'POST', body: form });
   const j = await r.json();
   if (!j.success) throw new Error('image/upload failed: ' + JSON.stringify(j));
-  return `${SITE_BASE}/${j.path}`; // relPath 已去掉 nginx 根前缀
+  // image/upload 把文件写入 letmetry.cn 的 nginx 根（/usr/share/nginx/html/），
+  // 因此本地上传的图片 URL 必须拼 API_BASE(letmetry.cn)，而非前端域名 SITE_BASE。
+  return `${API_BASE}/${j.path}`; // relPath 已去掉 nginx 根前缀
 }
 
 async function insertRow(table, data) {

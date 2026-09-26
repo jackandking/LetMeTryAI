@@ -1,0 +1,2 @@
+# ai 层构建产物不入库（由 build.cjs 生成，发布时产出）
+/build/dist/

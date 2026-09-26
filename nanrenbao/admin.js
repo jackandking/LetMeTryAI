@@ -190,7 +190,7 @@ function renderManageTable(rows, page, perPage, total) {
         tr.innerHTML = `
             <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="row-checkbox" data-id="${row.id}" /></td>
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${displayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${displayUrl}" onclick="openLightbox('${displayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
             <td style="padding:8px;">${row.view_count || 0}</td>
             <td style="padding:8px;">${formatReviewStatus(row)}</td>
             <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
@@ -756,8 +756,8 @@ function renderBackviewManageTable(rows, page, perPage, total) {
         tr.innerHTML = `
             <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="backview-row-checkbox" data-id="${row.id}" /></td>
             <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${backDisplayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${frontDisplayUrl}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${backDisplayUrl}" onclick="openLightbox('${backDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
+            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${frontDisplayUrl}" onclick="openLightbox('${frontDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
             <td style="padding:8px;">${row.click_count || 0}</td>
             <td style="padding:8px;">${formatReviewStatus(row)}</td>
             <td style="padding:8px;">${formatSubmissionMeta(row)}</td>

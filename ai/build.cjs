@@ -55,7 +55,8 @@ function build(name) {
   execSync(`find "${distDir}" -name "_meta.json" -delete`, { stdio: 'ignore' });
   const outZip = path.join(DIST_DIR, `${name}.skill`);
   if (fs.existsSync(outZip)) fs.rmSync(outZip);
-  execSync(`cd "${DIST_DIR}/${name}" && zip -rq "${outZip}" .`, { stdio: 'ignore' });
+  // 官方 package_skill 格式: zip 根下含 {name}/ 目录层级
+  execSync(`cd "${DIST_DIR}" && zip -rq "${outZip}" "${name}"`, { stdio: 'ignore' });
   return outZip;
 }
 
