@@ -1,4 +1,9 @@
 ---
+slug: portrait-prompt-studio
+displayName: 人像提示词工作室
+version: 1.0.0
+license: MIT
+icon: icon.jpg
 name: portrait-prompt-studio
 description: 返回高质量「写真/艺术人像」图像生成提示词与结构化 DNA 模板，帮助生成有质感的人像图并记录改良版提示词用于持续进化；当用户需要高品质写真/人像提示词、时尚大片或艺术化人像出图指引、以及半身/背影等风格化构图时使用
 ---
@@ -20,7 +25,7 @@ description: 返回高质量「写真/艺术人像」图像生成提示词与结
 ## 你每次返回时应包含
 
 1. **1–3 条完整提示词**（英文，图像模型更稳），每条附一句中文说明。
-2. **结构化 DNA**（对照 `../prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
+2. **结构化 DNA**（对照 `./prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
 3. **鼓励用户改良**：明确告诉用户——生成后如果调整了提示词（换光影、换场景、换情绪），请运行记录器把「源提示词 + 你的改良版」存下来，参与进化。
 
 ## 记录器调用（提示用户执行）
