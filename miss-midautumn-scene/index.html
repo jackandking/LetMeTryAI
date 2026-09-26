@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>错过十五月亮？回到哪个中秋画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">错过十五月亮那晚，你想回到哪个中秋画面？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">错过十五月亮那晚，你想回到哪个中秋画面？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="home-yard-lanterns">
+                            <div class="card-image">
+                                <img src="images/home-yard-lanterns.svg" alt="老家院子挂灯笼，一家人团聚吃月饼" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老家院子挂灯笼</h3>
+                                <p class="option-desc">老家院子里，灯笼高挂，大家围着小桌吃月饼、说笑追忆往事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="rooftop-with-spouse">
+                            <div class="card-image">
+                                <img src="images/rooftop-with-spouse.svg" alt="天台上两人肩并肩看月亮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">天台和老伴看月亮</h3>
+                                <p class="option-desc">和老伴肩并肩坐在天台，风轻月明，悄悄聊起年轻时的故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="grandpa-story">
+                            <div class="card-image">
+                                <img src="images/grandpa-story.svg" alt="爷爷讲中秋故事，大家围坐倾听" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">听爷爷讲中秋故事</h3>
+                                <p class="option-desc">围着爷爷听他讲过去的中秋传说和家中趣事，笑声里带着泪光。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="video-reunion">
+                            <div class="card-image">
+                                <img src="images/video-reunion.svg" alt="通过视频与远方亲人共赏月亮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">视频连线与远方亲人</h3>
+                                <p class="option-desc">不能回家就视频团圆，大家在线上举杯、对着屏幕一起赏月，暖在心里。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
