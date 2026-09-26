@@ -1,0 +1,19 @@
+{
+  "id": "saihou-makeup",
+  "name": "赛后妆容灵感",
+  "description": "以赛后女明星妆容为灵感，呈现4种可落地的妆感场景（自然通透/烟熏/复古红唇/舞台高光），适合手机图文投票与试妆笔记分享。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "赛后妆容",
+    "明星妆容",
+    "试妆",
+    "妆感对比",
+    "晚会造型",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "saihou-makeup/images/dewy-natural.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-26T20:00:37.206Z"
+}
