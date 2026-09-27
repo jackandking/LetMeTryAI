@@ -108,6 +108,7 @@
   var fitRect={dx:0,dy:0,dw:0,dh:0};
   var mask, mctx;           // 面积统计
   var unlocked=false;
+  var scratching=false;   // 修复: 之前未声明导致 pointerdown 抛 ReferenceError，擦除全失效
 
   function $(id){return document.getElementById(id);}
   function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
