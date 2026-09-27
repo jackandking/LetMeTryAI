@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>退休后你会怎么准备过日子？选一幅你想要的生活画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">退休后你会怎么准备过日子？宅家慢日常、兴趣打卡还是常回家看看？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">退休后你会怎么准备过日子？从下面选出最接近你会去准备的生活方式</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zhai-jia-man-shenghuo">
+                            <div class="card-image">
+                                <img src="images/zhai-jia-man-shenghuo.svg" alt="老人宅家做菜看书的温馨画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宅家慢生活</h3>
+                                <p class="option-desc">把家布置得舒适，早起做操、下厨房、和邻居喝茶，生活以小确幸为主。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="xingqu-chongshi-pai">
+                            <div class="card-image">
+                                <img src="images/xingqu-chongshi-pai.svg" alt="老人写书法与同伴交流的场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">兴趣充实派</h3>
+                                <p class="option-desc">报班学书法、插花或摄影，参加兴趣小组，有事做也常有新朋友。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="man-you-tan-qin-pai">
+                            <div class="card-image">
+                                <img src="images/man-you-tan-qin-pai.svg" alt="老人沿街散步看风景的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">慢游探亲派</h3>
+                                <p class="option-desc">安排短途旅行、回老家探亲或看老友，把时间留给回忆和风景。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="he-jiaren-zai-yiqi">
+                            <div class="card-image">
+                                <img src="images/he-jiaren-zai-yiqi.svg" alt="三代同堂家庭聚会的温馨场景" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">与家人在一起</h3>
+                                <p class="option-desc">常和子女、孙辈聚在一起做饭、聊天，参与家庭日常和节日活动。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
