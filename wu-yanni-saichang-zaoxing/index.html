@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>吴艳妮赛场造型，你想学哪款？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">吴艳妮赛场造型，你想学哪款？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">吴艳妮赛场造型，你想学哪款？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="red-glam-wave">
+                            <div class="card-image">
+                                <img src="images/red-glam-wave.svg" alt="明艳红唇大波浪造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">明艳红唇 + 大波浪</h3>
+                                <p class="option-desc">亮色唇妆配大波浪卷，镜头感强，适合想要惊艳效果的造型。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sporty-sleek">
+                            <div class="card-image">
+                                <img src="images/sporty-sleek.svg" alt="利落运动感自然妆造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">利落运动感 + 自然底妆</h3>
+                                <p class="option-desc">清爽自然妆容搭配利落发型，干练又轻盈，日常易复制。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vintage-soft">
+                            <div class="card-image">
+                                <img src="images/vintage-soft.svg" alt="复古卷发玫瑰粉妆造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古卷发 + 玫瑰粉妆</h3>
+                                <p class="option-desc">柔和粉色系妆容配复古大卷，温柔优雅，适合温暖场景出镜。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sleek-bun-matte">
+                            <div class="card-image">
+                                <img src="images/sleek-bun-matte.svg" alt="高雅盘发冷色哑光妆造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高雅盘发 + 冷色哑光妆</h3>
+                                <p class="option-desc">简洁盘发配冷色哑光妆，气场沉稳、有设计感，适合正式亮相。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
