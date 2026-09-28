@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>领奖台上的她：哪个造型更想学？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">领奖台上的她，哪个造型更想学？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">领奖台上的她，哪个造型更想学？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="red-carpet-queen">
+                            <div class="card-image">
+                                <img src="images/red-carpet-queen.svg" alt="红毯高光大波浪长裙妆发" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">红毯闪耀女王</h3>
+                                <p class="option-desc">高光 + 大红唇 + 长波浪卷，镜头感强烈，气场满分</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="garden-elf">
+                            <div class="card-image">
+                                <img src="images/garden-elf.svg" alt="淡雅清新低马尾妆容" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">清新花园仙子</h3>
+                                <p class="option-desc">粉嫩腮红 + 自然眼妆 + 低马尾，甜而不腻的清新感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="edgy-short-hair">
+                            <div class="card-image">
+                                <img src="images/edgy-short-hair.svg" alt="烟熏眼短发酷感造型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">酷感短发酷妹</h3>
+                                <p class="option-desc">烟熏眼 + 哑光唇 + 利落短发，带点中性帅气的个性风</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="french-elegance">
+                            <div class="card-image">
+                                <img src="images/french-elegance.svg" alt="法式盘发优雅妆容" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">高雅法式女神</h3>
+                                <p class="option-desc">精致眼线 + 裸色唇 + 法式盘发，优雅复古的气质路线</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
