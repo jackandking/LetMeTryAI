@@ -1,0 +1,19 @@
+{
+  "id": "lao-fang-zi-huai-nian",
+  "name": "老屋怀旧角落",
+  "description": "围绕老房子的具体画面（厨房灶台、窗台阳光、阳台老椅、院子天井），设计手机友好的图文投票页，鼓励用户分享往事与生活小技巧。",
+  "category": "怀旧回忆",
+  "profileId": "elder-love",
+  "keywords": [
+    "怀旧",
+    "老房子",
+    "家庭场景",
+    "回忆",
+    "生活细节",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "lao-fang-zi-huai-nian/images/chufang-lao-zao-tai.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-28T18:00:31.319Z"
+}
