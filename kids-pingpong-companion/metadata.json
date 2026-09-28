@@ -1,0 +1,19 @@
+{
+  "id": "kids-pingpong-companion",
+  "name": "陪孩子打乒乓的方式",
+  "description": "针对孩子练乒乓的四种常见陪练方式做对比：技术示范、陪玩游戏、情绪陪伴、交给专业或视频，帮助家长分享经验并获得实用灵感。",
+  "category": "亲子沟通",
+  "profileId": "parent-tools",
+  "keywords": [
+    "陪练",
+    "乒乓",
+    "亲子",
+    "育儿",
+    "家庭活动",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "kids-pingpong-companion/images/coach-style.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-28T19:00:41.296Z"
+}
