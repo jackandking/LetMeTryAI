@@ -1,0 +1,19 @@
+{
+  "id": "podium-her-look",
+  "name": "领奖台造型灵感",
+  "description": "以颁奖礼/领奖台为场景，展示4种可学的妆发造型（红毯光感、清新甜美、酷感短发、法式优雅），每项配短句说明与视觉呈现，便于用户快速判断并产生学习欲望。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "领奖台",
+    "红毯妆",
+    "妆发灵感",
+    "明星造型",
+    "学妆",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "podium-her-look/images/red-carpet-queen.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-28T20:01:05.913Z"
+}
