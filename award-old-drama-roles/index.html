@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>颁奖礼上的老剧角色，你会和家人先说起谁？聊聊你记得的画面</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">颁奖礼上的老剧角色，你会和家人先说起谁？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">颁奖礼上的老剧角色，你会和家人先说起谁？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tiegu-nan-zhu">
+                            <div class="card-image">
+                                <img src="images/tiegu-nan-zhu.svg" alt="铁骨男主在舞台上举杯的背影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">铁骨男主（正气/乡情）</h3>
+                                <p class="option-desc">颁奖台上想起他那句铿锵台词和为家乡付出的背影。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nuanxin-mu-nai">
+                            <div class="card-image">
+                                <img src="images/nuanxin-mu-nai.svg" alt="温柔母亲在厨房微笑的侧脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">暖心母亲/奶奶</h3>
+                                <p class="option-desc">家里聚会总有人先念起她的叮咛、做菜和温柔眼神。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="xiao-dian-peijue">
+                            <div class="card-image">
+                                <img src="images/xiao-dian-peijue.svg" alt="喜剧配角在台上夸张表情" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">笑点担当（喜剧配角）</h3>
+                                <p class="option-desc">一句俏皮话就能让全家笑出声的配角形象。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="fuza-fanpai">
+                            <div class="card-image">
+                                <img src="images/fuza-fanpai.svg" alt="深情的反派在颁奖礼上低头" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复杂反派（让人爱恨）</h3>
+                                <p class="option-desc">虽是反派，但他的内心戏和转折常成家人话题焦点。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
