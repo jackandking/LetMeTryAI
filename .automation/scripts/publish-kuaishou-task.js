@@ -223,7 +223,11 @@ async function main() {
   console.log(`Headless Mode: ${HEADLESS}`);
 
   // Launch browser with persistent context for login
-  const browser = await chromium.launch({ headless: HEADLESS });
+  const browser = await chromium.launch({
+    headless: HEADLESS,
+    executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    args: ['--disable-blink-features=AutomationControlled', '--no-sandbox']
+  });
   const context = await browser.newContext({
     // Load auth state if exists
     storageState: fs.existsSync(AUTH_FILE) ? JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8')) : undefined
