@@ -101,7 +101,13 @@ export class KuaishouLogin {
         
         this.browser = await chromium.launch({ 
             headless: this.headless,
-            args: ['--disable-blink-features=AutomationControlled']
+            executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            args: [
+                '--disable-blink-features=AutomationControlled',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',   // 防止长空闲渲染进程崩溃 (Page crashed)
+                '--disable-gpu'
+            ]
         });
         
         // Load existing session if available
@@ -208,7 +214,7 @@ export class KuaishouLogin {
     /**
      * Perform phone + SMS login
      */
-    async login(defaultPhone = DEFAULT_PHONE, autoMode = false) {
+    async login(defaultPhone = DEFAULT_PHONE, autoMode = false, codeMode = false) {
         await this.init();
         
         try {
@@ -289,11 +295,20 @@ export class KuaishouLogin {
                 }
             }
             
-            // Prompt for SMS code
-            log('\n─────────────────────────────────', 'cyan');
-            log('📲 请查看手机短信 / Please check your phone SMS', 'yellow');
-            const smsCode = await prompt('🔢 请输入验证码 / Enter verification code');
-            log('─────────────────────────────────\n', 'cyan');
+            // Prompt for SMS code (file-polling mode for non-TTY / agent environments)
+            let smsCode;
+            if (codeMode) {
+                log('\n─────────────────────────────────', 'cyan');
+                log('📲 已请求短信验证码，请在聊天里把 6 位验证码告诉我', 'yellow');
+                log('   我会把它写入 .automation/.local/auth/_pending_sms_code.txt 供脚本读取', 'yellow');
+                log('─────────────────────────────────\n', 'cyan');
+                smsCode = await this.waitForCodeFile(600);
+            } else {
+                log('\n─────────────────────────────────', 'cyan');
+                log('📲 请查看手机短信 / Please check your phone SMS', 'yellow');
+                smsCode = await prompt('🔢 请输入验证码 / Enter verification code');
+                log('─────────────────────────────────\n', 'cyan');
+            }
             
             if (!smsCode || smsCode.length < 4) {
                 throw new Error('Invalid SMS code');
@@ -307,9 +322,45 @@ export class KuaishouLogin {
             
             await codeInput.fill(smsCode);
             log('✅ Entered verification code', 'green');
-            
+
             await this.page.waitForTimeout(1000);
-            
+
+            // Guard 1: ensure still on SMS tab (page sometimes flips back to 密码登录)
+            const passwordVisible = await this.page.locator('input[placeholder*="密码"]:visible').count();
+            if (passwordVisible > 0) {
+                log('⚠️ 页面跳回了密码登录 tab，重新点击「验证码登录」...', 'yellow');
+                const smsTab = this.page.locator('text=验证码登录').first();
+                await smsTab.click({ force: true });
+                await this.page.waitForTimeout(1500);
+                // Re-fill code after tab switch (form re-rendered)
+                const codeInput2 = await this.findCodeInput();
+                if (codeInput2) {
+                    await codeInput2.fill(smsCode);
+                    log('✅ Re-entered verification code after tab switch', 'green');
+                }
+            }
+
+            // Guard 2: check the agreement checkbox if unchecked
+            try {
+                const checked = await this.page.evaluate(() => {
+                    const boxes = document.querySelectorAll('input[type="checkbox"]');
+                    for (const b of boxes) {
+                        if (b.closest('form') || b.offsetParent) return b.checked;
+                    }
+                    return true; // no visible checkbox found -> assume ok
+                });
+                if (!checked) {
+                    log('⚠️ 协议复选框未勾选，自动勾选「我同意」...', 'yellow');
+                    const agree = this.page.locator('text=我同意').first();
+                    await agree.click({ force: true });
+                    await this.page.waitForTimeout(500);
+                } else {
+                    log('✅ Agreement checkbox already checked', 'green');
+                }
+            } catch (e) {
+                log(`  (agreement check skipped: ${e.message})`, 'cyan');
+            }
+
             // Click login/submit button
             log('\n🔐 Clicking login button...', 'cyan');
             const submitBtn = await this.findLoginButton();
@@ -333,9 +384,24 @@ export class KuaishouLogin {
             // Check for slider captcha
             const hasSlider = await this.checkForSliderCaptcha();
             if (hasSlider) {
-                log('\n⚠️ Slider captcha detected!', 'yellow');
-                log('📝 Please complete the captcha manually in the browser', 'yellow');
-                await prompt('\n⏸️ Press Enter after completing captcha...');
+                if (!process.stdin.isTTY) {
+                    if (codeMode) {
+                        // Headed window is open on user's screen; poll until they solve it
+                        log('\n⚠️ 检测到滑块验证！请在弹出的浏览器窗口手动拖动完成', 'yellow');
+                        log('⏳ 等待你在窗口中完成滑块（最长 120 秒）...', 'yellow');
+                        const deadline = Date.now() + 120000;
+                        while (Date.now() < deadline) {
+                            await this.page.waitForTimeout(3000);
+                            if (await this.checkPageLoggedIn()) break;
+                        }
+                    } else {
+                        throw new Error('⚠️ 检测到滑块验证，但当前为非交互环境无法手动完成。请改为在本地终端运行：node .automation/skills/kuaishou-login/scripts/login.js');
+                    }
+                } else {
+                    log('\n⚠️ Slider captcha detected!', 'yellow');
+                    log('📝 Please complete the captcha manually in the browser', 'yellow');
+                    await prompt('\n⏸️ Press Enter after completing captcha...');
+                }
             }
 
             // First check current page without re-navigating
@@ -360,8 +426,19 @@ export class KuaishouLogin {
                     await this.saveSession();
                     return true;
                 }
+                // Debug: capture what the login page is showing (slider? error toast?)
+                try {
+                    const dbg = '/tmp/ks_login_debug.png';
+                    await this.page.screenshot({ path: dbg, fullPage: false });
+                    log(`  📸 debug screenshot -> ${dbg}`, 'cyan');
+                } catch (_) {}
             }
-            
+
+            // Dump visible page text to diagnose failure (slider, error toast, wrong code msg)
+            try {
+                const visibleText = await this.page.evaluate(() => document.body.innerText.slice(0, 1500));
+                log('--- 页面可见文本 ---\n' + visibleText + '\n--- end ---', 'yellow');
+            } catch (_) {}
             throw new Error('Login timeout - please check if SMS code was correct');
             
         } catch (error) {
@@ -451,7 +528,11 @@ export class KuaishouLogin {
 
         log('⚠️ Could not auto-switch to SMS login', 'yellow');
         log('📝 Please manually click "验证码登录" tab in the browser', 'yellow');
-        await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
+        if (process.stdin.isTTY) {
+            await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
+        } else {
+            throw new Error('⚠️ 无法自动切换到验证码登录，且当前为非交互环境。请改为在本地终端运行：node .automation/skills/kuaishou-login/scripts/login.js');
+        }
     }
 
     /**
@@ -648,6 +729,213 @@ export class KuaishouLogin {
     }
 
     /**
+     * Wait for SMS code written to a file (non-TTY / agent mode).
+     * The operator pastes the code into chat; the agent writes it to this file,
+     * and the script picks it up. File is deleted after consumption.
+     */
+    async waitForCodeFile(timeoutSec = 240) {
+        const file = path.resolve(process.cwd(), '.automation/.local/auth/_pending_sms_code.txt');
+        const deadline = Date.now() + timeoutSec * 1000;
+        log(`⏳ 等待验证码文件: ${file}`, 'cyan');
+        while (Date.now() < deadline) {
+            try {
+                if (fs.existsSync(file)) {
+                    const code = fs.readFileSync(file, 'utf-8').trim();
+                    if (/^\d{4,8}$/.test(code)) {
+                        fs.unlinkSync(file);
+                        log('✅ 已从文件读取验证码', 'green');
+                        return code;
+                    }
+                }
+            } catch (e) {
+                // ignore and retry
+            }
+            await new Promise(r => setTimeout(r, 2000));
+        }
+        throw new Error('⏰ 等待验证码文件超时 (timeout waiting for SMS code file)');
+    }
+
+    /**
+     * Manual login mode: open a headed window, let the HUMAN log in
+     * (QR code or SMS, whatever is easiest), poll until logged in, then save session.
+     * No fragile automation — most reliable path when a human is present.
+     */
+    async captureQr() {
+        try {
+            const el = await this.page.$('img[src^="data:image/png"]');
+            if (el) {
+                await el.screenshot({ path: '/tmp/ks_qr.png' }).catch(async () => {
+                    await this.page.screenshot({ path: '/tmp/ks_qr.png' });
+                });
+            } else {
+                await this.page.screenshot({ path: '/tmp/ks_qr.png' });
+            }
+        } catch (_) {}
+    }
+
+    /**
+     * Probe the current login page for QR state.
+     * Returns whether the QR shows an expiry overlay, whether a QR img is
+     * present, and a short slice of the QR image src (used to detect a
+     * silently-stale QR whose token hasn't rotated in a while).
+     */
+    async qrExpired() {
+        try {
+            return await this.page.evaluate(() => {
+                const body = document.body.innerText || '';
+                const expiredText = /失效|已过期|点击刷新|刷新二维码/.test(body);
+                const qr = document.querySelector('img[src^="data:image/png"]');
+                return {
+                    expiredText,
+                    hasQr: !!qr,
+                    src: qr ? qr.src.slice(0, 80) : ''
+                };
+            });
+        } catch (e) {
+            return { expiredText: false, hasQr: false, src: '' };
+        }
+    }
+
+    /**
+     * Actively mint a brand-new QR token. Kuaishou's login page rotates the QR
+     * on its own only via a client-side timer, which Chromium throttles when the
+     * tab is backgrounded/headless — so the token silently dies. We click the
+     * "刷新" trigger ourselves to force a fresh token, then the caller waits a
+     * beat and captures. Falls back to clicking the QR img (the whole area is
+     * usually clickable to refresh).
+     */
+    async _refreshQr() {
+        try {
+            return await this.page.evaluate(() => {
+                const all = [...document.querySelectorAll('*')];
+                // A short leaf element whose text is exactly a refresh cue
+                const byText = all.find(e => {
+                    const t = (e.innerText || e.textContent || '').trim();
+                    return /点击刷新|刷新二维码|^刷新$/.test(t) && t.length <= 12 && e.children.length === 0;
+                });
+                if (byText) { byText.click(); return 'clicked-text'; }
+                const qr = document.querySelector('img[src^="data:image/png"]');
+                if (qr) { qr.click(); return 'clicked-img'; }
+                return 'no-target';
+            });
+        } catch (e) {
+            return 'eval-failed';
+        }
+    }
+
+    async manualLogin(timeoutSec = 1800) {
+        await this.init();
+        log('\n' + '━'.repeat(45), 'yellow');
+        log('👉 请在弹出的浏览器窗口里手动完成登录', 'yellow');
+        log('   （推荐用「扫码登录」——最省事，不用等短信）', 'yellow');
+        log(`⏳ 我会在旁边等你，最长 ${Math.round(timeoutSec / 60)} 分钟`, 'yellow');
+        log('   （二维码会自动续期，页面崩溃也会自动重启，随时回来扫都有效）', 'yellow');
+        log('━'.repeat(45) + '\n', 'yellow');
+
+        await this._gotoLoginAndCaptureQr();
+
+        const deadline = Date.now() + timeoutSec * 1000;
+        let lastUrl = '';
+        this._lastQrSrc = '';
+        this._lastQrTs = 0;
+        let crashCount = 0;
+        while (Date.now() < deadline) {
+            try {
+                await this.page.waitForTimeout(4000);
+
+                // 1) Login detection first — never interrupt a successful login
+                const url = this.page.url();
+                if (url !== lastUrl) {
+                    log(`  🧭 url: ${url}`, 'cyan');
+                    lastUrl = url;
+                }
+                if (await this.checkPageLoggedIn()) {
+                    log('\n✅ 检测到登录成功！', 'green');
+                    await this.saveSession();
+                    return true;
+                }
+                // Also treat presence of a login cookie as success (user may stop on the main site)
+                try {
+                    const cookies = await this.context.cookies();
+                    const names = cookies.map(c => c.name);
+                    const hasAuthCookie = names.some(n => /passToken|userId|api_ph|api_st|kuaishou\.web\.cp/i.test(n));
+                    if (hasAuthCookie) {
+                        log(`\n✅ 检测到登录 cookie（${names.filter(n => /passToken|userId|api_ph|api_st/i.test(n)).join(', ')}），判定登录成功`, 'green');
+                        await this.saveSession();
+                        return true;
+                    }
+                } catch (_) {}
+
+                // 2) Keep /tmp/ks_qr.png fresh. Two mechanisms:
+                //    (a) If the page ever shows an "expired / click to refresh" overlay,
+                //        actively click the refresh trigger to mint a NEW token.
+                //    (b) Proactively refresh every ~80s regardless, to defeat Chromium's
+                //        timer throttling on headless/background tabs (the page's own
+                //        auto-rotation gets frozen, so the token silently dies).
+                //    We deliberately do NOT full-page reload here — that was what
+                //    destabilized Chromium and caused "Page crashed".
+                const info = await this.qrExpired().catch(() => ({ expiredText: false, hasQr: true, src: '' }));
+                this._cycle = (this._cycle || 0) + 1;
+                const proactiveRefresh = this._cycle % 20 === 0; // 20 * 4s = ~80s
+                if (info.expiredText || !info.hasQr || proactiveRefresh) {
+                    const how = await this._refreshQr();
+                    if (info.expiredText || !info.hasQr) {
+                        log(`  🔄 二维码过期，强制刷新（${how}）...`, 'yellow');
+                    } else if (proactiveRefresh) {
+                        log(`  🔄 主动刷新二维码（${how}）保持新鲜...`, 'yellow');
+                    }
+                    await this.page.waitForTimeout(1800); // let the new token render
+                }
+
+                // 3) Capture current QR into the shared file
+                await this.captureQr();
+            } catch (err) {
+                const msg = (err && err.message) ? err.message : String(err);
+                // Crash / detach recovery: relaunch the browser instead of dying
+                if (/Page crashed|Target closed|Execution context was destroyed|detached|Session closed|Browser closed/i.test(msg)) {
+                    crashCount++;
+                    if (crashCount > 30) {
+                        throw new Error(`⚠️ 页面反复崩溃（${crashCount} 次），停止重试。请检查系统 Chrome 是否正常。`);
+                    }
+                    log(`  ⚠️ 页面崩溃，自动重启浏览器（第 ${crashCount} 次）...`, 'yellow');
+                    let recovered = false;
+                    for (let attempt = 1; attempt <= 3 && !recovered; attempt++) {
+                        try {
+                            try { await this.browser.close().catch(() => {}); } catch (_) {}
+                            await this.init();
+                            await this._gotoLoginAndCaptureQr();
+                            lastUrl = '';
+                            recovered = true;
+                        } catch (re) {
+                            if (attempt === 3) throw re;
+                            log(`  ⚠️ 重启失败（第 ${attempt} 次），重试...`, 'yellow');
+                        }
+                    }
+                    continue;
+                }
+                throw err;
+            }
+        }
+        throw new Error('⏰ 手动登录等待超时（未检测到登录成功）');
+    }
+
+    /**
+     * Navigate to the login page, click the "扫码登录" tab, and capture the QR.
+     * Extracted so it can be reused both on first launch and after a crash.
+     */
+    async _gotoLoginAndCaptureQr() {
+        await this.page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+        await this.page.waitForTimeout(2500);
+        // 确保停在「扫码登录」tab（默认即此，但稳妥起见点一下）
+        await this.page.evaluate(() => {
+            const t = [...document.querySelectorAll('*')].find(e => e.textContent.trim() === '扫码登录');
+            if (t) t.click();
+        }).catch(() => {});
+        await this.page.waitForTimeout(1500);
+        await this.captureQr();
+    }
+
+    /**
      * Save session to file
      */
     async saveSession() {
@@ -713,6 +1001,10 @@ async function main() {
     let checkOnly = false;
     let headless = false;
     let autoMode = false;
+    let codeMode = false;
+    let manualMode = false;
+    let manualTimeout = 900;
+    let smsCode = null;
     
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--auth-file' && args[i + 1]) {
@@ -727,6 +1019,13 @@ async function main() {
             headless = true;
         } else if (args[i] === '--auto') {
             autoMode = true;
+        } else if (args[i] === '--code') {
+            codeMode = true;
+        } else if (args[i] === '--manual') {
+            manualMode = true;
+        } else if (args[i] === '--manual-timeout' && args[i + 1]) {
+            manualTimeout = parseInt(args[i + 1], 10) || 900;
+            i++;
         } else if (args[i] === '--help' || args[i] === '-h') {
             showHelp();
             process.exit(0);
@@ -746,9 +1045,20 @@ async function main() {
             const isValid = await login.validateSession();
             await login.close();
             process.exit(isValid ? 0 : 1);
+        } else if (manualMode) {
+            // Human logs in manually in the headed window; we just capture the session
+            await login.manualLogin(manualTimeout);
+
+            log('\n─────────────────────────────────', 'green');
+            log('✅ Kuaishou Login Complete!', 'green');
+            log('─────────────────────────────────', 'green');
+            log(`\nSession saved to: ${authFile}`, 'cyan');
+            log('\nYou can now run other scripts that use this session.', 'blue');
+
+            await login.close();
         } else {
             // Perform login with default phone
-            await login.login(phoneNumber, autoMode);
+            await login.login(phoneNumber, autoMode, codeMode);
             
             log('\n─────────────────────────────────', 'green');
             log('✅ Kuaishou Login Complete!', 'green');
@@ -759,6 +1069,7 @@ async function main() {
             await login.close();
         }
     } catch (error) {
+        log(`\n❌ Fatal: ${error && error.stack ? error.stack : error}`, 'red');
         await login.close();
         process.exit(1);
     }
@@ -775,6 +1086,9 @@ Options:
   --auth-file <path>   Custom auth file path (default: .automation/.local/auth/kuaishou_auth.json)
   --phone <number>     Phone number (default: ${DEFAULT_PHONE})
   --auto               Auto mode: use default phone, prompt only for SMS code
+  --code               Agent mode: poll .automation/.local/auth/_pending_sms_code.txt for the SMS code (no TTY needed)
+  --manual             Human mode: open a headed window, YOU log in (QR/SMS), script polls and saves the session automatically
+  --manual-timeout <s> Seconds to wait in --manual mode (default: 900)
   --check              Check if existing session is valid
   --headless           Run in headless mode (no browser window)
   --help, -h           Show this help message
