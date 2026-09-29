@@ -1,0 +1,19 @@
+{
+  "id": "jin-ying-red-carpet-makeup",
+  "name": "金鹰红毯妆学",
+  "description": "围绕金鹰红毯四位女星的妆容风格做直观对比：提供妆容关键词、适合场景与可学点，方便用户选出想模仿的红毯妆并分享到社媒。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "金鹰红毯",
+    "红毯妆",
+    "明星妆容",
+    "可学妆",
+    "妆容对比",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "jin-ying-red-carpet-makeup/images/zhao-liying-glow.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-29T20:00:30.858Z"
+}
