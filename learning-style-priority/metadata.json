@@ -1,0 +1,20 @@
+{
+  "id": "learning-style-priority",
+  "name": "学法观察",
+  "description": "面向家长的轻量投票页，通过动手/听讲/练习/合作四个场景化选项，帮助家长表达对孩子学习方式的侧重并看到他人选择理由。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "学习方式",
+    "动手实践",
+    "课堂听讲",
+    "重复练习",
+    "小组合作",
+    "育儿工具",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "learning-style-priority/images/hands-on-projects.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-29T19:00:40.826Z"
+}
