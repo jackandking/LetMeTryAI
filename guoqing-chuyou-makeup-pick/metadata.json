@@ -1,0 +1,20 @@
+{
+  "id": "guoqing-chuyou-makeup-pick",
+  "name": "国庆出游妆容拍照选哪种",
+  "description": "国庆出游场景下，从拍照角度比对四款常见妆容：自然裸光、甜美仙女、日系清透与微烟熏，适合图文投票页与短图展示。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "国庆",
+    "出游妆容",
+    "拍照妆",
+    "裸妆",
+    "仙女妆",
+    "烟熏妆",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "guoqing-chuyou-makeup-pick/images/nude-glow.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-09-30T20:01:02.098Z"
+}
