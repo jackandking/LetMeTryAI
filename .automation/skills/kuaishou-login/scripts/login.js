@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
+import http from 'http';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -32,6 +33,47 @@ const colors = {
 function log(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`);
 }
+
+// ── 单实例锁：避免两个登录进程抢同一个 /tmp/ks_qr.png（之前就因残留进程导致死码）──
+const LOCK_FILE = '/tmp/kuaishou_login.lock';
+function _readLockPid() {
+    try { return parseInt(fs.readFileSync(LOCK_FILE, 'utf-8').trim(), 10) || 0; } catch { return 0; }
+}
+function _isPidAlive(pid) {
+    if (!pid) return false;
+    try { process.kill(pid, 0); return true; } catch { return false; }
+}
+function killExistingInstance() {
+    const pid = _readLockPid();
+    if (pid && _isPidAlive(pid)) {
+        try { process.kill(pid, 'SIGTERM'); } catch {}
+        for (let i = 0; i < 25 && _isPidAlive(pid); i++) {
+            const t0 = Date.now(); while (Date.now() - t0 < 200) {}
+        }
+    }
+    try { fs.unlinkSync(LOCK_FILE); } catch {}
+}
+function acquireLock() {
+    const pid = _readLockPid();
+    if (pid && _isPidAlive(pid)) return pid; // 另一个活进程持有锁
+    try { fs.writeFileSync(LOCK_FILE, String(process.pid)); } catch {}
+    return 0;
+}
+function releaseLock() {
+    try { if (_readLockPid() === process.pid) fs.unlinkSync(LOCK_FILE); } catch {}
+}
+
+// ── 实时二维码页面（本地 HTTP 服务）：页面每 2 秒自动刷新，扫的是活码，不再有快照过期竞速 ──
+const QR_PAGE_HTML = `<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<title>快手登录二维码</title>
+<meta http-equiv="refresh" content="30">
+<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0e0e10;color:#eee;text-align:center;margin:0;padding:24px}img{width:340px;height:340px;background:#fff;border-radius:12px;margin-top:16px}.tip{color:#9aa;font-size:13px}</style>
+</head><body>
+<h2>快手创作者平台 · 扫码登录</h2>
+<img id="qr" src="/qr.png" alt="二维码">
+<p class="tip">二维码每隔几秒自动刷新，直接用快手 App 扫即可</p>
+<script>setInterval(function(){document.getElementById('qr').src='/qr.png?t='+Date.now();},2000);</script>
+</body></html>`;
 
 /**
  * Prompt user for input with optional default value
@@ -88,6 +130,8 @@ export class KuaishouLogin {
         this.authFile = options.authFile || DEFAULT_AUTH_FILE;
         this.headless = options.headless !== undefined ? options.headless : false;
         this.viewport = options.viewport || { width: 1280, height: 800 };
+        this.servePort = options.servePort || 0;
+        this._qrServer = null;
         this.browser = null;
         this.context = null;
         this.page = null;
@@ -752,6 +796,52 @@ export class KuaishouLogin {
     }
 
     /**
+     * 启动本地 HTTP 服务，提供“实时二维码”页面。
+     * 用户在自己浏览器打开 http://localhost:<port>/ 即可看到每 2 秒自动刷新的活码，
+     * 从根本上消除“聊天里发的是静态快照、等你扫时早已过期”的时序竞速。
+     */
+    async startQrServer() {
+        if (!this.servePort) return;
+        this._qrServer = http.createServer((req, res) => {
+            const url = (req.url || '/').split('?')[0];
+            try {
+                if (url === '/' || url === '/index.html') {
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                    res.end(QR_PAGE_HTML);
+                } else if (url === '/qr.png') {
+                    if (fs.existsSync('/tmp/ks_qr.png')) {
+                        const buf = fs.readFileSync('/tmp/ks_qr.png');
+                        res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'no-store' });
+                        res.end(buf);
+                    } else { res.writeHead(404); res.end('qr not ready'); }
+                } else if (url === '/status') {
+                    let age = -1, exists = false;
+                    try { const s = fs.statSync('/tmp/ks_qr.png'); exists = true; age = Math.round((Date.now() - s.mtimeMs) / 1000); } catch (_) {}
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ qrExists: exists, qrAgeSec: age }));
+                } else { res.writeHead(404); res.end('not found'); }
+            } catch (e) {
+                try { res.writeHead(500); res.end('server error'); } catch (_) {}
+            }
+        });
+        await new Promise((resolve, reject) => {
+            this._qrServer.once('error', reject);
+            this._qrServer.listen(this.servePort, () => {
+                log(`\n🌐 实时二维码已启动 → http://localhost:${this.servePort}/  （用本机或同网手机浏览器打开，页面每2秒自动刷新，直接扫）`, 'green');
+                resolve();
+            });
+        });
+    }
+
+    stopQrServer() {
+        if (this._qrServer) {
+            try { this._qrServer.close(); } catch (_) {}
+            this._qrServer = null;
+            log('🔌 已关闭二维码服务', 'blue');
+        }
+    }
+
+    /**
      * Probe the current login page for QR state.
      * Returns whether the QR shows an expiry overlay, whether a QR img is
      * present, and a short slice of the QR image src (used to detect a
@@ -829,6 +919,11 @@ export class KuaishouLogin {
         }
         if (!initialOk) throw new Error('⚠️ 初始加载反复崩溃，停止重试。请检查系统 Chrome 是否正常。');
 
+        // 若启用了 --serve，启动本地实时二维码服务（用户用浏览器打开即可扫码，无需等聊天发图）
+        if (this.servePort) {
+            await this.startQrServer().catch(e => log(`⚠️ 启动二维码服务失败，将仅写文件：${e.message}`, 'yellow'));
+        }
+
         const deadline = Date.now() + timeoutSec * 1000;
         let lastUrl = '';
         this._lastQrSrc = '';
@@ -847,6 +942,7 @@ export class KuaishouLogin {
                 if (await this.checkPageLoggedIn()) {
                     log('\n✅ 检测到登录成功！', 'green');
                     await this.saveSession();
+                    this.stopQrServer();
                     return true;
                 }
                 // Also treat presence of a login cookie as success (user may stop on the main site)
@@ -857,6 +953,7 @@ export class KuaishouLogin {
                     if (hasAuthCookie) {
                         log(`\n✅ 检测到登录 cookie（${names.filter(n => /passToken|userId|api_ph|api_st/i.test(n)).join(', ')}），判定登录成功`, 'green');
                         await this.saveSession();
+                        this.stopQrServer();
                         return true;
                     }
                 } catch (_) {}
@@ -911,6 +1008,7 @@ export class KuaishouLogin {
                 throw err;
             }
         }
+        this.stopQrServer();
         throw new Error('⏰ 手动登录等待超时（未检测到登录成功）');
     }
 
@@ -1000,6 +1098,9 @@ async function main() {
     let manualMode = false;
     let manualTimeout = 900;
     let smsCode = null;
+    let serve = false;
+    let servePort = 8731;
+    let killFlag = false;
     
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--auth-file' && args[i + 1]) {
@@ -1021,6 +1122,13 @@ async function main() {
         } else if (args[i] === '--manual-timeout' && args[i + 1]) {
             manualTimeout = parseInt(args[i + 1], 10) || 900;
             i++;
+        } else if (args[i] === '--serve') {
+            serve = true;
+        } else if (args[i] === '--serve-port' && args[i + 1]) {
+            servePort = parseInt(args[i + 1], 10) || 8731;
+            i++;
+        } else if (args[i] === '--kill') {
+            killFlag = true;
         } else if (args[i] === '--help' || args[i] === '-h') {
             showHelp();
             process.exit(0);
@@ -1032,7 +1140,25 @@ async function main() {
         authFile = path.resolve(process.cwd(), authFile);
     }
     
-    const login = new KuaishouLogin({ authFile, headless });
+    // --kill：终止任何正在运行的登录进程（并清除单实例锁），用于清理卡住的旧进程
+    if (killFlag) {
+        killExistingInstance();
+        log('✅ 已尝试终止已有的登录进程（如存在）', 'green');
+        process.exit(0);
+    }
+
+    // 单实例锁：避免两个登录进程同时跑、互相抢 /tmp/ks_qr.png
+    const lockPid = acquireLock();
+    if (lockPid) {
+        log(`⚠️ 已有登录进程在运行 (pid ${lockPid})。如需重启请先运行：node login.js --kill`, 'yellow');
+        process.exit(1);
+    }
+    const _releaseLock = () => releaseLock();
+    process.on('exit', _releaseLock);
+    process.on('SIGINT', () => { _releaseLock(); process.exit(130); });
+    process.on('SIGTERM', () => { _releaseLock(); process.exit(143); });
+
+    const login = new KuaishouLogin({ authFile, headless, servePort });
     
     try {
         if (checkOnly) {
@@ -1084,6 +1210,9 @@ Options:
   --code               Agent mode: poll .automation/.local/auth/_pending_sms_code.txt for the SMS code (no TTY needed)
   --manual             Human mode: open a headed window, YOU log in (QR/SMS), script polls and saves the session automatically
   --manual-timeout <s> Seconds to wait in --manual mode (default: 900)
+  --serve              Start a local HTTP server serving a live, auto-refreshing QR at http://localhost:8731/ (scan from your own browser, no chat snapshot race)
+  --serve-port <p>     Port for --serve (default: 8731)
+  --kill               Kill any running login instance (clears the single-instance lock), then exit
   --check              Check if existing session is valid
   --headless           Run in headless mode (no browser window)
   --help, -h           Show this help message
@@ -1100,6 +1229,12 @@ Examples:
 
   # Check session validity
   node login.js --check
+
+  # Live QR over HTTP: open http://localhost:8731/ in your browser and scan the auto-refreshing code
+  node login.js --manual --serve
+
+  # Kill a stuck login process (single-instance guard)
+  node login.js --kill
 
   # Custom auth file
   node login.js --auth-file ./my_auth.json
