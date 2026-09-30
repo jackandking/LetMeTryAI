@@ -216,233 +216,211 @@ export class KuaishouLogin {
      */
     async login(defaultPhone = DEFAULT_PHONE, autoMode = false, codeMode = false) {
         await this.init();
-        
-        try {
-            // Check if already logged in
-            if (await this.isLoggedIn()) {
-                log('\n✅ Already logged in!', 'green');
-                await this.saveSession();
-                return true;
-            }
-            
-            log('\n🔐 Need to login', 'yellow');
-            
-            // Wait for login page to fully load
-            log('\n⏳ Waiting for login page to load...', 'cyan');
-            await this.page.waitForTimeout(3000);
-            
-            // Take screenshot to see current state
-            await this.page.screenshot({ path: 'login_initial.png' });
-            
-            // Check current login method and switch to phone login if needed
+
+        // Resolve the phone number up-front so the retry loop can reuse it.
+        let phoneNumber = defaultPhone;
+        if (autoMode) {
+            log(`📱 Auto mode: Using phone number: ${defaultPhone}`, 'cyan');
+        } else {
+            const input = await prompt('📱 Enter your phone number', defaultPhone);
+            phoneNumber = input || defaultPhone;
+        }
+        if (!phoneNumber || phoneNumber.length < 11) {
+            throw new Error('Invalid phone number');
+        }
+
+        // Re-runnable setup: go to login page, switch to the SMS tab, fill the phone.
+        // Called at the start of every attempt so a retry always lands on a clean
+        // SMS form (after a wrong code the page often flips back to password tab).
+        const setupPhoneSession = async () => {
+            await this.page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+            await this.page.waitForTimeout(2500);
             await this.switchToPhoneLogin();
-            
-            // Wait for phone login form to appear
             await this.page.waitForTimeout(2000);
-            
-            // Use default phone or prompt
-            log('\n─────────────────────────────────', 'cyan');
-            let phoneNumber = defaultPhone;
-            
-            if (autoMode) {
-                // Auto mode: use default without prompting
-                log(`📱 Auto mode: Using phone number: ${defaultPhone}`, 'cyan');
-            } else {
-                // Interactive mode: prompt for phone
-                const input = await prompt('📱 Enter your phone number', defaultPhone);
-                phoneNumber = input || defaultPhone;
-            }
-            log('─────────────────────────────────\n', 'cyan');
-            
-            if (!phoneNumber || phoneNumber.length < 11) {
-                throw new Error('Invalid phone number');
-            }
-            
-            // Find and fill phone input
             const phoneInput = await this.findPhoneInput();
-            if (!phoneInput) {
-                throw new Error('Could not find phone number input field');
-            }
-            
+            if (!phoneInput) throw new Error('Could not find phone number input field');
             await phoneInput.fill(phoneNumber);
             await phoneInput.click();
             await this.page.waitForTimeout(500);
-            log('✅ Entered phone number', 'green');
-            
-            // Click get SMS code button
-            await this.page.waitForTimeout(1500);
-            log('\n📲 Attempting to click "获取验证码" button...', 'cyan');
-            const smsBtn = await this.clickGetSMSButton();
-            
-            if (smsBtn) {
-                log('✅ Clicked "获取验证码" button automatically', 'green');
-                log('⏳ Waiting 3 seconds for SMS to be sent...', 'cyan');
-                await this.page.waitForTimeout(3000);
-            } else {
-                log('\n⚠️ Could not auto-click SMS button automatically', 'yellow');
-                log('等待 5 秒后重试... / Retrying in 5 seconds...', 'cyan');
-                await this.page.waitForTimeout(5000);
-                
-                // Retry once
-                const retryBtn = await this.clickGetSMSButton();
-                if (retryBtn) {
-                    log('✅ Clicked "获取验证码" button on retry', 'green');
-                    await this.page.waitForTimeout(3000);
-                } else {
-                    log('⚠️ Still could not click SMS button', 'yellow');
-                    log('页面可能加载中，继续等待 3 秒...', 'cyan');
-                    await this.page.waitForTimeout(3000);
-                }
-            }
-            
-            // Prompt for SMS code (file-polling mode for non-TTY / agent environments)
-            let smsCode;
-            if (codeMode) {
-                log('\n─────────────────────────────────', 'cyan');
-                log('📲 已请求短信验证码，请在聊天里把 6 位验证码告诉我', 'yellow');
-                log('   我会把它写入 .automation/.local/auth/_pending_sms_code.txt 供脚本读取', 'yellow');
-                log('─────────────────────────────────\n', 'cyan');
-                smsCode = await this.waitForCodeFile(600);
-            } else {
-                log('\n─────────────────────────────────', 'cyan');
-                log('📲 请查看手机短信 / Please check your phone SMS', 'yellow');
-                smsCode = await prompt('🔢 请输入验证码 / Enter verification code');
-                log('─────────────────────────────────\n', 'cyan');
-            }
-            
-            if (!smsCode || smsCode.length < 4) {
-                throw new Error('Invalid SMS code');
-            }
-            
-            // Find and fill SMS code input
-            const codeInput = await this.findCodeInput();
-            if (!codeInput) {
-                throw new Error('Could not find verification code input field');
-            }
-            
-            await codeInput.fill(smsCode);
-            log('✅ Entered verification code', 'green');
+            log('\u2705 Entered phone number', 'green');
+        };
 
-            await this.page.waitForTimeout(1000);
-
-            // Guard 1: ensure still on SMS tab (page sometimes flips back to 密码登录)
-            const passwordVisible = await this.page.locator('input[placeholder*="密码"]:visible').count();
-            if (passwordVisible > 0) {
-                log('⚠️ 页面跳回了密码登录 tab，重新点击「验证码登录」...', 'yellow');
-                const smsTab = this.page.locator('text=验证码登录').first();
-                await smsTab.click({ force: true });
-                await this.page.waitForTimeout(1500);
-                // Re-fill code after tab switch (form re-rendered)
-                const codeInput2 = await this.findCodeInput();
-                if (codeInput2) {
-                    await codeInput2.fill(smsCode);
-                    log('✅ Re-entered verification code after tab switch', 'green');
-                }
-            }
-
-            // Guard 2: check the agreement checkbox if unchecked
-            try {
-                const checked = await this.page.evaluate(() => {
-                    const boxes = document.querySelectorAll('input[type="checkbox"]');
-                    for (const b of boxes) {
-                        if (b.closest('form') || b.offsetParent) return b.checked;
-                    }
-                    return true; // no visible checkbox found -> assume ok
-                });
-                if (!checked) {
-                    log('⚠️ 协议复选框未勾选，自动勾选「我同意」...', 'yellow');
-                    const agree = this.page.locator('text=我同意').first();
-                    await agree.click({ force: true });
-                    await this.page.waitForTimeout(500);
-                } else {
-                    log('✅ Agreement checkbox already checked', 'green');
-                }
-            } catch (e) {
-                log(`  (agreement check skipped: ${e.message})`, 'cyan');
-            }
-
-            // Click login/submit button
-            log('\n🔐 Clicking login button...', 'cyan');
-            const submitBtn = await this.findLoginButton();
-            
-            if (submitBtn) {
-                await submitBtn.click({ force: true });
-                log('✅ Clicked login button automatically', 'green');
-            } else {
-                log('\n⚠️ Could not find login button automatically', 'yellow');
-                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
-                log('👉 请在浏览器中手动点击"登录"按钮', 'yellow');
-                log('👉 Please manually click "登录" button in browser', 'yellow');
-                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'yellow');
-                await prompt('\n⏸️ 点击完成后请按回车 / Press Enter after clicking...');
-            }
-            
-            // Wait for login to complete
-            log('\n⏳ Waiting for login to complete...', 'cyan');
-            await this.page.waitForTimeout(5000);
-
-            // Check for slider captcha
-            const hasSlider = await this.checkForSliderCaptcha();
-            if (hasSlider) {
-                if (!process.stdin.isTTY) {
-                    if (codeMode) {
-                        // Headed window is open on user's screen; poll until they solve it
-                        log('\n⚠️ 检测到滑块验证！请在弹出的浏览器窗口手动拖动完成', 'yellow');
-                        log('⏳ 等待你在窗口中完成滑块（最长 120 秒）...', 'yellow');
-                        const deadline = Date.now() + 120000;
-                        while (Date.now() < deadline) {
-                            await this.page.waitForTimeout(3000);
-                            if (await this.checkPageLoggedIn()) break;
-                        }
-                    } else {
-                        throw new Error('⚠️ 检测到滑块验证，但当前为非交互环境无法手动完成。请改为在本地终端运行：node .automation/skills/kuaishou-login/scripts/login.js');
-                    }
-                } else {
-                    log('\n⚠️ Slider captcha detected!', 'yellow');
-                    log('📝 Please complete the captcha manually in the browser', 'yellow');
-                    await prompt('\n⏸️ Press Enter after completing captcha...');
-                }
-            }
-
-            // First check current page without re-navigating
-            if (await this.checkPageLoggedIn()) {
-                log('\n✅ Login successful!', 'green');
+        try {
+            // Fast path: a still-valid saved session
+            if (await this.isLoggedIn()) {
+                log('\n\u2705 Already logged in!', 'green');
                 await this.saveSession();
                 return true;
             }
 
-            // Wait and check again with navigation
-            log('⏳ Waiting for login success...', 'cyan');
+            log('\n🔐 Need to login', 'yellow');
+            await this.page.waitForTimeout(3000);
+            await this.page.screenshot({ path: 'login_initial.png' }).catch(() => {});
 
-            let attempts = 0;
-            const maxAttempts = 6; // 30 seconds total
-
-            while (attempts < maxAttempts) {
-                await this.page.waitForTimeout(5000);
-                attempts++;
-                log(`  Attempt ${attempts}/${maxAttempts}...`, 'cyan');
-                if (await this.isLoggedIn()) {
-                    log('\n✅ Login successful!', 'green');
-                    await this.saveSession();
-                    return true;
-                }
-                // Debug: capture what the login page is showing (slider? error toast?)
+            // Loop: each iteration mints a FRESH SMS code. Handles a wrong/expired
+            // code (re-request) and a transient Chromium crash (relaunch + retry).
+            const maxAttempts = 4;
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
                 try {
-                    const dbg = '/tmp/ks_login_debug.png';
-                    await this.page.screenshot({ path: dbg, fullPage: false });
-                    log(`  📸 debug screenshot -> ${dbg}`, 'cyan');
-                } catch (_) {}
+                    await setupPhoneSession();
+
+                    // 1) Request a fresh SMS code
+                    await this.page.waitForTimeout(1500);
+                    log('\n📲 Clicking SMS code button...', 'cyan');
+                    let smsBtn = await this.clickGetSMSButton();
+                    if (!smsBtn) {
+                        log('\u26A0\uFE0F First try missed, retrying once...', 'yellow');
+                        await this.page.waitForTimeout(2000);
+                        smsBtn = await this.clickGetSMSButton();
+                    }
+                    log(smsBtn ? '\u2705 Clicked SMS code button' : '\u26A0\uFE0F Could not click SMS code button', smsBtn ? 'green' : 'yellow');
+                    await this.page.waitForTimeout(3000);
+
+                    // 2) Wait for the code (file-poll in agent mode; prompt in TTY)
+                    let smsCode;
+                    if (codeMode) {
+                        log('\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500', 'cyan');
+                        log('📲 已请求短信验证码，请在聊天里把 6 位验证码告诉我', 'yellow');
+                        log('   我会把它写入 .automation/.local/auth/_pending_sms_code.txt 供脚本读取', 'yellow');
+                        log('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n', 'cyan');
+                        smsCode = await this.waitForCodeFile(600);
+                    } else {
+                        log('\n📲 请查看手机短信 / Please check your phone SMS', 'yellow');
+                        smsCode = await prompt('🔢 请输入验证码 / Enter verification code');
+                    }
+                    if (!smsCode || smsCode.length < 4) throw new Error('Invalid SMS code');
+
+                    // 3) Fill the code
+                    const codeInput = await this.findCodeInput();
+                    if (!codeInput) throw new Error('Could not find verification code input field');
+                    await codeInput.fill(smsCode);
+                    log('\u2705 Entered verification code', 'green');
+                    await this.page.waitForTimeout(1000);
+
+                    // Guard 1: page sometimes flips back to the password tab
+                    const passwordVisible = await this.page.locator('input[placeholder*="\u5BC6\u7801"]:visible').count();
+                    if (passwordVisible > 0) {
+                        log('\u26A0\uFE0F 页面跳回了密码登录 tab，重新点击「验证码登录」...', 'yellow');
+                        await this.page.locator('text=\u9A8C\u8BC1\u7801\u767B\u5F55').first().click({ force: true });
+                        await this.page.waitForTimeout(1500);
+                        const codeInput2 = await this.findCodeInput();
+                        if (codeInput2) {
+                            await codeInput2.fill(smsCode);
+                            log('\u2705 Re-entered verification code after tab switch', 'green');
+                        }
+                    }
+
+                    // Guard 2: ensure the agreement checkbox is checked
+                    try {
+                        const checked = await this.page.evaluate(() => {
+                            const boxes = document.querySelectorAll('input[type="checkbox"]');
+                            for (const b of boxes) {
+                                if (b.closest('form') || b.offsetParent) return b.checked;
+                            }
+                            return true;
+                        });
+                        if (!checked) {
+                            log('\u26A0\uFE0F 协议复选框未勾选，自动勾选「我同意」...', 'yellow');
+                            await this.page.locator('text=\u6211\u540C\u610F').first().click({ force: true });
+                            await this.page.waitForTimeout(500);
+                        } else {
+                            log('\u2705 Agreement checkbox already checked', 'green');
+                        }
+                    } catch (e) {
+                        log(`  (agreement check skipped: ${e.message})`, 'cyan');
+                    }
+
+                    // 4) Submit
+                    log('\n🔐 Clicking login button...', 'cyan');
+                    const submitBtn = await this.findLoginButton();
+                    if (submitBtn) {
+                        await submitBtn.click({ force: true });
+                        log('\u2705 Clicked login button automatically', 'green');
+                    } else {
+                        log('\n\u26A0\uFE0F Could not find login button automatically', 'yellow');
+                        await prompt('\n\u23F8\uFE0F 点击完成后请按回车 / Press Enter after clicking...');
+                    }
+
+                    // 5) Wait for completion
+                    log('\n\u23F3 Waiting for login to complete...', 'cyan');
+                    await this.page.waitForTimeout(5000);
+
+                    const hasSlider = await this.checkForSliderCaptcha();
+                    if (hasSlider) {
+                        if (codeMode) {
+                            log('\n\u26A0\uFE0F 检测到滑块验证！请在弹出的浏览器窗口手动拖动完成', 'yellow');
+                            log('\u23F3 等待你在窗口中完成滑块（最长 120 秒）...', 'yellow');
+                            const deadline = Date.now() + 120000;
+                            while (Date.now() < deadline) {
+                                await this.page.waitForTimeout(3000);
+                                if (await this.checkPageLoggedIn()) break;
+                            }
+                        } else if (process.stdin.isTTY) {
+                            log('\n\u26A0\uFE0F Slider captcha detected!', 'yellow');
+                            await prompt('\n\u23F8\uFE0F Press Enter after completing captcha...');
+                        } else {
+                            throw new Error('\u26A0\uFE0F 检测到滑块验证，但当前为非交互环境无法手动完成。请改为在本地终端运行：node .automation/skills/kuaishou-login/scripts/login.js');
+                        }
+                    }
+
+                    if (await this.checkPageLoggedIn()) {
+                        log('\n\u2705 Login successful!', 'green');
+                        await this.saveSession();
+                        return true;
+                    }
+
+                    // 6) Poll for the redirect to settle
+                    let ok = false;
+                    for (let a = 0; a < 6; a++) {
+                        await this.page.waitForTimeout(5000);
+                        log(`  Poll ${a + 1}/6...`, 'cyan');
+                        if (await this.isLoggedIn()) { ok = true; break; }
+                        try { await this.page.screenshot({ path: '/tmp/ks_login_debug.png', fullPage: false }); } catch (_) {}
+                    }
+                    if (ok) {
+                        log('\n\u2705 Login successful!', 'green');
+                        await this.saveSession();
+                        return true;
+                    }
+
+                    // 7) Not logged in -> decide whether to retry with a fresh code
+                    const onLoginPage = /passport|\/login/.test(this.page.url()) || await this.isOnSmsLoginForm().catch(() => false);
+                    const pageText = await this.page.evaluate(() => document.body.innerText).catch(() => '');
+                    const codeErr = /\u9A8C\u8BC1\u7801.{0,6}(\u9519\u8BEF|\u6709\u8BEF|\u5931\u6548|\u8FC7\u671F|\u4E0D\u6B63\u786E)|\u8BE5\u9A8C\u8BC1\u7801/.test(pageText);
+                    if (codeErr || onLoginPage) {
+                        log(`\u26A0\uFE0F 登录未通过（${codeErr ? '验证码错误/失效' : '仍停留在登录页'}），重新获取验证码（第 ${attempt}/${maxAttempts} 次）`, 'yellow');
+                        continue;
+                    }
+
+                    log('--- \u9875\u9762\u53EF\u89C1\u6587\u672C ---\n' + pageText.slice(0, 800) + '\n--- end ---', 'yellow');
+                    throw new Error('Login failed after submit (unknown reason)');
+
+                } catch (err) {
+                    const msg = (err && err.message) ? err.message : String(err);
+
+                    // Crash / detach recovery: relaunch and retry (fresh code next loop)
+                    if (/Page crashed|Target closed|Execution context was destroyed|detached|Session closed|Browser closed/i.test(msg)) {
+                        if (attempt >= maxAttempts) {
+                            throw new Error(`\u26A0\uFE0F 页面反复崩溃（${attempt} 次），停止重试。请检查系统 Chrome 是否正常。`);
+                        }
+                        log(`  \u26A0\uFE0F 页面崩溃，自动重启浏览器并重试（第 ${attempt}/${maxAttempts} 次）...`, 'yellow');
+                        try { await this.browser.close().catch(() => {}); } catch (_) {}
+                        await this.init();
+                        continue;
+                    }
+
+                    if (/Invalid SMS code/.test(msg)) {
+                        log(`\u26A0\uFE0F 验证码无效，重新获取（第 ${attempt}/${maxAttempts} 次）`, 'yellow');
+                        continue;
+                    }
+
+                    throw err;
+                }
             }
 
-            // Dump visible page text to diagnose failure (slider, error toast, wrong code msg)
-            try {
-                const visibleText = await this.page.evaluate(() => document.body.innerText.slice(0, 1500));
-                log('--- 页面可见文本 ---\n' + visibleText + '\n--- end ---', 'yellow');
-            } catch (_) {}
-            throw new Error('Login timeout - please check if SMS code was correct');
-            
+            throw new Error('\u23F0 多次尝试仍未登录成功（验证码反复失效或页面异常）');
         } catch (error) {
-            log(`\n❌ Login failed: ${error.message}`, 'red');
+            log(`\n\u274C Login failed: ${error.message}`, 'red');
             throw error;
         }
     }
@@ -832,7 +810,24 @@ export class KuaishouLogin {
         log('   （二维码会自动续期，页面崩溃也会自动重启，随时回来扫都有效）', 'yellow');
         log('━'.repeat(45) + '\n', 'yellow');
 
-        await this._gotoLoginAndCaptureQr();
+        // 初始加载登录页 + 截二维码，同样做崩溃自愈（开局崩不能 fatal 退出）
+        let initialOk = false;
+        for (let i = 0; i < 5 && !initialOk; i++) {
+            try {
+                await this._gotoLoginAndCaptureQr();
+                initialOk = true;
+            } catch (err) {
+                const msg = (err && err.message) ? err.message : String(err);
+                if (/Page crashed|Target closed|Execution context was destroyed|detached|Session closed|Browser closed/i.test(msg)) {
+                    log(`  ⚠️ 初始加载崩溃，自动重启浏览器（第 ${i + 1} 次）...`, 'yellow');
+                    try { await this.browser.close().catch(() => {}); } catch (_) {}
+                    await this.init();
+                } else {
+                    throw err;
+                }
+            }
+        }
+        if (!initialOk) throw new Error('⚠️ 初始加载反复崩溃，停止重试。请检查系统 Chrome 是否正常。');
 
         const deadline = Date.now() + timeoutSec * 1000;
         let lastUrl = '';
