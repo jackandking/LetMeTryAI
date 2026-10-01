@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>国庆出门你会选哪个节日红妆容？4款实景参考</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">国庆出门你会选哪个节日红妆容？复古/水光/哑光/派对红比一比</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">国庆出门你会选哪个节日红妆容？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vintage-red-lip">
+                            <div class="card-image">
+                                <img src="images/vintage-red-lip.svg" alt="复古红唇配细眼线妆容" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">复古红唇+细眼线</h3>
+                                <p class="option-desc">复古摩登，拍照显气质，适合文艺风街拍与正式午宴。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="glossy-glass-red">
+                            <div class="card-image">
+                                <img src="images/glossy-glass-red.svg" alt="水光亮泽红唇妆" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">水光亮泽红</h3>
+                                <p class="option-desc">水光质感，日间出街提亮肤色，显得清透又精神。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="matte-maple-red">
+                            <div class="card-image">
+                                <img src="images/matte-maple-red.svg" alt="哑光枫叶红唇妆" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">哑光枫叶红</h3>
+                                <p class="option-desc">哑光质地，秋日街拍更显高级与沉稳气场。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="glitter-party-red">
+                            <div class="card-image">
+                                <img src="images/glitter-party-red.svg" alt="派对亮片红妆" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">派对亮片红</h3>
+                                <p class="option-desc">珠光或细亮片，晚间庆祝更吸睛，适合派对与节日晚宴。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
