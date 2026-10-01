@@ -1,0 +1,19 @@
+{
+  "id": "home-kids-patriotic-songs",
+  "name": "家里爱国歌小查",
+  "description": "轻松的亲子投票页，鼓励家长和孩子回忆并分享在家常唱的爱国歌曲，适合作为家庭活动或音乐教育素材。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "爱国歌",
+    "亲子唱歌",
+    "家庭活动",
+    "音乐教育",
+    "回忆分享",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "home-kids-patriotic-songs/images/wo-he-wo-de-zu-guo.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-01T19:00:32.285Z"
+}

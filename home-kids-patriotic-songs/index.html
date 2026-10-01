@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>家里和孩子会唱哪首爱国歌？怀旧版 vs 儿歌版</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">家里和孩子会唱哪首爱国歌？你家是怀旧版还是儿歌版？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你家和孩子通常会唱哪首爱国歌？选出最常唱的一项（可多选改为单选）</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wo-he-wo-de-zu-guo">
+                            <div class="card-image">
+                                <img src="images/wo-he-wo-de-zu-guo.svg" alt="孩子唱我和我的祖国" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">我和我的祖国</h3>
+                                <p class="option-desc">节日与学校常唱，旋律熟悉、孩子易跟唱。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ge-chang-zu-guo">
+                            <div class="card-image">
+                                <img src="images/ge-chang-zu-guo.svg" alt="家庭合唱歌唱祖国" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">歌唱祖国</h3>
+                                <p class="option-desc">经常合唱的经典曲目，声音宏亮、有合唱感。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hongse-erge">
+                            <div class="card-image">
+                                <img src="images/hongse-erge.svg" alt="儿童唱红色儿歌示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">红色儿歌/简短爱国儿歌</h3>
+                                <p class="option-desc">短小押韵、容易记，常在幼儿园或活动中听到。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jia-li-xiangyao-zi-chuang">
+                            <div class="card-image">
+                                <img src="images/jia-li-xiangyao-zi-chuang.svg" alt="家庭小调示意" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">家里传唱的乡谣或自创曲</h3>
+                                <p class="option-desc">地方小调或家人自创的版本，带强烈家庭记忆。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
