@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>哪些老物件会把您瞬间带回过去？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">哪些老物件会把您瞬间带回过去？哪个画面更戳您？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">哪些老物件会把您瞬间带回过去？请选择能直接勾起那一刻回忆的物品。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vinyl-records">
+                            <div class="card-image">
+                                <img src="images/vinyl-records.svg" alt="黑胶唱片与唱机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">黑胶唱片</h3>
+                                <p class="option-desc">唱针落下，老歌和客厅的灯光一起回到那年。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="film-camera">
+                            <div class="card-image">
+                                <img src="images/film-camera.svg" alt="老式胶片相机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">胶片相机</h3>
+                                <p class="option-desc">卷片按下，老照片里有刚学走路的孩子和节日的笑脸。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="handwritten-letters">
+                            <div class="card-image">
+                                <img src="images/handwritten-letters.svg" alt="手写信件与邮票" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">手写家书</h3>
+                                <p class="option-desc">一页页笔迹和邮票，字里行间全是家的味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tube-radio">
+                            <div class="card-image">
+                                <img src="images/tube-radio.svg" alt="老式收音机" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">老式收音机</h3>
+                                <p class="option-desc">夜晚收音机里播着熟悉的节目，家的声音在屋里回荡。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
