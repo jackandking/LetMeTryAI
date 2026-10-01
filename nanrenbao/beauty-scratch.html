@@ -197,18 +197,62 @@
     img.src=IMAGES[i];
   }
 
+  var pendingNext = null;   // 看完广告后要跳到的图索引
+
+  // 触发快手小程序内置激励视频广告；广告播完由 showRewardedVideoAd 页带 finishedAd 跳回本页
+  function showAdForNext(){
+    if (typeof ks !== 'undefined' && ks.navigateTo) {
+      pendingNext = (idx+1 < IMAGES.length) ? idx+1 : 0;
+      // 跨页面重载兜底：记下“触发前那张”和“看完要跳的那张”
+      try {
+        localStorage.setItem('bs_pending_next', String(pendingNext));
+        localStorage.setItem('bs_current_idx', String(idx));
+      } catch(e){}
+      ks.navigateTo({
+        url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/beauty-scratch"
+      });
+    } else {
+      // 浏览器/调试环境：无广告 SDK，直接下一张（MVP 兜底）
+      if(idx+1<IMAGES.length){ load(idx+1); } else { load(0); }
+    }
+  }
+
+  // 页面加载时检查是否刚看完广告跳回（finishedAd 由 showRewardedVideoAd 页带回来）
+  function handleAdReturn(){
+    var fp = new URLSearchParams(location.search).get('finishedAd');
+    if (fp !== null) {
+      var nextIdx = null, curIdx = 0;
+      try {
+        nextIdx = parseInt(localStorage.getItem('bs_pending_next'), 10);
+        curIdx  = parseInt(localStorage.getItem('bs_current_idx'), 10);
+        localStorage.removeItem('bs_pending_next');
+        localStorage.removeItem('bs_current_idx');
+      } catch(e){}
+      // 清理 URL，避免重复触发
+      try { history.replaceState({}, document.title, location.pathname); } catch(e){}
+      if (fp === 'true' && !isNaN(nextIdx) && nextIdx>=0 && nextIdx<IMAGES.length) {
+        pendingNext = null; load(nextIdx); return;
+      }
+      // 未完成广告：回到触发前的那一张
+      if (!isNaN(curIdx) && curIdx>=0 && curIdx<IMAGES.length) { load(curIdx); return; }
+      load(0); return;
+    }
+    load(0);
+  }
+
   cv.addEventListener('pointerdown',onDown);
   window.addEventListener('pointermove',onMove);
   window.addEventListener('pointerup',onUp);
   window.addEventListener('pointercancel',onUp);
 
   $('nextBtn').addEventListener('click',function(){
-    // MVP：直接看下一张；接入快手激励视频后，此处为 finishedAd 判断 + 广告解锁
-    if(idx+1<IMAGES.length){ load(idx+1); } else { load(0); }
+    // 看完广告回来(finishedAd=true)由 handleAdReturn 自动解锁下一张；
+    // 这里只负责：未看完则触发激励视频广告
+    showAdForNext();
   });
   $('homeBtn').addEventListener('click',function(){ location.href='https://letmetryai.cn/nanrenbao/'; });
 
-  load(0);
+  handleAdReturn();
 })();
 </script>
 </body>
