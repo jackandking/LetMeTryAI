@@ -1,0 +1,6 @@
+# 本地 cron 运行产物（不进 git）
+last-run.json
+pending-email.json
+evolve.cron.out.log
+evolve.cron.err.log
+evolve.cron.log
