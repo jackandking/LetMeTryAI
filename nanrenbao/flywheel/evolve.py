@@ -96,7 +96,19 @@ def committed_champions(repo_root, rel_path):
         return None
 
 
-def auto_push(out_path, new_champions):
+def champion_changed(out_path, new_champions):
+    out_path = os.path.abspath(out_path)
+    rc, repo_root, _ = git(["rev-parse", "--show-toplevel"], os.path.dirname(out_path))
+    if rc != 0:
+        return True  # 不在仓库内：当作变化，交给调用方决定（通常不写）
+    rel = os.path.relpath(out_path, repo_root)
+    if rel.startswith(".."):
+        return True
+    old = committed_champions(repo_root, rel)
+    return champions_fingerprint(new_champions) != champions_fingerprint(old)
+
+
+def commit_push(out_path):
     out_path = os.path.abspath(out_path)
     rc, repo_root, _ = git(["rev-parse", "--show-toplevel"], os.path.dirname(out_path))
     if rc != 0:
@@ -105,10 +117,6 @@ def auto_push(out_path, new_champions):
     rel = os.path.relpath(out_path, repo_root)
     if rel.startswith(".."):
         print("[autopush] 输出文件不在仓库内，跳过", file=sys.stderr)
-        return False
-    old = committed_champions(repo_root, rel)
-    if champions_fingerprint(new_champions) == champions_fingerprint(old):
-        print("[autopush] champion 未变化，跳过推送")
         return False
     print("[autopush] champion 变化，提交并推送...")
     git(["pull", "--rebase", "--autostash", "origin", "main"], repo_root)
@@ -197,15 +205,27 @@ def main():
         "champion_seeds": champions,
         "fallback_seeds": FALLBACK_SEEDS,
     }
-    with open(args.out, "w") as f:
-        json.dump(out, f, ensure_ascii=False, indent=2)
-    print(
-        f"wrote {args.out}: {len(champions)} champions, "
-        f"{sum(len(v) for v in ranked.values())} ranked dimension values"
-    )
-
     if args.auto_push:
-        auto_push(args.out, champions)
+        if not champion_changed(args.out, champions):
+            print(
+                f"[autopush] champion 未变化，跳过写入与推送（保持工作区干净）: "
+                f"{len(champions)} champions"
+            )
+        else:
+            with open(args.out, "w") as f:
+                json.dump(out, f, ensure_ascii=False, indent=2)
+            print(
+                f"wrote {args.out}: {len(champions)} champions, "
+                f"{sum(len(v) for v in ranked.values())} ranked dimension values"
+            )
+            commit_push(args.out)
+    else:
+        with open(args.out, "w") as f:
+            json.dump(out, f, ensure_ascii=False, indent=2)
+        print(
+            f"wrote {args.out}: {len(champions)} champions, "
+            f"{sum(len(v) for v in ranked.values())} ranked dimension values"
+        )
 
 
 if __name__ == "__main__":
