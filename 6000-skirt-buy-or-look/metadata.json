@@ -1,0 +1,19 @@
+{
+  "id": "6000-skirt-buy-or-look",
+  "name": "女人爱·心动还是观望",
+  "description": "图文投票页，通过模特场景图与简短文案呈现6000元级裙子的购买冲动、犹豫、观望与省钱策略，适配美妆/时尚/情感用户群，鼓励评论故事型回复，提升参与与转发率。",
+  "category": "时尚",
+  "profileId": "womanai",
+  "keywords": [
+    "高价裙子",
+    "购物冲动",
+    "理性消费",
+    "场景化投票",
+    "女人爱",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "6000-skirt-buy-or-look/images/buy-now.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-02T20:00:34.092Z"
+}
