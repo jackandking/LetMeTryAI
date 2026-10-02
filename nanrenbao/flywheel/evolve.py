@@ -5,10 +5,13 @@
 输出胜出维度与冠军种子到 seeds.json（单一真相源，部署在 letmetryai.cn/nanrenbao，GitHub Pages 静态文件）。
 
 纯只读（/mysql/query 白名单）+ 本地产出，不碰任何写接口，不需 DB 凭据。
+加 --auto-push 时：仅在 champion_seeds 相对上次提交发生变化才 commit + push 到 GitHub（触发 GH Pages 重建，约 80s 后生效），无变化则跳过。
 """
 import argparse
 import datetime
 import json
+import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -74,10 +77,66 @@ def fetch_rows(table, col):
     return data, None
 
 
+def git(args, cwd):
+    r = subprocess.run(["git", "-C", cwd] + args, capture_output=True, text=True)
+    return r.returncode, r.stdout.strip(), r.stderr.strip()
+
+
+def champions_fingerprint(champions):
+    return json.dumps(champions, sort_keys=True, ensure_ascii=False)
+
+
+def committed_champions(repo_root, rel_path):
+    rc, out, _ = git(["show", f"HEAD:{rel_path}"], repo_root)
+    if rc != 0:
+        return None  # 未跟踪 / 无 HEAD
+    try:
+        return json.loads(out).get("champion_seeds")
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def auto_push(out_path, new_champions):
+    out_path = os.path.abspath(out_path)
+    rc, repo_root, _ = git(["rev-parse", "--show-toplevel"], os.path.dirname(out_path))
+    if rc != 0:
+        print("[autopush] 不在 git 仓库内，跳过", file=sys.stderr)
+        return False
+    rel = os.path.relpath(out_path, repo_root)
+    if rel.startswith(".."):
+        print("[autopush] 输出文件不在仓库内，跳过", file=sys.stderr)
+        return False
+    old = committed_champions(repo_root, rel)
+    if champions_fingerprint(new_champions) == champions_fingerprint(old):
+        print("[autopush] champion 未变化，跳过推送")
+        return False
+    print("[autopush] champion 变化，提交并推送...")
+    git(["pull", "--rebase", "--autostash", "origin", "main"], repo_root)
+    rc, _, err = git(["add", rel], repo_root)
+    if rc != 0:
+        print(f"[autopush] add 失败: {err}", file=sys.stderr)
+        return False
+    rc, _, err = git(["commit", "-m", "chore(flywheel): auto-update seeds champions"], repo_root)
+    if rc != 0:
+        print(f"[autopush] commit 失败: {err}", file=sys.stderr)
+        return False
+    rc, _, err = git(["push", "origin", "main"], repo_root)
+    if rc != 0:
+        git(["pull", "--rebase", "--autostash", "origin", "main"], repo_root)
+        rc, _, err = git(["push", "origin", "main"], repo_root)
+    if rc != 0:
+        print(f"[autopush] push 失败: {err}", file=sys.stderr)
+        return False
+    print("[autopush] 已推送，GH Pages 约 80s 后生效")
+    return True
+
+
 def main():
     ap = argparse.ArgumentParser(description="男人宝飞轮 DNA 聚合加权器")
     ap.add_argument("--out", default="seeds.json", help="输出 JSON 路径")
     ap.add_argument("--top", type=int, default=5, help="每个维度/冠军保留前 N")
+    ap.add_argument("--auto-push", action="store_true",
+                    help="champion 变化时才 commit+push 到 GitHub（GH Pages 重建）")
     args = ap.parse_args()
 
     leaderboard = {d: {} for d in DIMENSIONS}  # dim -> {value: {sum, n}}
@@ -144,6 +203,9 @@ def main():
         f"wrote {args.out}: {len(champions)} champions, "
         f"{sum(len(v) for v in ranked.values())} ranked dimension values"
     )
+
+    if args.auto_push:
+        auto_push(args.out, champions)
 
 
 if __name__ == "__main__":
