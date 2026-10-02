@@ -25,9 +25,9 @@ portrait-prompt-studio  ──提示词──▶  用户生成图片  ──▶ 
 
 ## 数据流（已落库字段）
 
-`beauty_images` / `back_view_images` 均含：
-`review_status`(pending/approved/rejected)、`source_type`(legacy/skill)、`submitted_at`、
-`prompt_dna`(TEXT, 本次新增：存用户改良版提示词 JSON)、`click_count` / `view_count`(站内热度)。
+两表共有：`review_status`(pending/approved/rejected)、`source_type`(legacy/skill)、`submitted_at`、
+`prompt_dna`(TEXT，存用户改良版提示词 JSON)。
+互动量列名不同：`beauty_images` 用 `view_count`（花积分解锁次数，见 points-system.js），`back_view_images` 用 `click_count`（点击次数，见 back-view-killer.html）；evolve.py 按表用对列名聚合，避免误以为双表同列。
 
 投稿走后端 **`POST /mysql/insert`**——这两个表在白名单内，**公开即可插入且默认 pending**（P0 安全修复后，
 `/mysql/query` 仅允许对白名单表只读 SELECT，`/mysql/insert` 对白名单表开放写）。无需 admin key。

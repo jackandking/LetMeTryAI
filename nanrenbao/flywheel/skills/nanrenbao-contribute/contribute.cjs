@@ -12,6 +12,8 @@ const path = require('path');
 const BASE = 'https://letmetry.cn';
 const INSERT_EP = `${BASE}/mysql/insert`;
 const UPLOAD_EP = `${BASE}/image/upload`;
+// 预览页是 nanrenbao H5，部署在 letmetryai.cn/nanrenbao（GitHub Pages），不在 letmetry.cn 上
+const PREVIEW_BASE = 'https://letmetryai.cn/nanrenbao';
 
 function parseArgs(argv) {
   const a = { table: 'beauty', sourceId: '', dna: '{}' };
@@ -75,7 +77,7 @@ async function insertRow(table, data) {
     }
 
     id = await insertRow(table, data);
-    const preview = `${BASE}/nanrenbao/review-preview.html?id=${id}&table=${a.table === 'backview' ? 'back_view' : 'beauty'}`;
+    const preview = `${PREVIEW_BASE}/review-preview.html?id=${id}&table=${a.table === 'backview' ? 'back_view' : 'beauty'}`;
     console.log('✅ 已提交审核 (review_status=pending)');
     console.log(`   表: ${table}  |  新行 id=${id}`);
     console.log(`   预览链接: ${preview}`);

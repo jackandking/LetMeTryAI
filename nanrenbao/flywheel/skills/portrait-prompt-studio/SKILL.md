@@ -1,5 +1,6 @@
 ---
 name: portrait-prompt-studio
+slug: portrait-prompt-studio
 displayName: 写真·艺术人像提示词工作室
 version: 1.0.0
 description: 返回高质量「写真 / 艺术人像」图像生成提示词与结构化 DNA 模板，帮助用户生成有质感的人像图，并记录改良版提示词用于持续进化。仅限着衣、艺术化、非性化的内容。
@@ -39,7 +40,13 @@ python3 ../recorder.py \
   --dna '{"style":"电影感","lighting":"霓虹","wardrobe":"红裙"}'
 ```
 
-## 种子提示词（高质感、着衣、艺术化）
+## 种子提示词（动态获取 + 内置兜底）
+
+> 进化中的种子 DNA **不再硬编码于此**。运行时优先从单一真相源拉取当前胜出 DNA：
+> `https://letmetryai.cn/nanrenbao/seeds.json`
+> 由 `evolve.py` 定时根据站内 `view_count` 聚合生成。拉取失败或为空时，回退到下方**内置兜底种子**，生成不中断。这样每次进化只改服务端 `seeds.json`，本 skill 包无需重发。
+
+### 内置兜底种子（仅在 fetch 失败时使用）
 
 ### A. 背影杀（呼应站内「背影杀」玩法）
 > Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible

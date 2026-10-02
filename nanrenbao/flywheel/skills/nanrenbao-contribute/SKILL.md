@@ -1,5 +1,6 @@
 ---
 name: nanrenbao-contribute
+slug: nanrenbao-contribute
 displayName: 男人宝·图片投稿（审核+预览）
 version: 1.0.0
 description: 把用户用 portrait-prompt-studio 等生成的图片投稿到男人宝画廊。自动插入待审行(review_status=pending)并返回预先准备好的预览链接；审核通过后该链接会展示真实照片并深链到站内对应位置。
@@ -20,7 +21,7 @@ type: free
    - `back_view_images`: `{ back_image_url, front_image_url, review_status:"pending", source_type:"skill", submitted_at:<now>, prompt_dna:<json> }`
    - 这两个表在后端白名单内，**公开即可插入，无需 admin key**（见后端 P0 安全修复）。
 4. 返回预览链接：
-   `https://letmetry.cn/nanrenbao/review-preview.html?id=<insertId>&table=<beauty|back_view>`
+   `https://letmetryai.cn/nanrenbao/review-preview.html?id=<insertId>&table=<beauty|back_view>`
 5. 文案（给用户）：「已提交审核，通常 1–2 个工作日内完成。审核通过前此链接显示占位；通过后即可看到你的照片在站内的真实效果，并可一键跳到画廊中它的位置。」
 
 ## 执行脚本
@@ -35,10 +36,10 @@ node contribute.cjs \
   --dna '{"style":"电影感","lighting":"霓虹"}'
 
 # 或传 URL：
-node contribute.js --image "https://.../p.jpg" --table beauty --dna '{...}'
+node contribute.cjs --image "https://.../p.jpg" --table beauty --dna '{...}'
 
 # 背影杀（需背+正两张）：
-node contribute.js --table backview --back <backUrl> --front <frontUrl> --dna '{...}'
+node contribute.cjs --table backview --back <backUrl> --front <frontUrl> --dna '{...}'
 ```
 
 脚本会打印预览链接。投稿后请顺手运行 `../recorder.py` 把这次的 (source_id, 源提示词, 改良提示词, db_id) 记到 `prompt-log.jsonl`。
