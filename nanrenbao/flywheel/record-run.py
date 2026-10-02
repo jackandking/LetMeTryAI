@@ -56,12 +56,16 @@ def main():
         json.dump(state, f, ensure_ascii=False, indent=2)
 
     rel = os.path.relpath(state_path, repo)
+    subprocess.run(["git", "-C", repo, "pull", "--rebase", "--autostash", "origin", "main"], check=False)
     subprocess.run(["git", "-C", repo, "add", rel], check=False)
     subprocess.run(
         ["git", "-C", repo, "commit", "-m", "chore(flywheel): update evolution-state (pushed_at)"],
         check=False,
     )
-    subprocess.run(["git", "-C", repo, "push", "origin", "main"], check=False)
+    rc = subprocess.run(["git", "-C", repo, "push", "origin", "main"], check=False).returncode
+    if rc != 0:  # 分叉再兜底一次
+        subprocess.run(["git", "-C", repo, "pull", "--rebase", "--autostash", "origin", "main"], check=False)
+        subprocess.run(["git", "-C", repo, "push", "origin", "main"], check=False)
 
     # 本机 macOS 通知
     try:
