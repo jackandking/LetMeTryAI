@@ -1,0 +1,19 @@
+{
+  "id": "new-metro-photo-play",
+  "name": "家长爱·地铁拍玩点",
+  "description": "围绕新版地铁体验，从拍照场景与亲子玩耍角度列出几类站点类型，帮助家长选站、分享拍照灵感与出行建议。",
+  "category": "家庭生活",
+  "profileId": "parent-tools",
+  "keywords": [
+    "地铁",
+    "亲子出行",
+    "拍照",
+    "儿童活动",
+    "站点推荐",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "new-metro-photo-play/images/spacious-hall.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-02T19:00:53.503Z"
+}
