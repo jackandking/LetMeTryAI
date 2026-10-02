@@ -1,0 +1,20 @@
+{
+  "id": "guoqing-slow-routes-elder",
+  "name": "爱老人慢游",
+  "description": "面向带父母出行的家庭，提供四种慢节奏出游场景（温泉、古镇、海边、茶园），每项用具体画面与体验诉求吸引投票与讨论。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "国庆",
+    "老人出游",
+    "慢节奏",
+    "养生",
+    "怀旧",
+    "家庭陪伴",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "guoqing-slow-routes-elder/images/hot-springs-retreat.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-02T18:00:44.589Z"
+}
