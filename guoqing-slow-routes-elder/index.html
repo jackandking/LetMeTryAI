@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>国庆带老人出游，你更爱哪种慢节奏线路？ — 情景化慢度假选项</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">国庆带老人出游，你更爱哪种慢节奏线路？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">国庆带老人出游，你更爱哪种慢节奏线路？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="hot-springs-retreat">
+                            <div class="card-image">
+                                <img src="images/hot-springs-retreat.svg" alt="老人温泉泡汤" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温泉养生慢游</h3>
+                                <p class="option-desc">泡温泉+轻松按摩，晚上在民宿听雨水声，适合放慢节奏休息的假期画面。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="ancient-town-stroll">
+                            <div class="card-image">
+                                <img src="images/ancient-town-stroll.svg" alt="古镇散步" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">古镇怀旧慢行</h3>
+                                <p class="option-desc">古巷散步、老店小吃，和父母一起回味老照片里的街景与味道。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="seaside-tide-watch">
+                            <div class="card-image">
+                                <img src="images/seaside-tide-watch.svg" alt="海边看潮" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">海边看潮慢度假</h3>
+                                <p class="option-desc">傍晚看潮起潮落，听海风和贝壳声，适合静心谈天和轻松散步的线路。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tea-mountain-retreat">
+                            <div class="card-image">
+                                <img src="images/tea-mountain-retreat.svg" alt="茶园山间" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">茶园山间静心</h3>
+                                <p class="option-desc">茶园漫步、品一盏清茶，空气清新、步调缓慢的乡村静享体验。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
