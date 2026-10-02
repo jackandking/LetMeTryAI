@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>新版地铁好在哪？带孩子去哪站更能拍照玩耍？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">新版地铁好在哪？带孩子去哪站更能拍照玩耍？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">你觉得新版地铁带孩子去哪个站更好拍照又能玩耍？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="spacious-hall">
+                            <div class="card-image">
+                                <img src="images/spacious-hall.svg" alt="孩子在宽敞站厅奔跑拍照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">宽敞站厅能跑跳</h3>
+                                <p class="option-desc">大站厅空旷，孩子能放心跑跳，抓拍背影和动感瞬间很容易。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="art-installation">
+                            <div class="card-image">
+                                <img src="images/art-installation.svg" alt="地铁里的艺术装置背景亲子照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">艺术装置打卡点</h3>
+                                <p class="option-desc">彩色壁画与装置背景丰富，亲子合影更有趣味感和画面层次。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="kids-play-corner">
+                            <div class="card-image">
+                                <img src="images/kids-play-corner.svg" alt="孩子在地铁儿童游乐角玩耍" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">儿童游乐角</h3>
+                                <p class="option-desc">站内或出入口附近有小型游乐区，孩子玩耍时的自然表情最能打动家长镜头。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="sunlit-platform">
+                            <div class="card-image">
+                                <img src="images/sunlit-platform.svg" alt="阳光照进地铁站平台亲子合影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">光影采光平台</h3>
+                                <p class="option-desc">高天窗或大片玻璃引入自然光，适合拍出温暖、有层次的亲子照片。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
