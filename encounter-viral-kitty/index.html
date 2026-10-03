@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>遇到那只刷屏小猫，拍照你会怎么摆？哪种姿势更上镜</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">遇到那只刷屏小猫，拍照你会怎么摆？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">遇到那只刷屏小猫，拍照你会怎么摆？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="kneel-close">
+                            <div class="card-image">
+                                <img src="images/kneel-close.svg" alt="蹲下与小猫同框的近景照" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">靠近蹲拍</h3>
+                                <p class="option-desc">蹲下与猫同高度，近距离捕捉萌脸与眼神，亲密感满分。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="top-down">
+                            <div class="card-image">
+                                <img src="images/top-down.svg" alt="从上方俯拍小猫萌脸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">俯拍萌脸</h3>
+                                <p class="option-desc">把手机举高俯拍，突出圆圆脑袋和小耳朵，萌感十足。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="backwide">
+                            <div class="card-image">
+                                <img src="images/backwide.svg" alt="远景背影与小猫互动的画面" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">背影远景</h3>
+                                <p class="option-desc">保持距离拍背影或环境感，画面有故事感与层次。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="reach-touch">
+                            <div class="card-image">
+                                <img src="images/reach-touch.svg" alt="伸手与小猫互动的瞬间特写" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">伸手互动</h3>
+                                <p class="option-desc">伸手轻抚或握手，捕捉互动瞬间的温度与表情变化。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
