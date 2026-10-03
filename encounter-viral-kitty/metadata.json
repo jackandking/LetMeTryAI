@@ -1,0 +1,20 @@
+{
+  "id": "encounter-viral-kitty",
+  "name": "刷屏小猫拍照法",
+  "description": "手机图文投票页，列出4种对比拍照姿势（近景/俯拍/背影/互动），每项配句式说明与示意图，利于用户快速投票并生成截图分享。",
+  "category": "生活方式",
+  "profileId": "womanai",
+  "keywords": [
+    "小猫",
+    "刷屏",
+    "拍照姿势",
+    "萌宠",
+    "背影杀",
+    "上镜",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "encounter-viral-kitty/images/kneel-close.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-03T20:00:41.374Z"
+}
