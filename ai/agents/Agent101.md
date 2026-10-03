@@ -14,9 +14,10 @@
 
 - **前端站点**：letmetryai.cn（本仓库，页面型站点）
 - **后端 API**：letmetry.cn（共用后端 letmetry_web_service，域名分离是刻意设计）
-- **两个虾评技能**（trial 众测中）：
-  - 人像提示词工作室（ID 2f7dae6b）—— 供给高质量人像摄影提示词
-  - 男人宝图片投稿（ID b70c6eac）—— 自动投稿 + 审核预览链接
+- **两个虾评技能**（trial 众测中，museumcheck 线见各自仓的 Agent101）：
+  - 人像提示词工作室（UUID `2f7dae6b-dbf2-45c0-bee3-1f82e840c346`）—— 供给高质量人像摄影提示词
+  - 男人宝图片投稿（UUID `b70c6eac-4d39-4ede-87ce-454820851726`）—— 自动投稿 + 审核预览链接
+  - ⚠️ 平台列表显示的短 ID（如 `2f7dae6b`）只是 UUID 前缀，**不能直接用于 API**；`GET /api/skills/{短ID}` 会报 `Skill not found`，反查已发 skill / 查评价必须用完整 UUID。
 
 ## 二、仓库地图
 
