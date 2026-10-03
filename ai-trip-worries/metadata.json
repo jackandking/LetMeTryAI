@@ -1,0 +1,21 @@
+{
+  "id": "ai-trip-worries",
+  "name": "带爸妈订行程小测",
+  "description": "适合爱老人品牌的手机图文投票，选项围绕老人出游常见担忧：景点/住宿安全、行程节奏、饮食与用药、紧急沟通与应对，便于分享讨论。",
+  "category": "家庭生活",
+  "profileId": "elder-love",
+  "keywords": [
+    "出游",
+    "AI订行程",
+    "带爸妈",
+    "安全",
+    "体力",
+    "饮食",
+    "应急",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "ai-trip-worries/images/safety-concerns.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-03T18:00:34.378Z"
+}
