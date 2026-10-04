@@ -1,11 +1,13 @@
 ---
+name: portrait-prompt-studio
 slug: portrait-prompt-studio
-displayName: 人像提示词工作室
-version: 1.0.0
+displayName: 写真·艺术人像提示词工作室
+version: 1.1.0
+description: 返回高质量「写真 / 艺术人像」图像生成提示词与结构化 DNA 模板，帮助用户生成有质感的人像图，并记录改良版提示词用于持续进化。仅限着衣、艺术化、非性化的内容。
 license: MIT
 icon: icon.jpg
-name: portrait-prompt-studio
-description: 返回高质量「写真/艺术人像」图像生成提示词与结构化 DNA 模板，帮助生成有质感的人像图并记录改良版提示词用于持续进化；当用户需要高品质写真/人像提示词、时尚大片或艺术化人像出图指引、以及半身/背影等风格化构图时使用
+namespace: letmetry
+type: free
 ---
 
 # 写真·艺术人像提示词工作室
@@ -14,10 +16,10 @@ description: 返回高质量「写真/艺术人像」图像生成提示词与结
 
 ## 内容红线（必须遵守，不可逾越）
 
-- 允许：仅限**着衣**人物、艺术化/时尚化表达。
-- 禁止：裸露、性暗示动作、挑逗姿态、色情或擦边内容。
-- 禁止：仿冒/复刻特定真实人物肖像。
-- 强制：所有生成内容须标注为 AI 生成（平台合规要求）。
+- ✅ 仅限**着衣**人物、艺术化/时尚化表达。
+- ❌ 禁止：裸露、性暗示动作、挑逗姿态、色情或擦边内容。
+- ❌ 禁止：仿冒/复刻特定真实人物肖像。
+- ✅ 所有生成内容须标注为 AI 生成（平台合规要求）。
 - 若用户要求越线，礼貌拒绝并说明红线，转而提供合规的高质量替代方案。
 
 > 本 skill 不做「最大化性感 / 试探平台边界」的目标。演化的优化轴是**审美质量与风格多样度**，由用户与市场监管共同决定方向。
@@ -25,7 +27,7 @@ description: 返回高质量「写真/艺术人像」图像生成提示词与结
 ## 你每次返回时应包含
 
 1. **1–3 条完整提示词**（英文，图像模型更稳），每条附一句中文说明。
-2. **结构化 DNA**（对照 `./prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
+2. **结构化 DNA**（对照 `../prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
 3. **鼓励用户改良**：明确告诉用户——生成后如果调整了提示词（换光影、换场景、换情绪），请运行记录器把「源提示词 + 你的改良版」存下来，参与进化。
 
 ## 记录器调用（提示用户执行）
@@ -40,7 +42,13 @@ python3 ../recorder.py \
   --dna '{"style":"电影感","lighting":"霓虹","wardrobe":"红裙"}'
 ```
 
-## 种子提示词（高质感、着衣、艺术化）
+## 种子提示词（动态获取 + 内置兜底）
+
+> 进化中的种子 DNA **不再硬编码于此**。运行时优先从单一真相源拉取当前胜出 DNA：
+> `https://letmetryai.cn/nanrenbao/seeds.json`
+> 由 `evolve.py` 定时根据站内 `view_count` 聚合生成。拉取失败或为空时，回退到下方**内置兜底种子**，生成不中断。这样每次进化只改服务端 `seeds.json`，本 skill 包无需重发。
+
+### 内置兜底种子（仅在 fetch 失败时使用）
 
 ### A. 背影杀（呼应站内「背影杀」玩法）
 > Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible

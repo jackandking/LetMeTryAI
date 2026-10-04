@@ -18,26 +18,29 @@
 ```
 ai/
 ├── README.md          # 本文件：产品 AI 能力清单 + 发布状态
-├── build.cjs          # 源码 → .skill 制品构建/校验（node build.cjs build --skill <name>）
+├── build.cjs          # 单源多端构建：node ai/build.cjs build --skill <name> --platform <skillhub|xiaping>
 ├── skills/
-│   ├── core/          # 母版：通用描述、提示词（所有平台版本的唯一事实源）
-│   │   ├── nanrenbao-contribute/
-│   │   ├── portrait-prompt-studio/
-│   │   ├── letmetry-vote-page/
-│   │   └── content-paywall-app/
-│   ├── skillhub/      # SkillHub 版（从 core 派生）
-│   ├── xiaping/       # 虾评版
-│   ├── coze/          # 扣子版
-│   └── ...
+│   └── core/          # 唯一事实源（母版）：所有平台版本都从 core 派生，仓库不维护任何平台副本
+│       ├── nanrenbao-contribute/
+│       ├── portrait-prompt-studio/
+│       ├── letmetry-vote-page/
+│       ├── content-paywall-app/
+│       └── prompt-dna.schema.json   # 共享 schema（portrait 引用，build 时内联进包）
+├── build/dist/        # 构建产物（gitignore）：build.cjs 按 --platform 派生出的各平台包 + .zip
 ├── agents/            # Bot/Agent 配置（系统提示词、工具清单等）
 └── shared/            # 共用素材（图标、触发词、用例）
 ```
 
-## 工作流（对外发布）
+## 工作流（单源多端，对外发布）
 
 ```
-修改 core/ 母版 → 派生到对应平台子目录 → node ai/build.js build --skill <name> → 生成 .skill → 上传对应平台
+修改 core/ 母版（唯一事实源）
+  → node ai/build.cjs build --skill <name> --platform <skillhub|xiaping>
+  → 生成 build/dist/<platform>/<name>/ + <name>.<platform>.zip
+  → 上传对应平台（SkillHub: skillhub publish <dir>；虾评: POST /api/upload）
 ```
+
+新增发布平台 = 在 `build.cjs` 的 `PLATFORMS` 加一个配置（字段映射 + 打包差异），**不需要新建仓库目录或维护新副本**。
 
 ## 约定
 - 对外发布的 AI 能力必须维护在 `skills/core/` 下（母版），各平台版本从 core 派生，避免描述越改越偏

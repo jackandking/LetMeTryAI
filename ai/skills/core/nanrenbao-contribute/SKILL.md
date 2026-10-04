@@ -1,11 +1,13 @@
 ---
+name: nanrenbao-contribute
 slug: nanrenbao-contribute
 displayName: 男人宝图片投稿
-version: 1.0.0
+version: 1.0.1
+description: 把用户生成的人像图片投稿到男人宝画廊，自动插入 beauty/back_view 待审行(review_status=pending)并返回预览链接，审核通过后深链展示站内真实效果；当需要向男人宝投稿 AI 人像图、获取图片审核与预览链接或登记生成提示词时使用
 license: MIT
 icon: icon.jpg
-name: nanrenbao-contribute
-description: 把用户生成的人像图片投稿到男人宝画廊，自动插入 beauty/back_view 待审行(review_status=pending)并返回预览链接，审核通过后深链展示站内真实效果；当需要向男人宝投稿 AI 人像图、获取图片审核与预览链接或登记生成提示词时使用
+namespace: letmetry
+type: free
 dependency:
   system:
     - node
