@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>小时候的街头小吃，哪样一看就能把爸妈带回记忆里？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">小时候的街头小吃，哪样一看就能把爸妈带回记忆里？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">看到下面哪样街头小吃，会让你想到父母过去常去的小摊和巷口？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="tang-hulu">
+                            <div class="card-image">
+                                <img src="images/tang-hulu.svg" alt="糖葫芦一串" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">糖葫芦</h3>
+                                <p class="option-desc">红亮的山楂串，甜里带着街头的热闹记忆</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="jianbing-guozi">
+                            <div class="card-image">
+                                <img src="images/jianbing-guozi.svg" alt="煎饼果子摊位" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">煎饼果子</h3>
+                                <p class="option-desc">摊前翻卷的煎饼，早晨的烟火和熟悉的酱香</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chou-doufu">
+                            <div class="card-image">
+                                <img src="images/chou-doufu.svg" alt="臭豆腐正在炸" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">臭豆腐</h3>
+                                <p class="option-desc">热油里滋滋作响的方块，巷口独有的气味画面</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="zha-mahua">
+                            <div class="card-image">
+                                <img src="images/zha-mahua.svg" alt="炸麻花一把" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">炸麻花</h3>
+                                <p class="option-desc">金黄酥脆的麻花，童年零食的简单快乐</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
