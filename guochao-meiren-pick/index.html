@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>国潮妆里你会pick哪种美人感？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">国潮妆里你会pick哪种美人感？背影惊艳还是温婉古韵？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">国潮妆里你会pick哪种美人感？选出你心动的那款。</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="wenwan-gufeng">
+                            <div class="card-image">
+                                <img src="images/wenwan-gufeng.svg" alt="温婉古风妆容：花钿、柔和胭脂与细长眉型" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">温婉古风</h3>
+                                <p class="option-desc">花钿与柔眉，含蓄温柔的古典美人感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chaoku-street">
+                            <div class="card-image">
+                                <img src="images/chaoku-street.svg" alt="潮酷街头国潮妆：重眼线、亮色眼影与金属配饰" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">潮酷街头</h3>
+                                <p class="option-desc">重眼线与金属配饰，带着大胆态度的国潮范儿</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="huaniao-style">
+                            <div class="card-image">
+                                <img src="images/huaniao-style.svg" alt="花鸟国色妆容：花朵贴饰与泼墨感眼影" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">花鸟国色</h3>
+                                <p class="option-desc">花鸟元素与水彩眼影，像画卷般的东方美感</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="nishang-qingsha">
+                            <div class="card-image">
+                                <img src="images/nishang-qingsha.svg" alt="霓裳轻纱妆：珠光高光与透光肌理，带梦幻质感" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">霓裳轻纱</h3>
+                                <p class="option-desc">珠光高光与轻纱感妆面，若隐若现的梦幻气质</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "id": "guochao-meiren-pick",
+  "name": "国潮美人Pick",
+  "description": "面向喜欢国潮与妆容创意的年轻用户，通过4种具有强烈画面感的国潮妆风，进行颜值与气质偏好对比，适合做图文投票页并配大图展示。",
+  "category": "美妆",
+  "profileId": "womanai",
+  "keywords": [
+    "国潮妆",
+    "美人感",
+    "国风妆",
+    "妆容对比",
+    "女性潮流",
+    "投票",
+    "女人爱"
+  ],
+  "coverImage": "guochao-meiren-pick/images/wenwan-gufeng.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-04T20:00:34.048Z"
+}
