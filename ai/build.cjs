@@ -162,10 +162,10 @@ function build(name, platform) {
     fs.writeFileSync(path.join(outDir, '_meta.json'), JSON.stringify(meta, null, 2));
   }
 
-  // 打包 zip（供上传/分发）
+  // 打包 zip（供上传/分发）：内容平铺到 zip 根（平台要求 SKILL.md 在根，不在子目录）
   const zip = path.join(DIST_DIR, `${name}.${platform}.zip`);
   if (fs.existsSync(zip)) fs.rmSync(zip);
-  execSync(`cd "${path.join(DIST_DIR, platform)}" && zip -rq "${zip}" "${name}"`, { stdio: 'ignore' });
+  execSync(`cd "${outDir}" && zip -rq "${zip}" . -x "*.DS_Store" "__MACOSX/*"`, { stdio: 'ignore' });
 
   return { outDir, zip, version: (newFm.match(/version:\s*(\S+)/) || [])[1] };
 }
