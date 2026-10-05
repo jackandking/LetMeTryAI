@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,25 +7,108 @@
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --grass: #5d9c3f;
+            --dirt: #7a5230;
+            --panel: #f4f1e8;
+            --ink: #2b2b2b;
+        }
         html, body {
-            height: 100%;
+            min-height: 100%;
             background: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--ink);
         }
-        body {
+        .topbar {
+            height: 10px;
+            background: linear-gradient(to bottom, var(--grass) 0 55%, var(--dirt) 55% 100%);
+        }
+        .wrap { max-width: 960px; margin: 0 auto; padding: 40px 20px 64px; }
+        .greeting {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .subtitle { color: #777; font-size: 15px; margin-bottom: 36px; }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-left: 12px;
+            border-left: 6px solid var(--grass);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--panel);
+            border: 3px solid #d8d2c0;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.12);
+        }
+        .card .thumb {
+            aspect-ratio: 1 / 1;
+            background: #e9e6db;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .greeting {
-            font-size: 48px;
-            font-weight: 600;
-            color: #1a1a1a;
-            letter-spacing: 0.5px;
+        .card .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
+        .card .meta { padding: 12px 14px 16px; }
+        .card .name { font-size: 17px; font-weight: 700; }
+        .card .name .cn { font-weight: 400; color: #666; font-size: 14px; margin-left: 6px; }
+        .card .desc { font-size: 13px; color: #777; margin-top: 6px; line-height: 1.5; }
     </style>
 </head>
 <body>
-    <div class="greeting">hi jason</div>
+    <div class="topbar"></div>
+    <div class="wrap">
+        <div class="greeting">hi jason</div>
+        <div class="subtitle">Minecraft · 典型人物图鉴</div>
+
+        <div class="section-title">典型人物 / Characters</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumb"><img src="images/steve.png" alt="Steve"></div>
+                <div class="meta">
+                    <div class="name">Steve<span class="cn">史蒂夫</span></div>
+                    <div class="desc">默认玩家角色，方脸、棕发、青衫蓝裤，Minecraft 的元老形象。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/creeper.png" alt="Creeper"></div>
+                <div class="meta">
+                    <div class="name">Creeper<span class="cn">苦力怕</span></div>
+                    <div class="desc">绿色方块生物，会悄悄靠近然后爆炸，最 iconic 的 Minecraft 符号。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/zombie.png" alt="Zombie"></div>
+                <div class="meta">
+                    <div class="name">Zombie<span class="cn">僵尸</span></div>
+                    <div class="desc">夜晚出没的敌对生物，伸臂前行，是生存模式的常客。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/enderman.png" alt="Enderman"></div>
+                <div class="meta">
+                    <div class="name">Enderman<span class="cn">末影人</span></div>
+                    <div class="desc">高挑黑色生物，紫色眼睛，能瞬移，凝视它的眼睛会被激怒。</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
