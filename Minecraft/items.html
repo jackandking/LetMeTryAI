@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft · 物品图鉴</title>
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+<style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --grass: #5d9c3f;
+            --dirt: #7a5230;
+            --panel: #f4f1e8;
+            --ink: #2b2b2b;
+        }
+        html, body {
+            min-height: 100%;
+            background: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--ink);
+        }
+        .topbar {
+            height: 10px;
+            background: linear-gradient(to bottom, var(--grass) 0 55%, var(--dirt) 55% 100%);
+        }
+        .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px 64px; }
+        .greeting {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .subtitle { color: #777; font-size: 15px; margin-bottom: 28px; }
+        .navbar { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+        .navbar button {
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 11px 26px;
+            border: 3px solid #d8d2c0;
+            border-radius: 4px;
+            background: var(--panel);
+            color: var(--ink);
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        .navbar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,.1);
+        }
+        .navbar button.active {
+            background: var(--grass);
+            color: #fff;
+            border-color: var(--grass);
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-left: 12px;
+            border-left: 6px solid var(--grass);
+        }
+        .section-title.blocks { border-left-color: var(--dirt); }
+        .section-title.items { border-left-color: #d4a017; }
+        .section-title.mobs { border-left-color: var(--grass); }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 22px;
+            margin-bottom: 44px;
+        }
+        .card {
+            background: var(--panel);
+            border: 3px solid #d8d2c0;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.12);
+        }
+        .card .thumb {
+            aspect-ratio: 1 / 1;
+            background:
+                linear-gradient(180deg, #eef3e4 0%, #e3ecdb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        .card .thumb img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .card .meta { padding: 14px 16px 18px; flex: 1; }
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .badge.player { background: #7fc7e8; color: #123; }
+        .badge.hostile { background: #e57373; color: #fff; }
+        .badge.neutral { background: #b39ddb; color: #2a1e3f; }
+        .badge.passive { background: #a5d6a7; color: #1b3a1e; }
+        .badge.block { background: #a1887f; color: #fff; }
+        .badge.item { background: #ffcc80; color: #5d3a00; }
+        .badge.boss { background: #37474f; color: #ffd54f; }
+        .card .name { font-size: 19px; font-weight: 700; }
+        .card .name .cn { font-weight: 400; color: #666; font-size: 14px; margin-left: 6px; }
+        .card .desc {
+            font-size: 13.5px;
+            color: #555;
+            margin-top: 10px;
+            line-height: 1.75;
+        }
+        .footnote {
+            margin-top: 36px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .backbtn {
+            display: inline-block; margin-bottom: 26px; text-decoration: none;
+            font-size: 14px; font-weight: 600; color: #555;
+            background: var(--panel); border: 3px solid #d8d2c0; border-radius: 4px;
+            padding: 9px 20px;
+            transition: transform .15s ease, background .15s ease, border-color .15s ease;
+        }
+        .backbtn:hover { transform: translateY(-2px); background: #fff; border-color: var(--grass); }
+        .menu {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; max-width: 720px; margin-top: 8px;
+        }
+        .menu a {
+            display: block; text-decoration: none; color: var(--ink);
+            background: var(--panel); border: 3px solid #d8d2c0; border-radius: 4px;
+            padding: 36px 20px; text-align: center;
+            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+        }
+        .menu a:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.12); border-color: var(--grass); }
+        .menu a .t { font-size: 28px; font-weight: 700; }
+        .menu a .en { font-size: 12px; color: #999; letter-spacing: 2px; margin-top: 6px; }
+        .menu a .cnt { font-size: 13px; color: #666; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="topbar"></div>
+    <div class="wrap">
+        <a class="backbtn" href="index.html">&larr; 返回首页</a>
+
+<section id="sec-items" class="catalog-section">
+        <div class="section-title items">典型物品 / Items</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumb"><img src="images/diamond_sword.png" alt="Diamond Sword"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Diamond Sword<span class="cn">钻石剑</span></div>
+                    <div class="desc">经典的高阶近战武器，单次攻击可造成 7 点伤害，攻速也快于斧头。它是大多数玩家打末影龙前的标配，配合锋利附魔更是如虎添翼。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/diamond_pickaxe.png" alt="Diamond Pickaxe"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Diamond Pickaxe<span class="cn">钻石镐</span></div>
+                    <div class="desc">第一把能开采黑曜石和高级矿物的镐子，耐久高达 1561 次。有了它，你才能解锁下界传送门与附魔台；配上时运 III，一颗钻石矿能挖出 4 颗钻石。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/apple.png" alt="Apple"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Apple<span class="cn">苹果</span></div>
+                    <div class="desc">打掉橡树树叶有几率掉落的食物，恢复 4 点饥饿值。它是生存前期最方便的应急口粮，也是合成金苹果的关键原料。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/golden_apple.png" alt="Golden Apple"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Golden Apple<span class="cn">金苹果</span></div>
+                    <div class="desc">用 8 个金锭环绕一颗苹果合成的稀有食物，食用后获得伤害吸收与生命恢复，还能在虚弱状态下治愈僵尸村民。PvP 和Boss 战中的翻盘神器。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/ender_pearl.png" alt="Ender Pearl"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Ender Pearl<span class="cn">末影珍珠</span></div>
+                    <div class="desc">击杀末影人掉落的传送道具：掷出后你会被瞬间传送到落点，但要承受一点摔落伤害。它与烈焰粉合成末影之眼——寻找要塞、开启末地传送门的必需品。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/bow.png" alt="Bow"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Bow<span class="cn">弓</span></div>
+                    <div class="desc">用 3 根木棍加 3 根线合成的远程武器，蓄力满射可造成最高 10 点伤害。配上无限、力量附魔后是打骷髅与末影龙的安全选择，只是记得带好箭。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/shield.png" alt="Shield"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Shield<span class="cn">盾牌</span></div>
+                    <div class="desc">用 6 块木板加 1 个铁锭合成，手持右键举起可格挡攻击，把近战和箭矢伤害降到几乎为零。配上旗帜还能定制图案——它是打近战 Boss 和掠夺者的保命神器。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/elytra.png" alt="Elytra"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Elytra<span class="cn">鞘翅</span></div>
+                    <div class="desc">只在末地船只线能找到的稀有护甲，穿在胸前。从高处跳下再按一次跳跃即可展开滑翔，配上烟花火箭更能持续飞行——它是打通远距离交通的终极装备，只是易损，要用幻翼膜修补。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/compass.png" alt="Compass"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Compass<span class="cn">指南针</span></div>
+                    <div class="desc">用 4 个铁锭加 1 个红石合成，指针永远指向世界出生点，迷路时的救命道具。在末地或下界它会疯狂乱转；配上 8 张纸还能合成空地图。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/bucket.png" alt="Bucket"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Bucket<span class="cn">铁桶</span></div>
+                    <div class="desc">用 3 个铁锭合成，能装水、岩浆甚至牛奶。一桶水是保命神器——从高处落地前放水可以抵消全部摔落伤害；两桶水摆对角还能造出无限水源。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/flint_steel.png" alt="Flint and Steel"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Flint and Steel<span class="cn">打火石</span></div>
+                    <div class="desc">用铁锭加燧石合成：右键点燃火焰、激活下界传送门、引燃 TNT。它是进入下界的第一把"钥匙"，耐久只有 64 次——别拿它到处放火烧林。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/torch.png" alt="Torch"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Torch<span class="cn">火把</span></div>
+                    <div class="desc">1 根木棍加 1 块煤合成的最基础光源，光照等级 14。它能照亮洞穴防刷怪、融雪化冰——插满火把的矿道就是安全矿道，这是每个玩家最先学会合成的照明工具。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/brewing_stand.png" alt="Brewing Stand"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Brewing Stand<span class="cn">酿造台</span></div>
+                    <div class="desc">药水系统的核心：用 1 个烈焰棒+3 个圆石合成。把水瓶和地狱疣、各类材料放进去就能酿出各种药水；下面点着烈焰粉作燃料。它也能让村民"解锁"牧师职业。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/name_tag.png" alt="Name Tag"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Name Tag<span class="cn">命名牌</span></div>
+                    <div class="desc">用铁砧给命名牌写上名字，就能给任何生物命名——命名后生物不会自然消失。把名字写成 "Dinnerbone" 或 "Grumm" 还能把生物倒挂过来，是玩家最爱的彩蛋。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/map.png" alt="Map"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Map<span class="cn">地图</span></div>
+                    <div class="desc">用 8 张纸+1 个指南针合成（空地图则在手里右键展开成"地图物品"），会如实记录你走过的地形。对着它用纸能扩大显示范围，镶进玻璃板做"定位器地图"还能标出玩家位置。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/clock.png" alt="Clock"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Clock<span class="cn">钟</span></div>
+                    <div class="desc">用 4 个金锭+1 个红石合成，表盘指针显示当前主世界的昼夜与大致时间。在下界和末地没有太阳月亮，钟会乱转，所以它在主世界之外基本失去计时作用。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/saddle.png" alt="Saddle"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Saddle<span class="cn">鞍</span></div>
+                    <div class="desc">给马、驴、骡、猪装备后就能骑乘操控（猪还要配胡萝卜钓竿当方向舵）。旧版本无法合成、只能钓鱼/村民交易/开宝箱获得，1.21 起才加入合成配方。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/trident.png" alt="Trident"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Trident<span class="cn">三叉戟</span></div>
+                    <div class="desc">只能从溺尸手中获得的稀有武器，近战远程两用——在水中或雨天可以掷出并自动回收。配上"引雷"附魔，能在雷雨天召唤闪电劈中目标，场面极其壮观。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/bread.png" alt="Bread"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Bread<span class="cn">面包</span></div>
+                    <div class="desc">由 3 个小麦合成，是前期最省钱的饱腹食物，比苹果和肉都便宜。在村庄里它还是村民交易的重要货币之一。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/iron_pickaxe.png" alt="Iron Pickaxe"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Iron Pickaxe<span class="cn">铁镐</span></div>
+                    <div class="desc">3 个铁锭+2 木棍合成，耐久 250，能以两倍速度挖石头，是从石器时代过渡到铁器时代的核心工具。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/shears.png" alt="Shears"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Shears<span class="cn">剪刀</span></div>
+                    <div class="desc">1 个铁合成，可剪羊毛、剪南瓜/南瓜灯、把树叶剪掉（有时掉落树苗）。剪羊毛后羊会重新长出羊毛，可无限采集。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/water_bucket.png" alt="Water Bucket"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Water Bucket<span class="cn">水桶</span></div>
+                    <div class="desc">一桶水：可以无限舀水、瞬间灭火、给耕作用的土加水催熟作物，也能把溺水或陷入岩浆的生物救上来。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/cooked_beef.png" alt="Cooked Beef"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Cooked Beef<span class="cn">熟牛肉</span></div>
+                    <div class="desc">由生牛肉烤熟，饱食与回复量都高于生牛肉，还避免了生肉的中毒风险。牛是前期最稳定的肉源之一。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/diamond.png" alt="Diamond"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Diamond<span class="cn">钻石</span></div>
+                    <div class="desc">在地壳 Y=-60 以下（深层）稀有生成，是最好的工具与装备材料，也是附魔与交易的高价通货。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/emerald.png" alt="Emerald"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Emerald<span class="cn">绿宝石</span></div>
+                    <div class="desc">本身不会自然生成，主要来自与村民交易——宝石匠、牧羊人、附魔师等都收它。它始终是村民贸易的硬通货。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/string.png" alt="String"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">String<span class="cn">线</span></div>
+                    <div class="desc">蜘蛛掉落、渔夫钩也常钓到，是合成弓、钓鱼竿、绊线与网的必需材料。蜘蛛网还能临时搭桥或做诱捕陷阱。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/gunpowder.png" alt="Gunpowder"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Gunpowder<span class="cn">火药</span></div>
+                    <div class="desc">苦力怕爆炸后的掉落物，是合成 TNT 的核心材料。做成烟花火箭可升空绽放，也是被苦力怕炸出门时的反杀道具。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/book.png" alt="Book"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Book<span class="cn">书</span></div>
+                    <div class="desc">3 张纸+1 张皮革合成。用于合成与复制书本、撰写书籍笔记，也是村民"书呆子/学者"职业交易笔记的来源。</div>
+                </div>
+            </div>
+        </div>
+
+        </section>
+
+        <div class="footnote">
+            图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图与物品图标，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
+        </div>
+    </div>
+</body>
+</html>
