@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft · 生物图鉴</title>
+    <title>Minecraft · 图鉴</title>
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,10 +38,14 @@
             padding-left: 12px;
             border-left: 6px solid var(--grass);
         }
+        .section-title.blocks { border-left-color: var(--dirt); }
+        .section-title.items { border-left-color: #d4a017; }
+        .section-title.mobs { border-left-color: var(--grass); }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 22px;
+            margin-bottom: 44px;
         }
         .card {
             background: var(--panel);
@@ -83,6 +87,10 @@
         .badge.player { background: #7fc7e8; color: #123; }
         .badge.hostile { background: #e57373; color: #fff; }
         .badge.neutral { background: #b39ddb; color: #2a1e3f; }
+        .badge.passive { background: #a5d6a7; color: #1b3a1e; }
+        .badge.block { background: #a1887f; color: #fff; }
+        .badge.item { background: #ffcc80; color: #5d3a00; }
+        .badge.boss { background: #37474f; color: #ffd54f; }
         .card .name { font-size: 19px; font-weight: 700; }
         .card .name .cn { font-weight: 400; color: #666; font-size: 14px; margin-left: 6px; }
         .card .desc {
@@ -103,9 +111,113 @@
     <div class="topbar"></div>
     <div class="wrap">
         <div class="greeting">hi jason</div>
-        <div class="subtitle">Minecraft · 典型生物图鉴</div>
+        <div class="subtitle">Minecraft · 图鉴：方块 / 物品 / 生物</div>
 
-        <div class="section-title">典型生物 / Characters &amp; Mobs</div>
+        <div class="section-title blocks">典型方块 / Blocks</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumb"><img src="images/grass.png" alt="Grass Block"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">Grass Block<span class="cn">草方块</span></div>
+                    <div class="desc">Minecraft 世界地表的"门面"，也是游戏最具辨识度的方块。只有在光照充足、旁边有泥土时才会蔓延生长。用锄头右键可把它变成耕地，用骨粉催生草丛与花，羊也会啃掉它的草皮。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/diamond_block.png" alt="Diamond Block"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">Diamond Block<span class="cn">钻石块</span></div>
+                    <div class="desc">由 9 颗钻石合成的储存方块，是财富的象征。它硬度极高、爆炸抗性强，常用作信标金字塔的顶层材料，也能反过来分解回 9 颗钻石，方便收纳与展示。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/crafting_table.png" alt="Crafting Table"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">Crafting Table<span class="cn">工作台</span></div>
+                    <div class="desc">生存模式的核心方块——把 2×2 背包合成格扩展成 3×3，几乎所有工具、武器、盔甲都要靠它合成。四块木板就能做出一张，它是每个玩家通往下一段冒险的起点。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/obsidian.png" alt="Obsidian"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">Obsidian<span class="cn">黑曜石</span></div>
+                    <div class="desc">水浇在岩浆源上形成的黑色玻璃状方块，爆炸抗性极高（连 TNT 都奈何不了它）。只能用钻石镐或更好的镐开采，是搭建下界传送门框架、制作附魔台的必需材料。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/tnt.png" alt="TNT"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">TNT<span class="cn">TNT 炸药</span></div>
+                    <div class="desc">用 5 份火药加 4 份沙子合成的爆炸方块，用打火石或红石信号点燃。它既能瞬间炸开大片地形、高效采矿清障，也是陷阱和大炮的经典核心，爆炸会掉落部分被炸毁的方块。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/oak_log.png" alt="Oak Log"></div>
+                <div class="meta">
+                    <span class="badge block">方块</span>
+                    <div class="name">Oak Log<span class="cn">橡木原木</span></div>
+                    <div class="desc">最基础的木材来源，一棵橡树通常能产出 4–6 根。每根可合成 4 块木板，木板再合成木棍与工作台——从头到尾，你手里第一套工具的起点就是它。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title items">典型物品 / Items</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumb"><img src="images/diamond_sword.png" alt="Diamond Sword"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Diamond Sword<span class="cn">钻石剑</span></div>
+                    <div class="desc">经典的高阶近战武器，单次攻击可造成 7 点伤害，攻速也快于斧头。它是大多数玩家打末影龙前的标配，配合锋利附魔更是如虎添翼。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/diamond_pickaxe.png" alt="Diamond Pickaxe"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Diamond Pickaxe<span class="cn">钻石镐</span></div>
+                    <div class="desc">第一把能开采黑曜石和高级矿物的镐子，耐久高达 1561 次。有了它，你才能解锁下界传送门与附魔台；配上时运 III，一颗钻石矿能挖出 4 颗钻石。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/apple.png" alt="Apple"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Apple<span class="cn">苹果</span></div>
+                    <div class="desc">打掉橡树树叶有几率掉落的食物，恢复 4 点饥饿值。它是生存前期最方便的应急口粮，也是合成金苹果的关键原料。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/golden_apple.png" alt="Golden Apple"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Golden Apple<span class="cn">金苹果</span></div>
+                    <div class="desc">用 8 个金锭环绕一颗苹果合成的稀有食物，食用后获得伤害吸收与生命恢复，还能在虚弱状态下治愈僵尸村民。PvP 和Boss 战中的翻盘神器。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/ender_pearl.png" alt="Ender Pearl"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Ender Pearl<span class="cn">末影珍珠</span></div>
+                    <div class="desc">击杀末影人掉落的传送道具：掷出后你会被瞬间传送到落点，但要承受一点摔落伤害。它与烈焰粉合成末影之眼——寻找要塞、开启末地传送门的必需品。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/bow.png" alt="Bow"></div>
+                <div class="meta">
+                    <span class="badge item">物品</span>
+                    <div class="name">Bow<span class="cn">弓</span></div>
+                    <div class="desc">用 3 根木棍加 3 根线合成的远程武器，蓄力满射可造成最高 10 点伤害。配上无限、力量附魔后是打骷髅与末影龙的安全选择，只是记得带好箭。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title mobs">典型生物 / Mobs</div>
         <div class="grid">
             <div class="card">
                 <div class="thumb"><img src="images/steve.png" alt="Steve"></div>
@@ -132,6 +244,46 @@
                 </div>
             </div>
             <div class="card">
+                <div class="thumb"><img src="images/skeleton.png" alt="Skeleton"></div>
+                <div class="meta">
+                    <span class="badge hostile">敌对</span>
+                    <div class="name">Skeleton<span class="cn">骷髅</span></div>
+                    <div class="desc">手持弓箭的远程敌对生物，会与目标保持距离不断放箭，被逼近时还会后退周旋。阳光会让它燃烧，白天常见它躲在阴影里。击杀后掉落骨头与箭——骨头既可驯狼又可催熟作物，是早期很实用的资源。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/spider.png" alt="Spider"></div>
+                <div class="meta">
+                    <span class="badge neutral">中立</span>
+                    <div class="name">Spider<span class="cn">蜘蛛</span></div>
+                    <div class="desc">能爬墙的大型节肢生物，身形扁平、红眼发亮。白天光线充足时它是中立的，只有被攻击才会反击；一到夜晚就变成主动猎手。它能攀上垂直的墙面翻越围墙，击杀后掉落线与蜘蛛眼——线是合成弓和钓竿的必需品。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/pig.png" alt="Pig"></div>
+                <div class="meta">
+                    <span class="badge passive">被动</span>
+                    <div class="name">Pig<span class="cn">猪</span></div>
+                    <div class="desc">粉色的经典被动生物，成群生活在草原上，用胡萝卜可以繁殖。击杀后掉落生猪排（烤熟更香）。手持胡萝卜钓竿还能骑猪兜风——虽然方向得靠它"配合"。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/cow.png" alt="Cow"></div>
+                <div class="meta">
+                    <span class="badge passive">被动</span>
+                    <div class="name">Cow<span class="cn">牛</span></div>
+                    <div class="desc">黑白花纹的被动生物，草原与山地的常客。它全身是宝：掉落牛肉与皮革（皮革是做书、护甲和物品展示框的原料），用铁桶右键还能挤到牛奶——喝下可解除一切药水效果，是打龙前的"解毒剂"。用小麦繁殖。</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumb"><img src="images/villager.png" alt="Villager"></div>
+                <div class="meta">
+                    <span class="badge passive">被动</span>
+                    <div class="name">Villager<span class="cn">村民</span></div>
+                    <div class="desc">生活在村庄里的类人 NPC，大鼻子、长袍加身，是交易系统的核心。不同职业（农民、图书管理员、铁匠等）提供不同商品——用绿宝石和它换货，能把"种田流"玩成经济学。僵尸可以把它感染成僵尸村民，也可能在白天被僵尸围攻。</div>
+                </div>
+            </div>
+            <div class="card">
                 <div class="thumb"><img src="images/enderman.png" alt="Enderman"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -139,10 +291,18 @@
                     <div class="desc">来自末路之地的高挑生物，通体漆黑、长着一双发光的紫色眼睛，身高接近三个方块。它能徒手搬起方块，也会在受伤时瞬移躲避。只要不直视它的眼睛，它就保持中立；一旦对视，它会发出尖啸并主动攻击。水会伤害它，戴上南瓜头就能放心打量它。</div>
                 </div>
             </div>
+            <div class="card">
+                <div class="thumb"><img src="images/ender_dragon.png" alt="Ender Dragon"></div>
+                <div class="meta">
+                    <span class="badge boss">Boss</span>
+                    <div class="name">Ender Dragon<span class="cn">末影龙</span></div>
+                    <div class="desc">Minecraft 的最终 Boss，盘踞在末路之地的黑曜石柱之间，通体漆黑、紫眼发光。它会俯冲撞击玩家、吐出龙息，还有一圈末影水晶为它持续回血——得先拆水晶、再磨血量。击败它后主世界会出现回到出生点的传送门，并播放著名的"终末之诗"。</div>
+                </div>
+            </div>
         </div>
 
         <div class="footnote">
-            图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
+            图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图与物品图标，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
         </div>
     </div>
 </body>
