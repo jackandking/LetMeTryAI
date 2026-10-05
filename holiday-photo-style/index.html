@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>放假拍照：你的上镜风格是哪一种？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">放假拍照，你更爱哪种上镜风格？背影杀、氛围感还是笑眼甜萌？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">放假拍照，你更爱哪种上镜风格？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="back-silhouette">
+                            <div class="card-image">
+                                <img src="images/back-silhouette.svg" alt="背影杀上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">背影杀</h3>
+                                <p class="option-desc">不露脸也能惊艳：找好线条和光线，摆出有故事感的背影。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="moody-film">
+                            <div class="card-image">
+                                <img src="images/moody-film.svg" alt="氛围感上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">氛围感大片</h3>
+                                <p class="option-desc">滤镜＋光影营造电影感，适合低饱和或胶片风处理，画面有故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="smile-cute">
+                            <div class="card-image">
+                                <img src="images/smile-cute.svg" alt="笑眼甜萌上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">笑眼甜萌</h3>
+                                <p class="option-desc">自然笑容＋俏皮小动作，亲和力爆棚，适合日常风格和好友合照。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="vibrant-color">
+                            <div class="card-image">
+                                <img src="images/vibrant-color.svg" alt="亮色冲击上镜风格" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">亮色冲击</h3>
+                                <p class="option-desc">高饱和配色与强对比，让照片一眼惊艳，适合大胆造型和街拍场景。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
