@@ -30,7 +30,29 @@
             letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
-        .subtitle { color: #777; font-size: 15px; margin-bottom: 36px; }
+        .subtitle { color: #777; font-size: 15px; margin-bottom: 28px; }
+        .navbar { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+        .navbar button {
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 11px 26px;
+            border: 3px solid #d8d2c0;
+            border-radius: 4px;
+            background: var(--panel);
+            color: var(--ink);
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        .navbar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,.1);
+        }
+        .navbar button.active {
+            background: var(--grass);
+            color: #fff;
+            border-color: var(--grass);
+        }
         .section-title {
             font-size: 22px;
             font-weight: 700;
@@ -112,7 +134,13 @@
     <div class="wrap">
         <div class="greeting">hi jason</div>
         <div class="subtitle">Minecraft · 图鉴：方块 / 物品 / 生物</div>
+        <div class="navbar">
+            <button type="button" data-target="blocks">方块</button>
+            <button type="button" data-target="items">物品</button>
+            <button type="button" data-target="mobs">生物</button>
+        </div>
 
+        <section id="sec-blocks" class="catalog-section">
         <div class="section-title blocks">典型方块 / Blocks</div>
         <div class="grid">
             <div class="card">
@@ -165,6 +193,8 @@
             </div>
         </div>
 
+        </section>
+        <section id="sec-items" class="catalog-section">
         <div class="section-title items">典型物品 / Items</div>
         <div class="grid">
             <div class="card">
@@ -217,6 +247,8 @@
             </div>
         </div>
 
+        </section>
+        <section id="sec-mobs" class="catalog-section">
         <div class="section-title mobs">典型生物 / Mobs</div>
         <div class="grid">
             <div class="card">
@@ -301,9 +333,31 @@
             </div>
         </div>
 
+        </section>
+
         <div class="footnote">
             图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图与物品图标，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
         </div>
     </div>
+
+    <script>
+        (function () {
+            const btns = document.querySelectorAll('.navbar button');
+            const secs = { blocks: 'sec-blocks', items: 'sec-items', mobs: 'sec-mobs' };
+            function showAll() {
+                Object.values(secs).forEach(id => { document.getElementById(id).style.display = ''; });
+                btns.forEach(b => b.classList.remove('active'));
+            }
+            btns.forEach(b => b.addEventListener('click', () => {
+                const t = b.dataset.target;
+                if (b.classList.contains('active')) { showAll(); return; }
+                btns.forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                Object.entries(secs).forEach(([k, id]) => {
+                    document.getElementById(id).style.display = (k === t ? '' : 'none');
+                });
+            }));
+        })();
+    </script>
 </body>
 </html>
