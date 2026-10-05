@@ -129,9 +129,6 @@
         }
 
         .backbtn {
-            position: sticky;
-            top: 14px;
-            z-index: 20;
             display: inline-block; margin-bottom: 26px; text-decoration: none;
             font-size: 14px; font-weight: 600; color: #555;
             background: var(--panel); border: 3px solid #d8d2c0; border-radius: 4px;
@@ -140,6 +137,27 @@
             transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
         }
         .backbtn:hover { transform: translateY(-2px); background: #fff; border-color: var(--grass); box-shadow: 0 6px 18px rgba(0,0,0,.16); }
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+            background: #ffffff;
+            padding: 14px 0 12px;
+            margin-bottom: 8px;
+            border-bottom: 3px solid #f0ede3;
+        }
+        .search {
+            flex: 1 1 200px; max-width: 340px;
+            font-family: inherit; font-size: 14px;
+            padding: 9px 14px;
+            border: 3px solid #d8d2c0; border-radius: 4px;
+            background: var(--panel); color: var(--ink);
+        }
+        .search:focus { outline: none; border-color: var(--grass); background: #fff; }
+        .search::-webkit-search-cancel-button { cursor: pointer; }
+        .count { font-size: 13px; color: #888; }
+        .card.hidden { display: none; }
         .menu {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px; max-width: 720px; margin-top: 8px;
@@ -159,7 +177,11 @@
 <body>
     <div class="topbar"></div>
     <div class="wrap">
-        <a class="backbtn" href="index.html">&larr; 返回首页</a>
+        <div class="toolbar">
+            <a class="backbtn" href="index.html">&larr; 返回首页</a>
+            <input id="q" class="search" type="search" placeholder="搜索名称或介绍…" autocomplete="off" />
+            <span class="count" id="count"></span>
+        </div>
 
 <section id="sec-mobs" class="catalog-section">
         <div class="section-title mobs">典型生物 / Mobs</div>
@@ -428,5 +450,23 @@
             图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图与物品图标，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
         </div>
     </div>
+    <script>
+        (function () {
+            var box = document.getElementById('q');
+            var count = document.getElementById('count');
+            var cards = [].slice.call(document.querySelectorAll('.card'));
+            function run() {
+                var kw = box.value.trim().toLowerCase();
+                var shown = 0;
+                cards.forEach(function (c) {
+                    var hit = !kw || c.textContent.toLowerCase().indexOf(kw) !== -1;
+                    c.classList.toggle('hidden', !hit);
+                    if (hit) shown++;
+                });
+                count.textContent = kw ? (shown + ' / ' + cards.length) : '';
+            }
+            box.addEventListener('input', run);
+        })();
+    </script>
 </body>
 </html>
