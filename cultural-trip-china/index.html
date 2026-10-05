@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>哪种出游方式更能让孩子懂中国文化？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">带孩子出游，哪种方式能让他们更懂中国文化？带他们看镇馆之宝，还是跟匠人学手艺？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">带孩子出游，你会用哪种方式帮助他们更懂中国文化？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="museum-treasure-tour">
+                            <div class="card-image">
+                                <img src="images/museum-treasure-tour.svg" alt="孩子在博物馆看文物讲解" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">博物馆看镇馆之宝</h3>
+                                <p class="option-desc">带孩子去博物馆看镇馆之宝，配生动讲解和探秘任务，把文物变成故事。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="learn-traditional-crafts">
+                            <div class="card-image">
+                                <img src="images/learn-traditional-crafts.svg" alt="孩子与匠人一起做手工" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">跟匠人学传统手艺</h3>
+                                <p class="option-desc">参加陶瓷、剪纸或织锦工作坊，孩子亲手做一件带回家的纪念品。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="living-history-experience">
+                            <div class="card-image">
+                                <img src="images/living-history-experience.svg" alt="孩子在古村落参与体验" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">历史情景体验（古村/民宿）</h3>
+                                <p class="option-desc">住一晚古村或历史主题民宿，穿戴与参与古礼，体验日常生活里的历史。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="story-audio-walking-tour">
+                            <div class="card-image">
+                                <img src="images/story-audio-walking-tour.svg" alt="孩子用平板参与寻宝导览" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">故事化导览＋互动寻宝</h3>
+                                <p class="option-desc">用故事音频或AR寻宝路线，把景点串成冒险故事，让孩子边玩边学。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

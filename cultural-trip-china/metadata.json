@@ -1,0 +1,20 @@
+{
+  "id": "cultural-trip-china",
+  "name": "家长爱文化出游",
+  "description": "移动端图文投票页：通过情景化文案与画面感选项，比较四种带孩子出游的文化体验，帮助家长挑选能激发孩子好奇心和文化理解的方式。",
+  "category": "教育",
+  "profileId": "parent-tools",
+  "keywords": [
+    "带孩子出游",
+    "中国文化",
+    "博物馆",
+    "传统手艺",
+    "亲子活动",
+    "文化体验",
+    "投票",
+    "家长爱"
+  ],
+  "coverImage": "cultural-trip-china/images/museum-treasure-tour.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-05T19:00:35.994Z"
+}
