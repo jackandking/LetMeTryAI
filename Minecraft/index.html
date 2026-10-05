@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft</title>
+    <title>Minecraft · 生物图鉴</title>
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,7 +23,7 @@
             height: 10px;
             background: linear-gradient(to bottom, var(--grass) 0 55%, var(--dirt) 55% 100%);
         }
-        .wrap { max-width: 960px; margin: 0 auto; padding: 40px 20px 64px; }
+        .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px 64px; }
         .greeting {
             font-size: 44px;
             font-weight: 700;
@@ -40,14 +40,16 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 22px;
         }
         .card {
             background: var(--panel);
             border: 3px solid #d8d2c0;
             border-radius: 4px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
             transition: transform .15s ease, box-shadow .15s ease;
         }
         .card:hover {
@@ -56,58 +58,91 @@
         }
         .card .thumb {
             aspect-ratio: 1 / 1;
-            background: #e9e6db;
+            background:
+                linear-gradient(180deg, #eef3e4 0%, #e3ecdb 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 10px;
         }
         .card .thumb img {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
         }
-        .card .meta { padding: 12px 14px 16px; }
-        .card .name { font-size: 17px; font-weight: 700; }
+        .card .meta { padding: 14px 16px 18px; flex: 1; }
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .badge.player { background: #7fc7e8; color: #123; }
+        .badge.hostile { background: #e57373; color: #fff; }
+        .badge.neutral { background: #b39ddb; color: #2a1e3f; }
+        .card .name { font-size: 19px; font-weight: 700; }
         .card .name .cn { font-weight: 400; color: #666; font-size: 14px; margin-left: 6px; }
-        .card .desc { font-size: 13px; color: #777; margin-top: 6px; line-height: 1.5; }
+        .card .desc {
+            font-size: 13.5px;
+            color: #555;
+            margin-top: 10px;
+            line-height: 1.75;
+        }
+        .footnote {
+            margin-top: 36px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
     <div class="topbar"></div>
     <div class="wrap">
         <div class="greeting">hi jason</div>
-        <div class="subtitle">Minecraft · 典型人物图鉴</div>
+        <div class="subtitle">Minecraft · 典型生物图鉴</div>
 
-        <div class="section-title">典型人物 / Characters</div>
+        <div class="section-title">典型生物 / Characters &amp; Mobs</div>
         <div class="grid">
             <div class="card">
                 <div class="thumb"><img src="images/steve.png" alt="Steve"></div>
                 <div class="meta">
+                    <span class="badge player">玩家</span>
                     <div class="name">Steve<span class="cn">史蒂夫</span></div>
-                    <div class="desc">默认玩家角色，方脸、棕发、青衫蓝裤，Minecraft 的元老形象。</div>
+                    <div class="desc">游戏的默认玩家角色，也是 Minecraft 的标志性形象。玩家操控他在方块世界里生存、建造与探索——他没有与生俱来的特殊能力，一切都要靠双手采集资源、合成工具。青色上衣、蓝色牛仔裤与深棕色短发，就是他的经典造型。</div>
                 </div>
             </div>
             <div class="card">
                 <div class="thumb"><img src="images/creeper.png" alt="Creeper"></div>
                 <div class="meta">
+                    <span class="badge hostile">敌对</span>
                     <div class="name">Creeper<span class="cn">苦力怕</span></div>
-                    <div class="desc">绿色方块生物，会悄悄靠近然后爆炸，最 iconic 的 Minecraft 符号。</div>
+                    <div class="desc">Minecraft 最具标志性的敌对生物：绿色方块身体、四条短腿、一脸"皱眉"。它会悄无声息地靠近玩家，贴近后身体膨胀、发出嘶嘶声并爆炸，瞬间炸毁建筑与地形。击杀后掉落火药，是合成 TNT 的关键材料。它天生害怕猫和豹猫——养一只猫就能把它吓跑。</div>
                 </div>
             </div>
             <div class="card">
                 <div class="thumb"><img src="images/zombie.png" alt="Zombie"></div>
                 <div class="meta">
+                    <span class="badge hostile">敌对</span>
                     <div class="name">Zombie<span class="cn">僵尸</span></div>
-                    <div class="desc">夜晚出没的敌对生物，伸臂前行，是生存模式的常客。</div>
+                    <div class="desc">最常见的敌对生物之一，夜晚在光照不足的地方成群出没，会主动追击玩家、村民和铁傀儡。阳光直射会让它着火，所以白天常躲在树荫与洞穴里。它还能把村民感染成僵尸村民——用虚弱喷溅药水加金苹果可以将其治愈。击杀后可能掉落腐肉、铁锭或胡萝卜。</div>
                 </div>
             </div>
             <div class="card">
                 <div class="thumb"><img src="images/enderman.png" alt="Enderman"></div>
                 <div class="meta">
+                    <span class="badge neutral">中立</span>
                     <div class="name">Enderman<span class="cn">末影人</span></div>
-                    <div class="desc">高挑黑色生物，紫色眼睛，能瞬移，凝视它的眼睛会被激怒。</div>
+                    <div class="desc">来自末路之地的高挑生物，通体漆黑、长着一双发光的紫色眼睛，身高接近三个方块。它能徒手搬起方块，也会在受伤时瞬移躲避。只要不直视它的眼睛，它就保持中立；一旦对视，它会发出尖啸并主动攻击。水会伤害它，戴上南瓜头就能放心打量它。</div>
                 </div>
             </div>
+        </div>
+
+        <div class="footnote">
+            图片来源：<a href="https://minecraft.wiki" style="color:#888;">Minecraft Wiki</a> 官方渲染图，仅供学习与图鉴展示；Minecraft 为 Mojang Studios 的商标。
         </div>
     </div>
 </body>
