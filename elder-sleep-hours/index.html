@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>老人每天睡几个小时你觉得合适？大家怎么安排睡眠</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">老人每天睡几个小时你觉得合适？说说你的选择</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">老人每天睡几个小时你觉得合适？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="under-5-hours">
+                            <div class="card-image">
+                                <img src="images/under-5-hours.svg" alt="老人短睡" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">5小时以下</h3>
+                                <p class="option-desc">睡得少，白天可能靠小憩补充精神</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="6-7-hours">
+                            <div class="card-image">
+                                <img src="images/6-7-hours.svg" alt="6-7小时睡眠" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">6-7小时</h3>
+                                <p class="option-desc">中等时长，很多家庭的常见作息</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="7-9-hours">
+                            <div class="card-image">
+                                <img src="images/7-9-hours.svg" alt="7-9小时睡眠" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">7-9小时</h3>
+                                <p class="option-desc">睡得比较充足，白天状态通常较稳定</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="late-night-plus-nap">
+                            <div class="card-image">
+                                <img src="images/late-night-plus-nap.svg" alt="晚睡午休" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">晚睡但午休补觉</h3>
+                                <p class="option-desc">夜里睡得晚，但靠午休补回精力</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

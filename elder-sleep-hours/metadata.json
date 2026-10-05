@@ -1,0 +1,18 @@
+{
+  "id": "elder-sleep-hours",
+  "name": "爱老人睡眠话题",
+  "description": "在家庭场景下以口语化问句发起关于老人日常睡眠时长的讨论，鼓励讲经验、晒作息、分享小技巧，不做医疗建议。",
+  "category": "健康养生",
+  "profileId": "elder-love",
+  "keywords": [
+    "老人睡眠",
+    "睡眠时长",
+    "家庭照护",
+    "养生习惯",
+    "投票",
+    "爱老人"
+  ],
+  "coverImage": "elder-sleep-hours/images/under-5-hours.svg",
+  "generatedFrom": "fighter-jets",
+  "generatedAt": "2026-10-05T18:00:48.512Z"
+}
