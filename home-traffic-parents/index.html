@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu_union_verify" content="a474889f17de23d877149d511beb790d">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <title>回家堵车时，你会选哪种和爸妈相处方式？</title>
+    <script src="../util.js"></script>
+    <script src="app.js?v=2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="pageTitle">回家堵车时，你更想和爸妈做什么？</h1>
+        </header>
+
+        <main>
+            <form id="questionnaire">
+                <div class="question" id="questionArea">
+                    <p id="questionText" class="question-text">回家堵车时，你更想和爸妈做什么？</p>
+                    <div class="options-grid" id="optionsContainer">
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="chat-old-stories">
+                            <div class="card-image">
+                                <img src="images/chat-old-stories.svg" alt="爸妈讲老故事" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">聊他们的老故事</h3>
+                                <p class="option-desc">听爸妈讲年轻时的趣事或过去的日常，边堵车边回忆温暖瞬间。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="listen-old-songs">
+                            <div class="card-image">
+                                <img src="images/listen-old-songs.svg" alt="一起听老歌" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">一起听老歌</h3>
+                                <p class="option-desc">放一张爸妈喜欢的老歌歌单，全家跟着哼唱，气氛轻松又亲切。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="plan-dinner">
+                            <div class="card-image">
+                                <img src="images/plan-dinner.svg" alt="商量晚饭安排" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">商量晚饭/分工</h3>
+                                <p class="option-desc">利用堵车时间决定晚饭菜单或分工，实用又能减少回家后的忙乱。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+
+                        <label class="option-card">
+                            <input type="radio" name="equipment" value="quiet-rest">
+                            <div class="card-image">
+                                <img src="images/quiet-rest.svg" alt="安静小憩" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="option-title">安静休息/小憩</h3>
+                                <p class="option-desc">让爸妈闭目养神或小憩，给彼此一个放松的安静时刻。</p>
+                            </div>
+                            <div class="check-indicator">✓</div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="result" id="result">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在获取最新数据...</p>
+                </div>
+            </div>
+
+            <button class="show-result-btn" id="showResultBtn" onclick="showAd()" style="display:none;">
+                <span>查看结果</span>
+            </button>
+        </main>
+
+        <footer class="page-footer">
+            <div class="more" id="more">
+                <a target="_blank" onclick="jumpToIndex()">返回主页查看更多</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js';
+                script.onload = function() {
+                    if (window.VConsole) new window.VConsole();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>
