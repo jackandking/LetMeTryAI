@@ -66,8 +66,11 @@ async function insertRow(table, data) {
     let data, table, id;
     const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
     if (a.table === 'backview') {
-      if (!a.back || !a.front) throw new Error('backview 需要 --back 和 --front 两张 URL');
-      if (!/^https:\/\//i.test(a.back) || !/^https:\/\//i.test(a.front)) throw new Error('back/front 必须是 https URL');
+      if (!a.back || !a.front) throw new Error('backview 需要 --back 和 --front 两张 URL 或本地路径');
+      // 本地文件自动上传（与 --image 行为一致）
+      if (fs.existsSync(a.back)) a.back = await uploadLocalFile(a.back);
+      if (fs.existsSync(a.front)) a.front = await uploadLocalFile(a.front);
+      if (!/^https:\/\//i.test(a.back) || !/^https:\/\//i.test(a.front)) throw new Error('back/front 必须是 https URL（本地文件会自动上传）');
       table = 'back_view_images';
       data = { back_image_url: a.back, front_image_url: a.front, review_status: 'pending', source_type: 'skill', submitted_at: now, prompt_dna: dna };
     } else {
