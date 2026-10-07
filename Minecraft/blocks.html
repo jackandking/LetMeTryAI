@@ -172,6 +172,26 @@
         .menu a .t { font-size: 28px; font-weight: 700; }
         .menu a .en { font-size: 12px; color: #999; letter-spacing: 2px; margin-top: 6px; }
         .menu a .cnt { font-size: 13px; color: #666; margin-top: 12px; }
+    
+        .card { cursor: pointer; }
+        .card:focus { outline: 3px solid var(--grass); outline-offset: 2px; }
+        .card .more { font-size: 12px; color: var(--grass); margin-top: 10px; font-weight: 600; }
+        .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal[hidden] { display: none; }
+        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.5); cursor: pointer; }
+        .modal-card { position: relative; background: #fff; border: 3px solid #d8d2c0; border-radius: 8px; max-width: 640px; width: 100%; max-height: 86vh; overflow-y: auto; padding: 28px 30px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+        .modal-close { position: absolute; top: 10px; right: 14px; border: none; background: transparent; font-size: 28px; line-height: 1; cursor: pointer; color: #999; }
+        .modal-close:hover { color: #333; }
+        .modal-head { display: flex; align-items: center; gap: 18px; padding-right: 30px; border-bottom: 2px solid #f0ede3; padding-bottom: 16px; margin-bottom: 18px; }
+        .modal-img { width: 84px; height: 84px; object-fit: contain; background: linear-gradient(180deg,#eef3e4,#e3ecdb); border-radius: 6px; padding: 6px; flex: none; }
+        .modal-name { font-size: 24px; font-weight: 700; }
+        .modal-cn { font-size: 14px; color: #888; margin-top: 2px; }
+        .dsec { margin-bottom: 16px; }
+        .dsec h4 { font-size: 15px; color: var(--grass); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .dsec h4::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--grass); display: inline-block; }
+        .dsec p { font-size: 14px; color: #444; line-height: 1.85; }
+        @media (max-width: 520px){ .modal-img{width:60px;height:60px;} .modal-name{font-size:20px;} }
+
     </style>
 </head>
 <body>
@@ -186,387 +206,387 @@
 <section id="sec-blocks" class="catalog-section">
         <div class="section-title blocks">典型方块 / Blocks</div>
         <div class="grid">
-            <div class="card">
+            <div class="card" data-slug="grass_block">
                 <div class="thumb"><img src="images/grass.png" alt="Grass Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Grass Block<span class="cn">草方块</span></div>
+                    <div class="name">草方块</span></div>
                     <div class="desc">Minecraft 世界地表的"门面"，也是游戏最具辨识度的方块。只有在光照充足、旁边有泥土时才会蔓延生长。用锄头右键可把它变成耕地，用骨粉催生草丛与花，羊也会啃掉它的草皮。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="diamond_block">
                 <div class="thumb"><img src="images/diamond_block.png" alt="Diamond Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Diamond Block<span class="cn">钻石块</span></div>
+                    <div class="name">钻石块</span></div>
                     <div class="desc">由 9 颗钻石合成的储存方块，是财富的象征。它硬度极高、爆炸抗性强，常用作信标金字塔的顶层材料，也能反过来分解回 9 颗钻石，方便收纳与展示。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="crafting_table">
                 <div class="thumb"><img src="images/crafting_table.png" alt="Crafting Table"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Crafting Table<span class="cn">工作台</span></div>
+                    <div class="name">工作台</span></div>
                     <div class="desc">生存模式的核心方块——把 2×2 背包合成格扩展成 3×3，几乎所有工具、武器、盔甲都要靠它合成。四块木板就能做出一张，它是每个玩家通往下一段冒险的起点。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="obsidian">
                 <div class="thumb"><img src="images/obsidian.png" alt="Obsidian"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Obsidian<span class="cn">黑曜石</span></div>
+                    <div class="name">黑曜石</span></div>
                     <div class="desc">水浇在岩浆源上形成的黑色玻璃状方块，爆炸抗性极高（连 TNT 都奈何不了它）。只能用钻石镐或更好的镐开采，是搭建下界传送门框架、制作附魔台的必需材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="tnt">
                 <div class="thumb"><img src="images/tnt.png" alt="TNT"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">TNT<span class="cn">TNT 炸药</span></div>
+                    <div class="name">TNT 炸药</span></div>
                     <div class="desc">用 5 份火药加 4 份沙子合成的爆炸方块，用打火石或红石信号点燃。它既能瞬间炸开大片地形、高效采矿清障，也是陷阱和大炮的经典核心，爆炸会掉落部分被炸毁的方块。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="oak_log">
                 <div class="thumb"><img src="images/oak_log.png" alt="Oak Log"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Oak Log<span class="cn">橡木原木</span></div>
+                    <div class="name">橡木原木</span></div>
                     <div class="desc">最基础的木材来源，一棵橡树通常能产出 4–6 根。每根可合成 4 块木板，木板再合成木棍与工作台——从头到尾，你手里第一套工具的起点就是它。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="diamond_ore">
                 <div class="thumb"><img src="images/diamond_ore.png" alt="Diamond Ore"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Diamond Ore<span class="cn">钻石矿石</span></div>
+                    <div class="name">钻石矿石</span></div>
                     <div class="desc">埋藏在地下深处的稀有矿石，通常出现在很深的岩层，越深越常见。必须用铁镐或更好的镐开采，配上时运 III 一块最多能掉 4 颗钻石——它是从"石器时代"迈向钻石装备的命脉。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="chest">
                 <div class="thumb"><img src="images/chest.png" alt="Chest"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Chest<span class="cn">箱子</span></div>
+                    <div class="name">箱子</span></div>
                     <div class="desc">8 块木板合成的储物方块，27 格空间，是每个基地的核心。两只箱子并排会拼成大箱子；驴、骡和运输矿车也能带箱子。破坏箱子时里面的物品会全部掉出——搬家前记得先清空。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="furnace">
                 <div class="thumb"><img src="images/furnace.png" alt="Furnace"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Furnace<span class="cn">熔炉</span></div>
+                    <div class="name">熔炉</span></div>
                     <div class="desc">8 块圆石合成的冶炼方块，用煤、木炭等燃料把矿石烧成锭、把生肉烤熟。它还是合成高炉与烟熏炉的基础——没有它，你就只能在石器时代原地踏步。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="glass">
                 <div class="thumb"><img src="images/glass.png" alt="Glass"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Glass<span class="cn">玻璃</span></div>
+                    <div class="name">玻璃</span></div>
                     <div class="desc">把沙子放进熔炉烧出的透明方块，用来做窗户和温室。打碎后不会掉落（除非用精准采集附魔），拆窗户要小心。它也是合成玻璃瓶——酿造药水的容器——的原料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bed">
                 <div class="thumb"><img src="images/bed.png" alt="Bed"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Bed<span class="cn">床</span></div>
+                    <div class="name">床</span></div>
                     <div class="desc">用 3 块羊毛加 3 块木板合成。在床上睡觉可以跳过夜晚并重设重生点，还能躲过夜里的怪物围攻。但在下界或末地尝试睡觉会直接爆炸——那两个维度的床可不是用来休息的。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="glowstone">
                 <div class="thumb"><img src="images/glowstone.png" alt="Glowstone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Glowstone<span class="cn">萤石</span></div>
+                    <div class="name">萤石</span></div>
                     <div class="desc">下界天花板上的发光方块，光照等级 15——游戏里最亮的方块之一。挖碎后掉落 2–4 份萤石粉，4 份粉可以重新合成一块。它是造灯和做熔岩主题建筑的好材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="enchanting_table">
                 <div class="thumb"><img src="images/enchanting_table.png" alt="Enchanting Table"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Enchanting Table<span class="cn">附魔台</span></div>
+                    <div class="name">附魔台</span></div>
                     <div class="desc">用书籍+钻石+黑曜石合成，消耗经验等级与青金石为工具、武器、盔甲附上魔法属性。周围每格摆书架可把最高附魔等级从 1 级一路拉到 30 级——书架离得越近、围得越满，出货越好。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="beacon">
                 <div class="thumb"><img src="images/beacon.png" alt="Beacon"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Beacon<span class="cn">信标</span></div>
+                    <div class="name">信标</span></div>
                     <div class="desc">用下界之星+玻璃+黑曜石合成，放置后会向天空射出一道光柱。把它摆在由金/钻石/铁/绿宝石块金字塔的顶层中央并"喂"一个矿物激活，就能给范围内的玩家提供速度、急迫、力量、跳跃提升或再生等增益。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bookshelf">
                 <div class="thumb"><img src="images/bookshelf.png" alt="Bookshelf"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Bookshelf<span class="cn">书架</span></div>
+                    <div class="name">书架</span></div>
                     <div class="desc">用 6 块木板+3 本书合成，主要用途是提升旁边附魔台的最高附魔等级。直接挖会只掉书，必须用带"精准采集"的工具才能完整回收书架本身。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="anvil">
                 <div class="thumb"><img src="images/anvil.png" alt="Anvil"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Anvil<span class="cn">铁砧</span></div>
+                    <div class="name">铁砧</span></div>
                     <div class="desc">用 3 个铁块+4 根铁锭合成，可修复装备、重命名物品、或合并两件上的附魔。每次使用都会累积"惩罚"使下一次的经验花费更高，且会随使用逐渐磨损，直至彻底损坏消失。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="hopper">
                 <div class="thumb"><img src="images/hopper.png" alt="Hopper"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Hopper<span class="cn">漏斗</span></div>
+                    <div class="name">漏斗</span></div>
                     <div class="desc">用 5 个铁锭合成，能自动把上方/侧面的物品吸进自己、再向下方容器输出，是自动农场和红石流水线的核心零件。给它通上红石信号时会被"锁定"，停止转移物品。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="redstone_ore">
                 <div class="thumb"><img src="images/redstone_ore.png" alt="Redstone Ore"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Redstone Ore<span class="cn">红石矿石</span></div>
+                    <div class="name">红石矿石</span></div>
                     <div class="desc">散布在地下的矿石，挖开会掉落 1–5 份红石粉（用时运镐可翻倍）。被踩、被点或被红石激活时还会发出红光与滋滋声——红石是游戏里一切机械与电路的起点。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="stone">
                 <div class="thumb"><img src="images/stone.png" alt="Stone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Stone<span class="cn">石头</span></div>
+                    <div class="name">石头</span></div>
                     <div class="desc">最常见的基础方块，徒手挖只能掉落圆石，需要用镐才能整块挖下。可烧成石砖、被熔岩烧成玄武岩，也是最通用的建材。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="sand">
                 <div class="thumb"><img src="images/sand.png" alt="Sand"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Sand<span class="cn">沙子</span></div>
+                    <div class="name">沙子</span></div>
                     <div class="desc">一踩就往下陷的松散方块，是烧制玻璃与埋 TNT 爆破的必备材料。掉进末地的流沙区会被整个吞下去，小心别被埋。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="iron_block">
                 <div class="thumb"><img src="images/iron_block.png" alt="Iron Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Iron Block<span class="cn">铁块</span></div>
+                    <div class="name">铁块</span></div>
                     <div class="desc">由 9 个铁锭合成，体积大但极"致密"，不能做工具，适合整块装饰与建造，也是把一堆铁锭压缩存放的好办法。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="emerald_block">
                 <div class="thumb"><img src="images/emerald_block.png" alt="Emerald Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Emerald Block<span class="cn">绿宝石块</span></div>
+                    <div class="name">绿宝石块</span></div>
                     <div class="desc">由 9 个绿宝石合成。村民交易只收绿宝石、不收绿宝石块，所以它必须先拆开才能交易——是高价值方块，也是财富象征。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="coal_block">
                 <div class="thumb"><img src="images/coal_block.png" alt="Coal Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Coal Block<span class="cn">煤炭块</span></div>
+                    <div class="name">煤炭块</span></div>
                     <div class="desc">9 个煤炭合成，方便储存与运输。真正的燃料是煤炭本身（可长期烧矿），煤块主要用于压缩存储与作为建筑材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="sandstone">
                 <div class="thumb"><img src="images/sandstone.png" alt="Sandstone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Sandstone<span class="cn">砂岩</span></div>
+                    <div class="name">砂岩</span></div>
                     <div class="desc">由 4 个沙子合成，表面有明显层理，是沙漠神殿与各类遗迹建筑的常用石材。还有磨切与雕纹变体可做更细腻的装饰。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bricks">
                 <div class="thumb"><img src="images/bricks.png" alt="Bricks"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Bricks<span class="cn">红砖块</span></div>
+                    <div class="name">红砖块</span></div>
                     <div class="desc">最常用的建材之一，广泛用于各类建筑。在红石机器里铺一层砖，能省下大量因朝向翻转（上下颠倒的活塞）带来的结构复杂度。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bedrock">
                 <div class="thumb"><img src="images/bedrock.png" alt="Bedrock"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Bedrock<span class="cn">基岩</span></div>
+                    <div class="name">基岩</span></div>
                     <div class="desc">组成下界、末地与主世界底部的最硬方块，镐挖不动。主世界基岩层在 Y=-60，往下就是基岩。末影龙要破坏基岩柱才能放出末地传送门。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="cactus">
                 <div class="thumb"><img src="images/cactus.png" alt="Cactus"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Cactus<span class="cn">仙人掌</span></div>
+                    <div class="name">仙人掌</span></div>
                     <div class="desc">沙漠常见的有刺方块，接触会持续掉血，但细心的玩家反而拿它当安全居所的一部分。附近刷新的骷髅大多会被它扎死。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="netherrack">
                 <div class="thumb"><img src="images/netherrack.png" alt="Netherrack"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Netherrack<span class="cn">下界岩</span></div>
+                    <div class="name">下界岩</span></div>
                     <div class="desc">下界的基本方块，打碎它有几率掉落下界火药——那是酿造抗火药水与防火药剂的关键材料。它也是下界传送门最常见的天然边框。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="cobblestone">
                 <div class="thumb"><img src="images/cobblestone.png" alt="Cobblestone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Cobblestone<span class="cn">圆石</span></div>
+                    <div class="name">圆石</span></div>
                     <div class="desc">石头用镐挖会掉落圆石，是最基础的可再生建材。把它熔炼可得石头，熔岩也能倒进熔炉烧成圆石。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="block_of_gold">
                 <div class="thumb"><img src="images/gold_block.png" alt="Block of Gold"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Block of Gold<span class="cn">金块</span></div>
+                    <div class="name">金块</span></div>
                     <div class="desc">由 9 个金锭合成的致密方块，是财富的象征。它也是下界传送门框架的两种材料之一（另一种是黑曜石），常用于高级红石机器的装饰。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="block_of_diamond">
                 <div class="thumb"><img src="images/diamond_block.png" alt="Block of Diamond"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Block of Diamond<span class="cn">钻石块</span></div>
+                    <div class="name">钻石块</span></div>
                     <div class="desc">9 个钻石合成，价值极高的致密方块。既是大额财富的象征，也是 30 格附魔台书架布局的建材之一。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="redstone_lamp">
                 <div class="thumb"><img src="images/redstone_lamp.png" alt="Redstone Lamp"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Redstone Lamp<span class="cn">红石灯</span></div>
+                    <div class="name">红石灯</span></div>
                     <div class="desc">通电后会发光的方块，需要红石信号点亮。既能当建筑照明，也能作为电路的负载或状态指示灯。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="lantern">
                 <div class="thumb"><img src="images/lantern.png" alt="Lantern"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Lantern<span class="cn">灯笼</span></div>
+                    <div class="name">灯笼</span></div>
                     <div class="desc">用 1 个铁锭+4 个火把合成的便携光源，可以挂在墙上或举在手里。比萤石省材料，是洞穴探索与建筑照明的主力。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="soul_sand">
                 <div class="thumb"><img src="images/soul_sand.png" alt="Soul Sand"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Soul Sand<span class="cn">灵魂沙</span></div>
+                    <div class="name">灵魂沙</span></div>
                     <div class="desc">下界里挖到的砂质方块，打碎会掉落灵魂火——酿造抗火药水与召唤下界残影的必需材料。生物站在上面还会缓慢下沉。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="sea_lantern">
                 <div class="thumb"><img src="images/sea_lantern.png" alt="Sea Lantern"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Sea Lantern<span class="cn">海晶灯</span></div>
+                    <div class="name">海晶灯</span></div>
                     <div class="desc">由海晶石碎片与棱石合成的强光方块，光照等级 15，是海底神殿的标志性照明。棱石本身可由海晶石加玻璃合成。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="prismarine">
                 <div class="thumb"><img src="images/prismarine.png" alt="Prismarine"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Prismarine<span class="cn">海晶石</span></div>
+                    <div class="name">海晶石</span></div>
                     <div class="desc">海底神殿的主要建材，由海晶石碎片合成。做成棱石版可进一步合出海晶灯，是深海探索的核心资源。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="magma_block">
                 <div class="thumb"><img src="images/magma_block.png" alt="Magma Block"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Magma Block<span class="cn">岩浆块</span></div>
+                    <div class="name">岩浆块</span></div>
                     <div class="desc">由 4 个岩浆膏合成，踩上去不会触发岩浆伤害。它也是熔岩桶的燃料来源，海洋中还能用来做"水下岩浆怪"农场。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="deepslate">
                 <div class="thumb"><img src="images/deepslate.png" alt="Deepslate"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Deepslate<span class="cn">深板岩</span></div>
+                    <div class="name">深板岩</span></div>
                     <div class="desc">1.17 洞穴与深板岩群的新主方块，硬度高于石头。大量分布于 Y=0 以下，是 1.18 之后深刷矿区的主角。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="nether_bricks">
                 <div class="thumb"><img src="images/nether_bricks.png" alt="Nether Bricks"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Nether Bricks<span class="cn">下界砖块</span></div>
+                    <div class="name">下界砖块</span></div>
                     <div class="desc">下界堡垒的常见建材，暗红紫色调。关键特性是<b>不会被爆炸破坏</b>（下界岩才会爆），因此常被用来加固据点。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="nether_quartz_ore">
                 <div class="thumb"><img src="images/nether_quartz_ore.png" alt="Nether Quartz Ore"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Nether Quartz Ore<span class="cn">下界石英矿石</span></div>
+                    <div class="name">下界石英矿石</span></div>
                     <div class="desc">下界最常见的矿石之一，熔炉烧炼可得下界石英——它是合成下界传送门框架、玻璃、活塞与红石比较器的共同基础材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="basalt">
                 <div class="thumb"><img src="images/basalt.png" alt="Basalt"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Basalt<span class="cn">玄武岩</span></div>
+                    <div class="name">玄武岩</span></div>
                     <div class="desc">下界常见柱状纹理的方块，层层堆叠成"玄武岩三角洲"。它的磨制变体（平滑玄武岩）可用作装饰建材。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="blackstone">
                 <div class="thumb"><img src="images/blackstone.png" alt="Blackstone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Blackstone<span class="cn">黑石</span></div>
+                    <div class="name">黑石</span></div>
                     <div class="desc">下界的深色方块。熔炼可得抛光黑石，敲打可转化为裂纹黑石变体——是下界建筑常用的基础石材。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="polished_andesite">
                 <div class="thumb"><img src="images/polished_andesite.png" alt="Polished Andesite"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Polished Andesite<span class="cn">磨制安山岩</span></div>
+                    <div class="name">磨制安山岩</span></div>
                     <div class="desc">安山岩的磨制变种，表面平滑，是各类遗迹与古典建筑的常用建材。它与磨制闪长岩/花岗岩/二长岩同属"石工"系列。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="block_of_quartz">
                 <div class="thumb"><img src="images/quartz_block.png" alt="Block of Quartz"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Block of Quartz<span class="cn">石英块</span></div>
+                    <div class="name">石英块</span></div>
                     <div class="desc">由 4 个下界石英合成的纯净白色方块，是高级装饰与展示建材。它也是下界传送门框架的两种材料之一（另一种是黑曜石）。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="piston">
                 <div class="thumb"><img src="images/piston.png" alt="Piston"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Piston<span class="cn">活塞</span></div>
+                    <div class="name">活塞</span></div>
                     <div class="desc">红石机械的核心，可推动最多 12 个方块。加上黏液做成黏液活塞还能把方块拉回来，是所有自动装置的基础。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="observer">
                 <div class="thumb"><img src="images/observer.png" alt="Observer"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Observer<span class="cn">侦测器</span></div>
+                    <div class="name">侦测器</span></div>
                     <div class="desc">能"看见"方块状态变化的方块。通过捕捉箱子、工作台等方块的状态变化来发出红石信号，是红石电路自动化的关键元件。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="target">
                 <div class="thumb"><img src="images/target.png" alt="Target"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Target<span class="cn">目标方块</span></div>
+                    <div class="name">目标方块</span></div>
                     <div class="desc">1.14 加入的方块，放置后会发射红色颗粒，可被侦测器与比较器读取。常用于制作"目标存档点"与检测飞行器的碰撞。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="lodestone">
                 <div class="thumb"><img src="images/lodestone.png" alt="Lodestone"></div>
                 <div class="meta">
                     <span class="badge block">方块</span>
-                    <div class="name">Lodestone<span class="cn">磁石</span></div>
+                    <div class="name">磁石</span></div>
                     <div class="desc">1.19 加入的深板岩质方块，放置后会发出指针指向附近的信标，可显示队友位置——联机版的"地图标记"就来自它。</div>
                 </div>
             </div>
@@ -596,5 +616,65 @@
             box.addEventListener('input', run);
         })();
     </script>
+
+    <div class="modal" id="detailModal" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <button class="modal-close" data-close aria-label="关闭">×</button>
+            <div class="modal-head">
+                <img class="modal-img" id="dmImg" src="" alt="">
+                <div>
+                    <div class="modal-name" id="dmName"></div>
+                    <div class="modal-cn" id="dmCn"></div>
+                </div>
+            </div>
+            <div id="dmBody"></div>
+        </div>
+    </div>
+    <script src="block-details.js"></script>
+    <script>
+    (function () {
+        var modal = document.getElementById('detailModal');
+        var dmImg = document.getElementById('dmImg');
+        var dmName = document.getElementById('dmName');
+        var dmCn = document.getElementById('dmCn');
+        var dmBody = document.getElementById('dmBody');
+        function sec(title, text) {
+            if (!text) return '';
+            return '<div class="dsec"><h4>' + title + '</h4><p>' + text + '</p></div>';
+        }
+        function open(card) {
+            var slug = card.getAttribute('data-slug');
+            var d = (window.BLOCK_DETAILS && window.BLOCK_DETAILS[slug]) || null;
+            if (!d) return;
+            var img = card.querySelector('img');
+            dmImg.src = img ? img.getAttribute('src') : '';
+            dmImg.alt = d.en || '';
+            dmName.textContent = d.en || '';
+            dmCn.textContent = d.cn || '';
+            dmBody.innerHTML = sec('合成途径', d.recipe) + sec('在哪儿找', d.find) + sec('各种特征', d.features) + sec('怎么挖掘', d.mining);
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+        function close() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        }
+        document.querySelectorAll('.card[data-slug]').forEach(function (card) {
+            card.setAttribute('tabindex', '0');
+            card.addEventListener('click', function () { open(card); });
+            card.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card); }
+            });
+        });
+        modal.addEventListener('click', function (e) {
+            if (e.target.hasAttribute('data-close')) close();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.hidden) close();
+        });
+    })();
+    </script>
+
 </body>
 </html>
