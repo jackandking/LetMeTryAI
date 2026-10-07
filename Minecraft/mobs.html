@@ -172,6 +172,21 @@
         .menu a .t { font-size: 28px; font-weight: 700; }
         .menu a .en { font-size: 12px; color: #999; letter-spacing: 2px; margin-top: 6px; }
         .menu a .cnt { font-size: 13px; color: #666; margin-top: 12px; }
+        .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal[hidden] { display: none; }
+        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.5); cursor: pointer; }
+        .modal-card { position: relative; background: #fff; border: 3px solid #d8d2c0; border-radius: 8px; max-width: 640px; width: 100%; max-height: 86vh; overflow-y: auto; padding: 28px 30px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+        .modal-close { position: absolute; top: 10px; right: 14px; border: none; background: transparent; font-size: 28px; line-height: 1; cursor: pointer; color: #999; }
+        .modal-close:hover { color: #333; }
+        .modal-head { display: flex; align-items: center; gap: 18px; padding-right: 30px; border-bottom: 2px solid #f0ede3; padding-bottom: 16px; margin-bottom: 18px; }
+        .modal-img { width: 84px; height: 84px; object-fit: contain; background: linear-gradient(180deg,#eef3e4,#e3ecdb); border-radius: 6px; padding: 6px; flex: none; }
+        .modal-name { font-size: 24px; font-weight: 700; }
+        .modal-cn { font-size: 14px; color: #888; margin-top: 2px; }
+        .dsec { margin-bottom: 16px; }
+        .dsec h4 { font-size: 15px; color: var(--grass); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .dsec h4::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--grass); display: inline-block; }
+        .dsec p { font-size: 14px; color: #444; line-height: 1.85; }
+        @media (max-width: 520px){ .modal-img{width:60px;height:60px;} .modal-name{font-size:20px;} }
     </style>
 </head>
 <body>
@@ -186,7 +201,7 @@
 <section id="sec-mobs" class="catalog-section">
         <div class="section-title mobs">典型生物 / Mobs</div>
         <div class="grid">
-            <div class="card">
+            <div class="card" data-slug="steve">
                 <div class="thumb"><img src="images/steve.png" alt="Steve"></div>
                 <div class="meta">
                     <span class="badge player">玩家</span>
@@ -194,7 +209,7 @@
                     <div class="desc">游戏的默认玩家角色，也是 Minecraft 的标志性形象。玩家操控他在方块世界里生存、建造与探索——他没有与生俱来的特殊能力，一切都要靠双手采集资源、合成工具。青色上衣、蓝色牛仔裤与深棕色短发，就是他的经典造型。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="creeper">
                 <div class="thumb"><img src="images/creeper.png" alt="Creeper"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -202,7 +217,7 @@
                     <div class="desc">Minecraft 最具标志性的敌对生物：绿色方块身体、四条短腿、一脸"皱眉"。它会悄无声息地靠近玩家，贴近后身体膨胀、发出嘶嘶声并爆炸，瞬间炸毁建筑与地形。击杀后掉落火药，是合成 TNT 的关键材料。它天生害怕猫和豹猫——养一只猫就能把它吓跑。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="zombie">
                 <div class="thumb"><img src="images/zombie.png" alt="Zombie"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -210,7 +225,7 @@
                     <div class="desc">最常见的敌对生物之一，夜晚在光照不足的地方成群出没，会主动追击玩家、村民和铁傀儡。阳光直射会让它着火，所以白天常躲在树荫与洞穴里。它还能把村民感染成僵尸村民——用虚弱喷溅药水加金苹果可以将其治愈。击杀后可能掉落腐肉、铁锭或胡萝卜。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="skeleton">
                 <div class="thumb"><img src="images/skeleton.png" alt="Skeleton"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -218,7 +233,7 @@
                     <div class="desc">手持弓箭的远程敌对生物，会与目标保持距离不断放箭，被逼近时还会后退周旋。阳光会让它燃烧，白天常见它躲在阴影里。击杀后掉落骨头与箭——骨头既可驯狼又可催熟作物，是早期很实用的资源。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="spider">
                 <div class="thumb"><img src="images/spider.png" alt="Spider"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -226,7 +241,7 @@
                     <div class="desc">能爬墙的大型节肢生物，身形扁平、红眼发亮。白天光线充足时它是中立的，只有被攻击才会反击；一到夜晚就变成主动猎手。它能攀上垂直的墙面翻越围墙，击杀后掉落线与蜘蛛眼——线是合成弓和钓竿的必需品。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="pig">
                 <div class="thumb"><img src="images/pig.png" alt="Pig"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -234,7 +249,7 @@
                     <div class="desc">粉色的经典被动生物，成群生活在草原上，用胡萝卜可以繁殖。击杀后掉落生猪排（烤熟更香）。手持胡萝卜钓竿还能骑猪兜风——虽然方向得靠它"配合"。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="cow">
                 <div class="thumb"><img src="images/cow.png" alt="Cow"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -242,7 +257,7 @@
                     <div class="desc">黑白花纹的被动生物，草原与山地的常客。它全身是宝：掉落牛肉与皮革（皮革是做书、护甲和物品展示框的原料），用铁桶右键还能挤到牛奶——喝下可解除一切药水效果，是打龙前的"解毒剂"。用小麦繁殖。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="villager">
                 <div class="thumb"><img src="images/villager.png" alt="Villager"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -250,7 +265,7 @@
                     <div class="desc">生活在村庄里的类人 NPC，大鼻子、长袍加身，是交易系统的核心。不同职业（农民、图书管理员、铁匠等）提供不同商品——用绿宝石和它换货，能把"种田流"玩成经济学。僵尸可以把它感染成僵尸村民，也可能在白天被僵尸围攻。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="enderman">
                 <div class="thumb"><img src="images/enderman.png" alt="Enderman"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -258,7 +273,7 @@
                     <div class="desc">来自末路之地的高挑生物，通体漆黑、长着一双发光的紫色眼睛，身高接近三个方块。它能徒手搬起方块，也会在受伤时瞬移躲避。只要不直视它的眼睛，它就保持中立；一旦对视，它会发出尖啸并主动攻击。水会伤害它，戴上南瓜头就能放心打量它。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="ender_dragon">
                 <div class="thumb"><img src="images/ender_dragon.png" alt="Ender Dragon"></div>
                 <div class="meta">
                     <span class="badge boss">Boss</span>
@@ -266,7 +281,7 @@
                     <div class="desc">Minecraft 的最终 Boss，盘踞在末路之地的黑曜石柱之间，通体漆黑、紫眼发光。它会俯冲撞击玩家、吐出龙息，还有一圈末影水晶为它持续回血——得先拆水晶、再磨血量。击败它后主世界会出现回到出生点的传送门，并播放著名的"终末之诗"。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="alex">
                 <div class="thumb"><img src="images/alex.png" alt="Alex"></div>
                 <div class="meta">
                     <span class="badge player">玩家</span>
@@ -274,7 +289,7 @@
                     <div class="desc">与史蒂夫并列的默认玩家角色：橘红色头发、绿眼睛、绿色上衣，模型更纤细。2014 年加入的官方女性角色，玩家可以在皮肤设置里自由切换两位默认角色——她和史蒂夫一样，没有特殊能力，全靠双手创造。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="slime">
                 <div class="thumb"><img src="images/slime.png" alt="Slime"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -282,7 +297,7 @@
                     <div class="desc">绿色半透明的立方体生物，在地下特定"史莱姆区块"和沼泽夜晚生成。它会跳跃着撞向玩家，死亡时还会分裂成更小的个体，最小的只会掉落粘液球——粘液球是合成粘液块、拴绳和粘性活塞的关键材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="ghast">
                 <div class="thumb"><img src="images/ghast.png" alt="Ghast"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -290,7 +305,7 @@
                     <div class="desc">下界里漂浮的巨型白色"水母"，会发出婴儿般的哭声，吐出会爆炸的火球。它的火球可以被玩家打回去——用剑反弹火球击杀它还能拿成就。击杀后掉落恶魂之泪，是酿造再生药水的材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="wolf">
                 <div class="thumb"><img src="images/wolf.png" alt="Wolf"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -298,7 +313,7 @@
                     <div class="desc">灰白色的中立生物，成群生活在森林与针叶林。用骨头驯服后会戴上红色项圈、坐下起立听你指挥，还会主动攻击你攻击的目标——是忠实的战斗伙伴。用肉喂养还能繁殖出小狼。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="chicken">
                 <div class="thumb"><img src="images/chicken.png" alt="Chicken"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -306,7 +321,7 @@
                     <div class="desc">白色的家禽，掉落生鸡肉与羽毛（羽毛是合成箭的原料）。它下蛋可以孵出小鸡，也用小麦种子繁殖。最神奇的是：从任何高度坠落它都靠扑扇翅膀缓慢下落，永远不会摔死。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="wither">
                 <div class="thumb"><img src="images/wither.png" alt="Wither"></div>
                 <div class="meta">
                     <span class="badge boss">Boss</span>
@@ -314,7 +329,7 @@
                     <div class="desc">第二个 Boss：用 4 块灵魂沙加 3 个凋灵骷髅头召唤。它会发射头颅轰炸、给玩家叠加持续掉血的"凋零"效果，血量过半后还会获得弹幕护甲。击败它掉落下界之星——合成信标的唯一材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="blaze">
                 <div class="thumb"><img src="images/blaze.png" alt="Blaze"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -322,7 +337,7 @@
                     <div class="desc">只在下界要塞的刷怪笼里生成，是一团悬浮燃烧、会喷射火球的发光生物。击杀掉落烈焰棒——酿造夜视/力量药水、以及激活末地传送门的核心材料。它怕水、怕冷，雪球都能把它砸伤。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="iron_golem">
                 <div class="thumb"><img src="images/iron_golem.png" alt="Iron Golem"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -330,7 +345,7 @@
                     <div class="desc">村庄够大时会自然生成，玩家也能用 4 个铁块摆成 T 形、顶上放南瓜手动召唤。它力大无穷、血量极高，专职保护村民驱赶怪物；对玩家通常中立，除非你先攻击了村民。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="drowned">
                 <div class="thumb"><img src="images/drowned.png" alt="Drowned"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -338,7 +353,7 @@
                     <div class="desc">僵尸在水里溺得太久会转化成溺尸，也会在河流、海洋自然刷出。它们常持三叉戟（会投掷）或钓鱼竿，击杀可能掉铜锭、三叉戟甚至鹦鹉螺壳——后者是召唤远古守卫者的材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="sheep">
                 <div class="thumb"><img src="images/sheep.png" alt="Sheep"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -346,7 +361,7 @@
                     <div class="desc">最常见的被动生物之一，可用剪刀"咔嚓"取下羊毛（之后会慢慢再长出来），也能用染料染成 16 种颜色、再剪下对应色的羊毛。被杀则掉落羊肉，是前期布料与食物的来源。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="guardian">
                 <div class="thumb"><img src="images/guardian.png" alt="Guardian"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -354,7 +369,7 @@
                     <div class="desc">盘踞在海底神殿、专职守卫宝藏的敌对生物。它用一道激光持续灼烧你，近身时体表的尖刺还会反伤；击杀掉落海晶碎片、生鱼与偶尔的鱼。更大的远古守卫者会给玩家叠加"挖掘疲劳"减速。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="squid">
                 <div class="thumb"><img src="images/squid.png" alt="Squid"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -362,7 +377,7 @@
                     <div class="desc">在水中游动的被动生物，受惊会喷出墨汁。击杀掉落墨囊（早期版本即黑色染料的来源），本身不攻击、也不会主动靠近玩家，是海洋里安静的背景生物。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="magma_cube">
                 <div class="thumb"><img src="images/magma_cube.png" alt="Magma Cube"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -370,7 +385,7 @@
                     <div class="desc">在下界岩浆中不停弹跳的立方体生物，分大、中、小三型。靠近会喷出有害火球，击杀掉落可当润滑剂的岩浆膏。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bat">
                 <div class="thumb"><img src="images/bat.png" alt="Bat"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -378,7 +393,7 @@
                     <div class="desc">洞穴与深暗中成群倒挂的飞行小怪，是最常见的洞穴敌对生物。击杀掉落纸——所以想造纸，就得先打蝙蝠。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="endermite">
                 <div class="thumb"><img src="images/endermite.png" alt="Endermite"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -386,7 +401,7 @@
                     <div class="desc">当你手持末影之眼激活末地传送门时，传送门周围会生成一群紫色小怪。它们体型小却会瞬移攻击，击杀有小概率掉落末影之眼——回收传送门信标的关键。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="silverfish">
                 <div class="thumb"><img src="images/silverfish.png" alt="Silverfish"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -394,7 +409,7 @@
                     <div class="desc">群居的银色小虫，怕水、会挖坏石头和泥土方块，破坏家园。它们常大量潜伏在石砖老建筑里，是最烦人的小型敌对生物之一。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="snow_golem">
                 <div class="thumb"><img src="images/snow_golem.png" alt="Snow Golem"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -402,7 +417,7 @@
                     <div class="desc">用 4 个雪球堆成，冬天会向玩家扔雪球。它对普通攻击免疫、护甲极高，却极怕水与热（会融化致死），因此是雪屋里既强又脆弱的守卫。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="ocelot">
                 <div class="thumb"><img src="images/ocelot.png" alt="Ocelot"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -410,7 +425,7 @@
                     <div class="desc">丛林中行踪隐秘的猫科生物，手持鱼可驯服成猫。被驯服的猫会驱赶僵尸、偶尔还会送礼物；击杀掉落生鲑鱼。猫还会主动吓跑苦力怕，是无伤刷怪的好帮手。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="turtle">
                 <div class="thumb"><img src="images/turtle.png" alt="Turtle"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -418,7 +433,7 @@
                     <div class="desc">常在海滩与浅海生成，头上有小龟壳花纹。喂海龟蛋会孵化小海龟，成年海龟掉落海龟壳（可做头盔）与海龟鳞甲。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="dolphin">
                 <div class="thumb"><img src="images/dolphin.png" alt="Dolphin"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -426,7 +441,7 @@
                     <div class="desc">海里成群游弋的被动生物，会主动游向玩家在海底找到的沉船与海底废墟并鸣叫指引，还赠送美之息礼物，是水下探索的好伙伴。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="fox">
                 <div class="thumb"><img src="images/fox.png" alt="Fox"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -434,7 +449,7 @@
                     <div class="desc">出生于针叶林，会偷地上的东西藏在嘴里。喂浆果、鸡蛋或皮革可驯服成温顺的狐狸——它会蜷在你脚边睡觉，甚至带来小狐狸。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="ravager">
                 <div class="thumb"><img src="images/ravager.png" alt="Ravager"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -442,7 +457,7 @@
                     <div class="desc">压迫感十足的巨型生物，1.21 起属于敌对阵营，会破坏树叶与作物，怒视时冲撞。击杀能掉落绿宝石、皮革等高价值战利品。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="parrot">
                 <div class="thumb"><img src="images/parrot.png" alt="Parrot"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -450,7 +465,7 @@
                     <div class="desc">丛林中生成的四种彩色鹦鹉，喂种子即可驯服。驯服后会模仿附近的声音、跟着玩家飞，且有降落灯（夜晚会发光）——完全无敌的可爱伙伴。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="glow_squid">
                 <div class="thumb"><img src="images/glow_squid.png" alt="Glow Squid"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -458,7 +473,7 @@
                     <div class="desc">深暗之海（Y=-50 以下）才生成的深海乌贼，体型大且会发光，击杀掉落发光墨囊——制作荧石棒的必需材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="cod">
                 <div class="thumb"><img src="images/cod.png" alt="Cod"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -466,7 +481,7 @@
                     <div class="desc">海洋与河流中最常见的鱼，钓鱼或用水桶舀水获得。是前期最稳定的蛋白质来源，也是钓鱼玩法的入门素材。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="pufferfish">
                 <div class="thumb"><img src="images/pufferfish.png" alt="Pufferfish"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -474,7 +489,7 @@
                     <div class="desc">热带海域的鱼，被攻击或被靠近时会鼓起并释放毒素。用它做水下发光的"河豚灯"是经典装饰。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="bee">
                 <div class="thumb"><img src="images/bee.png" alt="Bee"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -482,7 +497,7 @@
                     <div class="desc">蜂巢里生成的昆虫，会采蜜酿蜜。攻击蜂巢会激怒它们成群蜇人。收集瓶可从蜂巢取蜂蜜，是酿造糖浆与 potion 的材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="cat">
                 <div class="thumb"><img src="images/cat.png" alt="Cat"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -490,7 +505,7 @@
                     <div class="desc">村庄或废弃矿井里生成的猫，用生鳕鱼驯服。驯服后会在家附近游荡、偶尔送你小礼物，还会帮你吓跑苦力怕，是村庄的最佳守卫。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="panda">
                 <div class="thumb"><img src="images/panda.png" alt="Panda"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -498,7 +513,7 @@
                     <div class="desc">竹林生成的黑白大熊猫，看起来可爱但有脾气：竹子被砍或被激怒时会攻击（1.20 起会坐下翻滚）。动作循环独特，是版本特性展示的代表生物。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="llama">
                 <div class="thumb"><img src="images/llama.png" alt="Llama"></div>
                 <div class="meta">
                     <span class="badge passive">被动</span>
@@ -506,7 +521,7 @@
                     <div class="desc">沙漠与高原生成的商人羊驼，背毯子会随交易次数升到 1-5 级。行走商人就是骑它而来。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="piglin">
                 <div class="thumb"><img src="images/piglin.png" alt="Piglin"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -514,7 +529,7 @@
                     <div class="desc">下界金沙与深板岩生成的关键 NPC。给它金锭会交易金装备，攻击它会招来一群猪灵报复——它们也是把下界物资带回主界的桥梁。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="wither_skeleton">
                 <div class="thumb"><img src="images/wither_skeleton.png" alt="Wither Skeleton"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -522,7 +537,7 @@
                     <div class="desc">下界要塞与化石挖掘点生成的高瘦骷髅，比普通骷髅更致命（会造成凋零效果）。击杀掉落骨头与煤炭，但极小概率掉落凋灵之颅——召唤凋灵 Boss 的唯一途径。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="elder_guardian">
                 <div class="thumb"><img src="images/elder_guardian.png" alt="Elder Guardian"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -530,7 +545,7 @@
                     <div class="desc">海底神殿的 mini-Boss，体型是普通守卫者的三倍，激光更强。击杀掉落海晶碎片与"海洋之心"——后者是神器，可把附近守卫者变成友好的。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="shulker">
                 <div class="thumb"><img src="images/shulker.png" alt="Shulker"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -538,7 +553,7 @@
                     <div class="desc">末地的紫色漂浮方块生物，会发射能穿透护甲的追踪弹幕。被击杀后掉落紫色潜影壳，是染色羊毛与目标方块的材料。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="vex">
                 <div class="thumb"><img src="images/vex.png" alt="Vex"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -546,7 +561,7 @@
                     <div class="desc">卫道士召唤的小型飞行恶灵，会绕着玩家乱飞并造成伤害。击杀掉落恼鬼之翼（纪念品），是林地府邸的标志性生物。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="evoker">
                 <div class="thumb"><img src="images/evoker.png" alt="Evoker"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -554,7 +569,7 @@
                     <div class="desc">林地府邸的指挥者，会召唤恼鬼、布置恼鬼盒，还能放出致命的唤魔者尖牙——是府邸里最危险的敌人之一。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="pillager">
                 <div class="thumb"><img src="images/pillager.png" alt="Pillager"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -562,7 +577,7 @@
                     <div class="desc">巡逻队的一员，戴着头盔且不会溺水，还携带并使用弩箭。1.14 袭击机制加入后，它是"掠夺者之袭"的主力敌人。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="vindicator">
                 <div class="thumb"><img src="images/vindicator.png" alt="Vindicator"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -570,7 +585,7 @@
                     <div class="desc">手持铁斧的激进恶灵，会主动攻击玩家。持有铁斧时击败它有几率掉落一把铁斧——既是威胁也是不错的武器。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="stray">
                 <div class="thumb"><img src="images/stray.png" alt="Stray"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -578,7 +593,7 @@
                     <div class="desc">冰雪环境生成的骷髅变种，穿着带冰的斗篷、射程更远，箭矢还会造成缓慢效果。是雪原与冰原战斗的常见敌人。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="husk">
                 <div class="thumb"><img src="images/husk.png" alt="Husk"></div>
                 <div class="meta">
                     <span class="badge hostile">敌对</span>
@@ -586,7 +601,7 @@
                     <div class="desc">僵尸的变种，多出现在沙漠与丛林。攻击时不像普通僵尸那样迟缓笨拙，而是直接挥拳；死后掉落腐肉，但在沙漠中晒到太阳会燃烧。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="zombified_piglin">
                 <div class="thumb"><img src="images/zombified_piglin.png" alt="Zombified Piglin"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -594,7 +609,7 @@
                     <div class="desc">猪灵的僵尸化变种，手里握着金剑看似无害。但攻击它会激怒附近所有僵尸猪灵，金剑就是它们的标准配置。</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" data-slug="hoglin">
                 <div class="thumb"><img src="images/hoglin.png" alt="Hoglin"></div>
                 <div class="meta">
                     <span class="badge neutral">中立</span>
@@ -628,5 +643,64 @@
             box.addEventListener('input', run);
         })();
     </script>
+    <div class="modal" id="detailModal" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <button class="modal-close" data-close aria-label="关闭">×</button>
+            <div class="modal-head">
+                <img class="modal-img" id="dmImg" src="" alt="">
+                <div>
+                    <div class="modal-name" id="dmName"></div>
+                    <div class="modal-cn" id="dmCn"></div>
+                </div>
+            </div>
+            <div id="dmBody"></div>
+        </div>
+    </div>
+    <script src="mob-details.js"></script>
+    <script>
+    (function () {
+        var modal = document.getElementById('detailModal');
+        var dmImg = document.getElementById('dmImg');
+        var dmName = document.getElementById('dmName');
+        var dmCn = document.getElementById('dmCn');
+        var dmBody = document.getElementById('dmBody');
+        function sec(title, text) {
+            if (!text) return '';
+            return '<div class="dsec"><h4>' + title + '</h4><p>' + text + '</p></div>';
+        }
+        function open(card) {
+            var slug = card.getAttribute('data-slug');
+            var d = (window.MOB_DETAILS && window.MOB_DETAILS[slug]) || null;
+            if (!d) return;
+            var img = card.querySelector('img');
+            dmImg.src = img ? img.getAttribute('src') : '';
+            dmImg.alt = d.en || '';
+            dmName.textContent = d.en || '';
+            dmCn.textContent = d.cn || '';
+            dmBody.innerHTML = sec('在哪儿找', d.find) + sec('特征', d.features) + sec('怎么击杀', d.kill) + sec('掉落什么', d.drops);
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+        function close() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        }
+        document.querySelectorAll('.card[data-slug]').forEach(function (card) {
+            card.setAttribute('tabindex', '0');
+            card.addEventListener('click', function () { open(card); });
+            card.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card); }
+            });
+        });
+        modal.addEventListener('click', function (e) {
+            if (e.target.hasAttribute('data-close')) close();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.hidden) close();
+        });
+    })();
+    </script>
+
 </body>
 </html>
