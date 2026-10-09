@@ -56,6 +56,8 @@
   }
   .spinner{ width:34px; height:34px; border:3px solid rgba(255,255,255,.2); border-top-color:#ff5f8f; border-radius:50%; animation:spin .8s linear infinite; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
+  .save-tip{ display:none; font-size:12px; color:rgba(255,255,255,.6); margin-top:10px; }
+  .save-tip.show{ display:block; }
 </style>
 </head>
 <body>
@@ -77,24 +79,44 @@
 
 <div class="panel" id="panel">
   <div class="done-title">真容解锁 ✨</div>
-  <div class="done-sub">这张美图专属于你</div>
+  <div class="done-sub" id="doneSub">这张美图专属于你</div>
   <button class="btn" id="nextBtn">▶ 看下一张（观看广告解锁）</button>
+  <button class="btn ghost" id="downloadBtn" style="display:none;">⬇ 保存美图到相册</button>
   <button class="btn ghost" id="homeBtn">← 返回男人宝主页</button>
   <div class="footer-note">艺术写真 / 时尚美图，仅供欣赏</div>
+  <div class="save-tip" id="saveTip">若未自动下载，可长按上方图片或点击链接保存到相册</div>
 </div>
 
 <script>
 (function(){
   'use strict';
 
-  // ---- 现有男人宝图库（beauty_images 已审核，approve状态）----
+  // ---- 男人宝图库（beauty_images 已审核，approve状态）{id, url} ----
   var IMAGES = [
-    "https://letmetry.cn/images/79b959cd-5a66-47e3-9147-7b257fab60d4.jpg",
-    "https://letmetry.cn/images/c434df35-d1c3-4396-95b6-8ebadd01f100.jpg",
-    "https://letmetry.cn/images/3c7c5563-488d-418e-83ff-58876a64dfd2.jpg",
-    "https://letmetry.cn/images/141f60c5-33bc-4a6b-bd1e-95635a5cce73.jpg",
-    "https://letmetry.cn/images/3d5fd918-b432-40b6-8f38-94ca6e7ed08e.jpg",
-    "https://letmetry.cn/images/9b04ed43-70b2-4561-9701-0de1ee60832d.jpg"
+    { id: 581, url: "https://letmetry.cn/images/A_hyperrealistic_high_fashion__2026-10-08T23-36-44-c.jpg" },
+    { id: 580, url: "https://letmetry.cn/images/A_hyperrealistic_high_fashion__2026-10-08T04-11-48-c.jpg" },
+    { id: 575, url: "https://letmetry.cn/images/nanrenbao_beauty_20261002.jpg" },
+    { id: 568, url: "https://letmetry.cn/images/30f5c5d9-acba-4ec8-a899-a79a60099fc3.jpg" },
+    { id: 561, url: "https://letmetry.cn/images/79b959cd-5a66-47e3-9147-7b257fab60d4.jpg" },
+    { id: 559, url: "https://letmetry.cn/images/c434df35-d1c3-4396-95b6-8ebadd01f100.jpg" },
+    { id: 557, url: "https://letmetry.cn/images/3c7c5563-488d-418e-83ff-58876a64dfd2.jpg" },
+    { id: 555, url: "https://letmetry.cn/images/141f60c5-33bc-4a6b-bd1e-95635a5cce73.jpg" },
+    { id: 554, url: "https://letmetry.cn/images/4b76a095-7803-40bc-813f-4897158d1c94.jpg" },
+    { id: 553, url: "https://letmetry.cn/images/9b04ed43-70b2-4561-9701-0de1ee60832d.jpg" },
+    { id: 552, url: "https://letmetry.cn/images/3d5fd918-b432-40b6-8f38-94ca6e7ed08e.jpg" },
+    { id: 551, url: "https://letmetry.cn/images/0832cd8b-3094-49d4-8ece-e0939ca5fb54.jpg" },
+    { id: 550, url: "https://letmetry.cn/images/8acbc421-1124-40e3-b26d-fc5eae209f23.jpg" },
+    { id: 549, url: "https://letmetry.cn/images/1c47501f-d218-4f30-aff7-7426af3f86d0.jpg" },
+    { id: 548, url: "https://letmetry.cn/images/a7c4e3b4-5001-4c74-a278-8b2ccc76789b.jpg" },
+    { id: 547, url: "https://letmetry.cn/images/18c918b1-c647-40aa-b380-b005db6988f3.jpg" },
+    { id: 546, url: "https://letmetry.cn/images/15a2805f-3cbf-4f23-9452-7ef8ea801513.jpg" },
+    { id: 545, url: "https://letmetry.cn/images/bf619830-4628-495c-af89-293febed967f.jpg" },
+    { id: 544, url: "https://letmetry.cn/images/71b10305-7176-4919-865b-f325a21feb99.jpg" },
+    { id: 543, url: "https://letmetry.cn/images/4c816795-1b81-44ce-b645-d2489f6769e1.jpg" },
+    { id: 542, url: "https://letmetry.cn/images/cf5fc079-fc90-45ce-8232-8fee400394bd.jpg" },
+    { id: 541, url: "https://letmetry.cn/images/e24bf687-5233-4f84-9de4-4b8d02e76aa3.jpg" },
+    { id: 540, url: "https://letmetry.cn/images/4f957fbc-cdc6-4974-af56-8c87a878d902.jpg" },
+    { id: 539, url: "https://letmetry.cn/images/8c347da2-d365-4bba-9f12-b63fd7407a80.jpg" }
   ];
   var THUMB = 140;         // 马赛克单元参考
   var UNLOCK = 0.30;       // 擦除30%解锁
@@ -104,11 +126,23 @@
   var img=new Image();
   var bg=$('bg'), cv=$('scratch'), ctx=cv.getContext('2d');
   var bar=$('bar'), panel=$('panel'), hint=$('hint'), loading=$('loading'), counter=$('counter');
+  var nextBtn=$('nextBtn'), downloadBtn=$('downloadBtn'), saveTip=$('saveTip'), doneSub=$('doneSub');
   var W=0,H=0;              // canvas 像素
   var fitRect={dx:0,dy:0,dw:0,dh:0};
   var mask, mctx;           // 面积统计
   var unlocked=false;
   var scratching=false;   // 修复: 之前未声明导致 pointerdown 抛 ReferenceError，擦除全失效
+  var downloadUnlocked=false;
+
+  // ---- 单图模式解析（星火计划任务通过 ?id=<mysql_id> 深链）----
+  // showRewardedVideoAd 返回时拼成 "?id=581?finishedAd=true"（query 被覆盖），
+  // 用 split('?')[0] 取 id，用 includes 判 finishedAd，无需改小程序。
+  var _q = new URLSearchParams(location.search);
+  var _rawId = _q.get('id');
+  if (_rawId) _rawId = String(_rawId).split('?')[0];
+  var finishedAd = location.search.indexOf('finishedAd=true') !== -1;
+  var singleMode = !!_rawId && IMAGES.some(function(x){ return String(x.id) === String(_rawId); });
+  var singleIdx = singleMode ? IMAGES.findIndex(function(x){ return String(x.id) === String(_rawId); }) : 0;
 
   function $(id){return document.getElementById(id);}
   function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
@@ -179,12 +213,34 @@
     ctx.clearRect(0,0,cv.width,cv.height);
     bar.style.width='100%';
     hint.style.opacity='0';
+
+    if (singleMode && !downloadUnlocked) {
+      // 单图模式：先看广告才能下载
+      doneSub.textContent = '擦开马赛克，看专属美图';
+      nextBtn.textContent = '▶ 观看广告，解锁保存';
+      nextBtn.style.display = '';
+      downloadBtn.style.display = 'none';
+      saveTip.classList.remove('show');
+    } else if (singleMode && downloadUnlocked) {
+      // 广告看完：解锁下载
+      doneSub.textContent = '已解锁，保存这张美图吧';
+      nextBtn.style.display = 'none';
+      downloadBtn.style.display = '';
+      saveTip.classList.add('show');
+    } else {
+      // 轮播模式：看下一张
+      doneSub.textContent = '这张美图专属于你';
+      nextBtn.textContent = '▶ 看下一张（观看广告解锁）';
+      nextBtn.style.display = '';
+      downloadBtn.style.display = 'none';
+      saveTip.classList.remove('show');
+    }
     panel.classList.add('show');
   }
 
   function load(i){
-    idx=i; unlocked=false; bar.style.width='0%'; panel.classList.remove('show');
-    counter.textContent=(i+1)+'/'+IMAGES.length;
+    idx=i; unlocked=false; downloadUnlocked=false; bar.style.width='0%'; panel.classList.remove('show');
+    counter.textContent = singleMode ? '专属美图' : ((i+1)+'/'+IMAGES.length);
     hint.style.opacity='1';
     img=new Image();
     img.crossOrigin='anonymous';
@@ -194,7 +250,7 @@
       drawMosaic();
     };
     img.onerror=function(){ if(i+1<IMAGES.length){load(i+1);} else {loading.style.display='none'; alert('图片加载失败');} };
-    img.src=IMAGES[i];
+    img.src=IMAGES[i].url;
   }
 
   var pendingNext = null;   // 看完广告后要跳到的图索引
@@ -202,25 +258,44 @@
   // 触发快手小程序内置激励视频广告；广告播完由 showRewardedVideoAd 页带 finishedAd 跳回本页
   function showAdForNext(){
     if (typeof ks !== 'undefined' && ks.navigateTo) {
-      pendingNext = (idx+1 < IMAGES.length) ? idx+1 : 0;
-      // 跨页面重载兜底：记下“触发前那张”和“看完要跳的那张”
-      try {
-        localStorage.setItem('bs_pending_next', String(pendingNext));
-        localStorage.setItem('bs_current_idx', String(idx));
-      } catch(e){}
-      ks.navigateTo({
-        url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/beauty-scratch"
-      });
+      if (singleMode) {
+        // 单图模式：广告用于解锁「保存」，回到同一张
+        pendingNext = singleIdx;
+        var singlePageId = 'nanrenbao/beauty-scratch?id=' + IMAGES[singleIdx].id;
+        try {
+          localStorage.setItem('bs_pending_next', String(pendingNext));
+          localStorage.setItem('bs_current_idx', String(singleIdx));
+        } catch(e){}
+        ks.navigateTo({
+          url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=" + encodeURIComponent(singlePageId)
+        });
+      } else {
+        pendingNext = (idx+1 < IMAGES.length) ? idx+1 : 0;
+        try {
+          localStorage.setItem('bs_pending_next', String(pendingNext));
+          localStorage.setItem('bs_current_idx', String(idx));
+        } catch(e){}
+        ks.navigateTo({
+          url: "/pages/showRewardedVideoAd/showRewardedVideoAd?result_page_id=nanrenbao/beauty-scratch"
+        });
+      }
     } else {
-      // 浏览器/调试环境：无广告 SDK，直接下一张（MVP 兜底）
-      if(idx+1<IMAGES.length){ load(idx+1); } else { load(0); }
+      // 浏览器/调试环境：无广告 SDK，直接解锁下载（MVP 兜底）
+      if (singleMode) {
+        downloadUnlocked = true;
+        downloadBtn.style.display = '';
+        saveTip.classList.add('show');
+        nextBtn.style.display = 'none';
+        doneSub.textContent = '已解锁，保存这张美图吧';
+      } else if(idx+1<IMAGES.length){ load(idx+1); } else { load(0); }
     }
   }
 
   // 页面加载时检查是否刚看完广告跳回（finishedAd 由 showRewardedVideoAd 页带回来）
+  // 注意：小程序返回 URL 形如 "?id=581?finishedAd=true"（query 被覆盖，畸形），
+  // 故用模块级 finishedAd（location.search.indexOf）判定，而不是 URLSearchParams.get。
   function handleAdReturn(){
-    var fp = new URLSearchParams(location.search).get('finishedAd');
-    if (fp !== null) {
+    if (finishedAd) {
       var nextIdx = null, curIdx = 0;
       try {
         nextIdx = parseInt(localStorage.getItem('bs_pending_next'), 10);
@@ -228,16 +303,28 @@
         localStorage.removeItem('bs_pending_next');
         localStorage.removeItem('bs_current_idx');
       } catch(e){}
-      // 清理 URL，避免重复触发
       try { history.replaceState({}, document.title, location.pathname); } catch(e){}
-      if (fp === 'true' && !isNaN(nextIdx) && nextIdx>=0 && nextIdx<IMAGES.length) {
-        pendingNext = null; load(nextIdx); return;
-      }
-      // 未完成广告：回到触发前的那一张
-      if (!isNaN(curIdx) && curIdx>=0 && curIdx<IMAGES.length) { load(curIdx); return; }
-      load(0); return;
+      var target = (!isNaN(nextIdx) && nextIdx>=0 && nextIdx<IMAGES.length) ? nextIdx
+                 : (!isNaN(curIdx) && curIdx>=0 && curIdx<IMAGES.length) ? curIdx
+                 : (singleMode ? singleIdx : 0);
+      load(target);
+      if (singleMode && target === singleIdx) downloadUnlocked = true; // 单图：解锁下载（须在 load 之后，load 会重置）
+      return;
     }
-    load(0);
+    load(singleMode ? singleIdx : 0);
+  }
+
+  function doDownload(){
+    var u = IMAGES[idx].url;
+    var a = document.createElement('a');
+    a.href = u;
+    a.download = 'nanrenbao_' + IMAGES[idx].id + '.jpg';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    try { a.click(); } catch(e){}
+    a.remove();
+    // 兜底：跨域 download 可能只打开新标签，提示用户长按/保存
+    setTimeout(function(){ try { window.open(u, '_blank'); } catch(e){} }, 400);
   }
 
   cv.addEventListener('pointerdown',onDown);
@@ -245,11 +332,8 @@
   window.addEventListener('pointerup',onUp);
   window.addEventListener('pointercancel',onUp);
 
-  $('nextBtn').addEventListener('click',function(){
-    // 看完广告回来(finishedAd=true)由 handleAdReturn 自动解锁下一张；
-    // 这里只负责：未看完则触发激励视频广告
-    showAdForNext();
-  });
+  nextBtn.addEventListener('click',function(){ showAdForNext(); });
+  downloadBtn.addEventListener('click',function(){ doDownload(); });
   $('homeBtn').addEventListener('click',function(){ location.href='https://letmetryai.cn/nanrenbao/'; });
 
   handleAdReturn();
