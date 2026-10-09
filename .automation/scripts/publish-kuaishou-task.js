@@ -26,7 +26,7 @@ const SUBMISSION_CONFIRM_TIMEOUT_MS = Math.max(3000, Number.parseInt(process.env
 const HEADLESS = process.env.HEADLESS !== 'false';
 
 function getLatestReportPath() {
-  const reportDir = '/Users/weiping/prod/LetMeTryAI/.automation/.local/exports/metrics/kuaishou/daily';
+  const reportDir = '/Users/jak/LetMeTryAI/.automation/.local/exports/metrics/kuaishou/daily';
   if (!fs.existsSync(reportDir)) {
     return null;
   }
@@ -627,7 +627,7 @@ async function main() {
   } catch (error) {
     console.error('❌ Error during automation:', error);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const errorDir = path.resolve('/Users/weiping/prod/LetMeTryAI/.automation/.local/logs/publish-errors');
+    const errorDir = path.resolve('/Users/jak/LetMeTryAI/.automation/.local/logs/publish-errors');
     ensureParentDirectory(path.join(errorDir, '.keep'));
     const screenshotPath = path.join(errorDir, `${appId}-error-${timestamp}.png`);
     const htmlPath = path.join(errorDir, `${appId}-error-${timestamp}.html`);
