@@ -1,17 +1,159 @@
 {
   "version": 1,
-  "updated_at": "2026-10-02T09:26:35.980845Z",
+  "updated_at": "2026-10-10T01:05:00.346928Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
-    "style": [],
-    "lighting": [],
-    "wardrobe": [],
-    "mood": [],
-    "composition": [],
-    "camera": []
+    "style": [
+      {
+        "value": "超写实人像精修·时尚大片",
+        "sum": 5,
+        "n": 2,
+        "avg": 2.5
+      },
+      {
+        "value": "电影感时尚大片",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ],
+    "lighting": [
+      {
+        "value": "柔和自然散射光",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "黄金时刻自然光",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      },
+      {
+        "value": "柔和自然散射光（黄金时刻漫射）",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ],
+    "wardrobe": [
+      {
+        "value": "红色真丝旗袍，金线花卉刺绣衣领与下摆（着衣，非内衣）",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "酒红色长裙",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      },
+      {
+        "value": "红色金线刺绣内衣套装（bralette+高腰下装）",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ],
+    "mood": [
+      {
+        "value": "甜美喜庆",
+        "sum": 5,
+        "n": 2,
+        "avg": 2.5
+      },
+      {
+        "value": "优雅从容",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ],
+    "composition": [
+      {
+        "value": "竖幅大半身居中",
+        "sum": 5,
+        "n": 2,
+        "avg": 2.5
+      },
+      {
+        "value": "全身环境人像",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ],
+    "camera": [
+      {
+        "value": "85mm f/1.8 浅景深",
+        "sum": 5,
+        "n": 2,
+        "avg": 2.5
+      },
+      {
+        "value": "85mm",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
+      }
+    ]
   },
-  "champion_seeds": [],
+  "champion_seeds": [
+    {
+      "table": "beauty_images",
+      "id": 581,
+      "view_count": 4,
+      "dna": {
+        "subject": "亚洲青年女性，黑长发半扎，微笑柔和直视镜头",
+        "scene": "中式古典园林（圆月门+竹林+白墙）",
+        "lighting": "柔和自然散射光",
+        "composition": "竖幅大半身居中",
+        "style": "超写实人像精修·时尚大片",
+        "mood": "甜美喜庆",
+        "wardrobe": "红色真丝旗袍，金线花卉刺绣衣领与下摆（着衣，非内衣）",
+        "camera": "85mm f/1.8 浅景深",
+        "negative": "nudity, explicit, suggestive pose, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an elegant red silk qipao with delicate golden floral embroidery along the collar and hem, refined and tasteful. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred behind her. Soft diffused natural daylight wraps her skin in a luminous healthy glow; warm festive red tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with shallow depth of field, vertical 9:16 composition, fine skin texture, cinematic color grading, elegant and tasteful, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an elegant red silk qipao with delicate golden floral embroidery along the collar and hem, refined and tasteful. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred behind her. Soft diffused natural daylight wraps her skin in a luminous healthy glow; warm festive red tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with shallow depth of field, vertical 9:16 composition, fine skin texture, cinematic color grading, elegant and tasteful, AI-generated content label."
+    },
+    {
+      "table": "beauty_images",
+      "id": 575,
+      "view_count": 1,
+      "dna": {
+        "style": "电影感时尚大片",
+        "lighting": "黄金时刻自然光",
+        "wardrobe": "酒红色长裙",
+        "mood": "优雅从容",
+        "composition": "全身环境人像",
+        "camera": "85mm",
+        "negative": "nudity, vulgar, face distorted"
+      },
+      "prompt_text": null
+    },
+    {
+      "table": "beauty_images",
+      "id": 582,
+      "view_count": 1,
+      "dna": {
+        "subject": "亚洲青年女性，黑长发半扎，微笑直视镜头",
+        "scene": "中式古典园林（圆月门+竹林+白墙）",
+        "lighting": "柔和自然散射光（黄金时刻漫射）",
+        "composition": "竖幅大半身居中",
+        "style": "超写实人像精修·时尚大片",
+        "mood": "甜美喜庆",
+        "wardrobe": "红色金线刺绣内衣套装（bralette+高腰下装）",
+        "camera": "85mm f/1.8 浅景深",
+        "negative": "nudity, explicit, suggestive pose, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an exquisite red silk lingerie set with intricate golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred into bokeh behind her. Golden-hour diffused daylight wraps her skin in a luminous, flawless healthy glow with visible fine pores and silky individual hair strands; warm festive red tones dominate the palette with subtle teal garden accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-detailed skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, masterpiece quality, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an exquisite red silk lingerie set with intricate golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred into bokeh behind her. Golden-hour diffused daylight wraps her skin in a luminous, flawless healthy glow with visible fine pores and silky individual hair strands; warm festive red tones dominate the palette with subtle teal garden accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-detailed skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, masterpiece quality, AI-generated content label."
+    }
+  ],
   "fallback_seeds": [
     {
       "id": "A",
