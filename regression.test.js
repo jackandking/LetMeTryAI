@@ -68,9 +68,9 @@ describe('Regression Tests - Domain to IP Migration', () => {
     it('should maintain URL structure after centralization', () => {
       // Test that centralized config produces same URLs as hardcoded ones would
       const testCases = [
-        { path: 'images/zhirou.jpg', expected: 'https://letmetry.cn/images/zhirou.jpg' },
-        { path: '/images/WechatIMG366.jpg', expected: 'https://letmetry.cn/images/WechatIMG366.jpg' },
-        { path: 'images/0911/2571726056378_.pic.jpg', expected: 'https://letmetry.cn/images/0911/2571726056378_.pic.jpg' }
+        { path: 'https://letmetry.cn/images/a2a62bd35f1ff9a0-c.jpg', expected: 'https://letmetry.cn/images/zhirou.jpg' },
+        { path: 'https://letmetry.cn/images/0b9db930edfe46ae-c.jpg', expected: 'https://letmetry.cn/images/WechatIMG366.jpg' },
+        { path: 'https://letmetry.cn/images/9f15f46aca49b790-c.jpg', expected: 'https://letmetry.cn/images/0911/2571726056378_.pic.jpg' }
       ];
 
       testCases.forEach(({ path, expected }) => {

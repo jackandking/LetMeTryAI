@@ -130,10 +130,10 @@ describe('Integration Tests - Configuration System', () => {
 
     it('should support image gallery scenarios', () => {
       const imagePaths = [
-        'images/2491725962226_.pic.jpg',
-        'images/zhirou.jpg',
-        'images/WechatIMG366.jpg',
-        'images/0911/2571726056378_.pic.jpg'
+        'https://letmetry.cn/images/a0bf22f9b12203ab-c.jpg',
+        'https://letmetry.cn/images/a2a62bd35f1ff9a0-c.jpg',
+        'https://letmetry.cn/images/0b9db930edfe46ae-c.jpg',
+        'https://letmetry.cn/images/9f15f46aca49b790-c.jpg'
       ];
 
       const imageUrls = imagePaths.map(path => getImageUrl(path));

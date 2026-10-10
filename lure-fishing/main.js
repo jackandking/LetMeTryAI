@@ -528,7 +528,7 @@ function createRecordCard(record) {
     const img = document.createElement('img');
     img.src = photoUrl;
     img.alt = '钓鱼成果';
-    img.onerror = function() { this.src = '../images/game1.jpg'; };
+    img.onerror = function() { this.src = 'https://letmetry.cn/images/98c75102166d9159-c.jpg'; };
     
     const recordInfo = document.createElement('div');
     recordInfo.className = 'record-info';

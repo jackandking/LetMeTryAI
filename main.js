@@ -189,7 +189,7 @@ function getDefaultApps() {
             category: '娱乐',
             url: 'https://museumcheck.cn/fireworks-wall.html',
             external: true,
-            image: 'images/game1.jpg',
+            image: 'https://letmetry.cn/images/98c75102166d9159-c.jpg',
             tags: ['动画', '烟花'],
             featured: true
         },
@@ -352,7 +352,7 @@ function createAppCard(app) {
  * Set image with fallback
  */
 function setImageWithFallback(imgElement, imagePath) {
-    const fallbackImage = 'images/game1.jpg';
+    const fallbackImage = 'https://letmetry.cn/images/98c75102166d9159-c.jpg';
     
     imgElement.onerror = function() {
         console.warn(`Image failed to load: ${imagePath}, using fallback`);

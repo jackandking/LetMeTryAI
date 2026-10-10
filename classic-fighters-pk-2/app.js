@@ -10,19 +10,19 @@ const questionConfig = {
     "id": "option-1",
     "name": "P-51 野马",
     "desc": "盟军全能战机",
-    "image": "images/option1.jpg"
+    "image": "https://letmetry.cn/images/af189e492256d02d-c.jpg"
   },
   {
     "id": "option-2",
     "name": "喷火战斗机",
     "desc": "不列颠守护者",
-    "image": "images/option2.jpg"
+    "image": "https://letmetry.cn/images/e9f8933a262dc4ca-c.jpg"
   },
   {
     "id": "option-3",
     "name": "零式战机",
     "desc": "太平洋传奇",
-    "image": "images/option3.jpg"
+    "image": "https://letmetry.cn/images/fa4d9b36817df035-c.jpg"
   }
 ],
     storageKey: 'fighter_jets_v1.data'
