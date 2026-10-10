@@ -20,7 +20,7 @@ UTC = datetime.timezone.utc
 
 API = "https://letmetry.cn/mysql/query"
 TABLES = [("beauty_images", "view_count"), ("back_view_images", "click_count")]  # (表, 互动量列名)
-DIMENSIONS = ["style", "lighting", "wardrobe", "mood", "composition", "camera"]
+DIMENSIONS = ["style", "lighting", "wardrobe", "mood", "composition", "camera", "body_type"]
 MIN_VIEWS = 1  # 只看有真实浏览的行
 
 # 内置兜底种子：与 portrait-prompt-studio 的内置兜底一致。
@@ -29,22 +29,22 @@ FALLBACK_SEEDS = [
     {
         "id": "A", "name": "背影杀",
         "prompt": "Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible",
-        "dna": {"subject": "女性", "scene": "户外黄昏", "lighting": "黄金时刻", "composition": "背影", "style": "时尚大片", "mood": "神秘", "wardrobe": "长裙", "camera": "85mm", "negative": "face visible, nudity, vulgar"},
+        "dna": {"subject": "女性", "scene": "户外黄昏", "lighting": "黄金时刻", "composition": "背影", "style": "时尚大片", "mood": "神秘", "wardrobe": "长裙", "camera": "85mm", "body_type": "饱满曲线", "negative": "face visible, nudity, vulgar"},
     },
     {
         "id": "B", "name": "极简棚拍写真",
         "prompt": "Minimalist studio portrait, soft single-source lighting, clean background, confident pose, high-end fashion editorial, muted color palette, elegant",
-        "dna": {"subject": "女性", "scene": "棚拍", "lighting": "柔光单灯", "composition": "半身", "style": "极简时尚", "mood": "从容", "wardrobe": "简约", "camera": "85mm"},
+        "dna": {"subject": "女性", "scene": "棚拍", "lighting": "柔光单灯", "composition": "半身", "style": "极简时尚", "mood": "从容", "wardrobe": "简约", "camera": "85mm", "body_type": "饱满曲线"},
     },
     {
         "id": "C", "name": "电影感霓虹夜景",
         "prompt": "Neon-lit night street portrait, cinematic color grading, rim light, atmospheric haze, fashion film still, artistic",
-        "dna": {"subject": "人物", "scene": "夜景街道", "lighting": "霓虹轮廓光", "composition": "环境人像", "style": "电影感", "mood": "氛围", "wardrobe": "都市", "camera": "35mm"},
+        "dna": {"subject": "人物", "scene": "夜景街道", "lighting": "霓虹轮廓光", "composition": "环境人像", "style": "电影感", "mood": "氛围", "wardrobe": "都市", "camera": "35mm", "body_type": "饱满曲线"},
     },
     {
         "id": "D", "name": "胶片质感自然光",
         "prompt": "35mm film grain portrait, natural window light, warm tones, candid intimate mood, analog photography aesthetic",
-        "dna": {"subject": "人物", "scene": "室内自然光", "lighting": "窗光", "style": "胶片", "mood": "自然", "camera": "35mm"},
+        "dna": {"subject": "人物", "scene": "室内自然光", "lighting": "窗光", "style": "胶片", "mood": "自然", "camera": "35mm", "body_type": "饱满曲线"},
     },
 ]
 

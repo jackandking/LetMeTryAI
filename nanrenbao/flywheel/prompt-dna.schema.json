@@ -13,6 +13,7 @@
     "mood":       { "type": "string", "description": "情绪：神秘/优雅/俏皮/力量感" },
     "wardrobe":   { "type": "string", "description": "着装：礼服/休闲/正装/运动（仅着衣，无裸露）" },
     "camera":     { "type": "string", "description": "镜头：35mm/85mm/长焦/广角" },
+    "body_type":  { "type": "string", "description": "体型：饱满曲线/纤细/运动型（女性角色默认「饱满曲线」amply curved，已与用户确认）" },
     "negative":   { "type": "string", "description": "负向提示：避免的元素" },
     "prompt_text":{ "type": "string", "description": "最终完整提示词（英文，图像模型更稳）" }
   }
