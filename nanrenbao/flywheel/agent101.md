@@ -25,6 +25,15 @@
 
 ---
 
+## 审美基线（飞轮默认，必须应用，零上下文也生效）
+
+> 这些偏好是 Yingjie 在多轮飞轮中确认的稳定审美，作为**所有女性角色生成的默认基线**。即使本地 skill 的 SKILL.md 被重置，本手册这条也照常生效——**务必应用**，不要生成端庄全覆盖写真。
+
+- **body_type = 饱满曲线（amply curved, well-proportioned）**：所有女性 / 古装 / 内衣 / 神话女角，DNA `body_type` 默认填「饱满曲线」，prompt_text 写 `with a well-proportioned, amply curved feminine figure`。除非当次另指定。
+- **风格默认 = 高透少覆盖（人体为主）**：不透明衣物遮盖体表超过约 1/3 即「不好看」；**2026-10-11 起用户要求「更透」，新图压到 opaque < 1/4**。默认优先高透薄纱 / 半透真丝，让纱透出肌肤轮廓而非遮挡。**人体必须是画面主体**：肩部、躯干、手臂、双腿以柔光裸肤呈现，衣物极小且策略性，**绝不用长裙 / 长袍 / 连衣裙 / gown / robe / full-coverage 这类会把人裹住的款式**（模型安全过滤常把它们渲染成"裹住全身"，喧宾夺主）。
+- **最优款 = 古典肚兜**（王熙凤 id=602 用户赞"这个好"）；**最差款 = 全包紧身衣**（猫女 id=601 用户"不好看"）。贴身少覆盖（比基尼 / 肚兜 / 露脐 / 露腿 / 高透纱）始终优于全包。
+- **内容红线（并行）**：仍须着衣 / 艺术化 / 非性化；负向词必含 `nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose`。不可渲染色情或暴露生殖器 / 乳头。
+
 ## 环境准备
 
 1. **拿到运行代码（二选一；推荐方案 B，最自包含）**
@@ -36,10 +45,11 @@
      #   LetMeTryAI/nanrenbao/flywheel/recorder.py
      #   LetMeTryAI/nanrenbao/flywheel/prompt-dna.schema.json
      ```
-   - 方案 A（装 skill，获得完整运行指引）：
+   - 方案 A（用本机已装的 skill，获得完整运行指引）：
+     > ⚠️ **不要重装 skill**。`portrait-prompt-studio` 的 SKILL.md 里已 bake 进上方「审美基线」。重新 `skillhub install` 会用 skillhub 上的**原版空基线包覆盖掉本地改动**，导致新 Agent 生成"端庄写真 = 穿太多"。**直接用本机已装的 `~/.workbuddy/skills/@letmetry/portrait-prompt-studio/`**；仅当它不存在时才装一次。
      ```bash
-     skillhub install @letmetry/portrait-prompt-studio --dir ~/.workbuddy/skills/
-     skillhub install @letmetry/nanrenbao-contribute --dir ~/.workbuddy/skills/
+     ls ~/.workbuddy/skills/@letmetry/portrait-prompt-studio/SKILL.md || skillhub install @letmetry/portrait-prompt-studio --dir ~/.workbuddy/skills/
+     ls ~/.workbuddy/skills/@letmetry/nanrenbao-contribute/contribute.cjs || skillhub install @letmetry/nanrenbao-contribute --dir ~/.workbuddy/skills/
      # 注意：skill 包只含 contribute.cjs，不含 recorder.py。
      # 还需单独取 recorder.py（任选其一）：
      #   ① 顺手浅克隆仓库： git clone --depth 1 https://github.com/jackandking/LetMeTryAI.git
@@ -108,7 +118,9 @@ curl -s -m 25 -X POST https://letmetry.cn/mysql/query \
   "composition": "构图",
   "style": "风格",
   "mood": "情绪",
-  "wardrobe": "服装（必须着衣）",
+  "wardrobe": "服装（必须着衣；默认极小覆盖：比基尼/肚兜+高透纱，人体为主，opaque < 1/4；禁用长裙/长袍/gown/robe/full-coverage）",
+  "body_type": "饱满曲线",
+  "coverage": "minimal — body as subject, opaque < 1/4 of body surface",
   "camera": "镜头/参数",
   "negative": "nudity, explicit, suggestive pose, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
   "prompt_text": "英文写真提示词（出图用）"
@@ -189,6 +201,6 @@ python3 recorder.py \
 ## 备注
 
 - 飞轮的优化目标是**审美质量与风格多样度**，不是「越性感越好」。从榜首提取的种子，其「获胜属性」值得保留，但不要为了热度往性化方向改。
-- 若用户要求换题材：保持 `wardrobe=着衣`、不越红线即可；其余 `scene/lighting/mood/style` 可自由发挥。换题材时同样先按步骤 0 拉榜首参考其风格基线。
+- 若用户要求换题材：保持 `wardrobe=着衣`、不越红线即可；其余 `scene/lighting/mood/style` 可自由发挥。换题材时同样先按步骤 0 拉榜首参考其风格基线。**但换题材仍须遵守上方「审美基线」（饱满曲线 + 高透少覆盖 + 人体为主），不要把角色生成成端庄全覆盖写真。**
 - 数据库写入只能通过投稿脚本；任何直接 UPDATE/INSERT 的尝试都会失败。
 - 极端兜底：若线上完全拉不到任何图（数据库为空/不可达），先向用户报告，可加载 `portrait-prompt-studio` 从零生成一条合规红衣园林写真提示词作为启动种子，再继续——但**正常情况永远走「动态拉榜首」这条主路**。
