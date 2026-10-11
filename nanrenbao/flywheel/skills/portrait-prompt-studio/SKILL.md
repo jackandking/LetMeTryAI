@@ -25,8 +25,21 @@ type: free
 ## 你每次返回时应包含
 
 1. **1–3 条完整提示词**（英文，图像模型更稳），每条附一句中文说明。
-2. **结构化 DNA**（对照 `../prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
+2. **结构化 DNA**（对照 `../prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / body_type / negative / prompt_text。
 3. **鼓励用户改良**：明确告诉用户——生成后如果调整了提示词（换光影、换场景、换情绪），请运行记录器把「源提示词 + 你的改良版」存下来，参与进化。
+
+## 默认体型偏好（已与用户确认，飞轮基线）
+
+- **女性角色默认 `body_type = 饱满曲线`（amply curved, well-proportioned）**：生成女性 / 古装 / 比基尼 / 内衣 / 神话女角等任何人像时，DNA 的 `body_type` 字段默认填「饱满曲线」，并在 `prompt_text` 中以 `with a well-proportioned, amply curved feminine figure` 体现。
+- 这是已确认的审美偏好，作为飞轮默认基线；除非用户当次明确要求其他体型（如纤细 / 运动型），否则不要省略。
+- 该偏好已同步进 `evolve.py` 的 `body_type` 维度，会随站内浏览量加权回流到 `seeds.json`。
+
+## 默认风格偏好：少覆盖 + 高透明（已与用户确认，飞轮基线）
+
+- **不透明衣物遮盖体表超过约 1/3 即视为「不好看」**：飞轮生成贴身/艺术系列时，默认**优先高透明度薄纱 / 半透真丝**作为主体遮蔽，让纱「透出肌肤轮廓而非完全遮挡」；不透明内搭（比基尼 / 肚兜）只保留最小必要面积。
+- **DNA 记录**：生成时在 `wardrobe` 字段写明「high-transparency sheer, opaque area < 1/3 of body」，可选 `coverage` 字段标注 `minimal`。
+- **与红线并行**：该偏好不得突破内容红线——仍是 artistic / non-explicit；负向词必须含 `nudity / explicit / exposed nipples / genitalia / see-through revealing / arousal / vulgar / suggestive pose` 等兜底，不得渲染为色情或暴露生殖器 / 乳头。
+- **适用范围**：默认应用于所有女性角色飞轮生成；当次如需端庄 / 古装全覆盖款式，显式 override 即可。
 
 ## 记录器调用（提示用户执行）
 
