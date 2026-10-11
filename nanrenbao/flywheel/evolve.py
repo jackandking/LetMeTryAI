@@ -28,23 +28,23 @@ MIN_VIEWS = 1  # 只看有真实浏览的行
 FALLBACK_SEEDS = [
     {
         "id": "A", "name": "背影杀",
-        "prompt": "Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible",
-        "dna": {"subject": "女性", "scene": "户外黄昏", "lighting": "黄金时刻", "composition": "背影", "style": "时尚大片", "mood": "神秘", "wardrobe": "长裙", "camera": "85mm", "body_type": "饱满曲线", "negative": "face visible, nudity, vulgar"},
+        "prompt": "Cinematic back-view portrait of an elegant woman: a tiny minimal bikini/dudou set plus a single extremely sheer scarf drifting at the hip, bare skin softly lit, body as subject, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible",
+        "dna": {"subject": "女性", "scene": "户外黄昏", "lighting": "黄金时刻", "composition": "背影", "style": "时尚大片", "mood": "神秘", "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4", "camera": "85mm", "body_type": "饱满曲线", "negative": "face visible, nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"},
     },
     {
         "id": "B", "name": "极简棚拍写真",
-        "prompt": "Minimalist studio portrait, soft single-source lighting, clean background, confident pose, high-end fashion editorial, muted color palette, elegant",
-        "dna": {"subject": "女性", "scene": "棚拍", "lighting": "柔光单灯", "composition": "半身", "style": "极简时尚", "mood": "从容", "wardrobe": "简约", "camera": "85mm", "body_type": "饱满曲线"},
+        "prompt": "Minimalist studio portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare shoulders torso and legs softly lit, body as subject, soft single-source lighting, clean background, confident pose, high-end fashion editorial, muted color palette, elegant",
+        "dna": {"subject": "女性", "scene": "棚拍", "lighting": "柔光单灯", "composition": "半身", "style": "极简时尚", "mood": "从容", "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4", "camera": "85mm", "body_type": "饱满曲线", "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"},
     },
     {
         "id": "C", "name": "电影感霓虹夜景",
-        "prompt": "Neon-lit night street portrait, cinematic color grading, rim light, atmospheric haze, fashion film still, artistic",
-        "dna": {"subject": "人物", "scene": "夜景街道", "lighting": "霓虹轮廓光", "composition": "环境人像", "style": "电影感", "mood": "氛围", "wardrobe": "都市", "camera": "35mm", "body_type": "饱满曲线"},
+        "prompt": "Neon-lit night street portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare skin with neon rim light, body as subject, cinematic color grading, atmospheric haze, fashion film still, artistic",
+        "dna": {"subject": "人物", "scene": "夜景街道", "lighting": "霓虹轮廓光", "composition": "环境人像", "style": "电影感", "mood": "氛围", "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4", "camera": "35mm", "body_type": "饱满曲线", "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"},
     },
     {
         "id": "D", "name": "胶片质感自然光",
-        "prompt": "35mm film grain portrait, natural window light, warm tones, candid intimate mood, analog photography aesthetic",
-        "dna": {"subject": "人物", "scene": "室内自然光", "lighting": "窗光", "style": "胶片", "mood": "自然", "camera": "35mm", "body_type": "饱满曲线"},
+        "prompt": "35mm film grain portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare skin in warm window light, body as subject, natural window light, warm tones, candid intimate mood, analog photography aesthetic",
+        "dna": {"subject": "人物", "scene": "室内自然光", "lighting": "窗光", "style": "胶片", "mood": "自然", "camera": "35mm", "body_type": "饱满曲线", "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4", "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"},
     },
 ]
 

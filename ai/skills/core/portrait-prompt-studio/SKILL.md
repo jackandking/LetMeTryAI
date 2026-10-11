@@ -40,8 +40,10 @@ type: free
 
 - **不透明衣物遮盖体表超过约 1/3 即视为「不好看」**：飞轮生成贴身/艺术系列时，默认**优先高透明度薄纱 / 半透真丝**作为主体遮蔽，让纱「透出肌肤轮廓而非完全遮挡」；不透明内搭（比基尼 / 肚兜）只保留最小必要面积。
 - **DNA 记录**：生成时在 `wardrobe` 字段写明「high-transparency sheer, opaque area < 1/3 of body」，可选 `coverage` 字段标注 `minimal`。
-- **与红线并行**：该偏好不得突破内容红线——仍是 artistic / non-explicit；负向词必须含 `nudity / explicit / exposed nipples / genitalia / see-through revealing / arousal / vulgar / suggestive pose / heavy clothing / gown / dress / robe / full-coverage / covered body` 等兜底，不得渲染为色情或暴露生殖器 / 乳头，并主动排斥覆盖式服装。
-- **⚠️ 命名角色必须 reinterpret 其 canonical 服饰**：角色有标志性强设定服装（赵灵儿 仙女白裙、王熙凤 华服、小龙女 素袍）时，**绝不要原样复刻全覆盖服装**（那是"穿太多"根源）。改为极小覆盖 + 高透 reinterpret，仅保留识别特征（发色/发型、主色、标志性配饰），基线（少覆盖/高透/人体为主）优先于 canonical 服装。
+- **与红线并行**：该偏好不得突破内容红线——仍是 artistic / non-explicit；负向词必须含 `nudity / explicit / exposed nipples / genitalia / see-through revealing / arousal / vulgar / suggestive pose / heavy clothing / gown / dress / robe / full-coverage / covered body / drape / veil / shawl / wrap / cape / hanfu / kimono / long skirt / flowing fabric covering body` 等兜底，不得渲染为色情或暴露生殖器 / 乳头，并主动排斥覆盖式服装。
+- **🚫 服装构造禁词（出现即覆盖，必查）**：`drape / veil / shawl / wrap / cape / hanfu / kimono / robe / gown / dress / full-coverage / covered body / long skirt / flowing fabric covering body / 披风 / 长袍 / 罩衫`。这些词**即使加 high-transparency / sheer 也会把人裹住**——林黛玉(2026-10-11) 就栽在 `hanfu-style drape`。构造只允许：`bikini / tiny dudou + 单条极薄飘纱 scarf at hip + 裸肤主体`。
+- **📋 强制 wardrobe 模板（直接抄，替换 [ ]，不得另起炉灶）**：DNA `wardrobe` 写 `minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4; NEVER drape/robe/gown/hanfu/veil`；prompt_text 服装段写 `She wears a tiny minimal [dudou/bikini] set (small triangle top + small bottom) in [主色], plus a single extremely sheer [主色] scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the clothing is minimal and strategic, never a covering gown or robe or drape.`
+- **⚠️ 命名角色必须 reinterpret 其 canonical 服饰**：角色有标志性强设定服装（赵灵儿 仙女白裙、王熙凤 华服、小龙女 素袍、林黛玉 潇湘麻衣/披风）时，**绝不要原样复刻全覆盖服装**（那是"穿太多"根源）。改为极小覆盖 + 高透 reinterpret，仅保留识别特征（发色/发型、主色、标志性配饰：赵灵儿 铃铛/灵珠、王熙凤 金步摇、小龙女 白缎束发、林黛玉 玉簪/竹影/落英），严格套用上方强制模板，基线（少覆盖/高透/人体为主）优先于 canonical 服装。
 - **适用范围**：默认应用于所有女性角色飞轮生成；当次如需端庄 / 古装全覆盖款式，显式 override 即可。
 
 ## 记录器调用（提示用户执行）

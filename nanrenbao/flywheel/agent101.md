@@ -31,7 +31,11 @@
 
 - **body_type = 饱满曲线（amply curved, well-proportioned）**：所有女性 / 古装 / 内衣 / 神话女角，DNA `body_type` 默认填「饱满曲线」，prompt_text 写 `with a well-proportioned, amply curved feminine figure`。除非当次另指定。
 - **风格默认 = 高透少覆盖（人体为主）**：不透明衣物遮盖体表超过约 1/3 即「不好看」；**2026-10-11 起用户要求「更透」，新图压到 opaque < 1/4**。默认优先高透薄纱 / 半透真丝，让纱透出肌肤轮廓而非遮挡。**人体必须是画面主体**：肩部、躯干、手臂、双腿以柔光裸肤呈现，衣物极小且策略性，**绝不用长裙 / 长袍 / 连衣裙 / gown / robe / full-coverage 这类会把人裹住的款式**（模型安全过滤常把它们渲染成"裹住全身"，喧宾夺主）。
-- **⚠️ 命名角色必须 reinterpret 其 canonical 服饰，不得原样复刻**：当角色有标志性强设定服装（如 赵灵儿 的飘逸仙女白裙、王熙凤 的古典华服、小龙女 的素色长袍），**绝不要原样生成那套全覆盖服装**——那正是"穿太多"的根源。改为用**极小覆盖 + 高透** reinterpret：仅保留角色识别特征（发色/发型、主色系、标志性配饰：赵灵儿 的铃铛/灵珠、王熙凤 的金步摇、小龙女 的白缎束发），其余严格按本基线走 比基尼 / 肚兜 + 高透飘纱 + 人体为主。**基线（少覆盖 / 高透 / 人体为主）永远优先于 canonical 服装。**
+- **⚠️ 命名角色必须 reinterpret 其 canonical 服饰，不得原样复刻**：当角色有标志性强设定服装（如 赵灵儿 的飘逸仙女白裙、王熙凤 的古典华服、小龙女 的素色长袍、林黛玉 的潇湘麻衣 / 披风），**绝不要原样生成那套全覆盖服装**——那正是"穿太多"的根源。改为用**极小覆盖 + 高透** reinterpret：仅保留角色识别特征（发色/发型、主色系、标志性配饰：赵灵儿 的铃铛/灵珠、王熙凤 的金步摇、小龙女 的白缎束发、林黛玉 的玉簪/竹影/落英），其余严格按本基线走 比基尼 / 肚兜 + 高透飘纱 + 人体为主。**基线（少覆盖 / 高透 / 人体为主）永远优先于 canonical 服装。**
+- **🚫 服装构造禁词（每次必查，出现即覆盖）**：`drape（罩纱/披挂）、veil、shawl、wrap、cape、hanfu、kimono、robe、gown、dress、full-coverage、covered body、long skirt、flowing fabric covering body、sari、burqa、abaya、披风、长袍、罩衫`。**这些词哪怕加了"high-transparency / sheer"也会把人裹住**——之前林黛玉(2026-10-11) 就栽在 `hanfu-style drape` 上。构造服装只允许：`bikini / tiny dudou（小三角兜）+ 单条极薄飘纱 scarf at hip + 裸肤主体`。
+- **📋 强制 wardrobe 模板（直接抄，替换 [ ] 即可，不得另起炉灶）**：
+  - DNA `wardrobe` 字段固定写法：`minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4; NEVER drape/robe/gown/hanfu/veil`
+  - prompt_text 服装段固定写法：`She wears a tiny minimal [dudou/bikini] set (small triangle top + small bottom) in [主色], plus a single extremely sheer [主色] scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the clothing is minimal and strategic, never a covering gown or robe or drape.`
 - **最优款 = 古典肚兜**（王熙凤 id=602 用户赞"这个好"）；**最差款 = 全包紧身衣**（猫女 id=601 用户"不好看"）。贴身少覆盖（比基尼 / 肚兜 / 露脐 / 露腿 / 高透纱）始终优于全包。
 - **内容红线（并行）**：仍须着衣 / 艺术化 / 非性化；负向词必含 `nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose`。不可渲染色情或暴露生殖器 / 乳头。
 
@@ -119,11 +123,11 @@ curl -s -m 25 -X POST https://letmetry.cn/mysql/query \
   "composition": "构图",
   "style": "风格",
   "mood": "情绪",
-  "wardrobe": "服装（必须着衣；默认极小覆盖：比基尼/肚兜+高透纱，人体为主，opaque < 1/4；禁用长裙/长袍/gown/robe/full-coverage）",
+  "wardrobe": "服装（必须着衣；默认极小覆盖：比基尼/肚兜+单条高透飘纱，人体为主，opaque < 1/4；禁用 drape/veil/hanfu/robe/gown/dress/wrap/shawl/cape/长裙/长袍/披风）",
   "body_type": "饱满曲线",
   "coverage": "minimal — body as subject, opaque < 1/4 of body surface",
   "camera": "镜头/参数",
-  "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, heavy clothing, gown, dress, robe, full-coverage, covered body, bulky outfit, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
+  "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, heavy clothing, gown, dress, robe, full-coverage, covered body, bulky outfit, drape, veil, shawl, wrap, cape, hanfu, kimono, long skirt, flowing fabric covering body, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
   "prompt_text": "英文写真提示词（出图用）"
 }
 ```
