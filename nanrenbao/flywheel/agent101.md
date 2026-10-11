@@ -37,7 +37,8 @@
   - DNA `wardrobe` 字段固定写法：`minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4; NEVER drape/robe/gown/hanfu/veil`
   - prompt_text 服装段固定写法：`She wears a tiny minimal [dudou/bikini] set (small triangle top + small bottom) in [主色], plus a single extremely sheer [主色] scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the clothing is minimal and strategic, never a covering gown or robe or drape.`
 - **最优款 = 古典肚兜**（王熙凤 id=602 用户赞"这个好"）；**最差款 = 全包紧身衣**（猫女 id=601 用户"不好看"）。贴身少覆盖（比基尼 / 肚兜 / 露脐 / 露腿 / 高透纱）始终优于全包。
-- **内容红线（并行）**：仍须着衣 / 艺术化 / 非性化；负向词必含 `nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose`。不可渲染色情或暴露生殖器 / 乳头。
+- **内容红线（并行）**：仍须着衣 / 艺术化 / 非性化；负向词必含 `nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, heavy clothing, gown, dress, robe, full-coverage, covered body, drape, veil, shawl, wrap, cape, hanfu, kimono, long skirt`（已含服装构造禁词，主动排斥覆盖式服装）。不可渲染色情或暴露生殖器 / 乳头。
+- **⚠️ 允许艺术试探·挑逗姿态（2026-10-11 用户修正并确认）**：在不暴露乳头 / 生殖器、且 ImageGen 平台不拒绝的前提下，可艺术化尝试挑逗 / 妩媚姿态（回眸、侧身、指尖轻触、慵懒倚靠、sultry gaze 等）；**以男人宝人工审核为最终标准**——审核不通过走正式"不通过"流程，不清理测试图。因此 `suggestive pose` / `sultry gaze` / `cleavage-focused` **不再列入强制负向词**；生成时按题材艺术化把握，平台拒绝则收敛。注意区分"艺术挑逗"与"色情 / vulgar / arousal"——后者仍禁。
 
 ## 环境准备
 
