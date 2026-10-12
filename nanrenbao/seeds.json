@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-10T13:07:20.932108Z",
+  "updated_at": "2026-10-12T01:05:00.557639Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -13,27 +13,27 @@
       },
       {
         "value": "超写实人像精修·时尚大片",
-        "sum": 8,
-        "n": 3,
-        "avg": 2.7
+        "sum": 10,
+        "n": 4,
+        "avg": 2.5
       },
       {
-        "value": "电影感时尚大片",
-        "sum": 1,
+        "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "民国老电影/花样年华",
-        "sum": 1,
+        "value": "Hyperrealistic high-fashion beauty editorial, cinematic color grading, professional fashion photography.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "老上海/花样年华",
-        "sum": 1,
+        "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       }
     ],
     "lighting": [
@@ -50,22 +50,22 @@
         "avg": 3.0
       },
       {
-        "value": "黄金时刻自然光",
-        "sum": 1,
-        "n": 1,
-        "avg": 1.0
-      },
-      {
         "value": "柔和自然散射光（黄金时刻漫射）",
-        "sum": 1,
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "暖黄灯柔焦",
+        "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
         "sum": 2,
-        "n": 2,
-        "avg": 1.0
+        "n": 1,
+        "avg": 2.0
+      },
+      {
+        "value": "Soft warm golden-hour daylight through lattice windows blended with warm palace-lantern glow, luminous healthy skin highlights, gentle festive amber tones.",
+        "sum": 2,
+        "n": 1,
+        "avg": 2.0
       }
     ],
     "wardrobe": [
@@ -82,22 +82,22 @@
         "avg": 5.0
       },
       {
-        "value": "酒红色长裙",
-        "sum": 1,
+        "value": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "红色金线刺绣内衣套装（bralette+高腰下装）",
+        "value": "An embroidered classical dudou (肚兜) top in royal red silk with golden phoenix-thread embroidery along the neckline, worn under a very thin highly translucent sheer outer robe that reveals far more than it conceals, with delicate sheer draped sleeves and an almost-transparent flowing skirt of silk; a slim gold waist chain with a tiny phoenix charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
         "sum": 2,
-        "n": 2,
-        "avg": 1.0
+        "n": 1,
+        "avg": 2.0
       },
       {
-        "value": "旗袍(着衣)",
+        "value": "Minimal purple bikini-style top + a very thin highly translucent purple gauze drifting loosely (sheer sleeves + almost-transparent flowing skirt) that reveals far more than it conceals; slim silver waist chain with a tiny spider charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
         "sum": 2,
-        "n": 2,
-        "avg": 1.0
+        "n": 1,
+        "avg": 2.0
       }
     ],
     "mood": [
@@ -109,87 +109,99 @@
       },
       {
         "value": "甜美喜庆",
-        "sum": 8,
-        "n": 3,
-        "avg": 2.7
+        "sum": 10,
+        "n": 4,
+        "avg": 2.5
       },
       {
-        "value": "优雅从容",
-        "sum": 1,
+        "value": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "神秘性感慵懒",
-        "sum": 1,
+        "value": "温婉端庄·含蓄柔情 (gentle, regal, tender, a hint of restrained longing).",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       },
       {
-        "value": "慵懒尤物",
-        "sum": 1,
+        "value": "Alluring, commanding, mysterious, seductive-but-tasteful.",
+        "sum": 2,
         "n": 1,
-        "avg": 1.0
+        "avg": 2.0
       }
     ],
     "composition": [
       {
         "value": "竖幅大半身居中",
-        "sum": 15,
-        "n": 6,
-        "avg": 2.5
+        "sum": 17,
+        "n": 7,
+        "avg": 2.4
       },
       {
-        "value": "全身环境人像",
-        "sum": 1,
-        "n": 1,
-        "avg": 1.0
+        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
+        "sum": 7,
+        "n": 4,
+        "avg": 1.8
       },
       {
-        "value": "半身特写回眸",
-        "sum": 1,
-        "n": 1,
-        "avg": 1.0
+        "value": "Vertical 9:16, large half-body centered, shallow depth of field, clean negative space above the head.",
+        "sum": 3,
+        "n": 2,
+        "avg": 1.5
       },
       {
-        "value": "倚坐丝绒沙发",
-        "sum": 1,
-        "n": 1,
-        "avg": 1.0
+        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
+        "sum": 5,
+        "n": 4,
+        "avg": 1.2
       },
       {
-        "value": "红唇特写",
-        "sum": 1,
-        "n": 1,
+        "value": "竖幅全身环境人像",
+        "sum": 2,
+        "n": 2,
         "avg": 1.0
       }
     ],
     "camera": [
       {
         "value": "85mm f/1.8 浅景深",
-        "sum": 15,
-        "n": 6,
-        "avg": 2.5
+        "sum": 19,
+        "n": 9,
+        "avg": 2.1
+      },
+      {
+        "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
+        "sum": 7,
+        "n": 4,
+        "avg": 1.8
+      },
+      {
+        "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
+        "sum": 3,
+        "n": 2,
+        "avg": 1.5
+      },
+      {
+        "value": "85mm f/1.8 shallow depth of field.",
+        "sum": 5,
+        "n": 4,
+        "avg": 1.2
       },
       {
         "value": "85mm",
         "sum": 4,
         "n": 4,
         "avg": 1.0
-      },
-      {
-        "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
-        "sum": 1,
-        "n": 1,
-        "avg": 1.0
       }
     ],
     "body_type": [
       {
         "value": "饱满曲线",
-        "sum": 20,
-        "n": 11,
-        "avg": 1.8
+        "sum": 39,
+        "n": 24,
+        "avg": 1.6
       }
     ]
   },
@@ -234,43 +246,8 @@
     },
     {
       "table": "beauty_images",
-      "id": 575,
-      "view_count": 1,
-      "dna": {
-        "mood": "优雅从容",
-        "style": "电影感时尚大片",
-        "camera": "85mm",
-        "lighting": "黄金时刻自然光",
-        "negative": "nudity, vulgar, face distorted",
-        "wardrobe": "酒红色长裙",
-        "body_type": "饱满曲线",
-        "composition": "全身环境人像"
-      },
-      "prompt_text": null
-    },
-    {
-      "table": "beauty_images",
-      "id": 580,
-      "view_count": 1,
-      "dna": {
-        "mood": "甜美喜庆",
-        "scene": "中式古典园林（圆月门+竹林+白墙）",
-        "style": "超写实人像精修·时尚大片",
-        "camera": "85mm f/1.8 浅景深",
-        "subject": "亚洲青年女性，黑长发半扎，微笑直视镜头",
-        "lighting": "柔和自然散射光",
-        "negative": "nudity, explicit, suggestive pose, sultry gaze, cleavage-focused, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
-        "wardrobe": "红色金线刺绣内衣套装（bralette+高腰下装）",
-        "body_type": "饱满曲线",
-        "composition": "竖幅大半身居中",
-        "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in a refined red silk lingerie set with golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred behind her. Soft diffused natural daylight wraps her skin in a luminous healthy glow; warm festive red tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with shallow depth of field, vertical 9:16 composition, fine skin texture, cinematic color grading, elegant and tasteful, AI-generated content label."
-      },
-      "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in a refined red silk lingerie set with golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred behind her. Soft diffused natural daylight wraps her skin in a luminous healthy glow; warm festive red tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with shallow depth of field, vertical 9:16 composition, fine skin texture, cinematic color grading, elegant and tasteful, AI-generated content label."
-    },
-    {
-      "table": "beauty_images",
       "id": 582,
-      "view_count": 1,
+      "view_count": 2,
       "dna": {
         "mood": "甜美喜庆",
         "scene": "中式古典园林（圆月门+竹林+白墙）",
@@ -285,13 +262,53 @@
         "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an exquisite red silk lingerie set with intricate golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred into bokeh behind her. Golden-hour diffused daylight wraps her skin in a luminous, flawless healthy glow with visible fine pores and silky individual hair strands; warm festive red tones dominate the palette with subtle teal garden accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-detailed skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, masterpiece quality, AI-generated content label."
       },
       "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of a young Asian woman with long black hair in a soft half-updo, wearing a gentle smile and gazing softly toward the camera. She is dressed in an exquisite red silk lingerie set with intricate golden floral embroidery — a delicate bralette and high-waisted bottoms trimmed with fine lace. She stands gracefully in a classical Suzhou-style Chinese garden: a circular moon gate, slender bamboo, and whitewashed walls softly blurred into bokeh behind her. Golden-hour diffused daylight wraps her skin in a luminous, flawless healthy glow with visible fine pores and silky individual hair strands; warm festive red tones dominate the palette with subtle teal garden accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-detailed skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, masterpiece quality, AI-generated content label."
+    },
+    {
+      "table": "beauty_images",
+      "id": 609,
+      "view_count": 2,
+      "dna": {
+        "subject": "Nie Xiaoqian (倩女幽魂·聂小倩, the ghost maiden) — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing.",
+        "scene": "The deserted Lanruo Temple (兰若寺) at night — a moonlit ruined ancient temple, drifting night mist, a faint silver moonbeam, melancholic and eerie yet beautiful atmosphere; the figure is the sole focus.",
+        "lighting": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
+        "style": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
+        "mood": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
+        "wardrobe": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "camera": "85mm f/1.8, shallow DOF, vertical 9:16.",
+        "body_type": "饱满曲线",
+        "coverage": "minimal — body as subject, opaque < 1/4 of body surface",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, flat chest, small bust, heavy clothing, gown, dress, robe, full coverage, long sleeves covering, low-quality, deformed, extra limbs, watermark.",
+        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+    },
+    {
+      "table": "beauty_images",
+      "id": 605,
+      "view_count": 2,
+      "dna": {
+        "subject": "The Queen of the Kingdom of Women (西游记·女儿国王) — a young Asian queen with a well-proportioned, amply curved feminine figure, regal yet gentle beauty, a soft warm tender gaze, long dark hair adorned with a phoenix-shaped gold royal ornament, a faint melancholic-romantic expression as if secretly harboring affection, graceful bearing of a monarch.",
+        "scene": "An elegant classical Chinese palace interior — carved jade screens, warm palace lantern glow, blossoming peach branches in a celadon vase, soft silk drapery, golden-hour warm light streaming through lattice windows, refined and tasteful.",
+        "lighting": "Soft warm golden-hour daylight through lattice windows blended with warm palace-lantern glow, luminous healthy skin highlights, gentle festive amber tones.",
+        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
+        "style": "Hyperrealistic high-fashion beauty editorial, cinematic color grading, professional fashion photography.",
+        "mood": "温婉端庄·含蓄柔情 (gentle, regal, tender, a hint of restrained longing).",
+        "wardrobe": "An embroidered classical dudou (肚兜) top in royal red silk with golden phoenix-thread embroidery along the neckline, worn under a very thin highly translucent sheer outer robe that reveals far more than it conceals, with delicate sheer draped sleeves and an almost-transparent flowing skirt of silk; a slim gold waist chain with a tiny phoenix charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
+        "camera": "85mm f/1.8, shallow DOF, vertical 9:16.",
+        "body_type": "饱满曲线",
+        "coverage": "minimal — high-transparency sheer, opaque < 1/3 of body surface",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, flat chest, small bust, low-quality, deformed, extra limbs, watermark.",
+        "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of the Queen of the Kingdom of Women from Journey to the West — a young Asian queen with a well-proportioned, amply curved feminine figure, regal yet gentle beauty, a soft warm tender gaze, long dark hair adorned with a phoenix-shaped gold royal ornament, a faint melancholic-romantic expression as if secretly harboring affection. She wears an embroidered classical dudou top in royal red silk with golden phoenix-thread embroidery along the neckline, under a very thin highly translucent sheer outer robe that reveals far more than it conceals, with delicate sheer draped sleeves and an almost-transparent flowing silk skirt, a slim gold waist chain with a tiny phoenix charm, standing in an elegant classical Chinese palace interior with carved jade screens, warm palace-lantern glow, blossoming peach branches in a celadon vase, and soft silk drapery. Soft warm golden-hour daylight through lattice windows blends with warm lantern glow, wrapping her skin in a luminous healthy glow; gentle festive amber tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion beauty editorial portrait of the Queen of the Kingdom of Women from Journey to the West — a young Asian queen with a well-proportioned, amply curved feminine figure, regal yet gentle beauty, a soft warm tender gaze, long dark hair adorned with a phoenix-shaped gold royal ornament, a faint melancholic-romantic expression as if secretly harboring affection. She wears an embroidered classical dudou top in royal red silk with golden phoenix-thread embroidery along the neckline, under a very thin highly translucent sheer outer robe that reveals far more than it conceals, with delicate sheer draped sleeves and an almost-transparent flowing silk skirt, a slim gold waist chain with a tiny phoenix charm, standing in an elegant classical Chinese palace interior with carved jade screens, warm palace-lantern glow, blossoming peach branches in a celadon vase, and soft silk drapery. Soft warm golden-hour daylight through lattice windows blends with warm lantern glow, wrapping her skin in a luminous healthy glow; gentle festive amber tones dominate the palette. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
     }
   ],
   "fallback_seeds": [
     {
       "id": "A",
       "name": "背影杀",
-      "prompt": "Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible",
+      "prompt": "Cinematic back-view portrait of an elegant woman: a tiny minimal bikini/dudou set plus a single extremely sheer scarf drifting at the hip, bare skin softly lit, body as subject, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible",
       "dna": {
         "subject": "女性",
         "scene": "户外黄昏",
@@ -299,16 +316,16 @@
         "composition": "背影",
         "style": "时尚大片",
         "mood": "神秘",
-        "wardrobe": "长裙",
+        "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4",
         "camera": "85mm",
         "body_type": "饱满曲线",
-        "negative": "face visible, nudity, vulgar"
+        "negative": "face visible, nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"
       }
     },
     {
       "id": "B",
       "name": "极简棚拍写真",
-      "prompt": "Minimalist studio portrait, soft single-source lighting, clean background, confident pose, high-end fashion editorial, muted color palette, elegant",
+      "prompt": "Minimalist studio portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare shoulders torso and legs softly lit, body as subject, soft single-source lighting, clean background, confident pose, high-end fashion editorial, muted color palette, elegant",
       "dna": {
         "subject": "女性",
         "scene": "棚拍",
@@ -316,15 +333,16 @@
         "composition": "半身",
         "style": "极简时尚",
         "mood": "从容",
-        "wardrobe": "简约",
+        "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4",
         "camera": "85mm",
-        "body_type": "饱满曲线"
+        "body_type": "饱满曲线",
+        "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"
       }
     },
     {
       "id": "C",
       "name": "电影感霓虹夜景",
-      "prompt": "Neon-lit night street portrait, cinematic color grading, rim light, atmospheric haze, fashion film still, artistic",
+      "prompt": "Neon-lit night street portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare skin with neon rim light, body as subject, cinematic color grading, atmospheric haze, fashion film still, artistic",
       "dna": {
         "subject": "人物",
         "scene": "夜景街道",
@@ -332,15 +350,16 @@
         "composition": "环境人像",
         "style": "电影感",
         "mood": "氛围",
-        "wardrobe": "都市",
+        "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4",
         "camera": "35mm",
-        "body_type": "饱满曲线"
+        "body_type": "饱满曲线",
+        "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"
       }
     },
     {
       "id": "D",
       "name": "胶片质感自然光",
-      "prompt": "35mm film grain portrait, natural window light, warm tones, candid intimate mood, analog photography aesthetic",
+      "prompt": "35mm film grain portrait: a young woman in a tiny minimal bikini/dudou set plus a single extremely sheer scarf at the hip, bare skin in warm window light, body as subject, natural window light, warm tones, candid intimate mood, analog photography aesthetic",
       "dna": {
         "subject": "人物",
         "scene": "室内自然光",
@@ -348,7 +367,9 @@
         "style": "胶片",
         "mood": "自然",
         "camera": "35mm",
-        "body_type": "饱满曲线"
+        "body_type": "饱满曲线",
+        "wardrobe": "minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4",
+        "negative": "nudity, vulgar, gown, robe, dress, drape, full-coverage, covered body"
       }
     }
   ]
