@@ -1,16 +1,10 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T01:05:00.413009Z",
+  "updated_at": "2026-10-14T01:05:00.779844Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
-      {
-        "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
       {
         "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
         "sum": 3,
@@ -18,10 +12,16 @@
         "avg": 3.0
       },
       {
+        "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
         "value": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
-        "sum": 5,
+        "sum": 6,
         "n": 2,
-        "avg": 2.5
+        "avg": 3.0
       },
       {
         "value": "超写实人像精修·时尚大片",
@@ -50,19 +50,19 @@
         "avg": 3.0
       },
       {
+        "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
         "value": "Cool violet-magenta rim-light with soft moonlit key, glowing skin highlights, deep nocturnal tones.",
         "sum": 3,
         "n": 1,
         "avg": 3.0
       },
       {
-        "value": "Cool diffused overcast daylight with warm peach-gold rim-light; pale rosy-peach tones dominate with warm skin accents.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "value": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -82,19 +82,19 @@
         "avg": 5.0
       },
       {
+        "value": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
         "value": "Minimal purple bikini-style top + a very thin highly translucent purple gauze drifting loosely (sheer sleeves + almost-transparent flowing skirt) that reveals far more than it conceals; slim silver waist chain with a tiny spider charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
         "sum": 3,
         "n": 1,
         "avg": 3.0
       },
       {
-        "value": "A simple elegant peach-and-jade bikini-style top cropped short to bare the midriff and navel, with a translucent peach gauze draped over one shoulder and around the waist, a slim jade-green waist sash, a short flippy skirt; bare feet at the water's edge. Fully tasteful, non-explicit, amply curved bust.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "value": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -102,7 +102,19 @@
     ],
     "mood": [
       {
+        "value": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
         "value": "Alluring, commanding, mysterious, seductive-but-tasteful.",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
+        "value": "Mysterious, confident, feline grace — alluring but composed, never vulgar.",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -114,27 +126,21 @@
         "avg": 3.0
       },
       {
-        "value": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
         "value": "甜美喜庆",
         "sum": 10,
         "n": 4,
         "avg": 2.5
-      },
-      {
-        "value": "清冷仙气·温婉神秘",
-        "sum": 7,
-        "n": 3,
-        "avg": 2.3
       }
     ],
     "composition": [
       {
         "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
+        "sum": 9,
+        "n": 4,
+        "avg": 2.2
+      },
+      {
+        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
         "sum": 9,
         "n": 4,
         "avg": 2.2
@@ -146,22 +152,16 @@
         "avg": 2.0
       },
       {
-        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
-        "sum": 8,
-        "n": 4,
-        "avg": 2.0
-      },
-      {
         "value": "Vertical 9:16, large half-body centered, shallow depth of field, clean negative space above the head.",
         "sum": 4,
         "n": 2,
         "avg": 2.0
       },
       {
-        "value": "竖幅全身环境人像",
-        "sum": 3,
-        "n": 3,
-        "avg": 1.0
+        "value": "半身特写回眸",
+        "sum": 2,
+        "n": 1,
+        "avg": 2.0
       }
     ],
     "camera": [
@@ -173,9 +173,9 @@
       },
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 8,
+        "sum": 9,
         "n": 4,
-        "avg": 2.0
+        "avg": 2.2
       },
       {
         "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
@@ -191,16 +191,22 @@
       },
       {
         "value": "85mm",
-        "sum": 7,
-        "n": 7,
-        "avg": 1.0
+        "sum": 12,
+        "n": 9,
+        "avg": 1.3
       }
     ],
     "body_type": [
       {
+        "value": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
+        "sum": 2,
+        "n": 1,
+        "avg": 2.0
+      },
+      {
         "value": "饱满曲线",
-        "sum": 53,
-        "n": 32,
+        "sum": 58,
+        "n": 34,
         "avg": 1.7
       }
     ]
@@ -246,6 +252,26 @@
     },
     {
       "table": "beauty_images",
+      "id": 609,
+      "view_count": 3,
+      "dna": {
+        "subject": "Nie Xiaoqian (倩女幽魂·聂小倩, the ghost maiden) — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing.",
+        "scene": "The deserted Lanruo Temple (兰若寺) at night — a moonlit ruined ancient temple, drifting night mist, a faint silver moonbeam, melancholic and eerie yet beautiful atmosphere; the figure is the sole focus.",
+        "lighting": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
+        "style": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
+        "mood": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
+        "wardrobe": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "camera": "85mm f/1.8, shallow DOF, vertical 9:16.",
+        "body_type": "饱满曲线",
+        "coverage": "minimal — body as subject, opaque < 1/4 of body surface",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, flat chest, small bust, heavy clothing, gown, dress, robe, full coverage, long sleeves covering, low-quality, deformed, extra limbs, watermark.",
+        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+    },
+    {
+      "table": "beauty_images",
       "id": 604,
       "view_count": 3,
       "dna": {
@@ -266,42 +292,22 @@
     },
     {
       "table": "beauty_images",
-      "id": 600,
+      "id": 601,
       "view_count": 3,
       "dna": {
-        "subject": "Huang Rong (射雕英雄传·桃花岛主黄药师之女，丐帮帮主) — a young Asian woman with a well-proportioned, amply curved feminine figure, long black hair in a lively side braid with a peach-blossom hairpin, spirited and quick-witted, bright mischievous eyes, a playful cunning smile, one hand resting lightly on a slender dog-beating staff (打狗棒) or a sprig of peach blossom.",
-        "scene": "Peach Blossom Island shore at gentle dusk — drifting peach petals, misty lake, faint zigzag wooden bridge and a wine tavern silhouette (江南水乡), weeping willows, soft river mist.",
-        "lighting": "Cool diffused overcast daylight with warm peach-gold rim-light; pale rosy-peach tones dominate with warm skin accents.",
+        "subject": "A Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline.",
+        "scene": "Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air.",
+        "lighting": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
         "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
         "style": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
-        "mood": "Spirited, witty, playful, lightly teasing — intelligent gleam in the eyes.",
-        "wardrobe": "A simple elegant peach-and-jade bikini-style top cropped short to bare the midriff and navel, with a translucent peach gauze draped over one shoulder and around the waist, a slim jade-green waist sash, a short flippy skirt; bare feet at the water's edge. Fully tasteful, non-explicit, amply curved bust.",
+        "mood": "Mysterious, confident, feline grace — alluring but composed, never vulgar.",
+        "wardrobe": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
         "camera": "85mm f/1.8 shallow depth of field.",
         "body_type": "饱满曲线",
-        "negative": "flat chest, small bust, undefined figure, topless, nude, explicit, see-through lingerie, transparent undergarment, nudity, arousal, suggestive pose, sultry gaze, spread legs, vulgar, low-quality, deformed, extra limbs, watermark.",
-        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — Huang Rong (the witty heroine of Legend of the Condor Heroes, daughter of Peach Blossom Island's master) — with a well-proportioned, amply curved feminine figure, long black hair in a lively side braid with a peach-blossom hairpin, spirited and quick-witted, bright mischievous eyes, a playful cunning smile, one hand resting lightly on a slender dog-beating staff. She wears a simple elegant peach-and-jade bikini-style top cropped short to bare her midriff and navel, cut to flatter a fuller, more ample bust with natural curves, with a translucent peach gauze draped over one shoulder and around the waist, a slim jade-green waist sash and a short flippy skirt, standing barefoot at the edge of a misty Peach Blossom Island shore at dusk. Drifting peach petals, faint zigzag bridge and a wine-tavern silhouette, weeping willows, soft river mist. Cool diffused overcast daylight with warm peach-gold rim-light, pale rosy-peach tones with warm skin accents and jade highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
+        "negative": "flat chest, small bust, undefined figure, topless, nude, explicit, see-through, transparent, sheer fabric, nudity, arousal, suggestive pose, sultry gaze, spread legs, vulgar, low-quality, deformed, extra limbs, watermark.",
+        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
       },
-      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — Huang Rong (the witty heroine of Legend of the Condor Heroes, daughter of Peach Blossom Island's master) — with a well-proportioned, amply curved feminine figure, long black hair in a lively side braid with a peach-blossom hairpin, spirited and quick-witted, bright mischievous eyes, a playful cunning smile, one hand resting lightly on a slender dog-beating staff. She wears a simple elegant peach-and-jade bikini-style top cropped short to bare her midriff and navel, cut to flatter a fuller, more ample bust with natural curves, with a translucent peach gauze draped over one shoulder and around the waist, a slim jade-green waist sash and a short flippy skirt, standing barefoot at the edge of a misty Peach Blossom Island shore at dusk. Drifting peach petals, faint zigzag bridge and a wine-tavern silhouette, weeping willows, soft river mist. Cool diffused overcast daylight with warm peach-gold rim-light, pale rosy-peach tones with warm skin accents and jade highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
-    },
-    {
-      "table": "beauty_images",
-      "id": 609,
-      "view_count": 3,
-      "dna": {
-        "subject": "Nie Xiaoqian (倩女幽魂·聂小倩, the ghost maiden) — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing.",
-        "scene": "The deserted Lanruo Temple (兰若寺) at night — a moonlit ruined ancient temple, drifting night mist, a faint silver moonbeam, melancholic and eerie yet beautiful atmosphere; the figure is the sole focus.",
-        "lighting": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
-        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
-        "style": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
-        "mood": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
-        "wardrobe": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
-        "camera": "85mm f/1.8, shallow DOF, vertical 9:16.",
-        "body_type": "饱满曲线",
-        "coverage": "minimal — body as subject, opaque < 1/4 of body surface",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, flat chest, small bust, heavy clothing, gown, dress, robe, full coverage, long sleeves covering, low-quality, deformed, extra limbs, watermark.",
-        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
-      },
-      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of Nie Xiaoqian from A Chinese Ghost Story — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing. She wears a tiny minimal classical dudou (small triangle of pale silk with silver thread and slender straps) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the fabric is minimal and strategic, never a covering gown or robe. She stands in the deserted Lanruo Temple at night — a moonlit ruined ancient temple with drifting night mist, a faint silver moonbeam. Cool pale moonlight with soft silver-blue rim light wraps her in a luminous glow, deep nocturnal blue tones, wisps of night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin micro-texture, professional cinematic color grading, dreamlike ghostly aesthetic, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
     }
   ],
   "fallback_seeds": [
