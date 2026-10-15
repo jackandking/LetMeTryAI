@@ -13,6 +13,7 @@
     "test:regression": "npm test -- regression.test.js",
     "test:config": "npm test -- config.test.js",
     "test:nanrenbao-delete": "node nanrenbao/points-delete-image.test.cjs",
+    "test:scratch-view-count": "node nanrenbao/beauty-scratch-view-count.test.cjs",
     "lint": "eslint . --ext .js --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
     "lint:staged": "eslint --fix",

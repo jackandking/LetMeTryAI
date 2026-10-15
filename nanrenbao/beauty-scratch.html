@@ -210,6 +210,28 @@
     }).catch(function(){ return null; });
   }
 
+  // 刮擦乐单图深链计入 view_count（星火计划任务引流计量）。
+  // 走后端 /mysql/query 的计数器白名单例外（与画廊页 incrementViewCount 同一通道），
+  // 失败静默不影响刮擦体验；sessionStorage 防同一会话内广告返回刷新重复计数。
+  function bumpViewCount(id, url){
+    if (!url) return;
+    try {
+      var key = 'bs_view_bumped_' + id;
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+    } catch(e){}
+    try {
+      fetch('https://letmetry.cn/mysql/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sql: 'UPDATE beauty_images SET view_count = view_count + 1 WHERE image_url = ?',
+          params: [url]
+        })
+      }).catch(function(){});
+    } catch(e){}
+  }
+
   function $(id){return document.getElementById(id);}
   function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
 
@@ -538,9 +560,12 @@
     fetchBeautyUrl(_rawId).then(function(url){
       if (!url) { loading.style.display='none'; alert('未找到该美图，或尚未审核通过'); return; }
       singleItem = { id: parseInt(_rawId, 10), url: url };
+      bumpViewCount(singleItem.id, singleItem.url);
       handleAdReturn();
     });
   } else {
+    // 命中写死数组的单图深链同样计一次；轮播模式（无 id）不计数
+    if (singleMode && singleItem) bumpViewCount(singleItem.id, singleItem.url);
     handleAdReturn();
   }
 })();
