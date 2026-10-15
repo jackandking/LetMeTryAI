@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updated_at": "2026-10-14T01:05:00.779844Z",
+  "updated_at": "2026-10-15T01:05:00.581004Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
         "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
-        "sum": 3,
+        "sum": 4,
         "n": 1,
-        "avg": 3.0
+        "avg": 4.0
       },
       {
         "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
@@ -25,44 +25,44 @@
       },
       {
         "value": "超写实人像精修·时尚大片",
-        "sum": 11,
+        "sum": 12,
         "n": 5,
-        "avg": 2.2
+        "avg": 2.4
       },
       {
         "value": "超写实人像精修·电影感泳装艺术写真",
-        "sum": 8,
+        "sum": 9,
         "n": 4,
-        "avg": 2.0
+        "avg": 2.2
       }
     ],
     "lighting": [
       {
         "value": "柔和自然散射光",
+        "sum": 8,
+        "n": 2,
+        "avg": 4.0
+      },
+      {
+        "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "柔和冷调自然散射光（烟雨漫射，水面反光）",
         "sum": 7,
         "n": 2,
         "avg": 3.5
       },
       {
-        "value": "柔和冷调自然散射光（烟雨漫射，水面反光）",
-        "sum": 6,
-        "n": 2,
-        "avg": 3.0
-      },
-      {
-        "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "value": "冷月散射光·古庙残垣雾",
         "sum": 3,
         "n": 1,
         "avg": 3.0
       },
       {
-        "value": "Cool violet-magenta rim-light with soft moonlit key, glowing skin highlights, deep nocturnal tones.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
+        "value": "柔和冷白散射光·古墓石窟",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -70,31 +70,31 @@
     ],
     "wardrobe": [
       {
+        "value": "白色比基尼（简约优雅泳装，着衣，非内衣外露，非透明），肩披半透白纱，赤足立于浅水边",
+        "sum": 6,
+        "n": 1,
+        "avg": 6.0
+      },
+      {
         "value": "红色真丝旗袍，金线花卉刺绣衣领与下摆（着衣，非内衣）",
         "sum": 6,
         "n": 1,
         "avg": 6.0
       },
       {
-        "value": "白色比基尼（简约优雅泳装，着衣，非内衣外露，非透明），肩披半透白纱，赤足立于浅水边",
-        "sum": 5,
-        "n": 1,
-        "avg": 5.0
-      },
-      {
         "value": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "极小白 dudou + 单条高透白纱 + 骨纹银链（骨形吊坠+臂骨链），opaque<1/4; NEVER drape/robe/gown/hanfu",
         "sum": 3,
         "n": 1,
         "avg": 3.0
       },
       {
-        "value": "Minimal purple bikini-style top + a very thin highly translucent purple gauze drifting loosely (sheer sleeves + almost-transparent flowing skirt) that reveals far more than it conceals; slim silver waist chain with a tiny spider charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
+        "value": "极小白 dudou + 单条高透白纱，opaque<1/4; NEVER drape/robe/gown/hanfu",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -103,6 +103,18 @@
     "mood": [
       {
         "value": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "妖媚清冷·白骨仙",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
+        "value": "清冷仙气·不食烟火",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -118,64 +130,52 @@
         "sum": 3,
         "n": 1,
         "avg": 3.0
-      },
-      {
-        "value": "Spirited, witty, playful, lightly teasing — intelligent gleam in the eyes.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "甜美喜庆",
-        "sum": 10,
-        "n": 4,
-        "avg": 2.5
       }
     ],
     "composition": [
       {
         "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
-        "sum": 9,
+        "sum": 10,
         "n": 4,
-        "avg": 2.2
+        "avg": 2.5
       },
       {
         "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
-        "sum": 9,
+        "sum": 10,
         "n": 4,
-        "avg": 2.2
+        "avg": 2.5
       },
       {
         "value": "竖幅大半身居中",
-        "sum": 20,
+        "sum": 22,
         "n": 10,
-        "avg": 2.0
+        "avg": 2.2
+      },
+      {
+        "value": "全身艺术人像",
+        "sum": 9,
+        "n": 4,
+        "avg": 2.2
       },
       {
         "value": "Vertical 9:16, large half-body centered, shallow depth of field, clean negative space above the head.",
         "sum": 4,
         "n": 2,
         "avg": 2.0
-      },
-      {
-        "value": "半身特写回眸",
-        "sum": 2,
-        "n": 1,
-        "avg": 2.0
       }
     ],
     "camera": [
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
-        "sum": 9,
+        "sum": 10,
         "n": 4,
-        "avg": 2.2
+        "avg": 2.5
       },
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 9,
+        "sum": 10,
         "n": 4,
-        "avg": 2.2
+        "avg": 2.5
       },
       {
         "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
@@ -185,33 +185,52 @@
       },
       {
         "value": "85mm f/1.8 浅景深",
-        "sum": 24,
+        "sum": 27,
         "n": 14,
-        "avg": 1.7
+        "avg": 1.9
       },
       {
         "value": "85mm",
-        "sum": 12,
-        "n": 9,
-        "avg": 1.3
+        "sum": 19,
+        "n": 12,
+        "avg": 1.6
       }
     ],
     "body_type": [
       {
         "value": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
-        "sum": 2,
-        "n": 1,
+        "sum": 6,
+        "n": 3,
         "avg": 2.0
       },
       {
         "value": "饱满曲线",
-        "sum": 58,
-        "n": 34,
-        "avg": 1.7
+        "sum": 66,
+        "n": 35,
+        "avg": 1.9
       }
     ]
   },
   "champion_seeds": [
+    {
+      "table": "beauty_images",
+      "id": 593,
+      "view_count": 6,
+      "dna": {
+        "mood": "清冷仙气·温婉神秘",
+        "scene": "西湖烟雨（断桥+垂柳+残荷+薄雾），水面波光",
+        "style": "超写实人像精修·电影感泳装艺术写真",
+        "camera": "85mm f/1.8 浅景深",
+        "subject": "亚洲青年女性，黑长发，清冷优雅仙气，微垂眸带一丝神秘",
+        "lighting": "柔和冷调自然散射光（烟雨漫射，水面反光）",
+        "negative": "nudity, explicit, topless, see-through lingerie, suggestive pose, sultry gaze, cleavage-focused, spread legs, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
+        "wardrobe": "白色比基尼（简约优雅泳装，着衣，非内衣外露，非透明），肩披半透白纱，赤足立于浅水边",
+        "body_type": "饱满曲线",
+        "composition": "竖幅大半身居中",
+        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — the White Snake immortal (Bai Suzhen) reimagined — with long black hair, elegant and ethereal, a gentle expression touched with mystery, gazing softly toward the camera. She wears a simple elegant white bikini and a translucent white gauze draped over one shoulder, tasteful and refined, standing at the edge of the misty West Lake with bare feet in shallow water. Faint broken-bridge silhouette, weeping willows, lotus leaves, soft rain drifting through the air. Cool diffused overcast daylight and subtle water reflections wrap her in an ethereal glow; pale silvery-blue tones dominate with warm skin accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
+      },
+      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — the White Snake immortal (Bai Suzhen) reimagined — with long black hair, elegant and ethereal, a gentle expression touched with mystery, gazing softly toward the camera. She wears a simple elegant white bikini and a translucent white gauze draped over one shoulder, tasteful and refined, standing at the edge of the misty West Lake with bare feet in shallow water. Faint broken-bridge silhouette, weeping willows, lotus leaves, soft rain drifting through the air. Cool diffused overcast daylight and subtle water reflections wrap her in an ethereal glow; pale silvery-blue tones dominate with warm skin accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
+    },
     {
       "table": "beauty_images",
       "id": 581,
@@ -233,27 +252,8 @@
     },
     {
       "table": "beauty_images",
-      "id": 593,
-      "view_count": 5,
-      "dna": {
-        "mood": "清冷仙气·温婉神秘",
-        "scene": "西湖烟雨（断桥+垂柳+残荷+薄雾），水面波光",
-        "style": "超写实人像精修·电影感泳装艺术写真",
-        "camera": "85mm f/1.8 浅景深",
-        "subject": "亚洲青年女性，黑长发，清冷优雅仙气，微垂眸带一丝神秘",
-        "lighting": "柔和冷调自然散射光（烟雨漫射，水面反光）",
-        "negative": "nudity, explicit, topless, see-through lingerie, suggestive pose, sultry gaze, cleavage-focused, spread legs, deformed hands, extra fingers, watermark, text, lowres, plastic skin, oversaturated",
-        "wardrobe": "白色比基尼（简约优雅泳装，着衣，非内衣外露，非透明），肩披半透白纱，赤足立于浅水边",
-        "body_type": "饱满曲线",
-        "composition": "竖幅大半身居中",
-        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — the White Snake immortal (Bai Suzhen) reimagined — with long black hair, elegant and ethereal, a gentle expression touched with mystery, gazing softly toward the camera. She wears a simple elegant white bikini and a translucent white gauze draped over one shoulder, tasteful and refined, standing at the edge of the misty West Lake with bare feet in shallow water. Faint broken-bridge silhouette, weeping willows, lotus leaves, soft rain drifting through the air. Cool diffused overcast daylight and subtle water reflections wrap her in an ethereal glow; pale silvery-blue tones dominate with warm skin accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
-      },
-      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a young Asian woman — the White Snake immortal (Bai Suzhen) reimagined — with long black hair, elegant and ethereal, a gentle expression touched with mystery, gazing softly toward the camera. She wears a simple elegant white bikini and a translucent white gauze draped over one shoulder, tasteful and refined, standing at the edge of the misty West Lake with bare feet in shallow water. Faint broken-bridge silhouette, weeping willows, lotus leaves, soft rain drifting through the air. Cool diffused overcast daylight and subtle water reflections wrap her in an ethereal glow; pale silvery-blue tones dominate with warm skin accents. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic swimwear editorial, AI-generated content label."
-    },
-    {
-      "table": "beauty_images",
       "id": 609,
-      "view_count": 3,
+      "view_count": 4,
       "dna": {
         "subject": "Nie Xiaoqian (倩女幽魂·聂小倩, the ghost maiden) — a young Asian woman with a well-proportioned, amply curved feminine figure, ethereal ghostly beauty, a melancholic gentle gaze, long dark flowing hair, a faint sorrowful smile, otherworldly graceful bearing.",
         "scene": "The deserted Lanruo Temple (兰若寺) at night — a moonlit ruined ancient temple, drifting night mist, a faint silver moonbeam, melancholic and eerie yet beautiful atmosphere; the figure is the sole focus.",
@@ -272,42 +272,37 @@
     },
     {
       "table": "beauty_images",
-      "id": 604,
+      "id": 625,
       "view_count": 3,
       "dna": {
-        "subject": "Chun Sanshiniang (大话西游·春三十娘, the Spider Demoness) — a young Asian woman with a well-proportioned, amply curved feminine figure, alluring and commanding, smoldering confident eyes, a faint seductive smile, long dark hair with a purple spider-shaped hair ornament.",
-        "scene": "Misty moonlit demon lair — faint spider-web patterns carved on stone walls, drifting petals, soft night mist, cool violet-magenta atmosphere.",
-        "lighting": "Cool violet-magenta rim-light with soft moonlit key, glowing skin highlights, deep nocturnal tones.",
-        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
-        "style": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
-        "mood": "Alluring, commanding, mysterious, seductive-but-tasteful.",
-        "wardrobe": "Minimal purple bikini-style top + a very thin highly translucent purple gauze drifting loosely (sheer sleeves + almost-transparent flowing skirt) that reveals far more than it conceals; slim silver waist chain with a tiny spider charm. High transparency, minimal opaque coverage (opaque area well under 1/3 of body).",
-        "camera": "85mm f/1.8, shallow DOF, vertical 9:16.",
-        "body_type": "饱满曲线",
-        "coverage": "minimal — high-transparency sheer, opaque < 1/3 of body surface",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, suggestive pose, flat chest, small bust, low-quality, deformed, extra limbs, watermark.",
-        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Spider Demoness (Chun Sanshiniang from A Chinese Odyssey) — a young Asian woman with a well-proportioned, amply curved feminine figure, alluring and commanding, smoldering confident eyes, a faint seductive smile, long dark hair with a purple spider-shaped hair ornament. She wears only a minimal elegant purple bikini-style top and a very thin, highly translucent purple gauze that drifts loosely and reveals far more than it conceals, with delicate sheer sleeves and a sheer flowing skirt of almost transparent silk, a slim silver waist chain with a tiny spider charm, standing barefoot in a misty moonlit demon lair — faint spider-web patterns on stone walls, drifting petals, cool violet-magenta rim-light, soft night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+        "subject": "白骨精（西游记）reinterpret，非真人仿冒",
+        "style": "超写实人像精修·时尚大片/电影感",
+        "lighting": "冷月散射光·古庙残垣雾",
+        "composition": "全身艺术人像",
+        "mood": "妖媚清冷·白骨仙",
+        "wardrobe": "极小白 dudou + 单条高透白纱 + 骨纹银链（骨形吊坠+臂骨链），opaque<1/4; NEVER drape/robe/gown/hanfu",
+        "camera": "85mm",
+        "body_type": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, long skirt, full-coverage, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, watermark on face, text, lowres"
       },
-      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Spider Demoness (Chun Sanshiniang from A Chinese Odyssey) — a young Asian woman with a well-proportioned, amply curved feminine figure, alluring and commanding, smoldering confident eyes, a faint seductive smile, long dark hair with a purple spider-shaped hair ornament. She wears only a minimal elegant purple bikini-style top and a very thin, highly translucent purple gauze that drifts loosely and reveals far more than it conceals, with delicate sheer sleeves and a sheer flowing skirt of almost transparent silk, a slim silver waist chain with a tiny spider charm, standing barefoot in a misty moonlit demon lair — faint spider-web patterns on stone walls, drifting petals, cool violet-magenta rim-light, soft night mist. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      "prompt_text": null
     },
     {
       "table": "beauty_images",
-      "id": 601,
+      "id": 622,
       "view_count": 3,
       "dna": {
-        "subject": "A Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline.",
-        "scene": "Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air.",
-        "lighting": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
-        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
-        "style": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
-        "mood": "Mysterious, confident, feline grace — alluring but composed, never vulgar.",
-        "wardrobe": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
-        "camera": "85mm f/1.8 shallow depth of field.",
+        "subject": "小龙女（神雕侠侣）reinterpret，非真人仿冒",
+        "style": "超写实人像精修·时尚大片/电影感",
+        "lighting": "柔和冷白散射光·古墓石窟",
+        "composition": "全身艺术人像",
+        "mood": "清冷仙气·不食烟火",
+        "wardrobe": "极小白 dudou + 单条高透白纱，opaque<1/4; NEVER drape/robe/gown/hanfu",
+        "camera": "85mm",
         "body_type": "饱满曲线",
-        "negative": "flat chest, small bust, undefined figure, topless, nude, explicit, see-through, transparent, sheer fabric, nudity, arousal, suggestive pose, sultry gaze, spread legs, vulgar, low-quality, deformed, extra limbs, watermark.",
-        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, long skirt, full-coverage, deformed hands, watermark on face, text, lowres"
       },
-      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
+      "prompt_text": null
     }
   ],
   "fallback_seeds": [
