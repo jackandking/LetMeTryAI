@@ -29,7 +29,7 @@
   .topbar .title{ font-size:18px; font-weight:600; letter-spacing:1px; }
   .topbar .counter{ font-size:13px; color:rgba(255,255,255,.85); background:rgba(255,255,255,.14); padding:4px 12px; border-radius:20px; }
   .stage{ position:fixed; inset:0; overflow:hidden; }
-  .stage img.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
+  .stage img.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; z-index:1; }
   #scratch{ position:absolute; inset:0; width:100%; height:100%; z-index:2; }
   .hint{
     position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom) + 30px); z-index:15;
@@ -67,6 +67,7 @@
   @keyframes spin{ to{ transform:rotate(360deg); } }
   .save-tip{ display:none; font-size:12px; color:rgba(255,255,255,.6); margin-top:10px; }
   .save-tip.show{ display:block; }
+  .exp-tag{ position:fixed; top:calc(env(safe-area-inset-top) + 50px); left:16px; z-index:21; font-size:11px; color:rgba(255,255,255,.6); background:rgba(0,0,0,.4); padding:3px 9px; border-radius:12px; }
 </style>
 </head>
 <body>
@@ -85,6 +86,7 @@
 
 <div class="progress"><i id="bar"></i></div>
 <div class="hint" id="hint">↓ 手指擦开马赛克，看美女真容</div>
+<div class="exp-tag" id="expTag" style="display:none;"></div>
 
 <div class="panel" id="panel">
   <div class="done-title">真容解锁 ✨</div>
@@ -129,20 +131,52 @@
     { id: 539, url: "https://letmetry.cn/images/8c347da2-d365-4bba-9f12-b63fd7407a80.jpg" }
   ];
   var THUMB = 140;         // 马赛克单元参考
-  var UNLOCK = 0.30;       // 擦除30%解锁
+  var UNLOCK = 0.30;       // 擦除30%解锁（control 刮擦臂）
   var MASK_W = 96;         // 面积统计mask宽度(css px基准)
+
+  // ====== 实验臂配置（刮刮乐遮挡交互 A/n 实验）======
+  // vid 0 = control（旧刮擦 + 30% 全清）；vid 1..4 = 分块揭示，n 为方块数（正方形网格）
+  var EXP = {
+    VARIANTS: [
+      { mode:'scratch', n:0,  label:'control' },
+      { mode:'tile',   n:4,   label:'tile_4'  },
+      { mode:'tile',   n:9,   label:'tile_9'  },
+      { mode:'tile',   n:16,  label:'tile_16' },
+      { mode:'tile',   n:25,  label:'tile_25' }
+    ]
+  };
+  // FNV-1a 哈希：把 id 映射成稳定伪随机臂（同一张图永远同一臂，整体近似均匀）
+  function hashStr(s){ var h=2166136261; s=String(s); for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+  function variantForId(id){ var vid = hashStr('nrbsalt_'+id) % EXP.VARIANTS.length; return { vid:vid, v:EXP.VARIANTS[vid] }; }
+  // QA 覆盖：?exp=control|tile_4|tile_9|tile_16|tile_25 可强制某个臂
+  var _expOverride = (function(){ try { return new URLSearchParams(location.search).get('exp'); } catch(e){ return null; } })();
+  // QA 覆盖：?img=<url> 临时换图（本地调试用，图床防盗链拦 localhost 时指向本地图片即可）
+  var _imgOverride = (function(){ try { return new URLSearchParams(location.search).get('img'); } catch(e){ return null; } })();
+  function resolveVariant(id){
+    if (_expOverride) {
+      for (var k=0;k<EXP.VARIANTS.length;k++){ if (EXP.VARIANTS[k].label === _expOverride) return { vid:k, v:EXP.VARIANTS[k] }; }
+    }
+    return variantForId(id);
+  }
 
   var idx=0;
   var img=new Image();
   var bg=$('bg'), cv=$('scratch'), ctx=cv.getContext('2d');
-  var bar=$('bar'), panel=$('panel'), hint=$('hint'), loading=$('loading'), counter=$('counter');
+  var bar=$('bar'), panel=$('panel'), hint=$('hint'), loading=$('loading'), counter=$('counter'), expTag=$('expTag');
   var nextBtn=$('nextBtn'), downloadBtn=$('downloadBtn'), saveTip=$('saveTip'), doneSub=$('doneSub');
   var W=0,H=0;              // canvas 像素
   var fitRect={dx:0,dy:0,dw:0,dh:0};
-  var mask, mctx;           // 面积统计
+  var mask, mctx;           // 面积统计（仅 control 刮擦臂用）
   var unlocked=false;
   var scratching=false;   // 修复: 之前未声明导致 pointerdown 抛 ReferenceError，擦除全失效
   var downloadUnlocked=false;
+
+  // 实验臂 + 分块状态
+  var variant = { vid:0, v:EXP.VARIANTS[0] };
+  var cols=1, rows=1, tileW=0, tileH=0;
+  var tileState=[], tileRevealed=[], revealedCount=0;
+  var coverCanvas=null;     // 离屏马赛克（仅 tile 臂用）
+  var startLogged=false, halfLogged=false;
 
   // ---- 单图模式解析（星火计划任务通过 ?id=<mysql_id> 深链）----
   // showRewardedVideoAd 返回时拼成 "?id=581?finishedAd=true"（query 被覆盖），
@@ -179,6 +213,15 @@
   function $(id){return document.getElementById(id);}
   function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
 
+  // ====== 实验事件埋点（百度统计 _trackEvent，零部署，按变体 label 看完成率/进阶率）======
+  function track(action, value){
+    try {
+      if (typeof _hmt !== 'undefined' && _hmt.push) {
+        _hmt.push(['_trackEvent', 'scratch_exp', action, variant.v.label, (value==null?1:value)]);
+      }
+    } catch(e){}
+  }
+
   function size(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr(); cv.height=H*dpr(); }
   function fit(){
     var nw=img.naturalWidth, nh=img.naturalHeight, s=W/nw < H/nh ? W/nw : H/nh;
@@ -190,7 +233,7 @@
     mctx=mask.getContext('2d'); mctx.clearRect(0,0,mw,mh);
   }
 
-  // 绘制马赛克覆盖层（铺满图片区域）
+  // ====== control 刮擦臂：铺满马赛克（原逻辑）======
   function drawMosaic(){
     size(); fit();
     ctx.clearRect(0,0,cv.width,cv.height);
@@ -207,11 +250,96 @@
     panel.classList.remove('show');
   }
 
+  // ====== tile 分块臂：构建离屏马赛克 + 网格 ======
+  function buildCover(){
+    size(); fit();
+    coverCanvas = document.createElement('canvas');
+    coverCanvas.width = cv.width; coverCanvas.height = cv.height;
+    var cc = coverCanvas.getContext('2d');
+    cc.imageSmoothingEnabled=false;
+    var d=dpr();
+    var px=fitRect.dx*d, py=fitRect.dy*d, pw=fitRect.dw*d, ph=fitRect.dh*d;
+    var cell=Math.round(THUMB*Math.max(d,1));
+    var t=document.createElement('canvas'); t.width=Math.max(1,Math.round(pw/cell)); t.height=Math.max(1,Math.round(ph/cell));
+    var tc=t.getContext('2d'); tc.imageSmoothingEnabled=false;
+    tc.drawImage(img,0,0,t.width,t.height);
+    cc.drawImage(t,px,py,pw,ph);
+    // 正方形网格：cols=rows=sqrt(n)
+    cols = Math.max(1, Math.round(Math.sqrt(variant.v.n)));
+    rows = cols;
+    tileW = fitRect.dw/cols; tileH = fitRect.dh/rows;
+    tileState = []; tileRevealed = []; revealedCount = 0;
+    for (var i=0;i<cols*rows;i++){ tileState.push(1); tileRevealed.push(false); }
+    renderTiles();
+    panel.classList.remove('show');
+  }
+
+  // 仅绘制未揭示方块的马赛克（已揭示方块透明 → 透出底层真图）
+  function renderTiles(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.imageSmoothingEnabled=false;
+    var d=dpr();
+    for (var r=0;r<rows;r++){
+      for (var c=0;c<cols;c++){
+        var ti=r*cols+c;
+        if (tileState[ti] <= 0.01) continue;
+        var x=(fitRect.dx + c*tileW), y=(fitRect.dy + r*tileH);
+        ctx.globalAlpha = tileState[ti];
+        ctx.drawImage(coverCanvas, x*d, y*d, tileW*d, tileH*d, x*d, y*d, tileW*d, tileH*d);
+      }
+    }
+    ctx.globalAlpha=1;
+    // 淡网格线：让"可点方块"可见（仅 tile 臂）
+    var d=dpr();
+    ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=1;
+    for (var c2=1;c2<cols;c2++){
+      var gx=(fitRect.dx + c2*tileW)*d;
+      ctx.beginPath(); ctx.moveTo(gx, fitRect.dy*d); ctx.lineTo(gx, (fitRect.dy+fitRect.dh)*d); ctx.stroke();
+    }
+    for (var r2=1;r2<rows;r2++){
+      var gy=(fitRect.dy + r2*tileH)*d;
+      ctx.beginPath(); ctx.moveTo(fitRect.dx*d, gy); ctx.lineTo((fitRect.dx+fitRect.dw)*d, gy); ctx.stroke();
+    }
+  }
+
+  function revealTileAt(cx,cy){
+    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return;
+    var c=Math.floor((cx-fitRect.dx)/tileW), r=Math.floor((cy-fitRect.dy)/tileH);
+    if(c<0)c=0; if(c>=cols)c=cols-1; if(r<0)r=0; if(r>=rows)r=rows-1;
+    var ti=r*cols+c;
+    if (tileRevealed[ti]) return;
+    tileRevealed[ti]=true; revealedCount++;
+    animateTile(ti);
+    if (!startLogged){ startLogged=true; track('start'); }
+    tickTiles();
+  }
+
+  // 揭示动画：方块马赛克 alpha 1→0（约 220ms）
+  function animateTile(ti){
+    var start=performance.now(), dur=220;
+    function step(now){
+      var t=Math.min(1,(now-start)/dur);
+      tileState[ti]=1-t;
+      renderTiles();
+      if(t<1) requestAnimationFrame(step);
+      else { tileState[ti]=0; renderTiles(); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function tickTiles(){
+    var pct = revealedCount/(cols*rows);
+    bar.style.width=(pct*100)+'%';
+    if (pct>=0.5 && !halfLogged){ halfLogged=true; track('half'); }
+    if (revealedCount>=cols*rows && !unlocked){ unlock(); }
+  }
+
   function pxof(e){
     var r=cv.getBoundingClientRect(), t=(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0])||e;
     return { x:t.clientX-r.left, y:t.clientY-r.top };
   }
 
+  // ====== control 刮擦臂：擦除 + 面积统计 ======
   function erase(x,y){
     var d=dpr(), sd=Math.max(14, dpr()*28);      // 擦除半径
     ctx.globalCompositeOperation='destination-out';
@@ -230,21 +358,32 @@
     return erased/total;
   }
 
-  function onDown(e){ e.preventDefault(); scratching=true; erase(pxof(e).x,pxof(e).y); tick(); }
-  function onMove(e){ e.preventDefault(); if(!scratching) return; erase(pxof(e).x,pxof(e).y); tick(); }
-  function onUp(){ scratching=false; }
   function tick(){
     var r=ratio();
     bar.style.width=(r*100)+'%';
+    if (!startLogged){ startLogged=true; track('start'); }
+    if (r>=UNLOCK*0.5 && !halfLogged){ halfLogged=true; track('half'); }
     if(r>=UNLOCK && !unlocked) unlock();
   }
 
+  // ====== 统一指针入口：按臂分流 ======
+  function handlePoint(x,y){
+    if (variant.v.mode==='scratch'){ erase(x,y); tick(); }
+    else { revealTileAt(x,y); }
+  }
+  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); }
+  function onMove(e){ e.preventDefault(); if(!scratching) return; handlePoint(pxof(e).x,pxof(e).y); }
+  function onUp(){ scratching=false; }
+
   function unlock(){
     unlocked=true;
-    // 一键清空马赛克，露出真容
-    ctx.clearRect(0,0,cv.width,cv.height);
+    if (variant.v.mode==='scratch'){
+      // 一键清空马赛克，露出真容
+      ctx.clearRect(0,0,cv.width,cv.height);
+    }
     bar.style.width='100%';
     hint.style.opacity='0';
+    track('complete');
 
     if (singleMode && !downloadUnlocked) {
       // 单图模式：先看广告才能下载
@@ -278,15 +417,23 @@
 
   function load(i){
     idx=i; unlocked=false; downloadUnlocked=false; bar.style.width='0%'; panel.classList.remove('show');
+    startLogged=false; halfLogged=false;
     var item = currentItem();
+    if (_imgOverride) item = { id: item.id, url: _imgOverride };
+    variant = resolveVariant(item.id);
     counter.textContent = singleMode ? '专属美图' : ((i+1)+'/'+IMAGES.length);
+    expTag.style.display=''; expTag.textContent = '实验臂: ' + variant.v.label;
     hint.style.opacity='1';
+    hint.textContent = (variant.v.mode==='scratch')
+      ? '↓ 手指擦开马赛克，看美女真容'
+      : '👆 点开方块，逐块揭秘真容';
     img=new Image();
     img.crossOrigin='anonymous';
     img.onload=function(){
       bg.src=img.src;
       loading.style.display='none';
-      drawMosaic();
+      if (variant.v.mode==='scratch'){ drawMosaic(); }
+      else { buildCover(); }
     };
     img.onerror=function(){
       if (!singleMode && i+1<IMAGES.length){ load(i+1); }
@@ -299,6 +446,7 @@
 
   // 触发快手小程序内置激励视频广告；广告播完由 showRewardedVideoAd 页带 finishedAd 跳回本页
   function showAdForNext(){
+    track('advance');
     if (typeof ks !== 'undefined' && ks.navigateTo) {
       if (singleMode) {
         // 单图模式：广告用于解锁「保存」，回到同一张（兼容动态取图 id）
@@ -362,6 +510,7 @@
   }
 
   function doDownload(){
+    track('download');
     var item = (singleMode && singleItem) ? singleItem : IMAGES[idx];
     var u = item.url;
     var a = document.createElement('a');
