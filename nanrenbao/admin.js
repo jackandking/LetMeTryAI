@@ -66,39 +66,175 @@ function resetManageSelections() {
     }
 }
 
-// --- Admin write helpers: dedicated /api/nanrenbao/admin/* endpoints.
+// --- Admin write helpers: dedicated admin endpoints under /api/nanrenbao/admin/.
 // /mysql/update、/mysql/delete 自 2026-09-06 P0 起仅 KV_ADMIN_KEY 可写，
 // 审批后台裸调被 403 静默挡掉（2026-10-16 生产实测复现：审批通过/驳回/
 // 标记删除/取消删除/永久删除/批量操作全部失效）。密钥不落仓库：运营者
-// 首次操作时输入，仅 sessionStorage 本会话有效；401 时清除并提示重输。---
-const ADMIN_KEY_STORAGE = 'nrb_admin_key';
+// 首次操作时经模态框输入，sessionStorage 本会话生效；勾选「记住此设备」
+// 再写 localStorage（30 天 TTL）——手机上不必反复输 64 位密钥。
+// 401 时清除全部存储并重新输入；隐私模式存储不可用时降级为每次输入。---
+const ADMIN_KEY_STORAGE = 'nrb_admin_key';                 // sessionStorage：本会话
+const ADMIN_KEY_REMEMBER_KEY = 'nrb_admin_key_remembered'; // localStorage：记住的密钥
+const ADMIN_KEY_REMEMBER_UNTIL = 'nrb_admin_key_until';    // localStorage：过期时间(ms)
+const ADMIN_KEY_REMEMBER_DAYS = 30;
 
-function getAdminKey() {
-    let key = null;
-    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE); } catch (e) { /* 隐私模式：不缓存 */ }
-    if (!key) {
-        key = prompt('请输入男人宝管理密钥（仅本次会话有效）');
-        if (!key) return null;
-        try { sessionStorage.setItem(ADMIN_KEY_STORAGE, key); } catch (e) { /* 隐私模式：下次再问 */ }
+function safeStorageGet(store, key) {
+    try { return store.getItem(key); } catch (e) { return null; }
+}
+
+function safeStorageSet(store, key, value) {
+    try { store.setItem(key, value); return true; } catch (e) { return false; }
+}
+
+function safeStorageRemove(store, key) {
+    try { store.removeItem(key); } catch (e) { /* 隐私模式：忽略 */ }
+}
+
+// 读已存密钥：session 优先 → 未过期的本机记忆（回填 session）→ null
+function readStoredAdminKey() {
+    const sessionKey = safeStorageGet(sessionStorage, ADMIN_KEY_STORAGE);
+    if (sessionKey) return sessionKey;
+    const remembered = safeStorageGet(localStorage, ADMIN_KEY_REMEMBER_KEY);
+    const until = Number(safeStorageGet(localStorage, ADMIN_KEY_REMEMBER_UNTIL) || 0);
+    if (remembered && until > Date.now()) {
+        safeStorageSet(sessionStorage, ADMIN_KEY_STORAGE, remembered);
+        return remembered;
     }
-    return key;
+    if (remembered) { // 过期即清，避免密钥无限期残留
+        safeStorageRemove(localStorage, ADMIN_KEY_REMEMBER_KEY);
+        safeStorageRemove(localStorage, ADMIN_KEY_REMEMBER_UNTIL);
+    }
+    return null;
+}
+
+// 存密钥：remember=true 时按 30 天 TTL 写 localStorage（手机端免重复输入）
+function storeAdminKey(key, remember) {
+    safeStorageSet(sessionStorage, ADMIN_KEY_STORAGE, key);
+    if (remember) {
+        safeStorageSet(localStorage, ADMIN_KEY_REMEMBER_KEY, key);
+        safeStorageSet(localStorage, ADMIN_KEY_REMEMBER_UNTIL,
+            String(Date.now() + ADMIN_KEY_REMEMBER_DAYS * 24 * 60 * 60 * 1000));
+    }
 }
 
 function clearAdminKey() {
-    try { sessionStorage.removeItem(ADMIN_KEY_STORAGE); } catch (e) { /* 忽略 */ }
+    safeStorageRemove(sessionStorage, ADMIN_KEY_STORAGE);
+    safeStorageRemove(localStorage, ADMIN_KEY_REMEMBER_KEY);
+    safeStorageRemove(localStorage, ADMIN_KEY_REMEMBER_UNTIL);
+}
+
+function hasRememberedAdminKey() {
+    const remembered = safeStorageGet(localStorage, ADMIN_KEY_REMEMBER_KEY);
+    const until = Number(safeStorageGet(localStorage, ADMIN_KEY_REMEMBER_UNTIL) || 0);
+    return !!(remembered && until > Date.now());
+}
+
+// ---- 密钥输入模态框（admin.html #adminKeyModal，移动端为底部 Sheet）----
+let adminKeyModalResolver = null;
+
+function showAdminKeyModal(message) {
+    const modal = document.getElementById('adminKeyModal');
+    const input = document.getElementById('akInput');
+    if (!modal || !input) return Promise.resolve(null);
+    const msg = document.getElementById('akMsg');
+    if (msg) {
+        msg.textContent = message || '输入男人宝管理密钥以执行审核操作';
+        msg.classList.toggle('ak-error', !!message);
+    }
+    const remember = document.getElementById('akRemember');
+    if (remember) remember.checked = true;
+    input.value = '';
+    input.type = 'password';
+    modal.hidden = false;
+    setTimeout(() => input.focus(), 50);
+    return new Promise((resolve) => { adminKeyModalResolver = resolve; });
+}
+
+function closeAdminKeyModal(key) {
+    const modal = document.getElementById('adminKeyModal');
+    if (modal) modal.hidden = true;
+    const resolve = adminKeyModalResolver;
+    adminKeyModalResolver = null;
+    if (resolve) resolve(key);
+}
+
+function initAdminKeyModal() {
+    const modal = document.getElementById('adminKeyModal');
+    if (!modal) return;
+    const input = document.getElementById('akInput');
+    const confirmBtn = document.getElementById('akConfirm');
+    const cancelBtn = document.getElementById('akCancel');
+    const toggleBtn = document.getElementById('akToggle');
+    const remember = document.getElementById('akRemember');
+
+    const submit = () => {
+        const key = (input.value || '').trim();
+        if (!key) { input.focus(); return; }
+        storeAdminKey(key, !!(remember && remember.checked));
+        window.dispatchEvent(new Event('nrb:adminkey:changed'));
+        closeAdminKeyModal(key);
+    };
+    confirmBtn.addEventListener('click', submit);
+    cancelBtn.addEventListener('click', () => closeAdminKeyModal(null));
+    const mask = modal.querySelector('.ak-mask');
+    if (mask) mask.addEventListener('click', () => closeAdminKeyModal(null));
+    if (toggleBtn) toggleBtn.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+    });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
+    // 粘贴/自动填充满 64 位 hex 即自动提交——从邮件复制密钥最省事
+    input.addEventListener('input', () => {
+        if (/^[0-9a-fA-F]{64}$/.test((input.value || '').trim())) submit();
+    });
+}
+
+// 「退出」按钮：仅在 remembered 密钥存在时可见，一键清除本机保存
+function bindAdminKeyLogout() {
+    const btn = document.getElementById('adminKeyLogout');
+    if (!btn) return;
+    const syncVisibility = () => {
+        btn.style.display = hasRememberedAdminKey() ? '' : 'none';
+    };
+    btn.addEventListener('click', () => {
+        clearAdminKey();
+        showAlert('已清除本机保存的管理密钥', 'success');
+        syncVisibility();
+        showAdminKeyModal('请重新输入管理密钥');
+    });
+    window.addEventListener('nrb:adminkey:changed', syncVisibility);
+    syncVisibility();
+}
+
+// 无已存密钥才弹框；有则直接复用（session / 本机记忆）
+function ensureAdminKey(message) {
+    const stored = readStoredAdminKey();
+    if (stored) return Promise.resolve(stored);
+    return showAdminKeyModal(message);
 }
 
 async function adminWrite(endpoint, body) {
-    const key = getAdminKey();
+    let key = await ensureAdminKey();
     if (!key) throw new Error('未提供管理密钥，操作已取消');
-    const resp = await fetch(endpoint, {
+    let resp = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
         body: JSON.stringify(body)
     });
+    // 401：密钥失效/被更换 → 清除存储，弹框重输并自动重试一次
+    // （手机上不用退回再点一次审批按钮）
     if (resp.status === 401) {
         clearAdminKey();
-        throw new Error('管理密钥无效，请重新输入');
+        key = await ensureAdminKey('管理密钥无效或已更换，请重新输入');
+        if (!key) throw new Error('管理密钥无效，操作已取消');
+        resp = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+            body: JSON.stringify(body)
+        });
+        if (resp.status === 401) {
+            clearAdminKey();
+            throw new Error('管理密钥无效，请重新输入');
+        }
     }
     if (!resp.ok) {
         const txt = await resp.text().catch(() => '');
@@ -406,8 +542,12 @@ function attachManageHandlers() {
 // Initialize management UI handlers on load
 window.addEventListener('DOMContentLoaded', () => {
     attachManageHandlers();
+    initAdminKeyModal();
+    bindAdminKeyLogout();
     // initial load
     loadManagePage();
+    // 无已存密钥时预弹输入框：进页面先过一次，之后本会话/本机不再问
+    if (!readStoredAdminKey()) showAdminKeyModal();
 });
 
 // State management

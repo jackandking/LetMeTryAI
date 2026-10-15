@@ -349,6 +349,115 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+
+        /* ---- 管理密钥：头部退出按钮 + 输入模态框（移动端优先） ---- */
+        .ak-logout {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            min-height: 40px;
+            padding: 8px 14px;
+            border: 1px solid #d32f2f;
+            background: #fff;
+            color: #d32f2f;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ak-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .ak-modal[hidden] { display: none; }
+
+        .ak-mask {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .ak-sheet {
+            position: relative;
+            width: min(420px, 100%);
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .ak-sheet h2 { font-size: 1.15em; margin-bottom: 6px; }
+
+        .ak-msg { color: #666; font-size: 0.9em; margin-bottom: 14px; }
+
+        .ak-msg.ak-error { color: #d32f2f; font-weight: bold; }
+
+        .ak-inputrow { display: flex; gap: 8px; }
+
+        .ak-inputrow input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            font-size: 16px; /* ≥16px 防 iOS 聚焦自动放大 */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .ak-inputrow button {
+            flex: 0 0 auto;
+            padding: 0 12px;
+            font-size: 1.1em;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .ak-remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0 16px;
+            font-size: 0.9em;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .ak-remember input { width: 18px; height: 18px; }
+
+        .ak-buttons { display: flex; gap: 10px; }
+
+        .ak-btn {
+            flex: 1;
+            min-height: 44px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ak-btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+
+        .ak-btn-ghost { background: #eee; color: #333; }
+
+        @media (max-width: 640px) {
+            .ak-modal { align-items: flex-end; padding: 0; }
+
+            .ak-sheet {
+                width: 100vw;
+                border-radius: 16px 16px 0 0;
+                padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body>
@@ -356,6 +465,7 @@
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>🔧 管理后台</h1>
         <p>审核用户投稿并管理展示状态</p>
+        <button id="adminKeyLogout" type="button" class="ak-logout" style="display:none" title="清除本机保存的管理密钥">🚪 退出</button>
     </header>
 
     <div class="container">
@@ -600,6 +710,27 @@
                         <button class="btn-secondary" id="backviewNextPageBtn">下一页</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理密钥输入模态框：手机端为底部 Sheet；「记住此设备」写 localStorage 30 天 -->
+    <div id="adminKeyModal" class="ak-modal" hidden>
+        <div class="ak-mask"></div>
+        <div class="ak-sheet" role="dialog" aria-modal="true" aria-labelledby="akTitle">
+            <h2 id="akTitle">🔐 管理密钥</h2>
+            <p id="akMsg" class="ak-msg">输入男人宝管理密钥以执行审核操作</p>
+            <div class="ak-inputrow">
+                <input id="akInput" type="password" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="粘贴或输入 64 位密钥" aria-label="管理密钥">
+                <button id="akToggle" type="button" aria-label="显示或隐藏密钥">👁️</button>
+            </div>
+            <label class="ak-remember">
+                <input id="akRemember" type="checkbox" checked>
+                记住此设备（30 天内无需再输）
+            </label>
+            <div class="ak-buttons">
+                <button id="akCancel" type="button" class="ak-btn ak-btn-ghost">取消</button>
+                <button id="akConfirm" type="button" class="ak-btn ak-btn-primary">确认</button>
             </div>
         </div>
     </div>
