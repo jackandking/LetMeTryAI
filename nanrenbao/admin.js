@@ -66,32 +66,73 @@ function resetManageSelections() {
     }
 }
 
-// --- Admin write helpers: use dedicated CRUD endpoints, NOT raw SQL on the
-// read-only MYSQL_QUERY. (P0 2026-09-06 locked /mysql/query to SELECT-only.) ---
-async function mysqlUpdate(table, id, data) {
-    const resp = await fetch(API_ENDPOINTS.MYSQL_UPDATE, {
+// --- Admin write helpers: dedicated /api/nanrenbao/admin/* endpoints.
+// /mysql/update、/mysql/delete 自 2026-09-06 P0 起仅 KV_ADMIN_KEY 可写，
+// 审批后台裸调被 403 静默挡掉（2026-10-16 生产实测复现：审批通过/驳回/
+// 标记删除/取消删除/永久删除/批量操作全部失效）。密钥不落仓库：运营者
+// 首次操作时输入，仅 sessionStorage 本会话有效；401 时清除并提示重输。---
+const ADMIN_KEY_STORAGE = 'nrb_admin_key';
+
+function getAdminKey() {
+    let key = null;
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE); } catch (e) { /* 隐私模式：不缓存 */ }
+    if (!key) {
+        key = prompt('请输入男人宝管理密钥（仅本次会话有效）');
+        if (!key) return null;
+        try { sessionStorage.setItem(ADMIN_KEY_STORAGE, key); } catch (e) { /* 隐私模式：下次再问 */ }
+    }
+    return key;
+}
+
+function clearAdminKey() {
+    try { sessionStorage.removeItem(ADMIN_KEY_STORAGE); } catch (e) { /* 忽略 */ }
+}
+
+async function adminWrite(endpoint, body) {
+    const key = getAdminKey();
+    if (!key) throw new Error('未提供管理密钥，操作已取消');
+    const resp = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ table, id, data })
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+        body: JSON.stringify(body)
     });
+    if (resp.status === 401) {
+        clearAdminKey();
+        throw new Error('管理密钥无效，请重新输入');
+    }
     if (!resp.ok) {
         const txt = await resp.text().catch(() => '');
-        throw new Error(`更新失败: ${resp.status} ${resp.statusText} ${txt}`);
+        throw new Error(`操作失败: ${resp.status} ${resp.statusText} ${txt}`);
     }
     return resp.json();
 }
 
-async function mysqlDelete(table, id) {
-    const resp = await fetch(API_ENDPOINTS.MYSQL_DELETE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ table, id })
-    });
-    if (!resp.ok) {
-        const txt = await resp.text().catch(() => '');
-        throw new Error(`删除失败: ${resp.status} ${resp.statusText} ${txt}`);
+// 按 data 形状路由到对应端点，调用方（performAction 等）签名与用法不变
+async function mysqlUpdate(table, id, data) {
+    if (data && Object.prototype.hasOwnProperty.call(data, 'review_status')) {
+        const status = data.review_status;
+        if (status !== 'approved' && status !== 'rejected') {
+            throw new Error(`不支持的审核状态: ${status}`);
+        }
+        return adminWrite(API_ENDPOINTS.NANRENBAO_ADMIN_REVIEW || 'https://letmetry.cn/api/nanrenbao/admin/review', {
+            table,
+            id,
+            action: status === 'approved' ? 'approve' : 'reject',
+            reason: data.review_reason || undefined
+        });
     }
-    return resp.json();
+    if (data && Object.prototype.hasOwnProperty.call(data, 'deleted')) {
+        return adminWrite(API_ENDPOINTS.NANRENBAO_ADMIN_VISIBILITY || 'https://letmetry.cn/api/nanrenbao/admin/visibility', {
+            table,
+            id,
+            deleted: data.deleted ? 1 : 0
+        });
+    }
+    throw new Error('不支持的更新字段（仅限 review_status / deleted）');
+}
+
+async function mysqlDelete(table, id) {
+    return adminWrite(API_ENDPOINTS.NANRENBAO_ADMIN_PURGE || 'https://letmetry.cn/api/nanrenbao/admin/purge', { table, id });
 }
 
 async function mysqlUpdateMany(table, ids, data) {

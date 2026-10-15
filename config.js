@@ -28,6 +28,9 @@ window.API_ENDPOINTS = {
     MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`,
     BEAUTY_DELETE: `${window.BASE_URL}/api/beauty/delete`,
     BACKVIEW_DELETE: `${window.BASE_URL}/api/backview/delete`,
+    NANRENBAO_ADMIN_REVIEW: `${window.BASE_URL}/api/nanrenbao/admin/review`,
+    NANRENBAO_ADMIN_VISIBILITY: `${window.BASE_URL}/api/nanrenbao/admin/visibility`,
+    NANRENBAO_ADMIN_PURGE: `${window.BASE_URL}/api/nanrenbao/admin/purge`,
   PAYMENT_CREATE_ORDER: `${window.BASE_URL}/payment/alipay/create-order`,
   PAYMENT_QUERY_ORDER: `${window.BASE_URL}/payment/order`
 };
