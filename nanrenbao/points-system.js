@@ -360,24 +360,26 @@ const PointsSystem = (function() {
 
     /**
      * Mark an image as deleted in the database (logical delete)
+     * Routes through the dedicated /api/beauty/delete endpoint — the raw
+     * `UPDATE beauty_images SET deleted = 1` sent via /mysql/query has been
+     * rejected with 403 since the 2026-09-06 read-only lockdown.
      * @param {string} imageUrl - Image URL to mark deleted
-     * @returns {Promise<object>} DB response
+     * @returns {Promise<object>} Endpoint response ({ success, affectedRows })
      */
     async function markImageDeletedInDB(imageUrl) {
-        const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
-        };
+        const API_ENDPOINTS = window.API_ENDPOINTS || {};
+        // 双兜底：window.API_ENDPOINTS 缺项（旧缓存 config.js）时用硬编码默认值
+        const BEAUTY_DELETE = API_ENDPOINTS.BEAUTY_DELETE || 'https://letmetry.cn/api/beauty/delete';
+        const MYSQL_QUERY = API_ENDPOINTS.MYSQL_QUERY || 'https://letmetry.cn/mysql/query';
+        const uuid = getUserUUID();
 
-        // First try exact-match update
-        let response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        // First try exact-match delete via the dedicated endpoint
+        let response = await fetch(BEAUTY_DELETE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                sql: 'UPDATE beauty_images SET deleted = 1 WHERE image_url = ?',
-                params: [imageUrl]
-            })
+            body: JSON.stringify({ imageUrl: imageUrl, uuid: uuid })
         });
 
         if (!response.ok) {
@@ -385,15 +387,13 @@ const PointsSystem = (function() {
         }
 
         const data = await response.json();
-
-        // If update affected no rows, try a fallback: match by prefix (first 255 chars)
-        const affected = data && (data.affectedRows || data.changedRows || 0);
+        const affected = data && (data.affectedRows || 0);
         if (affected > 0) {
             console.log(`Marked deleted in DB for ${imageUrl} (exact match)`);
             return data;
         }
 
-        // Fallback: try to find by prefix (handles long URLs/truncation)
+        // Fallback: try to find by prefix (handles long URLs/truncation), then delete by id
         const prefix = imageUrl.slice(0, 255);
         response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
@@ -413,16 +413,13 @@ const PointsSystem = (function() {
         const rows = await response.json();
         if (Array.isArray(rows) && rows.length > 0) {
             const id = rows[0].id;
-            // Update by id
-            const updResp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            // Delete by id through the dedicated endpoint
+            const updResp = await fetch(BEAUTY_DELETE, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    sql: 'UPDATE beauty_images SET deleted = 1 WHERE id = ?',
-                    params: [id]
-                })
+                body: JSON.stringify({ id: id, uuid: uuid })
             });
 
             if (!updResp.ok) {
@@ -430,7 +427,7 @@ const PointsSystem = (function() {
             }
 
             const updResult = await updResp.json();
-            const updAffected = updResult && (updResult.affectedRows || updResult.changedRows || 0);
+            const updAffected = updResult && (updResult.affectedRows || 0);
             if (updAffected > 0) {
                 console.log(`Marked deleted in DB for ${imageUrl} (matched by prefix, id=${id})`);
                 return updResult;
@@ -441,19 +438,22 @@ const PointsSystem = (function() {
     }
 
     /**
-     * Mark a back_view image as deleted by id in the database
+     * Mark a back_view image as deleted by id in the database.
+     * Routes through the dedicated /api/backview/delete endpoint — the raw
+     * `UPDATE back_view_images SET deleted = 1` sent via /mysql/query has been
+     * rejected with 403 since the 2026-09-06 read-only lockdown.
      * @param {number} id - back_view_images.id
      * @returns {Promise<object>}
      */
     async function markBackViewDeletedById(id) {
-        const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
-        };
+        const API_ENDPOINTS = window.API_ENDPOINTS || {};
+        // 双兜底：window.API_ENDPOINTS 缺项（旧缓存 config.js）时用硬编码默认值
+        const BACKVIEW_DELETE = API_ENDPOINTS.BACKVIEW_DELETE || 'https://letmetry.cn/api/backview/delete';
 
-        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        const resp = await fetch(BACKVIEW_DELETE, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sql: 'UPDATE back_view_images SET deleted = 1 WHERE id = ?', params: [id] })
+            body: JSON.stringify({ id: id, uuid: getUserUUID() })
         });
 
         if (!resp.ok) throw new Error(`Failed to mark back_view deleted (HTTP ${resp.status})`);
