@@ -454,8 +454,8 @@ async function saveRecord(data) {
 async function loadRecords(clearExisting = true) {
     try {
         const offset = (currentPage - 1) * RECORDS_PER_PAGE;
-        const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM ?? ORDER BY created_at DESC LIMIT ? OFFSET ?';
-        
+        const query = 'SELECT photo_url, location, catch_date, temperature, catch_count, notes, created_at FROM lure_fishing_records ORDER BY created_at DESC LIMIT ? OFFSET ?';
+
         const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
             headers: {
@@ -463,7 +463,7 @@ async function loadRecords(clearExisting = true) {
             },
             body: JSON.stringify({
                 sql: query,
-                params: [TABLE_NAME, RECORDS_PER_PAGE, offset]
+                params: [RECORDS_PER_PAGE, offset]
             })
         });
         
@@ -573,15 +573,15 @@ function createRecordCard(record) {
 async function loadTemperatureStats() {
     try {
         const query = `
-            SELECT 
+            SELECT
                 temperature,
                 COUNT(*) as count,
                 SUM(catch_count) as total_catch
-            FROM ??
+            FROM lure_fishing_records
             GROUP BY temperature
             ORDER BY count DESC
         `;
-        
+
         const response = await fetch(window.API_ENDPOINTS.MYSQL_QUERY, {
             method: 'POST',
             headers: {
@@ -589,7 +589,7 @@ async function loadTemperatureStats() {
             },
             body: JSON.stringify({
                 sql: query,
-                params: [TABLE_NAME]
+                params: []
             })
         });
         
