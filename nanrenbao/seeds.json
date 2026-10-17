@@ -1,15 +1,27 @@
 {
   "version": 1,
-  "updated_at": "2026-10-15T01:05:00.581004Z",
+  "updated_at": "2026-10-17T01:05:01.125725Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
+        "value": "电影感·异域华贵时尚大片·超写实",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
         "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional cinematic color grading, dreamlike ghostly aesthetic.",
         "sum": 4,
         "n": 1,
         "avg": 4.0
+      },
+      {
+        "value": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
+        "sum": 7,
+        "n": 2,
+        "avg": 3.5
       },
       {
         "value": "Hyperrealistic high-fashion cinematic, artistic fashion editorial, professional color grading.",
@@ -18,22 +30,10 @@
         "avg": 3.0
       },
       {
-        "value": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
-        "sum": 6,
-        "n": 2,
-        "avg": 3.0
-      },
-      {
         "value": "超写实人像精修·时尚大片",
         "sum": 12,
         "n": 5,
         "avg": 2.4
-      },
-      {
-        "value": "超写实人像精修·电影感泳装艺术写真",
-        "sum": 9,
-        "n": 4,
-        "avg": 2.2
       }
     ],
     "lighting": [
@@ -44,7 +44,19 @@
         "avg": 4.0
       },
       {
+        "value": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
         "value": "Cool pale moonlight with soft silver-blue rim light, glowing luminous pale skin, deep nocturnal blue tones, wisps of night mist.",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
         "sum": 4,
         "n": 1,
         "avg": 4.0
@@ -54,18 +66,6 @@
         "sum": 7,
         "n": 2,
         "avg": 3.5
-      },
-      {
-        "value": "冷月散射光·古庙残垣雾",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "柔和冷白散射光·古墓石窟",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
       }
     ],
     "wardrobe": [
@@ -82,25 +82,31 @@
         "avg": 6.0
       },
       {
+        "value": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
         "value": "A tiny minimal classical dudou (small triangle of pale silk with silver thread, slender straps, opaque area well under 1/4 of body) plus a single extremely thin translucent white-and-pale-blue ghostly gauze scarf drifting at the hip. The HUMAN FIGURE is the focal point: shoulders, torso, arms and long legs are bare skin softly lit; fabric is minimal and strategic, never a covering gown or robe. Opaque coverage pushed to the absolute minimum.",
         "sum": 4,
         "n": 1,
         "avg": 4.0
       },
       {
-        "value": "极小白 dudou + 单条高透白纱 + 骨纹银链（骨形吊坠+臂骨链），opaque<1/4; NEVER drape/robe/gown/hanfu",
-        "sum": 3,
+        "value": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
+        "sum": 4,
         "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "极小白 dudou + 单条高透白纱，opaque<1/4; NEVER drape/robe/gown/hanfu",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
+        "avg": 4.0
       }
     ],
     "mood": [
+      {
+        "value": "端庄·华贵·神秘·威严",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
       {
         "value": "Melancholic, ethereal, otherworldly, tender-sorrowful.",
         "sum": 4,
@@ -108,25 +114,19 @@
         "avg": 4.0
       },
       {
-        "value": "妖媚清冷·白骨仙",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "清冷仙气·不食烟火",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
-        "value": "Alluring, commanding, mysterious, seductive-but-tasteful.",
-        "sum": 3,
-        "n": 1,
-        "avg": 3.0
-      },
-      {
         "value": "Mysterious, confident, feline grace — alluring but composed, never vulgar.",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "清丽灵动·幽洞秘境·月下静谧",
+        "sum": 3,
+        "n": 1,
+        "avg": 3.0
+      },
+      {
+        "value": "妖媚清冷·白骨仙",
         "sum": 3,
         "n": 1,
         "avg": 3.0
@@ -134,37 +134,43 @@
     ],
     "composition": [
       {
+        "value": "中近景环境人像·暖金虚化背景",
+        "sum": 4,
+        "n": 1,
+        "avg": 4.0
+      },
+      {
+        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
+        "sum": 11,
+        "n": 4,
+        "avg": 2.8
+      },
+      {
         "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field (85mm f/1.8).",
         "sum": 10,
         "n": 4,
         "avg": 2.5
       },
       {
-        "value": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
-        "sum": 10,
-        "n": 4,
-        "avg": 2.5
-      },
-      {
         "value": "竖幅大半身居中",
-        "sum": 22,
+        "sum": 23,
         "n": 10,
-        "avg": 2.2
+        "avg": 2.3
       },
       {
         "value": "全身艺术人像",
         "sum": 9,
         "n": 4,
         "avg": 2.2
-      },
-      {
-        "value": "Vertical 9:16, large half-body centered, shallow depth of field, clean negative space above the head.",
-        "sum": 4,
-        "n": 2,
-        "avg": 2.0
       }
     ],
     "camera": [
+      {
+        "value": "85mm f/1.8 shallow depth of field.",
+        "sum": 11,
+        "n": 4,
+        "avg": 2.8
+      },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
         "sum": 10,
@@ -172,10 +178,10 @@
         "avg": 2.5
       },
       {
-        "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 10,
-        "n": 4,
-        "avg": 2.5
+        "value": "85mm f/1.8 浅景深",
+        "sum": 28,
+        "n": 14,
+        "avg": 2.0
       },
       {
         "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
@@ -184,30 +190,30 @@
         "avg": 2.0
       },
       {
-        "value": "85mm f/1.8 浅景深",
-        "sum": 27,
-        "n": 14,
-        "avg": 1.9
-      },
-      {
-        "value": "85mm",
-        "sum": 19,
-        "n": 12,
-        "avg": 1.6
+        "value": "85mm f/1.8",
+        "sum": 2,
+        "n": 1,
+        "avg": 2.0
       }
     ],
     "body_type": [
       {
-        "value": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
-        "sum": 6,
-        "n": 3,
+        "value": "饱满曲线",
+        "sum": 71,
+        "n": 36,
         "avg": 2.0
       },
       {
-        "value": "饱满曲线",
-        "sum": 66,
-        "n": 35,
-        "avg": 1.9
+        "value": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
+        "sum": 24,
+        "n": 14,
+        "avg": 1.7
+      },
+      {
+        "value": "饱满曲线+明显D罩杯",
+        "sum": 1,
+        "n": 1,
+        "avg": 1.0
       }
     ]
   },
@@ -252,6 +258,28 @@
     },
     {
       "table": "beauty_images",
+      "id": 651,
+      "view_count": 4,
+      "dna": {
+        "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
+        "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
+        "context": "西域宫殿朱红鎏金廊柱·鎏金宫灯·垂落花枝·波斯纹样金饰与额链（仅环境点缀，不裹身）",
+        "lighting": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
+        "composition": "中近景环境人像·暖金虚化背景",
+        "action": "女王徐步下廊、微微抬手示意的华贵身姿，回眸凝视（端庄知性，女王威仪与柔美并存，非性化）",
+        "style": "电影感·异域华贵时尚大片·超写实",
+        "mood": "端庄·华贵·神秘·威严",
+        "wardrobe": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
+        "camera": "85mm",
+        "body_type": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
+        "face": "原创虚构五官，避免任何真实演员/名人可识别相似性（纯原创，非朱琳或 86 版西游记中该角色的任何扮演者）",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, resemblance to a real person, specific actress likeness, face resembling Zhu Lin, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
+      },
+      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
+    },
+    {
+      "table": "beauty_images",
       "id": 609,
       "view_count": 4,
       "dna": {
@@ -272,37 +300,22 @@
     },
     {
       "table": "beauty_images",
-      "id": 625,
-      "view_count": 3,
+      "id": 601,
+      "view_count": 4,
       "dna": {
-        "subject": "白骨精（西游记）reinterpret，非真人仿冒",
-        "style": "超写实人像精修·时尚大片/电影感",
-        "lighting": "冷月散射光·古庙残垣雾",
-        "composition": "全身艺术人像",
-        "mood": "妖媚清冷·白骨仙",
-        "wardrobe": "极小白 dudou + 单条高透白纱 + 骨纹银链（骨形吊坠+臂骨链），opaque<1/4; NEVER drape/robe/gown/hanfu",
-        "camera": "85mm",
-        "body_type": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, long skirt, full-coverage, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, watermark on face, text, lowres"
-      },
-      "prompt_text": null
-    },
-    {
-      "table": "beauty_images",
-      "id": 622,
-      "view_count": 3,
-      "dna": {
-        "subject": "小龙女（神雕侠侣）reinterpret，非真人仿冒",
-        "style": "超写实人像精修·时尚大片/电影感",
-        "lighting": "柔和冷白散射光·古墓石窟",
-        "composition": "全身艺术人像",
-        "mood": "清冷仙气·不食烟火",
-        "wardrobe": "极小白 dudou + 单条高透白纱，opaque<1/4; NEVER drape/robe/gown/hanfu",
-        "camera": "85mm",
+        "subject": "A Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline.",
+        "scene": "Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air.",
+        "lighting": "Cool neon rim-light with warm key accents; deep nocturnal tones with glowing skin highlights.",
+        "composition": "Vertical 9:16, large half-body centered, creamy shallow depth of field.",
+        "style": "Hyperrealistic high-fashion cinematic portrait, professional cinematic color grading.",
+        "mood": "Mysterious, confident, feline grace — alluring but composed, never vulgar.",
+        "wardrobe": "An ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, OPAQUE, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar; black cat-ear headpiece; a slender curving cat tail. Fully tasteful, non-explicit.",
+        "camera": "85mm f/1.8 shallow depth of field.",
         "body_type": "饱满曲线",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, long skirt, full-coverage, deformed hands, watermark on face, text, lowres"
+        "negative": "flat chest, small bust, undefined figure, topless, nude, explicit, see-through, transparent, sheer fabric, nudity, arousal, suggestive pose, sultry gaze, spread legs, vulgar, low-quality, deformed, extra limbs, watermark.",
+        "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
       },
-      "prompt_text": null
+      "prompt_text": "A hyperrealistic high-fashion cinematic portrait of a Catwoman-style woman — a young Asian woman with a well-proportioned, amply curved feminine figure, wearing a sleek black cat-ear headpiece and a slender curving cat tail, mysterious and confident, sharp playful eyes, a faint knowing smile, poised like a graceful feline. She wears an ultra-thin, sleek, high-gloss black catsuit (latex/spandex-like, opaque, non-transparent) that clings tightly to flatter a fuller, ample bust and curved silhouette, with subtle seam lines and a high collar. Neon-lit urban rooftop at night — glistening rain-slick tiles, distant city skyline with blurred neon signs, cool blue-magenta rim-light, light rain drifting through the air. Cool neon rim-light with warm key accents, deep nocturnal tones with glowing skin highlights. Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field, vertical 9:16 composition, ultra-fine skin and fabric micro-texture, professional cinematic color grading, elegant and tasteful, artistic fashion editorial, AI-generated content label."
     }
   ],
   "fallback_seeds": [
