@@ -536,9 +536,8 @@
     teaser.style.boxShadow = '';
     teaser.classList.remove('show');
   }
-  // 首次有效刮擦（点/擦在图内且揭开新区域）时调用：淡入线索卡并启动自动淡出
+  // 首次有效刮擦时调用：淡入线索卡并启动自动淡出
   function revealTeaserIfPending(){
-    try { window.__teaserDbg = { hasPending: !!teaserPending, state: state, unlocked: unlocked }; } catch(e){}
     if (!teaserPending || state !== 'scratching' || unlocked) return;
     var t = teaserPending;
     teaserPending = null;
