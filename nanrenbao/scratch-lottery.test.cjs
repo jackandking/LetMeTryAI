@@ -116,7 +116,7 @@ function makeStorage(seed) {
   check('B0: PURE-LOGIC 区块存在', !!PURE && PURE.length > 100);
   const pure = new Function('localStorage', PURE + `
     return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson,
-      extractDna, extractHair, splitSubject, firstSegs, cleanWardrobe, cleanAction, buildTeaserTint,
+      extractDna, extractHair, splitSubject, firstSegs, cleanWardrobe, cleanAction, cjkMostly, buildTeaserTint,
       buildTeaser, buildReveal, buildRevealExtra, buildKuaishouTitle };
   `)(makeStorage());
 
@@ -199,6 +199,31 @@ function makeStorage(seed) {
     check('B5e6: cleanWardrobe 去合规注脚留穿搭', !/全遮蔽不透明/.test(wChen) && !/着衣非内衣/.test(wChen) && /水红缎面明制立领长衫/.test(wChen) && /金线牡丹刺绣/.test(wChen));
     check('B5e7: cleanWardrobe 最多 2 段', wChen.split('·').length <= 2 && pure.cleanWardrobe('') === '');
     check('B5e7b: cleanWardrobe 去孤立「着衣」注脚', pure.cleanWardrobe('白旗袍(着衣)') === '白旗袍' && pure.cleanWardrobe('简约吊带裙(着衣)') === '简约吊带裙');
+    check('B5e7c: cleanWardrobe 剥 opaque<1/4 指标 + dudou 映射肚兜',
+      pure.cleanWardrobe('极小白 dudou + 单条高透白纱 · opaque<1/4') === '极小白肚兜 + 单条高透白纱');
+    check('B5e7d: cleanWardrobe 英文残留过半整条丢弃',
+      pure.cleanWardrobe('A simple elegant crimson-and-gold bikini-style top cropped short to bare the midriff and navel') === '' &&
+      pure.cleanWardrobe('An ultra-thin · sleek') === '');
+    check('B5e7e: cleanWardrobe 英文泳装词映射中文（615 风格）',
+      pure.cleanWardrobe('minimal bikini/dudou + single sheer scarf at hip · body as subject') === '极小比基尼/肚兜 + 单条薄透飘纱');
+    check('B5e7e2: cleanWardrobe 颜色词映射 + 空格一次吃净（619/634 风格）',
+      pure.cleanWardrobe('minimal white bikini/dudou + single sheer white scarf at hip, body as subject, opaque < 1/4') === '极小白比基尼/肚兜 + 单条薄透白飘纱');
+    check('B5e7e3: cleanWardrobe moon 映射（619 风格）',
+      pure.cleanWardrobe('minimal moon-white/silver-blue dudou + single sheer scarf at hip') === '极小月白/银蓝肚兜 + 单条薄透飘纱');
+    check('B5e7f: cleanWardrobe 剥不透明+coverage 指标残留（613 风格）',
+      (() => { const w = pure.cleanWardrobe('高透薄纱淡青/象牙色 drape，不透明内搭 < 1/3 体表（coverage: minimal）'); return w === '高透薄纱淡青/象牙色垂纱'; })());
+    check('B5e7g: cjkMostly 守卫：英文 scene/mood 行不展示',
+      (() => {
+        const t = pure.buildTeaser({ id: 598, url: 'u', dna: {
+          subject: '孙权（三国演义·弓腰姬）reinterpret',
+          scene: 'Misty riverside water-fort at dawn: faint wooden stockade and pennant silhouettes',
+          mood: 'Confident · valiant · a touch playful — never coy',
+          wardrobe: 'A simple elegant crimson-and-gold bikini-style top cropped short to bare the midriff',
+          hair: '乌黑盘髻'
+        } });
+        return !/Misty/.test(t) && !/Confident/.test(t) && /弓腰姬/.test(t) && /乌黑盘髻/.test(t);
+      })());
+    check('B5e7h: cjkMostly 混合行保留（644 风格 Central Perk）', pure.cjkMostly('Central Perk 风咖啡馆（紫墙+橘沙发）黄金时刻') === true);
 
     // cleanAction：去括号注释，取前两个动作
     const aChen = pure.cleanAction('曲桥之上横抱琵琶、侧首垂眸、弦声似咽、神情温婉含愁（江南愁绪，非性化）');
