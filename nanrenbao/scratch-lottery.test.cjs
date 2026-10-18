@@ -13,15 +13,18 @@
  *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
  *   - 刮前悬念提示：buildTeaser 给线索（出处/场景/氛围）不揭晓角色名，加载完即显示；
  *     **开始刮即淡出**（onDown 调 hideTeaser）——刮的过程要无遮挡看图；
- *     刮开后面板 buildReveal 揭晓身份 + buildKuaishouTitle 快手同款称号
+ *     刮开后面板只一行 buildReveal 揭晓身份（10-19 用户反馈字太多挡图，删称号行/精简文案）
+ *   - 全部刮完可「重开一轮」：resetRound 清三源（scratch + 全局 ID 级 + URL 级），
+ *     URL 级不清会因 recordSeen 回写而重开无效（10-19 回归 bug 修复锁）
  *
  * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
  * `node 本文件` 可直接执行。覆盖：
  *   A. 静态断言（主页卡片/脚本引入/实验臂/SQL 白名单/扣费时序/无越权写/后宫收录）
  *   B. 纯逻辑实跑（isSeen 三源/pickUnseen 去重+随机性/哈希分臂均匀/readJson 容错/
- *      splitSubject/buildTeaser/buildReveal/buildKuaishouTitle）
+ *      splitSubject/buildTeaser/buildReveal）
  *   C. seen 记录读写（markScratchSeen 幂等/removeScratchSeen 精确移除/buildSeenContext 三源合并）
  *   D. 图库池（缓存命中/过期刷新/拉失败兜底/脏数据过滤/prompt_dna 解析）
+ *   E. 重开一轮（resetRound 三源全清实跑，URL 级不清即回归 bug）
  */
 const fs = require('fs');
 const path = require('path');
@@ -76,6 +79,8 @@ function makeStorage(seed) {
   check('A4b: teaser 元素存在（刮前悬念提示）', /id="teaser"/.test(CODE) && /class="teaser"/.test(CODE));
   check('A4c: 面板含身份揭晓行与后宫状态行',
     /id="panelIdentity"/.test(CODE) && /id="panelHarem"/.test(CODE));
+  check('A4c2: 揭晓面板不渲染快手称号行（10-19 用户反馈字太多挡图）',
+    !/identity-title/.test(CODE) && !/buildKuaishouTitle/.test(CODE));
   check('A4d: loadItem 加载完成后展示悬念提示', /showTeaser\(buildTeaser\(it\)\)/.test(CODE));
   check('A4d2: 开始刮即淡出 teaser（onDown 调 hideTeaser，刮的过程无遮挡）',
     /function onDown\(e\)\{ e\.preventDefault\(\); scratching=true; hideTeaser\(\); handlePoint\(/.test(CODE));
@@ -113,7 +118,7 @@ function makeStorage(seed) {
   check('B0: PURE-LOGIC 区块存在', !!PURE && PURE.length > 100);
   const pure = new Function('localStorage', PURE + `
     return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson,
-      extractDna, splitSubject, buildTeaser, buildReveal, buildKuaishouTitle };
+      extractDna, splitSubject, buildTeaser, buildReveal };
   `)(makeStorage());
 
   // B1 isSeen 三源合并
@@ -202,12 +207,6 @@ function makeStorage(seed) {
     check('B5m: reveal 双身份人物', /武则天/.test(rWu) && /王者荣耀/.test(rWu));
     check('B5n: reveal 无 dna 时安全', pure.buildReveal({ id: 3, url: 'u' }).indexOf('新美女') !== -1);
 
-    // buildKuaishouTitle：快手同款称号（美女+出处+角色+id）
-    check('B5o: 快手称号格式（美女+出处+角色+id）',
-      pure.buildKuaishouTitle({ id: 671, url: 'u', dna: dnaLiu }) === '美女龙蛇起陆柳如烟671');
-    check('B5p: 快手称号无 dna 时仅美女+id',
-      pure.buildKuaishouTitle({ id: 683, url: 'u' }) === '美女683');
-
     // extractDna：只留三字段、畸形 JSON 回落 null
     check('B5q: extractDna 精简三字段', (() => {
       const d = pure.extractDna(JSON.stringify({ subject: 's', scene: 'sc', mood: 'm', prompt_text: '很长'.repeat(100), negative: 'x' }));
@@ -260,6 +259,48 @@ function makeStorage(seed) {
       const { f } = mk(); // 全空存储
       const ctx = f.buildSeenContext();
       check('C2e: 空存储不抛错且三源皆空', ctx.ids['1'] === undefined && ctx.urls['u'] === undefined && ctx.scratch['1'] === undefined);
+    }
+  }
+
+  // ============ E. 重开一轮：resetRound 三源全清（10-19 回归 bug 修复锁） ============
+  const resetFn = extractFunction(CODE, 'resetRound');
+  check('E0: resetRound 已定义', !!resetFn);
+  if (resetFn) {
+    const mkReset = (seed) => {
+      const storage = makeStorage(seed);
+      const stubs = { toast: '', paywall: 0, tracks: [] };
+      const f = new Function('localStorage', 'showToast', 'showPaywall', 'track', PURE + '\n' + resetFn + `
+        return resetRound;
+      `)(
+        storage,
+        function (m) { stubs.toast = m; },
+        function () { stubs.paywall++; },
+        function (a, b) { stubs.tracks.push(a + ':' + b); }
+      );
+      return { f, storage, stubs };
+    };
+    {
+      const { f, storage, stubs } = mkReset({
+        'nrb_scratch_seen': JSON.stringify(['671', '672']),
+        'nanrenbao_viewed_ids': JSON.stringify({ beauty: ['651', '661'], backview: ['45'] }),
+        'nanrenbao_viewed_images': JSON.stringify({ 'https://letmetry.cn/images/a.jpg': { timestamp: 'x' } })
+      });
+      f();
+      check('E1a: 清空刮刮乐自有记录', JSON.parse(storage._store['nrb_scratch_seen']).length === 0);
+      const idsAfter = JSON.parse(storage._store['nanrenbao_viewed_ids']);
+      check('E1b: 清空全局 ID 级 beauty', idsAfter.beauty.length === 0);
+      check('E1c: 不清其他栏目 ID（backview 保留）', idsAfter.backview.length === 1 && idsAfter.backview[0] === '45');
+      check('E1d: 清空 URL 级 viewed_images（不清则重开无效，回归点）',
+        storage._store['nanrenbao_viewed_images'] === undefined);
+      check('E1e: 重开后回到待机面板（showPaywall）', stubs.paywall === 1);
+      check('E1f:  toast 提示 + 埋点 reset', /重开一轮/.test(stubs.toast) && stubs.tracks.indexOf('scratch_lottery:reset') !== -1);
+    }
+    {
+      // 空存储下重开不炸（localStorage 缺键/坏 JSON 都安全）
+      const { f, stubs } = mkReset({ 'nanrenbao_viewed_ids': '{坏JSON' });
+      let threw = false;
+      try { f(); } catch (e) { threw = true; }
+      check('E2a: 坏 JSON 存储下重开不抛错', !threw && stubs.paywall === 1);
     }
   }
 

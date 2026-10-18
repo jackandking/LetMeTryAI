@@ -53,7 +53,7 @@
     transition:opacity .35s,transform .35s;
   }
   .panel.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
-  .done-title{ font-size:26px; font-weight:700; margin-bottom:6px; background:linear-gradient(90deg,#ffd86b,#ff6f91); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .done-title{ font-size:20px; font-weight:700; margin-bottom:6px; background:linear-gradient(90deg,#ffd86b,#ff6f91); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .done-sub{ font-size:14px; color:rgba(255,255,255,.82); margin-bottom:22px; line-height:1.5; }
   .btn{
     display:block; width:100%; max-width:340px; margin:0 auto 12px; padding:15px 0; border-radius:32px;
@@ -88,7 +88,6 @@
   }
   .teaser.show{ opacity:1; }
   .identity-name{ font-size:16px; font-weight:700; color:#ffd86b; margin-bottom:4px; }
-  .identity-title{ font-size:12px; color:rgba(255,255,255,.55); margin-bottom:14px; }
   .harem-note{ font-size:12px; color:rgba(255,255,255,.62); margin-bottom:14px; line-height:1.5; }
 </style>
 </head>
@@ -221,15 +220,6 @@
         : ('她就是「' + sp.name + '」');
     }
     return '一位刚加入你观看记录的新美女';
-  }
-  // 快手同款称号（站内展示用，与发布任务标题同风格：美女+出处+角色+id）
-  function buildKuaishouTitle(item){
-    var sp = splitSubject(item && item.dna && item.dna.subject);
-    var parts = ['美女'];
-    if (sp.source) parts.push(sp.source);
-    if (sp.name) parts.push(sp.name);
-    if (item && item.id != null) parts.push(String(item.id));
-    return parts.join('');
   }
   // ==== PURE-LOGIC-END ====
 
@@ -610,26 +600,22 @@
   }
 
   function renderIdentity(item){
-    // 身份揭晓：她是谁 + 快手同款称号（与发布任务标题同风格）
+    // 身份揭晓：只一行「她是谁」，不堆额外行（用户 10-19 反馈字太多挡图）
     panelIdentity.innerHTML = '';
     var l1 = document.createElement('div');
     l1.className = 'identity-name';
     l1.textContent = buildReveal(item);
     panelIdentity.appendChild(l1);
-    var l2 = document.createElement('div');
-    l2.className = 'identity-title';
-    l2.textContent = '快手同款称号：' + buildKuaishouTitle(item);
-    panelIdentity.appendChild(l2);
     panelIdentity.style.display = (item && item.dna) ? '' : 'none';
   }
   function renderHaremNote(){
     var msg = '';
     if (haremStatus === 'added') {
-      msg = '💗 已收入你的后宫，去「我的后宫」随时回看';
+      msg = '💗 已收入你的后宫';
     } else if (haremStatus === 'full') {
-      msg = '💗 后宫已满（可花 1 积分扩容 +1），这位暂未收录';
+      msg = '💗 后宫已满，可花 1 积分扩容';
     } else if (haremStatus === 'inactive') {
-      msg = '💗 花 50 积分激活「我的后宫」，刮到的美女自动收录';
+      msg = '💗 激活「我的后宫」，刮到自动收录';
     }
     panelHarem.textContent = msg;
     panelHarem.style.display = msg ? '' : 'none';
@@ -650,8 +636,8 @@
     renderHaremNote();
     var left = countUnseen(pool);
     panelSub.textContent = left > 0
-      ? ('这位美女已加入你的观看记录 · 图库还剩 ' + left + ' 位没看过')
-      : '这位美女已加入你的观看记录';
+      ? ('已加入观看记录 · 图库还剩 ' + left + ' 位')
+      : '已加入你的观看记录';
     nextBtn.style.display = left > 0 ? '' : 'none';
     drawBtn.style.display='none';
     rechargeBtn.style.display='none';
@@ -768,14 +754,17 @@
   }
 
   function resetRound(){
-    // 清空刮刮乐自有记录 + 全局 ID 级记录（让其他栏目也重新按未看排序）；
-    // 保留 viewed_images（URL 级付费窗口记录，避免重复扣费争议）
+    // 三源全清才叫真重开：刮刮乐自有 + 全局 ID 级 + URL 级。
+    // URL 级不清的话，recordSeen 回写的 viewed_images 仍判「已看过」，
+    // 重开后 countUnseen 仍是 0、按钮无反应（10-19 用户实测回归 bug：
+    // 全部刮完后点「重开一轮」没效果）。
     writeJson(KEYS.SCRATCH_SEEN, []);
     try {
       var idsAll = JSON.parse(localStorage.getItem('nanrenbao_viewed_ids') || '{}');
       idsAll.beauty = [];
       localStorage.setItem('nanrenbao_viewed_ids', JSON.stringify(idsAll));
     } catch(e){}
+    try { localStorage.removeItem('nanrenbao_viewed_images'); } catch(e){}
     track('scratch_lottery','reset');
     showToast('已重开一轮 🔄');
     showPaywall();
