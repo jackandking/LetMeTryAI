@@ -7,6 +7,7 @@
  *     + nrb_scratch_seen（刮刮乐自有，抽中即写，防中途退出重复抽）
  *   - 抽中即扣费并写 seen；加载失败退还积分重抽（有重试上限）
  *   - 图库池 DB 拉取 + localStorage 缓存 TTL 6h，失败兜底写死数组；
+ *     缓存未过期也探一次 MAX(id)，DB 有新审批图立即失效重拉（新图不必等 6h 才进池）；
  *     pool 带 prompt_dna 精简字段（subject/scene/mood）供悬念提示与身份揭晓
  *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
  *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
@@ -262,18 +263,28 @@ function makeStorage(seed) {
     }
   }
 
-  // ============ D. 图库池：缓存/过期/兜底/脏数据 ============
+  // ============ D. 图库池：缓存/探针失效/过期/兜底/脏数据 ============
   const fetchPoolFn = extractFunction(CODE, 'fetchPoolFromDB');
+  const probeFn = extractFunction(CODE, 'probePoolMaxId');
+  const saveFn = extractFunction(CODE, 'savePoolCache');
   const loadPoolFn = extractFunction(CODE, 'loadPool');
-  check('D0: fetchPoolFromDB/loadPool 均已定义', !!fetchPoolFn && !!loadPoolFn);
-  if (fetchPoolFn && loadPoolFn) {
+  check('D0: fetchPoolFromDB/probePoolMaxId/savePoolCache/loadPool 均已定义',
+    !!fetchPoolFn && !!probeFn && !!saveFn && !!loadPoolFn);
+  if (fetchPoolFn && probeFn && saveFn && loadPoolFn) {
     const mkPool = (storage, fetchImpl, windowObj) => {
       const f = new Function('localStorage', 'fetch', 'window', 'Date', PURE + '\n' +
         'var POOL_TTL_MS = 6 * 60 * 60 * 1000;\n' +
         'var FALLBACK_POOL = [{ id: 999, url: "fb.jpg" }];\n' +
-        fetchPoolFn + '\n' + loadPoolFn + '\nreturn { loadPool, fetchPoolFromDB };'
+        fetchPoolFn + '\n' + probeFn + '\n' + saveFn + '\n' + loadPoolFn + '\nreturn { loadPool, fetchPoolFromDB, probePoolMaxId };'
       )(storage, fetchImpl, windowObj, Date);
       return f;
+    };
+    // fetch 桩：按请求体区分探针（MAX(id)）与全量拉取（image_url），分别计数
+    const mkFetch = (rows, maxIdRow, counter) => (url, opts) => {
+      const body = opts && opts.body ? String(opts.body) : '';
+      const isProbe = body.indexOf('MAX(id)') !== -1;
+      if (counter) counter[isProbe ? 'probe' : 'pool']++;
+      return Promise.resolve({ json: () => Promise.resolve(isProbe ? maxIdRow : rows) });
     };
     const rows = [
       { id: '682', image_url: 'https://letmetry.cn/images/682.jpg' },
@@ -284,27 +295,50 @@ function makeStorage(seed) {
       { id: 679, image_url: null }                                    // 脏 url 过滤
     ];
     {
-      // D1 缓存命中（ts 新鲜）→ 不发 fetch
-      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now(), items: [{ id: 1, url: 'cached.jpg' }] }) });
-      let called = 0;
-      const f = mkPool(storage, () => { called++; return Promise.resolve({ json: () => Promise.resolve(rows) }); }, {});
+      // D1 缓存命中（ts 新鲜且 maxId 一致）→ 只发探针，不拉全量
+      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now(), maxId: 695, items: [{ id: 1, url: 'cached.jpg' }] }) });
+      const counter = { probe: 0, pool: 0 };
+      const f = mkPool(storage, mkFetch(rows, [{ max_id: 695 }], counter), {});
       const items = await f.loadPool();
       check('D1a: 新鲜缓存直接返回', items.length === 1 && items[0].url === 'cached.jpg');
-      check('D1b: 缓存命中零 fetch', called === 0);
+      check('D1b: 缓存命中只探针不拉全量', counter.probe === 1 && counter.pool === 0);
     }
     {
-      // D2 缓存过期 → 拉 DB → 写回缓存
-      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, items: [{ id: 1, url: 'stale.jpg' }] }) });
-      const f = mkPool(storage, () => Promise.resolve({ json: () => Promise.resolve(rows) }), {});
+      // D2 缓存过期 → 拉 DB → 写回缓存（ts + maxId）
+      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, maxId: 682, items: [{ id: 1, url: 'stale.jpg' }] }) });
+      const counter = { probe: 0, pool: 0 };
+      const f = mkPool(storage, mkFetch(rows, [{ max_id: 682 }], counter), {});
       const items = await f.loadPool();
       check('D2a: 过期缓存刷新为 DB 数据', items.length === 3 && items[0].id === 682 && items[1].id === 681);
-      check('D2b: 新池写回缓存（ts 更新）', (() => {
-        const cached = JSON.parse(storage._store['nrb_scratch_pool']);
-        return cached.items.length === 3 && cached.ts > Date.now() - 5000;
+      check('D2b: 新池写回缓存（ts 与 maxId 更新）', (() => {
+        const cached = JSON.parse(storage._store['nrb_scratch_pool_v2']);
+        return cached.items.length === 3 && cached.ts > Date.now() - 5000 && cached.maxId === 682;
       })());
       check('D2c: prompt_dna 解析为精简三字段',
         items[1].dna && items[1].dna.subject === '织女（牛郎织女）reinterpret' && items[1].dna.scene === '鹊桥银河·流星');
       check('D2d: 畸形 prompt_dna → dna=null 但图保留', items[2].id === 680 && items[2].dna === null);
+      check('D2e: 过期刷新不白发探针', counter.probe === 0 && counter.pool === 1);
+    }
+    {
+      // D6 缓存新鲜但 DB 有新审批图（maxId 变大）→ 立即重拉，不必等 6h TTL
+      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now(), maxId: 685, items: [{ id: 685, url: 'old.jpg' }] }) });
+      const counter = { probe: 0, pool: 0 };
+      const f = mkPool(storage, mkFetch(rows, [{ max_id: 695 }], counter), {});
+      const items = await f.loadPool();
+      check('D6a: 探针发现新图立即刷新（不等 6h TTL）', items.length === 3 && items[0].id === 682);
+      check('D6b: 刷新后写回新 maxId', JSON.parse(storage._store['nrb_scratch_pool_v2']).maxId === 682);
+      check('D6c: 探针+全量各一次', counter.probe === 1 && counter.pool === 1);
+    }
+    {
+      // D7 探针失败 → 仍返回缓存不炸
+      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now(), maxId: 685, items: [{ id: 685, url: 'cached.jpg' }] }) });
+      const f = mkPool(storage, (url, opts) => {
+        const body = opts && opts.body ? String(opts.body) : '';
+        if (body.indexOf('MAX(id)') !== -1) return Promise.reject(new Error('probe down'));
+        return Promise.resolve({ json: () => Promise.resolve(rows) });
+      }, {});
+      const items = await f.loadPool();
+      check('D7: 探针失败回落缓存不炸', items.length === 1 && items[0].url === 'cached.jpg');
     }
     {
       // D3 DB 拉取失败 → 兜底数组

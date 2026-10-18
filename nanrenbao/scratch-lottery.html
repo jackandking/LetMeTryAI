@@ -145,8 +145,8 @@
   function hashStr(s){ var h=2166136261; s=String(s); for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
   function variantForId(id){ var vid = hashStr('nrbsalt_'+id) % EXP.VARIANTS.length; return { vid:vid, v:EXP.VARIANTS[vid] }; }
 
-  // localStorage 键：刮刮乐自己的看过记录 + 图库池缓存
-  var KEYS = { SCRATCH_SEEN: 'nrb_scratch_seen', POOL_CACHE: 'nrb_scratch_pool' };
+  // localStorage 键：刮刮乐自己的看过记录 + 图库池缓存（v2：10-18 升级，旧 v1 缓存作废重拉）
+  var KEYS = { SCRATCH_SEEN: 'nrb_scratch_seen', POOL_CACHE: 'nrb_scratch_pool_v2' };
   var POOL_TTL_MS = 6 * 60 * 60 * 1000;   // 图库缓存 6 小时
   var COST_PER_DRAW = 1;                  // 每抽一张 1 积分
 
@@ -307,14 +307,43 @@
       return items.filter(function(x){ return !isNaN(x.id); });
     });
   }
+  function probePoolMaxId(){
+    var ep = (window.API_ENDPOINTS && window.API_ENDPOINTS.MYSQL_QUERY) || 'https://letmetry.cn/mysql/query';
+    return fetch(ep, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sql: 'SELECT MAX(id) AS max_id FROM beauty_images WHERE deleted = 0 AND review_status = ?',
+        params: ['approved']
+      })
+    }).then(function(r){ return r.json(); }).then(function(rows){
+      var row = Array.isArray(rows) ? rows[0] : (rows && Array.isArray(rows.data) ? rows.data[0] : null);
+      var m = row && row.max_id != null ? parseInt(row.max_id, 10) : NaN;
+      return isNaN(m) ? null : m;
+    }).catch(function(){ return null; });
+  }
+  function savePoolCache(items){
+    var maxId = 0;
+    for (var i=0;i<items.length;i++){ if (!isNaN(items[i].id) && items[i].id > maxId) maxId = items[i].id; }
+    writeJson(KEYS.POOL_CACHE, { ts: Date.now(), maxId: maxId, items: items });
+  }
   function loadPool(){
     var cached = readJson(KEYS.POOL_CACHE, null);
     if (cached && cached.ts && Array.isArray(cached.items) && cached.items.length &&
         (Date.now() - cached.ts) < POOL_TTL_MS) {
-      return Promise.resolve(cached.items);
+      // 缓存未过期也先探一次最新审批 id：有新图立即失效重拉，不必干等 6h TTL
+      return probePoolMaxId().then(function(maxId){
+        if (maxId && (!cached.maxId || maxId > cached.maxId)) {
+          return fetchPoolFromDB().then(function(items){
+            if (items && items.length) { savePoolCache(items); return items; }
+            return cached.items;
+          }).catch(function(){ return cached.items; });
+        }
+        return cached.items;
+      }).catch(function(){ return cached.items; });
     }
     return fetchPoolFromDB().then(function(items){
-      if (items && items.length) { writeJson(KEYS.POOL_CACHE, { ts: Date.now(), items: items }); return items; }
+      if (items && items.length) { savePoolCache(items); return items; }
       return FALLBACK_POOL.slice();
     }).catch(function(){ return FALLBACK_POOL.slice(); });
   }
