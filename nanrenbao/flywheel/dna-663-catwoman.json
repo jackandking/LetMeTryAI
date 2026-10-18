@@ -1,0 +1,16 @@
+{
+  "id": 663,
+  "logical_id": 663,
+  "name": "catwoman",
+  "name_cn": "猫女",
+  "ip": "猫女（Catwoman，DC 漫画）",
+  "created_at": "2026-10-17T11:20:00+08:00",
+  "subject": "猫女（Catwoman·DC漫画）reinterpret，非真人仿冒",
+  "wardrobe": "漆皮亮面黑色紧身连体衣（全着衣非透视，深V显沟）",
+  "scene": "都市夜景天台边缘、冷月高楼、玻璃幕墙反光",
+  "mood": "神秘、敏捷、暗夜魅惑",
+  "body_type": "极饱满丰硕巨乳 / G 罩杯以上 / 深 V 乳沟 / 紧身衣勾勒沙漏曲线 / 修长双腿",
+  "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional cat-burglar heroine inspired by the DC Comics character Catwoman, reimagined as an artistic non-real-person creation (an entirely original, fictional appearance that does NOT resemble any real actress, celebrity, or public figure — and specifically not resembling any actress who portrayed this character on film or television). She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush waist-and-hip curves and long slender legs. Scene & context: the edge of a city rooftop at night — cold moonlight, skyscrapers with glass facades, city bokeh lights below, as background accents only, never wrapping the figure. Pose & action: she stands at the rooftop edge with cat-like agile grace, body slightly coiled in a predator's poise, one hand raised near a cat-ear headband, turning her head with a mysterious, confident, playful gaze — agile and self-assured, never sexualized. Wardrobe: she wears a form-fitting sleek high-gloss black catsuit with a deep V neckline that shows generous cleavage across a very large full bust — a proper fully-clothed garment (opaque throughout, not lingerie, not see-through, covers the whole body), the glossy material pulled taut to emphasize a lush hourglass silhouette, plus a slim tail accessory and sleek black domino mask as character accents. The human figure is the unmistakable focal point: she is fully and properly dressed, cool rim light tracing the glossy suit. Lighting: cold moonlight with cyan-blue city light spill, cinematic cool color grading, glass reflection highlights on the suit. Camera: 85mm lens, medium close-up environmental portrait. Mood: mysterious, agile, confident, nocturnal, artistic and non-sexual. Style: cinematic superhero fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成.",
+  "negative_prompt": "real actress resemblance, celebrity likeness, small bust, flat chest, a-cup, b-cup, petite, underdeveloped, see-through clothing, exposed lingerie, nudity, nipples, stiff standing pose, sexualized pose, explicit content, watermark other than the required one, text artifacts, deformed hands, extra fingers, low quality, blurry",
+  "notes": "数据新信号线：seeds.json 10-17 09:05 更新后猫女（Catwoman 风·紧身高光泽黑衣）以 views=4 新入冠军榜——此前飞轮无任何漫画角色扮演风，本轮跟进验证；紧身衣全着衣合规性高于 dudou/比基尼；深V紧身显大胸 G 罩杯以上"
+}
