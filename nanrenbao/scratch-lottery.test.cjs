@@ -6,15 +6,20 @@
  *   - 去重三源合并：viewed_ids.beauty（各栏目通用 ID 级）+ viewed_images（URL 级）
  *     + nrb_scratch_seen（刮刮乐自有，抽中即写，防中途退出重复抽）
  *   - 抽中即扣费并写 seen；加载失败退还积分重抽（有重试上限）
- *   - 图库池 DB 拉取 + localStorage 缓存 TTL 6h，失败兜底写死数组
+ *   - 图库池 DB 拉取 + localStorage 缓存 TTL 6h，失败兜底写死数组；
+ *     pool 带 prompt_dna 精简字段（subject/scene/mood）供悬念提示与身份揭晓
  *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
+ *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
+ *   - 刮前悬念提示：buildTeaser 给线索（出处/场景/氛围）不揭晓角色名；
+ *     刮开后面板 buildReveal 揭晓身份 + buildKuaishouTitle 快手同款称号
  *
  * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
  * `node 本文件` 可直接执行。覆盖：
- *   A. 静态断言（主页卡片/脚本引入/实验臂/SQL 白名单/扣费时序/无越权写）
- *   B. 纯逻辑实跑（isSeen 三源/pickUnseen 去重+随机性/哈希分臂均匀/readJson 容错）
+ *   A. 静态断言（主页卡片/脚本引入/实验臂/SQL 白名单/扣费时序/无越权写/后宫收录）
+ *   B. 纯逻辑实跑（isSeen 三源/pickUnseen 去重+随机性/哈希分臂均匀/readJson 容错/
+ *      splitSubject/buildTeaser/buildReveal/buildKuaishouTitle）
  *   C. seen 记录读写（markScratchSeen 幂等/removeScratchSeen 精确移除/buildSeenContext 三源合并）
- *   D. 图库池（缓存命中/过期刷新/拉失败兜底/脏数据过滤）
+ *   D. 图库池（缓存命中/过期刷新/拉失败兜底/脏数据过滤/prompt_dna 解析）
  */
 const fs = require('fs');
 const path = require('path');
@@ -60,17 +65,32 @@ function makeStorage(seed) {
   // ============ A. 静态断言 ============
   check('A1: 主页新增刮刮乐栏目卡片', /scratch-lottery\.html/.test(INDEX) && /刮刮乐/.test(INDEX));
   check('A2: 页面引入 points-system.js（积分/去重记录同源）', /<script src="points-system\.js"><\/script>/.test(CODE));
+  check('A2b: 页面引入 harem.js（刮开收录后宫）', /<script src="harem\.js"><\/script>/.test(CODE));
   check('A3: 延续马赛克块实验五臂（control+tile_4/9/16/25）',
     /label:'control'/.test(CODE) && /label:'tile_4'/.test(CODE) && /label:'tile_9'/.test(CODE) &&
     /label:'tile_16'/.test(CODE) && /label:'tile_25'/.test(CODE));
   check('A4: 每张 1 积分（COST_PER_DRAW = 1）', /COST_PER_DRAW\s*=\s*1\s*;/.test(CODE));
-
+  // 悬念提示 + 后宫收录相关
+  check('A4b: teaser 元素存在（刮前悬念提示）', /id="teaser"/.test(CODE) && /class="teaser"/.test(CODE));
+  check('A4c: 面板含身份揭晓行与后宫状态行',
+    /id="panelIdentity"/.test(CODE) && /id="panelHarem"/.test(CODE));
+  check('A4d: loadItem 加载完成后展示悬念提示', /showTeaser\(buildTeaser\(it\)\)/.test(CODE));
+  check('A4e: 解锁/换抽时淡出 teaser', /hideTeaser\(\);/.test(CODE));
   {
+    const recordSrc = extractFunction(CODE, 'recordSeen') || '';
+    check('A4f: 刮开收录后宫（isHaremActivated 守卫 + addHaremImage）',
+      /isHaremActivated\(\)/.test(recordSrc) && /addHaremImage\(item\.url\)/.test(recordSrc));
+  }
+  {
+    // 图库池 SQL 带 prompt_dna（悬念提示素材），view_count 仍走白名单形态
     const codeNoComments = CODE
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/(^|[^:])\/\/.*$/gm, '$1');
+    const poolMatch = codeNoComments.match(/sql:\s*'([^']*beauty_images[^']*)'/);
+    check('A5: 图库 SQL 含 prompt_dna（悬念提示素材）',
+      !!poolMatch && /prompt_dna/.test(poolMatch[1]) && /review_status\s*=\s*\?/.test(poolMatch[1]));
     const sqlMatch = codeNoComments.match(/sql:\s*'([^']*view_count[^']*)'/);
-    check('A5: 刮开完成计 view_count（SQL 存在）', !!sqlMatch);
+    check('A5b: 刮开完成计 view_count（SQL 存在）', !!sqlMatch);
     check('A6: view_count SQL 精确匹配后端白名单形态',
       !!sqlMatch && BRIDGED_VIEW_COUNT_RE.test(sqlMatch[1]));
     // 扣费必须先于写 seen（抽中即扣，防刮到一半退出刷新重复抽）
@@ -88,7 +108,8 @@ function makeStorage(seed) {
   const PURE = CODE.split('// ==== PURE-LOGIC-BEGIN ====')[1].split('// ==== PURE-LOGIC-END ====')[0];
   check('B0: PURE-LOGIC 区块存在', !!PURE && PURE.length > 100);
   const pure = new Function('localStorage', PURE + `
-    return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson };
+    return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson,
+      extractDna, splitSubject, buildTeaser, buildReveal, buildKuaishouTitle };
   `)(makeStorage());
 
   // B1 isSeen 三源合并
@@ -144,6 +165,53 @@ function makeStorage(seed) {
     `)(dead);
     check('B4f: 抛错桩下 readJson 回落', deadPure.readJson('x', 7) === 7);
     check('B4g: 抛错桩下 writeJson 返回 false', deadPure.writeJson('x', 1) === false);
+  }
+
+  // ============ B5. 悬念提示 / 身份揭晓 ============
+  {
+    // splitSubject：括号拆分角色名与出处
+    const a = pure.splitSubject('柳如烟（龙蛇起陆）reinterpret，非真人仿冒');
+    check('B5a: splitSubject 拆出角色名+出处', a.name === '柳如烟' && a.source === '龙蛇起陆');
+    const b = pure.splitSubject('武则天（王者荣耀·海洋之心）reinterpret，非真人仿冒');
+    check('B5b: splitSubject 支持「·」出处', b.name === '武则天' && b.source === '王者荣耀·海洋之心');
+    const c = pure.splitSubject('虞姬reinterpret，非真人仿冒');
+    check('B5c: splitSubject 无括号时去尾取名', c.name === '虞姬' && c.source === '');
+    const d = pure.splitSubject('');
+    check('B5d: splitSubject 空串安全', d.name === '' && d.source === '');
+    check('B5e: splitSubject null 安全', pure.splitSubject(null).name === '');
+
+    // buildTeaser：刮前只给线索，绝不泄露角色名
+    const dnaLiu = { subject: '柳如烟（龙蛇起陆）reinterpret，非真人仿冒', scene: '民国私邸夜宴厅·暖金水晶吊灯·丝绒沙发', mood: '明艳·心机·慵懒·撩拨' };
+    const tLiu = pure.buildTeaser({ id: 671, url: 'u', dna: dnaLiu });
+    check('B5f: teaser 含出处线索', /龙蛇起陆/.test(tLiu));
+    check('B5g: teaser 不泄露角色名（刮前悬念）', !/柳如烟/.test(tLiu));
+    check('B5h: teaser 带氛围与提问钩子', /明艳/.test(tLiu) && /猜猜她是谁/.test(tLiu));
+    const tNoSource = pure.buildTeaser({ id: 1, url: 'u', dna: { subject: '虞姬reinterpret', scene: '垓下月夜烛帐·青铜剑', mood: '凄美·决绝' } });
+    check('B5i: 无出处时用场景首段', /垓下月夜烛帐/.test(tNoSource) && !/虞姬/.test(tNoSource));
+    check('B5j: 无 dna 走兜底文案', /神秘/.test(pure.buildTeaser({ id: 2, url: 'u', dna: null })));
+    check('B5k: 无 item 走兜底文案', typeof pure.buildTeaser(null) === 'string' && pure.buildTeaser(null).length > 0);
+
+    // buildReveal：刮开揭晓身份
+    const rLiu = pure.buildReveal({ id: 671, url: 'u', dna: dnaLiu });
+    check('B5l: reveal 亮出角色名与出处', /柳如烟/.test(rLiu) && /龙蛇起陆/.test(rLiu));
+    const rWu = pure.buildReveal({ id: 672, url: 'u', dna: { subject: '武则天（王者荣耀·海洋之心）reinterpret' } });
+    check('B5m: reveal 双身份人物', /武则天/.test(rWu) && /王者荣耀/.test(rWu));
+    check('B5n: reveal 无 dna 时安全', pure.buildReveal({ id: 3, url: 'u' }).indexOf('新美女') !== -1);
+
+    // buildKuaishouTitle：快手同款称号（美女+出处+角色+id）
+    check('B5o: 快手称号格式（美女+出处+角色+id）',
+      pure.buildKuaishouTitle({ id: 671, url: 'u', dna: dnaLiu }) === '美女龙蛇起陆柳如烟671');
+    check('B5p: 快手称号无 dna 时仅美女+id',
+      pure.buildKuaishouTitle({ id: 683, url: 'u' }) === '美女683');
+
+    // extractDna：只留三字段、畸形 JSON 回落 null
+    check('B5q: extractDna 精简三字段', (() => {
+      const d = pure.extractDna(JSON.stringify({ subject: 's', scene: 'sc', mood: 'm', prompt_text: '很长'.repeat(100), negative: 'x' }));
+      return d && d.subject === 's' && d.scene === 'sc' && d.mood === 'm' && !('prompt_text' in d) && !('negative' in d);
+    })());
+    check('B5r: extractDna 畸形 JSON 回落 null', pure.extractDna('{oops') === null);
+    check('B5s: extractDna 空值回落 null', pure.extractDna('') === null && pure.extractDna(null) === null);
+    check('B5t: extractDna 空对象回落 null', pure.extractDna('{}') === null);
   }
 
   // ============ C. seen 记录读写 + 三源合并 ============
@@ -206,9 +274,11 @@ function makeStorage(seed) {
     };
     const rows = [
       { id: '682', image_url: 'https://letmetry.cn/images/682.jpg' },
-      { id: 681, image_url: 'https://letmetry.cn/images/681.jpg' },
+      { id: 681, image_url: 'https://letmetry.cn/images/681.jpg',
+        prompt_dna: JSON.stringify({ subject: '织女（牛郎织女）reinterpret', scene: '鹊桥银河·流星', mood: '空灵·温柔', prompt_text: 'x'.repeat(500), negative: 'y' }) },
+      { id: 680, image_url: 'https://letmetry.cn/images/680.jpg', prompt_dna: '{坏JSON' },  // 畸形 dna 不丢图
       { id: null, image_url: 'https://letmetry.cn/images/bad.jpg' },  // 脏 id 过滤
-      { id: 680, image_url: null }                                    // 脏 url 过滤
+      { id: 679, image_url: null }                                    // 脏 url 过滤
     ];
     {
       // D1 缓存命中（ts 新鲜）→ 不发 fetch
@@ -224,9 +294,14 @@ function makeStorage(seed) {
       const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, items: [{ id: 1, url: 'stale.jpg' }] }) });
       const f = mkPool(storage, () => Promise.resolve({ json: () => Promise.resolve(rows) }), {});
       const items = await f.loadPool();
-      check('D2a: 过期缓存刷新为 DB 数据', items.length === 2 && items[0].id === 682 && items[1].id === 681);
-      const cached = JSON.parse(storage._store['nrb_scratch_pool']);
-      check('D2b: 新池写回缓存（ts 更新）', cached.items.length === 2 && cached.ts > Date.now() - 5000);
+      check('D2a: 过期缓存刷新为 DB 数据', items.length === 3 && items[0].id === 682 && items[1].id === 681);
+      check('D2b: 新池写回缓存（ts 更新）', (() => {
+        const cached = JSON.parse(storage._store['nrb_scratch_pool']);
+        return cached.items.length === 3 && cached.ts > Date.now() - 5000;
+      })());
+      check('D2c: prompt_dna 解析为精简三字段',
+        items[1].dna && items[1].dna.subject === '织女（牛郎织女）reinterpret' && items[1].dna.scene === '鹊桥银河·流星');
+      check('D2d: 畸形 prompt_dna → dna=null 但图保留', items[2].id === 680 && items[2].dna === null);
     }
     {
       // D3 DB 拉取失败 → 兜底数组
@@ -246,7 +321,7 @@ function makeStorage(seed) {
       const f = mkPool(makeStorage(), (url) => { hitUrl = url; return Promise.resolve({ json: () => Promise.resolve({ data: rows }) }); },
         { API_ENDPOINTS: { MYSQL_QUERY: 'https://custom.example/mysql/query' } });
       const items = await f.loadPool();
-      check('D5a: 兼容 {data:[...]} 包装', items.length === 2);
+      check('D5a: 兼容 {data:[...]} 包装', items.length === 3);
       check('D5b: 走 window.API_ENDPOINTS.MYSQL_QUERY', hitUrl === 'https://custom.example/mysql/query');
     }
   }

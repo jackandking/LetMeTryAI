@@ -6,6 +6,7 @@
 <title>刮刮乐 - 男人宝</title>
 <script src="../config.js"></script>
 <script src="points-system.js"></script>
+<script src="harem.js"></script>
 <script>
     var _hmt = _hmt || [];
     (function() {
@@ -76,6 +77,19 @@
     opacity:0; pointer-events:none; transition:opacity .25s; white-space:nowrap;
   }
   .toast.show{ opacity:1; }
+  .teaser{
+    position:fixed; left:50%; top:calc(env(safe-area-inset-top) + 58px); z-index:21;
+    transform:translateX(-50%); max-width:86vw; text-align:center;
+    font-size:13px; line-height:1.55; color:#ffe9b8;
+    background:linear-gradient(135deg,rgba(255,216,107,.16),rgba(255,111,145,.16));
+    border:1px solid rgba(255,216,107,.45); padding:8px 16px; border-radius:14px;
+    box-shadow:0 4px 18px rgba(0,0,0,.35);
+    opacity:0; pointer-events:none; transition:opacity .35s;
+  }
+  .teaser.show{ opacity:1; }
+  .identity-name{ font-size:16px; font-weight:700; color:#ffd86b; margin-bottom:4px; }
+  .identity-title{ font-size:12px; color:rgba(255,255,255,.55); margin-bottom:14px; }
+  .harem-note{ font-size:12px; color:rgba(255,255,255,.62); margin-bottom:14px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -95,12 +109,15 @@
 
 <div class="progress"><i id="bar"></i></div>
 <div class="hint" id="hint" style="opacity:0;">↓ 手指擦开马赛克，看美女真容</div>
+<div class="teaser" id="teaser"></div>
 <div class="exp-tag" id="expTag" style="display:none;"></div>
 <div class="toast" id="toast"></div>
 
 <div class="panel" id="panel">
   <div class="done-title" id="panelTitle">真容解锁 ✨</div>
+  <div class="done-sub" id="panelIdentity" style="display:none;"></div>
   <div class="done-sub" id="panelSub"></div>
+  <div class="harem-note" id="panelHarem" style="display:none;"></div>
   <button class="btn" id="drawBtn">🎰 花 1 积分抽一位新美女</button>
   <button class="btn" id="nextBtn" style="display:none;">▶ 下一张（1 积分）</button>
   <button class="btn ghost" id="rechargeBtn" style="display:none;">💰 积分不足，去赚积分</button>
@@ -159,6 +176,60 @@
     for (var i=0;i<pool.length;i++){ if (!isSeen(pool[i], ctx)) unseen.push(pool[i]); }
     if (!unseen.length) return null;
     return unseen[Math.floor(Math.random()*unseen.length)];
+  }
+  // prompt_dna 只抽 teaser 需要的三个字段（subject/scene/mood），
+  // 不存 prompt_text/negative（控制缓存体积，localStorage 上限约 5MB）
+  function extractDna(raw){
+    try {
+      var d = JSON.parse(raw || 'null');
+      if (!d || typeof d !== 'object') return null;
+      var dna = {};
+      if (d.subject) dna.subject = String(d.subject);
+      if (d.scene) dna.scene = String(d.scene);
+      if (d.mood) dna.mood = String(d.mood);
+      return (dna.subject || dna.scene || dna.mood) ? dna : null;
+    } catch(e){ return null; }
+  }
+  // ---- 悬念提示 / 身份揭晓（刮前给线索不揭晓，刮开再亮身份）----
+  // subject 形如「柳如烟（龙蛇起陆）reinterpret，非真人仿冒」→ 拆角色名与出处
+  function splitSubject(subject){
+    var s = String(subject || '').trim();
+    if (!s) return { name: '', source: '' };
+    var m = s.match(/^([^（(]{1,20})[（(]([^）)]{1,24})[）)]/);
+    if (m) return { name: m[1].trim(), source: m[2].trim() };
+    var t = s.split(/reinterpret/i)[0].split(/[，,]/)[0].trim();
+    return { name: t.slice(0, 20), source: '' };
+  }
+  function firstSeg(v){ return String(v || '').split('·')[0].split('·')[0].trim(); }
+  function buildTeaser(item){
+    var dna = item && item.dna;
+    if (!dna) return '🎭 今晚这位美人有点神秘，刮开见真容';
+    var sp = splitSubject(dna.subject);
+    var bits = [];
+    if (sp.source) bits.push('她出自「' + sp.source + '」');
+    else if (dna.scene) bits.push(firstSeg(dna.scene));
+    var mood = firstSeg(dna.mood);
+    if (mood) bits.push(mood);
+    if (!bits.length) return '🎭 今晚这位美人有点神秘，刮开见真容';
+    return '🎭 ' + bits.join(' · ') + ' · 猜猜她是谁？';
+  }
+  function buildReveal(item){
+    var sp = splitSubject(item && item.dna && item.dna.subject);
+    if (sp.name) {
+      return sp.source
+        ? ('她就是「' + sp.name + '」 · 出自 ' + sp.source)
+        : ('她就是「' + sp.name + '」');
+    }
+    return '一位刚加入你观看记录的新美女';
+  }
+  // 快手同款称号（站内展示用，与发布任务标题同风格：美女+出处+角色+id）
+  function buildKuaishouTitle(item){
+    var sp = splitSubject(item && item.dna && item.dna.subject);
+    var parts = ['美女'];
+    if (sp.source) parts.push(sp.source);
+    if (sp.name) parts.push(sp.name);
+    if (item && item.id != null) parts.push(String(item.id));
+    return parts.join('');
   }
   // ==== PURE-LOGIC-END ====
 
@@ -223,7 +294,7 @@
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sql: 'SELECT id, image_url FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY id DESC LIMIT 500',
+        sql: 'SELECT id, image_url, prompt_dna FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY id DESC LIMIT 500',
         params: ['approved']
       })
     }).then(function(r){ return r.json(); }).then(function(rows){
@@ -231,7 +302,7 @@
       var items = [];
       for (var i=0;i<list.length;i++){
         var row = list[i];
-        if (row && row.image_url) items.push({ id: parseInt(row.id,10), url: row.image_url });
+        if (row && row.image_url) items.push({ id: parseInt(row.id,10), url: row.image_url, dna: extractDna(row.prompt_dna) });
       }
       return items.filter(function(x){ return !isNaN(x.id); });
     });
@@ -282,6 +353,9 @@
   var pointsEl=$('points'), expTag=$('expTag'), toast=$('toast');
   var drawBtn=$('drawBtn'), nextBtn=$('nextBtn'), rechargeBtn=$('rechargeBtn'), resetBtn=$('resetBtn');
   var panelTitle=$('panelTitle'), panelSub=$('panelSub');
+  var panelIdentity=$('panelIdentity'), panelHarem=$('panelHarem');
+  var teaser=$('teaser');
+  var haremStatus='';   // '' | inactive | added | full（最近一次解锁时的后宫收录结果）
   var W=0,H=0, fitRect={dx:0,dy:0,dw:0,dh:0};
   var mask, mctx;
   var unlocked=false, scratching=false;
@@ -309,6 +383,14 @@
     toast.classList.add('show');
     clearTimeout(showToast._t);
     showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+  }
+  // 刮前悬念提示：给线索不揭晓；刮开/换抽时淡出
+  function showTeaser(text){
+    teaser.textContent = text;
+    teaser.classList.add('show');
+  }
+  function hideTeaser(){
+    teaser.classList.remove('show');
   }
 
   function size(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr(); cv.height=H*dpr(); }
@@ -486,6 +568,42 @@
         bumpViewCount(item.id, item.url);
       }
     } catch(e){ bumpViewCount(item.id, item.url); }
+    // 4) 后宫收录（与欣赏/背影杀同规则：激活后刮开即自动收入，无需再花积分）
+    haremStatus = '';
+    try {
+      if (window.isHaremActivated && window.isHaremActivated()) {
+        var added = window.addHaremImage ? window.addHaremImage(item.url) : false;
+        haremStatus = added ? 'added' : 'full';
+      } else {
+        haremStatus = 'inactive';
+      }
+    } catch(e){}
+  }
+
+  function renderIdentity(item){
+    // 身份揭晓：她是谁 + 快手同款称号（与发布任务标题同风格）
+    panelIdentity.innerHTML = '';
+    var l1 = document.createElement('div');
+    l1.className = 'identity-name';
+    l1.textContent = buildReveal(item);
+    panelIdentity.appendChild(l1);
+    var l2 = document.createElement('div');
+    l2.className = 'identity-title';
+    l2.textContent = '快手同款称号：' + buildKuaishouTitle(item);
+    panelIdentity.appendChild(l2);
+    panelIdentity.style.display = (item && item.dna) ? '' : 'none';
+  }
+  function renderHaremNote(){
+    var msg = '';
+    if (haremStatus === 'added') {
+      msg = '💗 已收入你的后宫，去「我的后宫」随时回看';
+    } else if (haremStatus === 'full') {
+      msg = '💗 后宫已满（可花 1 积分扩容 +1），这位暂未收录';
+    } else if (haremStatus === 'inactive') {
+      msg = '💗 花 50 积分激活「我的后宫」，刮到的美女自动收录';
+    }
+    panelHarem.textContent = msg;
+    panelHarem.style.display = msg ? '' : 'none';
   }
 
   function unlock(){
@@ -493,11 +611,14 @@
     if (variant.v.mode==='scratch'){ ctx2d.clearRect(0,0,cv.width,cv.height); }
     bar.style.width='100%';
     hint.style.opacity='0';
+    hideTeaser();
     track('scratch_exp','complete');
     track('scratch_lottery','unlock');
     if (current) recordSeen(current);
     state='unlocked';
     panelTitle.textContent='真容解锁 ✨';
+    renderIdentity(current);
+    renderHaremNote();
     var left = countUnseen(pool);
     panelSub.textContent = left > 0
       ? ('这位美女已加入你的观看记录 · 图库还剩 ' + left + ' 位没看过')
@@ -512,6 +633,10 @@
   // ---- 抽图（核心动作）：扣 1 积分 → 随机抽未看过 → 写 seen → 渲染 ----
   function draw(){
     if (state === 'drawing') return;
+    hideTeaser();
+    // 清掉上一张解锁面板的身份/后宫行，避免切态时残留
+    panelIdentity.style.display='none';
+    panelHarem.style.display='none';
     var points = refreshPoints();
     if (points < COST_PER_DRAW){
       state='insufficient';
@@ -550,7 +675,7 @@
 
   function loadItem(item){
     var it = item;
-    if (_imgOverride) it = { id: it.id, url: _imgOverride };
+    if (_imgOverride) it = { id: it.id, url: _imgOverride, dna: it.dna };
     variant = resolveVariant(it.id);
     unlocked=false; bar.style.width='0%'; panel.classList.remove('show');
     startLogged=false; halfLogged=false;
@@ -565,6 +690,7 @@
       bg.src=img.src;
       loading.style.display='none';
       state='scratching';
+      showTeaser(buildTeaser(it));
       if (variant.v.mode==='scratch'){ drawMosaic(); }
       else { buildCover(); }
     };
@@ -598,6 +724,8 @@
 
   function showPaywall(){
     state='idle';
+    panelIdentity.style.display='none';
+    panelHarem.style.display='none';
     var left = countUnseen(pool);
     panelTitle.textContent='🎰 刮刮乐';
     panelSub.textContent = left > 0
