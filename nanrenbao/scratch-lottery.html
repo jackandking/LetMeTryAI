@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>刮刮乐 - 男人宝</title>
+<script src="../config.js"></script>
+<script src="points-system.js"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#0d0d14; color:#fff; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none;
+  }
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:20;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 16px; padding-top:calc(env(safe-area-inset-top) + 10px);
+    background:linear-gradient(180deg,rgba(0,0,0,.75),transparent);
+  }
+  .topbar .title{ font-size:18px; font-weight:600; letter-spacing:1px; }
+  .topbar .points{ font-size:13px; color:#ffd86b; background:rgba(255,216,107,.14); border:1px solid rgba(255,216,107,.35); padding:4px 12px; border-radius:20px; }
+  .topbar .back{ font-size:13px; color:rgba(255,255,255,.85); text-decoration:none; background:rgba(255,255,255,.14); padding:4px 12px; border-radius:20px; }
+  .stage{ position:fixed; inset:0; overflow:hidden; }
+  .stage img.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; z-index:1; }
+  #scratch{ position:absolute; inset:0; width:100%; height:100%; z-index:2; }
+  .hint{
+    position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom) + 30px); z-index:15;
+    transform:translateX(-50%); font-size:14px; color:#fff; background:rgba(0,0,0,.55);
+    padding:8px 20px; border-radius:30px; white-space:nowrap; transition:opacity .3s;
+  }
+  .progress{
+    position:absolute; left:16px; right:16px; bottom:calc(env(safe-area-inset-bottom) + 88px); z-index:15;
+    height:5px; border-radius:3px; background:rgba(255,255,255,.18); overflow:hidden;
+  }
+  .progress>i{ display:block; height:100%; width:0%; border-radius:3px; background:linear-gradient(90deg,#ff5f8f,#ff9a5f); transition:width .15s ease-out; }
+  .panel{
+    position:absolute; left:0; right:0; bottom:0; z-index:30;
+    padding:30px 20px calc(env(safe-area-inset-bottom) + 26px);
+    background:linear-gradient(0deg,rgba(0,0,0,.93),rgba(0,0,0,.55) 62%,transparent);
+    text-align:center; opacity:0; pointer-events:none; transform:translateY(22px);
+    transition:opacity .35s,transform .35s;
+  }
+  .panel.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+  .done-title{ font-size:26px; font-weight:700; margin-bottom:6px; background:linear-gradient(90deg,#ffd86b,#ff6f91); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .done-sub{ font-size:14px; color:rgba(255,255,255,.82); margin-bottom:22px; line-height:1.5; }
+  .btn{
+    display:block; width:100%; max-width:340px; margin:0 auto 12px; padding:15px 0; border-radius:32px;
+    font-size:17px; font-weight:600; border:none; cursor:pointer; color:#fff;
+    background:linear-gradient(90deg,#ff5f8f,#ff9a5f);
+  }
+  .btn.ghost{ background:rgba(255,255,255,.15); }
+  .btn:active{ transform:scale(.98); }
+  .btn[disabled]{ opacity:.5; }
+  .footer-note{ font-size:12px; color:rgba(255,255,255,.5); margin-top:6px; }
+  #loading{
+    position:fixed; inset:0; z-index:40; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:#0d0d14; gap:14px;
+  }
+  .spinner{ width:34px; height:34px; border:3px solid rgba(255,255,255,.2); border-top-color:#ff5f8f; border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .exp-tag{ position:fixed; top:calc(env(safe-area-inset-top) + 50px); left:16px; z-index:21; font-size:11px; color:rgba(255,255,255,.6); background:rgba(0,0,0,.4); padding:3px 9px; border-radius:12px; }
+  .toast{
+    position:fixed; left:50%; top:calc(env(safe-area-inset-top) + 62px); transform:translateX(-50%); z-index:50;
+    background:rgba(0,0,0,.82); color:#fff; font-size:13px; padding:9px 18px; border-radius:22px;
+    opacity:0; pointer-events:none; transition:opacity .25s; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; }
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div><div id="loadingText">正在准备图库…</div></div>
+
+<div class="topbar">
+  <a class="back" href="index.html">← 返回</a>
+  <div class="title">🎰 刮刮乐</div>
+  <div class="points" id="points">积分 0</div>
+</div>
+
+<div class="stage">
+  <img class="bg" id="bg" alt="美图" crossorigin="anonymous">
+  <canvas id="scratch"></canvas>
+</div>
+
+<div class="progress"><i id="bar"></i></div>
+<div class="hint" id="hint" style="opacity:0;">↓ 手指擦开马赛克，看美女真容</div>
+<div class="exp-tag" id="expTag" style="display:none;"></div>
+<div class="toast" id="toast"></div>
+
+<div class="panel" id="panel">
+  <div class="done-title" id="panelTitle">真容解锁 ✨</div>
+  <div class="done-sub" id="panelSub"></div>
+  <button class="btn" id="drawBtn">🎰 花 1 积分抽一位新美女</button>
+  <button class="btn" id="nextBtn" style="display:none;">▶ 下一张（1 积分）</button>
+  <button class="btn ghost" id="rechargeBtn" style="display:none;">💰 积分不足，去赚积分</button>
+  <button class="btn ghost" id="resetBtn" style="display:none;">🔄 重开一轮（清空刮刮乐记录）</button>
+  <button class="btn ghost" id="homeBtn">← 返回男人宝主页</button>
+  <div class="footer-note">艺术写真 / 时尚美图，仅供欣赏 · 已看过的美女不会再抽到</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ==== PURE-LOGIC-BEGIN ====
+  // 实验臂配置（刮刮乐遮挡交互 A/n 实验，与 beauty-scratch.html 同款，
+  // 同一张图按 id 哈希永远落同一臂，整体近似均匀）
+  var EXP = {
+    VARIANTS: [
+      { mode:'scratch', n:0,  label:'control' },
+      { mode:'tile',   n:4,   label:'tile_4'  },
+      { mode:'tile',   n:9,   label:'tile_9'  },
+      { mode:'tile',   n:16,  label:'tile_16' },
+      { mode:'tile',   n:25,  label:'tile_25' }
+    ]
+  };
+  function hashStr(s){ var h=2166136261; s=String(s); for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+  function variantForId(id){ var vid = hashStr('nrbsalt_'+id) % EXP.VARIANTS.length; return { vid:vid, v:EXP.VARIANTS[vid] }; }
+
+  // localStorage 键：刮刮乐自己的看过记录 + 图库池缓存
+  var KEYS = { SCRATCH_SEEN: 'nrb_scratch_seen', POOL_CACHE: 'nrb_scratch_pool' };
+  var POOL_TTL_MS = 6 * 60 * 60 * 1000;   // 图库缓存 6 小时
+  var COST_PER_DRAW = 1;                  // 每抽一张 1 积分
+
+  function readJson(key, fallback){
+    try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+    catch(e){ return fallback; }
+  }
+  function writeJson(key, val){
+    try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+    catch(e){ return false; }
+  }
+
+  // 看过判定：三源合并——
+  //   ids:    PointsSystem 的 viewed_ids.beauty（各栏目通用的 ID 级记录）
+  //   urls:   viewed_images（URL 级记录，3 天免费窗口，带付费语义）
+  //   scratch: 刮刮乐自己的 nrb_scratch_seen（抽中即写，防中途退出重复抽）
+  function isSeen(item, ctx){
+    if (!item) return false;
+    if (ctx.ids && ctx.ids[item.id]) return true;
+    if (ctx.urls && ctx.urls[item.url]) return true;
+    if (ctx.scratch && ctx.scratch[item.id]) return true;
+    return false;
+  }
+  // 从池子里随机抽一个没看过的；全看过返回 null
+  function pickUnseen(pool, ctx){
+    var unseen = [];
+    for (var i=0;i<pool.length;i++){ if (!isSeen(pool[i], ctx)) unseen.push(pool[i]); }
+    if (!unseen.length) return null;
+    return unseen[Math.floor(Math.random()*unseen.length)];
+  }
+  // ==== PURE-LOGIC-END ====
+
+  var THUMB = 140;
+  var UNLOCK = 0.30;
+  var MASK_W = 96;
+
+  var _expOverride = (function(){ try { return new URLSearchParams(location.search).get('exp'); } catch(e){ return null; } })();
+  var _imgOverride = (function(){ try { return new URLSearchParams(location.search).get('img'); } catch(e){ return null; } })();
+  function resolveVariant(id){
+    if (_expOverride) {
+      for (var k=0;k<EXP.VARIANTS.length;k++){ if (EXP.VARIANTS[k].label === _expOverride) return { vid:k, v:EXP.VARIANTS[k] }; }
+    }
+    return variantForId(id);
+  }
+
+  // 兜底图库（DB 拉取失败时使用，均为已审核 approved）
+  var FALLBACK_POOL = [
+    { id: 621, url: "https://letmetry.cn/images/A_hyperrealistic_high_fashion__2026-10-12T12-16-27-c.jpg" },
+    { id: 581, url: "https://letmetry.cn/images/A_hyperrealistic_high_fashion__2026-10-08T23-36-44-c.jpg" },
+    { id: 580, url: "https://letmetry.cn/images/A_hyperrealistic_high_fashion__2026-10-08T04-11-48-c.jpg" },
+    { id: 575, url: "https://letmetry.cn/images/nanrenbao_beauty_20261002.jpg" },
+    { id: 568, url: "https://letmetry.cn/images/30f5c5d9-acba-4ec8-a899-a79a60099fc3.jpg" },
+    { id: 561, url: "https://letmetry.cn/images/79b959cd-5a66-47e3-9147-7b257fab60d4.jpg" },
+    { id: 559, url: "https://letmetry.cn/images/c434df35-d1c3-4396-95b6-8ebadd01f100.jpg" },
+    { id: 557, url: "https://letmetry.cn/images/3c7c5563-488d-418e-83ff-58876a64dfd2.jpg" },
+    { id: 555, url: "https://letmetry.cn/images/141f60c5-33bc-4a6b-bd1e-95635a5cce73.jpg" },
+    { id: 554, url: "https://letmetry.cn/images/4b76a095-7803-40bc-813f-4897158d1c94.jpg" },
+    { id: 553, url: "https://letmetry.cn/images/9b04ed43-70b2-4561-9701-0de1ee60832f.jpg" },
+    { id: 552, url: "https://letmetry.cn/images/3d5fd918-b432-40b6-8f38-94ca6e7ed08e.jpg" },
+    { id: 551, url: "https://letmetry.cn/images/0832cd8b-3094-49d4-8ece-e0939ca5fb54.jpg" },
+    { id: 550, url: "https://letmetry.cn/images/8acbc421-1124-40e3-b26d-fc5eae209f23.jpg" },
+    { id: 549, url: "https://letmetry.cn/images/1c47501f-d218-4f30-aff7-7426af3f86d0.jpg" },
+    { id: 548, url: "https://letmetry.cn/images/a7c4e3b4-5001-4c74-a278-8b2ccc76789b.jpg" },
+    { id: 547, url: "https://letmetry.cn/images/18c918b1-c647-40aa-b380-b005db6988f3.jpg" },
+    { id: 546, url: "https://letmetry.cn/images/15a2805f-3cbf-4f23-9452-7ef8ea801513.jpg" },
+    { id: 545, url: "https://letmetry.cn/images/bf619830-4628-495c-af89-293febed967f.jpg" },
+    { id: 544, url: "https://letmetry.cn/images/71b10305-7176-4919-865b-f325a21feb99.jpg" },
+    { id: 543, url: "https://letmetry.cn/images/4c816795-1b81-44ce-b645-d2489f6769e1.jpg" },
+    { id: 542, url: "https://letmetry.cn/images/cf5fc079-fc90-45ce-8232-8fee400394bd.jpg" },
+    { id: 541, url: "https://letmetry.cn/images/e24bf687-5233-4f84-9de4-4b8d02e76aa3.jpg" },
+    { id: 540, url: "https://letmetry.cn/images/4f957fbc-cdc6-4974-af56-8c87a878d902.jpg" },
+    { id: 539, url: "https://letmetry.cn/images/8c347da2-d365-4bba-9f12-b63fd7407a80.jpg" }
+  ];
+
+  function $(id){return document.getElementById(id);}
+  function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
+
+  // ---- 埋点（百度统计）：scratch_lottery 业务事件 + scratch_exp 实验臂事件 ----
+  function track(group, action, value){
+    try {
+      if (typeof _hmt !== 'undefined' && _hmt.push) {
+        _hmt.push(['_trackEvent', group, action, variant.v.label, (value==null?1:value)]);
+      }
+    } catch(e){}
+  }
+
+  // ---- 图库池：DB 拉取 + localStorage 缓存（TTL 6h），失败用兜底数组 ----
+  function fetchPoolFromDB(){
+    var ep = (window.API_ENDPOINTS && window.API_ENDPOINTS.MYSQL_QUERY) || 'https://letmetry.cn/mysql/query';
+    return fetch(ep, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sql: 'SELECT id, image_url FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY id DESC LIMIT 500',
+        params: ['approved']
+      })
+    }).then(function(r){ return r.json(); }).then(function(rows){
+      var list = Array.isArray(rows) ? rows : (rows && Array.isArray(rows.data) ? rows.data : []);
+      var items = [];
+      for (var i=0;i<list.length;i++){
+        var row = list[i];
+        if (row && row.image_url) items.push({ id: parseInt(row.id,10), url: row.image_url });
+      }
+      return items.filter(function(x){ return !isNaN(x.id); });
+    });
+  }
+  function loadPool(){
+    var cached = readJson(KEYS.POOL_CACHE, null);
+    if (cached && cached.ts && Array.isArray(cached.items) && cached.items.length &&
+        (Date.now() - cached.ts) < POOL_TTL_MS) {
+      return Promise.resolve(cached.items);
+    }
+    return fetchPoolFromDB().then(function(items){
+      if (items && items.length) { writeJson(KEYS.POOL_CACHE, { ts: Date.now(), items: items }); return items; }
+      return FALLBACK_POOL.slice();
+    }).catch(function(){ return FALLBACK_POOL.slice(); });
+  }
+
+  // ---- 看过上下文：三源合并（PointsSystem ID 级 + URL 级 + 刮刮乐自有）----
+  function buildSeenContext(){
+    var ctx = { ids:{}, urls:{}, scratch:{} };
+    try {
+      var idsAll = JSON.parse(localStorage.getItem('nanrenbao_viewed_ids') || '{}');
+      var beautyIds = idsAll.beauty || [];
+      for (var i=0;i<beautyIds.length;i++) ctx.ids[beautyIds[i]] = true;
+    } catch(e){}
+    try {
+      var viewed = JSON.parse(localStorage.getItem('nanrenbao_viewed_images') || '{}');
+      for (var k in viewed){ if (Object.prototype.hasOwnProperty.call(viewed,k)) ctx.urls[k] = true; }
+    } catch(e){}
+    var scratchSeen = readJson(KEYS.SCRATCH_SEEN, []);
+    for (var j=0;j<scratchSeen.length;j++) ctx.scratch[scratchSeen[j]] = true;
+    return ctx;
+  }
+  function countUnseen(pool){
+    var ctx = buildSeenContext(), n = 0;
+    for (var i=0;i<pool.length;i++){ if (!isSeen(pool[i], ctx)) n++; }
+    return n;
+  }
+  function markScratchSeen(id){
+    var seen = readJson(KEYS.SCRATCH_SEEN, []);
+    var s = String(id);
+    if (seen.indexOf(s) === -1){ seen.push(s); writeJson(KEYS.SCRATCH_SEEN, seen); }
+  }
+
+  // ---- 画布 / 马赛克（control 刮擦臂 + tile 分块臂，与 beauty-scratch.html 同源）----
+  var img = new Image();
+  var bg=$('bg'), cv=$('scratch'), ctx2d=cv.getContext('2d');
+  var bar=$('bar'), panel=$('panel'), hint=$('hint'), loading=$('loading'), loadingText=$('loadingText');
+  var pointsEl=$('points'), expTag=$('expTag'), toast=$('toast');
+  var drawBtn=$('drawBtn'), nextBtn=$('nextBtn'), rechargeBtn=$('rechargeBtn'), resetBtn=$('resetBtn');
+  var panelTitle=$('panelTitle'), panelSub=$('panelSub');
+  var W=0,H=0, fitRect={dx:0,dy:0,dw:0,dh:0};
+  var mask, mctx;
+  var unlocked=false, scratching=false;
+  var variant = { vid:0, v:EXP.VARIANTS[0] };
+  var cols=1, rows=1, tileW=0, tileH=0;
+  var tileState=[], tileRevealed=[], revealedCount=0;
+  var coverCanvas=null;
+  var startLogged=false, halfLogged=false;
+
+  // ---- 业务状态 ----
+  var pool = [];
+  var current = null;        // 当前图 {id,url}
+  var state = 'idle';        // idle | drawing | scratching | unlocked | insufficient | exhausted
+  var drawRetries = 0;       // 加载失败重抽计数（防死循环）
+  var MAX_DRAW_RETRIES = 5;
+
+  function refreshPoints(){
+    var p = 0;
+    try { p = PointsSystem.getPoints(); } catch(e){}
+    pointsEl.textContent = '积分 ' + p;
+    return p;
+  }
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+  }
+
+  function size(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr(); cv.height=H*dpr(); }
+  function fit(){
+    var nw=img.naturalWidth, nh=img.naturalHeight, s=W/nw < H/nh ? W/nw : H/nh;
+    var dw=nw*s, dh=nh*s, dx=(W-dw)/2, dy=(H-dh)/2;
+    fitRect={dx:dx,dy:dy,dw:dw,dh:dh};
+    var mw=MASK_W, mh=Math.round(MASK_W*dh/dw);
+    mask=document.createElement('canvas'); mask.width=mw; mask.height=mh;
+    mctx=mask.getContext('2d'); mctx.clearRect(0,0,mw,mh);
+  }
+
+  function drawMosaic(){
+    size(); fit();
+    ctx2d.clearRect(0,0,cv.width,cv.height);
+    ctx2d.globalCompositeOperation='source-over';
+    ctx2d.imageSmoothingEnabled=false;
+    var d=dpr();
+    var px=fitRect.dx*d, py=fitRect.dy*d, pw=fitRect.dw*d, ph=fitRect.dh*d;
+    var cell=Math.round(THUMB*Math.max(d,1));
+    var t=document.createElement('canvas'); t.width=Math.max(1,Math.round(pw/cell)); t.height=Math.max(1,Math.round(ph/cell));
+    var tc=t.getContext('2d'); tc.imageSmoothingEnabled=false;
+    tc.drawImage(img,0,0,t.width,t.height);
+    ctx2d.drawImage(t,px,py,pw,ph);
+    panel.classList.remove('show');
+  }
+
+  function buildCover(){
+    size(); fit();
+    coverCanvas = document.createElement('canvas');
+    coverCanvas.width = cv.width; coverCanvas.height = cv.height;
+    var cc = coverCanvas.getContext('2d');
+    cc.imageSmoothingEnabled=false;
+    var d=dpr();
+    var px=fitRect.dx*d, py=fitRect.dy*d, pw=fitRect.dw*d, ph=fitRect.dh*d;
+    var cell=Math.round(THUMB*Math.max(d,1));
+    var t=document.createElement('canvas'); t.width=Math.max(1,Math.round(pw/cell)); t.height=Math.max(1,Math.round(ph/cell));
+    var tc=t.getContext('2d'); tc.imageSmoothingEnabled=false;
+    tc.drawImage(img,0,0,t.width,t.height);
+    cc.drawImage(t,px,py,pw,ph);
+    cols = Math.max(1, Math.round(Math.sqrt(variant.v.n)));
+    rows = cols;
+    tileW = fitRect.dw/cols; tileH = fitRect.dh/rows;
+    tileState = []; tileRevealed = []; revealedCount = 0;
+    for (var i=0;i<cols*rows;i++){ tileState.push(1); tileRevealed.push(false); }
+    renderTiles();
+    panel.classList.remove('show');
+  }
+
+  function renderTiles(){
+    ctx2d.clearRect(0,0,cv.width,cv.height);
+    ctx2d.imageSmoothingEnabled=false;
+    var d=dpr();
+    for (var r=0;r<rows;r++){
+      for (var c=0;c<cols;c++){
+        var ti=r*cols+c;
+        if (tileState[ti] <= 0.01) continue;
+        var x=(fitRect.dx + c*tileW), y=(fitRect.dy + r*tileH);
+        ctx2d.globalAlpha = tileState[ti];
+        ctx2d.drawImage(coverCanvas, x*d, y*d, tileW*d, tileH*d, x*d, y*d, tileW*d, tileH*d);
+      }
+    }
+    ctx2d.globalAlpha=1;
+    ctx2d.strokeStyle='rgba(255,255,255,0.18)'; ctx2d.lineWidth=1;
+    for (var c2=1;c2<cols;c2++){
+      var gx=(fitRect.dx + c2*tileW)*d;
+      ctx2d.beginPath(); ctx2d.moveTo(gx, fitRect.dy*d); ctx2d.lineTo(gx, (fitRect.dy+fitRect.dh)*d); ctx2d.stroke();
+    }
+    for (var r2=1;r2<rows;r2++){
+      var gy=(fitRect.dy + r2*tileH)*d;
+      ctx2d.beginPath(); ctx2d.moveTo(fitRect.dx*d, gy); ctx2d.lineTo((fitRect.dx+fitRect.dw)*d, gy); ctx2d.stroke();
+    }
+  }
+
+  function revealTileAt(cx,cy){
+    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return;
+    var c=Math.floor((cx-fitRect.dx)/tileW), r=Math.floor((cy-fitRect.dy)/tileH);
+    if(c<0)c=0; if(c>=cols)c=cols-1; if(r<0)r=0; if(r>=rows)r=rows-1;
+    var ti=r*cols+c;
+    if (tileRevealed[ti]) return;
+    tileRevealed[ti]=true; revealedCount++;
+    animateTile(ti);
+    if (!startLogged){ startLogged=true; track('scratch_exp','start'); }
+    tickTiles();
+  }
+
+  function animateTile(ti){
+    var start=performance.now(), dur=220;
+    function step(now){
+      var t=Math.min(1,(now-start)/dur);
+      tileState[ti]=1-t;
+      renderTiles();
+      if(t<1) requestAnimationFrame(step);
+      else { tileState[ti]=0; renderTiles(); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function tickTiles(){
+    var pct = revealedCount/(cols*rows);
+    bar.style.width=(pct*100)+'%';
+    if (pct>=0.5 && !halfLogged){ halfLogged=true; track('scratch_exp','half'); }
+    if (revealedCount>=cols*rows && !unlocked){ unlock(); }
+  }
+
+  function pxof(e){
+    var r=cv.getBoundingClientRect(), t=(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0])||e;
+    return { x:t.clientX-r.left, y:t.clientY-r.top };
+  }
+
+  function erase(x,y){
+    var d=dpr(), sd=Math.max(14, dpr()*28);
+    ctx2d.globalCompositeOperation='destination-out';
+    ctx2d.beginPath(); ctx2d.arc(x*d, y*d, sd, 0, Math.PI*2); ctx2d.fill();
+    if(x>=fitRect.dx && x<=fitRect.dx+fitRect.dw && y>=fitRect.dy && y<=fitRect.dy+fitRect.dh){
+      var mx=(x-fitRect.dx)/fitRect.dw*MASK_W, my=(y-fitRect.dy)/fitRect.dh*mask.height;
+      mctx.globalCompositeOperation='destination-out';
+      mctx.beginPath(); mctx.arc(mx,my, Math.max(1.5, MASK_W/fitRect.dw * 6), 0, Math.PI*2); mctx.fill();
+    }
+  }
+
+  function ratio(){
+    var data=mctx.getImageData(0,0,mask.width,mask.height).data, total=mask.width*mask.height, erased=0;
+    for(var i=3;i<data.length;i+=4){ if(data[i]<128) erased++; }
+    return erased/total;
+  }
+
+  function tick(){
+    var r=ratio();
+    bar.style.width=(r*100)+'%';
+    if (!startLogged){ startLogged=true; track('scratch_exp','start'); }
+    if (r>=UNLOCK*0.5 && !halfLogged){ halfLogged=true; track('scratch_exp','half'); }
+    if(r>=UNLOCK && !unlocked) unlock();
+  }
+
+  function handlePoint(x,y){
+    if (variant.v.mode==='scratch'){ erase(x,y); tick(); }
+    else { revealTileAt(x,y); }
+  }
+  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); }
+  function onMove(e){ e.preventDefault(); if(!scratching) return; handlePoint(pxof(e).x,pxof(e).y); }
+  function onUp(){ scratching=false; }
+
+  // ---- 揭示完成：全局去重记录 + DB view_count ----
+  function bumpViewCount(id, url){
+    if (!url) return;
+    try {
+      var key = 'sl_view_bumped_' + id;
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+    } catch(e){}
+    try {
+      var ep = (window.API_ENDPOINTS && window.API_ENDPOINTS.MYSQL_QUERY) || 'https://letmetry.cn/mysql/query';
+      fetch(ep, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sql: 'UPDATE beauty_images SET view_count = view_count + 1 WHERE image_url = ?',
+          params: [url]
+        })
+      }).catch(function(){});
+    } catch(e){}
+  }
+
+  function recordSeen(item){
+    // 1) 刮刮乐自有记录（抽中时已写，这里双保险）
+    markScratchSeen(item.id);
+    // 2) 全局 ID 级记录：其他栏目（欣赏/背影杀/后宫）后续也会去重
+    try { PointsSystem.markImageIdAsViewed(item.id, 'beauty'); } catch(e){}
+    // 3) URL 级记录 + DB view_count（ PointsSystem.markImageViewed 内部含计数）
+    try {
+      if (PointsSystem && typeof PointsSystem.markImageViewed === 'function') {
+        PointsSystem.markImageViewed(item.url).catch(function(){});
+      } else {
+        bumpViewCount(item.id, item.url);
+      }
+    } catch(e){ bumpViewCount(item.id, item.url); }
+  }
+
+  function unlock(){
+    unlocked=true;
+    if (variant.v.mode==='scratch'){ ctx2d.clearRect(0,0,cv.width,cv.height); }
+    bar.style.width='100%';
+    hint.style.opacity='0';
+    track('scratch_exp','complete');
+    track('scratch_lottery','unlock');
+    if (current) recordSeen(current);
+    state='unlocked';
+    panelTitle.textContent='真容解锁 ✨';
+    var left = countUnseen(pool);
+    panelSub.textContent = left > 0
+      ? ('这位美女已加入你的观看记录 · 图库还剩 ' + left + ' 位没看过')
+      : '这位美女已加入你的观看记录';
+    nextBtn.style.display = left > 0 ? '' : 'none';
+    drawBtn.style.display='none';
+    rechargeBtn.style.display='none';
+    resetBtn.style.display = left > 0 ? 'none' : '';
+    panel.classList.add('show');
+  }
+
+  // ---- 抽图（核心动作）：扣 1 积分 → 随机抽未看过 → 写 seen → 渲染 ----
+  function draw(){
+    if (state === 'drawing') return;
+    var points = refreshPoints();
+    if (points < COST_PER_DRAW){
+      state='insufficient';
+      panelTitle.textContent='积分不足 😢';
+      panelSub.textContent='抽一位新美女需要 ' + COST_PER_DRAW + ' 积分，每日访问男人宝可领 5 积分';
+      drawBtn.style.display='none';
+      nextBtn.style.display='none';
+      rechargeBtn.style.display='';
+      resetBtn.style.display='none';
+      panel.classList.add('show');
+      track('scratch_lottery','insufficient');
+      return;
+    }
+    var item = pickUnseen(pool, buildSeenContext());
+    if (!item){
+      state='exhausted';
+      panelTitle.textContent='🎉 全部刮完';
+      panelSub.textContent='图库里没看过的新美女都刮完了，重开一轮可以再看一次';
+      drawBtn.style.display='none';
+      nextBtn.style.display='none';
+      rechargeBtn.style.display='none';
+      resetBtn.style.display='';
+      panel.classList.add('show');
+      track('scratch_lottery','exhausted');
+      return;
+    }
+    // 扣费 + 抽中即记 seen（防刮到一半退出后刷新重复抽到同一张）
+    try { PointsSystem.addPoints(-COST_PER_DRAW); } catch(e){}
+    markScratchSeen(item.id);
+    refreshPoints();
+    track('scratch_lottery','draw');
+    current = item;
+    state='drawing';
+    loadItem(item);
+  }
+
+  function loadItem(item){
+    var it = item;
+    if (_imgOverride) it = { id: it.id, url: _imgOverride };
+    variant = resolveVariant(it.id);
+    unlocked=false; bar.style.width='0%'; panel.classList.remove('show');
+    startLogged=false; halfLogged=false;
+    expTag.style.display=''; expTag.textContent = '实验臂: ' + variant.v.label;
+    hint.style.opacity='1';
+    hint.textContent = (variant.v.mode==='scratch')
+      ? '↓ 手指擦开马赛克，看美女真容'
+      : '👆 点开方块，逐块揭秘真容';
+    img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=function(){
+      bg.src=img.src;
+      loading.style.display='none';
+      state='scratching';
+      if (variant.v.mode==='scratch'){ drawMosaic(); }
+      else { buildCover(); }
+    };
+    img.onerror=function(){
+      // 单张加载失败：退还积分 + 从 seen 里摘掉（不算看过），换一张重抽
+      removeScratchSeen(it.id);
+      try { PointsSystem.addPoints(COST_PER_DRAW); } catch(e){}
+      refreshPoints();
+      loading.style.display='none';
+      drawRetries++;
+      if (drawRetries > MAX_DRAW_RETRIES){
+        drawRetries = 0;
+        state='idle';
+        showToast('网络不太稳，稍后再试 😵');
+        showPaywall();
+        return;
+      }
+      showToast('这张加载失败了，换一张 💫');
+      state='idle';
+      draw();
+    };
+    img.src=it.url;
+  }
+
+  function removeScratchSeen(id){
+    var seen = readJson(KEYS.SCRATCH_SEEN, []);
+    var s = String(id), out = [];
+    for (var i=0;i<seen.length;i++){ if (seen[i] !== s) out.push(seen[i]); }
+    writeJson(KEYS.SCRATCH_SEEN, out);
+  }
+
+  function showPaywall(){
+    state='idle';
+    var left = countUnseen(pool);
+    panelTitle.textContent='🎰 刮刮乐';
+    panelSub.textContent = left > 0
+      ? ('花 ' + COST_PER_DRAW + ' 积分随机抽一位没看过的新美女，刮开真容 · 图库还剩 ' + left + ' 位')
+      : '图库里没看过的新美女都刮完了';
+    drawBtn.style.display = left > 0 ? '' : 'none';
+    nextBtn.style.display='none';
+    rechargeBtn.style.display='none';
+    resetBtn.style.display = left > 0 ? 'none' : '';
+    panel.classList.add('show');
+  }
+
+  function resetRound(){
+    // 清空刮刮乐自有记录 + 全局 ID 级记录（让其他栏目也重新按未看排序）；
+    // 保留 viewed_images（URL 级付费窗口记录，避免重复扣费争议）
+    writeJson(KEYS.SCRATCH_SEEN, []);
+    try {
+      var idsAll = JSON.parse(localStorage.getItem('nanrenbao_viewed_ids') || '{}');
+      idsAll.beauty = [];
+      localStorage.setItem('nanrenbao_viewed_ids', JSON.stringify(idsAll));
+    } catch(e){}
+    track('scratch_lottery','reset');
+    showToast('已重开一轮 🔄');
+    showPaywall();
+  }
+
+  cv.addEventListener('pointerdown',onDown);
+  window.addEventListener('pointermove',onMove);
+  window.addEventListener('pointerup',onUp);
+  window.addEventListener('pointercancel',onUp);
+
+  drawBtn.addEventListener('click', function(){ track('scratch_lottery','advance'); draw(); });
+  nextBtn.addEventListener('click', function(){ track('scratch_lottery','advance'); draw(); });
+  rechargeBtn.addEventListener('click', function(){ location.href='recharge.html'; });
+  resetBtn.addEventListener('click', resetRound);
+  $('homeBtn').addEventListener('click',function(){ location.href='index.html'; });
+
+  // ---- 启动：初始化积分（新用户 3 + 每日 5）→ 拉图库 → 待机面板 ----
+  try { PointsSystem.initialize(); } catch(e){}
+  refreshPoints();
+  loadPool().then(function(items){
+    pool = items;
+    loading.style.display='none';
+    showPaywall();
+  });
+})();
+</script>
+</body>
+</html>

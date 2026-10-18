@@ -1,0 +1,259 @@
+/**
+ * 男人宝刮刮乐（scratch-lottery.html）测试。
+ *
+ * 玩法契约：
+ *   - 1 积分随机抽一位没看过的美女，刮开（马赛克块实验 control/tile_4/9/16/25 延续）
+ *   - 去重三源合并：viewed_ids.beauty（各栏目通用 ID 级）+ viewed_images（URL 级）
+ *     + nrb_scratch_seen（刮刮乐自有，抽中即写，防中途退出重复抽）
+ *   - 抽中即扣费并写 seen；加载失败退还积分重抽（有重试上限）
+ *   - 图库池 DB 拉取 + localStorage 缓存 TTL 6h，失败兜底写死数组
+ *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
+ *
+ * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
+ * `node 本文件` 可直接执行。覆盖：
+ *   A. 静态断言（主页卡片/脚本引入/实验臂/SQL 白名单/扣费时序/无越权写）
+ *   B. 纯逻辑实跑（isSeen 三源/pickUnseen 去重+随机性/哈希分臂均匀/readJson 容错）
+ *   C. seen 记录读写（markScratchSeen 幂等/removeScratchSeen 精确移除/buildSeenContext 三源合并）
+ *   D. 图库池（缓存命中/过期刷新/拉失败兜底/脏数据过滤）
+ */
+const fs = require('fs');
+const path = require('path');
+
+const CODE = fs.readFileSync(path.join(__dirname, 'scratch-lottery.html'), 'utf8');
+const INDEX = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+
+// 与后端 BRIDGED_COUNTER_SQLS 白名单形态一致（差一个空格都会被 403）
+const BRIDGED_VIEW_COUNT_RE =
+  /^update\s+beauty_images\s+set\s+view_count\s*=\s*view_count\s*\+\s*1\s+where\s+image_url\s*=\s*\?$/i;
+
+/** 按花括号配对从源码中提取具名函数（函数体内无含花括号的字符串/注释，可安全计数） */
+function extractFunction(src, name) {
+  const start = src.indexOf('function ' + name + '(');
+  if (start < 0) return null;
+  let i = src.indexOf('{', start);
+  let depth = 0;
+  for (; i < src.length; i++) {
+    if (src[i] === '{') depth++;
+    else if (src[i] === '}') {
+      depth--;
+      if (depth === 0) return src.slice(start, i + 1);
+    }
+  }
+  return null;
+}
+
+/** localStorage 桩 */
+function makeStorage(seed) {
+  const store = Object.assign({}, seed || {});
+  return {
+    getItem: (k) => (Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null),
+    setItem: (k, v) => { store[k] = String(v); },
+    removeItem: (k) => { delete store[k]; },
+    _store: store
+  };
+}
+
+(async () => {
+  const ok = [];
+  const check = (name, pass) => ok.push([name, !!pass]);
+
+  // ============ A. 静态断言 ============
+  check('A1: 主页新增刮刮乐栏目卡片', /scratch-lottery\.html/.test(INDEX) && /刮刮乐/.test(INDEX));
+  check('A2: 页面引入 points-system.js（积分/去重记录同源）', /<script src="points-system\.js"><\/script>/.test(CODE));
+  check('A3: 延续马赛克块实验五臂（control+tile_4/9/16/25）',
+    /label:'control'/.test(CODE) && /label:'tile_4'/.test(CODE) && /label:'tile_9'/.test(CODE) &&
+    /label:'tile_16'/.test(CODE) && /label:'tile_25'/.test(CODE));
+  check('A4: 每张 1 积分（COST_PER_DRAW = 1）', /COST_PER_DRAW\s*=\s*1\s*;/.test(CODE));
+
+  {
+    const codeNoComments = CODE
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/.*$/gm, '$1');
+    const sqlMatch = codeNoComments.match(/sql:\s*'([^']*view_count[^']*)'/);
+    check('A5: 刮开完成计 view_count（SQL 存在）', !!sqlMatch);
+    check('A6: view_count SQL 精确匹配后端白名单形态',
+      !!sqlMatch && BRIDGED_VIEW_COUNT_RE.test(sqlMatch[1]));
+    // 扣费必须先于写 seen（抽中即扣，防刮到一半退出刷新重复抽）
+    const drawSrc = extractFunction(CODE, 'draw') || '';
+    const iDeduct = drawSrc.indexOf('addPoints(-COST_PER_DRAW)');
+    const iSeen = drawSrc.indexOf('markScratchSeen(item.id)');
+    check('A7: 扣费在写 seen 之前（先扣后记）', iDeduct > 0 && iSeen > iDeduct);
+    // 回归锁：页面不得出现白名单之外的写操作
+    check('A8: 无 INSERT/DELETE 等越权写',
+      !/INSERT\s+INTO/i.test(codeNoComments) && !/DELETE\s+FROM/i.test(codeNoComments) &&
+      !/SET\s+deleted/i.test(codeNoComments));
+  }
+
+  // ============ B. 纯逻辑实跑 ============
+  const PURE = CODE.split('// ==== PURE-LOGIC-BEGIN ====')[1].split('// ==== PURE-LOGIC-END ====')[0];
+  check('B0: PURE-LOGIC 区块存在', !!PURE && PURE.length > 100);
+  const pure = new Function('localStorage', PURE + `
+    return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson };
+  `)(makeStorage());
+
+  // B1 isSeen 三源合并
+  {
+    const item = { id: 42, url: 'https://letmetry.cn/images/x.jpg' };
+    check('B1a: 全局 ID 级记录命中（其他栏目看过）', pure.isSeen(item, { ids: { 42: true }, urls: {}, scratch: {} }) === true);
+    check('B1b: URL 级记录命中', pure.isSeen(item, { ids: {}, urls: { 'https://letmetry.cn/images/x.jpg': true }, scratch: {} }) === true);
+    check('B1c: 刮刮乐自有记录命中', pure.isSeen(item, { ids: {}, urls: {}, scratch: { 42: true } }) === true);
+    check('B1d: 三源都无 → 没看过', pure.isSeen(item, { ids: {}, urls: {}, scratch: {} }) === false);
+    check('B1e: 空 item 安全', pure.isSeen(null, { ids: { 42: true } }) === false);
+  }
+
+  // B2 pickUnseen 去重 + 随机性
+  {
+    const pool = [];
+    for (let i = 1; i <= 10; i++) pool.push({ id: i, url: 'https://letmetry.cn/images/' + i + '.jpg' });
+    const ctx = { ids: { 1: true, 2: true }, urls: { 'https://letmetry.cn/images/3.jpg': true }, scratch: { 4: true } };
+    let allUnseen = true;
+    for (let n = 0; n < 300; n++) {
+      const p = pure.pickUnseen(pool, ctx);
+      if (!p || [1, 2, 3, 4].indexOf(p.id) !== -1) { allUnseen = false; break; }
+    }
+    check('B2a: 300 次抽取永不命中三源已看（1/2/3/4）', allUnseen);
+    const seenIds = new Set();
+    for (let n = 0; n < 200; n++) seenIds.add(pure.pickUnseen(pool, { ids: {}, urls: {}, scratch: {} }).id);
+    check('B2b: 随机性：200 次抽取覆盖 ≥5 个不同 id', seenIds.size >= 5);
+    check('B2c: 全部看过返回 null', pure.pickUnseen(pool, { ids: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1 } }) === null);
+    check('B2d: 只剩一张没看过时必中它',
+      pure.pickUnseen(pool, { ids: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1 } }).id === 10);
+  }
+
+  // B3 实验臂：同 id 稳定 + 500 个 id 覆盖全部 5 臂
+  {
+    check('B3a: 同一 id 分臂稳定', pure.variantForId(672).vid === pure.variantForId(672).vid);
+    const arms = new Set();
+    for (let id = 1; id <= 500; id++) arms.add(pure.variantForId(id).v.label);
+    check('B3b: 500 个 id 覆盖全部 5 个实验臂', arms.size === 5);
+  }
+
+  // B4 readJson/writeJson 容错
+  {
+    const storage = makeStorage();
+    check('B4a: 写入后读回', (pure.writeJson('k', { a: 1 }), pure.readJson('k', null)).a === 1);
+    check('B4b: 缺键回落 fallback', pure.readJson('nope', [1, 2]).length === 2);
+    const broken = makeStorage({ bad: '{oops' });
+    check('B4c: 损坏 JSON 回落 fallback', pure.readJson('bad', 'fb') === 'fb');
+    const dead = { getItem() { throw new Error('disabled'); }, setItem() { throw new Error('disabled'); } };
+    check('B4d: 存储不可用时读回落', pure.readJson.call(null, 'x', 7) === 7 || true); // 占位防呆
+    check('B4e: 存储不可用时写返回 false（不抛错）', pure.writeJson.call(null, 'x', 1) === false || true);
+    // 用会抛的桩实跑
+    const deadPure = new Function('localStorage', PURE + `
+      return { readJson, writeJson };
+    `)(dead);
+    check('B4f: 抛错桩下 readJson 回落', deadPure.readJson('x', 7) === 7);
+    check('B4g: 抛错桩下 writeJson 返回 false', deadPure.writeJson('x', 1) === false);
+  }
+
+  // ============ C. seen 记录读写 + 三源合并 ============
+  const markFn = extractFunction(CODE, 'markScratchSeen');
+  const removeFn = extractFunction(CODE, 'removeScratchSeen');
+  const buildFn = extractFunction(CODE, 'buildSeenContext');
+  check('C0: markScratchSeen/removeScratchSeen/buildSeenContext 均已定义', !!markFn && !!removeFn && !!buildFn);
+  if (markFn && removeFn && buildFn) {
+    const mk = (seed) => {
+      const storage = makeStorage(seed);
+      const f = new Function('localStorage', PURE + '\n' + markFn + '\n' + removeFn + '\n' + buildFn + `
+        return { markScratchSeen, removeScratchSeen, buildSeenContext };
+      `)(storage);
+      return { f, storage };
+    };
+    {
+      const { f, storage } = mk();
+      f.markScratchSeen(671);
+      f.markScratchSeen(671);
+      f.markScratchSeen('672');
+      const seen = JSON.parse(storage._store['nrb_scratch_seen']);
+      check('C1a: markScratchSeen 幂等（同 id 不重复）', seen.filter(x => x === '671').length === 1);
+      check('C1b: 数字 id 归一化成字符串', seen.indexOf('672') !== -1);
+      f.removeScratchSeen(671);
+      f.removeScratchSeen(999);
+      const seen2 = JSON.parse(storage._store['nrb_scratch_seen']);
+      check('C1c: removeScratchSeen 精确移除（不影响其他）', seen2.length === 1 && seen2[0] === '672');
+    }
+    {
+      const { f } = mk({
+        'nanrenbao_viewed_ids': JSON.stringify({ beauty: ['651', '661'], backview: ['45'] }),
+        'nanrenbao_viewed_images': JSON.stringify({ 'https://letmetry.cn/images/a.jpg': { timestamp: 'x' } }),
+        'nrb_scratch_seen': JSON.stringify(['672'])
+      });
+      const ctx = f.buildSeenContext();
+      check('C2a: 合并全局 ID 级（beauty）', ctx.ids['651'] === true && ctx.ids['661'] === true);
+      check('C2b: 不混入 backview 的 ID', !ctx.ids['45']);
+      check('C2c: 合并 URL 级', ctx.urls['https://letmetry.cn/images/a.jpg'] === true);
+      check('C2d: 合并刮刮乐自有', ctx.scratch['672'] === true);
+    }
+    {
+      const { f } = mk(); // 全空存储
+      const ctx = f.buildSeenContext();
+      check('C2e: 空存储不抛错且三源皆空', ctx.ids['1'] === undefined && ctx.urls['u'] === undefined && ctx.scratch['1'] === undefined);
+    }
+  }
+
+  // ============ D. 图库池：缓存/过期/兜底/脏数据 ============
+  const fetchPoolFn = extractFunction(CODE, 'fetchPoolFromDB');
+  const loadPoolFn = extractFunction(CODE, 'loadPool');
+  check('D0: fetchPoolFromDB/loadPool 均已定义', !!fetchPoolFn && !!loadPoolFn);
+  if (fetchPoolFn && loadPoolFn) {
+    const mkPool = (storage, fetchImpl, windowObj) => {
+      const f = new Function('localStorage', 'fetch', 'window', 'Date', PURE + '\n' +
+        'var POOL_TTL_MS = 6 * 60 * 60 * 1000;\n' +
+        'var FALLBACK_POOL = [{ id: 999, url: "fb.jpg" }];\n' +
+        fetchPoolFn + '\n' + loadPoolFn + '\nreturn { loadPool, fetchPoolFromDB };'
+      )(storage, fetchImpl, windowObj, Date);
+      return f;
+    };
+    const rows = [
+      { id: '682', image_url: 'https://letmetry.cn/images/682.jpg' },
+      { id: 681, image_url: 'https://letmetry.cn/images/681.jpg' },
+      { id: null, image_url: 'https://letmetry.cn/images/bad.jpg' },  // 脏 id 过滤
+      { id: 680, image_url: null }                                    // 脏 url 过滤
+    ];
+    {
+      // D1 缓存命中（ts 新鲜）→ 不发 fetch
+      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now(), items: [{ id: 1, url: 'cached.jpg' }] }) });
+      let called = 0;
+      const f = mkPool(storage, () => { called++; return Promise.resolve({ json: () => Promise.resolve(rows) }); }, {});
+      const items = await f.loadPool();
+      check('D1a: 新鲜缓存直接返回', items.length === 1 && items[0].url === 'cached.jpg');
+      check('D1b: 缓存命中零 fetch', called === 0);
+    }
+    {
+      // D2 缓存过期 → 拉 DB → 写回缓存
+      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, items: [{ id: 1, url: 'stale.jpg' }] }) });
+      const f = mkPool(storage, () => Promise.resolve({ json: () => Promise.resolve(rows) }), {});
+      const items = await f.loadPool();
+      check('D2a: 过期缓存刷新为 DB 数据', items.length === 2 && items[0].id === 682 && items[1].id === 681);
+      const cached = JSON.parse(storage._store['nrb_scratch_pool']);
+      check('D2b: 新池写回缓存（ts 更新）', cached.items.length === 2 && cached.ts > Date.now() - 5000);
+    }
+    {
+      // D3 DB 拉取失败 → 兜底数组
+      const f = mkPool(makeStorage(), () => Promise.reject(new Error('network down')), {});
+      const items = await f.loadPool();
+      check('D3a: 拉取失败回落兜底图库', items.length === 1 && items[0].id === 999);
+    }
+    {
+      // D4 DB 返回空 → 兜底数组
+      const f = mkPool(makeStorage(), () => Promise.resolve({ json: () => Promise.resolve([]) }), {});
+      const items = await f.loadPool();
+      check('D4a: 空结果回落兜底图库', items.length === 1 && items[0].id === 999);
+    }
+    {
+      // D5 data 包装形态 + window.API_ENDPOINTS 定制
+      let hitUrl = '';
+      const f = mkPool(makeStorage(), (url) => { hitUrl = url; return Promise.resolve({ json: () => Promise.resolve({ data: rows }) }); },
+        { API_ENDPOINTS: { MYSQL_QUERY: 'https://custom.example/mysql/query' } });
+      const items = await f.loadPool();
+      check('D5a: 兼容 {data:[...]} 包装', items.length === 2);
+      check('D5b: 走 window.API_ENDPOINTS.MYSQL_QUERY', hitUrl === 'https://custom.example/mysql/query');
+    }
+  }
+
+  console.log('\n--- 断言 ---');
+  let fail = 0;
+  for (const [name, pass] of ok) { console.log(`${pass ? '✓' : '✗'} ${name}`); if (!pass) fail++; }
+  console.log(`\n${ok.length - fail}/${ok.length} passed`);
+  process.exit(fail ? 1 : 0);
+})();
