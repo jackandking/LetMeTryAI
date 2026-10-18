@@ -53,6 +53,49 @@ const WAIT_AFTER_FINISH_MS = Math.max(0, Number.parseInt(process.env.PUBLISH_WAI
 const SUBMISSION_CONFIRM_TIMEOUT_MS = Math.max(3000, Number.parseInt(process.env.PUBLISH_CONFIRM_TIMEOUT_MS || '15000', 10) || 15000);
 const HEADLESS = process.env.HEADLESS !== 'false';
 
+// ─── Dialog stack diagnostics & settling ───
+// 2026-10-18 incident: clicking "AI 生成" for the cover can open a stacked
+// modal whose own .ks-overlay sits above the main dialog and swallows the
+// main dialog's confirm click (Playwright retried 58 times, then the flow
+// silently fell through to a page with no date input and no submit button).
+async function reportDialogStack(page, tag) {
+    const dialogCount = await page.locator('.ks-dialog').count().catch(() => 0);
+    const visibleDialogs = await page.locator('.ks-dialog:visible').count().catch(() => 0);
+    const overlayVisible = await page.locator('.ks-overlay').first().isVisible().catch(() => false);
+    let buttons = [];
+    try {
+        buttons = await page.locator('.ks-dialog:visible button:visible').allInnerTexts();
+    } catch (e) { /* ignore */ }
+    console.log(`🔎 [${tag}] dialogs=${dialogCount} visible=${visibleDialogs} overlay=${overlayVisible} buttons=${JSON.stringify(buttons.slice(0, 12))}`);
+}
+
+// Confirm/close the topmost visible modal until at most one dialog remains.
+// Returns the remaining visible dialog count.
+async function settleDialogStack(page, maxRounds = 4) {
+    for (let round = 0; round < maxRounds; round++) {
+        const visibleDialogs = page.locator('.ks-dialog:visible');
+        const count = await visibleDialogs.count().catch(() => 0);
+        if (count <= 1) return count;
+        const top = visibleDialogs.nth(count - 1);
+        const confirmInTop = top.locator('button', { hasText: /确认|确定|完成|使用|应用/ }).last();
+        if (await confirmInTop.isVisible().catch(() => false)) {
+            await confirmInTop.click({ timeout: 3000 }).catch(() => {});
+            console.log(`🧹 [stack round ${round + 1}] confirmed topmost dialog`);
+        } else {
+            const closeInTop = top.locator('.ks-dialog__headerbtn, .ks-icon-close, button[aria-label="关闭"], .ks-dialog__close').last();
+            if (await closeInTop.isVisible().catch(() => false)) {
+                await closeInTop.click({ timeout: 3000 }).catch(() => {});
+                console.log(`🧹 [stack round ${round + 1}] closed topmost dialog`);
+            } else {
+                await page.keyboard.press('Escape').catch(() => {});
+                console.log(`🧹 [stack round ${round + 1}] pressed Escape`);
+            }
+        }
+        await page.waitForTimeout(1200);
+    }
+    return page.locator('.ks-dialog:visible').count().catch(() => 0);
+}
+
 function getLatestReportPath() {
   const reportDir = '/Users/jak/LetMeTryAI/.automation/.local/exports/metrics/kuaishou/daily';
   if (!fs.existsSync(reportDir)) {
@@ -491,6 +534,19 @@ async function main() {
         // 7. In the Dialog: Confirm (确认)
         // Recording: click confirm
         // Ensure we are clicking the dialog footer confirm, not a sub-dialog
+        // A stacked modal (e.g. AI cover preview) puts its overlay above this
+        // dialog and swallows the click — settle the stack first. A pure
+        // overlay (AI-generation mask, 2026-10-18) needs waiting out instead.
+        await reportDialogStack(activePage, 'pre-confirm');
+        await settleDialogStack(activePage);
+        const preConfirmOverlay = activePage.locator('.ks-overlay').first();
+        for (let i = 0; i < 12; i++) {
+            if (!(await preConfirmOverlay.isVisible().catch(() => false))) break;
+            console.log(`⏳ overlay 仍遮挡中（如 AI 生成遮罩），等待消退 ${i + 1}/12...`);
+            await activePage.waitForTimeout(2500);
+        }
+        await reportDialogStack(activePage, 'post-settle');
+
         const confirmBtn = activePage.locator('.ks-dialog__footer button, .ks-dialog button', { hasText: /确认|确定/ }).last(); // Use last in case of multiple
         if (await confirmBtn.isVisible()) {
              await confirmBtn.click();
@@ -648,6 +704,17 @@ async function main() {
             }
         } else {
             console.log('❌ Could not find any Submit button.');
+            // Evidence dump: graceful-fallback failures never reach the catch
+            // block below, so without this the failure leaves no trace.
+            try {
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const errorDir = path.resolve('/Users/jak/LetMeTryAI/.automation/.local/logs/publish-errors');
+                ensureParentDirectory(path.join(errorDir, '.keep'));
+                const htmlPath = path.join(errorDir, `${appId}-error-${timestamp}.html`);
+                fs.writeFileSync(htmlPath, await activePage.content());
+                await reportDialogStack(activePage, 'giveup');
+                console.log(`📄 Page state dumped to ${htmlPath}`);
+            } catch (e) { console.log('⚠️ Dump failed:', e.message); }
         }
     }
 
