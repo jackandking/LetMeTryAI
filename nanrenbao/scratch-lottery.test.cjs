@@ -7,16 +7,11 @@
  *     + nrb_scratch_seen（刮刮乐自有，抽中即写，防中途退出重复抽）
  *   - 抽中即扣费并写 seen；加载失败退还积分重抽（有重试上限）
  *   - 图库池 DB 拉取 + localStorage 缓存 TTL 6h，失败兜底写死数组；
- *     pool 带 prompt_dna 精简字段（subject/scene/mood/wardrobe/action/hair）供多线索悬念提示与身份揭晓
+ *     pool 带 prompt_dna 精简字段（subject/scene/mood）供悬念提示与身份揭晓
  *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
  *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
- *   - 刮前线索卡：buildTeaser 给 4 类最高优先级线索（出处/造型/姿态/气质，
- *     稀缺时补发型/场景），给足已知信息（图片未必画得准）但绝不揭晓角色名；
- *     **开始刮才显示**：loadItem 只把线索卡存入 teaserPending，首次有效刮擦
- *     （onDown/onMove 且 handlePoint 返回 true）才 revealTeaserIfPending 淡入，
- *     7s 自动淡出（TEASER_AUTO_HIDE_MS）——开图体验第一位，提示不长期挡图；
- *     buildTeaserTint 按颜色关键词上色；
- *     刮开后面板 buildReveal 揭晓身份 + buildRevealExtra 造型回顾 + buildKuaishouTitle 快手同款称号
+ *   - 刮前悬念提示：buildTeaser 给线索（出处/场景/氛围）不揭晓角色名；
+ *     刮开后面板 buildReveal 揭晓身份 + buildKuaishouTitle 快手同款称号
  *
  * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
  * `node 本文件` 可直接执行。覆盖：
@@ -79,25 +74,8 @@ function makeStorage(seed) {
   check('A4b: teaser 元素存在（刮前悬念提示）', /id="teaser"/.test(CODE) && /class="teaser"/.test(CODE));
   check('A4c: 面板含身份揭晓行与后宫状态行',
     /id="panelIdentity"/.test(CODE) && /id="panelHarem"/.test(CODE));
-  check('A4d: loadItem 加载完成后线索卡只待命（teaserPending，不立即显示）',
-    /teaserPending\s*=\s*\{\s*text:\s*buildTeaser\(it\)/.test(CODE) && !/showTeaser\(buildTeaser\(it\)\)/.test(CODE));
+  check('A4d: loadItem 加载完成后展示悬念提示', /showTeaser\(buildTeaser\(it\)\)/.test(CODE));
   check('A4e: 解锁/换抽时淡出 teaser', /hideTeaser\(\);/.test(CODE));
-  // 开始刮才显示：首次有效刮擦触发淡入 + 自动淡出
-  check('A4d2: onDown 任何按下即触发 revealTeaserIfPending；onMove 需有效刮擦',
-    /function onDown\(e\)\{[^}]*revealTeaserIfPending\(\);/.test(CODE) &&
-    /function onMove\(e\)\{[^}]*if \(handlePoint\(pxof\(e\)\.x,pxof\(e\)\.y\)\) revealTeaserIfPending\(\);/.test(CODE));
-  check('A4d3: revealTeaserIfPending 有状态守卫（scratching 且未解锁）',
-    /if \(!teaserPending \|\| state !== 'scratching' \|\| unlocked\) return;/.test(CODE));
-  check('A4d4: 线索卡 7s 自动淡出（TEASER_AUTO_HIDE_MS）',
-    /TEASER_AUTO_HIDE_MS\s*=\s*7000/.test(CODE) && /setTimeout\(hideTeaser,\s*TEASER_AUTO_HIDE_MS\)/.test(CODE));
-  check('A4d5: handlePoint 返回是否真正揭开新区域', /return inside;/.test(CODE) && /return revealTileAt\(x,y\);/.test(CODE));
-  check('A4d6: revealTileAt 越界/已揭开返回 false', /if \(cx<fitRect\.dx\|\|cx>fitRect\.dx\+fitRect\.dw\|\|cy<fitRect\.dy\|\|cy>fitRect\.dy\+fitRect\.dh\) return false;/.test(CODE) && /if \(tileRevealed\[ti\]\) return false;/.test(CODE));
-  // 多线索卡 + 主题色 + 缓存升版
-  check('A4g: teaser CSS 支持多行（white-space:pre-line）', /\.teaser\{[^}]*white-space:\s*pre-line/.test(CODE));
-  check('A4h: POOL_CACHE 升 v2（富字段强制刷新老客户端缓存）', /POOL_CACHE:\s*'nrb_scratch_pool_v2'/.test(CODE));
-  check('A4i: loadItem 按 buildTeaserTint 给 teaser 上色', /buildTeaserTint\(it\)/.test(CODE) && /teaser\.style\.borderColor/.test(CODE));
-  check('A4j: extractDna 调用 extractHair 提炼发型', /var hair = extractHair\(d\.prompt_text\)/.test(CODE));
-  check('A4k: renderIdentity 展示 buildRevealExtra 造型回顾', /buildRevealExtra\(item\)/.test(CODE));
   {
     const recordSrc = extractFunction(CODE, 'recordSeen') || '';
     check('A4f: 刮开收录后宫（isHaremActivated 守卫 + addHaremImage）',
@@ -131,8 +109,7 @@ function makeStorage(seed) {
   check('B0: PURE-LOGIC 区块存在', !!PURE && PURE.length > 100);
   const pure = new Function('localStorage', PURE + `
     return { EXP, KEYS, COST_PER_DRAW, hashStr, variantForId, isSeen, pickUnseen, readJson, writeJson,
-      extractDna, extractHair, splitSubject, firstSegs, cleanWardrobe, cleanAction, cjkMostly, buildTeaserTint,
-      buildTeaser, buildReveal, buildRevealExtra, buildKuaishouTitle };
+      extractDna, splitSubject, buildTeaser, buildReveal, buildKuaishouTitle };
   `)(makeStorage());
 
   // B1 isSeen 三源合并
@@ -190,7 +167,7 @@ function makeStorage(seed) {
     check('B4g: 抛错桩下 writeJson 返回 false', deadPure.writeJson('x', 1) === false);
   }
 
-  // ============ B5. 多线索卡 / 身份揭晓 ============
+  // ============ B5. 悬念提示 / 身份揭晓 ============
   {
     // splitSubject：括号拆分角色名与出处
     const a = pure.splitSubject('柳如烟（龙蛇起陆）reinterpret，非真人仿冒');
@@ -203,136 +180,38 @@ function makeStorage(seed) {
     check('B5d: splitSubject 空串安全', d.name === '' && d.source === '');
     check('B5e: splitSubject null 安全', pure.splitSubject(null).name === '');
 
-    // firstSegs：前 n 段拼接
-    check('B5e2: firstSegs 取前 2 段', pure.firstSegs('江南园林月夜·水红缎裙·琵琶声咽', 2) === '江南园林月夜 · 水红缎裙');
-    check('B5e3: firstSegs 空值安全', pure.firstSegs('', 3) === '' && pure.firstSegs(null, 3) === '');
-
-    // cleanWardrobe：去负向/身材/合规注脚，只留穿搭看点
-    const wChen = pure.cleanWardrobe('水红缎面明制立领长衫（金线牡丹刺绣·马面裙，着衣非内衣，全遮蔽不透明），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透');
-    check('B5e4: cleanWardrobe 去 NEVER 负向 clause', !/NEVER/.test(wChen) && !/露点/.test(wChen));
-    check('B5e5: cleanWardrobe 去身材 clause（胸量不进提示）', !/紧裹/.test(wChen) && !/巨乳/.test(wChen));
-    check('B5e6: cleanWardrobe 去合规注脚留穿搭', !/全遮蔽不透明/.test(wChen) && !/着衣非内衣/.test(wChen) && /水红缎面明制立领长衫/.test(wChen) && /金线牡丹刺绣/.test(wChen));
-    check('B5e7: cleanWardrobe 最多 2 段', wChen.split('·').length <= 2 && pure.cleanWardrobe('') === '');
-    check('B5e7b: cleanWardrobe 去孤立「着衣」注脚', pure.cleanWardrobe('白旗袍(着衣)') === '白旗袍' && pure.cleanWardrobe('简约吊带裙(着衣)') === '简约吊带裙');
-    check('B5e7c: cleanWardrobe 剥 opaque<1/4 指标 + dudou 映射肚兜',
-      pure.cleanWardrobe('极小白 dudou + 单条高透白纱 · opaque<1/4') === '极小白肚兜 + 单条高透白纱');
-    check('B5e7d: cleanWardrobe 英文残留过半整条丢弃',
-      pure.cleanWardrobe('A simple elegant crimson-and-gold bikini-style top cropped short to bare the midriff and navel') === '' &&
-      pure.cleanWardrobe('An ultra-thin · sleek') === '');
-    check('B5e7e: cleanWardrobe 英文泳装词映射中文（615 风格）',
-      pure.cleanWardrobe('minimal bikini/dudou + single sheer scarf at hip · body as subject') === '极小比基尼/肚兜 + 单条薄透飘纱');
-    check('B5e7e2: cleanWardrobe 颜色词映射 + 空格一次吃净（619/634 风格）',
-      pure.cleanWardrobe('minimal white bikini/dudou + single sheer white scarf at hip, body as subject, opaque < 1/4') === '极小白比基尼/肚兜 + 单条薄透白飘纱');
-    check('B5e7e3: cleanWardrobe moon 映射（619 风格）',
-      pure.cleanWardrobe('minimal moon-white/silver-blue dudou + single sheer scarf at hip') === '极小月白/银蓝肚兜 + 单条薄透飘纱');
-    check('B5e7f: cleanWardrobe 剥不透明+coverage 指标残留（613 风格）',
-      (() => { const w = pure.cleanWardrobe('高透薄纱淡青/象牙色 drape，不透明内搭 < 1/3 体表（coverage: minimal）'); return w === '高透薄纱淡青/象牙色垂纱'; })());
-    check('B5e7g: cjkMostly 守卫：英文 scene/mood 行不展示',
-      (() => {
-        const t = pure.buildTeaser({ id: 598, url: 'u', dna: {
-          subject: '孙权（三国演义·弓腰姬）reinterpret',
-          scene: 'Misty riverside water-fort at dawn: faint wooden stockade and pennant silhouettes',
-          mood: 'Confident · valiant · a touch playful — never coy',
-          wardrobe: 'A simple elegant crimson-and-gold bikini-style top cropped short to bare the midriff',
-          hair: '乌黑盘髻'
-        } });
-        return !/Misty/.test(t) && !/Confident/.test(t) && /弓腰姬/.test(t) && /乌黑盘髻/.test(t);
-      })());
-    check('B5e7h: cjkMostly 混合行保留（644 风格 Central Perk）', pure.cjkMostly('Central Perk 风咖啡馆（紫墙+橘沙发）黄金时刻') === true);
-
-    // cleanAction：去括号注释，取前两个动作
-    const aChen = pure.cleanAction('曲桥之上横抱琵琶、侧首垂眸、弦声似咽、神情温婉含愁（江南愁绪，非性化）');
-    check('B5e8: cleanAction 去括号注释', !/非性化/.test(aChen) && !/江南愁绪/.test(aChen));
-    check('B5e9: cleanAction 保留前两个动作', /横抱琵琶/.test(aChen) && /侧首垂眸/.test(aChen) && !/弦声似咽/.test(aChen));
-
-    // extractHair：英文 prompt_text → 中文发型看点
-    check('B5e10: extractHair 映射颜色+飘逸长发',
-      pure.extractHair('She has long flowing deep-ocean-blue hair adorned with a golden crown.') === '深海蓝飘逸长发');
-    check('B5e11: extractHair 识别盘髻',
-      pure.extractHair('long black hair in an elegant Ming-style bun with pearl hairpins') === '乌黑盘髻');
-    check('B5e12: extractHair 无 hair mention 回落空串',
-      pure.extractHair('a woman standing by the lotus pond') === '' && pure.extractHair('') === '' && pure.extractHair(null) === '');
-    check('B5e13: extractHair 识别 waves 波浪卷',
-      pure.extractHair('black hair in vintage Hollywood waves with a jade hairpin') === '乌黑波浪卷');
-
-    // buildTeaser：刮前给足线索，绝不泄露角色名
+    // buildTeaser：刮前只给线索，绝不泄露角色名
     const dnaLiu = { subject: '柳如烟（龙蛇起陆）reinterpret，非真人仿冒', scene: '民国私邸夜宴厅·暖金水晶吊灯·丝绒沙发', mood: '明艳·心机·慵懒·撩拨' };
     const tLiu = pure.buildTeaser({ id: 671, url: 'u', dna: dnaLiu });
     check('B5f: teaser 含出处线索', /龙蛇起陆/.test(tLiu));
     check('B5g: teaser 不泄露角色名（刮前悬念）', !/柳如烟/.test(tLiu));
     check('B5h: teaser 带氛围与提问钩子', /明艳/.test(tLiu) && /猜猜她是谁/.test(tLiu));
-    // 富 DNA（陈圆圆）：线索多时只保留 4 行最高优先级，短促不挡图
-    const dnaChen = {
-      subject: '陈圆圆（明末·江南名媛）reinterpret，非真人仿冒',
-      scene: '江南园林月夜·水红缎裙·琵琶声咽',
-      mood: '温婉·华贵·愁绪·明艳',
-      wardrobe: '水红缎面明制立领长衫（金线牡丹刺绣·马面裙，着衣非内衣，全遮蔽不透明），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透',
-      action: '曲桥之上横抱琵琶、侧首垂眸、弦声似咽、神情温婉含愁（江南愁绪，非性化）',
-      hair: '乌黑盘髻'
-    };
-    const tChen = pure.buildTeaser({ id: 683, url: 'u', dna: dnaChen });
-    check('B5i: 富 teaser 优先展示出处/造型/姿态/气质四类',
-      /明末·江南名媛/.test(tChen) && /水红缎面明制立领长衫/.test(tChen) && /横抱琵琶/.test(tChen) && /温婉/.test(tChen));
-    check('B5i2: 富 teaser 裁掉低优先级线索（发型/场景不展示）',
-      !/乌黑盘髻/.test(tChen) && !/江南园林月夜/.test(tChen));
-    check('B5j: 富 teaser 仍不泄露角色名', !/陈圆圆/.test(tChen));
-    check('B5k: teaser 行数受控（≤5 行：头+4线索）', tChen.split('\n').length <= 5);
-    check('B5k2: teaser 无尾部教学文案（开始刮才显示，不用再教）', !/刮开/.test(tChen));
-    // 稀疏 DNA（老图只有 subject/scene/mood）也能出线索（发型/场景补位）
-    const tSparse = pure.buildTeaser({ id: 1, url: 'u', dna: { subject: '虞姬reinterpret', scene: '垓下月夜烛帐·青铜剑', mood: '凄美·决绝' } });
-    check('B5l: 无出处时用场景首段', /垓下月夜烛帐/.test(tSparse) && !/虞姬/.test(tSparse) && /凄美/.test(tSparse));
-    check('B5m: 无 dna 走兜底文案（四句轮换之一）', (() => {
-      const t = pure.buildTeaser({ id: 2, url: 'u', dna: null });
-      return typeof t === 'string' && t.length > 0 && /刮开/.test(t) && !/线索卡/.test(t);
-    })());
-    check('B5n: 无 item 走兜底文案', typeof pure.buildTeaser(null) === 'string' && pure.buildTeaser(null).length > 0);
-    check('B5n2: dna 存在但无有效线索也走兜底', /刮开/.test(pure.buildTeaser({ id: 9, url: 'u', dna: {} })));
-    check('B5n3: 兜底按 id 轮换（不全员同一句）', (() => {
-      const set = new Set();
-      for (let id = 1; id <= 20; id++) set.add(pure.buildTeaser({ id, url: 'u', dna: null }));
-      return set.size >= 2;
-    })());
-
-    // buildTeaserTint：颜色关键词 → 主题色（角色区分度）
-    check('B5o: tint 取水红（陈圆圆）', pure.buildTeaserTint({ id: 683, url: 'u', dna: dnaChen }) === '#ff6b8a');
-    check('B5p: tint 取深蓝（武则天）',
-      pure.buildTeaserTint({ id: 672, url: 'u', dna: { subject: '武则天（王者荣耀·海洋之心）reinterpret', scene: '月夜礁岸浅海·夜光藻蓝光·珍珠贝壳·鲸影', wardrobe: '人鱼风优雅泳装（深蓝海蓝主色·贝壳与珊瑚珠宝点缀）' } }) === '#5fb8ff');
-    check('B5q: tint 无颜色关键词回落空串', pure.buildTeaserTint({ id: 1, url: 'u', dna: { scene: '垓下月夜烛帐' } }) === '');
-    check('B5q2: tint 识别「赤」战袍红（穆桂英）',
-      pure.buildTeaserTint({ id: 673, url: 'u', dna: { wardrobe: '赤色绣金丝战袍（银甲叶镶边）', scene: '塞外点将台晨光' } }) === '#ff6b8a');
-    check('B5r: tint 无 dna 安全', pure.buildTeaserTint(null) === '');
+    const tNoSource = pure.buildTeaser({ id: 1, url: 'u', dna: { subject: '虞姬reinterpret', scene: '垓下月夜烛帐·青铜剑', mood: '凄美·决绝' } });
+    check('B5i: 无出处时用场景首段', /垓下月夜烛帐/.test(tNoSource) && !/虞姬/.test(tNoSource));
+    check('B5j: 无 dna 走兜底文案', /神秘/.test(pure.buildTeaser({ id: 2, url: 'u', dna: null })));
+    check('B5k: 无 item 走兜底文案', typeof pure.buildTeaser(null) === 'string' && pure.buildTeaser(null).length > 0);
 
     // buildReveal：刮开揭晓身份
     const rLiu = pure.buildReveal({ id: 671, url: 'u', dna: dnaLiu });
-    check('B5s: reveal 亮出角色名与出处', /柳如烟/.test(rLiu) && /龙蛇起陆/.test(rLiu));
+    check('B5l: reveal 亮出角色名与出处', /柳如烟/.test(rLiu) && /龙蛇起陆/.test(rLiu));
     const rWu = pure.buildReveal({ id: 672, url: 'u', dna: { subject: '武则天（王者荣耀·海洋之心）reinterpret' } });
-    check('B5t: reveal 双身份人物', /武则天/.test(rWu) && /王者荣耀/.test(rWu));
-    check('B5u: reveal 无 dna 时安全', pure.buildReveal({ id: 3, url: 'u' }).indexOf('新美女') !== -1);
-
-    // buildRevealExtra：刮开后造型回顾（文字给足已知信息）
-    const xChen = pure.buildRevealExtra({ id: 683, url: 'u', dna: dnaChen });
-    check('B5v: revealExtra 含造型/发型/场景回顾', /水红缎面明制立领长衫/.test(xChen) && /乌黑盘髻/.test(xChen) && /江南园林月夜/.test(xChen));
-    check('B5w: revealExtra 无 dna 安全', pure.buildRevealExtra({ id: 3, url: 'u' }) === '');
+    check('B5m: reveal 双身份人物', /武则天/.test(rWu) && /王者荣耀/.test(rWu));
+    check('B5n: reveal 无 dna 时安全', pure.buildReveal({ id: 3, url: 'u' }).indexOf('新美女') !== -1);
 
     // buildKuaishouTitle：快手同款称号（美女+出处+角色+id）
-    check('B5x: 快手称号格式（美女+出处+角色+id）',
+    check('B5o: 快手称号格式（美女+出处+角色+id）',
       pure.buildKuaishouTitle({ id: 671, url: 'u', dna: dnaLiu }) === '美女龙蛇起陆柳如烟671');
-    check('B5y: 快手称号无 dna 时仅美女+id',
+    check('B5p: 快手称号无 dna 时仅美女+id',
       pure.buildKuaishouTitle({ id: 683, url: 'u' }) === '美女683');
 
-    // extractDna：留富字段、提炼发型、丢大字段、畸形回落
-    check('B5z: extractDna 保留富字段并提炼发型', (() => {
-      const d = pure.extractDna(JSON.stringify({
-        subject: 's', scene: 'sc', mood: 'm', wardrobe: 'w', action: 'a',
-        prompt_text: 'long black hair in an elegant bun', negative: 'x'
-      }));
-      return d && d.subject === 's' && d.scene === 'sc' && d.mood === 'm' &&
-        d.wardrobe === 'w' && d.action === 'a' && d.hair === '乌黑盘髻' &&
-        !('prompt_text' in d) && !('negative' in d);
+    // extractDna：只留三字段、畸形 JSON 回落 null
+    check('B5q: extractDna 精简三字段', (() => {
+      const d = pure.extractDna(JSON.stringify({ subject: 's', scene: 'sc', mood: 'm', prompt_text: '很长'.repeat(100), negative: 'x' }));
+      return d && d.subject === 's' && d.scene === 'sc' && d.mood === 'm' && !('prompt_text' in d) && !('negative' in d);
     })());
-    check('B5aa: extractDna 畸形 JSON 回落 null', pure.extractDna('{oops') === null);
-    check('B5ab: extractDna 空值回落 null', pure.extractDna('') === null && pure.extractDna(null) === null);
-    check('B5ac: extractDna 空对象回落 null', pure.extractDna('{}') === null);
+    check('B5r: extractDna 畸形 JSON 回落 null', pure.extractDna('{oops') === null);
+    check('B5s: extractDna 空值回落 null', pure.extractDna('') === null && pure.extractDna(null) === null);
+    check('B5t: extractDna 空对象回落 null', pure.extractDna('{}') === null);
   }
 
   // ============ C. seen 记录读写 + 三源合并 ============
@@ -403,7 +282,7 @@ function makeStorage(seed) {
     ];
     {
       // D1 缓存命中（ts 新鲜）→ 不发 fetch
-      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now(), items: [{ id: 1, url: 'cached.jpg' }] }) });
+      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now(), items: [{ id: 1, url: 'cached.jpg' }] }) });
       let called = 0;
       const f = mkPool(storage, () => { called++; return Promise.resolve({ json: () => Promise.resolve(rows) }); }, {});
       const items = await f.loadPool();
@@ -412,17 +291,16 @@ function makeStorage(seed) {
     }
     {
       // D2 缓存过期 → 拉 DB → 写回缓存
-      const storage = makeStorage({ 'nrb_scratch_pool_v2': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, items: [{ id: 1, url: 'stale.jpg' }] }) });
+      const storage = makeStorage({ 'nrb_scratch_pool': JSON.stringify({ ts: Date.now() - 7 * 60 * 60 * 1000, items: [{ id: 1, url: 'stale.jpg' }] }) });
       const f = mkPool(storage, () => Promise.resolve({ json: () => Promise.resolve(rows) }), {});
       const items = await f.loadPool();
       check('D2a: 过期缓存刷新为 DB 数据', items.length === 3 && items[0].id === 682 && items[1].id === 681);
       check('D2b: 新池写回缓存（ts 更新）', (() => {
-        const cached = JSON.parse(storage._store['nrb_scratch_pool_v2']);
+        const cached = JSON.parse(storage._store['nrb_scratch_pool']);
         return cached.items.length === 3 && cached.ts > Date.now() - 5000;
       })());
-      check('D2c: prompt_dna 解析为富字段（subject/scene/mood，无大字段）',
-        items[1].dna && items[1].dna.subject === '织女（牛郎织女）reinterpret' && items[1].dna.scene === '鹊桥银河·流星' &&
-        items[1].dna.mood === '空灵·温柔' && !('prompt_text' in items[1].dna) && !('negative' in items[1].dna));
+      check('D2c: prompt_dna 解析为精简三字段',
+        items[1].dna && items[1].dna.subject === '织女（牛郎织女）reinterpret' && items[1].dna.scene === '鹊桥银河·流星');
       check('D2d: 畸形 prompt_dna → dna=null 但图保留', items[2].id === 680 && items[2].dna === null);
     }
     {

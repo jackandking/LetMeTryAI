@@ -79,10 +79,10 @@
   .toast.show{ opacity:1; }
   .teaser{
     position:fixed; left:50%; top:calc(env(safe-area-inset-top) + 58px); z-index:21;
-    transform:translateX(-50%); max-width:92vw; text-align:left;
-    font-size:12px; line-height:1.55; color:#ffe9b8; white-space:pre-line;
+    transform:translateX(-50%); max-width:86vw; text-align:center;
+    font-size:13px; line-height:1.55; color:#ffe9b8;
     background:linear-gradient(135deg,rgba(255,216,107,.16),rgba(255,111,145,.16));
-    border:1px solid rgba(255,216,107,.45); padding:9px 14px; border-radius:14px;
+    border:1px solid rgba(255,216,107,.45); padding:8px 16px; border-radius:14px;
     box-shadow:0 4px 18px rgba(0,0,0,.35);
     opacity:0; pointer-events:none; transition:opacity .35s;
   }
@@ -146,8 +146,7 @@
   function variantForId(id){ var vid = hashStr('nrbsalt_'+id) % EXP.VARIANTS.length; return { vid:vid, v:EXP.VARIANTS[vid] }; }
 
   // localStorage 键：刮刮乐自己的看过记录 + 图库池缓存
-  // （POOL_CACHE 带版本号：提取字段扩容时升版，强制老客户端刷新拿富线索）
-  var KEYS = { SCRATCH_SEEN: 'nrb_scratch_seen', POOL_CACHE: 'nrb_scratch_pool_v2' };
+  var KEYS = { SCRATCH_SEEN: 'nrb_scratch_seen', POOL_CACHE: 'nrb_scratch_pool' };
   var POOL_TTL_MS = 6 * 60 * 60 * 1000;   // 图库缓存 6 小时
   var COST_PER_DRAW = 1;                  // 每抽一张 1 积分
 
@@ -178,9 +177,8 @@
     if (!unseen.length) return null;
     return unseen[Math.floor(Math.random()*unseen.length)];
   }
-  // prompt_dna 抽 teaser 需要的字段（subject/scene/mood/wardrobe/action），
-  // 另从 prompt_text 提炼发型短语；不存 prompt_text/negative 本体
-  //（控制缓存体积，localStorage 上限约 5MB）
+  // prompt_dna 只抽 teaser 需要的三个字段（subject/scene/mood），
+  // 不存 prompt_text/negative（控制缓存体积，localStorage 上限约 5MB）
   function extractDna(raw){
     try {
       var d = JSON.parse(raw || 'null');
@@ -189,11 +187,7 @@
       if (d.subject) dna.subject = String(d.subject);
       if (d.scene) dna.scene = String(d.scene);
       if (d.mood) dna.mood = String(d.mood);
-      if (d.wardrobe) dna.wardrobe = String(d.wardrobe);
-      if (d.action) dna.action = String(d.action);
-      var hair = extractHair(d.prompt_text);
-      if (hair) dna.hair = hair;
-      return (dna.subject || dna.scene || dna.mood || dna.wardrobe || dna.action || dna.hair) ? dna : null;
+      return (dna.subject || dna.scene || dna.mood) ? dna : null;
     } catch(e){ return null; }
   }
   // ---- 悬念提示 / 身份揭晓（刮前给线索不揭晓，刮开再亮身份）----
@@ -206,136 +200,18 @@
     var t = s.split(/reinterpret/i)[0].split(/[，,]/)[0].trim();
     return { name: t.slice(0, 20), source: '' };
   }
-  // 取前 n 个有效段（·、，, 分隔），拼回 " · "
-  function firstSegs(v, n){
-    var segs = String(v || '').split(/[·、，,|]/);
-    var out = [];
-    for (var i=0;i<segs.length && out.length<n;i++){
-      var s = segs[i].trim();
-      if (s) out.push(s);
-    }
-    return out.join(' · ');
-  }
-  // 造型清洗：去负向 clause / 身材 clause / 合规注脚 / 英文残留，只留穿搭看点
-  var WARDROBE_WORD_MAP = [
-    [/\bbralette\b/gi,'抹胸'],[/\bchoker\b/gi,'项圈'],[/\bbikini-style\b/gi,'比基尼款'],
-    [/\bbikini\b/gi,'比基尼'],[/\bdudou\b/gi,'肚兜'],[/\bsheer\b/gi,'薄透'],[/\bscarf\b/gi,'飘纱'],
-    [/\btiny\b/gi,'极小'],[/\bminimal\b/gi,'极小'],[/\bsingle\b/gi,'单条'],[/\bdrape\b/gi,'垂纱'],
-    [/\bsleeves\b/gi,'袖'],[/\bskirt\b/gi,'裙'],[/\bstraps\b/gi,'细带'],[/\btriangle\b/gi,'三角'],
-    [/\bembroidered\b/gi,'刺绣'],[/\btop\b/gi,'上装'],[/\bbottom\b/gi,'底裤'],[/\bapron\b/gi,'围裙'],
-    [/\bchef\b/gi,'厨师'],[/\bboho\b/gi,'波西米亚'],[/\bmoon\b/gi,'月'],
-    [/\bwhite\b/gi,'白'],[/\bblack\b/gi,'黑'],[/\bred\b/gi,'红'],[/\bblue\b/gi,'蓝'],
-    [/\bgold\b/gi,'金'],[/\bsilver\b/gi,'银'],[/\bpurple\b/gi,'紫'],[/\bgreen\b/gi,'绿'],[/\bpink\b/gi,'粉'],
-    [/\bstyle\b/gi,''],[/\bat hip\b/gi,''],[/\bbody as subject\b/gi,'']
-  ];
-  function cleanWardrobe(w){
-    var s = String(w || '');
-    if (!s) return '';
-    s = s.split(/[;；]/)[0];                                   // NEVER 露点/透视/高透…
-    s = s.replace(/，?\s*紧裹[^，,;；]*/g, '');                  // 紧裹丰盈巨乳呈饱满曲线（身材信息不进提示）
-    s = s.replace(/proper swimsuit|全遮蔽不透明|非透视|非内衣外露|着衣非内衣|着衣|仅环境[^，,）)]*|不裹身/gi, '');
-    s = s.replace(/opaque\s*[<>≤≥=~]?\s*[\d\s/]+/gi, '');      // opaque<1/4 等指标残留
-    s = s.replace(/不透明[^，,;；|·（）]{0,16}/g, '');           // 不透明区域<1/3 等指标残留
-    s = s.replace(/coverage[^，,;；|·（）]*/gi, '');            // coverage: minimal 等残留
-    for (var i=0;i<WARDROBE_WORD_MAP.length;i++){ s = s.replace(WARDROBE_WORD_MAP[i][0], WARDROBE_WORD_MAP[i][1]); }
-    var letters = (s.match(/[a-zA-Z]/g) || []).length;
-    if (s.length && letters / s.length > 0.35) return '';       // 英文残留过半→整条丢弃（老图无中文造型描述）
-    s = s.replace(/([\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])/g, '$1');  // 中文间多余空格（lookahead 一次吃净）
-    s = s.replace(/([\u4e00-\u9fff])\s*[-–—]\s*(?=[\u4e00-\u9fff])/g, '$1');  // 月-白→月白
-    s = s.replace(/[（）()]/g, function(ch){ return (ch==='（'||ch==='(') ? '·' : ''; });
-    return firstSegs(s, 2);
-  }
-  // 中文占比守卫：早期行 scene/mood 可能是整句英文，字母过半不展示
-  function cjkMostly(v){
-    var s = String(v || '');
-    if (!s) return false;
-    var letters = (s.match(/[a-zA-Z]/g) || []).length;
-    return letters / s.length <= 0.5;
-  }
-  // 姿态清洗：去括号注释（非性化等），取前两个动作
-  function cleanAction(a){
-    var s = String(a || '');
-    if (!s) return '';
-    s = s.replace(/（[^）]*）/g, '').replace(/\([^)]*\)/g, '');
-    s = s.split(/[;；]/)[0];
-    return firstSegs(s, 2);
-  }
-  // 发型提炼：从英文 prompt_text 里抓 hair 短语（含其后 50 字符上下文，盘髻等在 hair 之后），映射成中文看点
-  function extractHair(promptText){
-    var t = String(promptText || '');
-    var m = t.match(/\b(([a-z][a-z-]*)(\s+[a-z][a-z-]*){0,3}?\s+hair\b[^.]{0,50})/i);
-    if (!m) return '';
-    var p = m[1].toLowerCase();
-    var colors = [
-      ['deep-ocean-blue','深海蓝'],['ocean-blue','海蓝'],['deep-blue','深蓝'],
-      ['dark-brown','深棕'],['blue','蓝'],['black','乌黑'],['dark','深色'],
-      ['brown','棕'],['silver','银白'],['white','雪白'],['golden','金'],['blonde','金'],['red','绯']
-    ];
-    var color = '';
-    for (var i=0;i<colors.length;i++){ if (p.indexOf(colors[i][0]) >= 0){ color = colors[i][1]; break; } }
-    var out = color;
-    if (/\bbun\b/.test(p)) out += '盘髻';
-    else {
-      if (/\bflowing\b/.test(p)) out += '飘逸';
-      if (/\blong\b/.test(p)) out += '长发';
-      else if (/\bshort\b/.test(p)) out += '短发';
-      if (/\bwavy\b|\bcurly\b|\bwaves?\b/.test(p)) out += '波浪卷';
-      if (/\bbraids?\b/.test(p)) out += '编发';
-      if (/\bponytail\b/.test(p)) out += '马尾';
-    }
-    return out;
-  }
-  // 线索卡主题色：wardrobe/scene/subject 里最先出现的颜色关键词决定 tint
-  var TINT_COLORS = [
-    ['水红','#ff6b8a'],['红','#ff6b8a'],['赤','#ff6b8a'],['粉','#ffb3c8'],['枫','#ff8a5c'],['绯','#ff8a5c'],
-    ['深蓝','#5fb8ff'],['海蓝','#5fb8ff'],['蓝','#5fb8ff'],
-    ['银','#dfe6f2'],['白','#dfe6f2'],['雪','#dfe6f2'],
-    ['金','#ffd86b'],['橙','#ffab6b'],['紫','#b39dff'],['绿','#7bd8a8'],['翠','#7bd8a8'],
-    ['黑','#8f9bb3'],['墨','#8f9bb3'],['乌','#8f9bb3']
-  ];
-  function buildTeaserTint(item){
-    var dna = item && item.dna;
-    if (!dna) return '';
-    var text = [dna.wardrobe, dna.scene, dna.subject].filter(Boolean).join(' ');
-    var best = '', bestIdx = -1;
-    for (var i=0;i<TINT_COLORS.length;i++){
-      var idx = text.indexOf(TINT_COLORS[i][0]);
-      if (idx >= 0 && (bestIdx < 0 || idx < bestIdx)) { bestIdx = idx; best = TINT_COLORS[i][1]; }
-    }
-    return best;
-  }
-  // 无 DNA 老图的兜底线索：按 id 哈希轮换，避免全员同一句
-  var TEASER_FALLBACKS = [
-    '🎭 这位美人有点神秘，刮开见真容',
-    '🎭 档案保密的佳人，亲手刮开揭晓',
-    '🎭 无线索盲盒款，刮开就是惊喜',
-    '🎭 今晚盲抽一位，刮开见真容'
-  ];
-  function fallbackTeaser(item){
-    var id = item && item.id != null ? String(item.id) : '';
-    return TEASER_FALLBACKS[id ? (hashStr(id) % TEASER_FALLBACKS.length) : 0];
-  }
-  // 刮前线索卡：给足已知信息（图片未必画得准，文字线索才可靠），
-  // 4 类最高优先级线索（出处/造型/姿态/气质，稀缺时补发型/场景）但绝不泄露角色名。
-  // 注意：开始刮才显示（见 revealTeaserIfPending），文案必须短——挡图时间越少越好
+  function firstSeg(v){ return String(v || '').split('·')[0].split('·')[0].trim(); }
   function buildTeaser(item){
     var dna = item && item.dna;
-    if (!dna) return fallbackTeaser(item);
+    if (!dna) return '🎭 今晚这位美人有点神秘，刮开见真容';
     var sp = splitSubject(dna.subject);
-    var rows = [];
-    if (sp.source) rows.push('👑 她出自「' + sp.source + '」');
-    var w = cleanWardrobe(dna.wardrobe);
-    if (w) rows.push('👗 ' + w);
-    var a = cleanAction(dna.action);
-    if (a) rows.push('💃 ' + a);
-    var mo = firstSegs(dna.mood, 3);
-    if (mo && cjkMostly(mo)) rows.push('✨ ' + mo);
-    if (dna.hair) rows.push('💇 ' + dna.hair);
-    var sc = firstSegs(dna.scene, 1);
-    if (sc && cjkMostly(sc)) rows.push('🌙 ' + sc);
-    if (!rows.length) return fallbackTeaser(item);
-    if (rows.length > 4) rows = rows.slice(0, 4);
-    return '🎭 猜猜她是谁？\n' + rows.join('\n');
+    var bits = [];
+    if (sp.source) bits.push('她出自「' + sp.source + '」');
+    else if (dna.scene) bits.push(firstSeg(dna.scene));
+    var mood = firstSeg(dna.mood);
+    if (mood) bits.push(mood);
+    if (!bits.length) return '🎭 今晚这位美人有点神秘，刮开见真容';
+    return '🎭 ' + bits.join(' · ') + ' · 猜猜她是谁？';
   }
   function buildReveal(item){
     var sp = splitSubject(item && item.dna && item.dna.subject);
@@ -345,18 +221,6 @@
         : ('她就是「' + sp.name + '」');
     }
     return '一位刚加入你观看记录的新美女';
-  }
-  // 刮开后的造型回顾：图片未必画得准，文字把已知信息给足
-  function buildRevealExtra(item){
-    var dna = item && item.dna;
-    if (!dna) return '';
-    var bits = [];
-    var w = cleanWardrobe(dna.wardrobe);
-    if (w) bits.push('👗 ' + w);
-    if (dna.hair) bits.push('💇 ' + dna.hair);
-    var sc = firstSegs(dna.scene, 2);
-    if (sc && cjkMostly(sc)) bits.push('🌙 ' + sc);
-    return bits.join('\n');
   }
   // 快手同款称号（站内展示用，与发布任务标题同风格：美女+出处+角色+id）
   function buildKuaishouTitle(item){
@@ -520,31 +384,13 @@
     clearTimeout(showToast._t);
     showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
   }
-  // 刮前线索卡：抽到图后只待命（teaserPending），等用户真正开始刮再淡入，
-  // 7 秒后自动淡出——开图/刮开的体验第一位，提示不长期挡图
-  var TEASER_AUTO_HIDE_MS = 7000;
-  var teaserPending = null;   // { text, tint } 待显示线索卡
-  var teaserHideTimer = null;
+  // 刮前悬念提示：给线索不揭晓；刮开/换抽时淡出
   function showTeaser(text){
     teaser.textContent = text;
     teaser.classList.add('show');
   }
   function hideTeaser(){
-    clearTimeout(teaserHideTimer);
-    teaserPending = null;
-    teaser.style.borderColor = '';
-    teaser.style.boxShadow = '';
     teaser.classList.remove('show');
-  }
-  // 首次有效刮擦时调用：淡入线索卡并启动自动淡出
-  function revealTeaserIfPending(){
-    if (!teaserPending || state !== 'scratching' || unlocked) return;
-    var t = teaserPending;
-    teaserPending = null;
-    showTeaser(t.text);
-    if (t.tint){ teaser.style.borderColor = t.tint; teaser.style.boxShadow = '0 4px 18px ' + t.tint + '66'; }
-    clearTimeout(teaserHideTimer);
-    teaserHideTimer = setTimeout(hideTeaser, TEASER_AUTO_HIDE_MS);
   }
 
   function size(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr(); cv.height=H*dpr(); }
@@ -620,11 +466,11 @@
   }
 
   function revealTileAt(cx,cy){
-    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return false;
+    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return;
     var c=Math.floor((cx-fitRect.dx)/tileW), r=Math.floor((cy-fitRect.dy)/tileH);
     if(c<0)c=0; if(c>=cols)c=cols-1; if(r<0)r=0; if(r>=rows)r=rows-1;
     var ti=r*cols+c;
-    if (tileRevealed[ti]) return false;
+    if (tileRevealed[ti]) return;
     tileRevealed[ti]=true; revealedCount++;
     animateTile(ti);
     if (!startLogged){ startLogged=true; track('scratch_exp','start'); }
@@ -680,19 +526,12 @@
     if(r>=UNLOCK && !unlocked) unlock();
   }
 
-  // handlePoint 返回「本次是否真正揭开了新区域」——首次有效刮擦才触发线索卡淡入
   function handlePoint(x,y){
-    if (variant.v.mode==='scratch'){
-      var inside = x>=fitRect.dx && x<=fitRect.dx+fitRect.dw && y>=fitRect.dy && y<=fitRect.dy+fitRect.dh;
-      erase(x,y); tick();
-      return inside;
-    }
-    return revealTileAt(x,y);
+    if (variant.v.mode==='scratch'){ erase(x,y); tick(); }
+    else { revealTileAt(x,y); }
   }
-  // onDown：任何按下都算「开始刮」（用户意图明确，不再要求点在图内）
-  // onMove：拖动中真正擦到图内才算
-  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); revealTeaserIfPending(); }
-  function onMove(e){ e.preventDefault(); if(!scratching) return; if (handlePoint(pxof(e).x,pxof(e).y)) revealTeaserIfPending(); }
+  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); }
+  function onMove(e){ e.preventDefault(); if(!scratching) return; handlePoint(pxof(e).x,pxof(e).y); }
   function onUp(){ scratching=false; }
 
   // ---- 揭示完成：全局去重记录 + DB view_count ----
@@ -742,21 +581,12 @@
   }
 
   function renderIdentity(item){
-    // 身份揭晓：她是谁 + 造型回顾（图片未必画得准，文字给足已知信息）+ 快手同款称号
+    // 身份揭晓：她是谁 + 快手同款称号（与发布任务标题同风格）
     panelIdentity.innerHTML = '';
     var l1 = document.createElement('div');
     l1.className = 'identity-name';
     l1.textContent = buildReveal(item);
     panelIdentity.appendChild(l1);
-    var extra = buildRevealExtra(item);
-    if (extra) {
-      var lx = document.createElement('div');
-      lx.className = 'identity-title';
-      lx.style.whiteSpace = 'pre-line';
-      lx.style.marginBottom = '8px';
-      lx.textContent = extra;
-      panelIdentity.appendChild(lx);
-    }
     var l2 = document.createElement('div');
     l2.className = 'identity-title';
     l2.textContent = '快手同款称号：' + buildKuaishouTitle(item);
@@ -849,7 +679,6 @@
     variant = resolveVariant(it.id);
     unlocked=false; bar.style.width='0%'; panel.classList.remove('show');
     startLogged=false; halfLogged=false;
-    hideTeaser();   // 清掉上一张的线索卡（含 pending 与自动淡出定时器）
     expTag.style.display=''; expTag.textContent = '实验臂: ' + variant.v.label;
     hint.style.opacity='1';
     hint.textContent = (variant.v.mode==='scratch')
@@ -861,8 +690,7 @@
       bg.src=img.src;
       loading.style.display='none';
       state='scratching';
-      // 线索卡先待命：等用户真正开始刮（首次有效刮擦）再淡入，不挡开图体验
-      teaserPending = { text: buildTeaser(it), tint: buildTeaserTint(it) };
+      showTeaser(buildTeaser(it));
       if (variant.v.mode==='scratch'){ drawMosaic(); }
       else { buildCover(); }
     };
