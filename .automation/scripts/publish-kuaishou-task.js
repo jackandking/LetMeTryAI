@@ -11,7 +11,11 @@ import {
   isSubmissionSuccessSignal,
   validateTaskName,
   PROFILE_SOURCE_TASKS,
-  validateBrandPathConsistency
+  validateBrandPathConsistency,
+  readAuthHealth,
+  backupAuthFile,
+  findHealthyAuthBackup,
+  evaluateAuthOverwrite
 } from './publish-kuaishou-task-utils.js';
 
 // Configuration
@@ -19,6 +23,30 @@ const SOURCE_TASK_ID = process.env.SOURCE_TASK_ID || '165805'; // The ID of the 
 // Direct URL to recreate the task - bypasses the list view and menu clicks!
 const BASE_URL = `https://daren.kuaishou.com/distribution-plan-create/recreate/${SOURCE_TASK_ID}`;
 const AUTH_FILE = resolveAuthFilePath();
+
+// ─── Startup gate: refuse to run on a destroyed session ───
+// A device-id-only auth file (no passToken/userId/bUserId) means a previous
+// run saved the login page's storageState over a good session (2026-10-18
+// incident). Continuing would burn 60s on the login page and risk degrading
+// the file again. If a healthy backup exists, auto-restore it and proceed.
+if (fs.existsSync(AUTH_FILE) && process.env.KUAISHOU_AUTH_FORCE !== '1') {
+    const startupHealth = readAuthHealth(AUTH_FILE);
+    if (!startupHealth.healthy) {
+        const healthyBackup = findHealthyAuthBackup(AUTH_FILE);
+        if (healthyBackup) {
+            fs.copyFileSync(healthyBackup, AUTH_FILE);
+            console.log(`♻️ 登录态文件已损坏（无身份 cookie），已从备份自动恢复：${healthyBackup}`);
+        } else {
+            console.error(`❌ 登录态文件已损坏：${AUTH_FILE}`);
+            console.error(`   （${startupHealth.totalCookies} 个 cookie，无身份 cookie passToken/userId/bUserId${startupHealth.unreadable ? '，且文件无法解析' : ''}）`);
+            console.error('   继续发布几乎必然失败，且失败流程可能再次损坏状态，已阻止运行。');
+            console.error('   👉 恢复姿势：HEADLESS=false 重新运行发布流程，弹出 Chrome 后扫码登录，');
+            console.error('      登录成功后脚本会自动保存完整登录态并继续发布。');
+            console.error('   （确认要强行继续：设置 KUAISHOU_AUTH_FORCE=1）');
+            process.exit(2);
+        }
+    }
+}
 
 
 const WAIT_AFTER_FINISH_MS = Math.max(0, Number.parseInt(process.env.PUBLISH_WAIT_FOR_MANUAL_MS || '0', 10) || 0);
@@ -255,17 +283,20 @@ async function main() {
       console.log(`👉 If you are redirected to the homepage after login, please navigate to: ${BASE_URL}`);
       
       // We wait for the form to appear, which confirms we are on the right page AND logged in
-      console.log('🔍 Waiting for form inputs... (If you see the form but this hangs, the selectors are wrong)');
+      console.log('🔍 Waiting for the task form (task-name input)... scan the QR code in the browser window');
       
-      // Try to find ANY text input to start with
+      // Wait for the REAL form marker — the task-name input (class ks-input__inner).
+      // Do NOT wait for "any text input": the Kuaishou login page renders text
+      // inputs too, and matching those used to make the script believe login
+      // succeeded, then save the login page's storageState over a good session
+      // (2026-10-18 incident — the whole auth file was destroyed this way).
+      // The login page does not contain input.ks-input__inner.
       try {
-        const anyInput = await page.waitForSelector('input[type="text"], textarea', { timeout: 60000 });
-        console.log('✅ Found an input field!');
-        // Log its attributes to help debug
-        const outerHTML = await anyInput.evaluate(el => el.outerHTML);
-        console.log('Found element:', outerHTML);
+        const formInput = await page.waitForSelector('input.ks-input__inner', { timeout: 60000 });
+        const outerHTML = await formInput.evaluate(el => el.outerHTML);
+        console.log('✅ Found task-name input:', String(outerHTML).slice(0, 160));
       } catch (e) {
-        console.log('❌ Could not find ANY input field. Page might be empty or in an iframe.');
+        console.log('❌ Task form never appeared (QR login not completed in time?). Page may still be the login page.');
         // Dump page content for debugging
         const content = await page.content();
         console.log('Page content length:', content.length);
@@ -274,10 +305,17 @@ async function main() {
       
       console.log('✅ Login detected and form loaded.');
       
-      // Save auth state for next time
+      // Save auth state for next time — but never let a degraded session
+      // (e.g. we somehow landed on the login page) destroy a healthy one.
       ensureParentDirectory(AUTH_FILE);
+      const newState = await context.storageState();
+      const verdict = evaluateAuthOverwrite(AUTH_FILE, newState);
+      if (!verdict.allow) {
+        throw new Error(`AUTH_DEGRADED: ${verdict.reason}。旧登录态已保留（${AUTH_FILE}），请确认扫码登录成功后重试。`);
+      }
+      backupAuthFile(AUTH_FILE);
       await context.storageState({ path: AUTH_FILE });
-      console.log(`💾 Login state saved to ${AUTH_FILE}`);
+      console.log(`💾 Login state saved to ${AUTH_FILE} (cookies=${verdict.newHealth.totalCookies}, identity=[${verdict.newHealth.identityCookies.join(',')}])`);
     }
 
     // Direct navigation means we are already on the form page

@@ -82,3 +82,96 @@ export function validateBrandPathConsistency(appId, profileId) {
     }
     return { valid: true };
 }
+
+// ─── Auth state health & backup ───
+//
+// 2026-10-18 incident: a failed headless publish run treated the Kuaishou
+// LOGIN PAGE as the task form (it waited for "any text input", which the
+// login page also renders), then saved the login page's storageState over a
+// still-valid session. The auth file was left with device-id cookies only
+// (did / weblogger_did); every subsequent run then burned 60s timeouts on
+// the login page until someone scanned a QR code again.
+//
+// Rule of thumb: a usable Kuaishou creator session MUST carry identity
+// cookies. A state with only device-id cookies is a DESTROYED session.
+
+const IDENTITY_COOKIE_RE = /^(passToken|userId|bUserId)$/i;
+
+export function assessAuthHealth(state) {
+    const cookies = state && Array.isArray(state.cookies) ? state.cookies : [];
+    const identity = cookies
+        .filter(c => IDENTITY_COOKIE_RE.test(String((c && c.name) || '')))
+        .map(c => c.name);
+    return {
+        totalCookies: cookies.length,
+        identityCookies: identity,
+        healthy: identity.length > 0
+    };
+}
+
+export function readAuthHealth(authFile) {
+    try {
+        return assessAuthHealth(JSON.parse(fs.readFileSync(authFile, 'utf-8')));
+    } catch (e) {
+        return { totalCookies: 0, identityCookies: [], healthy: false, unreadable: true, error: e.message };
+    }
+}
+
+// Copy the current auth file to a timestamped backup before any overwrite.
+// Keeps the newest `keep` backups, prunes older ones. Returns backup path or null.
+export function backupAuthFile(authFile, keep = 5) {
+    try {
+        if (!fs.existsSync(authFile)) return null;
+        const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const backupPath = `${authFile}.bak-${stamp}`;
+        fs.copyFileSync(authFile, backupPath);
+        const dir = path.dirname(authFile);
+        const prefix = `${path.basename(authFile)}.bak-`;
+        const backups = fs.readdirSync(dir)
+            .filter(f => f.startsWith(prefix))
+            .sort()
+            .reverse();
+        for (const stale of backups.slice(keep)) {
+            fs.unlinkSync(path.join(dir, stale));
+        }
+        return backupPath;
+    } catch (e) {
+        console.log(`⚠️ backupAuthFile failed (non-fatal): ${e.message}`);
+        return null;
+    }
+}
+
+// Newest healthy backup, if any — used to auto-recover a destroyed auth file.
+export function findHealthyAuthBackup(authFile) {
+    try {
+        const dir = path.dirname(authFile);
+        const prefix = `${path.basename(authFile)}.bak-`;
+        const backups = fs.readdirSync(dir)
+            .filter(f => f.startsWith(prefix))
+            .sort()
+            .reverse();
+        for (const b of backups) {
+            const candidate = path.join(dir, b);
+            if (readAuthHealth(candidate).healthy) return candidate;
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
+
+// Decide whether `newState` may overwrite the existing auth file.
+// Core rule: never let a degraded session destroy a healthy one.
+export function evaluateAuthOverwrite(authFile, newState) {
+    const newHealth = assessAuthHealth(newState);
+    const oldHealth = fs.existsSync(authFile) ? readAuthHealth(authFile) : null;
+    if (oldHealth && oldHealth.healthy && !newHealth.healthy) {
+        return {
+            allow: false,
+            reason: `新登录态缺少身份 cookie（identity=[${newHealth.identityCookies.join(',')}], total=${newHealth.totalCookies}），而旧文件仍然有效——疑似落在登录页，拒绝覆盖`,
+            oldHealth,
+            newHealth
+        };
+    }
+    return { allow: true, oldHealth, newHealth };
+}
