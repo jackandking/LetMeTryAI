@@ -939,20 +939,36 @@ export class KuaishouLogin {
                     log(`  🧭 url: ${url}`, 'cyan');
                     lastUrl = url;
                 }
+
+                // Snapshot passport-phase identity cookies (passToken/userId/bUserId)
+                // the instant they appear. They get CONSUMED by the STS exchange once
+                // we land on daren.kuaishou.com, so we must grab them now and merge
+                // them back into the final saved session (the creator API requires
+                // passToken + marketing_st/ph together, or it returns result=109).
+                try {
+                    const cur = await this.context.cookies();
+                    const passport = cur.filter(c => /^(passToken|userId|bUserId)$/.test(c.name));
+                    if (passport.length && !this._passportCookies) {
+                        this._passportCookies = passport;
+                        log('  🔑 已快照 passport 身份 cookie（STS 之后会被消费，稍后合并回写）', 'blue');
+                    }
+                } catch (_) {}
+
                 if (await this.checkPageLoggedIn()) {
                     log('\n✅ 检测到登录成功！', 'green');
-                    await this.saveSession();
+                    await this._mergeAndSave();
                     this.stopQrServer();
                     return true;
                 }
-                // Also treat presence of a login cookie as success (user may stop on the main site)
+                // Also treat presence of BOTH identity + creator-session cookies as success
                 try {
                     const cookies = await this.context.cookies();
                     const names = cookies.map(c => c.name);
-                    const hasAuthCookie = names.some(n => /passToken|userId|api_ph|api_st|kuaishou\.web\.cp/i.test(n));
-                    if (hasAuthCookie) {
-                        log(`\n✅ 检测到登录 cookie（${names.filter(n => /passToken|userId|api_ph|api_st/i.test(n)).join(', ')}），判定登录成功`, 'green');
-                        await this.saveSession();
+                    const hasId = names.some(n => /^(passToken|userId|bUserId)$/.test(n));
+                    const hasCreator = names.some(n => /marketing_st|marketing_ph/.test(n));
+                    if (hasId && hasCreator) {
+                        log(`\n✅ 检测到登录 cookie（身份+创作者会话齐全），判定登录成功`, 'green');
+                        await this._mergeAndSave();
                         this.stopQrServer();
                         return true;
                     }
@@ -1036,14 +1052,38 @@ export class KuaishouLogin {
             ensureDir(this.authFile);
             await this.context.storageState({ path: this.authFile });
             log(`\n💾 Session saved to: ${this.authFile}`, 'green');
-            
+
             // Show session info
             const stats = fs.statSync(this.authFile);
             log(`📊 File size: ${(stats.size / 1024).toFixed(2)} KB`, 'blue');
-            
+
         } catch (error) {
             log(`\n⚠️ Failed to save session: ${error.message}`, 'yellow');
         }
+    }
+
+    /**
+     * Save the session, but first re-inject the passport-phase identity cookies
+     * (passToken/userId/bUserId) snapshotted in manualLogin. The creator-backend
+     * API requires passToken + marketing_st/ph together; the STS exchange consumes
+     * passToken on redirect, so without this merge the saved session is useless
+     * (every API call returns result=109 "session expired").
+     */
+    async _mergeAndSave() {
+        try {
+            if (this._passportCookies && this._passportCookies.length) {
+                const cur = await this.context.cookies();
+                const have = new Set(cur.map(c => c.name + '@' + (c.domain || '')));
+                const missing = this._passportCookies.filter(c => !have.has(c.name + '@' + (c.domain || '')));
+                if (missing.length) {
+                    await this.context.addCookies(missing);
+                    log(`  🔧 合并回写 ${missing.length} 个 passport 身份 cookie（passToken/userId 等）`, 'blue');
+                }
+            }
+        } catch (e) {
+            log(`  ⚠️ 合并 passport cookie 失败：${e.message}`, 'yellow');
+        }
+        await this.saveSession();
     }
 
     /**
