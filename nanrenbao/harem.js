@@ -89,6 +89,16 @@ function addHaremImage(url) {
   return true;
 }
 
+// 从后宫删除一张照片（收录免费，删除不退不扣任何积分）
+function removeHaremImage(url) {
+  let imgs = getHaremImages();
+  const idx = imgs.indexOf(url);
+  if (idx === -1) return false;
+  imgs.splice(idx, 1);
+  localStorage.setItem('haremImages', JSON.stringify(imgs));
+  return true;
+}
+
 // Capacity helpers
 function getHaremCapacity() {
   const v = localStorage.getItem('haremCapacity');
@@ -125,11 +135,33 @@ function renderHaremImages() {
   }
   empty.style.display = 'none';
   imgs.forEach(url => {
+    const item = document.createElement('div');
+    item.className = 'harem-item';
+
     const img = document.createElement('img');
     img.src = url;
     img.className = 'harem-thumb';
     img.onclick = function() { if (window.showFullImage) window.showFullImage(url); };
-    list.appendChild(img);
+
+    // 删除按钮：确认后从后宫移除（收录免费，删除不涉及积分）
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'harem-delete';
+    del.title = '删除这张照片';
+    del.textContent = '✕';
+    del.onclick = function(ev) {
+      if (ev && ev.stopPropagation) ev.stopPropagation(); // 不触发全屏查看
+      if (!confirm('确定把这张照片从后宫移除吗？')) return;
+      if (removeHaremImage(url)) {
+        renderHaremImages();
+        if (typeof showPointsNotification === 'function') showPointsNotification('已删除 🗑️');
+        else if (window.showPointsNotification) window.showPointsNotification('已删除 🗑️');
+      }
+    };
+
+    item.appendChild(img);
+    item.appendChild(del);
+    list.appendChild(item);
   });
   if (capEl) capEl.textContent = `${imgs.length} / ${cap}`;
   if (expandBtn) {
@@ -223,3 +255,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // 导出方法供主站调用
 window.isHaremActivated = isHaremActivated;
 window.addHaremImage = addHaremImage;
+window.removeHaremImage = removeHaremImage;
