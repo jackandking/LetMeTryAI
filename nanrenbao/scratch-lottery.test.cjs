@@ -83,8 +83,8 @@ function makeStorage(seed) {
     /teaserPending\s*=\s*\{\s*text:\s*buildTeaser\(it\)/.test(CODE) && !/showTeaser\(buildTeaser\(it\)\)/.test(CODE));
   check('A4e: 解锁/换抽时淡出 teaser', /hideTeaser\(\);/.test(CODE));
   // 开始刮才显示：首次有效刮擦触发淡入 + 自动淡出
-  check('A4d2: onDown/onMove 首次有效刮擦才 revealTeaserIfPending',
-    /function onDown\(e\)\{[^}]*if \(handlePoint\(pxof\(e\)\.x,pxof\(e\)\.y\)\) revealTeaserIfPending\(\);/.test(CODE) &&
+  check('A4d2: onDown 任何按下即触发 revealTeaserIfPending；onMove 需有效刮擦',
+    /function onDown\(e\)\{[^}]*revealTeaserIfPending\(\);/.test(CODE) &&
     /function onMove\(e\)\{[^}]*if \(handlePoint\(pxof\(e\)\.x,pxof\(e\)\.y\)\) revealTeaserIfPending\(\);/.test(CODE));
   check('A4d3: revealTeaserIfPending 有状态守卫（scratching 且未解锁）',
     /if \(!teaserPending \|\| state !== 'scratching' \|\| unlocked\) return;/.test(CODE));

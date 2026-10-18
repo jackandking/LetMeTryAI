@@ -538,6 +538,7 @@
   }
   // 首次有效刮擦（点/擦在图内且揭开新区域）时调用：淡入线索卡并启动自动淡出
   function revealTeaserIfPending(){
+    try { window.__teaserDbg = { hasPending: !!teaserPending, state: state, unlocked: unlocked }; } catch(e){}
     if (!teaserPending || state !== 'scratching' || unlocked) return;
     var t = teaserPending;
     teaserPending = null;
@@ -689,7 +690,9 @@
     }
     return revealTileAt(x,y);
   }
-  function onDown(e){ e.preventDefault(); scratching=true; if (handlePoint(pxof(e).x,pxof(e).y)) revealTeaserIfPending(); }
+  // onDown：任何按下都算「开始刮」（用户意图明确，不再要求点在图内）
+  // onMove：拖动中真正擦到图内才算
+  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); revealTeaserIfPending(); }
   function onMove(e){ e.preventDefault(); if(!scratching) return; if (handlePoint(pxof(e).x,pxof(e).y)) revealTeaserIfPending(); }
   function onUp(){ scratching=false; }
 
