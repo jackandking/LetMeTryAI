@@ -278,11 +278,22 @@
     }
     return best;
   }
+  // 无 DNA 老图的兜底线索：按 id 哈希轮换，避免全员同一句
+  var TEASER_FALLBACKS = [
+    '🎭 这位美人有点神秘，刮开见真容',
+    '🎭 档案保密的佳人，亲手刮开揭晓',
+    '🎭 无线索盲盒款，刮开就是惊喜',
+    '🎭 今晚盲抽一位，刮开见真容'
+  ];
+  function fallbackTeaser(item){
+    var id = item && item.id != null ? String(item.id) : '';
+    return TEASER_FALLBACKS[id ? (hashStr(id) % TEASER_FALLBACKS.length) : 0];
+  }
   // 刮前多线索卡：给足已知信息（图片未必画得准，文字线索才可靠），
   // 6 类线索（出处/造型/姿态/场景/气质/发型）但绝不泄露角色名
   function buildTeaser(item){
     var dna = item && item.dna;
-    if (!dna) return '🎭 今晚这位美人有点神秘，刮开见真容';
+    if (!dna) return fallbackTeaser(item);
     var sp = splitSubject(dna.subject);
     var rows = [];
     if (sp.source) rows.push('👑 她出自「' + sp.source + '」');
@@ -295,7 +306,7 @@
     var mo = firstSegs(dna.mood, 4);
     if (mo) rows.push('✨ 气质｜' + mo);
     if (dna.hair) rows.push('💇 发型｜' + dna.hair);
-    if (!rows.length) return '🎭 今晚这位美人有点神秘，刮开见真容';
+    if (!rows.length) return fallbackTeaser(item);
     if (rows.length > 6) rows = rows.slice(0, 6);
     return '🎭 刮前线索卡 · 猜猜她是谁？\n' + rows.join('\n') + '\n👆 刮开，验证你的猜测';
   }

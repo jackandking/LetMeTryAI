@@ -238,8 +238,17 @@ function makeStorage(seed) {
     // 稀疏 DNA（老图只有 subject/scene/mood）也能出线索
     const tSparse = pure.buildTeaser({ id: 1, url: 'u', dna: { subject: '虞姬reinterpret', scene: '垓下月夜烛帐·青铜剑', mood: '凄美·决绝' } });
     check('B5l: 无出处时用场景首段', /垓下月夜烛帐/.test(tSparse) && !/虞姬/.test(tSparse) && /凄美/.test(tSparse));
-    check('B5m: 无 dna 走兜底文案', /神秘/.test(pure.buildTeaser({ id: 2, url: 'u', dna: null })));
+    check('B5m: 无 dna 走兜底文案（四句轮换之一）', (() => {
+      const t = pure.buildTeaser({ id: 2, url: 'u', dna: null });
+      return typeof t === 'string' && t.length > 0 && /刮开/.test(t) && !/线索卡/.test(t);
+    })());
     check('B5n: 无 item 走兜底文案', typeof pure.buildTeaser(null) === 'string' && pure.buildTeaser(null).length > 0);
+    check('B5n2: dna 存在但无有效线索也走兜底', /刮开/.test(pure.buildTeaser({ id: 9, url: 'u', dna: {} })));
+    check('B5n3: 兜底按 id 轮换（不全员同一句）', (() => {
+      const set = new Set();
+      for (let id = 1; id <= 20; id++) set.add(pure.buildTeaser({ id, url: 'u', dna: null }));
+      return set.size >= 2;
+    })());
 
     // buildTeaserTint：颜色关键词 → 主题色（角色区分度）
     check('B5o: tint 取水红（陈圆圆）', pure.buildTeaserTint({ id: 683, url: 'u', dna: dnaChen }) === '#ff6b8a');
