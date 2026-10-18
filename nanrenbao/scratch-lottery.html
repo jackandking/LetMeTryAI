@@ -222,7 +222,7 @@
     if (!s) return '';
     s = s.split(/[;；]/)[0];                                   // NEVER 露点/透视/高透…
     s = s.replace(/，?\s*紧裹[^，,;；]*/g, '');                  // 紧裹丰盈巨乳呈饱满曲线（身材信息不进提示）
-    s = s.replace(/proper swimsuit|全遮蔽不透明|非透视|非内衣外露|着衣非内衣|仅环境[^，,）)]*|不裹身/gi, '');
+    s = s.replace(/proper swimsuit|全遮蔽不透明|非透视|非内衣外露|着衣非内衣|着衣|仅环境[^，,）)]*|不裹身/gi, '');
     s = s.replace(/[（）()]/g, function(ch){ return (ch==='（'||ch==='(') ? '·' : ''; });
     return firstSegs(s, 2);
   }

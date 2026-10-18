@@ -198,6 +198,7 @@ function makeStorage(seed) {
     check('B5e5: cleanWardrobe 去身材 clause（胸量不进提示）', !/紧裹/.test(wChen) && !/巨乳/.test(wChen));
     check('B5e6: cleanWardrobe 去合规注脚留穿搭', !/全遮蔽不透明/.test(wChen) && !/着衣非内衣/.test(wChen) && /水红缎面明制立领长衫/.test(wChen) && /金线牡丹刺绣/.test(wChen));
     check('B5e7: cleanWardrobe 最多 2 段', wChen.split('·').length <= 2 && pure.cleanWardrobe('') === '');
+    check('B5e7b: cleanWardrobe 去孤立「着衣」注脚', pure.cleanWardrobe('白旗袍(着衣)') === '白旗袍' && pure.cleanWardrobe('简约吊带裙(着衣)') === '简约吊带裙');
 
     // cleanAction：去括号注释，取前两个动作
     const aChen = pure.cleanAction('曲桥之上横抱琵琶、侧首垂眸、弦声似咽、神情温婉含愁（江南愁绪，非性化）');
