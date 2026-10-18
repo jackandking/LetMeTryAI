@@ -10,7 +10,8 @@
  *     pool 带 prompt_dna 精简字段（subject/scene/mood）供悬念提示与身份揭晓
  *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
  *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
- *   - 刮前悬念提示：buildTeaser 给线索（出处/场景/氛围）不揭晓角色名；
+ *   - 刮前悬念提示：buildTeaser 给线索（出处/场景/氛围）不揭晓角色名，加载完即显示；
+ *     **开始刮即淡出**（onDown 调 hideTeaser）——刮的过程要无遮挡看图；
  *     刮开后面板 buildReveal 揭晓身份 + buildKuaishouTitle 快手同款称号
  *
  * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
@@ -75,6 +76,8 @@ function makeStorage(seed) {
   check('A4c: 面板含身份揭晓行与后宫状态行',
     /id="panelIdentity"/.test(CODE) && /id="panelHarem"/.test(CODE));
   check('A4d: loadItem 加载完成后展示悬念提示', /showTeaser\(buildTeaser\(it\)\)/.test(CODE));
+  check('A4d2: 开始刮即淡出 teaser（onDown 调 hideTeaser，刮的过程无遮挡）',
+    /function onDown\(e\)\{ e\.preventDefault\(\); scratching=true; hideTeaser\(\); handlePoint\(/.test(CODE));
   check('A4e: 解锁/换抽时淡出 teaser', /hideTeaser\(\);/.test(CODE));
   {
     const recordSrc = extractFunction(CODE, 'recordSeen') || '';

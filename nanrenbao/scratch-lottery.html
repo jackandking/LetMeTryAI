@@ -384,7 +384,7 @@
     clearTimeout(showToast._t);
     showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
   }
-  // 刮前悬念提示：给线索不揭晓；刮开/换抽时淡出
+  // 刮前悬念提示：给线索不揭晓；**开始刮即淡出**（刮的过程要无遮挡看图），换抽/解锁时也淡出
   function showTeaser(text){
     teaser.textContent = text;
     teaser.classList.add('show');
@@ -530,7 +530,7 @@
     if (variant.v.mode==='scratch'){ erase(x,y); tick(); }
     else { revealTileAt(x,y); }
   }
-  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); }
+  function onDown(e){ e.preventDefault(); scratching=true; hideTeaser(); handlePoint(pxof(e).x,pxof(e).y); }
   function onMove(e){ e.preventDefault(); if(!scratching) return; handlePoint(pxof(e).x,pxof(e).y); }
   function onUp(){ scratching=false; }
 
