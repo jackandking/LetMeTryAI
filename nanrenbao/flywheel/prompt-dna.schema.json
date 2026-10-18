@@ -7,8 +7,10 @@
   "properties": {
     "subject":    { "type": "string", "description": "主体：如 女性/男性/背影/情侣" },
     "scene":      { "type": "string", "description": "场景：棚拍/街拍/海滩/室内/自然" },
+    "context":    { "type": "string", "description": "角色标识性背景/道具/意象：唤起该人物辨识度的环境元素与符号（如东方不败=葵花宝典古籍+绣花针+红绸），非服装本身；仅作环境点缀，不得形成覆盖人体的帘幕/衣袍" },
     "lighting":   { "type": "string", "description": "光影：黄金时刻/柔光棚/霓虹/轮廓光/逆光" },
     "composition":{ "type": "string", "description": "构图：全身/背影/半身/特写/环境人像" },
+    "action":     { "type": "string", "description": "角色经典动作/姿态：该人物在影视剧（电影/剧集）中最具辨识度的招牌动作/手势/身姿（如神奇女侠双臂交叉用手镯格挡、东方不败绣花针发射），用于增强角色辨识度；须与 wardrobe 极小高透基线并行，人体仍为焦点，不得暴露乳头/生殖器" },
     "style":      { "type": "string", "description": "风格：时尚大片/电影感/胶片/油画/极简" },
     "mood":       { "type": "string", "description": "情绪：神秘/优雅/俏皮/力量感" },
     "wardrobe":   { "type": "string", "description": "着装：礼服/休闲/正装/运动（仅着衣，无裸露）" },
