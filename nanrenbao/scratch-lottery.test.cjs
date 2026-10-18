@@ -10,8 +10,12 @@
  *     pool 带 prompt_dna 精简字段（subject/scene/mood/wardrobe/action/hair）供多线索悬念提示与身份揭晓
  *   - 刮开完成：markImageIdAsViewed（全局 ID 级）+ markImageViewed（URL 级 + DB view_count）
  *     + 后宫收录（已激活则 addHaremImage，与欣赏/背影杀同规则）
- *   - 刮前多线索卡：buildTeaser 给 6 类线索（出处/造型/姿态/场景/气质/发型），
- *     给足已知信息（图片未必画得准）但绝不揭晓角色名；buildTeaserTint 按颜色关键词上色；
+ *   - 刮前线索卡：buildTeaser 给 4 类最高优先级线索（出处/造型/姿态/气质，
+ *     稀缺时补发型/场景），给足已知信息（图片未必画得准）但绝不揭晓角色名；
+ *     **开始刮才显示**：loadItem 只把线索卡存入 teaserPending，首次有效刮擦
+ *     （onDown/onMove 且 handlePoint 返回 true）才 revealTeaserIfPending 淡入，
+ *     7s 自动淡出（TEASER_AUTO_HIDE_MS）——开图体验第一位，提示不长期挡图；
+ *     buildTeaserTint 按颜色关键词上色；
  *     刮开后面板 buildReveal 揭晓身份 + buildRevealExtra 造型回顾 + buildKuaishouTitle 快手同款称号
  *
  * 本文件用 .cjs 结尾并自带断言：仓库 package.json 为 ES Module，
@@ -75,8 +79,19 @@ function makeStorage(seed) {
   check('A4b: teaser 元素存在（刮前悬念提示）', /id="teaser"/.test(CODE) && /class="teaser"/.test(CODE));
   check('A4c: 面板含身份揭晓行与后宫状态行',
     /id="panelIdentity"/.test(CODE) && /id="panelHarem"/.test(CODE));
-  check('A4d: loadItem 加载完成后展示悬念提示', /showTeaser\(buildTeaser\(it\)\)/.test(CODE));
+  check('A4d: loadItem 加载完成后线索卡只待命（teaserPending，不立即显示）',
+    /teaserPending\s*=\s*\{\s*text:\s*buildTeaser\(it\)/.test(CODE) && !/showTeaser\(buildTeaser\(it\)\)/.test(CODE));
   check('A4e: 解锁/换抽时淡出 teaser', /hideTeaser\(\);/.test(CODE));
+  // 开始刮才显示：首次有效刮擦触发淡入 + 自动淡出
+  check('A4d2: onDown/onMove 首次有效刮擦才 revealTeaserIfPending',
+    /function onDown\(e\)\{[^}]*if \(handlePoint\(pxof\(e\)\.x,pxof\(e\)\.y\)\) revealTeaserIfPending\(\);/.test(CODE) &&
+    /function onMove\(e\)\{[^}]*if \(handlePoint\(pxof\(e\)\.x,pxof\(e\)\.y\)\) revealTeaserIfPending\(\);/.test(CODE));
+  check('A4d3: revealTeaserIfPending 有状态守卫（scratching 且未解锁）',
+    /if \(!teaserPending \|\| state !== 'scratching' \|\| unlocked\) return;/.test(CODE));
+  check('A4d4: 线索卡 7s 自动淡出（TEASER_AUTO_HIDE_MS）',
+    /TEASER_AUTO_HIDE_MS\s*=\s*7000/.test(CODE) && /setTimeout\(hideTeaser,\s*TEASER_AUTO_HIDE_MS\)/.test(CODE));
+  check('A4d5: handlePoint 返回是否真正揭开新区域', /return inside;/.test(CODE) && /return revealTileAt\(x,y\);/.test(CODE));
+  check('A4d6: revealTileAt 越界/已揭开返回 false', /if \(cx<fitRect\.dx\|\|cx>fitRect\.dx\+fitRect\.dw\|\|cy<fitRect\.dy\|\|cy>fitRect\.dy\+fitRect\.dh\) return false;/.test(CODE) && /if \(tileRevealed\[ti\]\) return false;/.test(CODE));
   // 多线索卡 + 主题色 + 缓存升版
   check('A4g: teaser CSS 支持多行（white-space:pre-line）', /\.teaser\{[^}]*white-space:\s*pre-line/.test(CODE));
   check('A4h: POOL_CACHE 升 v2（富字段强制刷新老客户端缓存）', /POOL_CACHE:\s*'nrb_scratch_pool_v2'/.test(CODE));
@@ -245,8 +260,8 @@ function makeStorage(seed) {
     const tLiu = pure.buildTeaser({ id: 671, url: 'u', dna: dnaLiu });
     check('B5f: teaser 含出处线索', /龙蛇起陆/.test(tLiu));
     check('B5g: teaser 不泄露角色名（刮前悬念）', !/柳如烟/.test(tLiu));
-    check('B5h: teaser 带氛围与提问钩子', /明艳/.test(tLiu) && /猜猜她是谁/.test(tLiu) && /刮开/.test(tLiu));
-    // 富 DNA（陈圆圆）：6 类线索齐全且 differentiated
+    check('B5h: teaser 带氛围与提问钩子', /明艳/.test(tLiu) && /猜猜她是谁/.test(tLiu));
+    // 富 DNA（陈圆圆）：线索多时只保留 4 行最高优先级，短促不挡图
     const dnaChen = {
       subject: '陈圆圆（明末·江南名媛）reinterpret，非真人仿冒',
       scene: '江南园林月夜·水红缎裙·琵琶声咽',
@@ -256,12 +271,14 @@ function makeStorage(seed) {
       hair: '乌黑盘髻'
     };
     const tChen = pure.buildTeaser({ id: 683, url: 'u', dna: dnaChen });
-    check('B5i: 富 teaser 含出处/造型/姿态/场景/气质/发型六类线索',
-      /明末·江南名媛/.test(tChen) && /水红缎面明制立领长衫/.test(tChen) && /横抱琵琶/.test(tChen) &&
-      /江南园林月夜/.test(tChen) && /温婉/.test(tChen) && /乌黑盘髻/.test(tChen));
+    check('B5i: 富 teaser 优先展示出处/造型/姿态/气质四类',
+      /明末·江南名媛/.test(tChen) && /水红缎面明制立领长衫/.test(tChen) && /横抱琵琶/.test(tChen) && /温婉/.test(tChen));
+    check('B5i2: 富 teaser 裁掉低优先级线索（发型/场景不展示）',
+      !/乌黑盘髻/.test(tChen) && !/江南园林月夜/.test(tChen));
     check('B5j: 富 teaser 仍不泄露角色名', !/陈圆圆/.test(tChen));
-    check('B5k: teaser 行数受控（≤8 行：头+6线索+尾）', tChen.split('\n').length <= 8);
-    // 稀疏 DNA（老图只有 subject/scene/mood）也能出线索
+    check('B5k: teaser 行数受控（≤5 行：头+4线索）', tChen.split('\n').length <= 5);
+    check('B5k2: teaser 无尾部教学文案（开始刮才显示，不用再教）', !/刮开/.test(tChen));
+    // 稀疏 DNA（老图只有 subject/scene/mood）也能出线索（发型/场景补位）
     const tSparse = pure.buildTeaser({ id: 1, url: 'u', dna: { subject: '虞姬reinterpret', scene: '垓下月夜烛帐·青铜剑', mood: '凄美·决绝' } });
     check('B5l: 无出处时用场景首段', /垓下月夜烛帐/.test(tSparse) && !/虞姬/.test(tSparse) && /凄美/.test(tSparse));
     check('B5m: 无 dna 走兜底文案（四句轮换之一）', (() => {

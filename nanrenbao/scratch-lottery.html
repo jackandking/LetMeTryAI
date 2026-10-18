@@ -315,8 +315,9 @@
     var id = item && item.id != null ? String(item.id) : '';
     return TEASER_FALLBACKS[id ? (hashStr(id) % TEASER_FALLBACKS.length) : 0];
   }
-  // 刮前多线索卡：给足已知信息（图片未必画得准，文字线索才可靠），
-  // 6 类线索（出处/造型/姿态/场景/气质/发型）但绝不泄露角色名
+  // 刮前线索卡：给足已知信息（图片未必画得准，文字线索才可靠），
+  // 4 类最高优先级线索（出处/造型/姿态/气质，稀缺时补发型/场景）但绝不泄露角色名。
+  // 注意：开始刮才显示（见 revealTeaserIfPending），文案必须短——挡图时间越少越好
   function buildTeaser(item){
     var dna = item && item.dna;
     if (!dna) return fallbackTeaser(item);
@@ -324,17 +325,17 @@
     var rows = [];
     if (sp.source) rows.push('👑 她出自「' + sp.source + '」');
     var w = cleanWardrobe(dna.wardrobe);
-    if (w) rows.push('👗 造型｜' + w);
+    if (w) rows.push('👗 ' + w);
     var a = cleanAction(dna.action);
-    if (a) rows.push('💃 姿态｜' + a);
-    var sc = firstSegs(dna.scene, 2);
-    if (sc && cjkMostly(sc)) rows.push('🌙 场景｜' + sc);
-    var mo = firstSegs(dna.mood, 4);
-    if (mo && cjkMostly(mo)) rows.push('✨ 气质｜' + mo);
-    if (dna.hair) rows.push('💇 发型｜' + dna.hair);
+    if (a) rows.push('💃 ' + a);
+    var mo = firstSegs(dna.mood, 3);
+    if (mo && cjkMostly(mo)) rows.push('✨ ' + mo);
+    if (dna.hair) rows.push('💇 ' + dna.hair);
+    var sc = firstSegs(dna.scene, 1);
+    if (sc && cjkMostly(sc)) rows.push('🌙 ' + sc);
     if (!rows.length) return fallbackTeaser(item);
-    if (rows.length > 6) rows = rows.slice(0, 6);
-    return '🎭 刮前线索卡 · 猜猜她是谁？\n' + rows.join('\n') + '\n👆 刮开，验证你的猜测';
+    if (rows.length > 4) rows = rows.slice(0, 4);
+    return '🎭 猜猜她是谁？\n' + rows.join('\n');
   }
   function buildReveal(item){
     var sp = splitSubject(item && item.dna && item.dna.subject);
@@ -519,13 +520,31 @@
     clearTimeout(showToast._t);
     showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
   }
-  // 刮前多线索提示：给足造型/姿态/场景等已知信息，不揭晓角色名；刮开/换抽时淡出
+  // 刮前线索卡：抽到图后只待命（teaserPending），等用户真正开始刮再淡入，
+  // 7 秒后自动淡出——开图/刮开的体验第一位，提示不长期挡图
+  var TEASER_AUTO_HIDE_MS = 7000;
+  var teaserPending = null;   // { text, tint } 待显示线索卡
+  var teaserHideTimer = null;
   function showTeaser(text){
     teaser.textContent = text;
     teaser.classList.add('show');
   }
   function hideTeaser(){
+    clearTimeout(teaserHideTimer);
+    teaserPending = null;
+    teaser.style.borderColor = '';
+    teaser.style.boxShadow = '';
     teaser.classList.remove('show');
+  }
+  // 首次有效刮擦（点/擦在图内且揭开新区域）时调用：淡入线索卡并启动自动淡出
+  function revealTeaserIfPending(){
+    if (!teaserPending || state !== 'scratching' || unlocked) return;
+    var t = teaserPending;
+    teaserPending = null;
+    showTeaser(t.text);
+    if (t.tint){ teaser.style.borderColor = t.tint; teaser.style.boxShadow = '0 4px 18px ' + t.tint + '66'; }
+    clearTimeout(teaserHideTimer);
+    teaserHideTimer = setTimeout(hideTeaser, TEASER_AUTO_HIDE_MS);
   }
 
   function size(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr(); cv.height=H*dpr(); }
@@ -601,11 +620,11 @@
   }
 
   function revealTileAt(cx,cy){
-    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return;
+    if (cx<fitRect.dx||cx>fitRect.dx+fitRect.dw||cy<fitRect.dy||cy>fitRect.dy+fitRect.dh) return false;
     var c=Math.floor((cx-fitRect.dx)/tileW), r=Math.floor((cy-fitRect.dy)/tileH);
     if(c<0)c=0; if(c>=cols)c=cols-1; if(r<0)r=0; if(r>=rows)r=rows-1;
     var ti=r*cols+c;
-    if (tileRevealed[ti]) return;
+    if (tileRevealed[ti]) return false;
     tileRevealed[ti]=true; revealedCount++;
     animateTile(ti);
     if (!startLogged){ startLogged=true; track('scratch_exp','start'); }
@@ -661,12 +680,17 @@
     if(r>=UNLOCK && !unlocked) unlock();
   }
 
+  // handlePoint 返回「本次是否真正揭开了新区域」——首次有效刮擦才触发线索卡淡入
   function handlePoint(x,y){
-    if (variant.v.mode==='scratch'){ erase(x,y); tick(); }
-    else { revealTileAt(x,y); }
+    if (variant.v.mode==='scratch'){
+      var inside = x>=fitRect.dx && x<=fitRect.dx+fitRect.dw && y>=fitRect.dy && y<=fitRect.dy+fitRect.dh;
+      erase(x,y); tick();
+      return inside;
+    }
+    return revealTileAt(x,y);
   }
-  function onDown(e){ e.preventDefault(); scratching=true; handlePoint(pxof(e).x,pxof(e).y); }
-  function onMove(e){ e.preventDefault(); if(!scratching) return; handlePoint(pxof(e).x,pxof(e).y); }
+  function onDown(e){ e.preventDefault(); scratching=true; if (handlePoint(pxof(e).x,pxof(e).y)) revealTeaserIfPending(); }
+  function onMove(e){ e.preventDefault(); if(!scratching) return; if (handlePoint(pxof(e).x,pxof(e).y)) revealTeaserIfPending(); }
   function onUp(){ scratching=false; }
 
   // ---- 揭示完成：全局去重记录 + DB view_count ----
@@ -823,6 +847,7 @@
     variant = resolveVariant(it.id);
     unlocked=false; bar.style.width='0%'; panel.classList.remove('show');
     startLogged=false; halfLogged=false;
+    hideTeaser();   // 清掉上一张的线索卡（含 pending 与自动淡出定时器）
     expTag.style.display=''; expTag.textContent = '实验臂: ' + variant.v.label;
     hint.style.opacity='1';
     hint.textContent = (variant.v.mode==='scratch')
@@ -834,11 +859,8 @@
       bg.src=img.src;
       loading.style.display='none';
       state='scratching';
-      showTeaser(buildTeaser(it));
-      // 主题色：按线索里的颜色关键词给卡片边框/光晕上色，强化角色区分度
-      var tint = buildTeaserTint(it);
-      if (tint){ teaser.style.borderColor = tint; teaser.style.boxShadow = '0 4px 18px ' + tint + '66'; }
-      else { teaser.style.borderColor = ''; teaser.style.boxShadow = ''; }
+      // 线索卡先待命：等用户真正开始刮（首次有效刮擦）再淡入，不挡开图体验
+      teaserPending = { text: buildTeaser(it), tint: buildTeaserTint(it) };
       if (variant.v.mode==='scratch'){ drawMosaic(); }
       else { buildCover(); }
     };
