@@ -14,6 +14,7 @@
     "style":      { "type": "string", "description": "风格：时尚大片/电影感/胶片/油画/极简" },
     "mood":       { "type": "string", "description": "情绪：神秘/优雅/俏皮/力量感" },
     "wardrobe":   { "type": "string", "description": "着装：礼服/休闲/正装/运动（仅着衣，无裸露）" },
+    "coverage_pct": { "type": "integer", "minimum": 0, "maximum": 100, "description": "遮蔽度%（衣着覆盖身体比例估算）。门禁规则：<50 仅「后宫」激活用户可在欣赏美女页看到。参考基线：dudou+高透=20 / 内衣=25 / 比基尼=40 / 旗袍长裙=85 / 全遮蔽仙裙宫装=95" },
     "camera":     { "type": "string", "description": "镜头：35mm/85mm/长焦/广角" },
     "body_type":  { "type": "string", "description": "体型：饱满曲线/纤细/运动型（女性角色默认「饱满曲线」amply curved，已与用户确认）" },
     "negative":   { "type": "string", "description": "负向提示：避免的元素" },

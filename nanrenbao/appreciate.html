@@ -419,6 +419,16 @@
         <div class="ad-buttons-container">
             <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
+
+        <!-- 后宫门禁提示：有被隐藏的低遮蔽度图片时向未激活用户展示 -->
+        <div id="harem-gate-notice" style="display: none; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-size: 1.1em; font-weight: bold; color: #ad1457; margin-bottom: 8px;">👑 后宫专属提示</div>
+            <div style="font-size: 0.9em; color: #880e4f; line-height: 1.6;">
+                <span id="harem-gate-text">有部分精选内容仅对「我的后宫」用户开放。</span>
+                <a href="harem.html" style="color: #ad1457; font-weight: bold;">前往激活「我的后宫」解锁全部内容 →</a>
+            </div>
+        </div>
+
         <div id="loading">正在加载图片...</div>
         <div id="no-images">内容安全审核中，暂未开放展示，请稍后再来查看。</div>
         <div id="gallery" class="gallery"></div>
@@ -672,13 +682,28 @@
                     },
                     body: JSON.stringify({
                         // Only return approved images that are not marked deleted
-                        sql: `SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC`,
+                        sql: `SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC`,
                         params: ['approved']
                     })
                 });
 
                 let data = await response.json();
                 loading.style.display = 'none';
+
+                // 后宫门禁：遮蔽度 coverage_pct < 50 的图仅对已激活「后宫」的用户展示。
+                // 说明：此规则只作用于欣赏美女页；快手任务落地页(beauty-scratch)与
+                // 刮刮乐(scratch-lottery)不做过滤。NULL=未知遮蔽度（如 legacy 存量）不拦截。
+                if (!(window.isHaremActivated && window.isHaremActivated())) {
+                    const before = data && data.length ? data.length : 0;
+                    data = (data || []).filter(item => item.coverage_pct == null || Number(item.coverage_pct) >= 50);
+                    const hidden = before - data.length;
+                    if (hidden > 0) {
+                        const notice = document.getElementById('harem-gate-notice');
+                        const text = document.getElementById('harem-gate-text');
+                        if (text) text.textContent = `已为你隐藏 ${hidden} 张高能图片，仅对「我的后宫」用户开放。`;
+                        if (notice) notice.style.display = 'block';
+                    }
+                }
 
                 // Shuffle on every load so popularity does not determine exposure order.
                 if (data && data.length > 0) {

@@ -78,7 +78,7 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
     it('should attach click handler to gallery items', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('div.onclick = function()');
-      expect(html).toContain('showModal(item.image_url)');
+      expect(html).toContain('showModal(imageUrl, sourceImageUrl)');
     });
 
     it('should close modal on close button click', () => {
@@ -153,7 +153,7 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('async function loadImages()');
       expect(html).toContain('window.API_ENDPOINTS.MYSQL_QUERY');
-      expect(html).toContain("SELECT id, image_url, view_count, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ?");
+      expect(html).toContain("SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ?");
     });
 
     it('should handle image load errors', () => {
@@ -166,6 +166,51 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('display: grid');
       expect(html).toContain('grid-template-columns');
+    });
+  });
+
+  // 后宫门禁（2026-10-20）：遮蔽度 coverage_pct < 50 的图仅对已激活「后宫」的用户展示。
+  // 规则只作用于欣赏美女页；快手落地页(beauty-scratch.html)与刮刮乐(scratch-lottery.html)不过滤。
+  describe('Harem Coverage Gate', () => {
+    it('should select coverage_pct from beauty_images', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('coverage_pct');
+      expect(html).toContain('SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images');
+    });
+
+    it('should gate images by harem activation state', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('window.isHaremActivated && window.isHaremActivated()');
+    });
+
+    it('should hide images with coverage below 50 for non-harem users', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('item.coverage_pct == null || Number(item.coverage_pct) >= 50');
+    });
+
+    it('should keep unknown coverage (NULL) visible for everyone', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      // NULL（如 legacy 存量投稿）不拦截：过滤条件里 coverage_pct == null 一律放行
+      expect(html).toContain('coverage_pct == null ||');
+    });
+
+    it('should have harem gate notice element', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('id="harem-gate-notice"');
+      expect(html).toContain('id="harem-gate-text"');
+      expect(html).toContain('href="harem.html"');
+    });
+
+    it('should show notice with hidden count when images are gated', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('已为你隐藏');
+      expect(html).toContain('notice.style.display = \'block\'');
+    });
+
+    it('should document that kuaishou and scratch pages are unaffected', () => {
+      const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
+      expect(html).toContain('快手任务落地页(beauty-scratch)与');
+      expect(html).toContain('刮刮乐(scratch-lottery)不做过滤');
     });
   });
 });

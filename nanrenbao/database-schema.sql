@@ -38,6 +38,13 @@ CREATE TABLE IF NOT EXISTS beauty_images (
 -- UPDATE beauty_images SET submitted_at = created_at WHERE submitted_at IS NULL;
 -- UPDATE beauty_images SET review_status = 'approved', review_reason = '整改前存量内容恢复展示', reviewed_at = NOW(), reviewed_by = 'migration-backfill' WHERE source_type = 'legacy' AND review_status = 'pending';
 
+-- 遮蔽度门禁（2026-10-20）：coverage_pct 估算衣着覆盖比例(0-100)。
+-- 欣赏美女页(appreciate.html)对未激活「后宫」的用户隐藏 coverage_pct < 50 的图；
+-- NULL=未知（如 legacy 存量投稿）不拦截。快手落地页(beauty-scratch.html)与刮刮乐
+-- (scratch-lottery.html)不做此过滤。新投稿由 contribute.cjs 从 DNA.coverage_pct
+-- （缺省按 wardrobe 关键词估算）自动写入。
+-- ALTER TABLE beauty_images ADD COLUMN coverage_pct TINYINT UNSIGNED DEFAULT NULL COMMENT '遮蔽度%(衣着覆盖估算,0-100); NULL=未知不拦截; <50 仅后宫激活用户可见';
+
 -- Example queries for the application:
 
 -- Insert a new beauty image URL
