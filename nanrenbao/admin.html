@@ -359,6 +359,12 @@
         }
         .bulk-coverage-select { border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
 
+        /* 管理表定宽布局（2026-10-20）：auto 布局下 URL 列凭 nowrap 长文本抢占过半
+           宽度，把查看数/状态/操作列压到逐字换行、按钮纵向堆叠。fixed 后列宽即
+           th 设定值，URL 列吃剩余空间并 ellipsis；表格内按钮同步紧凑化。 */
+        #imagesTable, #backviewImagesTable { table-layout: fixed; }
+        #imagesTable td button, #backviewImagesTable td button { padding: 8px 12px; font-size: 0.95em; }
+
         /* ---- 管理密钥：头部退出按钮 + 输入模态框（移动端优先） ---- */
         .ak-logout {
             position: absolute;
@@ -681,14 +687,14 @@
                             <thead>
                                         <tr style="text-align:left; border-bottom:1px solid #eee;">
                                             <th style="padding:8px; width:40px;"><input type="checkbox" id="selectAllCheckbox" title="全选" /></th>
-                                            <th style="padding:8px; width:60px;">ID</th>
+                                            <th style="padding:8px; width:56px;">ID</th>
                                             <th style="padding:8px;">缩略图 / URL</th>
-                                            <th style="padding:8px; width:120px;">查看数</th>
-                                            <th style="padding:8px; width:150px;">遮蔽度</th>
-                                            <th style="padding:8px; width:180px;">审核 / 展示状态</th>
-                                            <th style="padding:8px; width:140px;">来源 / 提交时间</th>
-                                            <th style="padding:8px; width:160px;">审核备注</th>
-                                            <th style="padding:8px; width:320px;">操作</th>
+                                            <th style="padding:8px; width:72px;">查看数</th>
+                                            <th style="padding:8px; width:140px;">遮蔽度</th>
+                                            <th style="padding:8px; width:100px;">审核 / 展示状态</th>
+                                            <th style="padding:8px; width:120px;">来源 / 提交时间</th>
+                                            <th style="padding:8px; width:100px;">审核备注</th>
+                                            <th style="padding:8px; width:240px;">操作</th>
                                         </tr>
                             </thead>
                             <tbody id="imagesTbody"></tbody>
@@ -799,12 +805,12 @@
                             <thead>
                                         <tr style="text-align:left; border-bottom:1px solid #eee;">
                                             <th style="padding:8px; width:40px;"><input type="checkbox" id="backviewSelectAllCheckbox" title="全选" /></th>
-                                            <th style="padding:8px; width:60px;">ID</th>
+                                            <th style="padding:8px; width:56px;">ID</th>
                                             <th style="padding:8px;">背影缩略图 / URL</th>
                                             <th style="padding:8px;">正面缩略图 / URL</th>
-                                            <th style="padding:8px; width:100px;">点击数</th>
-                                            <th style="padding:8px; width:180px;">审核 / 展示状态</th>
-                                            <th style="padding:8px; width:140px;">来源 / 提交时间</th>
+                                            <th style="padding:8px; width:72px;">点击数</th>
+                                            <th style="padding:8px; width:100px;">审核 / 展示状态</th>
+                                            <th style="padding:8px; width:120px;">来源 / 提交时间</th>
                                             <th style="padding:8px; width:240px;">操作</th>
                                         </tr>
                             </thead>
