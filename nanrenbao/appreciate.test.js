@@ -203,7 +203,8 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
 
     it('should show notice with hidden count when images are gated', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
-      expect(html).toContain('已为你隐藏');
+      // 文案含蓄化（2026-10-20）：不点破「隐藏/高能」机制，用数量钩子引流
+      expect(html).toContain('还有 ${hidden} 幅作品在密室中等你');
       expect(html).toContain('notice.style.display = \'block\'');
     });
 

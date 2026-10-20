@@ -350,6 +350,13 @@
             }
         }
 
+        /* 遮蔽度快设下拉（桌面端基础样式；移动端在媒体查询内放大） */
+        .coverage-select {
+            max-width: 132px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 0.9em; background: #fff; cursor: pointer;
+        }
+        .bulk-coverage-select { border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
+
         /* ---- 管理密钥：头部退出按钮 + 输入模态框（移动端优先） ---- */
         .ak-logout {
             position: absolute;
@@ -458,6 +465,89 @@
                 padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
             }
         }
+
+        /* ---- 手机端管理体验（2026-10-20）：表格转卡片 + 触控友好 ---- */
+        .table-scroll { max-height: 420px; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+
+            header { padding: 14px 12px; margin-bottom: 16px; }
+            header h1 { font-size: 1.3em; }
+            header p { font-size: 0.85em; margin-top: 6px; }
+            .nav-back { left: 10px; font-size: 1em; }
+            .ak-logout { right: 10px; padding: 6px 10px; font-size: 0.85em; }
+
+            .admin-panel { padding: 14px; }
+            .section-title { font-size: 1.2em; }
+
+            /* 搜索/筛选行：纵向堆叠，控件全宽 + 16px 字号防 iOS 聚焦自动放大 */
+            .form-group input, .form-group select, .form-group textarea { font-size: 16px; }
+            #searchInput, #backviewSearchInput { width: 100%; }
+            .form-group div[style*="display:flex"] { flex-direction: column; }
+            .form-group div[style*="display:flex"] select,
+            .form-group div[style*="display:flex"] button { width: 100%; min-height: 44px; font-size: 16px; }
+
+            /* 批量操作区：允许换行，按钮/下拉全宽化 */
+            .bulk-actions { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+            .bulk-actions button { flex: 1 1 44%; min-height: 44px; font-size: 0.95em; padding: 10px 8px; }
+            .bulk-actions .bulk-coverage-select { flex: 1 1 100%; min-height: 44px; font-size: 16px; padding: 8px; border: 1px solid #ddd; border-radius: 6px; }
+
+            /* 分页：大触控目标 */
+            #prevPageBtn, #nextPageBtn, #backviewPrevPageBtn, #backviewNextPageBtn { min-height: 44px; min-width: 96px; font-size: 1em; }
+
+            /* 表格容器：视口比例高度 */
+            .table-scroll { max-height: 68vh; }
+
+            /* 表格 → 卡片：每条记录一张卡片，字段名以 data-label 前缀展示 */
+            #imagesTable thead, #backviewImagesTable thead { display: none; }
+            #imagesTable, #imagesTable tbody, #imagesTable tr, #imagesTable td,
+            #backviewImagesTable, #backviewImagesTable tbody, #backviewImagesTable tr, #backviewImagesTable td {
+                display: block; width: 100%;
+            }
+            #imagesTable tr, #backviewImagesTable tr {
+                position: relative;
+                border: 1px solid #e0e0e0; border-radius: 10px;
+                margin-bottom: 12px; padding: 10px 10px 10px 12px;
+                background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            }
+            #imagesTable td, #backviewImagesTable td {
+                border: none; padding: 6px 4px;
+                display: flex; align-items: center; gap: 10px;
+            }
+            #imagesTable td::before, #backviewImagesTable td::before {
+                content: attr(data-label);
+                flex: 0 0 60px; font-weight: bold; color: #666; font-size: 0.85em;
+            }
+            /* 多行内容单元格（徽章+下拉 / <br> 分段 / 按钮组）保持块级流式布局 */
+            #imagesTable td[data-label="图片"], #imagesTable td[data-label="遮蔽度"],
+            #imagesTable td[data-label="状态"], #imagesTable td[data-label="来源"], #imagesTable td[data-label="操作"],
+            #backviewImagesTable td[data-label="背影图"], #backviewImagesTable td[data-label="正面图"],
+            #backviewImagesTable td[data-label="操作"] { display: block; }
+            #imagesTable td[data-label="图片"]::before, #imagesTable td[data-label="遮蔽度"]::before,
+            #imagesTable td[data-label="状态"]::before, #imagesTable td[data-label="来源"]::before, #imagesTable td[data-label="操作"]::before,
+            #backviewImagesTable td[data-label="背影图"]::before, #backviewImagesTable td[data-label="正面图"]::before,
+            #backviewImagesTable td[data-label="操作"]::before { display: block; margin-bottom: 4px; }
+            /* 勾选框：浮动到卡片右上角，加大触控面积 */
+            #imagesTable td:first-child, #backviewImagesTable td:first-child {
+                position: absolute; top: 12px; right: 10px; width: auto; padding: 0;
+            }
+            #imagesTable td:first-child::before, #backviewImagesTable td:first-child::before { content: none; }
+            #imagesTable td:first-child input, #backviewImagesTable td:first-child input { width: 22px; height: 22px; }
+            /* 图片单元格：URL 文本收缩防溢出 */
+            #imagesTable td[data-label="图片"] div[style*="max-width"],
+            #backviewImagesTable td[data-label="背影图"] div[style*="max-width"],
+            #backviewImagesTable td[data-label="正面图"] div[style*="max-width"] { max-width: calc(100% - 90px) !important; }
+            /* 操作按钮：换行 + 40px 触控高度 */
+            #imagesTable td[data-label="操作"] button, #backviewImagesTable td[data-label="操作"] button {
+                min-height: 40px; margin: 3px 4px 3px 0; padding: 8px 14px; font-size: 0.95em;
+            }
+            /* 行内遮蔽度下拉：16px 防放大 + 40px 触控高度 */
+            #imagesTable .coverage-select { font-size: 16px; min-height: 40px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; margin-top: 2px; }
+
+            /* Lightbox 关闭键：手机端加大 */
+            #lrLightbox .lr-close { font-size: 44px; top: 10px; right: 14px; padding: 6px 12px; }
+        }
     </style>
 </head>
 <body>
@@ -552,6 +642,9 @@
                         <option value="rejected">仅显示已驳回</option>
                         <option value="visible">仅显示可见</option>
                         <option value="deleted">仅显示已标记删除</option>
+                        <option value="gated">仅显示门禁内容(&lt;50)</option>
+                        <option value="allage">仅显示全龄内容(≥50)</option>
+                        <option value="nocoverage">仅显示未知遮蔽度</option>
                     </select>
                     <button class="btn-primary" id="refreshBtn">刷新列表</button>
                 </div>
@@ -559,18 +652,29 @@
 
                 <div class="status-panel" id="managePanel">
                     <h3>图片列表</h3>
-                    <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                         <div id="manageStats">加载中...</div>
-                        <div>
+                        <div class="bulk-actions">
                             <button class="btn-secondary" id="bulkApproveBtn">批量通过</button>
                             <button class="btn-secondary" id="bulkRejectBtn">批量驳回</button>
                             <button class="btn-secondary" id="bulkHideBtn">批量隐藏</button>
                             <button class="btn-secondary" id="bulkShowBtn">批量展示</button>
                             <button class="btn-secondary" id="bulkUndeleteBtn">批量取消删除</button>
                             <button class="btn-secondary" id="bulkDeleteBtn">批量永久删除</button>
+                            <select id="bulkCoverageSelect" class="bulk-coverage-select" title="对勾选行批量设置遮蔽度：<50 仅后宫激活用户可见">
+                                <option value="">批量设遮蔽：未知</option>
+                                <option value="95">批量设遮蔽：全遮蔽 95</option>
+                                <option value="85">批量设遮蔽：长裙 85</option>
+                                <option value="70">批量设遮蔽：常规 70</option>
+                                <option value="40">批量设遮蔽：比基尼 40</option>
+                                <option value="25">批量设遮蔽：内衣 25</option>
+                                <option value="20">批量设遮蔽：高透 20</option>
+                            </select>
+                            <button class="btn-secondary" id="bulkCoverageBtn">应用</button>
                         </div>
                     </div>
-                    <div style="overflow:auto; max-height:420px; background:white; border-radius:8px; padding:10px;">
+                    <div id="coverageSummary" style="font-size:0.9em; color:#555; margin-bottom:10px; line-height:1.6;">遮蔽度统计加载中...</div>
+                    <div class="table-scroll">
                         <table id="imagesTable" style="width:100%; border-collapse:collapse; font-size:0.9em;">
                             <thead>
                                         <tr style="text-align:left; border-bottom:1px solid #eee;">
@@ -578,6 +682,7 @@
                                             <th style="padding:8px; width:60px;">ID</th>
                                             <th style="padding:8px;">缩略图 / URL</th>
                                             <th style="padding:8px; width:120px;">查看数</th>
+                                            <th style="padding:8px; width:150px;">遮蔽度</th>
                                             <th style="padding:8px; width:180px;">审核 / 展示状态</th>
                                             <th style="padding:8px; width:140px;">来源 / 提交时间</th>
                                             <th style="padding:8px; width:160px;">审核备注</th>
@@ -687,7 +792,7 @@
                             <button class="btn-secondary" id="backviewBulkDeleteBtn">批量永久删除</button>
                         </div>
                     </div>
-                    <div style="overflow:auto; max-height:420px; background:white; border-radius:8px; padding:10px;">
+                    <div style="overflow:auto; max-height:420px; background:white; border-radius:8px; padding:10px;" class="table-scroll">
                         <table id="backviewImagesTable" style="width:100%; border-collapse:collapse; font-size:0.9em;">
                             <thead>
                                         <tr style="text-align:left; border-bottom:1px solid #eee;">

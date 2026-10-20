@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
   // 自 2026-09-06 P0 起仅 admin key 可写，admin.js 已于 2026-10-16 切走）
   NANRENBAO_ADMIN_REVIEW: `${BASE_URL}/api/nanrenbao/admin/review`,
   NANRENBAO_ADMIN_VISIBILITY: `${BASE_URL}/api/nanrenbao/admin/visibility`,
+  NANRENBAO_ADMIN_COVERAGE: `${BASE_URL}/api/nanrenbao/admin/coverage`,
   NANRENBAO_ADMIN_PURGE: `${BASE_URL}/api/nanrenbao/admin/purge`,
   PAYMENT_CREATE_ORDER: `${BASE_URL}/payment/alipay/create-order`,
   PAYMENT_QUERY_ORDER: `${BASE_URL}/payment/order`

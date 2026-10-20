@@ -420,12 +420,12 @@
             <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
 
-        <!-- 后宫门禁提示：有被隐藏的低遮蔽度图片时向未激活用户展示 -->
+        <!-- 后宫门禁提示：有被隐藏的低遮蔽度图片时向未激活用户展示（文案含蓄化：不点破「隐藏/高能」机制，用数量钩子引流） -->
         <div id="harem-gate-notice" style="display: none; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <div style="font-size: 1.1em; font-weight: bold; color: #ad1457; margin-bottom: 8px;">👑 后宫专属提示</div>
+            <div style="font-size: 1.1em; font-weight: bold; color: #ad1457; margin-bottom: 8px;">✨ 更多珍藏</div>
             <div style="font-size: 0.9em; color: #880e4f; line-height: 1.6;">
-                <span id="harem-gate-text">有部分精选内容仅对「我的后宫」用户开放。</span>
-                <a href="harem.html" style="color: #ad1457; font-weight: bold;">前往激活「我的后宫」解锁全部内容 →</a>
+                <span id="harem-gate-text">更有珍藏佳作，静候知音。</span>
+                <a href="harem.html" style="color: #ad1457; font-weight: bold;">前往「我的后宫」→</a>
             </div>
         </div>
 
@@ -700,7 +700,7 @@
                     if (hidden > 0) {
                         const notice = document.getElementById('harem-gate-notice');
                         const text = document.getElementById('harem-gate-text');
-                        if (text) text.textContent = `已为你隐藏 ${hidden} 张高能图片，仅对「我的后宫」用户开放。`;
+                        if (text) text.textContent = `还有 ${hidden} 幅作品在密室中等你。`;
                         if (notice) notice.style.display = 'block';
                     }
                 }

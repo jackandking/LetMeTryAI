@@ -35,7 +35,38 @@ function buildReviewWhere(filter) {
     if (filter === 'pending') where += " AND review_status = 'pending'";
     if (filter === 'approved') where += " AND review_status = 'approved'";
     if (filter === 'rejected') where += " AND review_status = 'rejected'";
+    // 遮蔽度门禁筛选（2026-10-20：后宫门禁治理）
+    if (filter === 'gated') where += ' AND coverage_pct IS NOT NULL AND coverage_pct < 50';
+    if (filter === 'allage') where += ' AND coverage_pct IS NOT NULL AND coverage_pct >= 50';
+    if (filter === 'nocoverage') where += ' AND coverage_pct IS NULL';
     return where;
+}
+
+// 遮蔽度快设选项：[入库值, 标签]。'' → NULL（未知，不参与门禁）。
+const COVERAGE_OPTIONS = [
+    ['', '未知（不拦截）'],
+    ['95', '全遮蔽 95'],
+    ['85', '长裙/旗袍 85'],
+    ['70', '常规着装 70'],
+    ['40', '比基尼 40'],
+    ['25', '内衣 25'],
+    ['20', '高透极小 20']
+];
+
+// 遮蔽度徽章：🔴 门禁(<50，仅后宫可见) / 🟢 全龄(>=50) / ⚪ 未知(不拦截)
+function formatCoverage(row) {
+    const c = row.coverage_pct == null ? null : Number(row.coverage_pct);
+    if (c == null) return '<span style="color:#9e9e9e;">⚪ 未知</span>';
+    if (c < 50) return `<span style="color:#e91e63; font-weight:bold;">🔴 门禁 ${c}%</span>`;
+    return `<span style="color:#4caf50; font-weight:bold;">🟢 全龄 ${c}%</span>`;
+}
+
+// 行内遮蔽度快设下拉（change 后立即写库并刷新）
+function coverageSelectHtml(row) {
+    const current = row.coverage_pct == null ? '' : String(row.coverage_pct);
+    const options = COVERAGE_OPTIONS.map(([v, label]) =>
+        `<option value="${v}"${v === current ? ' selected' : ''}>${label}</option>`).join('');
+    return `<select class="coverage-select" data-id="${row.id}" title="设置遮蔽度：<50 仅后宫激活用户可见">${options}</select>`;
 }
 
 function formatReviewStatus(row) {
@@ -257,6 +288,18 @@ async function mysqlUpdate(table, id, data) {
             reason: data.review_reason || undefined
         });
     }
+    if (data && Object.prototype.hasOwnProperty.call(data, 'coverage_pct')) {
+        // 遮蔽度（后宫门禁元数据）：0-100 或 null（未知不拦截）；仅 beauty_images 有此列
+        const coverage = data.coverage_pct == null ? null : Number(data.coverage_pct);
+        if (coverage !== null && (!Number.isInteger(coverage) || coverage < 0 || coverage > 100)) {
+            throw new Error(`不支持的遮蔽度: ${data.coverage_pct}`);
+        }
+        return adminWrite(API_ENDPOINTS.NANRENBAO_ADMIN_COVERAGE || 'https://letmetry.cn/api/nanrenbao/admin/coverage', {
+            table,
+            id,
+            coverage
+        });
+    }
     if (data && Object.prototype.hasOwnProperty.call(data, 'deleted')) {
         return adminWrite(API_ENDPOINTS.NANRENBAO_ADMIN_VISIBILITY || 'https://letmetry.cn/api/nanrenbao/admin/visibility', {
             table,
@@ -327,7 +370,7 @@ async function fetchImagesForManage(page = 1, perPage = 20, filter = 'all', quer
     }
 
     const offset = (page - 1) * perPage;
-    const sql = `SELECT SQL_CALC_FOUND_ROWS id, image_url, view_count, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by, source_type, submitted_at FROM beauty_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
+    const sql = `SELECT SQL_CALC_FOUND_ROWS id, image_url, view_count, coverage_pct, created_at, deleted, review_status, review_reason, reviewed_at, reviewed_by, source_type, submitted_at FROM beauty_images ${where} ORDER BY submitted_at DESC, created_at DESC LIMIT ${perPage} OFFSET ${offset}`;
 
     const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
         method: 'POST',
@@ -365,14 +408,15 @@ function renderManageTable(rows, page, perPage, total) {
         const tr = document.createElement('tr');
         const displayUrl = normalizeStoredImageUrl(row.image_url);
         tr.innerHTML = `
-            <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="row-checkbox" data-id="${row.id}" /></td>
-            <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${displayUrl}" onclick="openLightbox('${displayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
-            <td style="padding:8px;">${row.view_count || 0}</td>
-            <td style="padding:8px;">${formatReviewStatus(row)}</td>
-            <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
-            <td style="padding:8px;">${row.review_reason || '-'}</td>
-            <td style="padding:8px;">
+            <td data-label="" style="padding:8px; vertical-align:middle;"><input type="checkbox" class="row-checkbox" data-id="${row.id}" /></td>
+            <td data-label="ID" style="padding:8px; vertical-align:middle;">${row.id}</td>
+            <td data-label="图片" style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${displayUrl}" onclick="openLightbox('${displayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.image_url}</div></div></td>
+            <td data-label="查看数" style="padding:8px;">${row.view_count || 0}</td>
+            <td data-label="遮蔽度" style="padding:8px;">${formatCoverage(row)}<br>${coverageSelectHtml(row)}</td>
+            <td data-label="状态" style="padding:8px;">${formatReviewStatus(row)}</td>
+            <td data-label="来源" style="padding:8px;">${formatSubmissionMeta(row)}</td>
+            <td data-label="备注" style="padding:8px;">${row.review_reason || '-'}</td>
+            <td data-label="操作" style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-id="${row.id}" data-url="${displayUrl}">查看</button>
                 ${row.review_status === 'approved' ? '' : `<button class="btn-secondary" data-action="approve" data-id="${row.id}" data-url="${displayUrl}">审核通过</button>`}
                 ${row.review_status === 'rejected' ? '' : `<button class="btn-secondary" data-action="reject" data-id="${row.id}" data-url="${displayUrl}">驳回</button>`}
@@ -405,6 +449,39 @@ async function loadManagePage() {
         addLog('加载图片列表失败: ' + (err.message || err), 'error');
         try { document.getElementById('manageStats').textContent = '加载失败'; } catch (e) {}
         showAlert('加载图片列表失败: ' + (err.message || err), 'error');
+    }
+    loadCoverageSummary(); // 与列表解耦：统计失败不影响主列表
+}
+
+// 前台可见面（approved 且未删除）的遮蔽度分布——后宫门禁治理仪表。
+// /mysql/query 为公开只读端点（欣赏页同款），无需管理密钥。
+async function loadCoverageSummary() {
+    const el = document.getElementById('coverageSummary');
+    if (!el) return;
+    try {
+        const resp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sql: `SELECT COUNT(*) AS total,
+                      SUM(CASE WHEN coverage_pct IS NULL THEN 1 ELSE 0 END) AS unknown_cnt,
+                      SUM(CASE WHEN coverage_pct < 50 THEN 1 ELSE 0 END) AS gated_cnt,
+                      SUM(CASE WHEN coverage_pct >= 50 THEN 1 ELSE 0 END) AS allage_cnt
+                      FROM beauty_images WHERE deleted = 0 AND review_status = 'approved'`,
+                params: []
+            })
+        });
+        if (!resp.ok) throw new Error(`统计查询失败: ${resp.status}`);
+        const rows = await resp.json();
+        const r = Array.isArray(rows) ? rows[0] : null;
+        if (!r) return;
+        el.innerHTML = `前台可见面（已通过）共 <b>${r.total || 0}</b> 幅：` +
+            `<span style="color:#e91e63; font-weight:bold;">🔴 门禁 ${r.gated_cnt || 0}</span>（仅后宫激活用户可见） · ` +
+            `<span style="color:#4caf50; font-weight:bold;">🟢 全龄 ${r.allage_cnt || 0}</span> · ` +
+            `<span style="color:#9e9e9e;">⚪ 未知 ${r.unknown_cnt || 0}</span>（不拦截）`;
+    } catch (err) {
+        console.error('遮蔽度统计失败:', err);
+        el.textContent = '遮蔽度统计加载失败';
     }
 }
 
@@ -473,6 +550,28 @@ function attachManageHandlers() {
         });
     }
 
+    // 行内遮蔽度快设：下拉 change 即写库（null=未知不拦截），成功后刷新列表与统计
+    document.getElementById('imagesTable').addEventListener('change', async (e) => {
+        const sel = e.target.closest('select.coverage-select');
+        if (!sel) return;
+        const id = parseInt(sel.getAttribute('data-id'), 10);
+        if (!Number.isInteger(id)) return;
+        const raw = sel.value;
+        const coverage = raw === '' ? null : parseInt(raw, 10);
+        const label = raw === '' ? '未知（不拦截）' : raw + '%';
+        sel.disabled = true;
+        try {
+            await mysqlUpdate('beauty_images', id, { coverage_pct: coverage });
+            addLog(`遮蔽度 id=${id} → ${label}`, 'info');
+            await loadManagePage();
+        } catch (err) {
+            console.error('设置遮蔽度失败:', err);
+            addLog('设置遮蔽度失败: ' + (err.message || err), 'error');
+            showAlert('设置遮蔽度失败: ' + (err.message || err), 'error');
+            sel.disabled = false;
+        }
+    });
+
     // helper to collect selected ids
     function getSelectedIds() {
         const ids = [];
@@ -536,6 +635,27 @@ function attachManageHandlers() {
         await mysqlDeleteMany('beauty_images', ids);
         addLog('批量永久删除: 完成', 'info');
         loadManagePage();
+    };
+
+    // 批量设遮蔽度：对勾选行统一设置（legacy 存量人工分级的批量入口）
+    document.getElementById('bulkCoverageBtn').onclick = async () => {
+        const ids = getSelectedIds();
+        if (ids.length === 0) { showAlert('请先选择至少一项', 'warning'); return; }
+        const sel = document.getElementById('bulkCoverageSelect');
+        const raw = sel ? sel.value : '';
+        const coverage = raw === '' ? null : parseInt(raw, 10);
+        const label = raw === '' ? '未知（不拦截）' : raw + '%';
+        if (!confirm(`确认将 ${ids.length} 项的遮蔽度设为「${label}」？`)) return;
+        try {
+            await mysqlUpdateMany('beauty_images', ids, { coverage_pct: coverage });
+            addLog(`批量设遮蔽度: ${ids.length} 项 → ${label}`, 'info');
+            resetManageSelections();
+            loadManagePage();
+        } catch (err) {
+            console.error('批量设遮蔽度失败:', err);
+            addLog('批量设遮蔽度失败: ' + (err.message || err), 'error');
+            showAlert('批量设遮蔽度失败: ' + (err.message || err), 'error');
+        }
     };
 }
 
@@ -935,14 +1055,14 @@ function renderBackviewManageTable(rows, page, perPage, total) {
         const backDisplayUrl = normalizeStoredImageUrl(row.back_image_url);
         const frontDisplayUrl = normalizeStoredImageUrl(row.front_image_url);
         tr.innerHTML = `
-            <td style="padding:8px; vertical-align:middle;"><input type="checkbox" class="backview-row-checkbox" data-id="${row.id}" /></td>
-            <td style="padding:8px; vertical-align:middle;">${row.id}</td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${backDisplayUrl}" onclick="openLightbox('${backDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
-            <td style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${frontDisplayUrl}" onclick="openLightbox('${frontDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
-            <td style="padding:8px;">${row.click_count || 0}</td>
-            <td style="padding:8px;">${formatReviewStatus(row)}</td>
-            <td style="padding:8px;">${formatSubmissionMeta(row)}</td>
-            <td style="padding:8px;">
+            <td data-label="" style="padding:8px; vertical-align:middle;"><input type="checkbox" class="backview-row-checkbox" data-id="${row.id}" /></td>
+            <td data-label="ID" style="padding:8px; vertical-align:middle;">${row.id}</td>
+            <td data-label="背影图" style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${backDisplayUrl}" onclick="openLightbox('${backDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.back_image_url}</div></div></td>
+            <td data-label="正面图" style="padding:8px;"><div style="display:flex; gap:10px; align-items:center;"><img src="${frontDisplayUrl}" onclick="openLightbox('${frontDisplayUrl}')" style="width:80px; height:60px; object-fit:cover; border-radius:6px; cursor:zoom-in; border:1px solid rgba(0,0,0,.08);" /><div style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${row.front_image_url}</div></div></td>
+            <td data-label="点击数" style="padding:8px;">${row.click_count || 0}</td>
+            <td data-label="状态" style="padding:8px;">${formatReviewStatus(row)}</td>
+            <td data-label="来源" style="padding:8px;">${formatSubmissionMeta(row)}</td>
+            <td data-label="操作" style="padding:8px;">
                 <button class="btn-primary" data-action="view" data-back-url="${backDisplayUrl}" data-front-url="${frontDisplayUrl}">查看</button>
                 ${row.review_status === 'approved' ? '' : '<button class="btn-secondary" data-action="approve" data-id="' + row.id + '">审核通过</button>'}
                 ${row.review_status === 'rejected' ? '' : '<button class="btn-secondary" data-action="reject" data-id="' + row.id + '">驳回</button>'}

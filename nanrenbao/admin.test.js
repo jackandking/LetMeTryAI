@@ -1,5 +1,10 @@
 // admin.test.js - Tests for nanrenbao admin batch upload functionality
+// ESM 模式（--experimental-vm-modules）下 jest 全局不自动注入，按 test-setup.js
+// 既定模式从 @jest/globals 显式引入；describe/it/expect 由 jest ESM 运行时提供。
+import { jest, beforeEach, afterEach } from '@jest/globals';
+import { readFileSync } from 'fs';
 import { API_ENDPOINTS } from '../util/config.js';
+import { validateImageUrl } from './url-validator.esm.js';
 
 describe('Nanrenbao Admin - Batch Upload', () => {
   let mockFetch;
@@ -421,7 +426,7 @@ https://example.com/image2.png`;
 
     it('should auto-scroll log container', () => {
       const logContainer = document.getElementById('logContainer');
-      
+
       // Add multiple log entries
       for (let i = 0; i < 20; i++) {
         const logEntry = document.createElement('div');
@@ -429,11 +434,16 @@ https://example.com/image2.png`;
         logEntry.textContent = `Log entry ${i}`;
         logContainer.appendChild(logEntry);
       }
-      
-      // Simulate auto-scroll
+
+      // jsdom 不做布局，scrollHeight/scrollTop 恒为 0；断言赋值行为本身
+      const assignments = [];
+      Object.defineProperty(logContainer, 'scrollTop', {
+        set(v) { assignments.push(v); },
+        get() { return 0; }
+      });
       logContainer.scrollTop = logContainer.scrollHeight;
-      
-      expect(logContainer.scrollTop).toBeGreaterThan(0);
+      expect(assignments).toEqual([0]);
+      expect(logContainer.children).toHaveLength(20);
     });
   });
 
@@ -483,14 +493,16 @@ https://example.com/image2.png`;
 
   describe('Integration with URL Validator', () => {
     it('should validate URLs using url-validator module', () => {
-      // Test that the validator is available
-      expect(typeof validateImageUrl).toBe('function' || 'undefined');
-      
-      // If validator is available, test basic validation patterns
-      const validPattern = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i;
-      
-      expect('https://example.com/image.jpg').toMatch(validPattern);
-      expect('not-a-url').not.toMatch(validPattern);
+      // 验证器与 admin.js 同源（url-validator.esm.js），显式引入后断言可用
+      expect(typeof validateImageUrl).toBe('function');
+
+      // 域名白名单 + HTTPS 双重规则
+      expect(validateImageUrl('https://img.myqcloud.com/a.jpg').valid).toBe(true);   // 白名单域名
+      expect(validateImageUrl('https://letmetry.cn/images/a.jpg').valid).toBe(true); // 白名单域名
+      expect(validateImageUrl('http://img.myqcloud.com/a.jpg').valid).toBe(false);   // 仅支持 HTTPS
+      expect(validateImageUrl('https://evil.example.com/a.jpg').valid).toBe(false);  // 非白名单域名
+      expect(validateImageUrl('not-a-url').valid).toBe(false);                       // 无效格式
+      expect(validateImageUrl('').valid).toBe(false);                                // 空值
     });
   });
 
@@ -516,5 +528,67 @@ https://example.com/image2.png`;
       expect(API_ENDPOINTS.MYSQL_INSERT).toContain('letmetry.cn');
       expect(API_ENDPOINTS.MYSQL_INSERT).not.toContain('/lws/');
     });
+  });
+});
+
+// 后宫门禁治理（2026-10-20）：遮蔽度 coverage_pct 的后台管理与手机端体验。
+// 文件内容式断言（与 appreciate.test.js 同风格）：锁定关键接线，防回归。
+describe('Nanrenbao Admin - Coverage Management', () => {
+  const read = (p) => readFileSync(p, 'utf8');
+
+  it('should fetch coverage_pct in the manage list query', () => {
+    const js = read('./nanrenbao/admin.js');
+    expect(js).toContain('id, image_url, view_count, coverage_pct, created_at');
+  });
+
+  it('should support coverage filters in buildReviewWhere', () => {
+    const js = read('./nanrenbao/admin.js');
+    expect(js).toContain("filter === 'gated'");
+    expect(js).toContain('coverage_pct IS NOT NULL AND coverage_pct < 50');
+    expect(js).toContain("filter === 'allage'");
+    expect(js).toContain('coverage_pct IS NOT NULL AND coverage_pct >= 50');
+    expect(js).toContain("filter === 'nocoverage'");
+  });
+
+  it('should render coverage badges and inline quick-set select', () => {
+    const js = read('./nanrenbao/admin.js');
+    expect(js).toContain('function formatCoverage');
+    expect(js).toContain('🔴 门禁');
+    expect(js).toContain('🟢 全龄');
+    expect(js).toContain('⚪ 未知');
+    expect(js).toContain('class="coverage-select"');
+    expect(js).toContain('COVERAGE_OPTIONS');
+  });
+
+  it('should route coverage_pct updates to the dedicated admin endpoint', () => {
+    const js = read('./nanrenbao/admin.js');
+    expect(js).toContain('NANRENBAO_ADMIN_COVERAGE');
+    expect(js).toContain("Object.prototype.hasOwnProperty.call(data, 'coverage_pct')");
+  });
+
+  it('should expose the coverage endpoint in centralized config', () => {
+    expect(API_ENDPOINTS.NANRENBAO_ADMIN_COVERAGE).toBeDefined();
+    expect(API_ENDPOINTS.NANRENBAO_ADMIN_COVERAGE).toContain('/api/nanrenbao/admin/coverage');
+  });
+
+  it('should have coverage column, filter options and bulk controls in admin.html', () => {
+    const html = read('./nanrenbao/admin.html');
+    expect(html).toContain('width:150px;">遮蔽度</th>');
+    expect(html).toContain('value="gated"');
+    expect(html).toContain('value="allage"');
+    expect(html).toContain('value="nocoverage"');
+    expect(html).toContain('id="bulkCoverageSelect"');
+    expect(html).toContain('id="bulkCoverageBtn"');
+    expect(html).toContain('id="coverageSummary"');
+  });
+
+  it('should switch tables to cards with data-labels on mobile', () => {
+    const html = read('./nanrenbao/admin.html');
+    expect(html).toContain('@media (max-width: 768px)');
+    expect(html).toContain('attr(data-label)');
+    expect(html).toContain('class="table-scroll"');
+    // 触控友好：16px 防 iOS 放大 + 44px 批量按钮
+    expect(html).toContain('font-size: 16px');
+    expect(html).toContain('min-height: 44px');
   });
 });
