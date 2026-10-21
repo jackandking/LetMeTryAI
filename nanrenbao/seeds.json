@@ -1,15 +1,21 @@
 {
   "version": 1,
-  "updated_at": "2026-10-20T01:05:01.602102Z",
+  "updated_at": "2026-10-21T01:05:01.989187Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
         "value": "东方秋日时尚大片·电影感·超写实",
-        "sum": 60,
+        "sum": 66,
         "n": 2,
-        "avg": 30.0
+        "avg": 33.0
+      },
+      {
+        "value": "电影感·异域华贵时尚大片·超写实",
+        "sum": 33,
+        "n": 1,
+        "avg": 33.0
       },
       {
         "value": "复古文学时尚大片·电影感·超写实",
@@ -18,30 +24,30 @@
         "avg": 15.0
       },
       {
-        "value": "电影感·异域华贵时尚大片·超写实",
-        "sum": 13,
-        "n": 1,
-        "avg": 13.0
-      },
-      {
         "value": "古风舞韵时尚大片·秋日绚烂·电影感·超写实",
-        "sum": 9,
+        "sum": 14,
         "n": 1,
-        "avg": 9.0
+        "avg": 14.0
       },
       {
         "value": "古风温婉时尚大片·电影感·超写实",
-        "sum": 8,
+        "sum": 11,
         "n": 1,
-        "avg": 8.0
+        "avg": 11.0
       }
     ],
     "lighting": [
       {
         "value": "秋日暖金逆光·轮廓光·电影感暖调色",
-        "sum": 60,
+        "sum": 66,
         "n": 2,
-        "avg": 30.0
+        "avg": 33.0
+      },
+      {
+        "value": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
+        "sum": 34,
+        "n": 2,
+        "avg": 17.0
       },
       {
         "value": "柔和暖调散射光（暖黄台灯·窗内暖光）",
@@ -51,61 +57,61 @@
       },
       {
         "value": "夕照金橙逆光 + 红叶透射光（绚烂暖调·电影感）",
-        "sum": 9,
+        "sum": 14,
         "n": 1,
-        "avg": 9.0
-      },
-      {
-        "value": "柔和冷调自然散射光（洞穴微光+轮廓光）",
-        "sum": 8,
-        "n": 1,
-        "avg": 8.0
+        "avg": 14.0
       },
       {
         "value": "初夏柔光·栀子白晕·清甜电影感",
-        "sum": 8,
+        "sum": 11,
         "n": 1,
-        "avg": 8.0
+        "avg": 11.0
       }
     ],
     "wardrobe": [
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
-        "sum": 45,
+        "sum": 50,
         "n": 1,
-        "avg": 45.0
-      },
-      {
-        "value": "极小暖琥珀金 dudou（金线秋菊刺绣）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
-        "sum": 15,
-        "n": 1,
-        "avg": 15.0
+        "avg": 50.0
       },
       {
         "value": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
-        "sum": 13,
+        "sum": 33,
         "n": 1,
-        "avg": 13.0
+        "avg": 33.0
+      },
+      {
+        "value": "极小暖琥珀金 dudou（金线秋菊刺绣）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
+        "sum": 16,
+        "n": 1,
+        "avg": 16.0
       },
       {
         "value": "红白相间舞裙（白色广袖上衣配绯红渐变裙裾·金色枫叶刺绣·全遮蔽不透明，着衣非内衣），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透",
-        "sum": 9,
+        "sum": 14,
         "n": 1,
-        "avg": 9.0
+        "avg": 14.0
       },
       {
-        "value": "红色真丝旗袍（高领·紧身·金线暗纹刺绣·侧开衩，着衣非内衣，全遮蔽不透明），紧裹丰盈巨乳呈饱满曲线; NEVER 内衣外露/透视/高透/露点",
-        "sum": 17,
-        "n": 2,
-        "avg": 8.5
+        "value": "极小栀白 dudou（栀子刺绣，深 V 显沟）+ 单条高透翠纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil/长裙",
+        "sum": 11,
+        "n": 1,
+        "avg": 11.0
       }
     ],
     "mood": [
       {
         "value": "秋高气爽·疏朗·从容·温暖",
-        "sum": 60,
+        "sum": 66,
         "n": 2,
-        "avg": 30.0
+        "avg": 33.0
+      },
+      {
+        "value": "端庄·华贵·神秘·威严",
+        "sum": 33,
+        "n": 1,
+        "avg": 33.0
       },
       {
         "value": "含蓄·温婉·书卷·明艳",
@@ -114,30 +120,30 @@
         "avg": 15.0
       },
       {
-        "value": "端庄·华贵·神秘·威严",
-        "sum": 13,
-        "n": 1,
-        "avg": 13.0
-      },
-      {
         "value": "灵动·俏皮·绚烂·明快",
-        "sum": 9,
+        "sum": 14,
         "n": 1,
-        "avg": 9.0
+        "avg": 14.0
       },
       {
-        "value": "神秘妖冶",
-        "sum": 8,
+        "value": "温婉·痴情·清甜·书卷",
+        "sum": 11,
         "n": 1,
-        "avg": 8.0
+        "avg": 11.0
       }
     ],
     "composition": [
       {
         "value": "中近景环境人像·山巅云海虚化背景",
-        "sum": 60,
+        "sum": 66,
         "n": 2,
-        "avg": 30.0
+        "avg": 33.0
+      },
+      {
+        "value": "中近景环境人像·暖金虚化背景",
+        "sum": 33,
+        "n": 1,
+        "avg": 33.0
       },
       {
         "value": "中景窗边人像·坐姿（区别于纯中近景）",
@@ -146,30 +152,24 @@
         "avg": 15.0
       },
       {
-        "value": "中近景环境人像·暖金虚化背景",
-        "sum": 13,
-        "n": 1,
-        "avg": 13.0
-      },
-      {
         "value": "中景全身环境人像·枫林小径旋舞（动态定格，区别于静立）",
-        "sum": 9,
+        "sum": 14,
         "n": 1,
-        "avg": 9.0
+        "avg": 14.0
       },
       {
         "value": "中近景环境人像·水榭伫立",
-        "sum": 8,
+        "sum": 11,
         "n": 1,
-        "avg": 8.0
+        "avg": 11.0
       }
     ],
     "camera": [
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 15,
+        "sum": 16,
         "n": 4,
-        "avg": 3.8
+        "avg": 4.0
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -179,15 +179,15 @@
       },
       {
         "value": "85mm",
-        "sum": 268,
-        "n": 83,
-        "avg": 3.2
+        "sum": 328,
+        "n": 92,
+        "avg": 3.6
       },
       {
         "value": "85mm f/1.8 浅景深",
-        "sum": 50,
+        "sum": 52,
         "n": 16,
-        "avg": 3.1
+        "avg": 3.2
       },
       {
         "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
@@ -199,9 +199,15 @@
     "body_type": [
       {
         "value": "饱满曲线 + 明显 D 罩杯 + 修长腿部",
-        "sum": 15,
+        "sum": 16,
         "n": 1,
-        "avg": 15.0
+        "avg": 16.0
+      },
+      {
+        "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
+        "sum": 16,
+        "n": 2,
+        "avg": 8.0
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
@@ -220,12 +226,6 @@
         "sum": 6,
         "n": 1,
         "avg": 6.0
-      },
-      {
-        "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
-        "sum": 11,
-        "n": 2,
-        "avg": 5.5
       }
     ]
   },
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 657,
-      "view_count": 45,
+      "view_count": 50,
       "dna": {
         "subject": "重阳登高女孩（重阳节热点）reinterpret，非真人仿冒",
         "scene": "秋日山巅·重阳登高·金菊与红叶·云海",
@@ -254,8 +254,30 @@
     },
     {
       "table": "beauty_images",
+      "id": 651,
+      "view_count": 33,
+      "dna": {
+        "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
+        "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
+        "context": "西域宫殿朱红鎏金廊柱·鎏金宫灯·垂落花枝·波斯纹样金饰与额链（仅环境点缀，不裹身）",
+        "lighting": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
+        "composition": "中近景环境人像·暖金虚化背景",
+        "action": "女王徐步下廊、微微抬手示意的华贵身姿，回眸凝视（端庄知性，女王威仪与柔美并存，非性化）",
+        "style": "电影感·异域华贵时尚大片·超写实",
+        "mood": "端庄·华贵·神秘·威严",
+        "wardrobe": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
+        "camera": "85mm",
+        "body_type": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
+        "face": "原创虚构五官，避免任何真实演员/名人可识别相似性（纯原创，非朱琳或 86 版西游记中该角色的任何扮演者）",
+        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, resemblance to a real person, specific actress likeness, face resembling Zhu Lin, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
+      },
+      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
+    },
+    {
+      "table": "beauty_images",
       "id": 656,
-      "view_count": 15,
+      "view_count": 16,
       "dna": {
         "subject": "重阳登高女孩（重阳节热点）reinterpret，非真人仿冒",
         "scene": "秋日山巅·重阳登高·金菊与红叶·云海",
@@ -298,30 +320,8 @@
     },
     {
       "table": "beauty_images",
-      "id": 651,
-      "view_count": 13,
-      "dna": {
-        "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
-        "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
-        "context": "西域宫殿朱红鎏金廊柱·鎏金宫灯·垂落花枝·波斯纹样金饰与额链（仅环境点缀，不裹身）",
-        "lighting": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
-        "composition": "中近景环境人像·暖金虚化背景",
-        "action": "女王徐步下廊、微微抬手示意的华贵身姿，回眸凝视（端庄知性，女王威仪与柔美并存，非性化）",
-        "style": "电影感·异域华贵时尚大片·超写实",
-        "mood": "端庄·华贵·神秘·威严",
-        "wardrobe": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
-        "camera": "85mm",
-        "body_type": "饱满曲线 + 明显 D 罩杯 / voluptuous full bust",
-        "face": "原创虚构五官，避免任何真实演员/名人可识别相似性（纯原创，非朱琳或 86 版西游记中该角色的任何扮演者）",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, resemblance to a real person, specific actress likeness, face resembling Zhu Lin, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
-        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
-      },
-      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
-    },
-    {
-      "table": "beauty_images",
       "id": 678,
-      "view_count": 9,
+      "view_count": 14,
       "dna": {
         "subject": "公孙离（王者荣耀·枫叶伞舞）reinterpret，非真人仿冒",
         "scene": "秋日枫林夕照·红叶纷飞·纸伞轻旋",
