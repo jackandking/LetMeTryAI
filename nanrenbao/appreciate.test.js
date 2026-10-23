@@ -153,7 +153,7 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('async function loadImages()');
       expect(html).toContain('window.API_ENDPOINTS.MYSQL_QUERY');
-      expect(html).toContain("SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ?");
+      expect(html).toContain("SELECT id, image_url, view_count, coverage_pct, created_at, JSON_UNQUOTE(JSON_EXTRACT(prompt_dna, '$.subject')) AS subject FROM beauty_images WHERE deleted = 0 AND review_status = ?");
     });
 
     it('should handle image load errors', () => {
@@ -175,7 +175,7 @@ describe('Nanrenbao Appreciate Page - Blur and Modal Feature', () => {
     it('should select coverage_pct from beauty_images', () => {
       const html = require('fs').readFileSync('./nanrenbao/appreciate.html', 'utf8');
       expect(html).toContain('coverage_pct');
-      expect(html).toContain('SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images');
+      expect(html).toContain("SELECT id, image_url, view_count, coverage_pct, created_at, JSON_UNQUOTE(JSON_EXTRACT(prompt_dna, '$.subject')) AS subject FROM beauty_images");
     });
 
     it('should gate images by harem activation state', () => {

@@ -9,6 +9,7 @@
     <script src="../config.js"></script>
     <script src="points-system.js"></script>
         <script src="harem.js"></script>
+    <script src="exp-naming.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -389,6 +390,52 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
             border-radius: 6px;
         }
+
+        /* 卡片人物名称角标（A/B 实验组 B 显示；名称来自图片 DNA 的 subject） */
+        .exp-name-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(20, 20, 30, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #fff;
+            line-height: 1.15;
+            pointer-events: none;
+            max-width: 60%;
+        }
+
+        .exp-name-badge-name {
+            font-size: 0.8em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .exp-name-badge-src {
+            font-size: 0.62em;
+            opacity: 0.75;
+        }
+
+        @media (max-width: 768px) {
+            .exp-name-badge {
+                padding: 3px 6px;
+                border-radius: 6px;
+            }
+
+            .exp-name-badge-name {
+                font-size: 0.72em;
+            }
+
+            .exp-name-badge-src {
+                font-size: 0.58em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -613,6 +660,7 @@
                     await PointsSystem.markImageViewed(sourceImageUrl);
                 }
                 updateBlurOverlay(imageUrl, sourceImageUrl);
+                if (window.NbbExp) window.NbbExp.logView(getImageIdFromUrl(sourceImageUrl));
                 // Show fullscreen image for better viewing experience
                 showFullImage(imageUrl);
                 return;
@@ -633,6 +681,8 @@
                 showPointsNotification(`❌ ${result.message}`);
                 return;
             }
+            // A/B 实验埋点：成功查看大图
+            if (window.NbbExp) window.NbbExp.logView(getImageIdFromUrl(sourceImageUrl));
             // 自动收录到后宫（如果已激活）
             if (window.isHaremActivated && window.isHaremActivated()) {
                 if (window.addHaremImage) window.addHaremImage(imageUrl);
@@ -644,6 +694,13 @@
                 updateBlurOverlay(imageUrl, sourceImageUrl);
             }
             showFullImage(imageUrl);
+        }
+
+        // A/B 实验埋点：sourceImageUrl → beauty_images.id 映射（查看事件定位图片用）
+        const imageIdByUrl = {};
+        function getImageIdFromUrl(url) {
+            var id = imageIdByUrl[url];
+            return id == null ? null : id;
         }
 
         // Fullscreen modal helpers
@@ -682,7 +739,8 @@
                     },
                     body: JSON.stringify({
                         // Only return approved images that are not marked deleted
-                        sql: `SELECT id, image_url, view_count, coverage_pct, created_at FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC`,
+                        // subject：人物名称实验数据源（prompt_dna.subject，无则为 NULL）
+                        sql: `SELECT id, image_url, view_count, coverage_pct, created_at, JSON_UNQUOTE(JSON_EXTRACT(prompt_dna, '$.subject')) AS subject FROM beauty_images WHERE deleted = 0 AND review_status = ? ORDER BY view_count DESC, created_at DESC`,
                         params: ['approved']
                     })
                 });
@@ -714,10 +772,12 @@
                     data.forEach(item => {
                         try {
                             const sourceImageUrl = item.image_url;
+                            imageIdByUrl[sourceImageUrl] = item.id;
                             const imageUrl = normalizeStoredImageUrl(sourceImageUrl);
                             const div = document.createElement('div');
                             div.className = 'gallery-item';
                             div.id = 'img-' + item.id; // 深链锚点：审核后可 #img-<id> 直达此卡片
+                            div.dataset.imgId = item.id; // 曝光埋点定位用
                             
                             const imageWrapper = document.createElement('div');
                             imageWrapper.className = 'image-wrapper';
@@ -789,6 +849,8 @@
                                 div.onclick = function() {
                                     // Mark as viewed for prioritization
                                     PointsSystem.markImageIdAsViewed(item.id, 'beauty');
+                                    // A/B 实验埋点：点击意图（先于积分校验，积分不足也计数）
+                                    if (window.NbbExp) window.NbbExp.logClick(item.id);
                                     showModal(imageUrl, sourceImageUrl);
                                 };
 
@@ -797,6 +859,8 @@
                             console.error('创建图片项失败:', itemError, item);
                         }
                     });
+                    // A/B 实验：渲染完成后加名称角标 + 启动曝光追踪
+                    if (window.NbbExp) window.NbbExp.onGalleryRendered(data);
                 } else {
                     noImages.style.display = 'block';
                 }
