@@ -7,7 +7,7 @@
  * 名称来源：图片 prompt_dna.subject，格式「名字（出处）reinterpret，非真人仿冒」。
  * 实事求是：解析不出规范人物名的图（描述性 subject / 无 DNA）不显示角标。
  *
- * 埋点事件（POST /api/nanrenbao/exp/track，批量 flush）：
+ * 埋点事件（POST /api/nanrenbao/exp/track，批量 flush，fetch keepalive）：
  *   page_view  页面级（每次加载一条）
  *   impression 卡片曝光（IntersectionObserver ≥50% 可见，每卡每遍一次）
  *   click      卡片点击（含积分不足未成功查看的点击，衡量点击意图）
@@ -107,16 +107,14 @@
       events: buffer.splice(0, MAX_BATCH)
     });
     try {
-      if (root.navigator && typeof root.navigator.sendBeacon === 'function') {
-        root.navigator.sendBeacon(ENDPOINT, new Blob([payload], { type: 'application/json' }));
-      } else {
-        root.fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: payload,
-          keepalive: true
-        }).catch(function () { /* 埋点失败静默，不影响体验 */ });
-      }
+      // fetch keepalive：页面卸载后请求仍可完成（sendBeacon 在部分 WebView 环境
+      // 会被丢弃 body，2026-10-24 线上实测复现，故弃用 sendBeacon）。
+      root.fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true
+      }).catch(function () { /* 埋点失败静默，不影响体验 */ });
     } catch (e) { /* 埋点失败静默 */ }
   }
 

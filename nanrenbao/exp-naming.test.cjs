@@ -67,18 +67,17 @@ function makeEl(tag) {
  * @param opts.dom      true=提供 document/setInterval 等浏览器全局（触发自动初始化）
  * @param opts.io       IntersectionObserver 替身
  * @param opts.cards    getElementById 路由表：{ 'img-676': cardStub }
- * @param opts.beacons  sendBeacon 捕获数组
+ * @param opts.requests fetch 捕获数组：[{ url, body }]
  * @param opts.flushFn  setInterval 回调捕获（手动触发 flush）
  */
 function loadExp(opts) {
   const o = opts || {};
   const storage = o.storage || makeStorage();
-  const beacons = o.beacons || [];
+  const requests = o.requests || [];
   const win = {
     location: { search: o.search || '' },
-    navigator: { sendBeacon: (url, blob) => { beacons.push({ url, blob }); return true; } },
     addEventListener: () => {},
-    fetch: () => Promise.reject(new Error('no network in tests'))
+    fetch: (url, init) => { requests.push({ url, body: init && init.body, keepalive: init && init.keepalive }); return Promise.resolve({}); }
   };
   if (!o.noStorage) win.localStorage = storage;
 
@@ -96,7 +95,7 @@ function loadExp(opts) {
   }
 
   const factory = new Function(
-    'window', 'document', 'setInterval', 'IntersectionObserver', 'Blob', 'Math',
+    'window', 'document', 'setInterval', 'IntersectionObserver', 'Math',
     SRC + '\nreturn window.NbbExp;'
   );
   const api = factory(
@@ -104,17 +103,16 @@ function loadExp(opts) {
     o.dom ? doc : undefined,
     setIntervalFn,
     o.io || undefined,
-    class BlobStub { constructor(parts, opts2) { this.parts = parts; this.type = opts2 && opts2.type; } },
     o.random ? { random: o.random } : Math
   );
   api._win = win;
   api._storage = storage;
-  api._beacons = beacons;
+  api._requests = requests;
   api._flushFn = intervalFn;
   return api;
 }
 
-const readBeacon = (b) => JSON.parse(b.blob.parts[0]);
+const readReq = (r) => JSON.parse(r.body);
 
 // ============ A. parseSubject ============
 {
@@ -174,36 +172,37 @@ check('D3: ?expid= 畸形拒绝回落默认',
   loadExp({ search: '?expid=x' }).getExpId() === 'appreciate-name-v1');
 
 // ============ E. 埋点上报 ============
-check('E1: 加载即上报 page_view', (() => {
-  const beacons = [];
-  const m = loadExp({ dom: true, beacons });
+check('E1: 加载即上报 page_view（fetch keepalive）', (() => {
+  const requests = [];
+  const m = loadExp({ dom: true, requests });
   m._flushFn(); // 手动触发定时 flush
-  if (beacons.length !== 1) return false;
-  const p = readBeacon(beacons[0]);
+  if (requests.length !== 1) return false;
+  const p = readReq(requests[0]);
   return p.exp_id === 'appreciate-name-v1' && p.variant.length === 1 &&
     p.visitor_id.length >= 8 && p.events.length === 1 && p.events[0].event === 'page_view' &&
-    beacons[0].url === 'https://letmetry.cn/api/nanrenbao/exp/track';
+    requests[0].url === 'https://letmetry.cn/api/nanrenbao/exp/track' &&
+    requests[0].keepalive === true;
 })());
 check('E2: 点击/查看事件进载荷', (() => {
-  const beacons = [];
-  const m = loadExp({ dom: true, beacons });
+  const requests = [];
+  const m = loadExp({ dom: true, requests });
   m._flushFn(); // 先冲掉 page_view
   m.logClick(676);
   m.logView(676);
   m._flushFn();
-  const p = readBeacon(beacons[1]);
+  const p = readReq(requests[1]);
   return p.events.length === 2 && p.events[0].event === 'click' && p.events[0].image_id === 676 &&
     p.events[1].event === 'view' && p.events[1].image_id === 676;
 })());
 check('E3: 满 50 条自动 flush', (() => {
-  const beacons = [];
-  const m = loadExp({ dom: true, beacons });
-  m._flushFn(); // 先冲掉 page_view → beacon 1
-  for (let i = 0; i < 50; i++) m.logClick(600 + i); // 第 50 条触发自动 flush → beacon 2
-  const autoOk = beacons.length === 2 && readBeacon(beacons[1]).events.length === 50;
+  const requests = [];
+  const m = loadExp({ dom: true, requests });
+  m._flushFn(); // 先冲掉 page_view → 请求 1
+  for (let i = 0; i < 50; i++) m.logClick(600 + i); // 第 50 条触发自动 flush → 请求 2
+  const autoOk = requests.length === 2 && readReq(requests[1]).events.length === 50;
   m.logClick(999);
-  m._flushFn(); // beacon 3：剩余 1 条
-  return autoOk && beacons.length === 3 && readBeacon(beacons[2]).events.length === 1;
+  m._flushFn(); // 请求 3：剩余 1 条
+  return autoOk && requests.length === 3 && readReq(requests[2]).events.length === 1;
 })());
 
 // ============ F. 角标渲染 ============
@@ -268,7 +267,7 @@ check('F4: 不重复添加角标', (() => {
 
 // ============ G. 曝光追踪 ============
 check('G1: IntersectionObserver 曝光每卡每遍一次', (() => {
-  const beacons = [];
+  const requests = [];
   const instances = [];
   class IOStub {
     constructor(cb) { this.cb = cb; instances.push(this); }
@@ -280,14 +279,14 @@ check('G1: IntersectionObserver 曝光每卡每遍一次', (() => {
   const m = loadExp({
     storage: makeStorage({ 'nbb_exp_variant_appreciate-name-v1': 'A' }),
     dom: true,
-    beacons,
+    requests,
     io: IOStub,
     ioCards: [card1, card2]
   });
   m._flushFn(); // page_view
   m.onGalleryRendered([{ id: 676, subject: 'x' }, { id: 653, subject: 'y' }]);
   m._flushFn();
-  const p = readBeacon(beacons[1]);
+  const p = readReq(requests[1]);
   const imps = p.events.filter((e) => e.event === 'impression');
   return instances.length === 1 && imps.length === 2 &&
     imps[0].image_id === 676 && imps[1].image_id === 653;
