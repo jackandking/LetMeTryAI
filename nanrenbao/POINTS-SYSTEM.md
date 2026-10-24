@@ -7,13 +7,14 @@
 ## 积分规则
 
 ### 初始积分
-- **新用户注册**：20 积分
+- **新用户注册**：3 积分
 - 系统自动为每个新用户分配唯一的 UUID
 
 ### 积分获取方式
 
-1. **每日签到**：每天首次访问任何页面获得 10 积分
+1. **每日签到**：每天首次访问获得 5 积分
 2. **上传图片**：每成功上传一张图片获得 10 积分
+3. **转发分享**：每天首次转发得 10 积分（H5 为荣誉体系，浏览器无法验证真实分享，故为信任制、每日限一次；快手小程序应改用平台分享回执验证）
 
 ## 技术实现
 
@@ -60,6 +61,19 @@ const newTotal = PointsSystem.addPoints(10);
 奖励上传积分
 ```javascript
 const newTotal = PointsSystem.awardUploadPoints();
+```
+
+#### `PointsSystem.canShareToday()`
+查询今天是否还能领转发积分（每日限一次）
+```javascript
+const canShare = PointsSystem.canShareToday(); // true=今天未转发过
+```
+
+#### `PointsSystem.awardSharePoints()`
+转发得积分（荣誉体系，每日限一次）。返回 `{ awarded, points, newTotal, message }`
+```javascript
+const res = PointsSystem.awardSharePoints();
+// res.awarded=false 且 message 提示"今天已转发过" 表示今日已领过
 ```
 
 #### `PointsSystem.getUserInfo()`
@@ -188,8 +202,8 @@ A: 不同步。每个设备独立存储积分。如需同步，需要后端支�
 1. **积分商城**：使用积分兑换特权
 2. **积分排行榜**：显示积分排名（需后端支持）
 3. **积分历史**：记录积分变动历史
-4. **更多奖励方式**：评论、分享等
-5. **后端同步**：将积分存储到数据库，实现跨设备同步
+4. **更多奖励方式**：评论等（分享/转发已支持，见上）
+5. **后端同步（重要）**：当前积分仍为前端 localStorage 荣誉体系，清缓存即清零、每设备独立、无法跨端、服务端无法验证扣费（见 `nanrenbaoGalleryApi.js` 注释）。若要"转发送积分"成为可信活动或打通 H5+快手小程序统一钱包，必须把积分上后端（可复用现有 `registerAuthApi`/`registerCheckinApi`/`registerUserDataApi` 基础设施）
 
 ## 相关文件
 

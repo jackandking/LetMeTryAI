@@ -8,6 +8,7 @@ const PointsSystem = (function() {
         USER_UUID: 'nanrenbao_user_uuid',
         POINTS: 'nanrenbao_points',
         LAST_VISIT: 'nanrenbao_last_visit',
+        LAST_SHARE: 'nanrenbao_last_share', // 最近一次转发得积分的日期 (YYYY-MM-DD)
         VIEWED_IMAGES: 'nanrenbao_viewed_images',
         INITIALIZED: 'nanrenbao_initialized',
         VIEWED_IDS: 'nanrenbao_viewed_ids'
@@ -20,7 +21,8 @@ const PointsSystem = (function() {
         VIEW_IMAGE: 1,          // Points to view a full image
         DELETE_IMAGE: 10,      // Points cost to mark an image as deleted
         AD_FULL: 10,            // Points for watching full ad
-        AD_PARTIAL: 3           // Points for partially watching ad
+        AD_PARTIAL: 3,          // Points for partially watching ad
+        SHARE: 10               // Points for sharing (once per day, honor-system on H5)
     };
 
     /**
@@ -149,6 +151,46 @@ const PointsSystem = (function() {
     }
 
     /**
+     * Check whether the user can still earn share points today.
+     * @returns {boolean} True if no share reward was claimed yet today.
+     */
+    function canShareToday() {
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const lastShare = localStorage.getItem(STORAGE_KEYS.LAST_SHARE);
+        return lastShare !== today;
+    }
+
+    /**
+     * Award points for sharing (honor-system, once per day).
+     *
+     * IMPORTANT: On the H5/browser entry point there is NO reliable way to
+     * verify that a share actually completed — the Web Share API does not
+     * confirm the content was posted. This is a trust-based reward. The Kuaishou
+     * mini-program (separate runtime) would instead verify via the platform
+     * share callback before awarding. See POINTS-SYSTEM.md "转发送积分".
+     * @returns {object} {awarded: boolean, points: number, newTotal: number, message: string}
+     */
+    function awardSharePoints() {
+        if (!canShareToday()) {
+            return {
+                awarded: false,
+                points: 0,
+                newTotal: getPoints(),
+                message: `今天已转发过，明天再来得 ${POINTS_CONFIG.SHARE} 积分`
+            };
+        }
+        const newTotal = addPoints(POINTS_CONFIG.SHARE);
+        localStorage.setItem(STORAGE_KEYS.LAST_SHARE, new Date().toISOString().split('T')[0]);
+        console.log(`Share bonus: +${POINTS_CONFIG.SHARE} points. Total: ${newTotal}`);
+        return {
+            awarded: true,
+            points: POINTS_CONFIG.SHARE,
+            newTotal: newTotal,
+            message: `🎉 转发成功！获得 ${POINTS_CONFIG.SHARE} 积分`
+        };
+    }
+
+    /**
      * Initialize points system on page load
      * Checks for new user and daily visit
      * @returns {object} Status information
@@ -186,6 +228,7 @@ const PointsSystem = (function() {
         localStorage.removeItem(STORAGE_KEYS.USER_UUID);
         localStorage.removeItem(STORAGE_KEYS.POINTS);
         localStorage.removeItem(STORAGE_KEYS.LAST_VISIT);
+        localStorage.removeItem(STORAGE_KEYS.LAST_SHARE);
         localStorage.removeItem(STORAGE_KEYS.VIEWED_IMAGES);
         localStorage.removeItem(STORAGE_KEYS.INITIALIZED);
         console.log('User data reset');
@@ -645,6 +688,8 @@ const PointsSystem = (function() {
         addPoints: addPoints,
         awardUploadPoints: awardUploadPoints,
         awardAdPoints: awardAdPoints,
+        canShareToday: canShareToday,
+        awardSharePoints: awardSharePoints,
         checkDailyVisit: checkDailyVisit,
         getUserInfo: getUserInfo,
         resetUser: resetUser,
