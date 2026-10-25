@@ -1,11 +1,11 @@
 {
-  "pushed_at": "2026-10-24T01:05:10.030847Z",
+  "pushed_at": "2026-10-25T01:05:11.369354Z",
   "champion_count": 5,
   "champions": [
     {
       "table": "beauty_images",
       "id": 718,
-      "view_count": 81,
+      "view_count": 94,
       "dna": {
         "subject": "精卫（山海经·填海）reinterpret，非真人仿冒",
         "scene": "东海之滨·怒涛衔枝·浪花碎玉",
@@ -27,8 +27,32 @@
     },
     {
       "table": "beauty_images",
+      "id": 826,
+      "view_count": 93,
+      "dna": {
+        "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
+        "scene": "青丘月下·九尾如焰·狐火幽幽",
+        "context": "the moonlit Qingqiu hills, nine fox tails fanning like flames, pale fox-fire glowing in the dark (background accents only, never wrapping the figure)",
+        "lighting": "soft cinematic cool-toned key light with delicate rim light",
+        "composition": "85mm 中近景环境人像",
+        "action": "月下回眸、妖异华美、九尾狐之诡魅（妖异非性化）",
+        "motif": "九条蓬松狐尾如焰展开",
+        "style": "电影感时尚大片·超写实",
+        "mood": "妖异·青丘九尾",
+        "wardrobe": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
+        "coverage_pct": 85,
+        "camera": "85mm",
+        "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+        "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视版本的扮演者）",
+        "negative": "bikini, lingerie, dudou, exposed midriff, see-through revealing skin, nudity, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional the Nine-Tailed Fox, the legendary fox spirit of Qingqiu from the Classic of Mountains and Seas (Shan Hai Jing), reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: the moonlit Qingqiu hills, nine fox tails fanning like flames, pale fox-fire glowing in the dark, as background accents only, never wrapping the figure. Pose & action: she turns under the moon and glances back with a bewitching, uncanny beauty, never sexualized. Signature motif: nine lush fox tails fanning out like flames behind her. Wardrobe: an elegant moon-white gown with fox-fire patterns, fully covered with proper opaque fabric. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. For this character the wardrobe is an elegant fully-covered gown in keeping with her setting, opaque proper coverage, the figure still the clear focal point. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: bewitching, uncanny, fox-fire-glow, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+      },
+      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional the Nine-Tailed Fox, the legendary fox spirit of Qingqiu from the Classic of Mountains and Seas (Shan Hai Jing), reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: the moonlit Qingqiu hills, nine fox tails fanning like flames, pale fox-fire glowing in the dark, as background accents only, never wrapping the figure. Pose & action: she turns under the moon and glances back with a bewitching, uncanny beauty, never sexualized. Signature motif: nine lush fox tails fanning out like flames behind her. Wardrobe: an elegant moon-white gown with fox-fire patterns, fully covered with proper opaque fabric. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. For this character the wardrobe is an elegant fully-covered gown in keeping with her setting, opaque proper coverage, the figure still the clear focal point. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: bewitching, uncanny, fox-fire-glow, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+    },
+    {
+      "table": "beauty_images",
       "id": 657,
-      "view_count": 50,
+      "view_count": 53,
       "dna": {
         "subject": "重阳登高女孩（重阳节热点）reinterpret，非真人仿冒",
         "scene": "秋日山巅·重阳登高·金菊与红叶·云海",
@@ -50,7 +74,7 @@
     {
       "table": "beauty_images",
       "id": 651,
-      "view_count": 37,
+      "view_count": 39,
       "dna": {
         "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
         "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
@@ -71,47 +95,27 @@
     },
     {
       "table": "beauty_images",
-      "id": 656,
-      "view_count": 17,
+      "id": 825,
+      "view_count": 28,
       "dna": {
-        "subject": "重阳登高女孩（重阳节热点）reinterpret，非真人仿冒",
-        "scene": "秋日山巅·重阳登高·金菊与红叶·云海",
-        "context": "高山之巅·远处层峦叠嶂·茱萸枝与金菊·枫叶·翻涌云海（仅环境点缀，不裹身）",
-        "lighting": "秋日暖金逆光·轮廓光·电影感暖调色",
-        "composition": "中近景环境人像·山巅云海虚化背景",
-        "action": "立于山巅迎风回眸远眺、发丝与纱随山风扬起、神情疏朗舒展（登高望远的从容，非性化）",
-        "style": "东方秋日时尚大片·电影感·超写实",
-        "mood": "秋高气爽·疏朗·从容·温暖",
-        "wardrobe": "极小暖琥珀金 dudou（金线秋菊刺绣）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
+        "subject": "姑获鸟（中国传说·夜行游女）reinterpret，非真人仿冒",
+        "scene": "月夜密林·墨羽纷飞·夜枭啼鸣",
+        "context": "a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark (background accents only, never wrapping the figure)",
+        "lighting": "soft cinematic cool-toned key light with delicate rim light",
+        "composition": "85mm 中近景环境人像",
+        "action": "林间回眸、幽诡凄迷、夜行游女之诡艳（幽诡非性化）",
+        "motif": "一双墨翼 + 纷飞黑羽",
+        "style": "电影感时尚大片·超写实",
+        "mood": "幽诡·姑获夜行",
+        "wardrobe": "玄黑羽纹肚兜（深 V 显沟）+ 单条高透墨纱 at hip，opaque<1/4",
+        "coverage_pct": 45,
         "camera": "85mm",
-        "body_type": "饱满曲线 + 明显 D 罩杯 + 修长腿部",
-        "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非真人仿冒）",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through revealing, arousal, vulgar, gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, resemblance to a real person, specific celebrity likeness, small bust, flat chest, a-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
-        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional young woman at an autumn mountain summit for the Double Ninth Festival climbing tradition, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has a well-proportioned, amply curved figure with a voluptuous full bust and long slender legs. Scene & context: the crest of a mountain at golden autumn afternoon — layered distant ranges, churning sea of clouds, golden chrysanthemums and red maple leaves, a sprig of dogwood as background accents only, never wrapping the figure. Pose & action: she stands at the summit turning her head to gaze into the distance, hair and a single sheer scarf drifting in the mountain wind, expression open and composed — a graceful 'looking afar from the heights' pose, relaxed and serene, never sexualized. Wardrobe: she wears a tiny minimal warm-amber-gold dudou/bikini set (small triangle top with gold-thread chrysanthemum embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit by warm autumn sunlight; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: warm golden-hour backlight with soft rim light, cinematic warm color grading, cloud-sea bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: crisp autumn air, open, composed, warm, artistic and non-sexual. Style: cinematic fashion editorial, oriental autumn, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+        "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+        "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视版本的扮演者）",
+        "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Guhuoniao, the mysterious night-wandering bird spirit (Yexing Younv) from Chinese folklore and the ancient text Xu Zhong Ji, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark, as background accents only, never wrapping the figure. Pose & action: she turns among the trees and glances back with an eerie, haunting beauty, never sexualized. Signature motif: a pair of ink-black wings, drifting black feathers in the air. Wardrobe: an ink-black dudou with feather-pattern embroidery and deep V neckline showing generous cleavage plus small bottom, plus a single extremely sheer black silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: eerie, haunting, moonlit-feather-dark, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
       },
-      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional young woman at an autumn mountain summit for the Double Ninth Festival climbing tradition, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has a well-proportioned, amply curved figure with a voluptuous full bust and long slender legs. Scene & context: the crest of a mountain at golden autumn afternoon — layered distant ranges, churning sea of clouds, golden chrysanthemums and red maple leaves, a sprig of dogwood as background accents only, never wrapping the figure. Pose & action: she stands at the summit turning her head to gaze into the distance, hair and a single sheer scarf drifting in the mountain wind, expression open and composed — a graceful 'looking afar from the heights' pose, relaxed and serene, never sexualized. Wardrobe: she wears a tiny minimal warm-amber-gold dudou/bikini set (small triangle top with gold-thread chrysanthemum embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit by warm autumn sunlight; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: warm golden-hour backlight with soft rim light, cinematic warm color grading, cloud-sea bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: crisp autumn air, open, composed, warm, artistic and non-sexual. Style: cinematic fashion editorial, oriental autumn, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
-    },
-    {
-      "table": "beauty_images",
-      "id": 661,
-      "view_count": 16,
-      "dna": {
-        "subject": "白流苏（倾城之恋）reinterpret，非真人仿冒",
-        "scene": "老宅窗前·暖黄台灯·旧式家具·书卷气",
-        "context": "老式公寓窗边·暖黄台灯光·印花窗帘·旧书与瓷杯（仅环境点缀，不裹身）",
-        "lighting": "柔和暖调散射光（暖黄台灯·窗内暖光）",
-        "composition": "中景窗边人像·坐姿（区别于纯中近景）",
-        "action": "坐于窗边、微微侧首、含蓄从容的微笑、文学气韵（端庄书卷，非性化）",
-        "style": "复古文学时尚大片·电影感·超写实",
-        "mood": "含蓄·温婉·书卷·明艳",
-        "wardrobe": "红色真丝旗袍（高领·紧身·金线暗纹刺绣·侧开衩，着衣非内衣，全遮蔽不透明），紧裹丰盈巨乳呈饱满曲线; NEVER 内衣外露/透视/高透/露点",
-        "camera": "85mm",
-        "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "face": "原创虚构五官，避免任何真实演员/名人可识别相似性（纯原创，非任何真人）",
-        "negative": "nudity, explicit, exposed nipples, genitalia, see-through, sheer, arousal, vulgar, lingerie, bikini, dudou, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, flat chested, resemblance to a real person, specific celebrity likeness, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
-        "prompt_text": "Cinematic medium artistic portrait of a fictional Republic-era woman inspired by the character Bai Liusu (from Eileen Chang's novella 'Love in a Fallen City / 倾城之恋'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure). She has an extremely voluptuous figure with a very large, full, prominent bust, lush waist-and-hip curves and long legs. Scene & context: sitting by the window of an old-fashioned apartment — warm amber lamplight, printed curtains, an old book and a porcelain cup, as background accents only, never wrapping the figure. Pose & action: she sits by the window, turning her head slightly with a reserved, gentle, composed smile and a bookish, literary grace — dignified and elegant, never sexualized. Wardrobe: she wears a form-fitting red silk qipao / cheongsam with a high collar, subtle gold-thread dark-floral embroidery and a side slit — a proper fully-clothed garment (not lingerie, not see-through, opaque throughout), the silk pulled taut across a very large full bust to emphasize a lush, curvy silhouette. The human figure is the unmistakable focal point: she is fully and properly dressed, warm light on the silk. Lighting: soft warm scattered light from an amber lamp and window glow, cinematic warm color grading, warm interior bokeh. Camera: 85mm lens, medium seated portrait. Mood: reserved, gentle, bookish, quietly glamorous, artistic and non-sexual. Style: retro literary fashion editorial, cinematic, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
-      },
-      "prompt_text": "Cinematic medium artistic portrait of a fictional Republic-era woman inspired by the character Bai Liusu (from Eileen Chang's novella 'Love in a Fallen City / 倾城之恋'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure). She has an extremely voluptuous figure with a very large, full, prominent bust, lush waist-and-hip curves and long legs. Scene & context: sitting by the window of an old-fashioned apartment — warm amber lamplight, printed curtains, an old book and a porcelain cup, as background accents only, never wrapping the figure. Pose & action: she sits by the window, turning her head slightly with a reserved, gentle, composed smile and a bookish, literary grace — dignified and elegant, never sexualized. Wardrobe: she wears a form-fitting red silk qipao / cheongsam with a high collar, subtle gold-thread dark-floral embroidery and a side slit — a proper fully-clothed garment (not lingerie, not see-through, opaque throughout), the silk pulled taut across a very large full bust to emphasize a lush, curvy silhouette. The human figure is the unmistakable focal point: she is fully and properly dressed, warm light on the silk. Lighting: soft warm scattered light from an amber lamp and window glow, cinematic warm color grading, warm interior bokeh. Camera: 85mm lens, medium seated portrait. Mood: reserved, gentle, bookish, quietly glamorous, artistic and non-sexual. Style: retro literary fashion editorial, cinematic, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Guhuoniao, the mysterious night-wandering bird spirit (Yexing Younv) from Chinese folklore and the ancient text Xu Zhong Ji, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark, as background accents only, never wrapping the figure. Pose & action: she turns among the trees and glances back with an eerie, haunting beauty, never sexualized. Signature motif: a pair of ink-black wings, drifting black feathers in the air. Wardrobe: an ink-black dudou with feather-pattern embroidery and deep V neckline showing generous cleavage plus small bottom, plus a single extremely sheer black silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: eerie, haunting, moonlit-feather-dark, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
     }
   ]
 }
