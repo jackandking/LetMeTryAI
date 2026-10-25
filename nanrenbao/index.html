@@ -91,5 +91,35 @@
             }
         })();
     </script>
+
+    <!-- 衍生漏斗：从单图页回主页时带 ?from=photo_<id>，在此记录到达事件 -->
+    <script>
+      (function () {
+        try {
+          var p = new URLSearchParams(window.location.search);
+          var from = p.get('from');
+          if (from && from.indexOf('photo_') === 0) {
+            var id = from.slice('photo_'.length);
+            if (window._hmt && _hmt.push) {
+              _hmt.push(['_trackEvent', 'nanrenbao_funnel', 'enter_from_photo', id]);
+            }
+            var ev = {
+              event: 'enter_from_photo',
+              appId: 'nanrenbao-home',
+              from_photo_id: Number(id) || null,
+              source: 'beauty_scratch',
+              timestamp: Date.now(),
+              date: new Date().toISOString().split('T')[0]
+            };
+            fetch('https://letmetry.cn/api/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(ev),
+              keepalive: true
+            }).catch(function () {});
+          }
+        } catch (e) {}
+      })();
+    </script>
 </body>
 </html>

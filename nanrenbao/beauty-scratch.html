@@ -236,10 +236,10 @@
   function dpr(){ return Math.min(window.devicePixelRatio||1,2); }
 
   // ====== 实验事件埋点（百度统计 _trackEvent，零部署，按变体 label 看完成率/进阶率）======
-  function track(action, value){
+  function track(action, value, category){
     try {
       if (typeof _hmt !== 'undefined' && _hmt.push) {
-        _hmt.push(['_trackEvent', 'scratch_exp', action, variant.v.label, (value==null?1:value)]);
+        _hmt.push(['_trackEvent', category || 'scratch_exp', action, variant.v.label, (value==null?1:value)]);
       }
     } catch(e){}
   }
@@ -553,7 +553,35 @@
 
   nextBtn.addEventListener('click',function(){ showAdForNext(); });
   downloadBtn.addEventListener('click',function(){ doDownload(); });
-  $('homeBtn').addEventListener('click',function(){ location.href='https://letmetryai.cn/nanrenbao/'; });
+  // 单图→主页 衍生漏斗埋点：点击回主页时记录来源照片 id，并带到主页 URL；
+  // 同时在服务端 /api/track 落一条 home_redirect 事件（失败静默，不影响体验）。
+  $('homeBtn').addEventListener('click',function(){
+    var fromId = (singleMode && singleItem) ? singleItem.id
+               : (singleMode && _rawId ? parseInt(_rawId,10) : '');
+    try { track('home_redirect', fromId ? Number(fromId) : 1, 'nanrenbao_funnel'); } catch(e){}
+    try {
+      if (fromId) {
+        var ev = {
+          event: 'home_redirect',
+          appId: 'nanrenbao-scratch',
+          from_photo_id: Number(fromId),
+          source: 'beauty_scratch',
+          timestamp: Date.now(),
+          date: new Date().toISOString().split('T')[0]
+        };
+        // fetch keepalive：页面跳转后请求仍可完成（sendBeacon 在部分 WebView 会丢 body，已弃用）
+        fetch('https://letmetry.cn/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev),
+          keepalive: true
+        }).catch(function(){});
+      }
+    } catch(e){}
+    var target = 'https://letmetryai.cn/nanrenbao/';
+    if (fromId) target += '?from=photo_' + encodeURIComponent(fromId);
+    location.href = target;
+  });
 
   // 启动：单图模式且不在写死数组 → 先按 id 动态取图，再进入流程（治本修复 622 退化轮播）
   if (singleMode && !singleItem) {
