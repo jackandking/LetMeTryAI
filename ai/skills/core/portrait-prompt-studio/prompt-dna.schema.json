@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prompt DNA",
+  "description": "把一张图的生成提示词拆成可独立演化的维度。每次用户生成后，记录「源提示词(skill 返回) + 用户改良版」，用于按站内浏览/翻转量回流加权，逐步进化提示词。",
+  "type": "object",
+  "required": ["prompt_text"],
+  "properties": {
+    "subject":    { "type": "string", "description": "主体：如 女性/男性/背影/情侣" },
+    "scene":      { "type": "string", "description": "场景：棚拍/街拍/海滩/室内/自然" },
+    "lighting":   { "type": "string", "description": "光影：黄金时刻/柔光棚/霓虹/轮廓光/逆光" },
+    "composition":{ "type": "string", "description": "构图：全身/背影/半身/特写/环境人像" },
+    "style":      { "type": "string", "description": "风格：时尚大片/电影感/胶片/油画/极简" },
+    "mood":       { "type": "string", "description": "情绪：神秘/优雅/俏皮/力量感" },
+    "wardrobe":   { "type": "string", "description": "着装：礼服/休闲/正装/运动（仅着衣，无裸露）" },
+    "camera":     { "type": "string", "description": "镜头：35mm/85mm/长焦/广角" },
+    "negative":   { "type": "string", "description": "负向提示：避免的元素" },
+    "prompt_text":{ "type": "string", "description": "最终完整提示词（英文，图像模型更稳）" }
+  }
+}

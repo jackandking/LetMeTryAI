@@ -2,7 +2,7 @@
 name: nanrenbao-contribute
 slug: nanrenbao-contribute
 displayName: 男人宝图片投稿
-version: 1.0.1
+version: 1.0.3
 description: 把用户生成的人像图片投稿到男人宝画廊，自动插入 beauty/back_view 待审行(review_status=pending)并返回预览链接，审核通过后深链展示站内真实效果；当需要向男人宝投稿 AI 人像图、获取图片审核与预览链接或登记生成提示词时使用
 license: MIT
 icon: icon.jpg
@@ -21,13 +21,19 @@ dependency:
 
 1. 用户提供：图片（URL 或本地文件路径）、投稿类型（beauty 单图 / backview 背影杀需 背+正 两张）、以及生成时用的改良版提示词 DNA。
 2. 校验：URL 必须 https；本地文件先走 `/image/upload` 拿到公开 URL。
-3. 入库：调用后端 `POST https://letmetry.cn/mysql/insert`（后端 API 域名，脚本中以 `API_BASE` 定义；前端站点为 `${SITE_BASE}=https://letmetryai.cn`），插入待审行：
+3. 入库：调用后端官方接口 `POST https://letmetry.cn/mysql/insert` 插入待审行（本地图片先经 `https://letmetry.cn/image/upload` 转成公开 URL；端点在脚本内固定为发布方官方地址，不自建后端无需任何配置）：
    - `beauty_images`: `{ image_url, review_status:"pending", source_type:"skill", submitted_at: <now>, prompt_dna:<json> }`
    - `back_view_images`: `{ back_image_url, front_image_url, review_status:"pending", source_type:"skill", submitted_at:<now>, prompt_dna:<json> }`
-   - 这两个表在后端白名单内，**公开即可插入，无需 admin key**（见后端 P0 安全修复）。
+   - 投稿场景公开可写、无需管理密钥；所有提交进入人工审核队列。
 4. 返回预览链接：
    `https://letmetryai.cn/nanrenbao/review-preview.html?id=<insertId>&table=<beauty|back_view>`
 5. 文案（给用户）：「已提交审核，通常 1–2 个工作日内完成。审核通过前此链接显示占位；通过后即可看到你的照片在站内的真实效果，并可一键跳到画廊中它的位置。」
+
+## 数据流向（透明说明）
+
+- 脚本只向**发布方固定运营的两个官方地址**发送数据：图片（本地文件先上传转 URL）与投稿行（图片 URL、投稿类型、提交时间、提示词 DNA JSON）。
+- 不收集、不上传任何密钥或个人身份信息；投稿不需要任何 API Key。
+- 端点固定为官方地址、不可配置，数据不流向任何第三方；自建后端的使用者可直接修改脚本顶部的两个常量。
 
 ## 执行脚本
 
@@ -47,7 +53,7 @@ node scripts/contribute.cjs --image "https://.../p.jpg" --table beauty --dna '{.
 node scripts/contribute.cjs --table backview --back <backUrl> --front <frontUrl> --dna '{...}'
 ```
 
-脚本会打印预览链接。投稿后请顺手运行 `../recorder.py` 把这次的 (source_id, 源提示词, 改良提示词, db_id) 记到 `prompt-log.jsonl`。
+脚本会打印预览链接。
 
 ## 资源索引
 - 脚本:见 [scripts/contribute.cjs](scripts/contribute.cjs)(用途与参数:`node scripts/contribute.cjs --image <url|本地路径> --table beauty|backview [--back <url> --front <url>] [--source-id <id>] [--dna <json>|--dna-file <file>]`；校验并入库待审行，stdout 输出预览链接)。

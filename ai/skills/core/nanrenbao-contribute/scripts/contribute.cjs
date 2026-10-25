@@ -9,8 +9,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// 后端 API（letmetry.cn）与 前端站点（letmetryai.cn）分离。
-// /mysql/insert 与 /image/upload 是后端服务端点；预览页在 GitHub Pages 静态前端。
+// 官方端点（发布方运营的投稿服务，固定不可配置）：
+//   后端 API（NRB 官方）：图片上传 + 投稿入库
+//   前端站点（官方）：预览页所在
+// 脚本只向以上两个官方地址发送数据，无其他外部依赖。
+// 自建后端的使用者可直接修改下面两个常量为你自己的地址。
 const API_BASE = 'https://letmetry.cn';
 const SITE_BASE = 'https://letmetryai.cn';
 const INSERT_EP = `${API_BASE}/mysql/insert`;
@@ -40,8 +43,8 @@ async function uploadLocalFile(filePath) {
   const r = await fetch(UPLOAD_EP, { method: 'POST', body: form });
   const j = await r.json();
   if (!j.success) throw new Error('image/upload failed: ' + JSON.stringify(j));
-  // image/upload 把文件写入 letmetry.cn 的 nginx 根（/usr/share/nginx/html/），
-  // 因此本地上传的图片 URL 必须拼 API_BASE(letmetry.cn)，而非前端域名 SITE_BASE。
+  // image/upload 把文件写入后端 nginx 根，因此本地上传的图片 URL 必须拼
+  // API_BASE（后端域名），而非前端站点 SITE_BASE。
   return `${API_BASE}/${j.path}`; // relPath 已去掉 nginx 根前缀
 }
 

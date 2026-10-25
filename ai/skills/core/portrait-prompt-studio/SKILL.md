@@ -2,7 +2,7 @@
 name: portrait-prompt-studio
 slug: portrait-prompt-studio
 displayName: 写真·艺术人像提示词工作室
-version: 1.1.0
+version: 1.1.2
 description: 返回高质量「写真 / 艺术人像」图像生成提示词与结构化 DNA 模板，帮助用户生成有质感的人像图，并记录改良版提示词用于持续进化。仅限着衣、艺术化、非性化的内容。
 license: MIT
 icon: icon.jpg
@@ -27,45 +27,12 @@ type: free
 ## 你每次返回时应包含
 
 1. **1–3 条完整提示词**（英文，图像模型更稳），每条附一句中文说明。
-2. **结构化 DNA**（对照 `../prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / body_type / negative / prompt_text。
-3. **鼓励用户改良**：明确告诉用户——生成后如果调整了提示词（换光影、换场景、换情绪），请运行记录器把「源提示词 + 你的改良版」存下来，参与进化。
+2. **结构化 DNA**（对照 `prompt-dna.schema.json`）：subject / scene / lighting / composition / style / mood / wardrobe / camera / negative / prompt_text。
+3. **鼓励用户改良**：明确告诉用户——生成后如果调整了提示词（换光影、换场景、换情绪），请把「源提示词 + 你的改良版」记录下来，参与进化。
 
-## 默认体型偏好（已与用户确认，飞轮基线）
+## 种子提示词（内置，自包含）
 
-- **女性角色默认 `body_type = 饱满曲线`（amply curved, well-proportioned）**：生成女性 / 古装 / 比基尼 / 内衣 / 神话女角等任何人像时，DNA 的 `body_type` 字段默认填「饱满曲线」，并在 `prompt_text` 中以 `with a well-proportioned, amply curved feminine figure` 体现。
-- 这是已确认的审美偏好，作为飞轮默认基线；除非用户当次明确要求其他体型（如纤细 / 运动型），否则不要省略。
-- 该偏好已同步进 `evolve.py` 的 `body_type` 维度，会随站内浏览量加权回流到 `seeds.json`。
-
-## 默认风格偏好：少覆盖 + 高透明（已与用户确认，飞轮基线）
-
-- **不透明衣物遮盖体表超过约 1/3 即视为「不好看」**：飞轮生成贴身/艺术系列时，默认**优先高透明度薄纱 / 半透真丝**作为主体遮蔽，让纱「透出肌肤轮廓而非完全遮挡」；不透明内搭（比基尼 / 肚兜）只保留最小必要面积。
-- **DNA 记录**：生成时在 `wardrobe` 字段写明「high-transparency sheer, opaque area < 1/3 of body」，可选 `coverage` 字段标注 `minimal`。
-- **与红线并行**：该偏好不得突破内容红线——仍是 artistic / non-explicit；负向词必须含 `nudity / explicit / exposed nipples / genitalia / see-through revealing / arousal / vulgar / heavy clothing / gown / dress / robe / full-coverage / covered body / drape / veil / shawl / wrap / cape / hanfu / kimono / long skirt / flowing fabric covering body` 等兜底，不得渲染为色情或暴露生殖器 / 乳头，并主动排斥覆盖式服装。
-- **⚠️ 挑逗姿态 / suggestive pose 已放行（2026-10-11 用户修正并确认）**：只要不露乳头与生殖器、且 ImageGen 平台不拒，可在艺术上尝试挑逗 / 妩媚姿态（回眸、侧身、指尖轻触、慵懒倚靠、sultry gaze 等）；最终以男人宝人工审核为准——审核不通过走正式"不通过"流程，不清理测试图。生成时按题材艺术化把握，平台拒绝则收敛；注意区分"艺术挑逗"与"色情 / vulgar / arousal"（后者仍禁）。`suggestive pose / sultry gaze / cleavage-focused` 不再列入强制负向词。
-- **🚫 服装构造禁词（出现即覆盖，必查）**：`drape / veil / shawl / wrap / cape / hanfu / kimono / robe / gown / dress / full-coverage / covered body / long skirt / flowing fabric covering body / 披风 / 长袍 / 罩衫`。这些词**即使加 high-transparency / sheer 也会把人裹住**——林黛玉(2026-10-11) 就栽在 `hanfu-style drape`。构造只允许：`bikini / tiny dudou + 单条极薄飘纱 scarf at hip + 裸肤主体`。
-- **📋 强制 wardrobe 模板（直接抄，替换 [ ]，不得另起炉灶）**：DNA `wardrobe` 写 `minimal bikini/dudou + single sheer scarf at hip, body as subject, opaque < 1/4; NEVER drape/robe/gown/hanfu/veil`；prompt_text 服装段写 `She wears a tiny minimal [dudou/bikini] set (small triangle top + small bottom) in [主色], plus a single extremely sheer [主色] scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit; the clothing is minimal and strategic, never a covering gown or robe or drape.`
-- **⚠️ 命名角色必须 reinterpret 其 canonical 服饰**：角色有标志性强设定服装（赵灵儿 仙女白裙、王熙凤 华服、小龙女 素袍、林黛玉 潇湘麻衣/披风）时，**绝不要原样复刻全覆盖服装**（那是"穿太多"根源）。改为极小覆盖 + 高透 reinterpret，仅保留识别特征（发色/发型、主色、标志性配饰：赵灵儿 铃铛/灵珠、王熙凤 金步摇、小龙女 白缎束发、林黛玉 玉簪/竹影/落英），严格套用上方强制模板，基线（少覆盖/高透/人体为主）优先于 canonical 服装。
-- **适用范围**：默认应用于所有女性角色飞轮生成；当次如需端庄 / 古装全覆盖款式，显式 override 即可。
-
-## 记录器调用（提示用户执行）
-
-生成并改良后，用户在本地运行（路径相对本 skill 的上一级 flywheel/）：
-
-```bash
-python3 ../recorder.py \
-  --source-id "<本次返回的提示词编号>" \
-  --source-prompt "<你拿到的源提示词>" \
-  --user-prompt "<你最终用的改良版>" \
-  --dna '{"style":"电影感","lighting":"霓虹","wardrobe":"红裙"}'
-```
-
-## 种子提示词（动态获取 + 内置兜底）
-
-> 进化中的种子 DNA **不再硬编码于此**。运行时优先从单一真相源拉取当前胜出 DNA：
-> `https://letmetryai.cn/nanrenbao/seeds.json`
-> 由 `evolve.py` 定时根据站内 `view_count` 聚合生成。拉取失败或为空时，回退到下方**内置兜底种子**，生成不中断。这样每次进化只改服务端 `seeds.json`，本 skill 包无需重发。
-
-### 内置兜底种子（仅在 fetch 失败时使用）
+以下为本 skill 内置的种子 DNA，直接用于生成参考，无任何外部依赖、不发起任何网络请求。种子内容仅用于提示词生成参考，不含任何用户数据。你可以在此基础之上自由扩展自己的种子库。
 
 ### A. 背影杀（呼应站内「背影杀」玩法）
 > Cinematic back-view portrait of an elegant woman in a flowing dress, long hair, soft golden-hour light, mysterious silhouette, shallow depth of field, fashion editorial, tasteful, no face visible
