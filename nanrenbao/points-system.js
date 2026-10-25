@@ -8,7 +8,7 @@ const PointsSystem = (function() {
         USER_UUID: 'nanrenbao_user_uuid',
         POINTS: 'nanrenbao_points',
         LAST_VISIT: 'nanrenbao_last_visit',
-        LAST_SHARE: 'nanrenbao_last_share', // 最近一次转发得积分的日期 (YYYY-MM-DD)
+        LAST_SHARE: 'nanrenbao_last_share', // 转发得积分记录：JSON { date: 'YYYY-MM-DD', count: N }
         VIEWED_IMAGES: 'nanrenbao_viewed_images',
         INITIALIZED: 'nanrenbao_initialized',
         VIEWED_IDS: 'nanrenbao_viewed_ids'
@@ -22,7 +22,8 @@ const PointsSystem = (function() {
         DELETE_IMAGE: 10,      // Points cost to mark an image as deleted
         AD_FULL: 10,            // Points for watching full ad
         AD_PARTIAL: 3,          // Points for partially watching ad
-        SHARE: 10               // Points for sharing (once per day, honor-system on H5)
+        SHARE: 10,              // Points per share (honor-system on H5, no reliable verification)
+        SHARE_DAILY_LIMIT: 10   // Max share rewards per day
     };
 
     /**
@@ -151,42 +152,97 @@ const PointsSystem = (function() {
     }
 
     /**
-     * Check whether the user can still earn share points today.
-     * @returns {boolean} True if no share reward was claimed yet today.
+     * Get today's date string (YYYY-MM-DD, local-ish via ISO).
+     * @returns {string}
      */
-    function canShareToday() {
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const lastShare = localStorage.getItem(STORAGE_KEYS.LAST_SHARE);
-        return lastShare !== today;
+    function getTodayStr() {
+        return new Date().toISOString().split('T')[0];
     }
 
     /**
-     * Award points for sharing (honor-system, once per day).
+     * Read the share-reward record for the current user.
+     * Stored as JSON { date: 'YYYY-MM-DD', count: N }. Expired days reset to 0.
+     * @returns {object} { date: string, count: number }
+     */
+    function getShareRecord() {
+        const today = getTodayStr();
+        try {
+            const raw = localStorage.getItem(STORAGE_KEYS.LAST_SHARE);
+            if (raw) {
+                const obj = JSON.parse(raw);
+                if (obj && typeof obj.date === 'string' && typeof obj.count === 'number') {
+                    if (obj.date === today) {
+                        return { date: today, count: obj.count };
+                    }
+                    // Old day -> reset count
+                    return { date: today, count: 0 };
+                }
+            }
+        } catch (e) {
+            // Corrupted value -> treat as no record
+        }
+        return { date: today, count: 0 };
+    }
+
+    /**
+     * How many share rewards are still available today.
+     * @returns {number} Remaining share rewards (0..SHARE_DAILY_LIMIT).
+     */
+    function getShareRemainingToday() {
+        const rec = getShareRecord();
+        return Math.max(0, POINTS_CONFIG.SHARE_DAILY_LIMIT - rec.count);
+    }
+
+    /**
+     * Whether the user can still earn a share reward today.
+     * @returns {boolean} True if at least one share reward is available.
+     */
+    function canShareToday() {
+        return getShareRemainingToday() > 0;
+    }
+
+    /**
+     * Award points for sharing (honor-system, up to SHARE_DAILY_LIMIT per day).
      *
      * IMPORTANT: On the H5/browser entry point there is NO reliable way to
      * verify that a share actually completed — the Web Share API does not
      * confirm the content was posted. This is a trust-based reward. The Kuaishou
      * mini-program (separate runtime) would instead verify via the platform
-     * share callback before awarding. See POINTS-SYSTEM.md "转发送积分".
-     * @returns {object} {awarded: boolean, points: number, newTotal: number, message: string}
+     * share callback before awarding; there the share button is hidden entirely
+     * (see appreciate.html / back-view-killer.html environment detection).
+     * See POINTS-SYSTEM.md "转发送积分".
+     * @returns {object} {awarded: boolean, points: number, newTotal: number, remaining: number, message: string}
      */
     function awardSharePoints() {
-        if (!canShareToday()) {
+        const remaining = getShareRemainingToday();
+        if (remaining <= 0) {
             return {
                 awarded: false,
                 points: 0,
                 newTotal: getPoints(),
-                message: `今天已转发过，明天再来得 ${POINTS_CONFIG.SHARE} 积分`
+                remaining: 0,
+                message: `今日转发已拿满（${POINTS_CONFIG.SHARE_DAILY_LIMIT}×${POINTS_CONFIG.SHARE} 分），明天再来`
             };
         }
+
         const newTotal = addPoints(POINTS_CONFIG.SHARE);
-        localStorage.setItem(STORAGE_KEYS.LAST_SHARE, new Date().toISOString().split('T')[0]);
-        console.log(`Share bonus: +${POINTS_CONFIG.SHARE} points. Total: ${newTotal}`);
+
+        // Persist count for today as JSON { date, count }
+        const today = getTodayStr();
+        const rec = getShareRecord();
+        const newCount = (rec.date === today ? rec.count : 0) + 1;
+        localStorage.setItem(STORAGE_KEYS.LAST_SHARE, JSON.stringify({ date: today, count: newCount }));
+        const left = POINTS_CONFIG.SHARE_DAILY_LIMIT - newCount;
+
+        console.log(`Share bonus: +${POINTS_CONFIG.SHARE} points (${newCount}/${POINTS_CONFIG.SHARE_DAILY_LIMIT} today). Total: ${newTotal}`);
         return {
             awarded: true,
             points: POINTS_CONFIG.SHARE,
             newTotal: newTotal,
-            message: `🎉 转发成功！获得 ${POINTS_CONFIG.SHARE} 积分`
+            remaining: left,
+            message: left > 0
+                ? `🎉 转发成功！获得 ${POINTS_CONFIG.SHARE} 积分（今日还可转发 ${left} 次）`
+                : `🎉 转发成功！获得 ${POINTS_CONFIG.SHARE} 积分（今日已拿满）`
         };
     }
 
@@ -689,6 +745,7 @@ const PointsSystem = (function() {
         awardUploadPoints: awardUploadPoints,
         awardAdPoints: awardAdPoints,
         canShareToday: canShareToday,
+        getShareRemainingToday: getShareRemainingToday,
         awardSharePoints: awardSharePoints,
         checkDailyVisit: checkDailyVisit,
         getUserInfo: getUserInfo,

@@ -453,7 +453,7 @@
         </div>
         
         <div class="ad-buttons-container">
-            <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
+            <button class="watch-ad-btn" id="watchAdBtn" onclick="showAdForPoints()">📺 看广告赚积分</button>
         </div>
 
         <div id="loading">正在加载...</div>
@@ -550,6 +550,14 @@
         }
 
         updatePointsDisplay();
+
+        /**
+         * 运行环境检测：看广告得积分仅快手小程序内可用（ks.navigateTo 拉起激励视频），
+         * 浏览器端不工作，故在浏览器隐藏该按钮。
+         */
+        const IS_KUAISHOU = (typeof ks !== 'undefined' && typeof ks.navigateTo === 'function');
+        const watchAdBtn = document.getElementById('watchAdBtn');
+        if (watchAdBtn) watchAdBtn.style.display = IS_KUAISHOU ? '' : 'none';
 
         if (pointsInfo.isNewUser) {
             showPointsNotification(`🎉 欢迎新用户！获得 ${PointsSystem.POINTS_CONFIG.NEW_USER} 积分`);

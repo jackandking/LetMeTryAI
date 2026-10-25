@@ -14,7 +14,7 @@
 
 1. **每日签到**：每天首次访问获得 5 积分
 2. **上传图片**：每成功上传一张图片获得 10 积分
-3. **转发分享**：每天首次转发得 10 积分（H5 为荣誉体系，浏览器无法验证真实分享，故为信任制、每日限一次；快手小程序应改用平台分享回执验证）
+3. **转发分享**：每次转发得 10 积分，每日最多 10 次（H5 为荣誉体系，浏览器无法验证真实分享，故为信任制；快手小程序内此入口隐藏——点击即发分无法验证真实转发，应改用平台分享回执验证后再开放）
 
 ## 技术实现
 
@@ -63,17 +63,19 @@ const newTotal = PointsSystem.addPoints(10);
 const newTotal = PointsSystem.awardUploadPoints();
 ```
 
-#### `PointsSystem.canShareToday()`
-查询今天是否还能领转发积分（每日限一次）
+#### `PointsSystem.canShareToday()` / `PointsSystem.getShareRemainingToday()`
+查询今天是否还能领转发积分（每日限 10 次）
 ```javascript
-const canShare = PointsSystem.canShareToday(); // true=今天未转发过
+const canShare = PointsSystem.canShareToday();          // true=今日还有剩余次数
+const left = PointsSystem.getShareRemainingToday();     // 今日剩余可领次数（0~10）
 ```
 
 #### `PointsSystem.awardSharePoints()`
-转发得积分（荣誉体系，每日限一次）。返回 `{ awarded, points, newTotal, message }`
+转发得积分（荣誉体系，每日限 10 次）。返回 `{ awarded, points, newTotal, remaining, message }`
 ```javascript
 const res = PointsSystem.awardSharePoints();
-// res.awarded=false 且 message 提示"今天已转发过" 表示今日已领过
+// res.remaining = 领完这次后今日剩余次数；0 表示已拿满
+// res.awarded=false 且 message 提示"今日转发已拿满" 表示今日 10 次已用完
 ```
 
 #### `PointsSystem.getUserInfo()`

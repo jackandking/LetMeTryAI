@@ -487,14 +487,14 @@
         <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <div style="font-size: 1.1em; font-weight: bold; color: #2e7d32; margin-bottom: 8px;">💎 积分说明</div>
             <div style="font-size: 0.9em; color: #1b5e20; line-height: 1.6;">
-                <strong>获取积分：</strong>每日访问+5分 | 看广告+3~10分 | 转发+10分/天<br>
+                <strong>获取积分：</strong>每日访问+5分 | 看广告+3~10分 | 转发+10分/次（每日限10次）<br>
                 <strong>消费积分：</strong>查看图片-1分/张（3天内免费重看）
             </div>
         </div>
         
         <!-- Watch Ad Button -->
         <div class="ad-buttons-container">
-            <button class="watch-ad-btn" onclick="showAdForPoints()">📺 看广告赚积分</button>
+            <button class="watch-ad-btn" id="watchAdBtn" onclick="showAdForPoints()">📺 看广告赚积分</button>
             <button class="share-btn" id="shareForPointsBtn" onclick="shareForPoints()">🔗 转发得积分</button>
         </div>
 
@@ -588,8 +588,9 @@
         }
 
         /**
-         * 转发得积分（H5 荣誉体系，浏览器无法验证是否真转发，每日限一次）。
+         * 转发得积分（H5 荣誉体系，浏览器无法验证是否真转发，每日限 10 次）。
          * 优先调起系统分享面板；不支持时用「复制链接」兜底，再发分。
+         * 注：快手小程序内此按钮会被隐藏（见 IS_KUAISHOU 处理），避免「点一下就误发分」。
          */
         async function shareForPoints() {
             const shareUrl = (window.location.origin + '/nanrenbao/appreciate.html');
@@ -620,7 +621,7 @@
                 }
             }
 
-            // 发分（每日限一次，由 PointsSystem 控制）
+            // 发分（每日限 10 次，由 PointsSystem 控制）
             const result = PointsSystem.awardSharePoints();
             updatePointsDisplay();
             showPointsNotification(result.message);
@@ -628,17 +629,40 @@
         }
 
         /**
-         * 根据今日是否已转发，刷新转发按钮状态
+         * 刷新转发按钮状态：显示今日剩余次数；快手内该按钮已隐藏，直接返回。
          */
         function updateShareButton() {
             const btn = document.getElementById('shareForPointsBtn');
             if (!btn) return;
-            if (!PointsSystem.canShareToday()) {
+            if (IS_KUAISHOU) {
+                // 快手内隐藏转发得积分（点一下就误发分，且无平台回执校验）
+                btn.style.display = 'none';
+                return;
+            }
+            const remaining = PointsSystem.getShareRemainingToday();
+            if (remaining <= 0) {
                 btn.disabled = true;
-                btn.textContent = '✅ 今日已转发';
+                btn.textContent = '✅ 今日已拿满';
             } else {
                 btn.disabled = false;
-                btn.textContent = '🔗 转发得积分';
+                btn.textContent = `🔗 转发得积分（剩 ${remaining} 次）`;
+            }
+        }
+
+        /**
+         * 运行环境检测：页面同时跑在浏览器和快手小程序 webview 里，两端各只显示能正常工作的入口。
+         * - 看广告得积分：仅快手内可用（ks.navigateTo 拉起激励视频），浏览器隐藏
+         * - 转发得积分：仅浏览器可用（honor-system），快手内误发分，隐藏
+         */
+        const IS_KUAISHOU = (typeof ks !== 'undefined' && typeof ks.navigateTo === 'function');
+        function applyEnvAwareButtons() {
+            const watchAdBtn = document.getElementById('watchAdBtn');
+            const shareBtn = document.getElementById('shareForPointsBtn');
+            // 看广告：仅快手可见
+            if (watchAdBtn) watchAdBtn.style.display = IS_KUAISHOU ? '' : 'none';
+            // 转发：仅浏览器可见（快手内隐藏）
+            if (shareBtn) {
+                if (IS_KUAISHOU) shareBtn.style.display = 'none';
             }
         }
 
@@ -664,6 +688,7 @@
 
         // Initialize display
         updatePointsDisplay();
+        applyEnvAwareButtons();
         updateShareButton();
 
         // Show notifications for new user or daily visit
