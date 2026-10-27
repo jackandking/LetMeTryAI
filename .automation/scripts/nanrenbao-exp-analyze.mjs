@@ -202,6 +202,14 @@ function aggStats(list) {
 const cleanA = aggStats(clean.filter((v) => v.variant === 'A'));
 const cleanB = aggStats(clean.filter((v) => v.variant === 'B'));
 
+function median(arr) {
+  const a = arr.slice().sort((x, y) => x - y);
+  if (!a.length) return NaN;
+  const mid = a.length >> 1;
+  return a.length % 2 ? a[mid] : (a[mid - 1] + a[mid]) / 2;
+}
+const medianOf = (list, variant) => median(list.filter((v) => v.variant === variant && Number.isFinite(v.ctr)).map((v) => v.ctr));
+
 const A = byVariant.A || {};
 const B = byVariant.B || {};
 const aImp = (A.impression || {}).n || 0;
@@ -241,6 +249,16 @@ const aVisitorCtrs = visitors.filter((v) => v.variant === 'A').map((v) => v.ctr)
 const bVisitorCtrs = visitors.filter((v) => v.variant === 'B').map((v) => v.ctr);
 const perm = visitorPermutationTest(aVisitorCtrs, bVisitorCtrs);
 
+// 剔除可疑会话后的访客级置换检验 + 访客 CTR 中位数（抗单访客离群）
+const cleanPerm = visitorPermutationTest(
+  clean.filter((v) => v.variant === 'A').map((v) => v.ctr),
+  clean.filter((v) => v.variant === 'B').map((v) => v.ctr)
+);
+const aMed = medianOf(visitors, 'A');
+const bMed = medianOf(visitors, 'B');
+const aMedClean = medianOf(clean, 'A');
+const bMedClean = medianOf(clean, 'B');
+
 const nSuspect = visitors.filter((v) => v.suspect).length;
 const lowSample = Math.min(aVis, bVis) < MIN_VISITORS_PER_ARM;
 
@@ -279,7 +297,9 @@ console.log(`访客级置换检验: p=${Number.isFinite(perm.p) ? perm.p.toFixed
 if (nSuspect > 0) {
   console.log(`\n【剔除 ${nSuspect} 个可疑会话后】span>${SUSPECT_SPAN_MIN}min 或 page_view>${SUSPECT_PAGE_VIEWS} 的长挂/自访会话`);
   console.log(`A(对照) ${cleanA.impression} 曝光 ${cleanA.click} 点击 CTR=${fmtPct(cACtr)} | B(命名) ${cleanB.impression} 曝光 ${cleanB.click} 点击 CTR=${fmtPct(cBCtr)} | pooled p=${Number.isFinite(cleanZ.p) ? cleanZ.p.toFixed(4) : '—'}`);
+  console.log(`干净数据访客级置换检验: p=${Number.isFinite(cleanPerm.p) ? cleanPerm.p.toFixed(3) : '—'}（${cleanPerm.exact ? '精确枚举' : 'Monte-Carlo'}，A/B 各有 ${cleanPerm.nA}/${cleanPerm.nB} 个有曝光访客）`);
 }
+console.log(`访客 CTR 中位数（抗单访客离群）: A=${fmtPct(aMed)} vs B=${fmtPct(bMed)}${nSuspect > 0 ? `；剔除可疑会话后 A=${fmtPct(aMedClean)} vs B=${fmtPct(bMedClean)}` : ''}`);
 console.log(`\n相对提升: ${fmtSignedPct(uplift)}   差值 95% CI: [${fmtPct(ciLo)}, ${fmtPct(ciHi)}]`);
 console.log(`样本进度: ${Math.min(aImp, bImp).toLocaleString()} / ${needN.toLocaleString()} 每臂（${(progress * 100).toFixed(0)}%）`);
 
@@ -322,6 +342,8 @@ const md = `# 男人宝卡片命名 A/B 实验报告（${expId}）
 | pooled 双比例 z 检验 | z=${Number.isFinite(z) ? z.toFixed(2) : '—'}，p=${Number.isFinite(p) ? p.toFixed(4) : '—'} | 曝光按访客聚类，访客少时高估显著性，仅参考 |
 | 访客级置换检验 | p=${Number.isFinite(perm.p) ? perm.p.toFixed(3) : '—'}（${perm.exact ? '精确枚举' : 'Monte-Carlo 10000'}） | 以访客级 CTR 为观测单位，对聚类稳健，**结论主依据** |
 | 剔除可疑会话后 pooled | A=${fmtPct(cACtr)} vs B=${fmtPct(cBCtr)}，p=${Number.isFinite(cleanZ.p) ? cleanZ.p.toFixed(4) : '—'} | 剔除 span>${SUSPECT_SPAN_MIN}min 或 page_view>${SUSPECT_PAGE_VIEWS} 的长挂/自访会话（本次 ${nSuspect} 个） |
+| 剔除可疑会话后访客级置换 | p=${Number.isFinite(cleanPerm.p) ? cleanPerm.p.toFixed(3) : '—'}（${cleanPerm.exact ? '精确枚举' : 'Monte-Carlo'}） | 干净数据上的访客级口径，A/B 各有 ${cleanPerm.nA}/${cleanPerm.nB} 个有曝光访客 |
+| 访客 CTR 中位数 | A=${fmtPct(aMed)} vs B=${fmtPct(bMed)}${nSuspect > 0 ? `（剔除可疑后 A=${fmtPct(aMedClean)} vs B=${fmtPct(bMedClean)}）` : ''} | 中位数抗单访客离群（如 1 曝光 1 点击的 100% CTR 访客） |
 
 - 80% 功效所需每臂曝光：${needN.toLocaleString()}（当前进度 ${(progress * 100).toFixed(0)}%）
 
