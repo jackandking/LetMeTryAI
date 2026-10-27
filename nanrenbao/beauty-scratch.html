@@ -93,6 +93,7 @@
   <div class="done-sub" id="doneSub">这张美图专属于你</div>
   <button class="btn" id="nextBtn">▶ 看下一张（观看广告解锁）</button>
   <button class="btn ghost" id="downloadBtn" style="display:none;">⬇ 保存美图到相册</button>
+  <button class="btn ghost" id="galleryBtn">🖼 浏览全部美女</button>
   <button class="btn ghost" id="homeBtn">← 返回男人宝主页</button>
   <div class="footer-note">艺术写真 / 时尚美图，仅供欣赏</div>
   <div class="save-tip" id="saveTip">若未自动下载，可长按上方图片或点击链接保存到相册</div>
@@ -553,6 +554,28 @@
 
   nextBtn.addEventListener('click',function(){ showAdForNext(); });
   downloadBtn.addEventListener('click',function(){ doDownload(); });
+  // 画廊入口埋点：刮刮乐→欣赏画廊 衍生漏斗（衡量导流入口转化，失败静默，不影响体验）。
+  // 位置刻意放在 nextBtn（激励视频广告，收入主路径）之后做 ghost 次级按钮，避免蚕食广告点击。
+  $('galleryBtn').addEventListener('click',function(){
+    var fromId = (singleMode && singleItem) ? singleItem.id
+               : (singleMode && _rawId ? parseInt(_rawId,10) : '');
+    try {
+      fetch('https://letmetry.cn/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'gallery_entry',
+          appId: 'nanrenbao-scratch',
+          from_photo_id: fromId ? Number(fromId) : 1,
+          source: 'beauty_scratch',
+          timestamp: Date.now(),
+          date: new Date().toISOString().split('T')[0]
+        }),
+        keepalive: true
+      }).catch(function(){});
+    } catch(e){}
+    location.href = 'https://letmetryai.cn/nanrenbao/appreciate.html';
+  });
   // 单图→主页 衍生漏斗埋点：点击回主页时记录来源照片 id，并带到主页 URL；
   // 同时在服务端 /api/track 落一条 home_redirect 事件（失败静默，不影响体验）。
   $('homeBtn').addEventListener('click',function(){
