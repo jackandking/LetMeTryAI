@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updated_at": "2026-10-27T01:05:02.062790Z",
+  "updated_at": "2026-10-28T01:05:02.720887Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
         "value": "电影感·异域华贵时尚大片·超写实",
-        "sum": 41,
+        "sum": 43,
         "n": 1,
-        "avg": 41.0
+        "avg": 43.0
       },
       {
         "value": "东方秋日时尚大片·电影感·超写实",
@@ -31,9 +31,9 @@
       },
       {
         "value": "古风温婉时尚大片·电影感·超写实",
-        "sum": 11,
+        "sum": 12,
         "n": 1,
-        "avg": 11.0
+        "avg": 12.0
       }
     ],
     "lighting": [
@@ -45,9 +45,9 @@
       },
       {
         "value": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
-        "sum": 42,
+        "sum": 45,
         "n": 2,
-        "avg": 21.0
+        "avg": 22.5
       },
       {
         "value": "柔和暖调散射光（暖黄台灯·窗内暖光）",
@@ -62,24 +62,24 @@
         "avg": 16.0
       },
       {
-        "value": "柔和冷调自然散射光（洞穴微光+轮廓光）",
-        "sum": 11,
+        "value": "初夏柔光·栀子白晕·清甜电影感",
+        "sum": 12,
         "n": 1,
-        "avg": 11.0
+        "avg": 12.0
       }
     ],
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 141,
+        "sum": 146,
         "n": 1,
-        "avg": 141.0
+        "avg": 146.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
-        "sum": 113,
+        "sum": 122,
         "n": 1,
-        "avg": 113.0
+        "avg": 122.0
       },
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
@@ -89,41 +89,41 @@
       },
       {
         "value": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
-        "sum": 41,
+        "sum": 43,
         "n": 1,
-        "avg": 41.0
+        "avg": 43.0
       },
       {
         "value": "玄黑羽纹肚兜（深 V 显沟）+ 单条高透墨纱 at hip，opaque<1/4",
-        "sum": 37,
+        "sum": 39,
         "n": 1,
-        "avg": 37.0
+        "avg": 39.0
       }
     ],
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 141,
+        "sum": 146,
         "n": 1,
-        "avg": 141.0
+        "avg": 146.0
       },
       {
         "value": "执著·清丽天真",
-        "sum": 113,
+        "sum": 122,
         "n": 1,
-        "avg": 113.0
+        "avg": 122.0
       },
       {
         "value": "端庄·华贵·神秘·威严",
-        "sum": 41,
+        "sum": 43,
         "n": 1,
-        "avg": 41.0
+        "avg": 43.0
       },
       {
         "value": "幽诡·姑获夜行",
-        "sum": 37,
+        "sum": 39,
         "n": 1,
-        "avg": 37.0
+        "avg": 39.0
       },
       {
         "value": "秋高气爽·疏朗·从容·温暖",
@@ -135,9 +135,9 @@
     "composition": [
       {
         "value": "中近景环境人像·暖金虚化背景",
-        "sum": 41,
+        "sum": 43,
         "n": 1,
-        "avg": 41.0
+        "avg": 43.0
       },
       {
         "value": "中近景环境人像·山巅云海虚化背景",
@@ -158,42 +158,42 @@
         "avg": 16.0
       },
       {
-        "value": "中近景环境人像·渡口伫立",
-        "sum": 11,
+        "value": "中近景环境人像·水榭伫立",
+        "sum": 12,
         "n": 1,
-        "avg": 11.0
+        "avg": 12.0
       }
     ],
     "camera": [
       {
         "value": "85mm",
-        "sum": 868,
-        "n": 176,
-        "avg": 4.9
+        "sum": 1016,
+        "n": 219,
+        "avg": 4.6
       },
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 16,
+        "sum": 18,
         "n": 4,
-        "avg": 4.0
+        "avg": 4.5
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
-        "sum": 16,
+        "sum": 18,
         "n": 4,
-        "avg": 4.0
+        "avg": 4.5
       },
       {
         "value": "85mm f/1.8 浅景深",
-        "sum": 60,
+        "sum": 64,
         "n": 16,
-        "avg": 3.8
+        "avg": 4.0
       },
       {
         "value": "Shot on an 85mm portrait lens at f/1.8 with creamy shallow depth of field.",
-        "sum": 5,
+        "sum": 6,
         "n": 2,
-        "avg": 2.5
+        "avg": 3.0
       }
     ],
     "body_type": [
@@ -217,9 +217,9 @@
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "sum": 21,
+        "sum": 22,
         "n": 3,
-        "avg": 7.0
+        "avg": 7.3
       },
       {
         "value": "饱满曲线 / 极饱满丰硕巨乳 / G 罩杯以上 / 深 V 乳沟 / 雍容腰臀曲线 / 修长双腿",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 141,
+      "view_count": 146,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -257,7 +257,7 @@
     {
       "table": "beauty_images",
       "id": 718,
-      "view_count": 113,
+      "view_count": 122,
       "dna": {
         "subject": "精卫（山海经·填海）reinterpret，非真人仿冒",
         "scene": "东海之滨·怒涛衔枝·浪花碎玉",
@@ -302,7 +302,7 @@
     {
       "table": "beauty_images",
       "id": 651,
-      "view_count": 41,
+      "view_count": 43,
       "dna": {
         "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
         "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
@@ -324,7 +324,7 @@
     {
       "table": "beauty_images",
       "id": 825,
-      "view_count": 37,
+      "view_count": 39,
       "dna": {
         "subject": "姑获鸟（中国传说·夜行游女）reinterpret，非真人仿冒",
         "scene": "月夜密林·墨羽纷飞·夜枭啼鸣",
