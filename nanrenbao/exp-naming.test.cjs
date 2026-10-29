@@ -9,7 +9,7 @@
  *   C. 分桶：粘性 / 首次随机并持久化 / QA 强制不落盘 / localStorage 不可用降级 A
  *   D. 实验 ID：默认 / ?expid= 覆盖 / 畸形拒绝
  *   E. 埋点：page_view 自动上报 / sendBeacon 载荷 / 批量上限自动 flush
- *   F. 角标：variant B 有名加角标 / 无名跳过 / 不重复添加
+ *   F. 角标：有名加角标（全量后 A/B 均显示）/ 无名跳过 / 不重复添加
  *   G. 曝光：IntersectionObserver ≥50% 去重
  *   H. appreciate.html 接入点静态断言
  *
@@ -236,7 +236,8 @@ check('F2: variant B 无名卡片不加角标', (() => {
   m.onGalleryRendered([{ id: 500, subject: '亚洲青年女性，棕色长发半扎配脸部碎发，含羞浅笑直视镜头' }]);
   return wrapper.querySelector('.exp-name-badge') === null;
 })());
-check('F3: variant A 完全不加角标', (() => {
+check('F3: 全量后 variant A（原对照组）也加角标', (() => {
+  // 2026-10-29 A/B 实验结束并全量：名称角标不再受 variant 限制，原对照组 A 也应显示。
   const card = makeEl('div');
   const wrapper = makeEl('div');
   wrapper.className = 'image-wrapper';
@@ -247,7 +248,8 @@ check('F3: variant A 完全不加角标', (() => {
     cards: { 'img-676': card }
   });
   m.onGalleryRendered([{ id: 676, subject: '大乔（三国·江东佳人）reinterpret，非真人仿冒' }]);
-  return wrapper.querySelector('.exp-name-badge') === null;
+  const badge = wrapper.querySelector('.exp-name-badge');
+  return !!badge && badge.querySelector('.exp-name-badge-name').textContent === '大乔';
 })());
 check('F4: 不重复添加角标', (() => {
   const card = makeEl('div');

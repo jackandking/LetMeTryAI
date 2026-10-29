@@ -1,9 +1,10 @@
 /**
  * exp-naming.js — 男人宝「欣赏美女」页卡片人物名称 A/B 实验模块。
  *
- * 实验设计（appreciate-name-v1）：
- *   对照组 A：卡片维持现状（无名称）
- *   实验组 B：卡片左上角显示人物名称角标
+ * 实验设计（appreciate-name-v1，已于 2026-10-29 结束并全量）：
+ *   原对照组 A：卡片维持现状（无名称）
+ *   原实验组 B：卡片左上角显示人物名称角标
+ *   当前：名称角标对全员常驻显示（凡是图片 DNA 含规范人物名即显示）。
  * 名称来源：图片 prompt_dna.subject，格式「名字（出处）reinterpret，非真人仿冒」。
  * 实事求是：解析不出规范人物名的图（描述性 subject / 无 DNA）不显示角标。
  *
@@ -119,8 +120,11 @@
   }
 
   // ---- 角标渲染 ----
+  // 2026-10-29：A/B 实验（appreciate-name-v1）已结束，名称角标全员常驻显示。
+  // 凡是图片 DNA 的 subject 能解析出「名字（出处）」即显示，新用户也能看到。
+  // 实验埋点（page_view/impression/click/view）仍照常上报，variant 仅作历史分组标记。
   function decorateCards(items) {
-    if (variant !== 'B' || !items || !items.length) return;
+    if (!items || !items.length) return;
     items.forEach(function (item) {
       var parsed = parseSubject(item.subject);
       if (!parsed) return; // 无规范人物名 → 不显示（实事求是）
