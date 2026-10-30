@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updated_at": "2026-10-29T01:05:02.457101Z",
+  "updated_at": "2026-10-30T01:05:02.684454Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
         "value": "电影感·异域华贵时尚大片·超写实",
-        "sum": 45,
+        "sum": 46,
         "n": 1,
-        "avg": 45.0
+        "avg": 46.0
       },
       {
         "value": "东方秋日时尚大片·电影感·超写实",
@@ -18,13 +18,13 @@
         "avg": 36.0
       },
       {
-        "value": "复古文学时尚大片·电影感·超写实",
-        "sum": 16,
+        "value": "古风舞韵时尚大片·秋日绚烂·电影感·超写实",
+        "sum": 17,
         "n": 1,
-        "avg": 16.0
+        "avg": 17.0
       },
       {
-        "value": "古风舞韵时尚大片·秋日绚烂·电影感·超写实",
+        "value": "复古文学时尚大片·电影感·超写实",
         "sum": 16,
         "n": 1,
         "avg": 16.0
@@ -45,18 +45,18 @@
       },
       {
         "value": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
-        "sum": 47,
+        "sum": 48,
         "n": 2,
-        "avg": 23.5
-      },
-      {
-        "value": "柔和暖调散射光（暖黄台灯·窗内暖光）",
-        "sum": 16,
-        "n": 1,
-        "avg": 16.0
+        "avg": 24.0
       },
       {
         "value": "夕照金橙逆光 + 红叶透射光（绚烂暖调·电影感）",
+        "sum": 17,
+        "n": 1,
+        "avg": 17.0
+      },
+      {
+        "value": "柔和暖调散射光（暖黄台灯·窗内暖光）",
         "sum": 16,
         "n": 1,
         "avg": 16.0
@@ -71,15 +71,15 @@
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 168,
+        "sum": 182,
         "n": 1,
-        "avg": 168.0
+        "avg": 182.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
-        "sum": 123,
+        "sum": 124,
         "n": 1,
-        "avg": 123.0
+        "avg": 124.0
       },
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
@@ -89,41 +89,41 @@
       },
       {
         "value": "极小鎏金 dudou（西域金纹刺绣）+ 单条高透暖金纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
-        "sum": 45,
+        "sum": 46,
         "n": 1,
-        "avg": 45.0
+        "avg": 46.0
       },
       {
         "value": "玄黑羽纹肚兜（深 V 显沟）+ 单条高透墨纱 at hip，opaque<1/4",
-        "sum": 40,
+        "sum": 42,
         "n": 1,
-        "avg": 40.0
+        "avg": 42.0
       }
     ],
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 168,
+        "sum": 182,
         "n": 1,
-        "avg": 168.0
+        "avg": 182.0
       },
       {
         "value": "执著·清丽天真",
-        "sum": 123,
+        "sum": 124,
         "n": 1,
-        "avg": 123.0
+        "avg": 124.0
       },
       {
         "value": "端庄·华贵·神秘·威严",
-        "sum": 45,
+        "sum": 46,
         "n": 1,
-        "avg": 45.0
+        "avg": 46.0
       },
       {
         "value": "幽诡·姑获夜行",
-        "sum": 40,
+        "sum": 42,
         "n": 1,
-        "avg": 40.0
+        "avg": 42.0
       },
       {
         "value": "秋高气爽·疏朗·从容·温暖",
@@ -135,9 +135,9 @@
     "composition": [
       {
         "value": "中近景环境人像·暖金虚化背景",
-        "sum": 45,
+        "sum": 46,
         "n": 1,
-        "avg": 45.0
+        "avg": 46.0
       },
       {
         "value": "中近景环境人像·山巅云海虚化背景",
@@ -146,13 +146,13 @@
         "avg": 36.0
       },
       {
-        "value": "中景窗边人像·坐姿（区别于纯中近景）",
-        "sum": 16,
+        "value": "中景全身环境人像·枫林小径旋舞（动态定格，区别于静立）",
+        "sum": 17,
         "n": 1,
-        "avg": 16.0
+        "avg": 17.0
       },
       {
-        "value": "中景全身环境人像·枫林小径旋舞（动态定格，区别于静立）",
+        "value": "中景窗边人像·坐姿（区别于纯中近景）",
         "sum": 16,
         "n": 1,
         "avg": 16.0
@@ -167,9 +167,9 @@
     "camera": [
       {
         "value": "85mm",
-        "sum": 1058,
+        "sum": 1116,
         "n": 219,
-        "avg": 4.8
+        "avg": 5.1
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -205,9 +205,9 @@
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
-        "sum": 20,
+        "sum": 21,
         "n": 2,
-        "avg": 10.0
+        "avg": 10.5
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 修长腿部",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 168,
+      "view_count": 182,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -257,7 +257,7 @@
     {
       "table": "beauty_images",
       "id": 718,
-      "view_count": 123,
+      "view_count": 124,
       "dna": {
         "subject": "精卫（山海经·填海）reinterpret，非真人仿冒",
         "scene": "东海之滨·怒涛衔枝·浪花碎玉",
@@ -302,7 +302,7 @@
     {
       "table": "beauty_images",
       "id": 651,
-      "view_count": 45,
+      "view_count": 46,
       "dna": {
         "subject": "女儿国国王（西游记）reinterpret，非真人仿冒",
         "scene": "西域王宫御花园·黄金时刻·暖金廊柱与花间光影",
@@ -324,7 +324,7 @@
     {
       "table": "beauty_images",
       "id": 825,
-      "view_count": 40,
+      "view_count": 42,
       "dna": {
         "subject": "姑获鸟（中国传说·夜行游女）reinterpret，非真人仿冒",
         "scene": "月夜密林·墨羽纷飞·夜枭啼鸣",
