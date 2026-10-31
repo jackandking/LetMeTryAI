@@ -18,12 +18,30 @@ let voteData = {};
 const EVENT_ENDPOINT = 'https://letmetry.cn/api/track';
 const pageStartTime = Date.now();
 
+function trackChannel() {
+    try {
+        const p = new URLSearchParams(window.location.search);
+        const ch = p.get('ch') || p.get('channel') || p.get('utm_source');
+        if (ch) return ch;
+        if (typeof document !== 'undefined' && document.referrer) {
+            try { return new URL(document.referrer).host; } catch (e) { return 'direct'; }
+        }
+        return 'direct';
+    } catch (e) { return 'direct'; }
+}
+function trackUtm(key) {
+    try { return new URLSearchParams(window.location.search).get(key) || null; } catch (e) { return null; }
+}
+function trackReferrer() {
+    try { return (typeof document !== 'undefined' && document.referrer) ? document.referrer : null; } catch (e) { return null; }
+}
 function logEvent(event, data = {}) {
     const payload = {
         event,
         appId: questionConfig.storageKey.replace(/\.data$/, ''),
         timestamp: Date.now(),
         date: new Date().toISOString().split('T')[0],
+        channel: trackChannel(), utm_source: trackUtm('utm_source'), utm_medium: trackUtm('utm_medium'), utm_campaign: trackUtm('utm_campaign'), referrer: trackReferrer(),
         ...data
     };
     if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
