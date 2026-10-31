@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>去过哪 · 足迹地图实体定制（合作演示）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #faf7f2;
+            color: #2d2a26;
+            line-height: 1.6;
+        }
+        .demo-banner {
+            background: repeating-linear-gradient(45deg, #b8860b, #b8860b 12px, #a9790a 12px, #a9790a 24px);
+            color: #fff; text-align: center; font-size: 12px; padding: 5px 10px;
+            letter-spacing: 1px;
+        }
+        .container { max-width: 520px; margin: 0 auto; padding: 0 16px 60px; }
+
+        /* Hero */
+        .hero { text-align: center; padding: 34px 0 10px; }
+        .hero .logo-tag {
+            display: inline-block; background: #e8663c; color: #fff; font-size: 13px;
+            padding: 3px 14px; border-radius: 20px; margin-bottom: 12px; letter-spacing: 2px;
+        }
+        .hero h1 { font-size: 26px; line-height: 1.4; }
+        .hero h1 em { font-style: normal; color: #e8663c; }
+        .hero p.sub { color: #7a736a; font-size: 14px; margin-top: 10px; }
+
+        .step-card {
+            background: #fff; border-radius: 16px; padding: 20px 16px; margin-top: 18px;
+            box-shadow: 0 2px 12px rgba(60, 40, 20, 0.06);
+        }
+        .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .step-num {
+            width: 26px; height: 26px; border-radius: 50%; background: #2d2a26; color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0;
+        }
+        .step-head h2 { font-size: 17px; }
+
+        /* 选省 */
+        .region-group { margin-bottom: 10px; }
+        .region-name { font-size: 12px; color: #a09a90; margin-bottom: 5px; }
+        .region-provinces { display: flex; flex-wrap: wrap; gap: 6px; }
+        .province-tag {
+            font-size: 13px; padding: 5px 11px; border-radius: 16px; cursor: pointer;
+            background: #f0ece4; color: #6b655c; border: 1px solid transparent; user-select: none;
+            transition: all .12s;
+        }
+        .province-tag.visited { background: #e8663c; color: #fff; font-weight: 500; }
+        .quick-row { display: flex; gap: 8px; margin-bottom: 14px; }
+        .btn-mini {
+            flex: 1; font-size: 13px; padding: 8px 0; border-radius: 10px; border: 1px solid #e8663c;
+            background: #fff; color: #e8663c; cursor: pointer;
+        }
+        .btn-mini.ghost { border-color: #d9d3c8; color: #8a8378; }
+        .nickname-row { margin-top: 12px; }
+        .nickname-row input {
+            width: 100%; font-size: 14px; padding: 9px 12px; border: 1px solid #e2dcd2;
+            border-radius: 10px; outline: none; background: #faf7f2;
+        }
+        .stats-line { text-align: center; font-size: 13px; color: #7a736a; margin: 12px 0 6px; }
+        .stats-line b { color: #e8663c; font-size: 17px; }
+        .map-wrap { background: #f4efe6; border-radius: 12px; padding: 8px; }
+        #china-map { width: 100%; height: auto; display: block; }
+        #china-map .province { fill: #dcd5c7; stroke: #f4efe6; stroke-width: 0.6; cursor: pointer; }
+        #china-map .province.visited { fill: #e8663c; }
+        #china-map .province.nanhai { fill: none; stroke: #b5ad9e; stroke-width: 0.5; stroke-dasharray: 2 2; cursor: default; }
+
+        /* 生成按钮 */
+        .btn-main {
+            width: 100%; margin-top: 16px; padding: 14px 0; font-size: 16px; font-weight: 600;
+            border: none; border-radius: 12px; background: #e8663c; color: #fff; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(232, 102, 60, 0.35);
+        }
+        .btn-main:disabled { background: #c9c2b6; box-shadow: none; }
+
+        /* 产品预览 */
+        #preview-section { display: none; }
+        .tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+        .tab {
+            flex: 1; text-align: center; font-size: 12px; padding: 8px 2px; border-radius: 10px;
+            background: #f0ece4; color: #6b655c; cursor: pointer; border: 1.5px solid transparent;
+        }
+        .tab.active { background: #fff; border-color: #e8663c; color: #e8663c; font-weight: 600; }
+        .tab .price { display: block; font-size: 13px; font-weight: 700; margin-top: 1px; }
+        .tab .price::after { content: " 演示价"; font-size: 9px; font-weight: 400; opacity: .65; }
+
+        .mockup-stage {
+            background: linear-gradient(160deg, #efe9df, #e3dbcd);
+            border-radius: 12px; padding: 26px 18px; display: flex; justify-content: center;
+        }
+        /* 画框 mockup */
+        .mockup { max-width: 270px; width: 100%; transition: all .2s; }
+        .mockup img { width: 100%; display: block; }
+        .m-poster { background: #fff; padding: 14px; box-shadow: 0 8px 22px rgba(50,35,15,.22); }
+        .m-wood {
+            padding: 16px; background: #fff;
+            border: 12px solid transparent;
+            border-image: linear-gradient(135deg, #8a5a33, #6d4423 30%, #93663c 55%, #5c3a1e 80%, #7c5230) 1;
+            box-shadow: 0 10px 26px rgba(50,35,15,.3);
+        }
+        .m-acrylic { padding: 0; position: relative; box-shadow: 0 10px 26px rgba(50,35,15,.3); }
+        .m-acrylic::after {
+            content: ""; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(115deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.08) 26%, transparent 42%);
+        }
+        .mockup-caption { text-align: center; font-size: 12px; color: #8a8378; margin-top: 12px; }
+
+        .order-note {
+            margin-top: 14px; background: #fdf1ea; border: 1px dashed #e8a88c; border-radius: 10px;
+            padding: 10px 12px; font-size: 12px; color: #a05535;
+        }
+        .order-note b { color: #c74e22; }
+
+        /* 流程 */
+        .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .flow-item { text-align: center; }
+        .flow-ico {
+            width: 44px; height: 44px; margin: 0 auto 6px; border-radius: 50%;
+            background: #f4efe6; display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .flow-item p { font-size: 11px; color: #6b655c; }
+        .flow-item p b { display: block; font-size: 12.5px; color: #2d2a26; }
+
+        /* 商家合作 */
+        .biz h2 { font-size: 17px; margin-bottom: 12px; }
+        .biz-item { display: flex; gap: 10px; margin-bottom: 12px; font-size: 13.5px; color: #55504a; }
+        .biz-item .dot { color: #e8663c; font-weight: bold; }
+        .biz-item b { color: #2d2a26; }
+        .biz-quote {
+            margin-top: 14px; padding: 12px 14px; background: #2d2a26; color: #f0ece4;
+            border-radius: 10px; font-size: 13px;
+        }
+        .footer { text-align: center; font-size: 11px; color: #b0a99d; margin-top: 30px; }
+        .footer a { color: #b0a99d; }
+    </style>
+</head>
+
+<body>
+    <div class="demo-banner">合作演示页 · MVP 效果展示 · 非正式下单入口</div>
+    <div class="container">
+
+        <div class="hero">
+            <span class="logo-tag">去过哪</span>
+            <h1>把你的旅行足迹，<br>做成<em>挂在墙上的纪念品</em></h1>
+            <p class="sub">用户在「去过哪」标记去过的省份生成专属足迹地图，<br>一键定制实体版，制作后寄到家。</p>
+        </div>
+
+        <!-- Step 1 交互演示 -->
+        <div class="step-card">
+            <div class="step-head"><span class="step-num">1</span><h2>现场试一试：标记你去过的省</h2></div>
+            <div class="quick-row">
+                <button class="btn-mini" id="btn-demo">一键示例（去过 12 省）</button>
+                <button class="btn-mini ghost" id="btn-clear">清空</button>
+            </div>
+            <div id="region-groups"></div>
+            <div class="nickname-row">
+                <input type="text" id="nickname-input" placeholder="输入昵称（显示在地图上）" maxlength="12">
+            </div>
+            <div class="stats-line">已标记 <b id="visited-count">0</b> / 34 个省级行政区</div>
+            <div class="map-wrap">
+                <svg id="china-map" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+        </div>
+
+        <!-- Step 2 生成预览 -->
+        <div class="step-card">
+            <div class="step-head"><span class="step-num">2</span><h2>生成实体产品预览</h2></div>
+            <button class="btn-main" id="btn-generate">✦ 生成我的实体足迹地图</button>
+
+            <div id="preview-section">
+                <div class="tabs" id="product-tabs">
+                    <div class="tab active" data-frame="m-wood">实木画框<span class="price">¥129</span></div>
+                    <div class="tab" data-frame="m-poster">相纸海报<span class="price">¥49</span></div>
+                    <div class="tab" data-frame="m-acrylic">亚克力摆台<span class="price">¥89</span></div>
+                </div>
+                <div class="mockup-stage">
+                    <div class="mockup m-wood" id="mockup-frame">
+                        <img id="preview-img" alt="足迹地图实体预览">
+                    </div>
+                </div>
+                <p class="mockup-caption">↑ 上方为网页实时渲染的印刷效果模拟，实际产品为高清印刷</p>
+                <div class="order-note">
+                    <b>下单流程（规划）：</b>用户选定规格并支付 → 我们生成高清印刷稿 → 合作工厂制作 →
+                    <b>顺丰寄送到家</b>，预计 3-5 天。本页暂不含支付，为洽谈演示。
+                </div>
+            </div>
+        </div>
+
+        <!-- 流程 -->
+        <div class="step-card">
+            <div class="step-head"><span class="step-num">3</span><h2>用户服务流程</h2></div>
+            <div class="flow">
+                <div class="flow-item"><div class="flow-ico">🗺️</div><p><b>选省生成</b>免费生成足迹地图</p></div>
+                <div class="flow-item"><div class="flow-ico">💳</div><p><b>选规格付款</b>画框 / 海报 / 亚克力</p></div>
+                <div class="flow-item"><div class="flow-ico">🏭</div><p><b>工厂精制</b>高清印刷 3-5 天</p></div>
+                <div class="flow-item"><div class="flow-ico">📦</div><p><b>顺丰到家</b>含包装与物流</p></div>
+            </div>
+        </div>
+
+        <!-- 商家合作 -->
+        <div class="step-card biz">
+            <div class="step-head"><span class="step-num">4</span><h2>致合作伙伴：合作模式说明</h2></div>
+            <div class="biz-item"><span class="dot">●</span><span><b>订单来源：</b>「去过哪」网页应用（letmetryai.cn/quguona）+ 快手短视频小程序卡片引流，用户自然生成个性化地图后转化。</span></div>
+            <div class="biz-item"><span class="dot">●</span><span><b>我们负责：</b>前端体验、支付收单、根据订单自动生成高清印刷稿（含用户昵称/省份数据）。</span></div>
+            <div class="biz-item"><span class="dot">●</span><span><b>商家负责：</b>接单制作（画框装裱 / 相纸冲印 / 亚克力）+ 包装发货，支持一件代发。</span></div>
+            <div class="biz-item"><span class="dot">●</span><span><b>结算方式：</b>按有效订单结算，可先小批量试产验证品质，再放量。</span></div>
+            <div class="biz-item"><span class="dot">●</span><span><b>延展空间：</b>同一套个性化数据可延展至冰箱贴、明信片、台历、T 恤等 SKU。</span></div>
+            <div class="biz-quote">💡 用户每发布一条足迹视频，就是一次免费的社交传播——实体定制把「晒过的足迹」变成「送得出、挂得住的礼物」。</div>
+        </div>
+
+        <div class="footer">去过哪 · 中国足迹地图<br><a href="https://letmetryai.cn/quguona/">letmetryai.cn/quguona</a></div>
+    </div>
+
+    <script src="china-map.js"></script>
+    <script>
+    (function () {
+        const visited = new Set();
+
+        // ---- SVG 地图 ----
+        function renderMap() {
+            const svg = document.getElementById('china-map');
+            CHINA_PROVINCES.forEach(p => {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', p.path);
+                path.setAttribute('data-id', p.id);
+                path.setAttribute('data-name', p.name);
+                path.classList.add('province');
+                if (p.id === 'nanhai') path.classList.add('nanhai');
+                svg.appendChild(path);
+            });
+            svg.addEventListener('click', e => {
+                const t = e.target.closest('.province:not(.nanhai)');
+                if (t) toggle(t.getAttribute('data-id'));
+            });
+        }
+
+        function renderRegionList() {
+            const box = document.getElementById('region-groups');
+            Object.entries(REGIONS).forEach(([rn, ids]) => {
+                const g = document.createElement('div');
+                g.className = 'region-group';
+                g.innerHTML = '<div class="region-name">' + rn + '</div>';
+                const list = document.createElement('div');
+                list.className = 'region-provinces';
+                ids.forEach(id => {
+                    const prov = CHINA_PROVINCES.find(p => p.id === id);
+                    if (!prov) return;
+                    const tag = document.createElement('span');
+                    tag.className = 'province-tag';
+                    tag.textContent = prov.name;
+                    tag.setAttribute('data-id', id);
+                    tag.addEventListener('click', () => toggle(id));
+                    list.appendChild(tag);
+                });
+                g.appendChild(list);
+                box.appendChild(g);
+            });
+        }
+
+        function toggle(id) {
+            visited.has(id) ? visited.delete(id) : visited.add(id);
+            document.querySelectorAll('[data-id="' + id + '"]').forEach(el => el.classList.toggle('visited', visited.has(id)));
+            document.getElementById('visited-count').textContent = visited.size;
+        }
+
+        document.getElementById('btn-demo').addEventListener('click', () => {
+            const demo = ['beijing','shanghai','guangdong','sichuan','yunnan','zhejiang','hainan','shandong','shaanxi','hunan','liaoning','xinjiang'];
+            CHINA_PROVINCES.forEach(p => {
+                const should = demo.includes(p.id);
+                if (should !== visited.has(p.id)) toggle(p.id);
+            });
+            document.getElementById('nickname-input').value = '旅行者';
+        });
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            [...visited].forEach(id => toggle(id));
+            document.getElementById('nickname-input').value = '';
+        });
+
+        // ---- 印刷风格出图（复刻并美化 createMapCanvas）----
+        function createMapCanvas(nickname) {
+            const W = 800, H = 1060;
+            const canvas = document.createElement('canvas');
+            canvas.width = W; canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            // 纸质底
+            ctx.fillStyle = '#f7f3ec';
+            ctx.fillRect(0, 0, W, H);
+            // 边框装饰线
+            ctx.strokeStyle = '#d9d2c4'; ctx.lineWidth = 2;
+            ctx.strokeRect(26, 26, W - 52, H - 52);
+            ctx.strokeStyle = '#e8663c'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(26, 120); ctx.lineTo(W - 26, 120); ctx.stroke();
+
+            // 标题
+            ctx.fillStyle = '#2d2a26';
+            ctx.font = 'bold 40px -apple-system, "PingFang SC", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText((nickname || '我') + '的中国足迹', W / 2, 88);
+
+            // 地图
+            const mapScale = (W - 120) / 600;
+            ctx.save();
+            ctx.translate(60, 165);
+            ctx.scale(mapScale, mapScale);
+            CHINA_PROVINCES.forEach(p => {
+                const path2d = new Path2D(p.path);
+                if (p.id === 'nanhai') {
+                    ctx.strokeStyle = '#b5ad9e'; ctx.lineWidth = 0.5;
+                    ctx.setLineDash([2, 2]); ctx.stroke(path2d); ctx.setLineDash([]);
+                } else {
+                    ctx.fillStyle = visited.has(p.id) ? '#e8663c' : '#ddd6c8';
+                    ctx.fill(path2d);
+                    ctx.strokeStyle = '#f7f3ec'; ctx.lineWidth = 0.6; ctx.stroke(path2d);
+                }
+            });
+            ctx.restore();
+
+            // 统计
+            const statsY = 800;
+            ctx.fillStyle = '#e8663c';
+            ctx.font = 'bold 96px -apple-system, sans-serif';
+            ctx.fillText(String(visited.size), W / 2, statsY);
+            ctx.fillStyle = '#8a8378';
+            ctx.font = '26px -apple-system, sans-serif';
+            ctx.fillText('/ 34 个省级行政区', W / 2, statsY + 42);
+
+            // 省名列表
+            const names = CHINA_PROVINCES.filter(p => visited.has(p.id) && p.id !== 'nanhai').map(p => p.name);
+            if (names.length) {
+                ctx.fillStyle = '#6b655c'; ctx.font = '19px -apple-system, sans-serif';
+                const lines = []; let line = '';
+                names.forEach(n => {
+                    if ((line + n).length > 22) { lines.push(line.trim()); line = n + '  '; }
+                    else line += n + '  ';
+                });
+                if (line.trim()) lines.push(line.trim());
+                lines.slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, statsY + 92 + i * 30));
+            }
+
+            ctx.fillStyle = '#b0a99d';
+            ctx.font = '18px -apple-system, sans-serif';
+            ctx.fillText('去过哪 · letmetryai.cn/quguona', W / 2, H - 48);
+            return canvas;
+        }
+
+        // ---- 预览 ----
+        document.getElementById('btn-generate').addEventListener('click', () => {
+            if (visited.size === 0) { alert('请先标记至少一个省份（可点"一键示例"）'); return; }
+            const canvas = createMapCanvas(document.getElementById('nickname-input').value.trim());
+            document.getElementById('preview-img').src = canvas.toDataURL('image/png');
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        document.getElementById('product-tabs').addEventListener('click', e => {
+            const tab = e.target.closest('.tab');
+            if (!tab) return;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('mockup-frame').className = 'mockup ' + tab.dataset.frame;
+        });
+
+        renderMap();
+        renderRegionList();
+    })();
+    </script>
+</body>
+
+</html>
