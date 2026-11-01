@@ -212,6 +212,11 @@ body {
     margin-bottom: 16px;
 }
 
+/* 全局隐藏工具类：buy-intent/buy-done 切换依赖它（此前只有组件级 .hidden 规则） */
+.hidden {
+    display: none !important;
+}
+
 .result-section .btn-secondary {
     color: #666;
     border-color: #ddd;
