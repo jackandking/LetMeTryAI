@@ -115,6 +115,24 @@
             padding: 10px 12px; font-size: 12px; color: #a05535;
         }
         .order-note b { color: #c74e22; }
+        .order-form { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #e2dcd2; }
+        .order-form h3 { font-size: 15px; margin-bottom: 4px; }
+        .order-form .form-tip { font-size: 12px; color: #8a8378; margin-bottom: 10px; }
+        .order-form input, .order-form textarea {
+            width: 100%; font-size: 14px; padding: 10px 12px; border: 1px solid #e2dcd2;
+            border-radius: 10px; outline: none; background: #faf7f2; margin-bottom: 8px;
+            font-family: inherit; resize: none;
+        }
+        #btn-order {
+            width: 100%; padding: 13px 0; font-size: 15px; font-weight: 600;
+            border: none; border-radius: 12px; background: #2d2a26; color: #fff; cursor: pointer;
+        }
+        #btn-order:disabled { background: #c9c2b6; }
+        .order-success {
+            margin-top: 10px; background: #eef7ee; border: 1px solid #b7d8b7; color: #2e6b2e;
+            border-radius: 10px; padding: 12px; font-size: 13px; display: none;
+        }
+        .order-success b { font-size: 14px; }
 
         /* 流程 */
         .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -141,7 +159,7 @@
 </head>
 
 <body>
-    <div class="demo-banner">合作演示页 · MVP 效果展示 · 非正式下单入口</div>
+    <div class="demo-banner">预订通道已开启 · 0 元占坑预订，确认后付款，24 小时内联系</div>
     <div class="container">
 
         <div class="hero">
@@ -185,8 +203,16 @@
                 </div>
                 <p class="mockup-caption">↑ 上方为网页实时渲染的印刷效果模拟，实际产品为高清印刷</p>
                 <div class="order-note">
-                    <b>下单流程（规划）：</b>用户选定规格并支付 → 我们生成高清印刷稿 → 合作工厂制作 →
-                    <b>顺丰寄送到家</b>，预计 3-5 天。本页暂不含支付，为洽谈演示。
+                    <b>预订说明：</b>暂不付款，提交后我们 24 小时内与你确认制作细节与付款方式；制作约 3-5 天，顺丰寄送。
+                </div>
+                <div class="order-form" id="order-form">
+                    <h3>预订实体版</h3>
+                    <p class="form-tip">先登记意愿、0 元占坑，确认后再付款</p>
+                    <input type="text" id="order-name" placeholder="收货人姓名" maxlength="20">
+                    <input type="tel" id="order-phone" placeholder="手机号" maxlength="11">
+                    <textarea id="order-address" rows="2" placeholder="收货地址（省 / 市 / 区 + 详细地址）" maxlength="120"></textarea>
+                    <button id="btn-order">提交预订（0 元占坑）</button>
+                    <div class="order-success" id="order-success"></div>
                 </div>
             </div>
         </div>
@@ -364,6 +390,45 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             document.getElementById('mockup-frame').className = 'mockup ' + tab.dataset.frame;
+        });
+
+        // 提交预订
+        document.getElementById('btn-order').addEventListener('click', async () => {
+            const name = document.getElementById('order-name').value.trim();
+            const phone = document.getElementById('order-phone').value.trim();
+            const address = document.getElementById('order-address').value.trim();
+            if (visited.size === 0) { alert('请先标记你的足迹（可点"一键示例"）'); return; }
+            if (!name || !phone || !address) { alert('请完整填写收货信息'); return; }
+            if (!/^1\d{10}$/.test(phone)) { alert('手机号格式不正确'); return; }
+            const product = { 'm-wood': 'wood', 'm-poster': 'poster', 'm-acrylic': 'acrylic' }[document.querySelector('.tab.active').dataset.frame];
+            const btn = document.getElementById('btn-order');
+            btn.disabled = true; btn.textContent = '提交中...';
+            try {
+                const r = await fetch('https://letmetry.cn/api/quguona/custom-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nickname: document.getElementById('nickname-input').value.trim(),
+                        provinces: [...visited],
+                        count: visited.size,
+                        product, name, phone, address,
+                    }),
+                });
+                const j = await r.json();
+                if (j.success) {
+                    const ok = document.getElementById('order-success');
+                    ok.innerHTML = '<b>✅ 预订成功！订单号 ' + j.orderId + '</b><br>' + j.product + '（演示价 ¥' + j.price + '）已登记，我们将在 24 小时内联系你确认制作与付款。';
+                    ok.style.display = 'block';
+                    btn.textContent = '已提交 ✓';
+                    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    alert(j.message || '提交失败，请稍后再试');
+                    btn.disabled = false; btn.textContent = '提交预订（0 元占坑）';
+                }
+            } catch (err) {
+                alert('网络错误，请稍后再试');
+                btn.disabled = false; btn.textContent = '提交预订（0 元占坑）';
+            }
         });
 
         renderMap();
