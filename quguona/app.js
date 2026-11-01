@@ -2,12 +2,62 @@
     const STORAGE_KEY = 'quguona_visited_v1';
     let visited = new Set();
 
+    const BASE = 'https://letmetry.cn';
+
     function init() {
         loadState();
         renderMap();
         renderRegionList();
         updateStats();
         bindEvents();
+        sendTrack('page_load', { count: visited.size });
+        cloudRestore();
+    }
+
+    // 埋点：text/plain 避免 CORS 预检；fire-and-forget，失败不影响主流程
+    function sendTrack(event, extra) {
+        try {
+            fetch(BASE + '/api/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(Object.assign({ event: event, appId: 'quguona', timestamp: Date.now() }, extra || {}))
+            }).catch(function() {});
+        } catch (e) {}
+    }
+
+    // 足迹云备份：走 letmetry.cn 统一入口（同一 AWS kv 存储、同 key 格式，老数据兼容）
+    function cloudSave() {
+        try {
+            fetch(BASE + '/api/quguona/state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ deviceId: getDeviceId(), provinces: [...visited] })
+            }).catch(function() {});
+        } catch (e) {}
+    }
+
+    // 本机无数据时尝试跨设备恢复（localStorage 为主，云端只补空）
+    async function cloudRestore() {
+        if (visited.size > 0) return;
+        try {
+            const r = await fetch(BASE + '/api/quguona/state?deviceId=' + encodeURIComponent(getDeviceId()));
+            const d = await r.json();
+            if (d && d.success && d.found && Array.isArray(d.provinces) && d.provinces.length) {
+                const valid = d.provinces.filter(function(id) { return CHINA_PROVINCES.some(function(p) { return p.id === id; }); });
+                if (!valid.length) return;
+                visited = new Set(valid);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited]));
+                rerenderAll();
+            }
+        } catch (e) {}
+    }
+
+    function rerenderAll() {
+        document.getElementById('china-map').innerHTML = '';
+        renderMap();
+        document.getElementById('region-groups').innerHTML = '';
+        renderRegionList();
+        updateStats();
     }
 
     function renderMap() {
@@ -142,6 +192,7 @@
     function checkPublishResult() {
         const params = new URLSearchParams(window.location.search);
         if (params.get('published') === 'success') {
+            sendTrack('publish_success');
             showPublishStatus('发布成功！视频已发到你的快手账号', true);
             window.history.replaceState({}, '', window.location.pathname);
         } else if (params.get('published') === 'error') {
@@ -173,6 +224,7 @@
         }
 
         const btn = document.getElementById('publish-btn');
+        sendTrack('publish_click', { count: visited.size });
         btn.disabled = true;
         btn.textContent = '跳转中...';
         window.location.href = publishUrl;
@@ -292,12 +344,7 @@
 
     function saveState() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited]));
-        if (typeof updateKeyValueStore === 'function') {
-            const deviceId = getDeviceId();
-            try {
-                updateKeyValueStore('quguona_' + deviceId, JSON.stringify([...visited]));
-            } catch (e) {}
-        }
+        cloudSave();
     }
 
     function loadState() {
@@ -320,6 +367,7 @@
 
     function generateImage() {
         const nickname = getNickname();
+        sendTrack('map_generate', { count: visited.size });
         const canvas = createMapCanvas(nickname);
         const dataUrl = canvas.toDataURL('image/png');
         const resultImg = document.getElementById('result-image');
