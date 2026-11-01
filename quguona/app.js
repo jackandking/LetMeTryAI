@@ -124,6 +124,7 @@
 
         document.getElementById('generate-btn').addEventListener('click', generateImage);
         document.getElementById('publish-btn').addEventListener('click', publishToKuaishou);
+        document.getElementById('buy-submit').addEventListener('click', submitBuyIntent);
         document.getElementById('close-result').addEventListener('click', () => {
             document.getElementById('result-section').classList.add('hidden');
         });
@@ -374,6 +375,51 @@
         resultImg.src = dataUrl;
         document.getElementById('result-section').classList.remove('hidden');
         resultImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 实物版购买意向：极简收集（只要手机号），款式/地址等回访时确认
+    async function submitBuyIntent() {
+        if (visited.size === 0) {
+            alert('请先标记你去过的省份');
+            return;
+        }
+        const phone = (document.getElementById('buy-phone').value || '').trim();
+        if (!/^1\d{10}$/.test(phone)) {
+            alert('请填写正确的 11 位手机号');
+            return;
+        }
+        const btn = document.getElementById('buy-submit');
+        btn.disabled = true;
+        btn.textContent = '提交中...';
+        try {
+            const r = await fetch(BASE + '/api/quguona/custom-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({
+                    nickname: getNickname() || '旅行者',
+                    provinces: [...visited],
+                    count: visited.size,
+                    product: 'wood',
+                    name: getNickname() || '客户',
+                    phone: phone,
+                    address: '',
+                }),
+            });
+            const j = await r.json();
+            if (j.success) {
+                sendTrack('buy_intent_submit', { count: visited.size, orderId: j.orderId });
+                document.getElementById('buy-intent').classList.add('hidden');
+                document.getElementById('buy-done').classList.remove('hidden');
+            } else {
+                alert(j.message || '提交失败，请稍后再试');
+                btn.disabled = false;
+                btn.textContent = '登记购买意向';
+            }
+        } catch (e) {
+            alert('网络错误，请稍后再试');
+            btn.disabled = false;
+            btn.textContent = '登记购买意向';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', init);

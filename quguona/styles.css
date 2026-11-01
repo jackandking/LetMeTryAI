@@ -218,6 +218,62 @@ body {
     width: 100%;
 }
 
+/* 实物版购买意愿：极简一行式（手机号 + 按钮），款式/地址回访时再确认 */
+.buy-intent {
+    margin: 4px 0 12px;
+    padding-top: 14px;
+    border-top: 1px dashed #eee;
+}
+
+.buy-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.buy-intent input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.buy-intent input:focus {
+    outline: 2px solid #ffd6c4;
+    border-color: #ff6b35;
+}
+
+.buy-intent .btn-primary {
+    width: 100%;
+    flex: none;
+}
+
+.buy-note {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+}
+
+.buy-done {
+    margin: 4px 0 12px;
+    padding: 14px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+}
+
+.buy-done-msg {
+    font-size: 14px;
+    color: #166534;
+    line-height: 1.6;
+    margin: 0;
+}
+
 .region-list {
     background: #fff;
     border-radius: 16px;
