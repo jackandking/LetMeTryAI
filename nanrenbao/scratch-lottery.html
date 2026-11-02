@@ -121,7 +121,7 @@
   <button class="btn" id="nextBtn" style="display:none;">▶ 下一张（1 积分）</button>
   <button class="btn ghost" id="rechargeBtn" style="display:none;">💰 积分不足，去赚积分</button>
   <button class="btn ghost" id="resetBtn" style="display:none;">🔄 重开一轮（清空刮刮乐记录）</button>
-  <button class="btn ghost" id="homeBtn">← 返回男人宝主页</button>
+  <button class="btn ghost" id="homeBtn">👑 进入我的后宫</button>
   <div class="footer-note">艺术写真 / 时尚美图，仅供欣赏 · 已看过的美女不会再抽到</div>
 </div>
 
@@ -779,7 +779,7 @@
   nextBtn.addEventListener('click', function(){ track('scratch_lottery','advance'); draw(); });
   rechargeBtn.addEventListener('click', function(){ location.href='recharge.html'; });
   resetBtn.addEventListener('click', resetRound);
-  $('homeBtn').addEventListener('click',function(){ location.href='index.html'; });
+  $('homeBtn').addEventListener('click',function(){ location.href='harem.html?from=nanrenbao_lottery'; });
 
   // ---- 启动：初始化积分（新用户 3 + 每日 5）→ 拉图库 → 待机面板 ----
   try { PointsSystem.initialize(); } catch(e){}

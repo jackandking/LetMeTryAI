@@ -94,7 +94,7 @@
   <button class="btn" id="nextBtn">▶ 看下一张（观看广告解锁）</button>
   <button class="btn ghost" id="downloadBtn" style="display:none;">⬇ 保存美图到相册</button>
   <button class="btn ghost" id="galleryBtn">🖼 浏览全部美女</button>
-  <button class="btn ghost" id="homeBtn">← 返回男人宝主页</button>
+  <button class="btn ghost" id="homeBtn">👑 进入我的后宫</button>
   <div class="footer-note">艺术写真 / 时尚美图，仅供欣赏</div>
   <div class="save-tip" id="saveTip">若未自动下载，可长按上方图片或点击链接保存到相册</div>
 </div>
@@ -576,16 +576,17 @@
     } catch(e){}
     location.href = 'https://letmetryai.cn/nanrenbao/appreciate.html';
   });
-  // 单图→主页 衍生漏斗埋点：点击回主页时记录来源照片 id，并带到主页 URL；
-  // 同时在服务端 /api/track 落一条 home_redirect 事件（失败静默，不影响体验）。
+  // 单图→我的后宫 引流漏斗：点击进入后宫时记录来源照片 id，并带归因参数落到 harem 页；
+  // 同时在服务端 /api/track 落一条 harem_redirect 事件（失败静默，不影响体验）。
+  // 后宫自带积分体系（新用户/每日签到获分、50 积分激活消费），落地即触发积分获得/消费动作。
   $('homeBtn').addEventListener('click',function(){
     var fromId = (singleMode && singleItem) ? singleItem.id
                : (singleMode && _rawId ? parseInt(_rawId,10) : '');
-    try { track('home_redirect', fromId ? Number(fromId) : 1, 'nanrenbao_funnel'); } catch(e){}
+    try { track('harem_redirect', fromId ? Number(fromId) : 1, 'nanrenbao_funnel'); } catch(e){}
     try {
       if (fromId) {
         var ev = {
-          event: 'home_redirect',
+          event: 'harem_redirect',
           appId: 'nanrenbao-scratch',
           from_photo_id: Number(fromId),
           source: 'beauty_scratch',
@@ -601,8 +602,8 @@
         }).catch(function(){});
       }
     } catch(e){}
-    var target = 'https://letmetryai.cn/nanrenbao/';
-    if (fromId) target += '?from=photo_' + encodeURIComponent(fromId);
+    var target = 'https://letmetryai.cn/nanrenbao/harem.html?from=nanrenbao_scratch';
+    if (fromId) target += '&photo=' + encodeURIComponent(fromId);
     location.href = target;
   });
 
