@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-02T01:05:03.414852Z",
+  "updated_at": "2026-11-03T01:05:03.783829Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -31,9 +31,9 @@
       },
       {
         "value": "电影感·东方武侠时尚大片·超写实",
-        "sum": 13,
+        "sum": 15,
         "n": 1,
-        "avg": 13.0
+        "avg": 15.0
       }
     ],
     "lighting": [
@@ -63,23 +63,23 @@
       },
       {
         "value": "冷调晨雾柔光·漫射散射·电影感冷调调色",
-        "sum": 13,
+        "sum": 15,
         "n": 1,
-        "avg": 13.0
+        "avg": 15.0
       }
     ],
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 270,
+        "sum": 294,
         "n": 1,
-        "avg": 270.0
+        "avg": 294.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
-        "sum": 127,
+        "sum": 128,
         "n": 1,
-        "avg": 127.0
+        "avg": 128.0
       },
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
@@ -103,15 +103,15 @@
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 270,
+        "sum": 294,
         "n": 1,
-        "avg": 270.0
+        "avg": 294.0
       },
       {
         "value": "执著·清丽天真",
-        "sum": 127,
+        "sum": 128,
         "n": 1,
-        "avg": 127.0
+        "avg": 128.0
       },
       {
         "value": "端庄·华贵·神秘·威严",
@@ -159,17 +159,17 @@
       },
       {
         "value": "中近景环境人像·冷山雾虚化背景",
-        "sum": 13,
+        "sum": 15,
         "n": 1,
-        "avg": 13.0
+        "avg": 15.0
       }
     ],
     "camera": [
       {
         "value": "85mm",
-        "sum": 1309,
+        "sum": 1362,
         "n": 246,
-        "avg": 5.3
+        "avg": 5.5
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -204,22 +204,22 @@
         "avg": 19.0
       },
       {
+        "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 修长腿部",
+        "sum": 11,
+        "n": 1,
+        "avg": 11.0
+      },
+      {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
         "sum": 21,
         "n": 2,
         "avg": 10.5
       },
       {
-        "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 修长腿部",
-        "sum": 9,
-        "n": 1,
-        "avg": 9.0
-      },
-      {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "sum": 23,
+        "sum": 24,
         "n": 3,
-        "avg": 7.7
+        "avg": 8.0
       },
       {
         "value": "饱满曲线 / 极饱满丰硕巨乳 / G 罩杯以上 / 深 V 乳沟 / 雍容腰臀曲线 / 修长双腿",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 270,
+      "view_count": 294,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -257,7 +257,7 @@
     {
       "table": "beauty_images",
       "id": 718,
-      "view_count": 127,
+      "view_count": 128,
       "dna": {
         "subject": "精卫（山海经·填海）reinterpret，非真人仿冒",
         "scene": "东海之滨·怒涛衔枝·浪花碎玉",
