@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T01:05:03.783829Z",
+  "updated_at": "2026-11-04T01:05:03.253425Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -38,6 +38,12 @@
     ],
     "lighting": [
       {
+        "value": "蓝调雪光·暖窗补光",
+        "sum": 53,
+        "n": 1,
+        "avg": 53.0
+      },
+      {
         "value": "秋日暖金逆光·轮廓光·电影感暖调色",
         "sum": 72,
         "n": 2,
@@ -60,26 +66,26 @@
         "sum": 16,
         "n": 1,
         "avg": 16.0
-      },
-      {
-        "value": "冷调晨雾柔光·漫射散射·电影感冷调调色",
-        "sum": 15,
-        "n": 1,
-        "avg": 15.0
       }
     ],
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 294,
+        "sum": 307,
         "n": 1,
-        "avg": 294.0
+        "avg": 307.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
-        "sum": 128,
+        "sum": 130,
         "n": 1,
-        "avg": 128.0
+        "avg": 130.0
+      },
+      {
+        "value": "上身雪白羽绒服(敞穿·深V露沟·袖覆肩臂) + 下身极小烈焰红比基尼(仅底裤) + 腰腹腿部裸露",
+        "sum": 53,
+        "n": 1,
+        "avg": 53.0
       },
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
@@ -92,26 +98,26 @@
         "sum": 51,
         "n": 1,
         "avg": 51.0
-      },
-      {
-        "value": "玄黑羽纹肚兜（深 V 显沟）+ 单条高透墨纱 at hip，opaque<1/4",
-        "sum": 43,
-        "n": 1,
-        "avg": 43.0
       }
     ],
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 294,
+        "sum": 307,
         "n": 1,
-        "avg": 294.0
+        "avg": 307.0
       },
       {
         "value": "执著·清丽天真",
-        "sum": 128,
+        "sum": 130,
         "n": 1,
-        "avg": 128.0
+        "avg": 130.0
+      },
+      {
+        "value": "俏皮·度假反差",
+        "sum": 53,
+        "n": 1,
+        "avg": 53.0
       },
       {
         "value": "端庄·华贵·神秘·威严",
@@ -124,12 +130,6 @@
         "sum": 43,
         "n": 1,
         "avg": 43.0
-      },
-      {
-        "value": "秋高气爽·疏朗·从容·温暖",
-        "sum": 72,
-        "n": 2,
-        "avg": 36.0
       }
     ],
     "composition": [
@@ -167,9 +167,9 @@
     "camera": [
       {
         "value": "85mm",
-        "sum": 1362,
+        "sum": 1447,
         "n": 246,
-        "avg": 5.5
+        "avg": 5.9
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -217,15 +217,15 @@
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "sum": 24,
+        "sum": 25,
         "n": 3,
-        "avg": 8.0
+        "avg": 8.3
       },
       {
         "value": "饱满曲线 / 极饱满丰硕巨乳 / G 罩杯以上 / 深 V 乳沟 / 雍容腰臀曲线 / 修长双腿",
-        "sum": 7,
+        "sum": 8,
         "n": 1,
-        "avg": 7.0
+        "avg": 8.0
       }
     ]
   },
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 294,
+      "view_count": 307,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -257,7 +257,7 @@
     {
       "table": "beauty_images",
       "id": 718,
-      "view_count": 128,
+      "view_count": 130,
       "dna": {
         "subject": "精卫（山海经·填海）reinterpret，非真人仿冒",
         "scene": "东海之滨·怒涛衔枝·浪花碎玉",
@@ -276,6 +276,43 @@
         "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Jingwei, the mythical bird-girl of Shan Hai Jing who fills the sea with pebbles and twigs, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: the eastern seashore, roaring waves, a small girl carrying a twig in her beak-like grace, sea spray like shattered jade, as background accents only, never wrapping the figure. Pose & action: she carries a twig toward the waves, poised as if to take flight, determined yet innocent, never sexualized. Wardrobe: a minimal pale-sea-blue bikini with wave-pattern texture, fully clothed non-transparent. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: determined, innocent, pure, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
       },
       "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Jingwei, the mythical bird-girl of Shan Hai Jing who fills the sea with pebbles and twigs, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: the eastern seashore, roaring waves, a small girl carrying a twig in her beak-like grace, sea spray like shattered jade, as background accents only, never wrapping the figure. Pose & action: she carries a twig toward the waves, poised as if to take flight, determined yet innocent, never sexualized. Wardrobe: a minimal pale-sea-blue bikini with wave-pattern texture, fully clothed non-transparent. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: determined, innocent, pure, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+    },
+    {
+      "table": "beauty_images",
+      "id": 882,
+      "view_count": 53,
+      "dna": {
+        "exp": {
+          "name": "batch-contrast-5run",
+          "batch": 5,
+          "date": "2026-10-30",
+          "vars": [
+            "contrast-outfit",
+            "down-jacket-top",
+            "bikini-bottom"
+          ]
+        },
+        "subject": "雪国假日（原创·度假反差）reinterpret，非真人仿冒",
+        "story_moment": "雪场露台·羽绒服半敞的俏皮回眸",
+        "scene": "阿尔卑斯风雪木屋露台·蓝调时刻·落雪纷飞",
+        "context": "an alpine chalet terrace at blue hour with falling snow and warm window glow behind as background accents only",
+        "lighting": "蓝调雪光·暖窗补光",
+        "composition": "85mm 中近景环境人像·前景景深层",
+        "action": "倚栏回眸、单手撩开羽绒服前襟、雪粒落于肩头",
+        "emotion": "俏皮度假·反差萌",
+        "motif": "一副滑雪镜挂于领口 + 纷飞落雪",
+        "motion": "雪白羽绒服下摆与发丝随画框外风雪扬起",
+        "style": "电影感时尚大片·叙事感·超写实",
+        "mood": "俏皮·度假反差",
+        "wardrobe": "上身雪白羽绒服(敞穿·深V露沟·袖覆肩臂) + 下身极小烈焰红比基尼(仅底裤) + 腰腹腿部裸露",
+        "coverage_pct": 45,
+        "camera": "85mm",
+        "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+        "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创）",
+        "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, long coat, trench coat, parka past hips, jacket fully zipped hiding cleavage, shirt, tee, sweater, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+        "prompt_text": "Cinematic medium-close-up artistic portrait with strong narrative storytelling of a fictional glamorous ski-resort woman, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. The decisive narrative moment: 雪场露台·羽绒服半敞的俏皮回眸. Scene & context: 阿尔卑斯风雪木屋露台·蓝调时刻·落雪纷飞, an alpine chalet terrace at blue hour with falling snow and warm window glow behind as background accents only. Pose & action: 倚栏回眸、单手撩开羽绒服前襟、雪粒落于肩头. Emotional micro-expression: 俏皮度假·反差萌. Story props: 一副滑雪镜挂于领口 + 纷飞落雪. Motion beyond the frame: 雪白羽绒服下摆与发丝随画框外风雪扬起. Wardrobe: she wears a puffy quilted down jacket (a bulky, thigh-length winter puffer in 雪白) worn OPEN and unzipped — the jacket sleeves cover her arms and shoulders, and it hangs open in a deep V that frames her cleavage while the front panels discreetly cover her breasts; paired with ONLY a tiny 烈焰红 bikini bottom (a small bottom only, no bikini top) — her bare midriff between the jacket hem and the bikini, and her long bare legs below, are softly lit; no dress, no gown, no robe, no long skirt, no coat zipped closed, no shirt. The human figure is the unmistakable focal point: the deliberate styling contrast of the bulky winter jacket against the minimal bikini and bare skin is the concept. Lighting: 蓝调雪光·暖窗补光. Style: 电影感时尚大片·叙事感·超写实. Composition: 85mm 中近景环境人像·前景景深层. Camera: 85mm. Hyper-realistic cinematic fashion editorial photography, soft rim light, shallow depth of field, luxurious skin rendering, tasteful and artistic, non-sexualized, fully clothed in the minimal set described. Negative: gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, long coat, trench coat, parka past hips, jacket fully zipped hiding cleavage, shirt, tee, sweater, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated."
+      },
+      "prompt_text": "Cinematic medium-close-up artistic portrait with strong narrative storytelling of a fictional glamorous ski-resort woman, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. The decisive narrative moment: 雪场露台·羽绒服半敞的俏皮回眸. Scene & context: 阿尔卑斯风雪木屋露台·蓝调时刻·落雪纷飞, an alpine chalet terrace at blue hour with falling snow and warm window glow behind as background accents only. Pose & action: 倚栏回眸、单手撩开羽绒服前襟、雪粒落于肩头. Emotional micro-expression: 俏皮度假·反差萌. Story props: 一副滑雪镜挂于领口 + 纷飞落雪. Motion beyond the frame: 雪白羽绒服下摆与发丝随画框外风雪扬起. Wardrobe: she wears a puffy quilted down jacket (a bulky, thigh-length winter puffer in 雪白) worn OPEN and unzipped — the jacket sleeves cover her arms and shoulders, and it hangs open in a deep V that frames her cleavage while the front panels discreetly cover her breasts; paired with ONLY a tiny 烈焰红 bikini bottom (a small bottom only, no bikini top) — her bare midriff between the jacket hem and the bikini, and her long bare legs below, are softly lit; no dress, no gown, no robe, no long skirt, no coat zipped closed, no shirt. The human figure is the unmistakable focal point: the deliberate styling contrast of the bulky winter jacket against the minimal bikini and bare skin is the concept. Lighting: 蓝调雪光·暖窗补光. Style: 电影感时尚大片·叙事感·超写实. Composition: 85mm 中近景环境人像·前景景深层. Camera: 85mm. Hyper-realistic cinematic fashion editorial photography, soft rim light, shallow depth of field, luxurious skin rendering, tasteful and artistic, non-sexualized, fully clothed in the minimal set described. Negative: gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, long coat, trench coat, parka past hips, jacket fully zipped hiding cleavage, shirt, tee, sweater, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated."
     },
     {
       "table": "beauty_images",
@@ -320,30 +357,6 @@
         "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
       },
       "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional queen inspired by the character of the Daughter-Kingdom Queen (from the classic Chinese novel 'Journey to the West / 西游记'), reimagined as an artistic non-real-person creation (an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling the actress who portrayed this character in the 1986 TV adaptation). She has a well-proportioned, amply curved figure and a voluptuous full bust. Scene & context: the royal garden of a western-region palace at golden hour — vermilion and gilt palace pillars, gilt lanterns, drooping flowering branches and Persian-pattern golden ornaments and a delicate forehead chain as background accents only, never wrapping the figure. Pose & action: she descends the palace corridor with a regal bearing, one hand slightly raised in a queenly gesture of receiving a guest, turning her head with a dignified, composed, softly commanding gaze — a majestic yet warm pose, never a stiff standing shot and never sexualized. Wardrobe: she wears a tiny minimal golden dudou/bikini set (small triangle top with western-region gold embroidery + small bottom) plus a single extremely sheer warm-gold silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her shoulders, torso, arms and long legs are bare skin softly lit by warm golden light; the clothing is minimal and strategic, never a covering gown or robe or drape. Lighting: warm golden-hour backlight with soft rim light, cinematic color grading, garden bokeh behind her. Camera: 85mm lens, medium close-up environmental portrait. Mood: dignified, gorgeous, mysterious, regal yet tender, artistic and non-sexual. Style: cinematic fashion editorial, exotic opulence, ultra-realistic, high-end, AI-generated."
-    },
-    {
-      "table": "beauty_images",
-      "id": 825,
-      "view_count": 43,
-      "dna": {
-        "subject": "姑获鸟（中国传说·夜行游女）reinterpret，非真人仿冒",
-        "scene": "月夜密林·墨羽纷飞·夜枭啼鸣",
-        "context": "a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark (background accents only, never wrapping the figure)",
-        "lighting": "soft cinematic cool-toned key light with delicate rim light",
-        "composition": "85mm 中近景环境人像",
-        "action": "林间回眸、幽诡凄迷、夜行游女之诡艳（幽诡非性化）",
-        "motif": "一双墨翼 + 纷飞黑羽",
-        "style": "电影感时尚大片·超写实",
-        "mood": "幽诡·姑获夜行",
-        "wardrobe": "玄黑羽纹肚兜（深 V 显沟）+ 单条高透墨纱 at hip，opaque<1/4",
-        "coverage_pct": 45,
-        "camera": "85mm",
-        "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
-        "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视版本的扮演者）",
-        "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
-        "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Guhuoniao, the mysterious night-wandering bird spirit (Yexing Younv) from Chinese folklore and the ancient text Xu Zhong Ji, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark, as background accents only, never wrapping the figure. Pose & action: she turns among the trees and glances back with an eerie, haunting beauty, never sexualized. Signature motif: a pair of ink-black wings, drifting black feathers in the air. Wardrobe: an ink-black dudou with feather-pattern embroidery and deep V neckline showing generous cleavage plus small bottom, plus a single extremely sheer black silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: eerie, haunting, moonlit-feather-dark, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
-      },
-      "prompt_text": "Cinematic medium-close-up artistic portrait of a fictional Guhuoniao, the mysterious night-wandering bird spirit (Yexing Younv) from Chinese folklore and the ancient text Xu Zhong Ji, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. Scene & context: a moonlit dense forest, ink-black feathers drifting down, a night owl calling in the dark, as background accents only, never wrapping the figure. Pose & action: she turns among the trees and glances back with an eerie, haunting beauty, never sexualized. Signature motif: a pair of ink-black wings, drifting black feathers in the air. Wardrobe: an ink-black dudou with feather-pattern embroidery and deep V neckline showing generous cleavage plus small bottom, plus a single extremely sheer black silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: eerie, haunting, moonlit-feather-dark, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
     }
   ],
   "fallback_seeds": [
