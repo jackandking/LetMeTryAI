@@ -354,6 +354,8 @@ const EVENT_SUMMARY_URL = 'https://letmetry.cn/api/track/summary';
 const KS_TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
 const KS_REFRESH_URL = 'https://letmetry.cn/oauth/kuaishou/refresh';
 const KS_OPEN_API = 'https://open.kuaishou.com';
+// 发件人用业务公开邮箱（nanrenbao/privacy.html 对外留的就是这个），可用 env 覆盖
+const KUAISHOU_EMAIL_FROM = process.env.KUAISHOU_EMAIL_FROM || 'letmetryx@163.com';
 const KS_APP_ID = 'ks683421244533878879';
 const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), 'state', 'kuaishou-follow', 'app-config.local.json');
 
@@ -1013,7 +1015,7 @@ async function sendEmailWithSystemMail(to, subject, body, attachmentPath) {
 
     const date = new Date().toUTCString();
     const emailContent = `To: ${to}
-From: daily-report@letmetryai.cn
+From: ${KUAISHOU_EMAIL_FROM}
 Subject: =?UTF-8?B?${Buffer.from(subject).toString('base64')}?=
 Date: ${date}
 MIME-Version: 1.0

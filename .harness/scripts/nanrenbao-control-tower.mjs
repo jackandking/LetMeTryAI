@@ -30,6 +30,8 @@ const KR_DIRS = [
   REPORTS,
 ];
 const EMAIL_TO = 'jackandking@163.com';
+// 发件人用业务公开邮箱（nanrenbao/privacy.html 里对外留的就是这个），可用 env 覆盖
+const EMAIL_FROM = process.env.CONTROL_TOWER_EMAIL_FROM || 'letmetryx@163.com';
 const AGENTMAIL_API_KEY = process.env.AGENTMAIL_API_KEY ||
   'am_us_8ad8e7f3b27ce401a22901ee8ab1108e290efe027f80b66b0ab434f6f9b2b5b4';
 
@@ -257,7 +259,7 @@ async function sendEmailWithSystemMail(to, subject, body) {
   await execAsync('test -x /usr/sbin/sendmail');
   const date = new Date().toUTCString();
   const emailContent = `To: ${to}
-From: control-tower@letmetryai.cn
+From: ${EMAIL_FROM}
 Subject: =?UTF-8?B?${Buffer.from(subject).toString('base64')}?=
 Date: ${date}
 MIME-Version: 1.0
