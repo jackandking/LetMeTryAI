@@ -1,0 +1,104 @@
+# push 到 main 自动把前端同步到腾讯云 Lighthouse（letmetryai.cn）
+# 背景：2026-11-07 ICP 备案整改，域名解析由 GitHub Pages 切至 43.143.241.181。
+#       GitHub Pages 不再承载线上流量，必须由 CI 主动推送到自有服务器。
+#
+# ⚠️ 核心纪律（踩过的坑，别改）：
+#   1) 绝不加 --delete / git clean。nanrenbao/flywheel 下约 475 个图片资产（534MB）
+#      不在 git 版本控制内，是服务器上的状态；带 --delete 会直接删光线上图库。
+#   2) 只同步 git 跟踪的内容，.git/.github/.automation/.harness/node_modules 全部排除。
+#   3) 图片资产新增/更新仍需手动跑 .automation/deploy_lighthouse.sh（本机全量同步）。
+#   4) 远程脚本经 stdin heredoc 下发，不要拼成 ssh argv（引号会被远程 shell 吃掉）。
+
+name: Deploy letmetryai.cn to Lighthouse
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-letmetryai-lighthouse
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: rsync to Lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup SSH (dedicated deploy key)
+        env:
+          LWS_SSH_KEY: ${{ secrets.LWS_SSH_KEY }}
+          LWS_KNOWN_HOSTS: ${{ secrets.LWS_KNOWN_HOSTS }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$LWS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$LWS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null   # 密钥格式自检
+          ssh -o BatchMode=yes -p "$PORT" "$USER@$HOST" 'echo "SSH OK: $(hostname)"'
+
+      - name: Sync tracked site files (no --delete)
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DIR: ${{ secrets.DEPLOY_DIR }}
+        run: |
+          set -euo pipefail
+          rsync -az --stats \
+            -e "ssh -o BatchMode=yes -p ${PORT}" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.automation/' \
+            --exclude='.harness/' \
+            --exclude='node_modules/' \
+            --exclude='.workbuddy/' \
+            --exclude='.kimi/' \
+            --exclude='.minimax/' \
+            --exclude='.agents/' \
+            --exclude='.learnings/' \
+            --exclude='.gitignore' \
+            --exclude='.eslintrc.js' \
+            --exclude='.prettierrc.js' \
+            ./ "${USER}@${HOST}:${DIR}/"
+
+      - name: Verify live site
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DIR: ${{ secrets.DEPLOY_DIR }}
+        run: |
+          set -euo pipefail
+          ssh -o BatchMode=yes -p "$PORT" "$USER@$HOST" bash -s -- "$DIR" <<'REMOTE_SCRIPT'
+            set -euo pipefail
+            DIR="$1"
+            # 备案号页脚必须存在（ICP 整改项②）
+            if ! grep -q '京ICP备2024092319号-1' "$DIR/index.html"; then
+              echo "::error:: 首页缺少 ICP 备案号页脚"; exit 1
+            fi
+            # 图片资产健康度抽查：存在即说明未被误删
+            img_count=$(find "$DIR/nanrenbao/flywheel" -type f 2>/dev/null | wc -l)
+            echo "flywheel assets: $img_count"
+            if [ "$img_count" -lt 100 ]; then
+              echo "::error:: 图片资产异常减少，疑似误删"; exit 1
+            fi
+            code=$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: letmetryai.cn' http://127.0.0.1/)
+            echo "local HTTP: $code"
+            [ "$code" = "301" ] || [ "$code" = "200" ] || { echo "::error:: 站点返回 $code"; exit 1; }
+          REMOTE_SCRIPT
+          echo "Live check: https://letmetryai.cn/ HTTP $(curl -s -o /dev/null -w '%{http_code}' https://letmetryai.cn/)"

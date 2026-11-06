@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # 把 LetMeTryAI 静态站同步到 Lighthouse（letmetryai.cn 自 2026-11-07 起解析至 43.143.241.181）
 # 背景：ICP 备案整改要求备案域名解析至腾讯云大陆服务器，GitHub Pages 不再承载线上流量。
+#
+# ⚠️ 2026-11-07 起已由 .github/workflows/deploy-lighthouse.yml 接管：push main 自动部署
+#    git 跟踪的内容。本脚本降级为两个用途：
+#      a) 同步未纳入 git 的图片资产（nanrenbao/flywheel 下约 475 个文件 / 534MB）；
+#      b) CI 故障时的手动兜底。
+#    注意：CI 的 rsync 刻意不带 --delete 以保护这些图片；本脚本默认同样不带。
 # 用法：
 #   bash .automation/deploy_lighthouse.sh            # 同步
 #   bash .automation/deploy_lighthouse.sh --dry-run # 只看会传什么
