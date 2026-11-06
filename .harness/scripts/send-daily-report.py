@@ -7,7 +7,7 @@ import sys
 from email.message import EmailMessage
 
 
-DEFAULT_FROM_EMAIL = os.environ.get("SEND_EMAIL_FROM", "harness@letmetryai.cn")
+DEFAULT_FROM_EMAIL = os.environ.get("SEND_EMAIL_FROM", "letmetryx@163.com")
 DEFAULT_SENDMAIL_PATH = os.environ.get("SENDMAIL_PATH", "/usr/sbin/sendmail")
 
 

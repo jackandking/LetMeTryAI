@@ -7,7 +7,7 @@ from email.mime.application import MIMEApplication
 
 
 API_KEY = os.environ.get("AGENTMAIL_API_KEY") or "am_us_8ad8e7f3b27ce401a22901ee8ab1108e290efe027f80b66b0ab434f6f9b2b5b4"
-DEFAULT_FROM_EMAIL = os.environ.get("SEND_EMAIL_FROM", "daily-report@letmetryai.cn")
+DEFAULT_FROM_EMAIL = os.environ.get("SEND_EMAIL_FROM", "letmetryx@163.com")
 DEFAULT_SENDMAIL_PATH = os.environ.get("SENDMAIL_PATH", "/usr/sbin/sendmail")
 
 
