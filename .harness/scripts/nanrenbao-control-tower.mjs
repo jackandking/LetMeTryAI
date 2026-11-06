@@ -13,6 +13,10 @@
 
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const { sendViaVault } = require('./lib/smtp-mail.cjs');
 
 const HOME = process.env.HOME || '/Users/jak';
 const PROJECT = path.join(HOME, 'LetMeTryAI');
@@ -279,8 +283,19 @@ ${Buffer.from(body).toString('base64')}`;
   }
 }
 
-// 主用系统 sendmail（与 daily-kuaishou-report.js 一致），AgentMail 作为兜底
+// 主用 Vault 凭据 + smtp.163.com 直发（与后端 quguona_order.js 同一条发信链路），
+// 绕开本机 postfix/postdrop 限制与 SPF 拦信；失败再退系统 sendmail / AgentMail。
 async function sendEmail(subject, body) {
+  try {
+    const info = await sendViaVault({
+      to: EMAIL_TO, subject, text: body,
+      from: EMAIL_FROM, fromName: '男人宝飞轮控制塔',
+    });
+    log('INFO', `控制塔日报已通过 ${info.host} 直发（发件 ${info.user}）`);
+    return true;
+  } catch (e) {
+    log('WARN', `163 SMTP 直发失败(${e.message})，回退系统 sendmail`);
+  }
   try {
     await sendEmailWithSystemMail(EMAIL_TO, subject, body);
     log('INFO', '控制塔日报已通过系统 sendmail 推送');

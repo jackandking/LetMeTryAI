@@ -18,6 +18,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 import {
     ensureDirectory,
     ensureParentDirectory,
@@ -28,6 +29,9 @@ import {
 import { buildUsageReport, formatEmailBody as formatAdoptionEmail } from './lib/usage-report-builder.js';
 import { requestOfficialAccessToken } from './kuaishou-follow-api.js';
 import { loadFollowAppConfigs } from './kuaishou-follow-config.js';
+
+const require = createRequire(import.meta.url);
+const { sendViaVault } = require('./lib/smtp-mail.cjs');
 
 const PROJECT_ROOT = resolveProjectRoot(import.meta.url);
 const RUNTIME_DIR = resolveRuntimeDir(import.meta.url);
@@ -1044,6 +1048,24 @@ async function sendEmail(report, adoptionReport, deltaReport, trendReport, dateS
     const fanLabel = accountInfo ? ` ${accountInfo.fan}粉丝` : '';
     const subject = `[快手日报] ${dateStr} |${fanLabel} ${report.summary.totalDaren}达人 ${report.summary.totalWorks}作品 ${report.summary.totalExposure.toLocaleString()}曝光`;
     const attachmentPath = path.join(CONFIG.outputDir, `${filename}.csv`);
+
+    // 首选：Vault 凭据 + smtp.163.com 直发（与后端 quguona_order.js 同一条发信链路）。
+    // 绕开本机 postfix/postdrop 限制与 SPF 拦信；凭据运行时取、用完即丢。
+    try {
+        let textBody = body;
+        if (fs.existsSync(attachmentPath)) {
+            const csvContent = fs.readFileSync(attachmentPath, 'utf-8');
+            textBody += '\n\n--- CSV Data Preview ---\n' + csvContent.split('\n').slice(0, 15).join('\n') + '\n... (see attachment for full data)';
+        }
+        const info = await sendViaVault({
+            to: CONFIG.emailTo, subject, text: textBody,
+            from: KUAISHOU_EMAIL_FROM, fromName: '男人宝·快手日报',
+        });
+        log('INFO', `Email sent via 163 SMTP (${info.host}, ${info.user})`);
+        return true;
+    } catch (e) {
+        log('WARN', `163 SMTP 直发失败: ${e.message}`);
+    }
 
     // Try AgentMail first
     try {
