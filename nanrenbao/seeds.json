@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T00:28:33.663378Z",
+  "updated_at": "2026-11-06T01:05:03.489270Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -71,9 +71,9 @@
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 394,
+        "sum": 395,
         "n": 1,
-        "avg": 394.0
+        "avg": 395.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
@@ -103,9 +103,9 @@
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 394,
+        "sum": 395,
         "n": 1,
-        "avg": 394.0
+        "avg": 395.0
       },
       {
         "value": "执著·清丽天真",
@@ -167,7 +167,7 @@
     "camera": [
       {
         "value": "85mm",
-        "sum": 1644,
+        "sum": 1645,
         "n": 246,
         "avg": 6.7
       },
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 394,
+      "view_count": 395,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
