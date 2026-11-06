@@ -352,6 +352,7 @@ function appendTopicPerformance(report, dateStr, projectRoot) {
 const EVENT_SUMMARY_URL = 'https://letmetry.cn/api/track/summary';
 
 const KS_TOKEN_URL = 'https://letmetry.cn/oauth/kuaishou/token';
+const KS_REFRESH_URL = 'https://letmetry.cn/oauth/kuaishou/refresh';
 const KS_OPEN_API = 'https://open.kuaishou.com';
 const KS_APP_ID = 'ks683421244533878879';
 const KS_FOLLOW_CONFIG_FILE = path.join(resolveRuntimeDir(import.meta.url), 'state', 'kuaishou-follow', 'app-config.local.json');
@@ -360,7 +361,16 @@ async function fetchAccountInfo() {
     try {
         const tokenResp = await fetch(KS_TOKEN_URL);
         if (!tokenResp.ok) return null;
-        const { access_token } = await tokenResp.json();
+        const tokenJson = await tokenResp.json();
+        let access_token = tokenJson.access_token;
+        // access_token 常过期，但服务端 /refresh 可用 → 过期时主动刷新，否则 user_info 必失败
+        if (tokenJson.access_token_expired || !access_token) {
+            const refreshResp = await fetch(KS_REFRESH_URL);
+            if (refreshResp.ok) {
+                const refreshJson = await refreshResp.json();
+                if (refreshJson.access_token) access_token = refreshJson.access_token;
+            }
+        }
         if (!access_token) return null;
 
         const resp = await fetch(`${KS_OPEN_API}/openapi/user_info?access_token=${access_token}&app_id=${KS_APP_ID}`);

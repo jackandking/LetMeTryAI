@@ -1,0 +1,30 @@
+{
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材；当前素材均为 AI 写真镜头，需 Yingjie 确认不擦边后再把 safe/enabled 置 true。挂小程序卡片不可逆，path 里的 id 必须是已审核+已发的真实 beauty_images id。",
+  "assets": [
+    {
+      "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
+      "cover": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/r888-change-conservative-cover.png",
+      "caption": "男人宝「美女刮刮乐」新玩法上线！轻轻一刮，今日好运立现 ✨\n来男人宝玩刮刮乐，看看今天给你什么惊喜～",
+      "topics": ["刮刮乐", "男人宝", "新玩法"],
+      "safe": false,
+      "enabled": false,
+      "note": "AI 写真慢推镜头，需确认不擦边再启用"
+    },
+    {
+      "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/r888-change-kenburns.mp4",
+      "cover": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/r888-change-conservative-cover.png",
+      "caption": "男人宝刮刮乐，每天都有新惊喜 ✨ 轻轻一刮，好运立现～",
+      "topics": ["刮刮乐", "男人宝"],
+      "safe": false,
+      "enabled": false,
+      "note": "肯恩兹特效，需确认不擦边再启用"
+    }
+  ],
+  "miniApp": {
+    "enabled": false,
+    "appId": "ks655273748878573030",
+    "path": "pages/rewardedWebview/rewardedWebview?target=nanrenbao/beauty-scratch?id=685&showAd=true",
+    "title": "来玩刮刮乐",
+    "note": "挂卡片不可逆；id 必须是已审核+已发的真实 beauty_images id（见 nanrenbao-scratch-publish 的 published-record.json）"
+  }
+}
