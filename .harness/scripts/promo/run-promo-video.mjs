@@ -10,6 +10,10 @@
  *   - 挂小程序卡片：绑卡不可改是「单条视频级」（无 unbind / 不支持覆盖），不是账号级，
  *     下一条视频随时可换 path。故发布前强制校验 path 格式 + id 在 published-record.json 在册，
  *     校验不过直接拒绝发布（绑错只能 App 手动删视频重发，代价大）。
+ *   - 2026-11-08 事故补充：「id 在册」只证明落地页不 404，不证明内容合适。published-record
+ *     里的 id 指向某张具体 beauty_images 写真；曾把保守汉服视频挂到肚兜深 V 图上，Owner
+ *     手动删视频。故增加 safeCardIds 内容安全白名单 + blockedCardIds 黑名单，白名单为空则
+ *     拒绝任何挂卡发布。视频 safe:true 与卡片 safeCardIds 是两套独立审批，缺一不可。
  *   - 隔天策略：距上次成功发布不足 36h 则跳过（launchd 每天跑，脚本控频）。
  *
  * 用法：
@@ -64,6 +68,12 @@ function validateMiniPath(mini) {
   if (!m) throw new Error(`小程序卡片 path 格式不合法（绑错改不了，已拒绝发布）: ${p}`);
   if (!mini.appId) throw new Error('miniApp.appId 缺失，已拒绝挂卡发布');
   const id = Number(m[1]);
+  // 「在册」只保证落地页不 404，不保证图片内容适合挂在这条视频下。
+  // 2026-11-08 事故：685 在册且格式合法，但落地页是肚兜深 V 写真，与保守汉服视频相反。
+  const blocked = Array.isArray(mini.blockedCardIds) ? mini.blockedCardIds.map(Number) : [];
+  if (blocked.includes(id)) throw new Error(`卡片 id=${id} 在 blockedCardIds 黑名单（2026-11-08 事故：落地页内容与视频不符、Owner 手动删视频），拒绝挂卡发布`);
+  const safeIds = Array.isArray(mini.safeCardIds) ? mini.safeCardIds.map(Number) : [];
+  if (!safeIds.includes(id)) throw new Error(`卡片 id=${id} 不在 safeCardIds 内容安全白名单（当前为空：无任何落地页 id 通过不擦边复核），拒绝挂卡发布；须 Owner 复核该 id 指向的图片后再加入白名单`);
   let rec;
   try { rec = JSON.parse(fs.readFileSync(PUBLISHED_RECORD, 'utf-8')); }
   catch (e) { throw new Error(`读不到 published-record.json(${PUBLISHED_RECORD})，拒绝挂卡发布: ${e.message}`); }

@@ -190,12 +190,20 @@ function inspectOwnedVideo() {
   const recordPath = path.join(HARNESS_LOCAL, 'state', 'promo-video', 'promo-video-publish.json');
   const arr = readJsonSafe(recordPath);
   if (Array.isArray(arr) && arr.length) {
-    const last = arr[arr.length - 1];
-    const lastDate = last.date ? new Date(last.date + 'T00:00:00') : null;
-    const ageDays = lastDate ? (Date.now() - lastDate.getTime()) / 86400000 : Infinity;
-    if (ageDays < 2) return { beat: '④ 自有账号宣传视频', status: 'green', lastRun: last.date || '?', note: `最近发布于 ${last.date}（隔天策略生效）` };
-    if (ageDays < 7) return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前，隔天策略下偏久）` };
-    return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前）— 疑似停发，检查 promo-video 流水线` };
+    // voided = 该次发布已被 Owner 手动删除/作废（2026-11-08 卡片不对事故）。
+    // 作废记录不能算「已发」，否则控制塔会在视频已不存在时误报 green。
+    const valid = arr.filter(r => !r.voided);
+    if (valid.length) {
+      const last = valid[valid.length - 1];
+      const lastDate = last.date ? new Date(last.date + 'T00:00:00') : null;
+      const ageDays = lastDate ? (Date.now() - lastDate.getTime()) / 86400000 : Infinity;
+      if (ageDays < 2) return { beat: '④ 自有账号宣传视频', status: 'green', lastRun: last.date || '?', note: `最近发布于 ${last.date}（隔天策略生效）` };
+      if (ageDays < 7) return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前，隔天策略下偏久）` };
+      return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前）— 疑似停发，检查 promo-video 流水线` };
+    }
+    const v = arr[arr.length - 1];
+    return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: v.date || '?',
+      note: `最近一次发布(${v.date})已作废：${v.voidedReason || '视频被手动删除'} — 当前停发，卡片方案待重新确认` };
   }
   // 退化：探测发布产物（排除挂载快照/源码误报）
   const probeDirs = [HARNESS_LOCAL, HARNESS, REPORTS];

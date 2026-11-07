@@ -1,5 +1,5 @@
 {
-  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 用 AVFoundation 对各抽 5 帧逐帧复核：Cinematic 全程比基尼擦边，永久禁用；r888 全程银白汉服判定安全；2026-11-07 22:01 Owner 明确授权「可以发了」，assets.enabled 已置 true 启用隔天发。miniApp 默认挂卡：卡片是 ④ 段唯一转化/激励广告入口，不挂等于只涨曝光不变现；且「绑卡不可改」是单条视频级、不是账号级，下条视频随时可换 path。",
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 事故：首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片不对，Owner 判定不符并已在快手 App 手动删除视频，全面停发。教训：视频素材安全 ≠ 卡片落地页安全，两者都必须逐条复核内容，不能只验 path 格式与 id 在册。miniApp 现为 enabled:false 且 safeCardIds 为空，任何挂卡发布都会被脚本拒绝，直到 Owner 明确批准某个落地页 id。",
   "assets": [
     {
       "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
@@ -17,15 +17,17 @@
       "caption": "男人宝刮刮乐，每天都有新惊喜 ✨ 轻轻一刮，好运立现～",
       "topics": ["刮刮乐", "男人宝"],
       "safe": true,
-      "enabled": true,
-      "note": "【安全·已启用】2026-11-07 抽 5 帧复核：银白汉服月宫造型、头纱+长袍全身包裹、无暴露，慢推近镜头，判定不擦边。22:01 Owner 授权真发后置 enabled=true；按 miniApp 挂卡片。发布动作对外不可逆（删视频只能 App 手动）。"
+      "enabled": false,
+      "note": "【暂停发布】2026-11-08 Owner 反馈首次真发的卡片不对、已手动删除视频。enabled 已回退 false 止损，禁止再次自动发布，直到卡片方案复核确认。视频本身 2026-11-07 抽 5 帧复核为银白汉服、判定安全；问题在卡片不在素材。"
     }
   ],
   "miniApp": {
-    "enabled": true,
+    "enabled": false,
     "appId": "ks655273748878573030",
     "path": "pages/rewardedWebview/rewardedWebview?target=nanrenbao/beauty-scratch?id=685&showAd=true",
     "title": "来玩刮刮乐",
-    "note": "挂卡片是 ④ 段唯一转化入口（rewardedWebview + showAd=true 也是激励广告变现入口）。id=685 已在 published-record.json 的 303 个已审核已发 id 中核验；历史 1033 条挂载里 986 条用同格式、136 个 id 全部在册。绑卡不可改是单条视频级（无 unbind、不能覆盖），故发布前由脚本强制校验 path 格式 + id 在册，失败即拒绝发布。"
+    "safeCardIds": [],
+    "blockedCardIds": [685],
+    "note": "【暂停·2026-11-08 事故】首次真发挂 id=685，Owner 判定卡片不对并手动删除视频。根因：只校验了 path 格式与 id 在册，没有校验 id 指向的落地页图片内容 —— 685 对应的是极小绯红肚兜/深 V/大面积裸露的褒姒写真，与银白汉服保守视频完全相反，且会把用户导向擦边内容。另：published-record.json 的 id 是「星火单图任务」用的（达人接单视频解锁某张图），不等于自有官方号宣传视频的通用入口。safeCardIds 为空 = 没有任何 id 通过内容安全复核，脚本在挂卡前一律拒绝发布；必须由 Owner 逐条确认落地页图片不擦边后加入白名单。"
   }
 }
