@@ -1,5 +1,5 @@
 {
-  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 用 AVFoundation 对各抽 5 帧逐帧复核：Cinematic 全程比基尼擦边，永久禁用；r888 全程银白汉服判定安全，但 assets.enabled 仍为 false —— 真发闸待 Owner 明确授权。miniApp 默认挂卡：卡片是 ④ 段唯一转化/激励广告入口，不挂等于只涨曝光不变现；且「绑卡不可改」是单条视频级、不是账号级，下条视频随时可换 path。",
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 用 AVFoundation 对各抽 5 帧逐帧复核：Cinematic 全程比基尼擦边，永久禁用；r888 全程银白汉服判定安全；2026-11-07 22:01 Owner 明确授权「可以发了」，assets.enabled 已置 true 启用隔天发。miniApp 默认挂卡：卡片是 ④ 段唯一转化/激励广告入口，不挂等于只涨曝光不变现；且「绑卡不可改」是单条视频级、不是账号级，下条视频随时可换 path。",
   "assets": [
     {
       "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
@@ -17,8 +17,8 @@
       "caption": "男人宝刮刮乐，每天都有新惊喜 ✨ 轻轻一刮，好运立现～",
       "topics": ["刮刮乐", "男人宝"],
       "safe": true,
-      "enabled": false,
-      "note": "【安全】2026-11-07 抽 5 帧复核：银白汉服月宫造型、头纱+长袍全身包裹、无暴露，慢推近镜头，判定不擦边。enabled 保持 false 等 Owner 明确授权真发（删视频只能 App 手动）。启用时会按 miniApp 挂卡片。"
+      "enabled": true,
+      "note": "【安全·已启用】2026-11-07 抽 5 帧复核：银白汉服月宫造型、头纱+长袍全身包裹、无暴露，慢推近镜头，判定不擦边。22:01 Owner 授权真发后置 enabled=true；按 miniApp 挂卡片。发布动作对外不可逆（删视频只能 App 手动）。"
     }
   ],
   "miniApp": {
