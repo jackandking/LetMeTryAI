@@ -12,7 +12,14 @@ NODE="/Users/jak/.workbuddy/binaries/node/versions/22.22.2-6/bin/node"
 LOGDIR="$REPO/.harness/.local/exports/metrics/kuaishou/daily"
 LOG="$LOGDIR/daily-report.cron.log"
 
-export PATH="/Users/jak/.workbuddy/binaries/node/versions/22.22.2-6/bin:$PATH"
+# WorkBuddy 升级 node 后带版本号的绝对路径会失效：回退到已装的最新版本，再退到 PATH
+if [ ! -x "$NODE" ]; then
+  NODE="$(ls -1 /Users/jak/.workbuddy/binaries/node/versions/*/bin/node 2>/dev/null | sort | tail -1)"
+fi
+if [ ! -x "$NODE" ]; then NODE="$(command -v node 2>/dev/null || true)"; fi
+if [ ! -x "$NODE" ]; then echo "node not found (check WorkBuddy node install)" >&2; exit 1; fi
+
+export PATH="$(dirname "$NODE"):$PATH"
 cd "$REPO" || exit 1
 mkdir -p "$LOGDIR"
 
