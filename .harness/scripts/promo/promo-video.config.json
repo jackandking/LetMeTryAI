@@ -1,5 +1,5 @@
 {
-  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 事故：首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片不对，Owner 判定不符并已在快手 App 手动删除视频，全面停发。教训：视频素材安全 ≠ 卡片落地页安全，两者都必须逐条复核内容，不能只验 path 格式与 id 在册。miniApp 现为 enabled:false 且 safeCardIds 为空，任何挂卡发布都会被脚本拒绝，直到 Owner 明确批准某个落地页 id。",
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 事故：首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片点开 404，Owner 已在快手 App 手动删除视频，全面停发。根因：把 published-record.json 的「在册」当成「能打开」，漏看挂载监控里 685 展示 13113 次 / 点击进入 0 次的 404 信号。现 miniApp.enabled=false、safeCardIds 为空，且脚本强制用 plcClickEnterCnt>0 + 近期在线作为可达判据，任何未验证卡片一律拒绝发布。",
   "assets": [
     {
       "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
@@ -28,6 +28,7 @@
     "title": "来玩刮刮乐",
     "safeCardIds": [],
     "blockedCardIds": [685],
-    "note": "【暂停·2026-11-08 事故】首次真发挂 id=685，Owner 判定卡片不对并手动删除视频。根因：只校验了 path 格式与 id 在册，没有校验 id 指向的落地页图片内容 —— 685 对应的是极小绯红肚兜/深 V/大面积裸露的褒姒写真，与银白汉服保守视频完全相反，且会把用户导向擦边内容。另：published-record.json 的 id 是「星火单图任务」用的（达人接单视频解锁某张图），不等于自有官方号宣传视频的通用入口。safeCardIds 为空 = 没有任何 id 通过内容安全复核，脚本在挂卡前一律拒绝发布；必须由 Owner 逐条确认落地页图片不擦边后加入白名单。"
+    "candidateCardIds": [826, 882, 657, 678, 664, 717, 718],
+    "note": "【暂停·2026-11-08 404 事故】path 里的 685 是事故现场，禁止使用。根因：published-record.json 只是「发过星火任务」的去重表，不证明 target 在小程序侧能打开；685 在挂载监控里 5 条记录、13113 次展示、点击 0、进入小程序 0（对照 826：183 条挂载、132 次进入），且 11-04 被 retitle 重新提交进入 3-5 工作日审核后无上线痕迹 —— 卡片点开 404。candidateCardIds 是从 plcClickEnterCnt>0 且 14 天内仍在线的 id 中挑的实证可打开候选，仅供 Owner 选择，不代表已批准。脚本现强制 verifyCardOnline() 校验可达性；safeCardIds 为空则一律拒绝挂卡。另：卡片标题「来玩刮刮乐」也是自编的，SKILL.md 示例未传 title（默认「了解更多」），重发前需一并确认。"
   }
 }
