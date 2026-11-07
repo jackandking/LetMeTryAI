@@ -139,10 +139,41 @@ function inspectFollowAndFans() {
   };
 }
 
+// daily-kuaishou-report.js 是全量拉取（~1000 个任务逐个请求，约 30 分钟），
+// 且 kuaishou_report_*.json / account_history.jsonl 都在最后才写。若此时巡检，
+// 「文件不存在」并不代表故障。读 wrapper 的 cron 日志判断本趟是否仍在生成中。
+function dailyReportInProgress() {
+  const logPath = path.join(HARNESS_LOCAL, 'exports', 'metrics', 'kuaishou', 'daily', 'daily-report.cron.log');
+  let txt;
+  try { txt = fs.readFileSync(logPath, 'utf8'); } catch { return null; }
+  let lastRun = null, lastDone = null;
+  for (const line of txt.split('\n')) {
+    const m = line.match(/^(\S+)\s+===\s+(run|done)/);
+    if (!m) continue;
+    if (m[2] === 'run') lastRun = m[1]; else lastDone = m[1];
+  }
+  if (!lastRun) return null;
+  if (lastDone && lastDone >= lastRun) return null; // 本趟已结束
+  const t = Date.parse(lastRun);
+  if (!Number.isFinite(t)) return null;
+  const ageMin = (Date.now() - t) / 60000;
+  if (ageMin < 0 || ageMin > 120) return null; // 超过 2 小时视为卡住，仍按故障报
+  return { startedAt: lastRun, ageMin: Math.round(ageMin) };
+}
+
 function inspectMeasurementTower() {
   // 综合度量日报 (daily-kuaishou-report.js)：产出 kuaishou_report_*.json + account_history.jsonl
   const kr = latestFile(KR_DIRS, f => f.startsWith('kuaishou_report_') && f.endsWith('.json'));
   const fresh = kr && daysSince(kr.st) < 2;
+  const prog = dailyReportInProgress();
+  if (prog && !fresh) {
+    return {
+      beat: '⑤ 综合度量日报 (daily-kuaishou-report)',
+      status: 'unknown',
+      lastRun: kr ? localYmd(kr.st.mtime) : '生成中',
+      note: `本趟全量日报正在生成（启动 ${prog.startedAt}，已 ${prog.ageMin} 分钟）：逐个拉 ~1000 个任务、产出集中在末尾，约需 30 分钟 — 非故障`,
+    };
+  }
   let note = '';
   if (!kr) note = 'kuaishou_report_*.json 全树未找到 — daily-kuaishou-report 未产出(可能未调度/cookie过期静默退出)';
   else if (daysSince(kr.st) >= 2) note = `综合度量日报已 ${daysSince(kr.st).toFixed(1)} 天未刷新`;
