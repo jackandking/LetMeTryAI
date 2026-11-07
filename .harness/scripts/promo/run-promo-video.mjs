@@ -7,7 +7,9 @@
  *
  * 安全约束（铁律）：
  *   - 只发布 config 里 safe:true 且 enabled:true 的素材；默认全 false，需人工确认不擦边后开启。
- *   - 挂小程序卡片不可逆，且 config.miniApp.enabled 默认 false；开启需填真实 beauty_images id。
+ *   - 挂小程序卡片：绑卡不可改是「单条视频级」（无 unbind / 不支持覆盖），不是账号级，
+ *     下一条视频随时可换 path。故发布前强制校验 path 格式 + id 在 published-record.json 在册，
+ *     校验不过直接拒绝发布（绑错只能 App 手动删视频重发，代价大）。
  *   - 隔天策略：距上次成功发布不足 36h 则跳过（launchd 每天跑，脚本控频）。
  *
  * 用法：
@@ -33,6 +35,8 @@ const RECORD_FILE = path.join(STATE_DIR, 'promo-video-publish.json');
 const PUBLISH_MJS = process.env.PUBLISH_MJS ||
   '/Users/jak/.workbuddy/skills/kuaishou-openapi-publish/publish.mjs';
 const NODE = process.env.PROMO_NODE || '/Users/jak/.workbuddy/binaries/node/versions/22.22.2-6/bin/node';
+const PUBLISHED_RECORD = process.env.PROMO_PUBLISHED_RECORD ||
+  path.join(HOME, '.workbuddy', 'skills', '@letmetry', 'nanrenbao-scratch-publish', 'published-record.json');
 const MIN_GAP_MS = 36 * 3600 * 1000; // 隔天
 
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -50,6 +54,22 @@ function pickAsset(cfg, state) {
   if (!enabled.length) return null;
   const nextIndex = (state.lastIndex + 1) % enabled.length;
   return { asset: enabled[nextIndex], nextIndex };
+}
+
+// 卡片一旦绑错无法改（无 unbind、bind 不支持覆盖），只能 App 手动删视频重发。
+// 所以在 spawn publish.mjs 之前把 path 格式和 beauty_images id 在册性一次性验死。
+function validateMiniPath(mini) {
+  const p = mini.path || '';
+  const m = p.match(/^pages\/rewardedWebview\/rewardedWebview\?target=nanrenbao\/beauty-scratch\?id=(\d+)&showAd=true$/);
+  if (!m) throw new Error(`小程序卡片 path 格式不合法（绑错改不了，已拒绝发布）: ${p}`);
+  if (!mini.appId) throw new Error('miniApp.appId 缺失，已拒绝挂卡发布');
+  const id = Number(m[1]);
+  let rec;
+  try { rec = JSON.parse(fs.readFileSync(PUBLISHED_RECORD, 'utf-8')); }
+  catch (e) { throw new Error(`读不到 published-record.json(${PUBLISHED_RECORD})，拒绝挂卡发布: ${e.message}`); }
+  const arr = Array.isArray(rec.published) ? rec.published : [];
+  if (!arr.includes(id)) throw new Error(`卡片 id=${id} 不在 published-record.json 的 ${arr.length} 个已审核已发 id 中，拒绝挂卡发布（点开会 404）`);
+  return id;
 }
 
 async function checkToken() {
@@ -83,12 +103,12 @@ async function main() {
   if (a.cover) env.KS_COVER = path.isAbsolute(a.cover) ? a.cover : path.resolve(__dirname, a.cover);
   const mini = cfg.miniApp || {};
   let miniNote = '(不挂小程序卡片)';
-  if (mini.enabled && mini.appId && mini.path && !mini.path.includes('<真实')) {
+  if (mini.enabled) {
+    // 不静默降级：既然声明要挂卡，参数不合法就整趟拒绝，避免「以为挂了其实没挂」。
+    const id = validateMiniPath(mini);
     env.KS_MINI_APP_ID = mini.appId; env.KS_MINI_PATH = mini.path;
     if (mini.title) env.KS_MINI_TITLE = mini.title;
-    miniNote = `挂卡片 path=${mini.path}`;
-  } else if (mini.enabled) {
-    log('miniApp.enabled=true 但 path 仍含占位符 <真实...>，本次不挂卡片以免绑错。');
+    miniNote = `挂卡片 path=${mini.path} (id=${id} 已校验在册)`;
   }
 
   if (DRY_RUN) {
