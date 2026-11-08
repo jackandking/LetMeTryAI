@@ -1,5 +1,5 @@
 {
-  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片点开 404，Owner 已在快手 App 手动删除视频，全面停发。【2026-11-08 10:20 根因更正】404 与卡片 id 无关：DNS 迁移（letmetryai.cn 11-07 由 GitHub Pages 切至 Lighthouse）后 nginx 默认不把无扩展名 URL 映射到 .html，卡片 target=/nanrenbao/beauty-scratch 全站 404。nginx access log 实证：11-08 00:32 id=826、06:02 id=685、06:09 id=826、06:18 id=819 的 KsWebView 请求全部 404；09:45 修 try_files $uri.html + /$1.html 后，10:11 起所有 id 均 200。现 miniApp.enabled=false、safeCardIds 为空保持停发；脚本新增站点级 HTTP 200 校验（真正的 404 判据），plcClickEnterCnt 仅作转化能力参考。",
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片点开 404，Owner 已在快手 App 手动删除视频，全面停发。【2026-11-08 10:20 根因更正】404 与卡片 id 无关：DNS 迁移（letmetryai.cn 11-07 由 GitHub Pages 切至 Lighthouse）后 nginx 默认不把无扩展名 URL 映射到 .html，卡片 target=/nanrenbao/beauty-scratch 全站 404。nginx access log 实证：11-08 00:32 id=826、06:02 id=685、06:09 id=826、06:18 id=819 的 KsWebView 请求全部 404；09:45 修 try_files $uri.html + /$1.html 后，10:11 起所有 id 均 200。【2026-11-08 18:20 恢复自动发】Owner 在 v2 全链路 e2e 中授权恢复 ④：assets[1].enabled=true、miniApp.enabled=true、卡片改用 id=826（历史 138 次进入、最近在线 11-06）、标题改回默认「了解更多」、safeCardIds=[826]。脚本新增 --force-once 供本次 e2e 绕过 36h 控频，launchd 日常仍按隔天策略。404 防线保留：发布前 GET 落地页要求 200 + text/html，plcClickEnterCnt 仅作转化能力参考。",
   "assets": [
     {
       "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
@@ -17,18 +17,18 @@
       "caption": "男人宝刮刮乐，每天都有新惊喜 ✨ 轻轻一刮，好运立现～",
       "topics": ["刮刮乐", "男人宝"],
       "safe": true,
-      "enabled": false,
-      "note": "【暂停发布】2026-11-08 Owner 反馈卡片点开 404、已手动删除视频，enabled 回退 false 止损。视频本身 2026-11-07 抽 5 帧复核为银白汉服、判定安全。404 已于当日 09:45 在 nginx 侧修复（站点级 DNS 迁移故障，非素材、非卡片 id 问题）。恢复自动发布前仍需 Owner 确认卡片 id 与标题。"
+      "enabled": true,
+      "note": "【2026-11-08 18:20 恢复自动发】Owner 在 v2 全链路 e2e 中确认卡片 id=826 + 默认标题「了解更多」，授权恢复。素材 2026-11-07 抽 5 帧复核为银白汉服、判定安全不擦边。11-08 的 404 已于当日 09:45 在 nginx 侧修复（站点级 DNS 迁移故障，非素材、非卡片 id 问题），线上落地页实测 200。首次真发（photo_id=3x3ppr3pjzgebim，挂 685）已被 Owner 手动删除，不再复用。"
     }
   ],
   "miniApp": {
-    "enabled": false,
+    "enabled": true,
     "appId": "ks655273748878573030",
-    "path": "pages/rewardedWebview/rewardedWebview?target=nanrenbao/beauty-scratch?id=685&showAd=true",
-    "title": "来玩刮刮乐",
-    "safeCardIds": [],
+    "path": "pages/rewardedWebview/rewardedWebview?target=nanrenbao/beauty-scratch?id=826&showAd=true",
+    "title": "了解更多",
+    "safeCardIds": [826],
     "blockedCardIds": [685],
     "candidateCardIds": [826, 882, 657, 678, 664, 717, 718],
-    "note": "【暂停·2026-11-08 404 事故 → 10:20 根因更正】path 里的 685 是事故现场，暂不使用。404 真因是站点级 DNS 迁移故障：letmetryai.cn 11-07 从 GitHub Pages 迁到 Lighthouse，nginx 缺 GitHub Pages 的「无扩展名 URL → .html」映射，11-08 09:45 前 /nanrenbao/beauty-scratch 全站 404，826/819 等 id 同样 404；09:45 已修，现在所有 id 的 H5 均 200。685 在挂载监控里 5 条记录（10-19~11-02，均在迁移前）、13130 次展示、0 次进入小程序 —— 这是转化/审核或数据口径疑点，不是 404 证据，不再据此拉黑为「404 卡片」。candidateCardIds 仍是 plcClickEnterCnt>0 且 14 天内在线的实证有转化候选，仅供 Owner 选择，不代表已批准。脚本现强制 verifyTargetReachable() 校验 H5 URL 返回 200，verifyCardOnline() 只作为转化能力参考；safeCardIds 为空则一律拒绝挂卡。另：卡片标题「来玩刮刮乐」也是自编的，SKILL.md 示例未传 title（默认「了解更多」），重发前需一并确认。"
+    "note": "【2026-11-08 18:20 生效】卡片 id=826（published-record 在册 303 条之一；挂载监控历史 138 次进入、最近在线 2026-11-06），标题改回 SKILL.md 示例的默认「了解更多」，不再用自编「来玩刮刮乐」。11-08 的 404 真因是站点级 DNS 迁移故障：letmetryai.cn 11-07 从 GitHub Pages 迁到 Lighthouse，nginx 缺「无扩展名 URL → .html」映射，09:45 前 /nanrenbao/beauty-scratch 全站 404，826/819/685 同样 404；09:45 已修，现所有 id 的 H5 均 200。685 保留在 blockedCardIds：其 5 条挂载（10-19~11-02）13130 次展示 / 0 次进入是转化或审核疑点，不是 404 证据。脚本强制 verifyTargetReachable() 要求 H5 返回 200 + text/html，verifyCardOnline() 只作转化能力参考；safeCardIds 白名单与素材 safe 标记仍是两套独立审批。"
   }
 }

@@ -25,6 +25,8 @@
  * 用法：
  *   node run-promo-video.mjs            # 真实发布（受 safe/enabled + 隔天约束）
  *   node run-promo-video.mjs --dry-run  # 只校验 token/素材/计划，不真正上传
+ *   node run-promo-video.mjs --force-once # 仅本次绕过 36h 控频（e2e / 事故后补发用）
+ *                                        # 注意：launchd 日常不带此参数，隔天策略不变
  *
  * 产物：
  *   .harness/.local/state/promo-video/state.json            （轮转下标 + 上次发布时间）
@@ -56,6 +58,9 @@ const SITE_BASE = process.env.PROMO_SITE_BASE || 'https://letmetryai.cn/';
 const MIN_GAP_MS = 36 * 3600 * 1000; // 隔天
 
 const DRY_RUN = process.argv.includes('--dry-run');
+// 仅本次绕过 36h 控频：用于 e2e 验收或事故后补发。发布成功后仍会写 lastPublishedAt，
+// 后续 launchd 日常调用不带此参数，隔天策略照常生效。
+const FORCE_ONCE = process.argv.includes('--force-once');
 const log = (...a) => console.log('[promo]', ...a);
 
 function loadConfig() { return JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8')); }
@@ -143,9 +148,12 @@ async function main() {
   const state = loadState();
   const now = Date.now();
 
-  if (!DRY_RUN && (now - (state.lastPublishedAt || 0)) < MIN_GAP_MS) {
+  if (!DRY_RUN && !FORCE_ONCE && (now - (state.lastPublishedAt || 0)) < MIN_GAP_MS) {
     log(`距上次发布不足 ${MIN_GAP_MS / 3600000}h，跳过（隔天策略）。`);
     return;
+  }
+  if (FORCE_ONCE && !DRY_RUN) {
+    log(`--force-once：本次显式绕过 36h 控频（距上次 ${((now - (state.lastPublishedAt || 0)) / 3600000).toFixed(1)}h）；发布后仍写入 lastPublishedAt，日常隔天策略不变。`);
   }
 
   const pick = pickAsset(cfg, state);
