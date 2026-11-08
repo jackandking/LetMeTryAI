@@ -203,7 +203,7 @@ function inspectOwnedVideo() {
     }
     const v = arr[arr.length - 1];
     return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: v.date || '?',
-      note: `最近一次发布(${v.date})已作废：${v.voidedReason || '视频被手动删除'} — 当前停发，卡片方案待重新确认` };
+      note: `最近一次发布(${v.date})已作废：${v.voidedSummary || v.voidedReason || '视频被手动删除'} — 当前停发，卡片方案待重新确认` };
   }
   // 退化：探测发布产物（排除挂载快照/源码误报）
   const probeDirs = [HARNESS_LOCAL, HARNESS, REPORTS];
@@ -250,6 +250,35 @@ function inspectPaymentIntent() {
     lastRun: pPath ? localYmd(pPath.st.mtime) : '无报告',
     note: txt ? `支付意向: ${conclusion} @ ${pPath ? localYmd(pPath.st.mtime) : '?'}` : '未找到支付意向报告',
     conclusion,
+  };
+}
+
+// ── 线上落地页可达性 ──
+// 2026-11-08 DNS 迁移事故：letmetryai.cn 从 GitHub Pages 迁到 Lighthouse 后，nginx
+// 默认不把无扩展名 URL 映射到 .html，/nanrenbao/* 整段 404 却没有任何告警。
+// 每天主动 GET 三个关键 URL，把「站点级 404」变成控制塔里看得见的红灯。
+async function inspectSiteReachability() {
+  const checks = [
+    { name: '卡片落地页', url: 'https://letmetryai.cn/nanrenbao/beauty-scratch?id=826&showAd=true' },
+    { name: '无扩展名兼容', url: 'https://letmetryai.cn/nanrenbao/appreciate' },
+    { name: '带尾斜杠兼容', url: 'https://letmetryai.cn/nanrenbao/admin/' },
+  ];
+  const results = await Promise.all(checks.map(async c => {
+    try {
+      const r = await fetch(c.url, { signal: AbortSignal.timeout(8000) });
+      const body = await r.text().catch(() => '');
+      return { ...c, ok: r.status === 200 && body.length > 1000, code: r.status, bytes: body.length };
+    } catch (e) { return { ...c, ok: false, code: 0, bytes: 0, error: e.message }; }
+  }));
+  const bad = results.filter(r => !r.ok);
+  return {
+    beat: '⓪ 线上落地页可达性 (letmetryai.cn)',
+    status: bad.length ? 'red' : 'green',
+    lastRun: localYmd() + ' ' + new Date().toTimeString().slice(0, 8),
+    note: bad.length
+      ? `🔴 ${bad.map(r => `${r.name} HTTP ${r.code}${r.error ? ' ' + r.error : ''}`).join('；')} — 落地页可能整段 404，先查 nginx try_files 与 DNS 解析`
+      : results.map(r => `${r.name} 200/${r.bytes}B`).join(' · '),
+    checks: results,
   };
 }
 
@@ -367,6 +396,7 @@ async function main() {
   const noEmail = process.argv.includes('--no-email');
   log('INFO', `控制塔启动 ${dateStr}`);
   const beats = [
+    await inspectSiteReachability(),
     inspectEvolve(),
     inspectDistribution(),
     inspectFollowAndFans(),
