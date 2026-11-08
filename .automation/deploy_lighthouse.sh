@@ -12,6 +12,9 @@
 #       映射到同名 .html（/nanrenbao/admin → admin.html），nginx 默认不会。
 #       try_files 必须含 $uri.html，并为带尾斜杠路径加 /$1.html 兜底，
 #       否则旧书签、外部链接全部 404。配置见服务器 /etc/nginx/conf.d/letmetryai.conf。
+#    ⚠️ 快手星火任务的卡片 target 就是这类无扩展名路径
+#       （rewardedWebview?target=nanrenbao/beauty-scratch），规则失效会直接让
+#       卡片点开 404 —— 2026-11-07 05:36~11-08 09:45 事故，约 48 次真实点击被挡。
 # 用法：
 #   bash .automation/deploy_lighthouse.sh            # 同步
 #   bash .automation/deploy_lighthouse.sh --dry-run # 只看会传什么
