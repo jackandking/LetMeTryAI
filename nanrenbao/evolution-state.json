@@ -1,11 +1,11 @@
 {
-  "pushed_at": "2026-11-07T01:05:11.519206Z",
+  "pushed_at": "2026-11-09T01:05:26.792957Z",
   "champion_count": 5,
   "champions": [
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 417,
+      "view_count": 435,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -52,7 +52,7 @@
     {
       "table": "beauty_images",
       "id": 673,
-      "view_count": 86,
+      "view_count": 118,
       "dna": {
         "subject": "穆桂英（杨家将·巾帼元帅）reinterpret，非真人仿冒",
         "scene": "塞外点将台晨光·赤色战袍·令旗猎猎",
@@ -74,7 +74,7 @@
     {
       "table": "beauty_images",
       "id": 882,
-      "view_count": 63,
+      "view_count": 64,
       "dna": {
         "exp": {
           "name": "batch-contrast-5run",
