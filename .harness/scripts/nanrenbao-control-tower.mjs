@@ -197,9 +197,16 @@ function inspectOwnedVideo() {
       const last = valid[valid.length - 1];
       const lastDate = last.date ? new Date(last.date + 'T00:00:00') : null;
       const ageDays = lastDate ? (Date.now() - lastDate.getTime()) / 86400000 : Infinity;
-      if (ageDays < 2) return { beat: '④ 自有账号宣传视频', status: 'green', lastRun: last.date || '?', note: `最近发布于 ${last.date}（隔天策略生效）` };
-      if (ageDays < 7) return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前，隔天策略下偏久）` };
-      return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `最近发布于 ${last.date}（${ageDays.toFixed(1)}天前）— 疑似停发，检查 promo-video 流水线` };
+      // 2026-11-10：日报只写日期，看不出发的是哪条素材，导致 r888 同一张图连发 3 次无人发现。
+      // 现在展示素材名，并在最近 3 次全是同一素材时直接告警。
+      const asset = last.video ? path.basename(last.video) : '未知素材';
+      const recent = valid.slice(-3).map(r => r.video || '?');
+      const repeat = recent.length >= 3 && new Set(recent).size === 1
+        ? ` ⚠️ 最近 3 次发布都复用同一素材 ${path.basename(recent[0])}，应换新图` : '';
+      const tag = `最近发布于 ${last.date} · 素材 ${asset}${repeat}`;
+      if (ageDays < 2) return { beat: '④ 自有账号宣传视频', status: 'green', lastRun: last.date || '?', note: `${tag}（隔天策略生效）` };
+      if (ageDays < 7) return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `${tag}（${ageDays.toFixed(1)}天前，隔天策略下偏久）` };
+      return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: last.date || '?', note: `${tag}（${ageDays.toFixed(1)}天前）— 疑似停发，检查 promo-video 流水线` };
     }
     const v = arr[arr.length - 1];
     return { beat: '④ 自有账号宣传视频', status: 'unknown', lastRun: v.date || '?',
