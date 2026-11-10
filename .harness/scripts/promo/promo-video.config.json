@@ -1,5 +1,5 @@
 {
-  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片点开 404，Owner 已在快手 App 手动删除视频，全面停发。【2026-11-08 10:20 根因更正】404 与卡片 id 无关：DNS 迁移（letmetryai.cn 11-07 由 GitHub Pages 切至 Lighthouse）后 nginx 默认不把无扩展名 URL 映射到 .html，卡片 target=/nanrenbao/beauty-scratch 全站 404。nginx access log 实证：11-08 00:32 id=826、06:02 id=685、06:09 id=826、06:18 id=819 的 KsWebView 请求全部 404；09:45 修 try_files $uri.html + /$1.html 后，10:11 起所有 id 均 200。【2026-11-08 18:20 恢复自动发】Owner 在 v2 全链路 e2e 中授权恢复 ④：assets[1].enabled=true、miniApp.enabled=true、卡片改用 id=826（历史 138 次进入、最近在线 11-06）、标题改回默认「了解更多」、safeCardIds=[826]。脚本新增 --force-once 供本次 e2e 绕过 36h 控频，launchd 日常仍按隔天策略。404 防线保留：发布前 GET 落地页要求 200 + text/html，plcClickEnterCnt 仅作转化能力参考。",
+  "_comment": "男人宝 ④ 自有账号宣传视频 · 隔天发安全模板流水线配置。脚本只发布 safe:true 且 enabled:true 的素材。2026-11-07 逐帧复核：Cinematic 比基尼擦边永久禁用、r888 银白汉服安全。⚠️ 2026-11-08 首次真发（photo_id=3x3ppr3pjzgebim）挂的卡片点开 404，Owner 已在快手 App 手动删除视频，全面停发。【2026-11-08 10:20 根因更正】404 与卡片 id 无关：DNS 迁移（letmetryai.cn 11-07 由 GitHub Pages 切至 Lighthouse）后 nginx 默认不把无扩展名 URL 映射到 .html，卡片 target=/nanrenbao/beauty-scratch 全站 404。nginx access log 实证：11-08 00:32 id=826、06:02 id=685、06:09 id=826、06:18 id=819 的 KsWebView 请求全部 404；09:45 修 try_files $uri.html + /$1.html 后，10:11 起所有 id 均 200。【2026-11-08 18:20 恢复自动发】Owner 在 v2 全链路 e2e 中授权恢复 ④：assets[1].enabled=true、miniApp.enabled=true、卡片改用 id=826（历史 138 次进入、最近在线 11-06）、标题改回默认「了解更多」、safeCardIds=[826]。脚本新增 --force-once 供本次 e2e 绕过 36h 控频，launchd 日常仍按隔天策略。404 防线保留：发布前 GET 落地页要求 200 + text/html，plcClickEnterCnt 仅作转化能力参考。【2026-11-10 22:45 素材轮换纪律】Owner 指出 ④ 一直在复用 r888 同一张图（11-07/11-08/11-10 三次发布画面相同）。根因是 enabled 只有一条素材，pickAsset() 轮转永远选中它。已新增 .harness/scripts/promo/make-kenburns.swift：飞轮每出一张新图就产一条新片，登记到 assets 并把上一条 enabled 置 false，保证「隔天发」每次都是新素材。本次新增 r889-guyeshenzi-kenburns.mp4（源自 11-08 v2 e2e 的 889 号新图，10%/50%/90% 抽帧复核安全），r888 已停用。",
   "assets": [
     {
       "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/Cinematic_slow_push_in_portrai_2026-11-01T10-40-59.mp4",
@@ -17,8 +17,17 @@
       "caption": "男人宝刮刮乐，每天都有新惊喜 ✨ 轻轻一刮，好运立现～",
       "topics": ["刮刮乐", "男人宝"],
       "safe": true,
+      "enabled": false,
+      "note": "【2026-11-10 22:45 停用·换素材】11-07 / 11-08 / 11-10 三次发布都用这条 r888 银白汉服画面，Owner 要求换新图，故 enabled 置 false。保留为历史/备用素材，不再自动发；如需复用须重新确认。【以下为 11-08 原始记录】Owner 在 v2 全链路 e2e 中确认卡片 id=826 + 默认标题「了解更多」，授权恢复。素材 2026-11-07 抽 5 帧复核为银白汉服、判定安全不擦边。11-08 的 404 已于当日 09:45 在 nginx 侧修复（站点级 DNS 迁移故障，非素材、非卡片 id 问题），线上落地页实测 200。首次真发（photo_id=3x3ppr3pjzgebim，挂 685）已被 Owner 手动删除，不再复用。"
+    },
+    {
+      "video": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/videos/r889-guyeshenzi-kenburns.mp4",
+      "cover": "/Users/jak/LetMeTryAI/nanrenbao/flywheel/images/r889-guyeshenzi.png",
+      "caption": "月色如霜，一刮见惊喜 ✨ 男人宝刮刮乐，今天换一位古风小姐姐陪你玩～",
+      "topics": ["刮刮乐", "男人宝", "古风"],
+      "safe": true,
       "enabled": true,
-      "note": "【2026-11-08 18:20 恢复自动发】Owner 在 v2 全链路 e2e 中确认卡片 id=826 + 默认标题「了解更多」，授权恢复。素材 2026-11-07 抽 5 帧复核为银白汉服、判定安全不擦边。11-08 的 404 已于当日 09:45 在 nginx 侧修复（站点级 DNS 迁移故障，非素材、非卡片 id 问题），线上落地页实测 200。首次真发（photo_id=3x3ppr3pjzgebim，挂 685）已被 Owner 手动删除，不再复用。"
+      "note": "【2026-11-10 22:45 新素材·首次使用】源图 r889-guyeshenzi.png（姑射仙子，庄子·逍遥游）是 11-08 v2 全链路 e2e 新出、已投稿 mysql id=889 并 approved 的图，此前从未做过宣传视频。用 .harness/scripts/promo/make-kenburns.swift 生成 1080x1920 / 6s / 30fps 缓慢推镜（编译：swiftc -O ... -o /tmp/make-kenburns；执行：/tmp/make-kenburns <png> <mp4> 6 30）。10%/50%/90% 抽帧复核：方向正确（首版曾上下颠倒，已修）、推镜平滑、高领长袖不透明月白仙裙、端庄执卷、虚构脸、无露点无擦边、右下角 AI 标识。卡片沿用已验证的 id=826 + 默认标题「了解更多」。"
     }
   ],
   "miniApp": {
