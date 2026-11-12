@@ -392,7 +392,7 @@
             provinces: [...visited],
             count: visited.size,
             product: 'wood',
-            price: 129,
+            price: 49,
             referrer: document.referrer || '',
             landing: location.href,
             timestamp: Date.now(),
