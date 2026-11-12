@@ -14,7 +14,7 @@
  *   2 — critical (needs manual intervention)
  */
 
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { checkCookieExpiry } from './kuaishou-follow-auth.js';
 
@@ -22,6 +22,7 @@ const HISTORY_FILE = 'follow-history.jsonl';
 const DAILY_RUNS_DIR = 'daily-runs';
 const PENDING_QUEUE_FILE = 'pending-queue.json';
 const HOURS_WINDOW = 24;
+const ZERO_FOLLOW_STREAK_DAYS = Number(process.env.KUAISHOU_FOLLOW_ZERO_DAYS || 3) || 3;
 
 function readJsonLines(filePath) {
     if (!existsSync(filePath)) {
@@ -56,6 +57,47 @@ function readJsonFile(filePath, defaultValue = null) {
 function getRunDateKey(now = new Date()) {
     const d = new Date(now.getTime() + 8 * 60 * 60 * 1000); // Asia/Shanghai
     return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Detect the "heartbeat without output" failure mode: the cron keeps firing
+ * and reports keep being generated, but no account is actually followed.
+ * Missing daily-run files count as zero output (a missed ingest is also a bug).
+ */
+function detectZeroFollowStreak(dailyRunsDir, streakDays) {
+    const checkedDates = [];
+    let streak = 0;
+
+    for (let offset = 0; offset < streakDays; offset++) {
+        const key = getRunDateKey(new Date(Date.now() - offset * 24 * 60 * 60 * 1000));
+        const run = readJsonFile(join(dailyRunsDir, `${key}.json`), null);
+        const followed = Array.isArray(run?.hourlyRuns)
+            ? run.hourlyRuns.reduce((sum, hour) => sum + Number(hour?.followed || 0), 0)
+            : 0;
+        checkedDates.push({ date: key, followed, hasRunFile: Boolean(run) });
+        if (followed > 0) break;
+        streak++;
+    }
+
+    let lastFollowedDate = null;
+    if (existsSync(dailyRunsDir)) {
+        const files = readdirSync(dailyRunsDir)
+            .filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name))
+            .sort()
+            .reverse();
+        for (const name of files) {
+            const run = readJsonFile(join(dailyRunsDir, name), null);
+            const followed = Array.isArray(run?.hourlyRuns)
+                ? run.hourlyRuns.reduce((sum, hour) => sum + Number(hour?.followed || 0), 0)
+                : 0;
+            if (followed > 0) {
+                lastFollowedDate = name.slice(0, 10);
+                break;
+            }
+        }
+    }
+
+    return { streak, checkedDates, lastFollowedDate };
 }
 
 function analyzeHealth(repoRoot) {
@@ -117,6 +159,9 @@ function analyzeHealth(repoRoot) {
         .filter(([reason]) => reason === 'not-logged-in')
         .reduce((sum, [, count]) => sum + count, 0);
 
+    // 4b. Detect a multi-day zero-output streak while candidates are waiting
+    const zeroFollow = detectZeroFollowStreak(dailyRunsDir, ZERO_FOLLOW_STREAK_DAYS);
+
     // 5. Determine health level
     let level = 'healthy';
     const issues = [];
@@ -132,6 +177,18 @@ function analyzeHealth(repoRoot) {
     if (authExpiredRuns > 0 || notLoggedInFailures > 0) {
         level = 'critical';
         issues.push(`Auth 实际失效: ${authExpiredRuns} 次 auth-expired 停止, ${notLoggedInFailures} 次 not-logged-in 失败。请刷新 cookie`);
+    }
+
+    if (zeroFollow.streak >= ZERO_FOLLOW_STREAK_DAYS && queueSize > 0) {
+        level = 'critical';
+        const window = zeroFollow.checkedDates
+            .map(d => `${d.date}:${d.followed}${d.hasRunFile ? '' : '(缺文件)'}`)
+            .join(', ');
+        issues.push(
+            `连续 ${zeroFollow.streak} 天 0 关注，但 pending 队列仍有 ${queueSize} 个待处理` +
+            `（最后一次有效关注: ${zeroFollow.lastFollowedDate || '未找到'}；检查窗口: ${window}）。` +
+            `大概率是登录态/调度空转，请检查 worker 日志与 auth 文件。`
+        );
     }
 
     if (topFailureReason && topFailureReason[0] === 'follow-button-not-found' && topFailureReason[1] >= 3) {
@@ -175,7 +232,10 @@ function analyzeHealth(repoRoot) {
             totalAttempted,
             totalFollowed,
             totalFailed,
-            authExpiry
+            authExpiry,
+            zeroFollowStreak: zeroFollow.streak,
+            lastFollowedDate: zeroFollow.lastFollowedDate,
+            zeroFollowCheckedDates: zeroFollow.checkedDates
         }
     };
 }

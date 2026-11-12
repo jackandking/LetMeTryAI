@@ -22,6 +22,7 @@ const CRITICAL_COOKIE_NAMES = [
     'kuaishou.creator.marketing_st'
 ];
 
+const MASTER_COOKIE_NAME = 'passToken';
 const EXPIRY_SOON_HOURS = 72;
 
 export function inferKuaishouAuthScope(url = '') {
@@ -76,6 +77,15 @@ export function backupAuthStateFile(authFile) {
     return backupFile;
 }
 
+/**
+ * Check whether a stored login state can still start a browser session.
+ *
+ * Kuaishou writes several same-name cookies under different domains. The
+ * short-lived web cookies (userId / webday7_st) are refreshed by the server
+ * on the next page visit as long as the master passToken is valid, so one
+ * expired copy must not fail the whole auth check. Only an expired or missing
+ * master token is fatal. Same-name cookies are reduced to their latest copy.
+ */
 export function checkCookieExpiry(authFile) {
     const authState = readAuthStateFile(authFile);
     if (!authState || !Array.isArray(authState.cookies)) {
@@ -83,32 +93,66 @@ export function checkCookieExpiry(authFile) {
     }
 
     const nowSec = Date.now() / 1000;
-    let earliest = { expires: Infinity, name: '' };
+    const latestValid = new Map();
+    let ignoredExpiredCopies = 0;
+    let hasMasterCookie = false;
 
     for (const cookie of authState.cookies) {
         const name = String(cookie?.name || '').trim();
         if (!CRITICAL_COOKIE_NAMES.includes(name)) continue;
+        if (name === MASTER_COOKIE_NAME) hasMasterCookie = true;
+
         const expires = Number(cookie.expires || 0);
-        if (expires <= 0) continue;
-        if (expires < earliest.expires) {
-            earliest = { expires, name };
+        if (expires <= 0) continue; // session cookies carry no expiry
+        if (expires < nowSec) {
+            ignoredExpiredCopies++;
+            continue;
+        }
+
+        const previous = latestValid.get(name);
+        if (!previous || expires > previous.expires) {
+            latestValid.set(name, { name, expires });
         }
     }
 
-    if (earliest.expires === Infinity) {
-        return { expiresAt: null, ttlHours: 0, isExpired: true, isExpiringSoon: true, cookieName: '', reason: 'no-critical-cookies' };
+    // Master token exists but every copy expired: this is a real logout.
+    if (hasMasterCookie && !latestValid.has(MASTER_COOKIE_NAME)) {
+        return {
+            expiresAt: null,
+            ttlHours: 0,
+            isExpired: true,
+            isExpiringSoon: true,
+            cookieName: MASTER_COOKIE_NAME,
+            reason: 'master-token-expired',
+            ignoredExpiredCopies
+        };
     }
 
-    const ttlHours = Math.round((earliest.expires - nowSec) / 3600);
-    const expiresAt = new Date(earliest.expires * 1000).toISOString();
+    const candidates = [...latestValid.values()];
+    if (candidates.length === 0) {
+        return {
+            expiresAt: null,
+            ttlHours: 0,
+            isExpired: true,
+            isExpiringSoon: true,
+            cookieName: '',
+            reason: ignoredExpiredCopies > 0 ? 'all-critical-cookies-expired' : 'no-critical-cookies',
+            ignoredExpiredCopies
+        };
+    }
+
+    const master = latestValid.get(MASTER_COOKIE_NAME);
+    const chosen = master || candidates.sort((a, b) => a.expires - b.expires)[0];
+    const ttlHours = Math.round((chosen.expires - nowSec) / 3600);
 
     return {
-        expiresAt,
+        expiresAt: new Date(chosen.expires * 1000).toISOString(),
         ttlHours,
         isExpired: ttlHours <= 0,
         isExpiringSoon: ttlHours > 0 && ttlHours < EXPIRY_SOON_HOURS,
-        cookieName: earliest.name,
-        reason: ''
+        cookieName: chosen.name,
+        reason: master ? 'master-token' : 'no-master-token',
+        ignoredExpiredCopies
     };
 }
 
@@ -138,8 +182,11 @@ export function assertAuthValid(authFile) {
 
     const expiry = checkCookieExpiry(authFile);
     if (expiry.isExpired) {
+        const detail = expiry.expiresAt
+            ? `${expiry.cookieName} expired at ${expiry.expiresAt}`
+            : `${expiry.reason || 'auth state invalid'}`;
         throw new Error(
-            `Kuaishou auth expired (${expiry.cookieName} expired at ${expiry.expiresAt}).\n` +
+            `Kuaishou auth expired (${detail}).\n` +
             `Fix: cd .harness && npm run kuaishou:follow -- start --url https://www.kuaishou.com`
         );
     }
