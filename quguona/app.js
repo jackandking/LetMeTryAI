@@ -124,7 +124,7 @@
 
         document.getElementById('generate-btn').addEventListener('click', generateImage);
         document.getElementById('publish-btn').addEventListener('click', publishToKuaishou);
-        document.getElementById('buy-submit').addEventListener('click', submitBuyIntent);
+        document.getElementById('buy-submit').addEventListener('click', startPurchase);
         document.getElementById('close-result').addEventListener('click', () => {
             document.getElementById('result-section').classList.add('hidden');
         });
@@ -377,49 +377,51 @@
         resultImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // 实物版购买意向：极简收集（只要手机号），款式/地址等回访时确认
-    async function submitBuyIntent() {
+    // 点击「我要付款购买」：先把点击信号即时送出去（后端会立刻发邮件），
+    // 再进入独立页面收集联系方式。sendBeacon 保证页面跳转时请求不被取消。
+    function startPurchase() {
         if (visited.size === 0) {
             alert('请先标记你去过的省份');
             return;
         }
-        const phone = (document.getElementById('buy-phone').value || '').trim();
-        if (!/^1\d{10}$/.test(phone)) {
-            alert('请填写正确的 11 位手机号');
-            return;
-        }
-        const btn = document.getElementById('buy-submit');
-        btn.disabled = true;
-        btn.textContent = '提交中...';
+        const intentId = 'INT' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+        const payload = {
+            intentId: intentId,
+            deviceId: getDeviceId(),
+            nickname: getNickname() || '旅行者',
+            provinces: [...visited],
+            count: visited.size,
+            product: 'wood',
+            price: 129,
+            referrer: document.referrer || '',
+            landing: location.href,
+            timestamp: Date.now(),
+        };
+        const body = JSON.stringify(payload);
+        let sent = false;
         try {
-            const r = await fetch(BASE + '/api/quguona/custom-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({
-                    nickname: getNickname() || '旅行者',
-                    provinces: [...visited],
-                    count: visited.size,
-                    product: 'wood',
-                    name: getNickname() || '客户',
-                    phone: phone,
-                    address: '',
-                }),
-            });
-            const j = await r.json();
-            if (j.success) {
-                sendTrack('buy_intent_submit', { count: visited.size, orderId: j.orderId });
-                document.getElementById('buy-intent').classList.add('hidden');
-                document.getElementById('buy-done').classList.remove('hidden');
-            } else {
-                alert(j.message || '提交失败，请稍后再试');
-                btn.disabled = false;
-                btn.textContent = '登记购买意向';
+            if (navigator.sendBeacon) {
+                sent = navigator.sendBeacon(
+                    BASE + '/api/quguona/purchase-intent',
+                    new Blob([body], { type: 'text/plain' })
+                );
             }
-        } catch (e) {
-            alert('网络错误，请稍后再试');
-            btn.disabled = false;
-            btn.textContent = '登记购买意向';
+        } catch (e) {}
+        if (!sent) {
+            try {
+                fetch(BASE + '/api/quguona/purchase-intent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: body,
+                    keepalive: true,
+                }).catch(function () {});
+            } catch (e) {}
         }
+        sendTrack('buy_intent_click', { count: visited.size, intentId: intentId, product: 'wood' });
+        try {
+            sessionStorage.setItem('quguona_buy_context', body);
+        } catch (e) {}
+        location.href = 'buy.html?i=' + encodeURIComponent(intentId);
     }
 
     document.addEventListener('DOMContentLoaded', init);

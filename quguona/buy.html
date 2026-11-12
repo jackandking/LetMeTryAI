@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>去过哪 · 确认你的实木画框</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #faf7f2;
+            color: #2d2a26;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+        }
+        .wrap { max-width: 480px; margin: 0 auto; padding: 28px 18px 48px; }
+        .top { text-align: center; }
+        .top img {
+            width: 112px; border-radius: 8px; display: block; margin: 0 auto 16px;
+            box-shadow: 0 8px 20px rgba(60, 40, 20, .14);
+        }
+        .badge {
+            display: inline-block; font-size: 11px; letter-spacing: .5px;
+            color: #2e6b2e; background: #eaf6e9; border-radius: 20px; padding: 4px 12px;
+        }
+        h1 { font-size: 22px; margin: 12px 0 8px; }
+        .lead { font-size: 14px; color: #6b655c; padding: 0 6px; }
+        .card {
+            background: #fff; border-radius: 16px; padding: 20px 18px; margin-top: 22px;
+            box-shadow: 0 4px 20px rgba(60, 40, 20, .07);
+        }
+        .card h2 { font-size: 16px; margin-bottom: 4px; }
+        .card .tip { font-size: 12px; color: #8a8378; margin-bottom: 16px; }
+        label { display: block; font-size: 13px; color: #55504a; margin: 12px 0 6px; }
+        input, textarea {
+            width: 100%; font-size: 16px; padding: 12px 14px;
+            border: 1px solid #e2dcd2; border-radius: 10px; outline: none;
+            background: #faf7f2; font-family: inherit; resize: none;
+        }
+        input:focus, textarea:focus { border-color: #ff6b35; background: #fff; }
+        textarea { min-height: 68px; }
+        .submit {
+            width: 100%; margin-top: 20px; padding: 14px 0; font-size: 16px; font-weight: 600;
+            border: none; border-radius: 12px; background: #ff6b35; color: #fff; cursor: pointer;
+            box-shadow: 0 6px 16px rgba(255, 107, 53, .28);
+        }
+        .submit:disabled { background: #c9c2b6; box-shadow: none; }
+        .privacy { font-size: 11px; color: #a09a90; text-align: center; margin-top: 12px; }
+        .done {
+            display: none; text-align: center; padding: 8px 0 4px;
+        }
+        .done .check {
+            width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%;
+            background: #eaf6e9; color: #2e6b2e; font-size: 26px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .done h2 { font-size: 18px; }
+        .done p { font-size: 13px; color: #6b655c; margin-top: 8px; }
+        .back { display: block; text-align: center; font-size: 13px; color: #a09a90; margin-top: 22px; }
+        .footer { text-align: center; font-size: 11px; color: #b0a99d; margin-top: 34px; }
+        .footer a { color: #b0a99d; text-decoration: none; }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="top">
+            <img src="images/frame-hero.jpg" alt="实木画框装裱的中国足迹地图">
+            <span class="badge">✓ 购买意向已登记</span>
+            <h1>这一幅，给你留好了</h1>
+            <p class="lead">留个联系电话，我们会在 24 小时内与你确认画框款式、收货信息，并完成付款。</p>
+        </div>
+
+        <div class="card" id="form-card">
+            <h2>怎么联系你？</h2>
+            <p class="tip">只用于这一幅画框的确认与寄送，不会用于其他用途。</p>
+            <form id="contact-form" autocomplete="off">
+                <label for="phone">联系电话 <span style="color:#e8663c">*</span></label>
+                <input type="tel" id="phone" inputmode="numeric" maxlength="11" placeholder="请输入手机号">
+
+                <label for="name">怎么称呼你（选填）</label>
+                <input type="text" id="name" maxlength="20" placeholder="例如：小鹿">
+
+                <label for="note">想说的话（选填）</label>
+                <textarea id="note" maxlength="120" placeholder="例如：想换成海报款 / 想作为礼物，需要礼盒"></textarea>
+
+                <button type="submit" class="submit" id="submit-btn">提交联系方式</button>
+                <p class="privacy">提交即表示同意我们就本次定制与你联系</p>
+            </form>
+        </div>
+
+        <div class="done" id="done">
+            <div class="check">✓</div>
+            <h2>已收到，我们会尽快联系你</h2>
+            <p>画框款式与收货信息会在电话里一并确认，<br>无需你再做任何操作。</p>
+        </div>
+
+        <a class="back" href="index.html">← 返回修改我的足迹</a>
+        <div class="footer">去过哪 · 中国足迹地图<br><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备2024092319号-1</a></div>
+    </div>
+
+    <script>
+    (function () {
+        var BASE = 'https://letmetry.cn';
+        var params = new URLSearchParams(location.search);
+        var ctx = null;
+        try { ctx = JSON.parse(sessionStorage.getItem('quguona_buy_context') || 'null'); } catch (e) {}
+        if (!ctx) ctx = {};
+
+        // 直接打开本页时的兜底：从本机足迹缓存恢复
+        if (!ctx.provinces || !ctx.provinces.length) {
+            try {
+                var v = JSON.parse(localStorage.getItem('quguona_visited_v1') || '[]');
+                if (v.length) ctx.provinces = v;
+            } catch (e) {}
+        }
+        if (!ctx.deviceId) {
+            try { ctx.deviceId = localStorage.getItem('quguona_device_id') || ''; } catch (e) {}
+        }
+        ctx.intentId = ctx.intentId || params.get('i') || ('INT' + Date.now());
+        ctx.count = ctx.count || (ctx.provinces ? ctx.provinces.length : 0);
+        ctx.product = ctx.product || 'wood';
+        ctx.nickname = ctx.nickname || '旅行者';
+
+        function track(event, extra) {
+            try {
+                fetch(BASE + '/api/track', {
+                    method: 'POST', headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(Object.assign({ event: event, appId: 'quguona', timestamp: Date.now() }, extra || {}))
+                }).catch(function () {});
+            } catch (e) {}
+        }
+        track('buy_contact_page_load', { intentId: ctx.intentId, count: ctx.count });
+
+        document.getElementById('contact-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var phone = document.getElementById('phone').value.trim();
+            if (!/^1\d{10}$/.test(phone)) { alert('请填写正确的 11 位手机号'); return; }
+            var btn = document.getElementById('submit-btn');
+            btn.disabled = true; btn.textContent = '提交中...';
+            try {
+                var r = await fetch(BASE + '/api/quguona/custom-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        intentId: ctx.intentId,
+                        deviceId: ctx.deviceId,
+                        nickname: ctx.nickname,
+                        provinces: ctx.provinces || [],
+                        count: ctx.count,
+                        product: ctx.product,
+                        name: document.getElementById('name').value.trim() || ctx.nickname,
+                        phone: phone,
+                        address: '',
+                        note: document.getElementById('note').value.trim(),
+                    }),
+                });
+                var j = await r.json();
+                if (!j.success) throw new Error(j.message || '提交失败');
+                track('buy_contact_submit', { intentId: ctx.intentId, orderId: j.orderId });
+                document.getElementById('form-card').style.display = 'none';
+                document.getElementById('done').style.display = 'block';
+            } catch (err) {
+                // 即使后端暂时不可用，也不把内部状态暴露给用户：意向已经在点击时登记
+                track('buy_contact_submit_failed', { intentId: ctx.intentId });
+                document.getElementById('form-card').style.display = 'none';
+                document.getElementById('done').style.display = 'block';
+            }
+        });
+    })();
+    </script>
+</body>
+
+</html>

@@ -223,60 +223,83 @@ body {
     width: 100%;
 }
 
-/* 实物版购买意愿：极简一行式（手机号 + 按钮），款式/地址回访时再确认 */
+/* 实物版商品卡：只呈现成品与购买入口，履约细节留到下一步页面 */
 .buy-intent {
-    margin: 4px 0 12px;
-    padding-top: 14px;
-    border-top: 1px dashed #eee;
-}
-
-.buy-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.buy-intent input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 16px;
+    margin: 6px 0 14px;
+    padding: 18px 16px 20px;
+    background: #faf7f2;
+    border: 1px solid #f0e9de;
+    border-radius: 16px;
     text-align: center;
-    margin-bottom: 10px;
-    box-sizing: border-box;
 }
 
-.buy-intent input:focus {
-    outline: 2px solid #ffd6c4;
-    border-color: #ff6b35;
+.product-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: .5px;
+    color: #b4532a;
+    background: #fdeee5;
+    border-radius: 20px;
+    padding: 4px 12px;
 }
 
-.buy-intent .btn-primary {
+.product-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d2a26;
+    margin: 10px 0 4px;
+}
+
+.product-sub {
+    font-size: 12px;
+    color: #8a8378;
+    margin-bottom: 14px;
+}
+
+.product-hero {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.product-meta {
+    margin: 16px 0 16px;
+}
+
+.product-price {
+    font-size: 30px;
+    font-weight: 700;
+    color: #e8663c;
+    line-height: 1.1;
+}
+
+.price-symbol { font-size: 17px; margin-right: 2px; }
+.price-suffix { font-size: 12px; font-weight: 400; color: #9b9388; }
+
+.product-points {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: #7a736a;
+}
+
+.product-points span::before { content: "✓ "; color: #e8663c; }
+
+.buy-intent .buy-cta {
+    display: block;
     width: 100%;
     flex: none;
-}
-
-.buy-note {
-    font-size: 12px;
-    color: #999;
-    margin-top: 8px;
-}
-
-.buy-done {
-    margin: 4px 0 12px;
-    padding: 14px;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 10px;
-}
-
-.buy-done-msg {
-    font-size: 14px;
-    color: #166534;
-    line-height: 1.6;
-    margin: 0;
+    height: 52px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(255, 107, 53, .28);
 }
 
 .region-list {
