@@ -201,3 +201,26 @@ explorations/
 
 # Temporary self-improvement report drafts
 .learnings/
+
+# Flywheel generated media & batch artifacts (hundreds of MB; photos are uploaded to CDN)
+nanrenbao/flywheel/images/
+nanrenbao/flywheel/videos/
+nanrenbao/flywheel/batch-*/
+nanrenbao/flywheel/*contact-sheet*.png
+nanrenbao/flywheel/A_hyperrealistic*.png
+nanrenbao/flywheel/daily-run-marker.json
+
+# Agent-local runtime state and temp probes (never commit)
+.workbuddy/
+Minecraft/.workbuddy/
+_tmpks/
+__pycache__/
+*.pyc
+*.local.mjs
+.automation/reports/
+
+# One-off Kuaishou session/login probes (operate on live auth state; keep local)
+.automation/scripts/ks_login_passToken.mjs
+.automation/scripts/ks_mp_login.mjs
+.automation/scripts/ks_mp_probe.mjs
+.automation/scripts/ks_mp_probe2.mjs
