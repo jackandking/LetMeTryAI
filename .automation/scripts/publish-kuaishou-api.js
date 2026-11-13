@@ -35,6 +35,7 @@ import {
     PROFILE_SOURCE_TASKS,
     validateBrandPathConsistency
 } from './publish-kuaishou-task-utils.js';
+import { enforceKuaishouImageCoverage, formatGateError } from './ks-image-coverage-gate.js';
 
 // ─── Config ───
 const PROFILE_ID = process.env.PROFILE_ID || 'nanrenbao';
@@ -260,6 +261,16 @@ async function main() {
         log('ERROR', brandCheck.message);
         log('ERROR', 'Fix: PROFILE_ID=<correct-brand> node publish-kuaishou-api.js ...');
         process.exit(1);
+    }
+
+    // 【快手星火图片门禁 Owner 2026-11-13】coverage_pct 必须严格 > 50（仅快手出口，站内不受限）
+    const coverageGate = await enforceKuaishouImageCoverage(appId);
+    if (!coverageGate.allowed) {
+        log('ERROR', formatGateError(coverageGate));
+        process.exit(1);
+    }
+    if (coverageGate.applied) {
+        log('INFO', `[KS_IMAGE_COVERAGE_GATE] 图片 id=${coverageGate.imageId} coverage=${coverageGate.coverage} > 50，允许发布`);
     }
 
     // 2. Interactive confirmation (Layer 3: manual publish safeguard)

@@ -17,6 +17,7 @@ import {
   findHealthyAuthBackup,
   evaluateAuthOverwrite
 } from './publish-kuaishou-task-utils.js';
+import { enforceKuaishouImageCoverage, formatGateError } from './ks-image-coverage-gate.js';
 
 // Configuration
 const SOURCE_TASK_ID = process.env.SOURCE_TASK_ID || '165805'; // The ID of the template task to copy
@@ -225,6 +226,7 @@ async function waitForSubmissionOutcome(activePage, baseUrl, timeoutMs = SUBMISS
   while (Date.now() - startedAt < timeoutMs) {
     const currentUrl = activePage.url();
     const messageText = await readFirstVisibleText(feedbackLocator);
+    if (messageText) console.log('🔎 toast:', messageText);
 
     if (isSubmissionSuccessSignal({ currentUrl, baseUrl, messageText })) {
       return {
@@ -271,6 +273,18 @@ async function main() {
     process.exit(1);
   }
 
+  // 【快手星火图片门禁 Owner 2026-11-13】coverage_pct 必须严格 > 50。
+  // 只约束快手任务出口；网站画廊/投稿/预览没有此限制，低遮蔽图站内照常展示。
+  // fail-closed，且必须早于交互确认与浏览器启动，避免白发。
+  const coverageGate = await enforceKuaishouImageCoverage(appId);
+  if (!coverageGate.allowed) {
+    console.error(formatGateError(coverageGate));
+    process.exit(1);
+  }
+  if (coverageGate.applied) {
+    console.log(`✅ [KS_IMAGE_COVERAGE_GATE] 图片 id=${coverageGate.imageId} coverage=${coverageGate.coverage} > 50，允许发布`);
+  }
+
   // Interactive confirmation (Layer 3: manual publish safeguard)
   const confirmed = await confirmPublish(appId, appName, profileId, SOURCE_TASK_ID);
   if (!confirmed) {
@@ -307,7 +321,9 @@ async function main() {
 
   try {
     console.log('Navigating to task list...');
-    await page.goto(BASE_URL);
+    // 改用 domcontentloaded：快手创作者平台是重 SPA，'load' 事件常在 30s 内不触发
+    // （持续连接/懒加载资源），导致默认 page.goto 超时；后续逻辑本就靠显式 waitForSelector。
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // Check login status
     // Look for a specific element that indicates we are logged in (e.g., the task list table or user avatar)
@@ -588,6 +604,7 @@ async function main() {
     }
 
     // 9. Date Selection
+    let dateSelectionAborted = false;
     console.log('📅 Handling Date Selection (Today -> 5 Years later)...');
     try {
         const dateInput = activePage.locator('.ks-range-input, input[placeholder*="日期"], input[placeholder*="开始"]').first();
@@ -609,32 +626,87 @@ async function main() {
             }
             await activePage.waitForTimeout(500);
 
-            // 2. Advance 5 years
-            // Find the "Next Year" (double right arrow) button
-            const nextYearBtn = activePage.locator('button.ks-picker-panel__icon-btn.sys-icon-double-arrow-right').first();
-            
-            if (await nextYearBtn.isVisible()) {
-                console.log('Advancing 5 years...');
-                for (let i = 0; i < 5; i++) {
-                    await nextYearBtn.click();
-                    await activePage.waitForTimeout(200);
+            // --- Shared end-date helpers (canonical element-ui/ks range-picker gesture) ---
+            // Standard gesture: focus the END input, then click the target day inside the
+            // panel whose header shows the target year+month. Validating via `td.end-date`
+            // class (inputValue does NOT echo the selection, so it is unreliable).
+            const clickDayInMonthPanel = async (y, m, d) => {
+                const panels = activePage.locator('.ks-date-range-picker__content');
+                const pc = await panels.count();
+                // Panel index by month (no slow header query): 0 = left/current month, 1 = right/next month.
+                // For a short validity the target is at most next month, so one of these two is correct.
+                const curMonth = new Date().getMonth();
+                const candidates = (m === curMonth) ? [0, 1] : [1, 0];
+                for (const p of candidates) {
+                    if (p >= pc) continue;
+                    const cells = panels.nth(p).locator('td.available');
+                    const nc = await cells.count();
+                    for (let i = 0; i < nc; i++) {
+                        if (((await cells.nth(i).textContent() || '').trim()) === String(d)) {
+                            await cells.nth(i).click();
+                            return { panel: p };
+                        }
+                    }
+                }
+                return null;
+            };
+            const getEndDateCell = async () => {
+                const c = await activePage.locator('td.end-date').count();
+                if (!c) return { count: 0, text: '' };
+                return { count: c, text: (await activePage.locator('td.end-date').first().textContent() || '').trim() };
+            };
+
+            // Real end-date selection
+            const validityDays = parseInt(process.env.TASK_VALIDITY_DAYS || '', 10);
+            if (!isNaN(validityDays) && validityDays > 0 && validityDays < 36500) {
+                const target = new Date();
+                target.setHours(0, 0, 0, 0);
+                target.setDate(target.getDate() + validityDays);
+                const tYear = target.getFullYear();
+                const tMonth = target.getMonth(); // 0-indexed
+                const tDay = target.getDate();
+                const pad = (n) => String(n).padStart(2, '0');
+                console.log(`🎯 Custom validity: end = today + ${validityDays} days → ${tYear}-${pad(tMonth + 1)}-${pad(tDay)} (TASK_VALIDITY_DAYS="${process.env.TASK_VALIDITY_DAYS}")`);
+                // Natural two-click gesture (verified): start already selected above; now click the
+                // target day in the panel whose header shows the target year+month. Do NOT re-focus
+                // the end input or re-open the picker — that collapses the range back to a single day.
+                let res = await clickDayInMonthPanel(tYear, tMonth, tDay);
+                let navGuard = 0;
+                while (!res && navGuard < 13) {
+                    const nx = activePage.locator('button.ks-picker-panel__icon-btn.sys-icon-arrow-right').first();
+                    if (await nx.isVisible()) { await nx.click(); await activePage.waitForTimeout(250); }
+                    res = await clickDayInMonthPanel(tYear, tMonth, tDay);
+                    navGuard++;
+                }
+                await activePage.waitForTimeout(400);
+                const endCell = await getEndDateCell();
+                if (res && endCell.count > 0 && endCell.text === String(tDay)) {
+                    console.log(`✅ Selected End Date (${validityDays}-day validity): ${tYear}-${pad(tMonth + 1)}-${pad(tDay)} (td.end-date confirmed)`);
+                } else {
+                    // SAFETY NET: end date did not stick — ABORT so we never publish a wrong-validity task.
+                    throw new Error(`ABORT: End-date selection failed: target=${tDay}, got=${JSON.stringify(endCell)}. Not submitting to avoid wrong validity.`);
                 }
             } else {
-                console.log('⚠️ "Next Year" button not found.');
-            }
-            
-            // 3. Select End Date
-            // Pick a date in the middle of the month to be safe
-            // We search for available cells in the visible panel
-            const availableCells = activePage.locator('td.available');
-            const count = await availableCells.count();
-            if (count > 0) {
-                // Pick one in the middle (e.g., 15th available) or last
-                const targetIndex = Math.min(15, count - 1);
-                await availableCells.nth(targetIndex).click();
-                console.log('Selected End Date (5 years later).');
-            } else {
-                console.log('⚠️ No available dates found for end date.');
+                // ORIGINAL: advance 5 years, pick a middle available cell
+                const nextYearBtn = activePage.locator('button.ks-picker-panel__icon-btn.sys-icon-double-arrow-right').first();
+                if (await nextYearBtn.isVisible()) {
+                    console.log('Advancing 5 years...');
+                    for (let i = 0; i < 5; i++) {
+                        await nextYearBtn.click();
+                        await activePage.waitForTimeout(200);
+                    }
+                } else {
+                    console.log('⚠️ "Next Year" button not found.');
+                }
+                const availableCells = activePage.locator('td.available');
+                const count = await availableCells.count();
+                if (count > 0) {
+                    const targetIndex = Math.min(15, count - 1);
+                    await availableCells.nth(targetIndex).click();
+                    console.log('Selected End Date (5 years later).');
+                } else {
+                    console.log('⚠️ No available dates found for end date.');
+                }
             }
             await activePage.waitForTimeout(500);
 
@@ -651,11 +723,21 @@ async function main() {
             // Wait for picker to close
             await activePage.waitForTimeout(1000);
 
+            // Read back the selected range for verification
+            const rangeVal = await dateInput.inputValue().catch(() => '');
+            console.log(`📅 Selected range value: "${rangeVal}"`);
+
         } else {
              console.log('⚠️ Date input not found.');
         }
     } catch (e) {
         console.log('❌ Error selecting dates:', e.message);
+        if (e.message && e.message.includes('ABORT')) { dateSelectionAborted = true; }
+    }
+
+    if (dateSelectionAborted) {
+        console.log('🛑 Date selection aborted (diagnostic or end-date verification failed). NOT submitting task — exiting to avoid publishing a wrong-validity plan.');
+        return;
     }
 
     let submissionSucceeded = false;

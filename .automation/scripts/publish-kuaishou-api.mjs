@@ -2,6 +2,7 @@
 // 读真实会话 cookie (.automation/.local/auth/kuaishou_auth.json)，逐接口打日志，验证 API 发布通路。
 // 用法: node publish-kuaishou-api.mjs <appId> <appName> [profileId] [sourceTaskId]
 import fs from 'fs';
+import { enforceKuaishouImageCoverage, formatGateError } from './ks-image-coverage-gate.js';
 
 const AUTH_FILE = '/Users/jak/LetMeTryAI/.automation/.local/auth/kuaishou_auth.json';
 const BASE_URL = 'https://daren.kuaishou.com';
@@ -74,6 +75,11 @@ async function main() {
   const bc = brandCheck(appId, profileId);
   if (bc) { err(bc); process.exit(1); }
   ok('品牌路径一致性通过');
+
+  // 【快手星火图片门禁 Owner 2026-11-13】coverage_pct 必须严格 > 50（仅快手出口，站内不受限）
+  const coverageGate = await enforceKuaishouImageCoverage(appId);
+  if (!coverageGate.allowed) { err(formatGateError(coverageGate)); process.exit(1); }
+  if (coverageGate.applied) ok(`[KS_IMAGE_COVERAGE_GATE] 图片 id=${coverageGate.imageId} coverage=${coverageGate.coverage} > 50`);
 
   // 1) 取模板详情
   log('\n[1] distribution/detail');
