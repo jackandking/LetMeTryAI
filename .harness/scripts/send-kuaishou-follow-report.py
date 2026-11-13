@@ -43,15 +43,28 @@ def send_email(subject, to_email, body_file, attachment_path=None):
             filename=os.path.basename(attachment_path)
         )
 
-    subprocess.run(
-        [sendmail_path, "-t", "-oi"],
-        input=message.as_bytes(),
-        check=True,
-        timeout=30,
-        capture_output=True
-    )
-    print("Email sent.")
-    return 0
+    try:
+        subprocess.run(
+            [sendmail_path, "-t", "-oi"],
+            input=message.as_bytes(),
+            check=True,
+            timeout=30,
+            capture_output=True,
+        )
+        print("Email sent.")
+        return 0
+    except subprocess.CalledProcessError as exc:
+        stderr = (exc.stderr or b"").decode("utf-8", "replace")
+        print(
+            "Warning: sendmail failed (exit %d); skipping email send "
+            "(reports are forwarded via Agent Mail). %s"
+            % (exc.returncode, stderr[:200]),
+            file=sys.stderr,
+        )
+        return 0  # 非致命：不影响关注任务本身
+    except subprocess.TimeoutExpired:
+        print("Warning: sendmail timed out; skipping email send.", file=sys.stderr)
+        return 0
 
 
 def main(argv):
