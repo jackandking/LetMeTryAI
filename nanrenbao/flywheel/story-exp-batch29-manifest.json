@@ -1,0 +1,57 @@
+{
+ "exp": "story-feel-2026-10-27",
+ "batch": 29,
+ "created": "2026-10-27T12:26:40.290Z",
+ "chars": [
+  {
+   "logical_id": 843,
+   "py": "liuruoshi",
+   "cn": "柳如是",
+   "work": "秦淮八艳",
+   "subject": "柳如是（秦淮八艳）reinterpret，非真人仿冒",
+   "db_id": 847,
+   "image_url": "https://letmetry.cn/images/r843-liuruoshi-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 844,
+   "py": "guhengbo",
+   "cn": "顾横波",
+   "work": "秦淮八艳",
+   "subject": "顾横波（秦淮八艳）reinterpret，非真人仿冒",
+   "db_id": 848,
+   "image_url": "https://letmetry.cn/images/r844-guhengbo-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 845,
+   "py": "biyujing",
+   "cn": "卞玉京",
+   "work": "秦淮八艳",
+   "subject": "卞玉京（秦淮八艳）reinterpret，非真人仿冒",
+   "db_id": 849,
+   "image_url": "https://letmetry.cn/images/r845-biyujing-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 846,
+   "py": "maxianglan",
+   "cn": "马湘兰",
+   "work": "秦淮八艳",
+   "subject": "马湘兰（秦淮八艳）reinterpret，非真人仿冒",
+   "db_id": 850,
+   "image_url": "https://letmetry.cn/images/r846-maxianglan-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 847,
+   "py": "koubaimen",
+   "cn": "寇白门",
+   "work": "秦淮八艳",
+   "subject": "寇白门（秦淮八艳）reinterpret，非真人仿冒",
+   "db_id": 851,
+   "image_url": "https://letmetry.cn/images/r847-koubaimen-c.jpg",
+   "status": "approved"
+  }
+ ]
+}

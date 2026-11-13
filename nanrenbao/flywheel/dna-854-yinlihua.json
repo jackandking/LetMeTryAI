@@ -1,0 +1,36 @@
+{
+ "exp": {
+  "name": "story-feel",
+  "batch": 30,
+  "date": "2026-10-27",
+  "vars": [
+   "decisive-moment",
+   "emotional-micro-expression",
+   "motivated-single-light",
+   "story-props",
+   "motion-beyond-frame",
+   "foreground-depth",
+   "color-story"
+  ],
+  "baseline": "batch<=27 通用场景写法（无明确叙事时刻/通用柔光）"
+ },
+ "subject": "阴丽华（光武帝皇后）reinterpret，非真人仿冒",
+ "story_moment": "新野初见·回眸一笑的一瞬",
+ "scene": "新野春园·桃花夹道·日间暖光",
+ "context": "a spring garden in Xinye, peach blossoms lining the path, warm daylight through new leaves (background accents only, never wrapping the figure)",
+ "lighting": "日间暖阳·桃粉",
+ "composition": "85mm 中近景环境人像·前景景深层",
+ "action": "园中漫步、回眸浅笑、披帛轻扬",
+ "emotion": "娇羞·温婉·少女清甜",
+ "motif": "一枝将落的桃花 + 垂落的披帛",
+ "motion": "发丝与纱幔随画框外气流扬起（动态瞬间）",
+ "style": "电影感时尚大片·叙事感·超写实",
+ "mood": "温婉·新野春园",
+ "wardrobe": "极小桃粉 dudou（深 V 显沟）+ 单条高透桃粉纱 at hip，opaque<1/4",
+ "coverage_pct": 20,
+ "camera": "85mm",
+ "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+ "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视/游戏版本的扮演者）",
+ "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+ "prompt_text": "Cinematic medium-close-up artistic portrait with strong narrative storytelling of a fictional Yin Lihua, the beauty of Xinye who became Empress of Han under Emperor Guangwu, famed for the vow \"to wed none but Yin Lihua\", reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen or game adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. The decisive narrative moment: strolling among the peach blooms, she turns back with a shy smile — the frozen instant the young Liu Xiu first vows to wed none but her, a story of a village beauty who became an empress told in a single frame. Scene & context: a spring garden in Xinye, peach blossoms lining the path, warm daylight through new leaves, as background accents only, never wrapping the figure. Pose & action: strolling among the blossoms, turning back with a shy smile, a silk shawl drifting. Emotional micro-expression: a sweet shy micro-expression — cheeks faintly flushed, eyes downcast then a quick glance, lips curved in a bashful smile. Story props: a peach blossom branch slipping from her hand and a drifting silk shawl. Motion beyond the frame: her long dark hair and the single sheer silk scarf drifting in the air, fabric and small details frozen in motion. Wardrobe: a tiny minimal peach-pink dudou/bikini set (small triangle top with deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer peach-pink silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: a single motivated soft daylight — warm spring sun through new leaves, gentle bloom, rosy color grading. Camera: 85mm lens, medium close-up environmental portrait, shallow depth of field — peach blossoms framing the path and the drifting shawl as foreground framing elements creating cinematic depth layers. Color story: palette locked to the emotional beat: 桃粉+春阳暖白. Mood: sweet, shy, spring-fresh, tender grace, artistic and non-sexual. Style: cinematic fashion editorial with narrative storytelling, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+}

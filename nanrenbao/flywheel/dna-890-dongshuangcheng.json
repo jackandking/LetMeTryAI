@@ -1,0 +1,17 @@
+{
+  "subject": "董双成（汉武帝内传·瑶池蟠桃仙侍）reinterpret，非真人仿冒",
+  "scene": "瑶池蟠桃园·云海石阶·千年蟠桃树·汉白玉栏杆·远处云阙飞檐·清冷月华",
+  "context": "the Jade Pool peach garden of the Queen Mother of the West, ancient white marble balustrade, a gnarled millennium peach tree with ripe peaches, a jade sheng reed-pipe resting on a stone table, drifting cloud sea and distant palace eaves, no curtain or drapery covering the body",
+  "lighting": "冷银月华侧逆光 + 柔和轮廓光，晨雾漫射，低饱和青瓷/月白/象牙调，电影感冷调柔光",
+  "composition": "竖幅 2:3，半身至膝，人物居中略偏右，浅景深，85mm 人像",
+  "action": "端立石阶，双手轻捧一枚蟠桃置于身前，目光微垂，神情沉静雅正；知性端庄，无挑逗、无倚靠、无扭身姿态",
+  "style": "ultra-realistic cinematic fashion editorial，超写实电影感",
+  "mood": "清冷、疏离、雅正、仙气",
+  "wardrobe": "全遮蔽高领长袖月白广袖宫装长裙 + 银线云鹤暗绣袖缘 + 淡青织金宽腰带 + 长披帛；颈至脚踝全覆盖，仅露面部与双手；布料完全不透明，无透视、无深V、无露肩、无露背、无内衣、无泳装",
+  "coverage_pct": 95,
+  "camera": "85mm f/1.8, vertical portrait, shallow depth of field, fine silk and brocade texture",
+  "body_type": "自然匀称成年女性体态，端庄克制，不做曲线夸张或性化处理",
+  "negative": "nudity, semi-nudity, see-through or sheer fabric, deep V neckline, cleavage, bare shoulders, lingerie, bikini, swimwear, sexualized or seductive pose, real person likeness, celebrity face, resembling any actress, text overlay, extra limbs, distorted hands",
+  "prompt_text": "Cinematic vertical editorial portrait of an entirely original, fictional Chinese celestial maiden - Dong Shuangcheng, the peach-garden attendant of the Jade Pool from the classical text Han Wudi Neizhuan - with an entirely original, fictional face that does NOT resemble any real actress or celebrity, invented facial features, no real person likeness whatsoever. She stands composed on a white marble stair in a misty Jade Pool peach garden, calmly holding a single ripe peach with both hands before her, eyes gently lowered, a jade sheng reed-pipe and a gnarled ancient peach tree behind her, drifting cloud sea and distant palace eaves. She wears a fully opaque high-collared long-sleeved floor-length moon-white wide-sleeved celestial court robe with subtle silver crane-and-cloud embroidery, a pale celadon gold-thread wide sash and a long flowing shawl, covering the whole body from neck to ankle, only face and hands visible: no sheer or transparent fabric, no deep neckline, no cleavage, no bare shoulders, no bare back, no lingerie, no swimwear. Dignified intellectual posture, non-sexualized, serene refined expression. Cold silver moonlight with soft rim light, diffused mist, muted celadon and ivory palette, cinematic cold-toned soft lighting, ultra-realistic cinematic fashion editorial photography, 85mm lens, shallow depth of field, fine silk brocade texture, tasteful art direction. A small discreet 'AI生成' watermark at the bottom right corner. Avoid nudity, see-through or sheer clothing, bikini, seductive or sexualized pose, real person likeness, celebrity face, any resemblance to a real actress, text overlay, extra limbs, distorted hands.",
+  "safety_note": "2026-11-12 每日一轮：命名 IP + 仙/雅极端 + 未跑过（prompt-log 0 命中）。延续 887/888/889 全遮蔽合规路线与线上冠军「九尾狐·全遮蔽长袍 478 views」，按 Owner「不擦边、安全、否则限流」要求取 coverage_pct=95，主动不套用高透极小遮蔽基线。逻辑 id 890 仅为本地序号，非 mysql id。"
+}

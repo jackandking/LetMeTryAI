@@ -1,0 +1,57 @@
+{
+ "exp": "story-feel-2026-10-27",
+ "batch": 30,
+ "created": "2026-10-27T13:32:27.687Z",
+ "chars": [
+  {
+   "logical_id": 852,
+   "py": "weiziwu",
+   "cn": "卫子夫",
+   "work": "汉武帝皇后",
+   "subject": "卫子夫（汉武帝皇后）reinterpret，非真人仿冒",
+   "db_id": 852,
+   "image_url": "https://letmetry.cn/images/r852-weiziwu-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 853,
+   "py": "douyifang",
+   "cn": "窦漪房",
+   "work": "汉文帝皇后",
+   "subject": "窦漪房（汉文帝皇后）reinterpret，非真人仿冒",
+   "db_id": 853,
+   "image_url": "https://letmetry.cn/images/r853-douyifang-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 854,
+   "py": "yinlihua",
+   "cn": "阴丽华",
+   "work": "光武帝皇后",
+   "subject": "阴丽华（光武帝皇后）reinterpret，非真人仿冒",
+   "db_id": 854,
+   "image_url": "https://letmetry.cn/images/r854-yinlihua-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 855,
+   "py": "dugujiaruo",
+   "cn": "独孤伽罗",
+   "work": "隋文帝皇后",
+   "subject": "独孤伽罗（隋文帝皇后）reinterpret，非真人仿冒",
+   "db_id": 855,
+   "image_url": "https://letmetry.cn/images/r855-dugujiaruo-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 856,
+   "py": "zhangsunhuanghou",
+   "cn": "长孙皇后",
+   "work": "唐太宗皇后",
+   "subject": "长孙皇后（唐太宗皇后）reinterpret，非真人仿冒",
+   "db_id": 856,
+   "image_url": "https://letmetry.cn/images/r856-zhangsunhuanghou-c.jpg",
+   "status": "approved"
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+import fs from 'fs';
+import path from 'path';
+const DIR = '/Users/jak/LetMeTryAI/nanrenbao/flywheel';
+
+const NEG_BASE = 'nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, resemblance to a real person, specific celebrity likeness, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated';
+const NEG_DUDOU = 'gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, ' + NEG_BASE;
+const NEG_BIKINI = 'gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, ' + NEG_BASE;
+const NEG_GOWN = 'bikini, lingerie, dudou, exposed midriff, see-through revealing skin, nudity, ' + NEG_BASE;
+const BODY = '极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部';
+
+// [id, pinyin, CN名, 作品, EN身份短语, 场景CN, EN场景, 动作CN, EN动作, 服装类型, 服装CN, EN服装, coverage, 情绪, 特殊说明]
+const S = [
+[718,'nvwa','女娲','上古神话·补天','Nuwa, the ancient Chinese creator goddess who mended the heavens with five-colored stones','昆仑神境·五色石祭坛·补天余晖','the mythical Kunlun realm, an altar of five-colored stones, the glow of the mended sky','抬手补天、五色石流光、创世神威（神威非性化）','she raises a hand toward the mended sky, five-colored stone-light streaming around her, the bearing of a creator deity, powerful and never sexualized','gown','五色流彩广袖仙裙（五色石锦纹刺绣，全遮蔽 opaque proper coverage, elegant celestial palace gown）','an elegant flowing five-colored celestial palace gown with five-colored-stone brocade embroidery, fully covered with proper opaque fabric',95,'创世·庄严瑰丽',''],
+[719,'jingwei','精卫','山海经·填海','Jingwei, the mythical bird-girl of Shan Hai Jing who fills the sea with pebbles and twigs','东海之滨·怒涛衔枝·浪花碎玉','the eastern seashore, roaring waves, a small girl carrying a twig in her beak-like grace, sea spray like shattered jade','衔枝击浪、振翅欲飞、执著天真（清丽非性化）','she carries a twig toward the waves, poised as if to take flight, determined yet innocent, never sexualized','bikini','极浅海蓝比基尼（浪花纹，着衣非透视）','a minimal pale-sea-blue bikini with wave-pattern texture, fully clothed non-transparent',40,'执著·清丽天真',''],
+[720,'longnv','龙女','柳毅传书·洞庭','the Dragon Maiden, third princess of Dongting Lake from the ancient tale of Liu Yi','洞庭水府·琉璃波光·鲛绡轻曳','the underwater palace realm of Dongting Lake, translucent rippling water-light, strands of merfolk silk drifting','水府凌波、回眸凝睇、清冷出尘（仙气非性化）','she glides over the water of the dragon palace realm, a cool distant gaze, ethereal and never sexualized','bikini','青碧色比基尼（鲛绡波纹，着衣非透视）','a minimal jade-cyan bikini with merfolk-silk wave texture, fully clothed non-transparent',40,'清冷·水府仙气',''],
+[721,'yaoji','瑶姬','巫山·云雨','Yaoji, the goddess of the Wu Mountain cloud-and-rain, daughter of the Flame Emperor','巫山朝云·薜荔为衣·云雨霏微','the dawn clouds of Wu Mountain, creeping fig vines, a faint mist of cloud and rain','云间舒袖、朝云凝睇、缱绻仙姿（雅致非性化）','she unfurls her sleeves among the clouds, gazing into the dawn mist of Wu Mountain, graceful and never sexualized','dudou','极小绯粉色 dudou（云雨纹刺绣，深 V 显沟）+ 单条高透素纱 at hip，opaque<1/4','a tiny minimal rose-pink dudou set (cloud-and-rain pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer plain silk scarf drifting loosely at the hip',20,'缱绻·巫山仙雅',''],
+[722,'zhenmi','甄宓','洛神赋·文昭甄皇后','Empress Zhen Mi, the Luo Shen beauty celebrated in the Luo Shen Fu poem','洛水之滨·芙蓉照水·惊鸿婉转','the banks of the Luo River, lotus blooms reflected in the water, the grace of a swan in flight','凌波微步、回雪流风、婉若游龙（典雅非性化）','she steps lightly over the water as if treading waves, turning like drifting snow, the elegance of a swimming dragon, graceful and never sexualized','dudou','极小芙蓉绯 dudou（洛水芙蓉纹刺绣，深 V 显沟）+ 单条高透素纱 at hip，opaque<1/4','a tiny minimal hibiscus-pink dudou set (Luo River lotus-pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer plain silk scarf drifting loosely at the hip',20,'典雅·洛神婉转',''],
+[723,'dengzhuangyu','邓婵玉','封神演义·五光石','Deng Zhuangyu, the stone-throwing maiden general of Fengshen Yanyi','牧野战场·五光石飞虹·缨红猎猎','the Muye battlefield, a rainbow arc of a flung magic stone, red tassels flying','掷石破敌、英姿凛然、红缨飒踏（英气非性化）','she hurls a glowing stone at the enemy, a fierce upright bearing, battle-ready and never sexualized','dudou','极小绯红 dudou（五光石纹刺绣，深 V 显沟）+ 单条高透绯纱 at hip，opaque<1/4','a tiny minimal crimson dudou set (five-colored-stone pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer crimson silk scarf drifting loosely at the hip',20,'英气·飒爽凛然',''],
+[724,'longjigongzhu','龙吉公主','封神演义·昊天公主','Princess Longji, the heavenly princess of Fengshen Yanyi, daughter of the Heavenly Emperor','瑶池仙境·琼华玉树·鸾鹤齐鸣','the jade pool immortal realm of the heavenly court, jeweled trees, cranes and mythical luan birds in flight','执净瓶、拂琼枝、天家华贵（华贵非性化）','she holds a pure vase and brushes the jeweled branches, the noble grace of a heavenly princess, never sexualized','gown','瑶池织金广袖仙裙（宝相花刺绣，全遮蔽 opaque proper coverage, elegant celestial palace gown）','an elegant flowing gold-woven celestial palace gown with precious-lotus brocade embroidery, fully covered with proper opaque fabric',95,'华贵·天家仙气',''],
+[725,'huximei','胡喜媚','封神演义·九头雉鸡','Hu Ximei, the nine-headed pheasant spirit of Fengshen Yanyi','轩辕坟畔·雉羽纷飞·碧影妖娆','the Xuan Yuan tomb mounds, pheasant feathers drifting, a jade-green enchanting shadow','展雉羽、拂长袖、妖而自重（绮丽非性化）','she spreads pheasant-plume sleeves with a sweeping gesture, enchanting yet self-possessed, never sexualized','dudou','极小碧青 dudou（雉羽纹刺绣，深 V 显沟）+ 单条高透碧纱 at hip，opaque<1/4','a tiny minimal jade-cyan dudou set (pheasant-plume pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer jade silk scarf drifting loosely at the hip',20,'绮丽·妖而自重',''],
+[726,'luochanv','罗刹女','西游记·铁扇公主','Princess Iron Fan, the Rakshasi of the Flaming Mountains in Journey to the West','火焰山畔·芭蕉翠影·炽风炎炎','the banks of the Flaming Mountains, green banana-leaf shadows, blazing wind','执芭蕉扇、轻摇生风、飒爽护子（英风非性化）','she holds the magical banana-leaf fan and waves it lightly, a bold protective bearing, never sexualized','dudou','极小翠绿 dudou（芭蕉纹刺绣，深 V 显沟）+ 单条高透翠纱 at hip，opaque<1/4','a tiny minimal emerald-green dudou set (banana-leaf pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer emerald silk scarf drifting loosely at the hip',20,'英风·炽烈飒爽',''],
+[727,'yumianhuli','玉面狐狸','西游记·摩云洞','the Jade-faced Fox Spirit of Moyun Cave in Journey to the West','摩云洞天·狐火点点·月华如练','the celestial cave of Moyun, drifting fox-fire lights, moonlight like white silk','狐尾轻摆、回眸一笑、狡黠灵动（灵动非性化）','her fox tail sways gently as she glances back with a sly smile, playful and never sexualized','dudou','极小素白 dudou（狐尾纹刺绣，深 V 显沟）+ 单条高透素纱 at hip，opaque<1/4','a tiny minimal plain-white dudou set (fox-tail pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer plain silk scarf drifting loosely at the hip',20,'灵动·狡黠生姿',''],
+[728,'xiezijing','蝎子精','西游记·毒敌山','the Scorpion Spirit of Dudi Mountain in Journey to the West','毒敌山窈·蝎影横斜·琵琶声咽','the secluded caves of Dudi Mountain, a scorpion shadow across the moonlight, the plaintive notes of a pipa','横抱琵琶、蝎尾轻翘、妖娆自重（绮艳非性化）','she cradles a pipa lute with a scorpion tail arched behind her, alluring yet self-possessed, never sexualized','dudou','极小紫罗兰 dudou（蝎尾纹刺绣，深 V 显沟）+ 单条高透紫纱 at hip，opaque<1/4','a tiny minimal violet dudou set (scorpion-tail pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer violet silk scarf drifting loosely at the hip',20,'绮艳·妖娆自重',''],
+[729,'limochou','李莫愁','神雕侠侣·赤练仙子','Li Mochou, the Scarlet Frost Fairy of The Return of the Condor Heroes','赤霞剑影·拂尘轻扬·冷艳孤绝','a crimson sunset with sword shadows, a horsetail whisk swaying, cold and aloof','拂尘轻挥、冷眸回望、孤绝痴情（冷艳非性化）','she sweeps her horsetail whisk in a light arc, looking back with cold eyes, lone and obsessive, never sexualized','dudou','极小紫红 dudou（赤练纹刺绣，深 V 显沟）+ 单条高透紫红纱 at hip，opaque<1/4','a tiny minimal magenta-red dudou set (scarlet-whip pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer magenta silk scarf drifting loosely at the hip',20,'冷艳·孤绝痴情',''],
+[730,'guoxiang','郭襄','神雕侠侣·小东邪','Guo Xiang, the little Eastern Heretic, founder of the Emei sect','风陵渡夜灯火·酒葫芦·俏影跃然','a lantern-lit night at Fengling Ferry, a wine gourd, a lively youthful silhouette','抛酒葫芦、回眸狡黠、灵动跳脱（俏皮非性化）','she tosses her wine gourd playfully and glances back with a mischievous grin, lively and never sexualized','dudou','极小黛青 dudou（桃花纹刺绣，深 V 显沟）+ 单条高透黛纱 at hip，opaque<1/4','a tiny minimal dark-indigo dudou set (peach-blossom pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer indigo silk scarf drifting loosely at the hip',20,'俏皮·灵动跳脱',''],
+[731,'chengying','程英','神雕侠侣·东邪门下','Cheng Ying, the gentle flute-playing disciple of the Eastern Heretic','清箫笛韵·青衣屿立·温婉如玉','the soft note of a jade flute, a quiet islet, gentle as polished jade','执笛横吹、低眉浅笑、温婉清雅（清雅非性化）','she holds a jade flute and plays gently, looking down with a faint smile, tender and never sexualized','dudou','极小缃青 dudou（竹笛纹刺绣，深 V 显沟）+ 单条高透青纱 at hip，opaque<1/4','a tiny minimal pale-cyan dudou set (bamboo-flute pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer cyan silk scarf drifting loosely at the hip',20,'清雅·温婉如玉',''],
+[732,'gongsunlv','公孙绿萼','绝情谷·情花','Gongsun Lv-e, the kind maiden of the Passionless Valley','绝情谷深·情花绽谢·柔光清幽','the depths of Passionless Valley, passion-flowers blooming and falling, soft green light','拈情花、浅愁凝睇、柔而不弱（柔情非性化）','she holds a passion flower with a trace of sorrow in her gaze, gentle yet never weak, never sexualized','dudou','极小绯绿 dudou（绝情花纹刺绣，深 V 显沟）+ 单条高透绿纱 at hip，opaque<1/4','a tiny minimal rose-green dudou set (passion-flower pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer green silk scarf drifting loosely at the hip',20,'柔情·柔而不弱',''],
+[733,'liannishang','练霓裳','白发魔女传·玉罗刹','Lian Nishang, the White-Haired Demoness, the Jade Rakshasa','霜峰月夜·白发如雪·剑寒孤影','a frosty peak under moonlight, white hair like snow, the lonely shadow of a cold sword','按剑回身、白发飞扬、孤高绝艳（孤高非性化）','she turns with a hand on her sword, white hair flying, proud and breathtakingly striking, never sexualized','dudou','极小缟白 dudou（霜雪纹刺绣，深 V 显沟）+ 单条高透白纱 at hip，opaque<1/4','a tiny minimal snow-white dudou set (frost-snow pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer white silk scarf drifting loosely at the hip',20,'孤高·绝艳出尘','白发（标志性特征）'],
+[734,'huoqingtong','霍青桐','书剑恩仇录·翠羽黄衫','Huo Qingtong, the Green Feather in Yellow Robes, the proud Uyghur heroine','天山雪岭·黄衫映雪·翠羽英风','the Tianshan snow ridges, a yellow robe against the snow, green-feathered heroism','按剑立雪、回眸决断、统帅英风（英风非性化）','she stands in the snow with a hand on her sword, looking back with resolve, a commander bearing, never sexualized','dudou','极小翠黄 dudou（翠羽纹刺绣，深 V 显沟）+ 单条高透黄纱 at hip，opaque<1/4','a tiny minimal green-yellow dudou set (green-feather pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer yellow silk scarf drifting loosely at the hip',20,'英风·决断出尘',''],
+[735,'ajiu','阿九','碧血剑·长平公主','A Jiu, Princess Changping, the tragic Ming princess of Sword Stained with Royal Blood','深宫月下·断剑红颜·清寂如莲','a deep palace under moonlight, a broken sword and a doomed beauty, silent as a lotus','断剑轻抚、低眉清泪、哀而不伤（清寂非性化）','she touches a broken sword with downcast eyes and quiet tears, sorrowful yet never broken, never sexualized','dudou','极小素白 dudou（宫砂纹刺绣，深 V 显沟）+ 单条高透素纱 at hip，opaque<1/4','a tiny minimal plain-white dudou set (palace-cinnabar pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer plain silk scarf drifting loosely at the hip',20,'清寂·哀而不伤',''],
+[736,'fanlihua','樊梨花','大唐·梨花枪女帅','Fan Liguang, the pear-blossom spear lady general of Tang legend','塞上梨雪·银枪挑月·帅帐英风','snowy pear blossoms on the frontier, a silver spear catching the moon, a commander camp','横枪立马、梨花回雪、统帅三军（英风非性化）','she holds her spear across the saddle, pear blossoms swirling like returning snow, commanding three armies, never sexualized','dudou','极小绯红 dudou（梨花枪纹刺绣，深 V 显沟）+ 单条高透绯纱 at hip，opaque<1/4','a tiny minimal crimson dudou set (pear-blossom-spear pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer crimson silk scarf drifting loosely at the hip',20,'英风·统帅梨雪',''],
+[737,'fuhao','妇好','商代·王后女将军','Fu Hao, the Shang dynasty queen and warrior-general who commanded armies and presided over rites','殷商祭坛·青铜饕餮纹·甲骨占烟','a Shang dynasty ritual altar, bronze taotie patterns, smoke of oracle-bone divination','举钺肃立、青铜映面、王祭英威（英威非性化）','she stands solemn holding a ritual battle-axe, bronze patterns reflected on her, the majesty of a queen-priest-general, never sexualized','dudou','极小玄黑 dudou（饕餮纹刺绣，深 V 显沟）+ 单条高透玄纱 at hip，opaque<1/4','a tiny minimal deep-black dudou set (bronze taotie pattern embroidery, deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer dark silk scarf drifting loosely at the hip',20,'英威·王祭庄肃','青铜时代'],
+];
+
+const manifest = [];
+const MOOD_EN = {
+  '创世·庄严瑰丽': 'majestic, solemn, magnificent',
+  '执著·清丽天真': 'determined, innocent, pure',
+  '清冷·水府仙气': 'ethereal, cool, otherworldly',
+  '缱绻·巫山仙雅': 'romantic, ethereal, elegant',
+  '典雅·洛神婉转': 'elegant, graceful, classical',
+  '英气·飒爽凛然': 'heroic, valiant, fierce',
+  '华贵·天家仙气': 'noble, celestial, regal',
+  '绮丽·妖而自重': 'enchanting, alluring, self-possessed',
+  '英风·炽烈飒爽': 'bold, fiery, valiant',
+  '灵动·狡黠生姿': 'playful, cunning, lively',
+  '绮艳·妖娆自重': 'alluring, enchanting, self-possessed',
+  '冷艳·孤绝痴情': 'cold, aloof, obsessive',
+  '俏皮·灵动跳脱': 'playful, lively, mischievous',
+  '清雅·温婉如玉': 'gentle, tender, elegant',
+  '柔情·柔而不弱': 'tender, gentle, quietly sorrowful',
+  '孤高·绝艳出尘': 'proud, striking, otherworldly',
+  '英风·决断出尘': 'resolute, commanding, heroic',
+  '清寂·哀而不伤': 'quiet, sorrowful, pure',
+  '英风·统帅梨雪': 'commanding, heroic, majestic',
+  '英威·王祭庄肃': 'solemn, majestic, mighty',
+};
+for (const [id, py, cn, work, enId, sceneCN, sceneEN, actCN, actEN, wtype, wardCN, wardEN, cov, mood, note] of S) {
+  const subject = `${cn}（${work}）reinterpret，非真人仿冒`;
+  const neg = wtype === 'gown' ? NEG_GOWN : (wtype === 'bikini' ? NEG_BIKINI : NEG_DUDOU);
+  const prompt = `Cinematic medium-close-up artistic portrait of a fictional ${enId}, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs.${note.includes('白发') ? ' Her most striking feature is long flowing white hair.' : ''} Scene & context: ${sceneEN}, as background accents only, never wrapping the figure. Pose & action: ${actEN}. Wardrobe: ${wardEN}. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt.${wtype === 'gown' ? ' For this character the wardrobe is an elegant fully-covered celestial palace gown in keeping with her divine station, opaque proper coverage, the figure still the clear focal point.' : ''} Lighting: soft cinematic cool-toned key light with delicate rim light, ultra-realistic skin texture. Camera: 85mm lens, medium close-up environmental portrait. Mood: ${MOOD_EN[mood] || mood}, artistic and non-sexual. Style: cinematic fashion editorial, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成.`;
+  const dna = {
+    subject,
+    scene: `${sceneCN}${note ? '·' + note : ''}`,
+    context: sceneEN + ' (background accents only, never wrapping the figure)',
+    lighting: 'soft cinematic cool-toned key light with delicate rim light',
+    composition: '85mm 中近景环境人像',
+    action: actCN,
+    style: '电影感时尚大片·超写实',
+    mood,
+    wardrobe: wardCN,
+    coverage_pct: cov,
+    camera: '85mm',
+    body_type: BODY,
+    face: '原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非真人仿冒）',
+    negative: neg,
+    prompt_text: prompt,
+  };
+  const file = path.join(DIR, `dna-${id}-${py}.json`);
+  fs.writeFileSync(file, JSON.stringify(dna, null, 1));
+  manifest.push({ id, py, cn, work, cov, file });
+}
+console.log('written', manifest.length, 'DNA files:');
+for (const m of manifest) console.log(`  r${m.id}-${m.py}  ${m.cn} (cov=${m.cov})`);

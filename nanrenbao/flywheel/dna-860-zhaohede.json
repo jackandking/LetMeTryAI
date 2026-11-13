@@ -1,0 +1,36 @@
+{
+ "exp": {
+  "name": "story-feel",
+  "batch": 31,
+  "date": "2026-10-27",
+  "vars": [
+   "decisive-moment",
+   "emotional-micro-expression",
+   "motivated-single-light",
+   "story-props",
+   "motion-beyond-frame",
+   "foreground-depth",
+   "color-story"
+  ],
+  "baseline": "batch<=27 通用场景写法（无明确叙事时刻/通用柔光）"
+ },
+ "subject": "赵合德（汉成帝昭仪）reinterpret，非真人仿冒",
+ "story_moment": "初入椒房·回望殿门的一瞬",
+ "scene": "未央椒房·殿烛初燃·金砖映影",
+ "context": "the Jiaofang chamber of the Weiyang palace at night, great candles newly lit, gilded floor bricks mirroring the flames (background accents only, never wrapping the figure)",
+ "lighting": "殿烛双燃·暖金",
+ "composition": "85mm 中近景环境人像·前景景深层",
+ "action": "殿门回望、裙裾初曳、仪态万方",
+ "emotion": "从容·矜贵·藏锋于柔",
+ "motif": "一对新燃的殿烛 + 殿门金钉",
+ "motion": "发丝与纱幔随画框外气流扬起（动态瞬间）",
+ "style": "电影感时尚大片·叙事感·超写实",
+ "mood": "矜贵·椒房初入",
+ "wardrobe": "极小绛红 dudou（深 V 显沟）+ 单条高透绛红纱 at hip，opaque<1/4",
+ "coverage_pct": 20,
+ "camera": "85mm",
+ "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+ "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视/游戏版本的扮演者）",
+ "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+ "prompt_text": "Cinematic medium-close-up artistic portrait with strong narrative storytelling of a fictional Zhao Hede, the younger Zhao sister and consort of Emperor Cheng of Han, famed as the gentle kingdom that toppled a throne, reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen or game adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. The decisive narrative moment: stepping across the threshold of the Jiaofang chamber, she glances back through the doors — the frozen instant her new life opens, a story of a sister pair who reached the palace summit told in a single frame. Scene & context: the Jiaofang chamber of the Weiyang palace at night, great candles newly lit, gilded floor bricks mirroring the flames, as background accents only, never wrapping the figure. Pose & action: pausing at the threshold, glancing back through the open doors, posture poised and unhurried. Emotional micro-expression: a composed regal micro-expression — eyes level and unhurried, a faint smile of quiet ambition. Story props: a pair of newly-lit palace candles and the gilt-studded doors behind her. Motion beyond the frame: her long dark hair and the single sheer silk scarf drifting in the air, fabric and small details frozen in motion. Wardrobe: a tiny minimal crimson dudou/bikini set (small triangle top with deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer crimson silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: a single motivated palace-candle source — warm gold light swelling on gilded bricks, deep crimson shadows, imperial color grading. Camera: 85mm lens, medium close-up environmental portrait, shallow depth of field — the gilt-studded door edge and a candle stand as foreground framing elements creating cinematic depth layers. Color story: palette locked to the emotional beat: 绛红+殿烛暖金. Mood: composed, regal, quietly ambitious, candlelit, artistic and non-sexual. Style: cinematic fashion editorial with narrative storytelling, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+}

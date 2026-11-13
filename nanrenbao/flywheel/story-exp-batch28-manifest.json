@@ -1,0 +1,57 @@
+{
+ "exp": "story-feel-2026-10-25",
+ "batch": 28,
+ "created": "2026-10-25T00:37:10.779Z",
+ "chars": [
+  {
+   "logical_id": 829,
+   "py": "biyao",
+   "cn": "碧瑶",
+   "work": "诛仙",
+   "subject": "碧瑶（诛仙）reinterpret，非真人仿冒",
+   "db_id": 838,
+   "image_url": "https://letmetry.cn/images/r829-biyao-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 830,
+   "py": "longkui",
+   "cn": "龙葵",
+   "work": "仙剑奇侠传三",
+   "subject": "龙葵（仙剑奇侠传三）reinterpret，非真人仿冒",
+   "db_id": 839,
+   "image_url": "https://letmetry.cn/images/r830-longkui-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 831,
+   "py": "linyueru",
+   "cn": "林月如",
+   "work": "仙剑奇侠传",
+   "subject": "林月如（仙剑奇侠传）reinterpret，非真人仿冒",
+   "db_id": 840,
+   "image_url": "https://letmetry.cn/images/r831-linyueru-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 832,
+   "py": "abao",
+   "cn": "阿宝",
+   "work": "聊斋志异",
+   "subject": "阿宝（聊斋志异）reinterpret，非真人仿冒",
+   "db_id": 841,
+   "image_url": "https://letmetry.cn/images/r832-abao-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 833,
+   "py": "huoxiaoyu",
+   "cn": "霍小玉",
+   "work": "唐传奇",
+   "subject": "霍小玉（唐传奇）reinterpret，非真人仿冒",
+   "db_id": 842,
+   "image_url": "https://letmetry.cn/images/r833-huoxiaoyu-c.jpg",
+   "status": "approved"
+  }
+ ]
+}

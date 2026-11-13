@@ -1,0 +1,36 @@
+{
+ "exp": {
+  "name": "story-feel",
+  "batch": 28,
+  "date": "2026-10-25",
+  "vars": [
+   "decisive-moment",
+   "emotional-micro-expression",
+   "motivated-single-light",
+   "story-props",
+   "motion-beyond-frame",
+   "foreground-depth",
+   "color-story"
+  ],
+  "baseline": "batch<=27 通用场景写法（无明确叙事时刻/通用柔光）"
+ },
+ "subject": "阿宝（聊斋志异）reinterpret，非真人仿冒",
+ "story_moment": "离魂化鸟栖钗——人狐（人鸟）情根的第一帧",
+ "scene": "春日闺阁·绣架窗光·海棠压枝",
+ "context": "a spring boudoir, an embroidery frame by the lattice window, crabapple branches heavy with blossom pressing against the window paper (background accents only, never wrapping the figure)",
+ "lighting": "春日窗光·柔和暖白",
+ "composition": "85mm 中近景环境人像·前景景深层",
+ "action": "垂眸浅笑、小鸟栖钗、绣针停在半空",
+ "emotion": "娇羞·温柔·宿命心动",
+ "motif": "发钗上一只小鸟 + 绣架上半成的并蒂莲",
+ "motion": "发丝与纱幔随画框外气流扬起（动态瞬间）",
+ "style": "电影感时尚大片·叙事感·超写实",
+ "mood": "娇羞·离魂化鸟",
+ "wardrobe": "极小藕粉 dudou（深 V 显沟）+ 单条高透粉纱 at hip，opaque<1/4",
+ "coverage_pct": 20,
+ "camera": "85mm",
+ "body_type": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 丰盈腰臀曲线 + 修长腿部",
+ "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非该角色任何影视/游戏版本的扮演者）",
+ "negative": "gown, robe, drape, hanfu, kimono, long skirt, full-coverage, full-body suit, catsuit, body-suit, nudity, explicit, exposed nipples, genitalia, see-through revealing skin, arousal, vulgar, gore, blood, horror mask on face, resemblance to a real person, specific celebrity likeness, face resembling any screen actress of this character, small bust, flat chest, a-cup, b-cup, petite chest, underdeveloped bust, deformed hands, extra fingers, watermark on face, text, lowres, plastic skin, oversaturated",
+ "prompt_text": "Cinematic medium-close-up artistic portrait with strong narrative storytelling of a fictional Abao, the young mistress in the tale Abao in Strange Tales from a Chinese Studio (Liaozhai Zhiyi), reimagined as an entirely original, fictional person that does NOT resemble any real actress, celebrity, or public figure — specifically not resembling any actress who has portrayed this character in any screen or game adaptation. She has an extremely voluptuous, amply curved figure with a very large, full, prominent bust and generous deep cleavage (clearly oversized, G-cup or larger), lush hip-and-waist curves and long slender legs. The decisive narrative moment: a small bird perches quietly on her jade hairpin while she lowers her eyes with a tender, startled, secretly joyful smile — the surreal story of a soul that crossed death to be near her, told in a single frame. Scene & context: a spring boudoir, an embroidery frame by the lattice window, crabapple branches heavy with blossom pressing against the window paper, as background accents only, never wrapping the figure. Pose & action: lowering her eyes in a tender smile, the embroidery needle frozen mid-stitch as the little bird rests on her hairpin. Emotional micro-expression: a tender startled micro-expression — cheeks faintly flushed, a secret joyful smile she cannot hide, eyes soft as still water. Story props: a small bird perched on her jade hairpin and a half-finished twin-lotus embroidery on the hoop. Motion beyond the frame: her long dark hair and the single sheer silk scarf drifting in the air, fabric and small details frozen in motion. Wardrobe: a tiny minimal lotus-pink dudou/bikini set (small triangle top with deep V neckline showing generous cleavage + small bottom) plus a single extremely sheer pink silk scarf drifting loosely at the hip. The human figure is the unmistakable focal point: her bare shoulders, torso, arms and long legs are softly lit; the clothing is minimal and strategic, never a covering gown, robe, drape or long skirt. Lighting: soft spring daylight filtering through the window paper — a single motivated window-light source, warm and diffuse, gentle bloom, poetic color grading. Camera: 85mm lens, medium close-up environmental portrait, shallow depth of field — crabapple branches outside the window and the embroidery hoop as foreground framing elements creating cinematic depth layers. Color story: palette locked to the emotional beat: 藕粉+海棠胭脂色. Mood: tender, shy, fated heartbeat, spring-bright and quietly magical, artistic and non-sexual. Style: cinematic fashion editorial with narrative storytelling, ultra-realistic, high-end, AI-generated. Watermark text at bottom-right corner: AI生成."
+}

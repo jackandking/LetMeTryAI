@@ -1,0 +1,17 @@
+{
+  "subject": "姑射仙子（庄子逍遥游）reinterpret，非真人仿冒",
+  "scene": "姑射之山·云海石台·古松·远处宫阙檐角·清冷月华",
+  "context": "misty mountain stone terrace, ancient pine, distant pavilion eaves, cold silver moonlight",
+  "lighting": "冷银月华侧逆光 + 柔和轮廓光，晨雾漫射，低饱和青瓷/象牙/月白调",
+  "composition": "竖幅 2:3，半身至膝，人物居中略偏右，浅景深，85mm 人像",
+  "action": "端立双手执一卷书轴，目光微垂，神情沉静，无挑逗姿态",
+  "style": "ultra-realistic cinematic fashion editorial，超写实电影感",
+  "mood": "清冷、疏离、雅正、书卷气",
+  "wardrobe": "全遮蔽高领长袖月白丝质长袍 + 银云纹暗绣袖缘 + 宽腰带；颈至脚踝全覆盖，仅露面部与手部；布料完全不透明，无透视、无深V、无露肩、无内衣、无泳装",
+  "coverage_pct": 95,
+  "camera": "85mm f/1.8, vertical portrait, shallow depth of field, fine silk texture",
+  "body_type": "自然匀称成年女性体态，端庄克制，不做曲线夸张或性化处理",
+  "negative": "nudity, semi-nudity, see-through or sheer fabric, deep V neckline, cleavage, bare shoulders, lingerie, bikini, swimwear, sexualized or seductive pose, real person likeness, celebrity face, text overlay, extra limbs, distorted hands",
+  "prompt_text": "Cinematic vertical editorial portrait of an entirely original fictional Chinese immortal maiden from the ancient Zhuangzi text (Guye Shenzi), a completely invented face resembling no real actress or celebrity. Serene dignified scholarly posture on a misty mountain stone terrace beside an old pine, holding a rolled scroll, calm composed expression. She wears a fully opaque high-collared long-sleeved floor-length pale moon-white silk robe with subtle silver cloud embroidery and a wide flowing sash, covering the whole body from neck to ankle, only face and hands visible: no sheer or transparent fabric, no deep neckline, no cleavage, no bare shoulders, no lingerie, no swimwear. Cold silver moonlight, soft rim light, drifting mist, muted celadon and ivory palette, ultra-realistic cinematic fashion editorial photography, 85mm lens, shallow depth of field, fine silk texture, refined tasteful art direction. Small discreet AI-generated watermark at bottom right. Avoid nudity, see-through clothing, bikini, sexualized pose, real person likeness, text overlay, extra limbs.",
+  "safety_note": "2026-11-08 全链路 e2e：按 Owner「不擦边、安全、否则限流」要求，刻意不套站内高透极小遮蔽基线，改用线上冠军「九尾狐·全遮蔽长袍 417 views」同类的全遮蔽仙裙路线。coverage_pct=95。"
+}

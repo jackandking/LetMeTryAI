@@ -1,0 +1,19 @@
+{
+  "subject": "百花仙子（镜花缘）reinterpret，非真人仿冒",
+  "scene": "蓬莱百花圃·群芳台·牡丹初绽·云阶玉栏·远处仙阙飞檐·清冷晨曦",
+  "context": "the celestial Hundred-Flower Garden on Penglai, a white jade terrace set among blooming peonies and plum blossoms, a bound floral register and a slender jade brush resting on a stone table, drifting cloud sea and distant immortal pavilion eaves, all as background accents only, no curtain or drapery covering the body",
+  "lighting": "冷银晨曦侧逆光 + 柔和轮廓光，晨雾漫射，低饱和青瓷/月白/藕荷调，电影感冷调柔光",
+  "composition": "竖幅 2:3，半身至膝，人物居中略偏右，浅景深，85mm 人像",
+  "action": "端立花台，左手轻托展开的群芳名册、右手执玉笔作点检群芳状，目光微垂，神情沉静雅正；知性端庄，无挑逗、无倚靠、无扭身姿态",
+  "motif": "群芳名册 + 玉笔 + 牡丹与落英（仅环境点缀，不遮身）",
+  "style": "ultra-realistic cinematic fashion editorial，超写实电影感",
+  "mood": "清冷、疏离、雅正、仙气",
+  "wardrobe": "全遮蔽高领长袖藕荷渐月白广袖花神宫装长裙 + 银线百花暗绣袖缘 + 淡青织金宽腰带 + 长披帛；颈至脚踝全覆盖，仅露面部与双手；布料完全不透明，无透视、无深V、无露肩、无露背、无内衣、无泳装",
+  "coverage_pct": 95,
+  "camera": "85mm f/1.8, vertical portrait, shallow depth of field, fine silk and brocade texture",
+  "body_type": "自然匀称成年女性体态，端庄克制，不做曲线夸张或性化处理",
+  "face": "原创虚构五官，避免任何真实演员/名人/公众人物可识别相似性（纯原创，非任何影视/游戏版本的扮演者）",
+  "negative": "nudity, semi-nudity, see-through or sheer fabric, deep V neckline, cleavage, bare shoulders, lingerie, bikini, swimwear, sexualized or seductive pose, real person likeness, celebrity face, resembling any actress, text overlay, extra limbs, distorted hands, gown clinging to body, wet fabric",
+  "prompt_text": "Cinematic vertical editorial portrait of an entirely original, fictional Chinese celestial being — Baihua Xianzi, the immortal Mistress of All Flowers from the classical novel Jinghua Yuan (Flowers in the Mirror) — with an entirely original, fictional face that does NOT resemble any real actress, celebrity, or public figure, invented facial features, no real person likeness whatsoever. She stands composed on a white jade terrace in the misty celestial Hundred-Flower Garden of Penglai, calmly holding an open bound floral register in one hand and a slender jade brush in the other as if reviewing the roster of flowers, eyes gently lowered, blossoming peonies and plum branches around her, drifting cloud sea and distant immortal pavilion eaves behind her. She wears a fully opaque high-collared long-sleeved floor-length wide-sleeved celestial court robe in a soft lotus-pink to moon-white gradient, with subtle silver-thread hundred-flower embroidery along the sleeve hems, a pale celadon gold-thread wide sash and a long flowing shawl, covering the whole body from neck to ankle, only face and hands visible: no sheer or transparent fabric, no deep neckline, no cleavage, no bare shoulders, no bare back, no lingerie, no swimwear. Dignified intellectual posture, non-sexualized, serene refined expression. Cold silver dawn light with soft rim light, diffused morning mist, muted celadon, ivory and lotus palette, cinematic cold-toned soft lighting, ultra-realistic cinematic fashion editorial photography, 85mm lens, shallow depth of field, fine silk brocade texture, tasteful art direction. A small discreet 'AI生成' watermark at the bottom right corner. Avoid nudity, see-through or sheer clothing, bikini, seductive or sexualized pose, real person likeness, celebrity face, any resemblance to a real actress, text overlay, extra limbs, distorted hands.",
+  "safety_note": "2026-11-12 第二轮（当日 07:05 已跑 890 董双成）：命名 IP + 仙/雅极端 + 人物 0 命中（prompt-log 314 条，作品镜花缘另有唐闺臣/廉锦枫两轮但人物不重复，无内卷）。延续 889/890 全遮蔽合规路线与线上冠军「九尾狐·全遮蔽长袍 478 views」，按 Owner「不擦边、安全、否则限流」要求取 coverage_pct=95，主动不套用高透极小遮蔽基线。逻辑 id 891 仅为本地序号，非 mysql id。"
+}

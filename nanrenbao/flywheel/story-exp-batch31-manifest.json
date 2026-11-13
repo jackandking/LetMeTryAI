@@ -1,0 +1,57 @@
+{
+ "exp": "story-feel-2026-10-27",
+ "batch": 31,
+ "created": "2026-10-27T13:41:37.638Z",
+ "chars": [
+  {
+   "logical_id": 857,
+   "py": "zhushuzhen",
+   "cn": "朱淑真",
+   "work": "南宋断肠词人",
+   "subject": "朱淑真（南宋断肠词人）reinterpret，非真人仿冒",
+   "db_id": 857,
+   "image_url": "https://letmetry.cn/images/r857-zhushuzhen-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 858,
+   "py": "guandaosheng",
+   "cn": "管道升",
+   "work": "元代书画大家",
+   "subject": "管道升（元代书画大家）reinterpret，非真人仿冒",
+   "db_id": 858,
+   "image_url": "https://letmetry.cn/images/r858-guandaosheng-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 859,
+   "py": "fengxiaolian",
+   "cn": "冯小怜",
+   "work": "北齐淑妃",
+   "subject": "冯小怜（北齐淑妃）reinterpret，非真人仿冒",
+   "db_id": 859,
+   "image_url": "https://letmetry.cn/images/r859-fengxiaolian-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 860,
+   "py": "zhaohede",
+   "cn": "赵合德",
+   "work": "汉成帝昭仪",
+   "subject": "赵合德（汉成帝昭仪）reinterpret，非真人仿冒",
+   "db_id": 860,
+   "image_url": "https://letmetry.cn/images/r860-zhaohede-c.jpg",
+   "status": "approved"
+  },
+  {
+   "logical_id": 861,
+   "py": "ehuang",
+   "cn": "娥皇",
+   "work": "舜帝之妃",
+   "subject": "娥皇（舜帝之妃）reinterpret，非真人仿冒",
+   "db_id": 861,
+   "image_url": "https://letmetry.cn/images/r861-ehuang-c.jpg",
+   "status": "approved"
+  }
+ ]
+}
