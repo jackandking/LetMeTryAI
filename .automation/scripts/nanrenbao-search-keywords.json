@@ -1,0 +1,66 @@
+{
+  "brand": "nanrenbao",
+  "specSource": "https://open.kuaishou.com/docs/operate/reviewSpecification/review/searchReview.html",
+  "specVersion": "2025-09-17",
+  "miniProgramName": "人人爱男人宝",
+  "reason": "别名≠泛化词；必须为本名的高认知简称",
+  "generatedAt": "2026-10-18T00:20:56.475Z",
+  "limits": {
+    "maxAliases": 5,
+    "maxPerWeek": 3,
+    "maxLenPerAlias": 10
+  },
+  "autoConfigured": [
+    "人人爱男人宝",
+    "人人爱男人宝小程序",
+    "小程序人人爱男人宝"
+  ],
+  "aliases": [
+    "人宝",
+    "爱男人宝",
+    "人人爱",
+    "人人爱男"
+  ],
+  "submissionPlan": {
+    "thisWeek": [
+      "人宝",
+      "爱男人宝",
+      "人人爱"
+    ],
+    "nextWeek": [
+      "人人爱男"
+    ]
+  },
+  "blocked": [
+    {
+      "kw": "男人宝",
+      "reason": "被其他小程序占用(其注销后搜索别名字才清空)"
+    }
+  ],
+  "rejected": [
+    {
+      "kw": "美女",
+      "errors": [
+        "历史被拒(官方不支持二次修改提交,永久拉黑)"
+      ]
+    },
+    {
+      "kw": "写真",
+      "errors": [
+        "历史被拒(官方不支持二次修改提交,永久拉黑)"
+      ]
+    },
+    {
+      "kw": "壁纸",
+      "errors": [
+        "历史被拒(官方不支持二次修改提交,永久拉黑)"
+      ]
+    },
+    {
+      "kw": "人人",
+      "errors": [
+        "泛化词(品类/风格/用途/通用词，官方明令拒绝)"
+      ]
+    }
+  ]
+}
