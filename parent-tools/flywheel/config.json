@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "product": "家长爱",
+  "note": "每日迭代引擎配置。改阈值不动代码；护栏优先级高于增长目标。",
+  "track_summary_url": "https://letmetry.cn/api/track/summary",
+  "app_id_prefix": "pl.",
+  "data_date": "previous_complete_utc_day",
+  "signals": {
+    "page_load": "进入页面",
+    "tool_open": "点开工具卡",
+    "result_shown": "结果物出现（漏斗分母）",
+    "card_saved": "结果卡存相册（第一价值信号）",
+    "share_tap": "点分享",
+    "share_open_first_complete": "分享带来的新用户完成首次任务",
+    "first_task_complete": "首次完成任务",
+    "unlock_complete": "解锁成功",
+    "abort": "中途退出（护栏）",
+    "negative_feedback": "负反馈（护栏）"
+  },
+  "thresholds": {
+    "min_signal_events": 5,
+    "min_result_shown": 20,
+    "min_share_tap_for_rate": 10
+  },
+  "weights": {
+    "artifact_save_rate": 0.5,
+    "share_completion": 0.3,
+    "first_task_completion": 0.2
+  },
+  "guardrails": {
+    "max_abort_rate": 0.05,
+    "block_on_negative_feedback": true
+  },
+  "objective": "结果物保存率 + 分享完成率；护栏：不制造焦虑、不评判家长",
+  "experiment_queue_order": [
+    "06", "02", "07", "04", "12", "09", "11", "05", "03", "01", "08", "10"
+  ]
+}

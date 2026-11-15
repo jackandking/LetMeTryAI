@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "product": "家长爱",
+  "updated_at": null,
+  "source": "parent-love-ideas.json -> daily.py",
+  "note": "创意种子单一真相源。零信号期只推进实验队列；有真实信号且样本达标才产生 champion。",
+  "dna_dimensions": ["emotion", "artifact_type", "share_target", "question_template", "unlock_point"],
+  "dimension_leaderboard": {},
+  "champion_seeds": [],
+  "ideas": [
+    {
+      "id": "01", "name": "家长类型卡", "group": "身份/对照",
+      "hook": "5 道题测育儿风格", "artifact": "「____型家长」身份卡 + 一句给孩子的承诺",
+      "share_line": "测出来是这款，你呢",
+      "dna": {"emotion": "自我确认", "artifact_type": "身份卡", "share_target": "同为家长的朋友", "question_template": "5题单选", "unlock_point": "激励视频解锁高清"},
+      "replicability": 0.80, "share_impulse": 0.55,
+      "risk": "文案不得出现分数、优劣、诊断",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "02", "name": "家庭默契对照卡", "group": "身份/对照",
+      "hook": "家长先答，再猜孩子会怎么答", "artifact": "双栏「你以为 / 其实」对照卡",
+      "share_line": "我以为他选 A，结果……",
+      "dna": {"emotion": "被孩子惊到", "artifact_type": "对照卡", "share_target": "伴侣 / 孩子本人", "question_template": "两轮作答", "unlock_point": "激励视频解锁完整对照"},
+      "replicability": 0.62, "share_impulse": 0.90,
+      "risk": "不得暗示「不够了解孩子」",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "03", "name": "周末人格卡", "group": "身份/对照",
+      "hook": "5 题看你家周末怎么过", "artifact": "「你家周末属于哪一型」卡",
+      "share_line": "太准了，转给我家那位",
+      "dna": {"emotion": "会心一笑", "artifact_type": "身份卡", "share_target": "家族群", "question_template": "5题单选", "unlock_point": "激励视频"},
+      "replicability": 0.92, "share_impulse": 0.50,
+      "risk": "低",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "04", "name": "代际对照卡", "group": "身份/对照",
+      "hook": "你妈当年 vs 你现在", "artifact": "两代做法对照卡",
+      "share_line": "我妈看了估计要说我两句",
+      "dna": {"emotion": "代际共鸣", "artifact_type": "对照卡", "share_target": "家族群 / 快手同城", "question_template": "单选站队", "unlock_point": "激励视频"},
+      "replicability": 0.78, "share_impulse": 0.72,
+      "risk": "避免贬低上一代",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "05", "name": "孩子口头禅说明书", "group": "身份/对照",
+      "hook": "选 3 句娃常说的话", "artifact": "一张「使用说明书」卡",
+      "share_line": "第 2 条全家都中",
+      "dna": {"emotion": "好笑 / 被看见", "artifact_type": "说明书卡", "share_target": "家族群", "question_template": "多选3", "unlock_point": "激励视频"},
+      "replicability": 0.68, "share_impulse": 0.75,
+      "risk": "不得让孩子身份可识别",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "06", "name": "少数派身份卡", "group": "站队/争论",
+      "hook": "单题站队 → 看有多少人跟你一样", "artifact": "「只有 12% 的家长这么选」身份卡",
+      "share_line": "原来我是少数派，敢不敢测一下你",
+      "dna": {"emotion": "稀缺身份 / 站队", "artifact_type": "比例身份卡", "share_target": "同为家长的朋友 / 评论区", "question_template": "单题单选 + 已有投票比例", "unlock_point": "看结果即广告，存图不加锁"},
+      "replicability": 0.95, "share_impulse": 0.95,
+      "risk": "比例必须来自真实投票，不可编造",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "07", "name": "双答案站队卡", "group": "站队/争论",
+      "hook": "同一场景，两种回应，你选哪个", "artifact": "「A 派 / B 派」卡",
+      "share_line": "我家那位选了 B，评论区评评理",
+      "dna": {"emotion": "争论 / 好奇", "artifact_type": "站队卡", "share_target": "评论区 / 伴侣", "question_template": "二选一", "unlock_point": "激励视频"},
+      "replicability": 0.88, "share_impulse": 0.78,
+      "risk": "两种回应不得暗示对错",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "08", "name": "家长黑话词典卡", "group": "站队/争论",
+      "hook": "把育儿场景翻成幽默词条", "artifact": "可收藏词条卡",
+      "share_line": "这个词我先存了",
+      "dna": {"emotion": "幽默 / 自嘲", "artifact_type": "词条卡", "share_target": "收藏 / 朋友圈", "question_template": "无题，文案模板", "unlock_point": "免解锁"},
+      "replicability": 0.50, "share_impulse": 0.68,
+      "risk": "避免嘲讽孩子",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "09", "name": "一句话时间胶囊", "group": "时间/关系",
+      "hook": "写给 10 年后孩子的一句话", "artifact": "带日期的卡片，存相册",
+      "share_line": "存下来了，十年后翻出来看",
+      "dna": {"emotion": "柔软 / 长期", "artifact_type": "时间卡", "share_target": "自己 / 伴侣", "question_template": "一句填空", "unlock_point": "存图"},
+      "replicability": 0.72, "share_impulse": 0.60,
+      "risk": "自由文本需本地敏感词过滤，不上传",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "10", "name": "家庭年度小报", "group": "时间/关系",
+      "hook": "汇总今年做过的选择", "artifact": "「你家今年的 5 个选择」小报",
+      "share_line": "我们家这一年的答案",
+      "dna": {"emotion": "回顾 / 归属感", "artifact_type": "汇总小报", "share_target": "家族群", "question_template": "聚合历史作答", "unlock_point": "付费"},
+      "replicability": 0.30, "share_impulse": 0.72,
+      "risk": "数据归属与隐私，需显式同意",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "11", "name": "孩子教我的一件事", "group": "时间/关系",
+      "hook": "填一句孩子说过的话", "artifact": "反向感谢卡",
+      "share_line": "今天反过来被他上了一课",
+      "dna": {"emotion": "被触动", "artifact_type": "感谢卡", "share_target": "朋友圈 / 家族群", "question_template": "一句填空", "unlock_point": "免解锁"},
+      "replicability": 0.52, "share_impulse": 0.82,
+      "risk": "自由文本需过滤，不上传",
+      "app_ids": [], "score": null, "last_seen_date": null
+    },
+    {
+      "id": "12", "name": "周末任务券", "group": "时间/关系",
+      "hook": "这周末我陪你做___", "artifact": "可存图的承诺券",
+      "share_line": "券已发，不许反悔",
+      "dna": {"emotion": "承诺 / 玩闹", "artifact_type": "承诺券", "share_target": "孩子 / 伴侣", "question_template": "选一项活动", "unlock_point": "免解锁"},
+      "replicability": 0.85, "share_impulse": 0.38,
+      "risk": "低",
+      "app_ids": [], "score": null, "last_seen_date": null
+    }
+  ]
+}

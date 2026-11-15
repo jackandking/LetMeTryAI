@@ -1,0 +1,5 @@
+# 本地每日运行产物，不进 git
+reports/
+state.json
+*.log
+__pycache__/

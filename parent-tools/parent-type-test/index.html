@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测测你是哪种家长类型 - 家长爱</title>
+    <meta name="pl-app" content="pl.01.parent-type-test" />
     <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css">
     <script>
@@ -35,10 +36,10 @@
         </div>
 
         <!-- Brief Result (before payment) -->
-        <div id="brief-result" class="card hidden"></div>
+        <div id="brief-result" class="card hidden" data-pl-result data-pl-idea="01"></div>
 
         <!-- Full Report (after payment) -->
-        <div id="full-report" class="card hidden"></div>
+        <div id="full-report" class="card hidden" data-pl-result data-pl-idea="01"></div>
 
         <!-- Footer -->
         <div class="footer">
@@ -46,6 +47,7 @@
         </div>
     </div>
 
+    <script src="../signal.js?v=1"></script>
     <script src="app.js?v=3"></script>
 <div style="text-align:center;font-size:12px;color:#999;padding:8px 0 16px;"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:#999;text-decoration:none;">京ICP备2024092319号-1</a></div>
 </body>
