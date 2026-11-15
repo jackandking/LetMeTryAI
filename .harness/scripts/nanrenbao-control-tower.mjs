@@ -251,11 +251,38 @@ function inspectPaymentIntent() {
   const fresh = pPath ? daysSince(pPath.st) : Infinity;
   let conclusion = '';
   if (txt) { const m = txt.match(/(有人想花钱|有人尝试|无人尝试|从未有人尝试)/); conclusion = m ? m[1] : '(结论未识别)'; }
+
+  // 支付意向是「稀疏的需求信号」，不是每日节拍：报告只在按需跑 nanrenbao-payment-intent
+  // skill 时生成，没有新意向就不会刷新。2026-11-14/15 的控制塔 RED 就是把文件陈旧天数
+  // 当成节拍故障（fresh<5 ? green : red）造成的误报——同一条 10-08 意向被连续判异常。
+  // 新语义：报告存在且结论可读 = green（照常展示需求信号，附报告日期避免误读为新事件）；
+  // 报告缺失/结论不可读/超 30 天未刷新 = unknown（监测该补跑），都不进 RED——
+  // 支付通道长期关闭是已知业务状态，不是控制塔要报警的故障。
+  if (!pPath) {
+    return {
+      beat: '变现 · 支付意向',
+      status: 'unknown',
+      lastRun: '无报告',
+      note: '未找到支付意向报告 — 可按需运行 nanrenbao-payment-intent skill 建立基线（非支付通道故障）',
+      conclusion: '',
+    };
+  }
+  const reportDay = localYmd(pPath.st.mtime);
+  if (conclusion === '(结论未识别)') {
+    return {
+      beat: '变现 · 支付意向',
+      status: 'unknown',
+      lastRun: reportDay,
+      note: `支付意向报告结论无法识别（${reportDay}）— 检查文件格式，非支付通道故障`,
+      conclusion,
+    };
+  }
+  const stale = fresh >= 30;
   return {
     beat: '变现 · 支付意向',
-    status: fresh < 5 ? 'green' : 'red',
-    lastRun: pPath ? localYmd(pPath.st.mtime) : '无报告',
-    note: txt ? `支付意向: ${conclusion} @ ${pPath ? localYmd(pPath.st.mtime) : '?'}` : '未找到支付意向报告',
+    status: stale ? 'unknown' : 'green',
+    lastRun: reportDay,
+    note: `支付意向: ${conclusion}（报告 ${reportDay} 生成，${fresh.toFixed(0)} 天前；稀疏事件，无新意向时报告不刷新 ≠ 异常）${stale ? ' ⚠️ 建议补跑一次 nanrenbao-payment-intent 确认监测仍有效' : ''}`,
     conclusion,
   };
 }
@@ -317,7 +344,7 @@ function buildReport(dateStr, beats) {
   if (fanBeat && fanBeat.fan != null) L.push(`- 自有粉丝: ${fanBeat.fan.toLocaleString()} (${fanBeat.fanDelta != null ? (fanBeat.fanDelta >= 0 ? '+' : '') + fanBeat.fanDelta : '?'} 较昨日)`);
   else if (fanBeat) L.push(`- 自有粉丝: 未采集（综合度量日报未产出）`);
   if (distBeat && distBeat.metric) L.push(`- 分发: ${distBeat.metric}`);
-  if (payBeat) L.push(`- 支付意向: ${payBeat.conclusion || '未知'}`);
+  if (payBeat) L.push(`- 支付意向: ${payBeat.conclusion || '未知'}${payBeat.lastRun && payBeat.lastRun !== '无报告' ? `（报告 ${payBeat.lastRun}）` : ''}`);
   L.push('');
   L.push('## 需决策 / 告警');
   L.push('');
