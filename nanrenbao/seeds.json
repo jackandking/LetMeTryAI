@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updated_at": "2026-11-16T01:05:03.132156Z",
+  "updated_at": "2026-11-17T01:05:03.457393Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
     "style": [
       {
         "value": "古装军旅时尚大片·东方史诗·电影感·超写实",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "电影感·异域华贵时尚大片·超写实",
@@ -39,15 +39,15 @@
     "lighting": [
       {
         "value": "黎明金色顶光 + 塞风寒雾（高反差·电影感暖调）",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "蓝调雪光·暖窗补光",
-        "sum": 67,
+        "sum": 68,
         "n": 1,
-        "avg": 67.0
+        "avg": 68.0
       },
       {
         "value": "冷调晨雾柔光·漫射散射·电影感冷调调色",
@@ -71,15 +71,15 @@
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 650,
+        "sum": 692,
         "n": 1,
-        "avg": 650.0
+        "avg": 692.0
       },
       {
         "value": "赤色绣金丝战袍（银甲叶镶边·革带束腰·全遮蔽不透明，着衣非内衣），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "极浅海蓝比基尼（浪花纹，着衣非透视）",
@@ -89,9 +89,9 @@
       },
       {
         "value": "上身雪白羽绒服(敞穿·深V露沟·袖覆肩臂) + 下身极小烈焰红比基尼(仅底裤) + 腰腹腿部裸露",
-        "sum": 67,
+        "sum": 68,
         "n": 1,
-        "avg": 67.0
+        "avg": 68.0
       },
       {
         "value": "极小暖琥珀金 dudou（金线秋菊刺绣，深 V 显沟）+ 单条高透金纱 at hip，opaque<1/4; NEVER drape/robe/gown/long skirt/full-coverage",
@@ -103,15 +103,15 @@
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 650,
+        "sum": 692,
         "n": 1,
-        "avg": 650.0
+        "avg": 692.0
       },
       {
         "value": "英气·飒爽·自信·威严",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "执著·清丽天真",
@@ -121,9 +121,9 @@
       },
       {
         "value": "俏皮·度假反差",
-        "sum": 67,
+        "sum": 68,
         "n": 1,
-        "avg": 67.0
+        "avg": 68.0
       },
       {
         "value": "端庄·华贵·神秘·威严",
@@ -135,9 +135,9 @@
     "composition": [
       {
         "value": "中景全身环境人像·点将台执枪立马式（区别于纯中近景）",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "中近景环境人像·暖金虚化背景",
@@ -167,9 +167,9 @@
     "camera": [
       {
         "value": "85mm",
-        "sum": 2300,
+        "sum": 2354,
         "n": 246,
-        "avg": 9.3
+        "avg": 9.6
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -185,9 +185,9 @@
       },
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 18,
+        "sum": 20,
         "n": 4,
-        "avg": 4.5
+        "avg": 5.0
       },
       {
         "value": "85mm f/1.8, vertical portrait, shallow depth of field, fine silk texture",
@@ -199,9 +199,9 @@
     "body_type": [
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 战袍勾勒 + 修长腿部",
-        "sum": 265,
+        "sum": 270,
         "n": 1,
-        "avg": 265.0
+        "avg": 270.0
       },
       {
         "value": "饱满曲线 + 明显 D 罩杯 + 修长腿部",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 650,
+      "view_count": 692,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -257,7 +257,7 @@
     {
       "table": "beauty_images",
       "id": 673,
-      "view_count": 265,
+      "view_count": 270,
       "dna": {
         "subject": "穆桂英（杨家将·巾帼元帅）reinterpret，非真人仿冒",
         "scene": "塞外点将台晨光·赤色战袍·令旗猎猎",
@@ -302,7 +302,7 @@
     {
       "table": "beauty_images",
       "id": 882,
-      "view_count": 67,
+      "view_count": 68,
       "dna": {
         "exp": {
           "name": "batch-contrast-5run",
