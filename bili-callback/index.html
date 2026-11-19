@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B 站授权完成 · 复制授权码</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         max-width: 620px; margin: 60px auto; padding: 0 20px; color: #1f2328; line-height: 1.6; }
+  .card { border: 1px solid #d0d7de; border-radius: 10px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+  h1 { font-size: 20px; margin: 0 0 16px; }
+  p { color: #57606a; font-size: 14px; }
+  .code { display: block; width: 100%; box-sizing: border-box; margin: 14px 0;
+          padding: 12px; font: 14px ui-monospace, SFMono-Regular, Menlo, monospace;
+          border: 1px solid #d0d7de; border-radius: 6px; background: #f6f8fa;
+          word-break: break-all; min-height: 44px; }
+  button { background: #fb7299; color: #fff; border: 0; border-radius: 6px;
+           padding: 10px 20px; font-size: 14px; cursor: pointer; }
+  button:hover { background: #e85d85; }
+  .ok { color: #1a7f37; font-weight: 600; }
+  .warn { color: #9a6700; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>B 站授权回调</h1>
+  <div id="state"></div>
+  <p>下面就是授权码（code）。请点「复制」后粘贴回对话里，我来换 access_token 并完成配置。</p>
+  <code class="code" id="code">未在 URL 中检测到 code 参数</code>
+  <button id="copy">复制授权码</button>
+  <p class="warn">这个页面只做展示与复制，不会把授权码发给任何第三方。</p>
+</div>
+<script>
+  var q = new URLSearchParams(location.search);
+  var code = q.get('code') || '';
+  var state = q.get('state') || '';
+  document.getElementById('code').textContent = code || '未在 URL 中检测到 code 参数';
+  document.getElementById('state').innerHTML = code
+    ? '<p class="ok">✓ 已收到回调' + (state ? '（state: ' + state + '）' : '') + '</p>'
+    : '<p>如果你刚完成授权却看到这行字，请检查应用后台的「授权回调域」是否配置为 <b>letmetryai.cn</b>，回调地址是否填写 <b>https://letmetryai.cn/bili-callback/index.html</b>。</p>';
+  document.getElementById('copy').onclick = function () {
+    if (!code) { alert('没有可复制的授权码'); return; }
+    navigator.clipboard.writeText(code).then(function () {
+      document.getElementById('copy').textContent = '已复制 ✓';
+    }, function () {
+      var r = document.createRange(); r.selectNode(document.getElementById('code'));
+      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+      document.execCommand('copy');
+      document.getElementById('copy').textContent = '已复制 ✓';
+    });
+  };
+</script>
+</body>
+</html>
