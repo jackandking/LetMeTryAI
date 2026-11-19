@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>快手小程序变现全家桶 · 把踩过的坑变成你的捷径</title>
+<style>
+  :root{
+    --ink:#1a1a2e; --ink2:#4a4a68; --brand:#ff5000; --brand2:#ff7a3d;
+    --bg:#fff8f3; --card:#ffffff; --line:#f0e2d8; --ok:#0a9d6c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(135deg,#2b1a0e 0%,#4a2410 55%,#7a3a12 100%);color:#fff;padding:56px 20px 44px;text-align:center}
+  header .tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 14px;font-size:13px;letter-spacing:1px;margin-bottom:18px}
+  header h1{font-size:30px;line-height:1.35;letter-spacing:1px}
+  header h1 em{font-style:normal;color:var(--brand2)}
+  header p.sub{margin-top:14px;font-size:15px;color:rgba(255,255,255,.85)}
+  header .badges{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  header .badges span{background:rgba(255,255,255,.12);border-radius:8px;padding:5px 12px;font-size:12.5px;color:rgba(255,255,255,.9)}
+  section{padding:36px 0}
+  h2{font-size:21px;margin-bottom:16px;letter-spacing:.5px}
+  h2::before{content:"";display:inline-block;width:5px;height:19px;background:var(--brand);border-radius:3px;margin-right:10px;vertical-align:-3px}
+  .pain{display:grid;gap:10px}
+  .pain li{list-style:none;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:14.5px;color:var(--ink2)}
+  .pain li b{color:var(--ink)}
+  .pain li .num{color:var(--brand);font-weight:700;margin-right:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+  .card h3{font-size:16.5px;margin-bottom:6px}
+  .card h3 .chip{display:inline-block;font-size:11px;background:#fff1e8;color:var(--brand);border-radius:6px;padding:2px 8px;margin-left:8px;vertical-align:2px;font-weight:600}
+  .card p{font-size:13.8px;color:var(--ink2)}
+  .proof{background:#0f2a1f;color:#d8f3e6;border-radius:14px;padding:20px 18px;font-size:14px}
+  .proof b{color:#7be0b4}
+  .proof ul{margin-top:10px}
+  .proof li{list-style:none;padding-left:20px;position:relative;margin-top:6px}
+  .proof li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+  .price{background:var(--card);border:2px solid var(--brand);border-radius:16px;padding:24px 20px;text-align:center}
+  .price .old{color:#aaa;text-decoration:line-through;font-size:15px}
+  .price .now{font-size:44px;font-weight:800;color:var(--brand);letter-spacing:-1px}
+  .price .now small{font-size:16px;font-weight:600}
+  .price .lim{margin-top:6px;font-size:13px;color:#c0392b;font-weight:600}
+  .price ul{margin-top:16px;text-align:left;font-size:14px;color:var(--ink2)}
+  .price li{list-style:none;padding-left:22px;position:relative;margin-top:8px}
+  .price li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+  .cta{display:block;width:100%;margin-top:20px;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border:none;border-radius:12px;padding:15px;font-size:17px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none}
+  .note{margin-top:10px;font-size:12px;color:#999;text-align:center}
+  .leadbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px}
+  .leadbox input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;font-size:16px;outline:none;margin-bottom:12px}
+  .leadbox input:focus{border-color:var(--brand)}
+  .leadbox button{display:block;width:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border:none;border-radius:12px;padding:14px;font-size:16.5px;font-weight:700;letter-spacing:1px;cursor:pointer}
+  .leadbox button:disabled{opacity:.6}
+  .leadmsg{margin-top:10px;font-size:14px;text-align:center;min-height:20px}
+  .faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  .faq summary{font-weight:600;font-size:15px;cursor:pointer}
+  .faq details p{margin-top:8px;font-size:13.8px;color:var(--ink2)}
+  .disclaim{font-size:11.5px;color:#b0a49a;text-align:center;padding:10px 20px 30px;line-height:1.8}
+  .divider{height:1px;background:var(--line);margin:6px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">快手小程序开发者 · 实战工具包</div>
+  <h1>快手小程序<br><em>变现全家桶</em></h1>
+  <p class="sub">星火任务发布 · 视频挂卡 · 收入观测<br>一条龙 SOP ＋ 可执行脚本 ＋ 20+ 条避坑清单</p>
+  <div class="badges">
+    <span>✅ 全流程真实跑通</span>
+    <span>✅ 五个小程序线在用</span>
+    <span>✅ 持续更新</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>你是不是也卡在这些地方</h2>
+  <ul class="pain">
+    <li><span class="num">01</span><b>星火任务发布总被拒？</b>品牌路径校验、资源校验、文本审核……一道闸没过就前功尽弃，还不知道错在哪。</li>
+    <li><span class="num">02</span><b>视频挂卡报 10001008？</b>「小程序与当前应用不存在有效关联关系」——官方文档一句话带过，没人告诉你后台到底怎么配。</li>
+    <li><span class="num">03</span><b>广告分成资质死循环？</b>近 7 天零收入 → 没资质 → 发不了任务 → 更没收入。这个环我们亲手打破过，方法可复制。</li>
+    <li><span class="num">04</span><b>钱到账了却看不懂？</b>ad/data 接口参数一堆坑、数据 T+1、跨应用查询被拒……收入到底从哪条视频来，说不清。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>全家桶里有什么</h2>
+  <div class="card">
+    <h3>① 星火任务一键发布脚本 <span class="chip">可执行</span></h3>
+    <p>五道闸自动校验：品牌路径 → 图片覆盖率 → 小程序归属防串线 → 文本审核 → 资源路径，全过才提交。参数填错直接拦下，不会浪费一次投放机会。</p>
+  </div>
+  <div class="card">
+    <h3>② OpenAPI 视频挂卡发布器 <span class="chip">可执行</span></h3>
+    <p>环境变量驱动：视频、封面、文案、话题、挂卡小程序、落地页路径一次配齐。支持自有号挂自家小程序卡，发布前自动核验账号身份，杜绝发错号。</p>
+  </div>
+  <div class="card">
+    <h3>③ 收入观测脚本 <span class="chip">可执行</span></h3>
+    <p>一条命令查任意时间窗的广告收入，支持按小程序线拆分、JSON 输出接自动化。多小程序多账号隔离，token 不串线。</p>
+  </div>
+  <div class="card">
+    <h3>④ 避坑清单 20+ 条 <span class="chip">文档</span></h3>
+    <p>10001008 关联授权、批量挂载申请、话题上限 4 个、资质死循环、挂载明细 T+1 滞后、绑定不可逆铁律……每条都带「官方定义 + 实测根因 + 解法步骤」。</p>
+  </div>
+  <div class="card">
+    <h3>⑤ 多线运营方法论 <span class="chip">文档</span></h3>
+    <p>受众路由矩阵：什么内容走什么小程序、什么人群用什么号。跨号挂卡与账号隔离的完整纪律，防止辛苦攒的号互相污染。</p>
+  </div>
+  <div class="card">
+    <h3>⑥ 端到端支付接入模板 <span class="chip">可执行</span></h3>
+    <p>小程序/技能收款全链路：下单 → 二维码 → 回调验签 → 核销放行，附 10 分钟连通性自测法。商户号配置的三大经典报错排查法一并奉上。</p>
+  </div>
+</section>
+
+<section>
+  <h2>不是纸上谈兵</h2>
+  <div class="proof">
+    这套东西每天都在真实运营中使用：<b>5 条小程序线、多个快手账号</b>
+    <ul>
+      <li>星火任务发布：五道闸全过一次提交成功，小程序归属零串线</li>
+      <li>视频挂卡：从报 10001008 到彻底搞懂关联授权，走了完整排障闭环</li>
+      <li>收入观测：全矩阵每日只读扫描，哪里赚钱、哪里漏量一目了然</li>
+      <li>支付链路：真人端到端实测，下单 → 扫码 → 回调 → 核销 10 分钟走通</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>定价</h2>
+  <div class="price">
+    <div class="old">恢复价 ¥99</div>
+    <div class="now"><small>¥</small>49</div>
+    <div class="lim">早鸟限 20 名 · 含 30 天内容更新</div>
+    <ul>
+      <li>3 个可执行脚本（即拿即用，附配置说明）</li>
+      <li>避坑清单 + 运营方法论完整文档</li>
+      <li>支付接入模板 + 自测清单</li>
+      <li>30 天内内容更新免费跟进（坑库持续扩充）</li>
+      <li>1 次提问答疑（你的报错截图发来，帮你看）</li>
+    </ul>
+    <a class="cta" href="#lead">预订早鸟名额</a>
+    <p class="note">填个微信号锁定，上架时优先通知你</p>
+  </div>
+</section>
+
+<section id="lead">
+  <h2>锁定早鸟名额</h2>
+  <div class="leadbox">
+    <input id="wx" type="text" maxlength="60" placeholder="填你的微信号" autocomplete="off">
+    <button id="btn" onclick="submitLead()">锁定早鸟名额（¥49）</button>
+    <p id="leadmsg" class="leadmsg"></p>
+    <p class="note">只用于上架通知，不做其他用途；也可直接添加页面底部联系方式。</p>
+  </div>
+</section>
+
+<section class="faq" id="order">
+  <h2>常见问题</h2>
+  <details>
+    <summary>需要什么技术基础？</summary>
+    <p>会用命令行、能看懂 JSON 就够。脚本是即拿即用的，文档里有逐步配置说明。如果你已经做过快手小程序，基本是零门槛。</p>
+  </details>
+  <details>
+    <summary>和网上免费教程有什么区别？</summary>
+    <p>网上教程停在「接口怎么调」。这里给的是跑通全链路之后的完整版本：每道审核闸、每个报错码、每条后台配置都实测过，包括官方文档没写清的部分（比如 10001008 的后台解法）。</p>
+  </details>
+  <details>
+    <summary>保证能赚钱吗？</summary>
+    <p>不保证。本产品是工具与方法论，帮你把「发布、挂卡、观测、收款」这些工程环节打通、少踩坑。收益取决于你的内容和运营，我们不夸大承诺。</p>
+  </details>
+  <details>
+    <summary>什么时候交付？</summary>
+    <p>预订后正式上架时优先交付（预计一周内），早鸟价锁定，随后发你完整包 + 更新通道。</p>
+  </details>
+</section>
+
+<script>
+async function submitLead(){
+  var wx = document.getElementById('wx').value.trim();
+  var msg = document.getElementById('leadmsg');
+  var btn = document.getElementById('btn');
+  if(!wx){ msg.style.color='#c0392b'; msg.textContent='先填一下微信号'; return; }
+  btn.disabled = true; msg.style.color='#666'; msg.textContent='提交中…';
+  try{
+    var r = await fetch('https://letmetry.cn/mysql/insert', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({table:'ks_toolkit_leads', data:{wxid: wx, source:'landing'}})
+    });
+    var j = await r.json();
+    if(r.ok && j.insertId){
+      msg.style.color='#0a9d6c';
+      msg.textContent='✅ 已锁定！名额序号 #' + j.insertId + '，上架时优先通知你';
+      btn.textContent='已锁定 ✓';
+    }else{ throw new Error('fail'); }
+  }catch(e){
+    btn.disabled = false;
+    msg.style.color='#c0392b'; msg.textContent='提交失败，稍后再试或直接联系我';
+  }
+}
+</script>
+<p class="disclaim">
+  本产品与快手官方无隶属关系；所有接口调用基于快手开放平台公开 API。<br>
+  © 北京南路科技 · 数据实测截至 2026-11
+</p>
+
+</div>
+</body>
+</html>
