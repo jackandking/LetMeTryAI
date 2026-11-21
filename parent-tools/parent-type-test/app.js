@@ -132,9 +132,15 @@ let openid = '';
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-    // 尝试从 URL 获取 openid
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
+
+    // 支付成功返回（returnUrl 带 paid=1&type=<resultType>）
+    // 校验后端确实已付费后再展示完整报告，防止手动拼 URL 白嫖
+    if (urlParams.get('paid') === '1') {
+        verifyPaidAndShowReport(urlParams.get('type'));
+        return;
+    }
 
     // 环境检测调试
     const hasKs = typeof ks !== 'undefined';
@@ -154,6 +160,27 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuestion();
     updateProgress();
 });
+
+// 支付成功返回：校验已付费 → 直接展示完整报告（结果类型取自 returnUrl，
+// 因为重新加载页面后本地 answers 已丢失）
+async function verifyPaidAndShowReport(forcedType) {
+    try {
+        const res = await fetch(`${API_BASE}/api/pay/has-paid?openid=${encodeURIComponent(openid)}&productId=${encodeURIComponent(PRODUCT_ID)}`);
+        const data = await res.json();
+        if (data.success && data.paid) {
+            const quiz = document.getElementById('quiz-section');
+            if (quiz) quiz.classList.add('hidden');
+            showFullReport(null, forcedType || undefined);
+            return;
+        }
+        console.log('[paid-return] has-paid check: not paid, fallback to quiz');
+    } catch (err) {
+        console.error('[paid-return] has-paid check failed, fallback to quiz', err);
+    }
+    // 未付费或校验失败 → 正常做题流程
+    renderQuestion();
+    updateProgress();
+}
 
 function updateProgress() {
     const progress = document.getElementById('progress');
@@ -275,9 +302,11 @@ async function unlockReport() {
 
         console.log('[pay] Environment check:', { hasKs, hasKsPay, hasNavigateTo });
 
-        // 构造返回 URL：当前页 + ?paid=1
+        // 构造返回 URL：当前页 + ?paid=1&type=<resultType>
+        // type 必须带回：支付返回时页面重新加载，本地 answers 会丢失
+        const resultType = calculateResult();
         const currentUrl = window.location.href.split('?')[0];
-        const returnUrl = currentUrl + '?paid=1';
+        const returnUrl = currentUrl + '?paid=1&type=' + encodeURIComponent(resultType);
 
         // 3. 调起支付 - 优先级：ks.navigateTo > ks.pay > 模拟
         if (hasNavigateTo) {
@@ -375,11 +404,11 @@ async function unlockReport() {
     }
 }
 
-async function showFullReport(orderId) {
+async function showFullReport(orderId, forcedType) {
     document.getElementById('brief-result').classList.add('hidden');
     document.getElementById('full-report').classList.remove('hidden');
 
-    const resultType = calculateResult();
+    const resultType = forcedType || calculateResult();
     const result = RESULTS[resultType];
 
     document.getElementById('full-report').innerHTML = `
