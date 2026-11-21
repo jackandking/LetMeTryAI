@@ -132,7 +132,7 @@ function createPostCard(post) {
     if (post.imageLink) {
         const view = document.createElement('a');
         view.href = post.imageLink;
-        view.target = '_blank';
+        // 快手小程序 webview 内 _blank 会被拦截，改为当前窗口跳转（v.kuaishou.com 短链可在快手内直接播放）
         view.className = 'video-link';
         view.textContent = '查看视频 →';
         card.appendChild(view);
