@@ -359,24 +359,27 @@ const PointsSystem = (function() {
 
     /**
      * Mark an image as deleted in the database (logical delete)
+     * Routes through the dedicated /api/womanai/delete endpoint — the raw
+     * `UPDATE handsome_images SET deleted = 1` sent via /mysql/query has been
+     * rejected with 403 since the 2026-09-06 read-only lockdown
+     * (reproduced in production 2026-11-22).
      * @param {string} imageUrl - Image URL to mark deleted
-     * @returns {Promise<object>} DB response
+     * @returns {Promise<object>} Endpoint response ({ success, affectedRows })
      */
     async function markImageDeletedInDB(imageUrl) {
-        const API_ENDPOINTS = window.API_ENDPOINTS || {
-            MYSQL_QUERY: 'https://letmetry.cn/mysql/query'
-        };
+        const API_ENDPOINTS = window.API_ENDPOINTS || {};
+        // 双兜底：window.API_ENDPOINTS 缺项（旧缓存 config.js）时用硬编码默认值
+        const WOMANAI_DELETE = API_ENDPOINTS.WOMANAI_DELETE || 'https://letmetry.cn/api/womanai/delete';
+        const MYSQL_QUERY = API_ENDPOINTS.MYSQL_QUERY || 'https://letmetry.cn/mysql/query';
+        const uuid = getUserUUID();
 
-        // First try exact-match update
-        let response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        // First try exact-match delete via the dedicated endpoint
+        let response = await fetch(WOMANAI_DELETE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                sql: 'UPDATE handsome_images SET deleted = 1 WHERE image_url = ?',
-                params: [imageUrl]
-            })
+            body: JSON.stringify({ imageUrl: imageUrl, uuid: uuid })
         });
 
         if (!response.ok) {
@@ -384,24 +387,22 @@ const PointsSystem = (function() {
         }
 
         const data = await response.json();
-
-        // If update affected no rows, try a fallback: match by prefix (first 255 chars)
         const affected = data && (data.affectedRows || data.changedRows || 0);
         if (affected > 0) {
             console.log(`Marked deleted in DB for ${imageUrl} (exact match)`);
             return data;
         }
 
-        // Fallback: try to find by prefix using SUBSTRING for security
-        // This avoids SQL injection risks from wildcards in the URL
-        response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        // Fallback: try to find by prefix (handles long URLs/truncation), then delete by id
+        const prefix = imageUrl.slice(0, 255);
+        response = await fetch(MYSQL_QUERY, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sql: 'SELECT id, image_url FROM handsome_images WHERE SUBSTRING(image_url, 1, 255) = SUBSTRING(?, 1, 255) LIMIT 1',
-                params: [imageUrl]
+                sql: 'SELECT id, image_url FROM handsome_images WHERE image_url LIKE ? LIMIT 1',
+                params: [prefix + '%']
             })
         });
 
@@ -412,16 +413,13 @@ const PointsSystem = (function() {
         const rows = await response.json();
         if (Array.isArray(rows) && rows.length > 0) {
             const id = rows[0].id;
-            // Update by id
-            const updResp = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+            // Delete by id through the dedicated endpoint
+            const updResp = await fetch(WOMANAI_DELETE, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    sql: 'UPDATE handsome_images SET deleted = 1 WHERE id = ?',
-                    params: [id]
-                })
+                body: JSON.stringify({ id: id, uuid: uuid })
             });
 
             if (!updResp.ok) {

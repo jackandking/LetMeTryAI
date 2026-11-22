@@ -28,6 +28,7 @@ window.API_ENDPOINTS = {
     MYSQL_DELETE: `${window.BASE_URL}/mysql/delete`,
     BEAUTY_DELETE: `${window.BASE_URL}/api/beauty/delete`,
     BACKVIEW_DELETE: `${window.BASE_URL}/api/backview/delete`,
+    WOMANAI_DELETE: `${window.BASE_URL}/api/womanai/delete`,
     NANRENBAO_ADMIN_REVIEW: `${window.BASE_URL}/api/nanrenbao/admin/review`,
     NANRENBAO_ADMIN_VISIBILITY: `${window.BASE_URL}/api/nanrenbao/admin/visibility`,
     NANRENBAO_ADMIN_COVERAGE: `${window.BASE_URL}/api/nanrenbao/admin/coverage`,
