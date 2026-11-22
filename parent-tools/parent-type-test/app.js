@@ -142,6 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // 已付费兜底：支付后返回小程序的链路可能失败（跳微信支付后快手冷启动回首页），
+    // 用户重新点链接进入时不带 paid=1，此时只要 openid 是真实获取的，
+    // 进页就查一次付费状态，已付费直接展示完整报告，避免重做问卷、二次扣费
+    if (openid && !openid.startsWith('unknown_')) {
+        verifyPaidAndShowReport();
+        return;
+    }
+
     // 环境检测调试
     const hasKs = typeof ks !== 'undefined';
     const hasKsPay = hasKs && typeof ks.pay === 'function';
@@ -161,8 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgress();
 });
 
-// 支付成功返回：校验已付费 → 直接展示完整报告（结果类型取自 returnUrl，
-// 因为重新加载页面后本地 answers 已丢失）
+// 支付成功返回或进页兜底：校验已付费 → 直接展示完整报告
+// resultType 优先级：returnUrl 参数 > 后端订单记录（下单时存入）> 本地 answers 计算
 async function verifyPaidAndShowReport(forcedType) {
     try {
         const res = await fetch(`${API_BASE}/api/pay/has-paid?openid=${encodeURIComponent(openid)}&productId=${encodeURIComponent(PRODUCT_ID)}`);
@@ -170,7 +178,7 @@ async function verifyPaidAndShowReport(forcedType) {
         if (data.success && data.paid) {
             const quiz = document.getElementById('quiz-section');
             if (quiz) quiz.classList.add('hidden');
-            showFullReport(null, forcedType || undefined);
+            showFullReport(null, forcedType || data.resultType || undefined);
             return;
         }
         console.log('[paid-return] has-paid check: not paid, fallback to quiz');
@@ -275,7 +283,7 @@ async function unlockReport() {
     }
 
     try {
-        // 1. 创建订单
+        // 1. 创建订单（带 resultType，后端存储，供重新进入时兜底展示正确报告类型）
         const res = await fetch(`${API_BASE}/api/pay/create-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -283,7 +291,8 @@ async function unlockReport() {
                 openid: openid,
                 productId: PRODUCT_ID,
                 productName: PRODUCT_NAME,
-                amount: AMOUNT
+                amount: AMOUNT,
+                resultType: calculateResult()
             })
         });
         const data = await res.json();
