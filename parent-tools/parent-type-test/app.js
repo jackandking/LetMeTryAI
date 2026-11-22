@@ -5,7 +5,8 @@
 const API_BASE = 'https://letmetry.cn';
 const PRODUCT_ID = 'parent-type-test';
 const PRODUCT_NAME = '测测你是哪种家长类型';
-const AMOUNT = 100; // 1元 = 100分
+const AMOUNT = 1; // 1分（用户要求降到1分，后端金额单位为分）
+const PRICE_LABEL = '¥' + (AMOUNT / 100).toFixed(2); // 展示与下单金额单一数据源
 
 // 测试题目
 const QUESTIONS = [
@@ -266,7 +267,7 @@ function showBriefResult() {
             <p class="brief">${result.brief}</p>
         </div>
         <div class="price-tag">
-            <div class="price">¥1.00</div>
+            <div class="price">${PRICE_LABEL}</div>
             <div class="unit">解锁完整分析报告</div>
         </div>
         <button class="btn btn-pay" onclick="unlockReport()">🔓 立即解锁完整报告
