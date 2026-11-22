@@ -313,6 +313,12 @@ async function unlockReport() {
             // 方式1：ks.navigateTo 跳转到小程序原生支付页（快手 webview 中可用）
             console.log('[pay] Using ks.navigateTo → /pages/pay/pay');
             const payUrl = '/pages/pay/pay?orderId=' + encodeURIComponent(order.orderId) +
+                '&openid=' + encodeURIComponent(openid) +
+                '&productId=' + encodeURIComponent(PRODUCT_ID) +
+                '&quantity=1' +
+                '&totalAmount=' + encodeURIComponent(AMOUNT) +
+                '&subject=' + encodeURIComponent(PRODUCT_NAME) +
+                '&body=' + encodeURIComponent(PRODUCT_NAME) +
                 '&appId=' + encodeURIComponent(order.appId) +
                 '&prepayId=' + encodeURIComponent(order.prepayId) +
                 '&nonceStr=' + encodeURIComponent(order.nonceStr) +
