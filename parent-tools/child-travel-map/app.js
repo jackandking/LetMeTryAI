@@ -42,6 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 本地 session / URL 参数只是 UX 提示，授权锚点永远是后端 has-paid（fail-closed）
     if (shouldAutoGenerateAfterPayment()) {
         verifyPaidAndAutoGenerate();
+    } else if (openid && !openid.startsWith('unknown_')) {
+        // 双保险：外部支付后平台跳回失败、用户从最近使用重进小程序，
+        // URL 不带 paid=1 且本地 session 已清。此时只要带有效 openid 就主动查一次后端，
+        // 已付费则切「已解锁」UI（不强制生图，避免冷启动 visited 为空生成空图）。
+        verifyPaid().then(paid => {
+            if (paid) applyPaidUi();
+        });
     }
 });
 
