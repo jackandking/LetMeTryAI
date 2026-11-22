@@ -38,9 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStats();
     bindEvents();
 
-    // 如果 URL 带 paid=1，或本地仍持有最近一次支付成功状态，自动触发生成
+    // 如果 URL 带 paid=1，或本地仍持有最近一次支付成功状态，先向后端核实再生成
+    // 本地 session / URL 参数只是 UX 提示，授权锚点永远是后端 has-paid（fail-closed）
     if (shouldAutoGenerateAfterPayment()) {
-        setTimeout(() => generateImage(), 500);
+        verifyPaidAndAutoGenerate();
     }
 });
 
@@ -170,12 +171,49 @@ function onGenerateClick() {
         return;
     }
 
-    if (hasRecentPaidSession()) {
-        generateImage();
+    // 不再信任本地 session：每次生成都向后端核实付费状态
+    verifyPaid().then(paid => {
+        if (paid) {
+            applyPaidUi();
+            generateImage();
+        } else {
+            initiatePayment();
+        }
+    });
+}
+
+// 后端付费校验（fail-closed：网络错误一律视为未付费）
+async function verifyPaid() {
+    try {
+        const res = await fetch(`${API_BASE}/api/pay/has-paid?openid=${encodeURIComponent(openid)}&productId=${encodeURIComponent(PRODUCT_ID)}`);
+        const data = await res.json();
+        return !!(data.success && data.paid);
+    } catch (e) {
+        console.error('[pay] has-paid check failed', e);
+        return false;
+    }
+}
+
+// 支付成功返回：校验通过后自动生图 + 切到已付费 UI；校验失败清本地会话，保持免费态
+async function verifyPaidAndAutoGenerate() {
+    const paid = await verifyPaid();
+    if (!paid) {
+        try { localStorage.removeItem(PAID_SESSION_KEY); } catch (e) {}
+        console.log('[pay] paid=1 但后端校验未通过，按未付费处理');
         return;
     }
+    applyPaidUi();
+    setTimeout(() => generateImage(), 500);
+}
 
-    initiatePayment();
+// 已付费 UI：隐藏付费引导，避免用户重复付费
+function applyPaidUi() {
+    const price = document.getElementById('generate-price');
+    const hint = document.querySelector('.generate-hint');
+    const btn = document.getElementById('generate-btn');
+    if (price) price.classList.add('hidden');
+    if (hint) hint.textContent = '已解锁 · 可重复生成高清图';
+    if (btn) btn.innerHTML = '✨ 重新生成';
 }
 
 // ===== 支付流程：H5 跳转原生支付页，支付后回跳当前 H5 =====
