@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
     syncPaidSessionFromUrl();
 
-    // debug bar
+    // debug bar：默认隐藏，仅 URL 带 ?debug=1 时显示（避免真机出现测试文案）
     const debug = document.getElementById('debug-info');
-    if (debug) {
+    if (debug && urlParams.get('debug') === '1') {
         debug.style.display = 'block';
-        debug.textContent = '点击生成后，请使用小程序底部按钮完成支付 | tap to hide';
+        debug.textContent = 'debug: 支付走小程序底部按钮 | tap to hide';
         debug.onclick = () => debug.style.display = 'none';
     }
 
@@ -301,7 +301,7 @@ async function generateImage() {
             uploadedImageUrl = uploadResult.imageUrl;
 
             if (resultStatus) {
-                resultStatus.textContent = '图片已上传，点“保存到相册”会唤起快手原生保存；失败时再用预览长按保存';
+                resultStatus.textContent = '图片已上传，推荐点“预览并长按保存”；也可点“直接保存到相册”';
             }
             if (saveBtn) {
                 saveBtn.classList.remove('hidden');
@@ -526,20 +526,26 @@ async function saveGeneratedImageToAlbum() {
         resultStatus.textContent = '正在下载图片并保存到相册...';
     }
 
+    // 与原生 save-image 页一致：安卓 tempFilePath 无后缀会 decode fail，
+    // 下载时指定 .jpg 后缀路径，保存用返回的 res.filePath
+    const userDataPath = ks.env && ks.env.USER_DATA_PATH;
+    const localPath = userDataPath ? `${userDataPath}/footprint-${Date.now()}.jpg` : '';
     const downloadRes = await new Promise((resolve, reject) => {
-        ks.downloadFile({
-            url: uploadedImageUrl,
-            success: resolve,
-            fail: reject
-        });
+        const opts = { url: uploadedImageUrl, success: resolve, fail: reject };
+        if (localPath) opts.filePath = localPath;
+        ks.downloadFile(opts);
     });
 
-        const filePath = downloadRes.tempFilePath || downloadRes.apFilePath || downloadRes.filePath;
+        const filePath = downloadRes.filePath || downloadRes.tempFilePath || downloadRes.apFilePath;
         if (!filePath) {
             throw new Error('未获取到本地图片路径');
         }
 
         await ks.saveImageToPhotosAlbum({ filePath });
+
+        if (localPath && filePath === localPath) {
+            try { ks.getFileSystemManager().unlink(localPath); } catch (e) {}
+        }
 
         if (resultStatus) {
             resultStatus.textContent = '已保存到相册，请到系统相册查看';

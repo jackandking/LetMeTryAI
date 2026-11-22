@@ -62,14 +62,14 @@
 
         <!-- Result Image (hidden until generated) -->
         <div id="result-section" class="card hidden">
-            <p class="result-tip">👇 优先点“保存到相册”，长按预览仅作兜底</p>
+            <p class="result-tip">👇 推荐用「预览 + 长按保存」，最稳；也可直接存相册</p>
             <p id="result-status" class="result-status">图片生成后会自动上传，便于在快手里预览保存</p>
             <img id="result-image" class="result-image" alt="足迹地图">
-            <button id="save-to-album-btn" class="btn-generate hidden" onclick="saveGeneratedImageToAlbum()">
-                💾 保存到相册
-            </button>
             <button id="preview-save-btn" class="btn-generate hidden" onclick="previewGeneratedImage()">
-                📱 在快手中预览并长按保存
+                📱 预览并长按保存（推荐）
+            </button>
+            <button id="save-to-album-btn" class="btn-generate hidden" onclick="saveGeneratedImageToAlbum()">
+                💾 直接保存到相册
             </button>
             <button class="btn-secondary" onclick="closeResult()">关闭</button>
         </div>
@@ -87,7 +87,7 @@
     <script src="payment-bridge.js?v=2"></script>
     <script src="paid-session.js?v=1"></script>
     <script src="image-upload-helper.js?v=2"></script>
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
 <div style="text-align:center;font-size:12px;color:#999;padding:8px 0 16px;"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:#999;text-decoration:none;">京ICP备2024092319号-1</a></div>
     <script src="/parent-tools/service-fab.js"></script>
 </body>
