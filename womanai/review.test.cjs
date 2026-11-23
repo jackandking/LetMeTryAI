@@ -46,6 +46,16 @@ const check = (name, pass) => ok.push([name, pass]);
   check('后台投稿端点有旧缓存兜底',
     /WOMANAI_SUBMIT\s*\|\|\s*['"]https:\/\/letmetry\.cn\/api\/womanai\/submit['"]/.test(adminJs));
 
+  // 2b. 用户投稿只支持本地文件上传（2026-11-23 移除 URL 上传链路）
+  check('上传页已移除 URL 输入框',
+    !/id=["']imageUrl["']/.test(upload) && !/type=["']url["']/.test(upload));
+  check('上传页不再引用 URL 校验器',
+    !/url-validator\.js/.test(upload) && !/isAllowedDomain\s*\(/.test(upload));
+  check('投稿来源固定为 local_file',
+    /const sourceType = 'local_file'/.test(upload) && !/localFile \? 'local_file' : 'url'/.test(upload));
+  check('图片上传端点有旧缓存兜底',
+    /IMAGE_UPLOAD\)?\s*\|\|\s*['"]https:\/\/letmetry\.cn\/image\/upload['"]/.test(upload));
+
   // 3. 自动生成图链路
   check('自动生成图入库 approved + automation',
     /INSERT INTO \$\{config\.database\.imagesTable\}[\s\S]{0,150}'approved', 'automation'/.test(approveScript));

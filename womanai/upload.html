@@ -110,29 +110,6 @@
             border-color: #f5576c;
         }
 
-        .allowed-domains {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .allowed-domains h3 {
-            margin: 0 0 10px;
-            color: #f5576c;
-            font-size: 1em;
-        }
-
-        .allowed-domains ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        .allowed-domains li {
-            color: #666;
-            margin-bottom: 5px;
-        }
-
         .preview-section {
             margin-top: 20px;
         }
@@ -141,25 +118,6 @@
             max-width: 100%;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .upload-or-divider {
-            text-align: center;
-            margin: 16px 0;
-            color: #999;
-            font-size: 0.95em;
-            position: relative;
-        }
-
-        .upload-or-divider::before,
-        .upload-or-divider::after {
-            content: '';
-            display: inline-block;
-            width: 40%;
-            height: 1px;
-            background: #ddd;
-            vertical-align: middle;
-            margin: 0 8px;
         }
 
         .file-upload-row {
@@ -283,19 +241,7 @@
 
             <form id="uploadForm">
                 <div class="form-group">
-                    <label for="imageUrl">帅哥图片链接:</label>
-                    <input 
-                        type="url" 
-                        id="imageUrl" 
-                        name="imageUrl" 
-                        placeholder="请输入图片URL"
-                    >
-                </div>
-
-                <div class="upload-or-divider">— 或者选择本地图片 —</div>
-
-                <div class="form-group">
-                    <label>本地图片上传：</label>
+                    <label>选择要上传的图片：</label>
                     <div class="file-upload-row">
                         <input type="file" id="localFileInput" accept="image/*" style="display:none">
                         <button type="button" id="localFileBtn" class="file-btn">📁 选择本地图片</button>
@@ -321,9 +267,7 @@
         <p>&copy; 2025 女人爱. 保留所有权利.</p>
     </footer>
 
-    <script src="url-validator.js"></script>
     <script>
-        const imageUrlInput = document.getElementById('imageUrl');
         const previewSection = document.getElementById('previewSection');
         const previewImage = document.getElementById('previewImage');
         const uploadForm = document.getElementById('uploadForm');
@@ -378,9 +322,6 @@
                 localFile = file;
                 localFileNameEl.textContent = file.name;
                 localFileNameEl.className = 'file-name selected';
-                // Clear URL input when file is selected
-                imageUrlInput.value = '';
-                previewSection.style.display = 'none';
                 // Show local preview
                 var objectUrl = URL.createObjectURL(file);
                 previewImage.onload = function() { URL.revokeObjectURL(objectUrl); };
@@ -458,7 +399,9 @@
             formData.append('file', file);
             var resp;
             try {
-                resp = await fetch(window.API_ENDPOINTS.IMAGE_UPLOAD, { method: 'POST', body: formData });
+                // 兜底：config.js 可能被浏览器缓存旧版本，缺端点时不能 fetch(undefined)
+                const imageUploadEndpoint = (window.API_ENDPOINTS && window.API_ENDPOINTS.IMAGE_UPLOAD) || 'https://letmetry.cn/image/upload';
+                resp = await fetch(imageUploadEndpoint, { method: 'POST', body: formData });
             } catch (err) {
                 throw new Error('上传请求失败：' + (err.message || '网络错误'));
             }
@@ -488,82 +431,34 @@
             return null;
         }
 
-        // Preview image when URL is entered (on blur)
-        imageUrlInput.addEventListener('input', function() {
-            // Clear local file when user types a URL
-            if (this.value.trim()) {
-                localFile = null;
-                localFileInput.value = '';
-                localFileNameEl.textContent = '未选择文件';
-                localFileNameEl.className = 'file-name';
-            }
-        });
-
-        imageUrlInput.addEventListener('blur', function() {
-            var url = this.value.trim();
-            if (url && isValidUrl(url)) {
-                previewImage.src = url;
-                previewSection.style.display = 'block';
-                previewImage.onerror = function() {
-                    previewSection.style.display = 'none';
-                    showMessage('无法加载预览图片，请检查URL是否正确', 'error');
-                };
-            } else if (!url) {
-                previewSection.style.display = 'none';
-            }
-        });
-
         // Handle form submission
         uploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            var urlValue = imageUrlInput.value.trim();
-
-            // Must have either a local file or a URL
-            if (!localFile && !urlValue) {
-                showMessage('请输入图片URL或选择本地图片', 'error');
+            // 只支持本地文件上传：未选文件直接提示，不再接受图片链接
+            if (!localFile) {
+                showMessage('请先选择一张本地图片', 'error');
                 return;
             }
 
             submitBtn.disabled = true;
 
-            var imageUrl = urlValue;
-
-            // --- Local file upload path ---
-            if (localFile) {
-                try {
-                    submitBtn.textContent = '压缩中...';
-                    var compressed = await compressImageFile(localFile);
-                    submitBtn.textContent = '上传图片中...';
-                    var apiResponse = await uploadFileToImageApi(compressed);
-                    var uploadedUrl = extractImageUrlFromResponse(apiResponse);
-                    if (!uploadedUrl) {
-                        throw new Error('未能从服务器响应中获取图片URL');
-                    }
-                    imageUrl = uploadedUrl;
-                } catch (err) {
-                    console.error('Local file upload error:', err);
-                    showMessage('本地图片上传失败：' + (err.message || '请稍后重试'), 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '上传图片';
-                    return;
+            var imageUrl;
+            try {
+                submitBtn.textContent = '压缩中...';
+                var compressed = await compressImageFile(localFile);
+                submitBtn.textContent = '上传图片中...';
+                var apiResponse = await uploadFileToImageApi(compressed);
+                imageUrl = extractImageUrlFromResponse(apiResponse);
+                if (!imageUrl) {
+                    throw new Error('未能从服务器响应中获取图片URL');
                 }
-            } else {
-                // Validate URL
-                if (!isValidUrl(imageUrl)) {
-                    showMessage('请输入有效的图片URL', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '上传图片';
-                    return;
-                }
-
-                // Validate domain
-                if (!isAllowedDomain(imageUrl)) {
-                    showMessage('该图片来源域名不在允许列表中，请使用小红书、知乎、Instagram等平台的图片', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '上传图片';
-                    return;
-                }
+            } catch (err) {
+                console.error('Local file upload error:', err);
+                showMessage('本地图片上传失败：' + (err.message || '请稍后重试'), 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '上传图片';
+                return;
             }
 
             submitBtn.textContent = '上传中...';
@@ -574,7 +469,7 @@
                 // 兜底：config.js 被浏览器缓存一周，旧缓存没有 WOMANAI_SUBMIT 会
                 // 导致 fetch(undefined) → /womanai/undefined 404（2026-11-23 实测）。
                 const submitEndpoint = API_ENDPOINTS.WOMANAI_SUBMIT || 'https://letmetry.cn/api/womanai/submit';
-                const sourceType = localFile ? 'local_file' : 'url';
+                const sourceType = 'local_file';
                 const response = await fetch(submitEndpoint, {
                     method: 'POST',
                     headers: {
@@ -609,7 +504,6 @@
                     } catch (err) {
                         console.warn('points award failed', err);
                     }
-                    imageUrlInput.value = '';
                     localFile = null;
                     localFileNameEl.textContent = '未选择文件';
                     localFileNameEl.className = 'file-name';
@@ -645,15 +539,6 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
-        }
-
-        function isValidUrl(url) {
-            try {
-                new URL(url);
-                return url.startsWith('http://') || url.startsWith('https://');
-            } catch {
-                return false;
-            }
         }
 
         // VConsole for debugging
