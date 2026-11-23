@@ -569,27 +569,33 @@
             submitBtn.textContent = '上传中...';
 
             try {
-                // 快手上线要求：用户投稿先进 pending，审核通过后才在前台展示。
-                // source_type 标记来源，便于审核后台区分 url / 本地上传。
+                // 走服务端专用投稿端点：审核状态由服务端强制设为 pending，
+                // 不再由客户端 SQL 指定（否则可自行改成 approved 绕过审核）。
                 const sourceType = localFile ? 'local_file' : 'url';
-                const sql = "INSERT INTO handsome_images (image_url, created_at, review_status, source_type, submitted_at) VALUES (?, NOW(), 'pending', ?, NOW())";
-                const params = [imageUrl, sourceType];
-                
-                const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+                const response = await fetch(API_ENDPOINTS.WOMANAI_SUBMIT, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ sql, params })
+                    body: JSON.stringify({
+                        imageUrl,
+                        sourceType,
+                        uuid: localStorage.getItem('womanai_user_uuid') || null
+                    })
                 });
 
+                if (response.status === 409) {
+                    throw new Error('DUPLICATE');
+                }
                 if (!response.ok) {
-                    throw new Error('上传失败');
+                    let msg = '上传失败';
+                    try { const d = await response.json(); msg = d.error || msg; } catch (e) { /* keep default */ }
+                    throw new Error(`HTTP ${response.status}: ${msg}`);
                 }
 
                 const result = await response.json();
-                
-                if (result.affectedRows > 0) {
+
+                if (result.success) {
                     showMessage('上传成功！内容将先进入人工审核，通过后展示。感谢分享 😊', 'success');
                     try {
                         if (window.PointsSystem) {
@@ -617,7 +623,7 @@
             } catch (error) {
                 console.error('Upload error:', error);
                 
-                if (error.message.includes('Duplicate')) {
+                if (error.message === 'DUPLICATE' || /duplicate|already exists/i.test(error.message)) {
                     showMessage('这张图片已经存在了！', 'error');
                 } else {
                     showMessage('上传失败: ' + error.message, 'error');

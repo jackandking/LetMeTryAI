@@ -113,25 +113,25 @@ function parseUrls(input) {
  */
 async function uploadSingleImage(url) {
     try {
-        // 快手上线要求：任何来源（含后台批量上传）都先进 pending 待审核
-        const sql = "INSERT INTO handsome_images (image_url, created_at, review_status, source_type, submitted_at) VALUES (?, NOW(), 'pending', 'url', NOW())";
-        const params = [url];
-        
-        const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
+        // 走服务端专用投稿端点：服务端强制 pending，客户端不能自行放行审核
+        const response = await fetch(API_ENDPOINTS.WOMANAI_SUBMIT, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ sql, params })
+            body: JSON.stringify({ imageUrl: url, sourceType: 'url' })
         });
-        
+
+        if (response.status === 409) {
+            return { success: false, error: 'Duplicate' };
+        }
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        
+
         const result = await response.json();
-        
-        if (result.affectedRows > 0) {
+
+        if (result.success) {
             return { success: true };
         } else {
             throw new Error(result.error || '上传失败');

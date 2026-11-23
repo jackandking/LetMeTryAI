@@ -29,6 +29,7 @@ window.API_ENDPOINTS = {
     BEAUTY_DELETE: `${window.BASE_URL}/api/beauty/delete`,
     BACKVIEW_DELETE: `${window.BASE_URL}/api/backview/delete`,
     WOMANAI_DELETE: `${window.BASE_URL}/api/womanai/delete`,
+    WOMANAI_SUBMIT: `${window.BASE_URL}/api/womanai/submit`,
     WOMANAI_ADMIN_REVIEW: `${window.BASE_URL}/api/womanai/admin/review`,
     WOMANAI_ADMIN_VISIBILITY: `${window.BASE_URL}/api/womanai/admin/visibility`,
     NANRENBAO_ADMIN_REVIEW: `${window.BASE_URL}/api/nanrenbao/admin/review`,

@@ -33,11 +33,13 @@ const check = (name, pass) => ok.push([name, pass]);
   check('前台只查 approved 且未删除',
     /handsome_images WHERE deleted = 0 AND review_status = 'approved'/.test(appreciate));
 
-  // 2. 两个投稿入口都进 pending
-  check('用户投稿 INSERT 带 pending',
-    /INSERT INTO handsome_images[\s\S]{0,120}'pending'/.test(upload));
-  check('后台批量上传 INSERT 带 pending',
-    /INSERT INTO handsome_images[\s\S]{0,120}'pending'/.test(adminJs));
+  // 2. 两个投稿入口都走服务端专用端点（pending 由服务端强制，客户端无权指定）
+  check('用户投稿走 WOMANAI_SUBMIT 且无客户端 INSERT',
+    /API_ENDPOINTS\.WOMANAI_SUBMIT/.test(upload) && !/INSERT INTO handsome_images/.test(upload));
+  check('后台批量上传走 WOMANAI_SUBMIT 且无客户端 INSERT',
+    /API_ENDPOINTS\.WOMANAI_SUBMIT/.test(adminJs) && !/INSERT INTO handsome_images/.test(adminJs));
+  check('两套 config 都声明投稿端点',
+    /WOMANAI_SUBMIT:.*api\/womanai\/submit/.test(config) && /WOMANAI_SUBMIT:.*api\/womanai\/submit/.test(utilConfig));
 
   // 3. 自动生成图链路
   check('自动生成图入库 approved + automation',
