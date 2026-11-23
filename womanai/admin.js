@@ -114,7 +114,9 @@ function parseUrls(input) {
 async function uploadSingleImage(url) {
     try {
         // 走服务端专用投稿端点：服务端强制 pending，客户端不能自行放行审核
-        const response = await fetch(API_ENDPOINTS.WOMANAI_SUBMIT, {
+        // 兜底：旧缓存 config.js 缺 WOMANAI_SUBMIT 时不能 fetch(undefined) → 404
+        const submitEndpoint = API_ENDPOINTS.WOMANAI_SUBMIT || 'https://letmetry.cn/api/womanai/submit';
+        const response = await fetch(submitEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

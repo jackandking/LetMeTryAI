@@ -40,6 +40,11 @@ const check = (name, pass) => ok.push([name, pass]);
     /API_ENDPOINTS\.WOMANAI_SUBMIT/.test(adminJs) && !/INSERT INTO handsome_images/.test(adminJs));
   check('两套 config 都声明投稿端点',
     /WOMANAI_SUBMIT:.*api\/womanai\/submit/.test(config) && /WOMANAI_SUBMIT:.*api\/womanai\/submit/.test(utilConfig));
+  // 旧缓存兜底：config.js 有 7 天缓存，老用户拿不到新端点时会 fetch(undefined) → 404
+  check('用户投稿端点有旧缓存兜底',
+    /WOMANAI_SUBMIT\s*\|\|\s*['"]https:\/\/letmetry\.cn\/api\/womanai\/submit['"]/.test(upload));
+  check('后台投稿端点有旧缓存兜底',
+    /WOMANAI_SUBMIT\s*\|\|\s*['"]https:\/\/letmetry\.cn\/api\/womanai\/submit['"]/.test(adminJs));
 
   // 3. 自动生成图链路
   check('自动生成图入库 approved + automation',

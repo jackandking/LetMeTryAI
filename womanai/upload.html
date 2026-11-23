@@ -571,8 +571,11 @@
             try {
                 // 走服务端专用投稿端点：审核状态由服务端强制设为 pending，
                 // 不再由客户端 SQL 指定（否则可自行改成 approved 绕过审核）。
+                // 兜底：config.js 被浏览器缓存一周，旧缓存没有 WOMANAI_SUBMIT 会
+                // 导致 fetch(undefined) → /womanai/undefined 404（2026-11-23 实测）。
+                const submitEndpoint = API_ENDPOINTS.WOMANAI_SUBMIT || 'https://letmetry.cn/api/womanai/submit';
                 const sourceType = localFile ? 'local_file' : 'url';
-                const response = await fetch(API_ENDPOINTS.WOMANAI_SUBMIT, {
+                const response = await fetch(submitEndpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
