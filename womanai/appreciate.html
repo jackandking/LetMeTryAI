@@ -617,8 +617,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        // Only return images that are not marked deleted
-                        sql: 'SELECT id, image_url, view_count, created_at FROM handsome_images WHERE deleted = 0 ORDER BY view_count DESC, created_at DESC',
+                        // 快手上线要求：用户投稿须审核通过后展示（pending/rejected 不外露）
+                        sql: "SELECT id, image_url, view_count, created_at FROM handsome_images WHERE deleted = 0 AND review_status = 'approved' ORDER BY view_count DESC, created_at DESC",
                         params: []
                     })
                 });

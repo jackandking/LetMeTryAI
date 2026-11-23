@@ -113,7 +113,8 @@ function parseUrls(input) {
  */
 async function uploadSingleImage(url) {
     try {
-        const sql = 'INSERT INTO handsome_images (image_url, created_at) VALUES (?, NOW())';
+        // 快手上线要求：任何来源（含后台批量上传）都先进 pending 待审核
+        const sql = "INSERT INTO handsome_images (image_url, created_at, review_status, source_type, submitted_at) VALUES (?, NOW(), 'pending', 'url', NOW())";
         const params = [url];
         
         const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {

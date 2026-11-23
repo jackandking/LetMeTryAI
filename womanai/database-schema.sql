@@ -8,8 +8,17 @@ CREATE TABLE IF NOT EXISTS handsome_images (
     deleted TINYINT(1) DEFAULT 0 NOT NULL COMMENT 'Logical delete flag: 0=visible,1=deleted',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- 内容审核（快手上线要求：用户投稿须审核通过后展示）
+    review_status VARCHAR(20) DEFAULT 'pending' NOT NULL COMMENT 'pending/approved/rejected',
+    review_reason VARCHAR(255) DEFAULT NULL COMMENT 'Review note or rejection reason',
+    reviewed_at DATETIME DEFAULT NULL COMMENT 'Time when review was completed',
+    reviewed_by VARCHAR(64) DEFAULT NULL COMMENT 'Reviewer identity',
+    source_type VARCHAR(32) DEFAULT 'legacy' NOT NULL COMMENT 'legacy/url/local_file/automation',
+    submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time when the image was submitted',
     INDEX idx_created_at (created_at),
     INDEX idx_view_count (view_count),
+    INDEX idx_review_status (review_status),
+    INDEX idx_review_deleted (review_status, deleted),
     UNIQUE INDEX idx_image_url (image_url(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

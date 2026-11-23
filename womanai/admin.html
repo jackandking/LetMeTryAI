@@ -393,12 +393,56 @@
     <header>
         <a href="index.html" class="nav-back">← 返回</a>
         <h1>🔧 管理后台</h1>
-        <p>批量上传帅哥图片URL</p>
+        <p>内容审核 + 批量上传帅哥图片URL</p>
+        <button id="reviewKeyLogout" type="button" class="btn-secondary" style="position:absolute;right:16px;top:16px;padding:6px 12px;font-size:0.85em;display:none;">🚪 退出审核</button>
     </header>
 
     <div class="container">
         <div class="admin-panel">
             <div id="alertContainer"></div>
+
+            <h2 class="section-title">🛡️ 审核工作台</h2>
+            <p style="font-size:0.9em;color:#555;margin-bottom:12px;">
+                用户投稿先进入「待审核」，通过后才会前台展示；驳回/隐藏的内容不会展示。
+                写操作需输入管理密钥，仅保存在本会话（可勾选记住本机 30 天）。
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
+                <select id="filterSelect" style="padding:8px;border-radius:6px;border:1px solid #ddd;">
+                    <option value="pending" selected>仅显示待审核</option>
+                    <option value="approved">仅显示已通过</option>
+                    <option value="rejected">仅显示已驳回</option>
+                    <option value="hidden">仅显示已隐藏</option>
+                    <option value="all">全部</option>
+                </select>
+                <button class="btn-secondary" id="reviewRefresh" style="padding:8px 14px;">🔄 刷新</button>
+                <button class="btn-primary" id="reviewBatchApprove" style="padding:8px 14px;">✓ 批量通过</button>
+                <button class="btn-danger" id="reviewBatchReject" style="padding:8px 14px;">✗ 批量驳回</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:760px;">
+                    <thead>
+                        <tr style="background:rgba(0,0,0,0.04);">
+                            <th style="padding:8px;width:36px;"></th>
+                            <th style="padding:8px;">ID</th>
+                            <th style="padding:8px;width:70px;">缩略图</th>
+                            <th style="padding:8px;">审核 / 展示状态</th>
+                            <th style="padding:8px;">来源 / 提交时间</th>
+                            <th style="padding:8px;">审核备注</th>
+                            <th style="padding:8px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviewTableBody">
+                        <tr><td colspan="7" style="text-align:center;padding:20px;">加载中…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;justify-content:center;margin:14px 0;font-size:0.9em;">
+                <button class="btn-secondary" id="reviewPrev" style="padding:6px 12px;">← 上一页</button>
+                <span id="reviewPageInfo">第 1 页</span>
+                <button class="btn-secondary" id="reviewNext" style="padding:6px 12px;">下一页 →</button>
+            </div>
+
+            <hr style="border:none;border-top:1px solid rgba(0,0,0,0.1);margin:28px 0;">
 
             <h2 class="section-title">批量上传URL</h2>
             
@@ -467,7 +511,24 @@
         </div>
     </div>
 
+    <!-- 审核密钥输入模态框 -->
+    <div id="reviewKeyModal" hidden style="position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);">
+        <div style="background:#fff;border-radius:14px;padding:24px;width:min(420px,92vw);box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+            <h2 style="margin-bottom:10px;font-size:1.2em;">🔐 管理密钥</h2>
+            <p id="rvkMsg" class="rvk-msg" style="font-size:0.9em;color:#555;margin-bottom:12px;">输入女人宝管理密钥以执行审核操作</p>
+            <input id="rvkInput" type="password" autocomplete="off" placeholder="粘贴或输入管理密钥" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+            <label style="display:block;margin:12px 0;font-size:0.9em;color:#555;">
+                <input id="rvkRemember" type="checkbox" checked> 记住本机 30 天
+            </label>
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button id="rvkCancel" class="btn-secondary" style="padding:8px 16px;">取消</button>
+                <button id="rvkConfirm" class="btn-primary" style="padding:8px 16px;">确定</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="admin.js"></script>
+    <script type="module" src="review.js"></script>
 <div style="text-align:center;font-size:12px;color:#999;padding:8px 0 16px;"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:#999;text-decoration:none;">京ICP备2024092319号-1</a></div>
 </body>
 </html>

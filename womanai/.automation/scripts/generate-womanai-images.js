@@ -71,7 +71,7 @@ async function generateMiniMaxImage({ apiKey, prompt, aspectRatio, quality, fetc
 }
 
 async function fetchHotImages(config) {
-    const sql = `SELECT id, image_url, view_count, created_at FROM ${config.database.imagesTable} WHERE deleted = 0 ORDER BY view_count DESC, created_at DESC LIMIT ?`;
+    const sql = `SELECT id, image_url, view_count, created_at FROM ${config.database.imagesTable} WHERE deleted = 0 AND review_status = 'approved' ORDER BY view_count DESC, created_at DESC LIMIT ?`;
     const result = await postSql(config.database.mysqlQueryEndpoint, sql, [config.generation.hotSampleLimit]);
     return normalizeRows(result);
 }

@@ -28,6 +28,8 @@ export const API_ENDPOINTS = {
   MYSQL_DELETE: `${BASE_URL}/mysql/delete`,
   // 女人宝删图专用写端点（/mysql/query 只读化后，客户端 UPDATE 被 403）
   WOMANAI_DELETE: `${BASE_URL}/api/womanai/delete`,
+  WOMANAI_ADMIN_REVIEW: `${BASE_URL}/api/womanai/admin/review`,
+  WOMANAI_ADMIN_VISIBILITY: `${BASE_URL}/api/womanai/admin/visibility`,
   // 男人宝审核后台专用写端点（KV_ADMIN_KEY 鉴权；/mysql/update、/mysql/delete
   // 自 2026-09-06 P0 起仅 admin key 可写，admin.js 已于 2026-10-16 切走）
   NANRENBAO_ADMIN_REVIEW: `${BASE_URL}/api/nanrenbao/admin/review`,

@@ -92,7 +92,9 @@ export async function main() {
         const reactivateSql = `UPDATE ${config.database.imagesTable} SET deleted = 0 WHERE id = ?`;
         await postSql(config.database.mysqlQueryEndpoint, reactivateSql, [approvedImageId]);
     } else if (!approvedImageId) {
-        const insertSql = `INSERT INTO ${config.database.imagesTable} (image_url, created_at) VALUES (?, NOW())`;
+        // 候选图已经过本流水线人工审核（approve-generated-image），推到画廊时
+        // 直接置 approved；source_type=automation 与用户投稿 pending 区分开。
+        const insertSql = `INSERT INTO ${config.database.imagesTable} (image_url, created_at, review_status, source_type, submitted_at) VALUES (?, NOW(), 'approved', 'automation', NOW())`;
         const insertResult = await postSql(config.database.mysqlQueryEndpoint, insertSql, [candidate.image_url]);
         approvedImageId = extractInsertId(insertResult);
     }

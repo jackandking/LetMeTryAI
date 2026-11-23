@@ -569,9 +569,11 @@
             submitBtn.textContent = '上传中...';
 
             try {
-                // Insert image URL into database using parameterized query
-                const sql = 'INSERT INTO handsome_images (image_url, created_at) VALUES (?, NOW())';
-                const params = [imageUrl];
+                // 快手上线要求：用户投稿先进 pending，审核通过后才在前台展示。
+                // source_type 标记来源，便于审核后台区分 url / 本地上传。
+                const sourceType = localFile ? 'local_file' : 'url';
+                const sql = "INSERT INTO handsome_images (image_url, created_at, review_status, source_type, submitted_at) VALUES (?, NOW(), 'pending', ?, NOW())";
+                const params = [imageUrl, sourceType];
                 
                 const response = await fetch(API_ENDPOINTS.MYSQL_QUERY, {
                     method: 'POST',
@@ -588,7 +590,7 @@
                 const result = await response.json();
                 
                 if (result.affectedRows > 0) {
-                    showMessage('上传成功！感谢分享 😊', 'success');
+                    showMessage('上传成功！内容将先进入人工审核，通过后展示。感谢分享 😊', 'success');
                     try {
                         if (window.PointsSystem) {
                             const newTotal = PointsSystem.awardUploadPoints();
