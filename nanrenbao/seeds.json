@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-23T01:05:03.878175Z",
+  "updated_at": "2026-11-24T01:05:05.146246Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -31,9 +31,9 @@
       },
       {
         "value": "古风舞韵时尚大片·秋日绚烂·电影感·超写实",
-        "sum": 26,
+        "sum": 27,
         "n": 1,
-        "avg": 26.0
+        "avg": 27.0
       }
     ],
     "lighting": [
@@ -71,9 +71,9 @@
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 901,
+        "sum": 904,
         "n": 1,
-        "avg": 901.0
+        "avg": 904.0
       },
       {
         "value": "赤色绣金丝战袍（银甲叶镶边·革带束腰·全遮蔽不透明，着衣非内衣），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透",
@@ -103,9 +103,9 @@
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 901,
+        "sum": 904,
         "n": 1,
-        "avg": 901.0
+        "avg": 904.0
       },
       {
         "value": "英气·飒爽·自信·威严",
@@ -159,17 +159,17 @@
       },
       {
         "value": "中景全身环境人像·枫林小径旋舞（动态定格，区别于静立）",
-        "sum": 26,
+        "sum": 27,
         "n": 1,
-        "avg": 26.0
+        "avg": 27.0
       }
     ],
     "camera": [
       {
         "value": "85mm",
-        "sum": 2685,
+        "sum": 2722,
         "n": 246,
-        "avg": 10.9
+        "avg": 11.1
       },
       {
         "value": "85mm f/1.8, shallow DOF, vertical 9:16.",
@@ -185,9 +185,9 @@
       },
       {
         "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 21,
+        "sum": 23,
         "n": 4,
-        "avg": 5.2
+        "avg": 5.8
       },
       {
         "value": "85mm f/1.8 浅景深",
@@ -211,15 +211,15 @@
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
-        "sum": 30,
+        "sum": 31,
         "n": 2,
-        "avg": 15.0
+        "avg": 15.5
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "sum": 37,
+        "sum": 43,
         "n": 3,
-        "avg": 12.3
+        "avg": 14.3
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 修长腿部",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 901,
+      "view_count": 904,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
