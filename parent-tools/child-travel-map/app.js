@@ -5,6 +5,27 @@
  */
 
 const API_BASE = 'https://letmetry.cn';
+
+// === 转化漏斗埋点（复用后端现成 /api/track，带渠道归因）===
+const _urlParams = new URLSearchParams(window.location.search);
+const TRACK_BASE = {
+    appId: 'pl.02.child-travel-map',
+    channel: _urlParams.get('channel') || _urlParams.get('utm_source') || null,
+    utm_source: _urlParams.get('utm_source') || null,
+    utm_campaign: _urlParams.get('utm_campaign') || null,
+    landing_path: window.location.pathname
+};
+function track(event, data) {
+    try {
+        fetch(API_BASE + '/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.assign({}, TRACK_BASE, { event: event }, data || {})),
+            keepalive: true
+        }).catch(function () {});
+    } catch (e) {}
+}
+
 const PRODUCT_ID = 'child-travel-map';
 const PRODUCT_NAME = '孩子足迹地图生成';
 const AMOUNT = 1; // 1分，方便测试
@@ -22,6 +43,7 @@ let uploadedImageUrl = '';
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
+    track('page_load', { openid: openid });
     syncPaidSessionFromUrl();
 
     // debug bar：默认隐藏，仅 URL 带 ?debug=1 时显示（避免真机出现测试文案）
@@ -41,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 如果 URL 带 paid=1，或本地仍持有最近一次支付成功状态，先向后端核实再生成
     // 本地 session / URL 参数只是 UX 提示，授权锚点永远是后端 has-paid（fail-closed）
     if (shouldAutoGenerateAfterPayment()) {
+        track('pay_success', { openid: openid });
         verifyPaidAndAutoGenerate();
     } else if (openid && !openid.startsWith('unknown_')) {
         // 双保险：外部支付后平台跳回失败、用户从最近使用重进小程序，
@@ -225,6 +248,7 @@ function applyPaidUi() {
 
 // ===== 支付流程：H5 跳转原生支付页，支付后回跳当前 H5 =====
 async function initiatePayment() {
+    track('pay_click', { openid: openid });
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> 正在打开支付页...';
@@ -273,6 +297,7 @@ async function initiatePayment() {
 
 // ===== Canvas 图片生成 =====
 async function generateImage() {
+    track('map_generate_click', { openid: openid });
     const btn = document.getElementById('generate-btn');
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> 正在生成...';

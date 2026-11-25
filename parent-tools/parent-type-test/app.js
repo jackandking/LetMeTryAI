@@ -8,6 +8,27 @@ const PRODUCT_NAME = '测测你是哪种家长类型';
 const AMOUNT = 1; // 1分（用户要求降到1分，后端金额单位为分）
 const PRICE_LABEL = '¥' + (AMOUNT / 100).toFixed(2); // 展示与下单金额单一数据源
 
+// === 转化漏斗埋点（复用后端现成的 /api/track，带渠道归因）===
+// 从 URL 解析 utm/source 归因：快手视频挂卡進来的链接可带 ?channel=-video&utm_source=ks
+const _urlParams = new URLSearchParams(window.location.search);
+const TRACK_BASE = {
+    appId: 'pl.01.parent-type-test',
+    channel: _urlParams.get('channel') || _urlParams.get('utm_source') || null,
+    utm_source: _urlParams.get('utm_source') || null,
+    utm_campaign: _urlParams.get('utm_campaign') || null,
+    landing_path: window.location.pathname
+};
+function track(event, data) {
+    try {
+        fetch(API_BASE + '/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.assign({}, TRACK_BASE, { event: event }, data || {})),
+            keepalive: true
+        }).catch(function () {});
+    } catch (e) {}
+}
+
 // 测试题目
 const QUESTIONS = [
     {
@@ -135,10 +156,12 @@ let openid = '';
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     openid = urlParams.get('openid') || 'unknown_' + Date.now();
+    track('page_load', { openid: openid });
 
     // 支付成功返回（returnUrl 带 paid=1&type=<resultType>）
     // 校验后端确实已付费后再展示完整报告，防止手动拼 URL 白嫖
     if (urlParams.get('paid') === '1') {
+        track('pay_success', { openid: openid });
         verifyPaidAndShowReport(urlParams.get('type'));
         return;
     }
@@ -150,21 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         verifyPaidAndShowReport();
         return;
     }
-
-    // 环境检测调试
-    const hasKs = typeof ks !== 'undefined';
-    const hasKsPay = hasKs && typeof ks.pay === 'function';
-    const hasMiniProgram = hasKs && ks.miniProgram && typeof ks.miniProgram.requestPayment === 'function';
-    const hasNavigateTo = hasKs && ks.miniProgram && typeof ks.miniProgram.navigateTo === 'function';
-    console.log('[init] Environment:', { hasKs, hasKsPay, hasMiniProgram, hasNavigateTo, userAgent: navigator.userAgent.substring(0, 50) });
-
-    // 在页面底部添加调试信息（仅开发阶段显示）
-    const debugInfo = document.createElement('div');
-    debugInfo.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:#0f0;padding:8px;font-size:11px;z-index:9999;text-align:center;';
-    debugInfo.id = 'debug-info';
-    debugInfo.innerHTML = `环境: ks=${hasKs ? '✅' : '❌'} pay=${hasKsPay ? '✅' : '❌'} nav=${hasNavigateTo ? '✅' : '❌'} | 点击关闭`;
-    debugInfo.onclick = () => debugInfo.remove();
-    document.body.appendChild(debugInfo);
 
     renderQuestion();
     updateProgress();
@@ -232,6 +240,7 @@ function renderQuestion() {
 }
 
 function selectOption(type) {
+    if (currentQuestion === 0) track('quiz_start', { openid: openid });
     answers.push(type);
     currentQuestion++;
     updateProgress();
@@ -256,6 +265,7 @@ function calculateResult() {
 function showBriefResult() {
     const resultType = calculateResult();
     const result = RESULTS[resultType];
+    track('quiz_complete', { openid: openid, resultType: resultType });
 
     document.getElementById('quiz-section').classList.add('hidden');
     document.getElementById('brief-result').classList.remove('hidden');
@@ -277,6 +287,7 @@ function showBriefResult() {
 }
 
 async function unlockReport() {
+    track('pay_click', { openid: openid, resultType: calculateResult() });
     const btn = document.querySelector('.btn-pay');
     if (btn) {
         btn.disabled = true;
