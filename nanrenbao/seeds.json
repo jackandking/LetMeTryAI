@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-24T01:05:05.146246Z",
+  "updated_at": "2026-11-25T01:05:03.337876Z",
   "source": "evolve.py",
   "note": "胜出 DNA 维度与冠军种子；skill 运行时 fetch 失败回退内置兜底。",
   "dimension_leaderboard": {
@@ -13,9 +13,9 @@
       },
       {
         "value": "电影感·东方武侠时尚大片·超写实",
-        "sum": 55,
+        "sum": 56,
         "n": 1,
-        "avg": 55.0
+        "avg": 56.0
       },
       {
         "value": "电影感·异域华贵时尚大片·超写实",
@@ -31,9 +31,9 @@
       },
       {
         "value": "古风舞韵时尚大片·秋日绚烂·电影感·超写实",
-        "sum": 27,
+        "sum": 28,
         "n": 1,
-        "avg": 27.0
+        "avg": 28.0
       }
     ],
     "lighting": [
@@ -51,9 +51,9 @@
       },
       {
         "value": "冷调晨雾柔光·漫射散射·电影感冷调调色",
-        "sum": 55,
+        "sum": 56,
         "n": 1,
-        "avg": 55.0
+        "avg": 56.0
       },
       {
         "value": "秋日暖金逆光·轮廓光·电影感暖调色",
@@ -62,18 +62,18 @@
         "avg": 38.0
       },
       {
-        "value": "黄金时刻暖金逆光·柔和轮廓光·暖调电影感",
-        "sum": 54,
-        "n": 2,
-        "avg": 27.0
+        "value": "夕照金橙逆光 + 红叶透射光（绚烂暖调·电影感）",
+        "sum": 28,
+        "n": 1,
+        "avg": 28.0
       }
     ],
     "wardrobe": [
       {
         "value": "月白狐火纹长袍（全遮蔽 opaque proper coverage, elegant gown）",
-        "sum": 904,
+        "sum": 906,
         "n": 1,
-        "avg": 904.0
+        "avg": 906.0
       },
       {
         "value": "赤色绣金丝战袍（银甲叶镶边·革带束腰·全遮蔽不透明，着衣非内衣），紧裹丰盈巨乳呈饱满曲线; NEVER 露点/透视/高透",
@@ -95,17 +95,17 @@
       },
       {
         "value": "极小月白淡青 dudou（淡银刺绣）+ 单条高透冷纱 at hip，opaque<1/4; NEVER drape/robe/gown/hanfu/veil",
-        "sum": 55,
+        "sum": 56,
         "n": 1,
-        "avg": 55.0
+        "avg": 56.0
       }
     ],
     "mood": [
       {
         "value": "妖异·青丘九尾",
-        "sum": 904,
+        "sum": 906,
         "n": 1,
-        "avg": 904.0
+        "avg": 906.0
       },
       {
         "value": "英气·飒爽·自信·威严",
@@ -127,9 +127,9 @@
       },
       {
         "value": "清冷·孤高·隐忍·仙气",
-        "sum": 55,
+        "sum": 56,
         "n": 1,
-        "avg": 55.0
+        "avg": 56.0
       }
     ],
     "composition": [
@@ -141,9 +141,9 @@
       },
       {
         "value": "中近景环境人像·冷山雾虚化背景",
-        "sum": 55,
+        "sum": 56,
         "n": 1,
-        "avg": 55.0
+        "avg": 56.0
       },
       {
         "value": "中近景环境人像·暖金虚化背景",
@@ -159,15 +159,15 @@
       },
       {
         "value": "中景全身环境人像·枫林小径旋舞（动态定格，区别于静立）",
-        "sum": 27,
+        "sum": 28,
         "n": 1,
-        "avg": 27.0
+        "avg": 28.0
       }
     ],
     "camera": [
       {
         "value": "85mm",
-        "sum": 2722,
+        "sum": 2737,
         "n": 246,
         "avg": 11.1
       },
@@ -178,16 +178,16 @@
         "avg": 6.5
       },
       {
+        "value": "85mm f/1.8 shallow depth of field.",
+        "sum": 24,
+        "n": 4,
+        "avg": 6.0
+      },
+      {
         "value": "85mm f/1.8, vertical portrait, shallow depth of field, fine silk texture",
         "sum": 6,
         "n": 1,
         "avg": 6.0
-      },
-      {
-        "value": "85mm f/1.8 shallow depth of field.",
-        "sum": 23,
-        "n": 4,
-        "avg": 5.8
       },
       {
         "value": "85mm f/1.8 浅景深",
@@ -211,15 +211,15 @@
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 舞裙勾勒 + 修长腿部",
-        "sum": 31,
+        "sum": 32,
         "n": 2,
-        "avg": 15.5
+        "avg": 16.0
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 丰盈腰臀曲线 + 紧身旗袍勾勒 + 修长腿部",
-        "sum": 43,
+        "sum": 46,
         "n": 3,
-        "avg": 14.3
+        "avg": 15.3
       },
       {
         "value": "极饱满丰硕巨乳 + 明显 G 罩杯以上 + 深 V 乳沟 + 修长腿部",
@@ -233,7 +233,7 @@
     {
       "table": "beauty_images",
       "id": 826,
-      "view_count": 904,
+      "view_count": 906,
       "dna": {
         "subject": "九尾狐（山海经·青丘）reinterpret，非真人仿冒",
         "scene": "青丘月下·九尾如焰·狐火幽幽",
@@ -339,7 +339,7 @@
     {
       "table": "beauty_images",
       "id": 653,
-      "view_count": 55,
+      "view_count": 56,
       "dna": {
         "subject": "周芷若（倚天屠龙记）reinterpret，非真人仿冒",
         "scene": "峨眉山金顶·云雾松林·冷调晨雾",
