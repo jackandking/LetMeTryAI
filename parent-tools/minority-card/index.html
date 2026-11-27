@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>少数派身份卡 - 家长爱</title>
+    <meta name="pl-app" content="pl.06.parent-chat-teen" />
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
+    <style>
+        * { box-sizing: border-box; }
+        body { margin:0; padding:18px 16px 40px; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+               background:linear-gradient(160deg,#1d1b3a 0%,#3a2b5f 45%,#6d4b8f 100%); color:#fff; min-height:100vh; }
+        .wrap { max-width:520px; margin:0 auto; }
+        .tag { display:inline-block; font-size:12px; letter-spacing:2px; padding:5px 12px; border:1px solid rgba(255,255,255,.35); border-radius:20px; }
+        h1 { font-size:24px; line-height:1.4; margin:18px 0 6px; }
+        .sub { font-size:13px; color:rgba(255,255,255,.7); margin-bottom:22px; }
+        .question { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:18px; }
+        .question .q { font-size:16px; line-height:1.6; margin-bottom:14px; }
+        .opt { display:block; width:100%; text-align:left; margin-top:10px; padding:13px 15px; border-radius:12px;
+               border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.06); color:#fff; font-size:15px; cursor:pointer; }
+        .opt:active { background:rgba(255,255,255,.18); }
+        .opt.selected { border-color:#ffd166; background:rgba(255,209,102,.16); }
+        .hidden { display:none !important; }
+        .result { margin-top:22px; text-align:center; }
+        .verdict { font-size:30px; font-weight:800; line-height:1.35; color:#ffd166; }
+        .verdict small { display:block; font-size:14px; font-weight:400; color:rgba(255,255,255,.8); margin-top:8px; }
+        .bars { margin:22px 0 16px; text-align:left; }
+        .bar-row { margin-bottom:11px; }
+        .bar-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; color:rgba(255,255,255,.9); }
+        .bar-track { height:9px; background:rgba(255,255,255,.14); border-radius:6px; overflow:hidden; }
+        .bar-fill { height:100%; background:linear-gradient(90deg,#ffd166,#ff8c69); border-radius:6px; }
+        .bar-row.mine .bar-label { color:#ffd166; font-weight:700; }
+        .source { font-size:12px; color:rgba(255,255,255,.6); }
+        #card-image { width:100%; max-width:420px; border-radius:12px; margin-top:18px; box-shadow:0 14px 40px rgba(0,0,0,.35); }
+        .actions { display:flex; gap:12px; margin-top:22px; }
+        .btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; }
+        .btn.primary { background:#ffd166; color:#3a2b2b; }
+        .btn.ghost { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); }
+        .btn:disabled { opacity:.5; cursor:default; }
+        .tip { font-size:12px; color:rgba(255,255,255,.65); margin-top:14px; line-height:1.6; }
+        .err { margin-top:20px; padding:14px; border-radius:12px; background:rgba(220,60,60,.18); border:1px solid rgba(255,120,120,.45); font-size:14px; line-height:1.6; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <span class="tag">家长爱 · 少数派身份卡</span>
+    <h1>跟青春期孩子聊天，<br>你选哪一种？</h1>
+    <p class="sub">选完看有多少家长和你一样 —— 比例来自 513 位家长的真实投票</p>
+
+    <div class="question" id="question-section" data-pl-event="vote_open">
+        <div class="q">孩子放学回家不太想说话，你通常怎么做？</div>
+        <div id="options"></div>
+    </div>
+
+    <div id="error-box" class="err hidden"></div>
+
+    <div id="result-section" class="result hidden" data-pl-result data-pl-idea="06">
+        <div class="verdict" id="verdict"></div>
+        <div class="bars" id="bars"></div>
+        <div class="source" id="source"></div>
+        <img id="card-image" alt="我的少数派身份卡" />
+        <div class="actions">
+            <button class="btn primary" id="save-btn">保存这张卡</button>
+            <button class="btn ghost" id="share-btn" data-pl-event="share_tap" data-pl-idea="06">发给同样的人</button>
+        </div>
+        <p class="tip" id="share-tip">存图不加锁、不用付费。卡上的比例是实时读取的真实票数，不是写死的文案。</p>
+    </div>
+</div>
+
+<script src="../signal.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>

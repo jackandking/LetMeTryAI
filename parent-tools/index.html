@@ -235,6 +235,16 @@
                     <li><strong style="color:#ff6b35">¥1.00 生成专属足迹图</strong></li>
                 </ul>
             </div>
+            <div class="activity-card" onclick="openMinorityCard()" style="cursor:pointer;" data-pl-event="tool_open" data-pl-tool="minority-card">
+                <span class="category">少数派身份卡</span>
+                <h3>🔥 只有少数家长这么选</h3>
+                <div style="width:100%;height:160px;background:linear-gradient(135deg,#1d1b3a,#6d4b8f);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:4em;">🔥</div>
+                <ul>
+                    <li>一题站队，看真实投票比例</li>
+                    <li>生成专属身份卡，存相册</li>
+                    <li><strong style="color:#6d4b8f">免费，存图不加锁</strong></li>
+                </ul>
+            </div>
             <div class="activity-card" onclick="openBookRecommend()" style="cursor:pointer;" data-pl-event="tool_open" data-pl-tool="book-recommend">
                 <span class="category">阅读成长</span>
                 <h3>📚 为孩子选对书</h3>
@@ -463,6 +473,16 @@
     </script>
 
     <script>
+        function openMinorityCard() {
+            if (typeof ks !== 'undefined' && ks.navigateTo) {
+                ks.navigateTo({
+                    url: '/pages/rewardedWebview/rewardedWebview?target=parent-tools/minority-card'
+                });
+            } else {
+                window.location.href = 'minority-card/index.html';
+            }
+        }
+
         function openBookRecommend() {
             if (typeof ks !== 'undefined' && ks.navigateTo) {
                 ks.navigateTo({
