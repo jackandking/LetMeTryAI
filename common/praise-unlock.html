@@ -189,6 +189,11 @@ var TABS=[{k:"did",label:"做了什么"},{k:"said",label:"说了什么"},{k:"cha
 function hashStr(s){var h=2166136261;s=String(s);for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function getUid(){try{var u=localStorage.getItem('heart_uid');if(!u){u='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem('heart_uid',u);}return u;}catch(e){return 'anon';}}
 var q=new URLSearchParams(location.search);
+// 星火 resourcePath 里 target 只保留第一个 & 之前的内容，
+// 多个 & 参数会逃逸到小程序外层 options。故用复合参数 ?v=skin-arm
+// （如 ?v=parent-heart），保证 skin/arm 能完整随 target 传进 H5。
+var vParam=q.get('v');
+if(vParam){var vp=vParam.split('-');if(SKINS[vp[0]])q.set('skin',vp[0]);if(vp[1]==='control'||vp[1]==='heart')q.set('arm',vp[1]);}
 var skin=SKINS[q.get('skin')]?q.get('skin'):'parent';
 var armOverride=q.get('arm');
 var arm=armOverride==='control'||armOverride==='heart'?armOverride:(hashStr('heart_exp_'+getUid())%2===0?'control':'heart');
