@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>说句心里话</title>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4ec6d2ddfd5746ce248a74a75c1d4fba";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-user-select:none;user-select:none}
+
+  .skin-man{--bg:#0d0d14;--g1:#ff5f8f;--g2:#ff9a5f;--ink:#fff;--ink2:rgba(255,255,255,.82);--card:#17121a;--chipbg:rgba(255,255,255,.14)}
+  .skin-woman{--bg:#160d16;--g1:#ff7eb6;--g2:#c86bff;--ink:#fff;--ink2:rgba(255,255,255,.84);--card:#1c1220;--chipbg:rgba(255,255,255,.13)}
+  .skin-elder{--bg:#f5f1e8;--g1:#c0392b;--g2:#d97706;--ink:#2b2119;--ink2:#5a4a3a;--card:#fffdf8;--chipbg:rgba(0,0,0,.06)}
+  .skin-parent{--bg:#0f1b1a;--g1:#2ec4a6;--g2:#f5a623;--ink:#fff;--ink2:rgba(255,255,255,.85);--card:#0e2420;--chipbg:rgba(255,255,255,.13)}
+  .skin-museum{--bg:#0c1420;--g1:#c9a227;--g2:#e0c56a;--ink:#fff;--ink2:rgba(255,255,255,.82);--card:#101e2e;--chipbg:rgba(255,255,255,.12)}
+
+  .wrap{max-width:520px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:calc(env(safe-area-inset-bottom) + 30px)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top) + 14px) 20px 14px;font-size:16px;font-weight:600}
+  .badge{font-size:12px;font-weight:500;background:var(--chipbg);padding:4px 11px;border-radius:16px}
+  .art{height:300px;display:flex;align-items:center;justify-content:center;font-size:120px;background:linear-gradient(150deg,var(--card),var(--bg))}
+  .body{padding:22px 22px 0}
+  .stage-title{font-size:21px;font-weight:700;margin-bottom:6px}
+  .stage-sub{font-size:13px;color:var(--ink2);margin-bottom:20px;line-height:1.6}
+  .btn{display:block;width:100%;padding:16px 0;border:none;border-radius:30px;font-size:16px;font-weight:600;color:#fff;background:linear-gradient(90deg,var(--g1),var(--g2));cursor:pointer;margin-bottom:11px}
+  .btn.ghost{background:var(--chipbg);color:var(--ink)}
+  .btn.skip{background:transparent;color:var(--ink2);border:1px solid var(--chipbg);font-weight:500}
+  .btn:active{transform:scale(.985)}
+  .btn.big{font-size:19px;padding:18px 0}
+
+  .tabs{display:flex;gap:6px;margin-bottom:14px}
+  .tab{flex:1;text-align:center;padding:10px 4px;border-radius:10px;background:var(--chipbg);color:var(--ink2);font-size:12px;cursor:pointer}
+  .tab.on{background:linear-gradient(90deg,var(--g1),var(--g2));color:#fff;font-weight:600}
+  .fillq{font-size:14px;color:var(--ink2);margin-bottom:12px}
+  .fillopts{display:flex;flex-direction:column;gap:8px}
+  .fillopt{padding:13px 14px;border-radius:12px;background:var(--card);border:1px solid var(--chipbg);color:var(--ink);font-size:14px;cursor:pointer;line-height:1.5}
+  .fillopt.on{border-color:var(--g1)}
+  .voicebtn{display:inline-flex;align-items:center;gap:6px;background:var(--chipbg);color:var(--ink);border-radius:16px;padding:9px 14px;font-size:13px;cursor:pointer;margin-bottom:12px}
+  .voluntary{font-size:11px;color:var(--ink2);opacity:.7;text-align:center;margin:12px 0 14px;line-height:1.5}
+
+  .composed{background:var(--card);border-radius:12px;padding:14px;margin-bottom:12px;border-left:3px solid var(--g1);font-size:15px;line-height:1.6}
+  .fb{border-radius:14px;padding:16px;margin-bottom:12px;background:var(--card);border-left:3px solid var(--g1);opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s}
+  .fb.in{opacity:1;transform:none}
+  .fb-label{font-size:10px;letter-spacing:1px;color:var(--g1);font-weight:700;margin-bottom:7px}
+  .fb-main{font-size:15px;line-height:1.65}
+  .counter-num{font-size:28px;font-weight:800;color:var(--g1)}
+  .progress{height:6px;border-radius:3px;background:var(--chipbg);overflow:hidden;margin-top:8px}
+  .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2));transition:width .5s}
+  .cardbox{margin-top:6px;border-radius:16px;padding:20px;background:linear-gradient(140deg,var(--g1),var(--g2));color:#fff;text-align:center}
+  .cardbox .c-emoji{font-size:36px}.cardbox .c-quote{font-size:17px;font-weight:600;line-height:1.6;margin:10px 0}.cardbox .c-from{font-size:11px;opacity:.85}
+  .inbox-item{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border-left:3px solid var(--g2)}
+  .inbox-item .from{font-size:11px;color:var(--g1);margin-bottom:6px}
+  .inbox-item .txt{font-size:15px;line-height:1.6}
+  .reset{font-size:12px;color:var(--ink2);opacity:.7;text-align:center;margin-top:18px;cursor:pointer;text-decoration:underline}
+
+  /* 老人爱：全面放大 */
+  .skin-elder .stage-title{font-size:26px}.skin-elder .stage-sub{font-size:17px}
+  .skin-elder .btn{font-size:20px;padding:20px 0;border-radius:14px}
+  .skin-elder .tab{font-size:16px;padding:12px 4px}.skin-elder .fillq{font-size:19px}
+  .skin-elder .fillopt{font-size:19px;padding:15px}.skin-elder .voicebtn{font-size:17px;padding:11px 16px}
+  .skin-elder .fb-main{font-size:19px}.skin-elder .composed{font-size:20px}.skin-elder .inbox-item .txt{font-size:20px}
+  .skin-elder .voluntary{font-size:14px}
+
+  /* QA 调试条：仅 ?debug=1 显示 */
+  #debug{display:none;position:fixed;top:0;left:0;right:0;z-index:99;background:#000;color:#0f0;font:11px ui-monospace,monospace;padding:4px 8px;text-align:center}
+</style>
+</head>
+<body>
+<div id="debug"></div>
+<div class="wrap" id="wrap">
+  <div class="topbar"><span id="topTitle">说句心里话</span><span class="badge" id="topBadge"></span></div>
+  <div class="art" id="art">🌸</div>
+
+  <!-- 情绪层入口（control 臂看不到） -->
+  <div class="body" id="stepEntry">
+    <div class="stage-title" id="entryTitle">美图已解锁 ✨</div>
+    <div class="stage-sub" id="entrySub">已经可以保存了。下面这步和解锁无关，<strong>想留一句话就留，不想就直接走</strong>。</div>
+    <button class="btn big" id="btnEnter">留一句话（可选）</button>
+    <button class="btn skip" id="btnSkip">直接走，不留</button>
+    <button class="btn ghost" id="btnInbox" style="display:none;">💌 看看别人留给我的话</button>
+  </div>
+
+  <!-- control 臂：只有解锁态 -->
+  <div class="body" id="stepControl" style="display:none;">
+    <div class="stage-title">已解锁 ✨</div>
+    <div class="stage-sub" id="ctrlSub">长按图片保存，或点下方按钮。</div>
+    <button class="btn big" id="btnCtrlDone">完成</button>
+  </div>
+
+  <!-- 填空式 -->
+  <div class="body" id="stepFill" style="display:none;">
+    <div class="stage-title" id="fillTitle">说句心里话</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="fillq" id="fillq"></div>
+    <button class="voicebtn" id="btnVoice" style="display:none;">🎤 按住说话</button>
+    <div class="fillopts" id="fillopts"></div>
+    <div class="voluntary">没有对错，选一句就行。不上传、不存储、不画像。</div>
+    <button class="btn" id="btnDone">就这句</button>
+    <button class="btn skip" id="btnFillSkip">算了，不留</button>
+  </div>
+
+  <!-- 收获感 -->
+  <div class="body" id="stepFeedback" style="display:none;">
+    <div class="stage-title">你写下了这句话</div>
+    <div class="composed" id="composed"></div>
+    <div class="fb" id="fb1"><div class="fb-label">① 你写的具体内容</div><div class="fb-main" id="fb1main"></div></div>
+    <div class="fb" id="fb2"><div class="fb-label">② 累积的痕迹</div><div class="fb-main">你已经留下 <span class="counter-num" id="fb2num">0</span> 句话了</div><div class="progress"><i id="fb2bar"></i></div></div>
+    <div class="fb" id="fb3"><div class="fb-label">③ 一句话卡</div><div class="fb-main">这句话可以保存下来。要不要给对方，你自己决定。</div>
+      <div class="cardbox"><div class="c-emoji">💌</div><div class="c-quote" id="cardQuote"></div><div class="c-from">— 一句心里话</div></div>
+    </div>
+    <button class="btn" id="btnSave">保存到相册</button>
+    <div class="reset" id="reset">↺ 再来一次</div>
+  </div>
+
+  <!-- 接收端 -->
+  <div class="body" id="stepInbox" style="display:none;">
+    <div class="stage-title">留给我的话</div>
+    <div id="inboxList"></div>
+    <button class="voicebtn" id="btnRead" style="display:none;">🔊 读给我听</button>
+    <button class="btn ghost" id="btnBack">返回</button>
+  </div>
+</div>
+
+<script>
+/* ============ 配置 ============ */
+var SKINS={
+  man:{name:"男人宝",title:"说句心里话",emoji:"🌸"},
+  woman:{name:"女人宝",title:"说句心里话",emoji:"💐"},
+  elder:{name:"老人爱",title:"说句心里话",emoji:"🌻"},
+  parent:{name:"家长爱",title:"说句心里话",emoji:"🧩"},
+  museum:{name:"博物馆打卡",title:"说句心里话",emoji:"🏛"}
+};
+
+/* 五套皮肤各自的填空题库 —— 真分层，不是换皮 */
+var FILL={
+  man:{
+    did:"夸身边那个她，她做了什么？",
+    opts:["今天主动收拾了桌子","把最后一块肉夹给了我","记得我爱吃的水果","今天穿了件好看的衣服","累了还先给我倒了水"],
+    said:"她说过什么，你记得？",
+    saidopts:["说'你先歇着，我来'","夸我今天气色好","说'没关系，不急'","讲了个笑话逗我","记得跟我说晚安"],
+    changed:"你注意到她哪里变了？",
+    chopts:["比上次更爱笑了","最近没那么累了","开始跟我讲心事发型变了","头发剪短了","学会说谢谢了"]
+  },
+  woman:{
+    did:"夸一个人，他今天做了什么？",
+    opts:["主动把碗洗了","把菜切得很细","给孩子讲睡前故事","冒雨去接我下班","把地拖了一遍"],
+    said:"他说了什么，让你记住了？",
+    saidopts:["说'你今天辛苦了'","夸我做的饭好吃","说'别担心，有我'","记得跟我说谢谢","讲了个笑话逗我"],
+    changed:"你注意到他哪里变了？",
+    chopts:["比平时话多了","最近爱笑了","开始主动做家务了","学会说对不起了","头发剪短了"]
+  },
+  elder:{
+    did:"想一个人，他做过什么？",
+    opts:["给我泡了杯茶","陪我出去散了步","记得按时给我打电话","帮我买了药","把被子晒了"]
+    ,
+    said:"他说过什么，你记着？",
+    saidopts:["说'妈，我到家了'","夸我做的饭好吃","说'天冷多穿点'","祝我生日快乐","讲了个笑话逗我"],
+    changed:"你注意到他哪里变了？",
+    chopts:["比以前高了","学会自己做饭了","笑起来比以前多了","说话更客气了","最近忙得少了"]
+  },
+  parent:{
+    did:"夸孩子，他今天做了什么？",
+    opts:["自己把玩具收好了","主动帮弟弟拿杯子","把零食分给小朋友","自己穿好了衣服","吃饭没撒"],
+    said:"孩子说了什么，你记住了？",
+    saidopts:["说'妈妈我来帮你'","说'这个给你吃'","说'我今天很开心'","主动说了谢谢","说'我长大了'"],
+    changed:"你注意到孩子哪里变了？",
+    chopts:["比上次更爱笑了","开始自己看书了","没那么怕生了","学会说对不起了","自己收拾书包了"]
+  },
+  museum:{
+    did:"夸同行的人，他发现了什么？",
+    opts:["找到了青铜器上的小纹路","记住了那个朝代","发现了解说牌上的错字","注意到了壁画的颜色","找到了展厅出口"],
+    said:"他说了什么，让你记住了？",
+    saidopts:["讲了个文物的故事","说'你看这个细节'","问我'猜猜这是干嘛的'","把解说念给我听","说'这里值得再看一遍'"],
+    changed:"你注意到他哪里变了？",
+    chopts:["比上次看得更仔细了","开始主动讲解了","没那么走马观花了","记住了更多朝代","学会提问了"]
+  }
+};
+var TABS=[{k:"did",label:"做了什么"},{k:"said",label:"说了什么"},{k:"changed",label:"哪里变了"}];
+
+/* ============ A/B 分流 ============ */
+function hashStr(s){var h=2166136261;s=String(s);for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function getUid(){try{var u=localStorage.getItem('heart_uid');if(!u){u='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem('heart_uid',u);}return u;}catch(e){return 'anon';}}
+var q=new URLSearchParams(location.search);
+var skin=SKINS[q.get('skin')]?q.get('skin'):'parent';
+var armOverride=q.get('arm');
+var arm=armOverride==='control'||armOverride==='heart'?armOverride:(hashStr('heart_exp_'+getUid())%2===0?'control':'heart');
+
+/* ============ 埋点（百度统计，label=arm，不传用户原文） ============ */
+function track(action,extra){
+  try{if(typeof _hmt!=='undefined'&&_hmt.push){_hmt.push(['_trackEvent','heart_exp',action,arm+'_'+skin,extra==null?1:extra]);}}catch(e){}
+}
+function getCount(){try{return parseInt(localStorage.getItem('heart_count')||'0',10);}catch(e){return 0;}}
+function setCount(n){try{localStorage.setItem('heart_count',String(n));}catch(e){}}
+function cnt(){var n=getCount();var a=document.getElementById('fb2num');if(a)a.textContent=n;var b=document.getElementById('fb2bar');if(b)b.style.width=Math.min(100,n*10)+'%';}
+function show(id){
+  ['stepEntry','stepControl','stepFill','stepFeedback','stepInbox'].forEach(function(x){
+    var el=document.getElementById(x);if(el)el.style.display=(x===id)?'block':'none';
+  });
+}
+var $=function(id){return document.getElementById(id);};
+var tab='did',pick='';
+
+function renderSkin(){
+  var s=SKINS[skin];document.body.className='skin-'+skin;
+  $('topTitle').textContent=s.title;$('topBadge').textContent=s.name;$('art').textContent=s.emoji;
+  $('btnVoice').style.display=(skin==='elder')?'inline-flex':'none';
+  $('btnRead').style.display=(skin==='elder')?'inline-flex':'none';
+  $('btnInbox').style.display='block';
+  cnt();
+}
+function renderTabs(){
+  $('tabs').innerHTML=TABS.map(function(t){return "<div class='tab"+(t.k===tab?" on":"")+"' data-k='"+t.k+"'>"+t.label+"</div>";}).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-k]'),function(el){el.onclick=function(){tab=el.getAttribute('data-k');pick='';renderTabs();};});
+  var f=FILL[skin];
+  $('fillq').textContent=(tab==='did'?f.did:tab==='said'?f.said:f.changed);
+  var opts=(tab==='did'?f.opts:tab==='said'?f.saidopts:f.chopts);
+  $('fillopts').innerHTML=opts.map(function(o){return "<div class='fillopt"+(o===pick?" on":"")+"'>"+o+"</div>";}).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.fillopt'),function(el){el.onclick=function(){pick=el.textContent;renderTabs();};});
+}
+
+/* ============ 流程 ============ */
+if(arm==='control'){
+  $('btnEnter').style.display='none';$('btnSkip').style.display='none';
+  show('stepControl');
+  track('task_open','control');
+}else{
+  renderSkin();show('stepEntry');track('task_open','heart');
+}
+
+$('btnEnter').onclick=function(){track('enter_heart');tab='did';pick='';renderTabs();show('stepFill');};
+$('btnSkip').onclick=function(){track('skip_heart');window.history.back();};
+$('btnFillSkip').onclick=function(){track('skip_fill');show('stepEntry');};
+$('btnVoice').onclick=function(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('当前浏览器不支持语音识别，请直接点选下面的选项');return;}
+  var r=new SR();r.lang='zh-CN';r.onresult=function(e){pick=e.results[0][0].transcript;$('fillq').textContent='你说的是：「'+pick+'」——点一句确认，或直接点「就这句」';track('voice_input');};r.start();
+};
+$('btnDone').onclick=function(){
+  if(!pick){var f=FILL[skin];pick=(tab==='did'?f.opts:tab==='said'?f.saidopts:f.chopts)[0];}
+  var n=getCount()+1;setCount(n);
+  track('heart_submit',tab);
+  $('composed').textContent='「'+pick+'」';
+  $('fb1main').textContent='你写下了「'+pick+'」——选得很具体，这是你自己的观察。';
+  $('cardQuote').textContent='「'+pick+'」';
+  cnt();show('stepFeedback');
+  ['fb1','fb2','fb3'].forEach(function(id){$(id).classList.remove('in');});
+  setTimeout(function(){$('fb1').classList.add('in');},100);
+  setTimeout(function(){$('fb2').classList.add('in');},350);
+  setTimeout(function(){$('fb3').classList.add('in');},650);
+};
+$('btnSave').onclick=function(){track('save_card');alert('话卡已生成，长按图片即可保存到相册，再决定要不要发给对方。');};
+$('reset').onclick=function(){show('stepEntry');track('task_open');};
+$('btnCtrlDone').onclick=function(){track('control_done');window.history.back();};
+
+var INBOX=[{from:'女儿',txt:'妈妈，你今天没有发火，我知道你很累了。'},{from:'老伴',txt:'你泡的茶，温度刚好。'}];
+$('btnInbox').onclick=function(){
+  $('inboxList').innerHTML=INBOX.map(function(i){return "<div class='inbox-item'><div class='from'>来自 "+i.from+"</div><div class='txt'>「"+i.txt+"」</div></div>";}).join('');
+  track('open_inbox');show('stepInbox');
+};
+$('btnRead').onclick=function(){
+  if(!window.speechSynthesis){alert('当前浏览器不支持朗读');return;}
+  var u=new SpeechSynthesisUtterance(INBOX.map(function(i){return i.from+"留的话："+i.txt;}).join('。'));
+  u.lang='zh-CN';u.rate=.8;speechSynthesis.speak(u);track('read_aloud');
+};
+$('btnBack').onclick=function(){show(arm==='control'?'stepControl':'stepEntry');};
+
+if(q.get('debug')==='1'){
+  var d=$('debug');d.style.display='block';d.textContent='arm='+arm+(armOverride?' (forced)':'')+' skin='+skin+' uid='+getUid();
+}
+</script>
+</body>
+</html>
